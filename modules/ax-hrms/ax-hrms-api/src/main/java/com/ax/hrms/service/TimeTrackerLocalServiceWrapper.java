@@ -1,0 +1,430 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.ax.hrms.service;
+
+import com.liferay.portal.kernel.service.ServiceWrapper;
+import com.liferay.portal.kernel.service.persistence.BasePersistence;
+
+/**
+ * Provides a wrapper for {@link TimeTrackerLocalService}.
+ *
+ * @author Brian Wing Shun Chan
+ * @see TimeTrackerLocalService
+ * @generated
+ */
+public class TimeTrackerLocalServiceWrapper
+	implements ServiceWrapper<TimeTrackerLocalService>,
+			   TimeTrackerLocalService {
+
+	public TimeTrackerLocalServiceWrapper() {
+		this(null);
+	}
+
+	public TimeTrackerLocalServiceWrapper(
+		TimeTrackerLocalService timeTrackerLocalService) {
+
+		_timeTrackerLocalService = timeTrackerLocalService;
+	}
+
+	/**
+	 * Adds the time tracker to the database. Also notifies the appropriate model listeners.
+	 *
+	 * <p>
+	 * <strong>Important:</strong> Inspect TimeTrackerLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * </p>
+	 *
+	 * @param timeTracker the time tracker
+	 * @return the time tracker that was added
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker addTimeTracker(
+		com.ax.hrms.model.TimeTracker timeTracker) {
+
+		return _timeTrackerLocalService.addTimeTracker(timeTracker);
+	}
+
+	/**
+	 * @throws PortalException
+	 */
+	@Override
+	public com.liferay.portal.kernel.model.PersistedModel createPersistedModel(
+			java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.createPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	 * Creates a new time tracker with the primary key. Does not add the time tracker to the database.
+	 *
+	 * @param timeTrackerId the primary key for the new time tracker
+	 * @return the new time tracker
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker createTimeTracker(long timeTrackerId) {
+		return _timeTrackerLocalService.createTimeTracker(timeTrackerId);
+	}
+
+	/**
+	 * @throws PortalException
+	 */
+	@Override
+	public com.liferay.portal.kernel.model.PersistedModel deletePersistedModel(
+			com.liferay.portal.kernel.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.deletePersistedModel(persistedModel);
+	}
+
+	/**
+	 * Deletes the time tracker with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * <p>
+	 * <strong>Important:</strong> Inspect TimeTrackerLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * </p>
+	 *
+	 * @param timeTrackerId the primary key of the time tracker
+	 * @return the time tracker that was removed
+	 * @throws PortalException if a time tracker with the primary key could not be found
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker deleteTimeTracker(long timeTrackerId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.deleteTimeTracker(timeTrackerId);
+	}
+
+	/**
+	 * Deletes the time tracker from the database. Also notifies the appropriate model listeners.
+	 *
+	 * <p>
+	 * <strong>Important:</strong> Inspect TimeTrackerLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * </p>
+	 *
+	 * @param timeTracker the time tracker
+	 * @return the time tracker that was removed
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker deleteTimeTracker(
+		com.ax.hrms.model.TimeTracker timeTracker) {
+
+		return _timeTrackerLocalService.deleteTimeTracker(timeTracker);
+	}
+
+	@Override
+	public <T> T dslQuery(com.liferay.petra.sql.dsl.query.DSLQuery dslQuery) {
+		return _timeTrackerLocalService.dslQuery(dslQuery);
+	}
+
+	@Override
+	public int dslQueryCount(
+		com.liferay.petra.sql.dsl.query.DSLQuery dslQuery) {
+
+		return _timeTrackerLocalService.dslQueryCount(dslQuery);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _timeTrackerLocalService.dynamicQuery();
+	}
+
+	/**
+	 * Performs a dynamic query on the database and returns the matching rows.
+	 *
+	 * @param dynamicQuery the dynamic query
+	 * @return the matching rows
+	 */
+	@Override
+	public <T> java.util.List<T> dynamicQuery(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
+
+		return _timeTrackerLocalService.dynamicQuery(dynamicQuery);
+	}
+
+	/**
+	 * Performs a dynamic query on the database and returns a range of the matching rows.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.ax.hrms.model.impl.TimeTrackerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dynamicQuery the dynamic query
+	 * @param start the lower bound of the range of model instances
+	 * @param end the upper bound of the range of model instances (not inclusive)
+	 * @return the range of matching rows
+	 */
+	@Override
+	public <T> java.util.List<T> dynamicQuery(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
+		int end) {
+
+		return _timeTrackerLocalService.dynamicQuery(dynamicQuery, start, end);
+	}
+
+	/**
+	 * Performs a dynamic query on the database and returns an ordered range of the matching rows.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.ax.hrms.model.impl.TimeTrackerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dynamicQuery the dynamic query
+	 * @param start the lower bound of the range of model instances
+	 * @param end the upper bound of the range of model instances (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching rows
+	 */
+	@Override
+	public <T> java.util.List<T> dynamicQuery(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
+
+		return _timeTrackerLocalService.dynamicQuery(
+			dynamicQuery, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns the number of rows matching the dynamic query.
+	 *
+	 * @param dynamicQuery the dynamic query
+	 * @return the number of rows matching the dynamic query
+	 */
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
+
+		return _timeTrackerLocalService.dynamicQueryCount(dynamicQuery);
+	}
+
+	/**
+	 * Returns the number of rows matching the dynamic query.
+	 *
+	 * @param dynamicQuery the dynamic query
+	 * @param projection the projection to apply to the query
+	 * @return the number of rows matching the dynamic query
+	 */
+	@Override
+	public long dynamicQueryCount(
+		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery,
+		com.liferay.portal.kernel.dao.orm.Projection projection) {
+
+		return _timeTrackerLocalService.dynamicQueryCount(
+			dynamicQuery, projection);
+	}
+
+	@Override
+	public com.ax.hrms.model.TimeTracker fetchTimeTracker(long timeTrackerId) {
+		return _timeTrackerLocalService.fetchTimeTracker(timeTrackerId);
+	}
+
+	/**
+	 * Returns the time tracker matching the UUID and group.
+	 *
+	 * @param uuid the time tracker's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching time tracker, or <code>null</code> if a matching time tracker could not be found
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker fetchTimeTrackerByUuidAndGroupId(
+		String uuid, long groupId) {
+
+		return _timeTrackerLocalService.fetchTimeTrackerByUuidAndGroupId(
+			uuid, groupId);
+	}
+
+	@Override
+	public java.util.List<com.ax.hrms.model.TimeTracker> findByTaskId(
+		long taskId) {
+
+		return _timeTrackerLocalService.findByTaskId(taskId);
+	}
+
+	@Override
+	public java.util.List<com.ax.hrms.model.TimeTracker>
+		findByTaskIdAndEmployeeId(long taskId, long employeeId) {
+
+		return _timeTrackerLocalService.findByTaskIdAndEmployeeId(
+			taskId, employeeId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
+		getActionableDynamicQuery() {
+
+		return _timeTrackerLocalService.getActionableDynamicQuery();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
+		getExportActionableDynamicQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return _timeTrackerLocalService.getExportActionableDynamicQuery(
+			portletDataContext);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
+		getIndexableActionableDynamicQuery() {
+
+		return _timeTrackerLocalService.getIndexableActionableDynamicQuery();
+	}
+
+	/**
+	 * Returns the OSGi service identifier.
+	 *
+	 * @return the OSGi service identifier
+	 */
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return _timeTrackerLocalService.getOSGiServiceIdentifier();
+	}
+
+	/**
+	 * @throws PortalException
+	 */
+	@Override
+	public com.liferay.portal.kernel.model.PersistedModel getPersistedModel(
+			java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	 * Returns the time tracker with the primary key.
+	 *
+	 * @param timeTrackerId the primary key of the time tracker
+	 * @return the time tracker
+	 * @throws PortalException if a time tracker with the primary key could not be found
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker getTimeTracker(long timeTrackerId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.getTimeTracker(timeTrackerId);
+	}
+
+	/**
+	 * Returns the time tracker matching the UUID and group.
+	 *
+	 * @param uuid the time tracker's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching time tracker
+	 * @throws PortalException if a matching time tracker could not be found
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker getTimeTrackerByUuidAndGroupId(
+			String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _timeTrackerLocalService.getTimeTrackerByUuidAndGroupId(
+			uuid, groupId);
+	}
+
+	/**
+	 * Returns a range of all the time trackers.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.ax.hrms.model.impl.TimeTrackerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of time trackers
+	 * @param end the upper bound of the range of time trackers (not inclusive)
+	 * @return the range of time trackers
+	 */
+	@Override
+	public java.util.List<com.ax.hrms.model.TimeTracker> getTimeTrackers(
+		int start, int end) {
+
+		return _timeTrackerLocalService.getTimeTrackers(start, end);
+	}
+
+	/**
+	 * Returns all the time trackers matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the time trackers
+	 * @param companyId the primary key of the company
+	 * @return the matching time trackers, or an empty list if no matches were found
+	 */
+	@Override
+	public java.util.List<com.ax.hrms.model.TimeTracker>
+		getTimeTrackersByUuidAndCompanyId(String uuid, long companyId) {
+
+		return _timeTrackerLocalService.getTimeTrackersByUuidAndCompanyId(
+			uuid, companyId);
+	}
+
+	/**
+	 * Returns a range of time trackers matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the time trackers
+	 * @param companyId the primary key of the company
+	 * @param start the lower bound of the range of time trackers
+	 * @param end the upper bound of the range of time trackers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the range of matching time trackers, or an empty list if no matches were found
+	 */
+	@Override
+	public java.util.List<com.ax.hrms.model.TimeTracker>
+		getTimeTrackersByUuidAndCompanyId(
+			String uuid, long companyId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.ax.hrms.model.TimeTracker> orderByComparator) {
+
+		return _timeTrackerLocalService.getTimeTrackersByUuidAndCompanyId(
+			uuid, companyId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns the number of time trackers.
+	 *
+	 * @return the number of time trackers
+	 */
+	@Override
+	public int getTimeTrackersCount() {
+		return _timeTrackerLocalService.getTimeTrackersCount();
+	}
+
+	/**
+	 * Updates the time tracker in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	 *
+	 * <p>
+	 * <strong>Important:</strong> Inspect TimeTrackerLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * </p>
+	 *
+	 * @param timeTracker the time tracker
+	 * @return the time tracker that was updated
+	 */
+	@Override
+	public com.ax.hrms.model.TimeTracker updateTimeTracker(
+		com.ax.hrms.model.TimeTracker timeTracker) {
+
+		return _timeTrackerLocalService.updateTimeTracker(timeTracker);
+	}
+
+	@Override
+	public BasePersistence<?> getBasePersistence() {
+		return _timeTrackerLocalService.getBasePersistence();
+	}
+
+	@Override
+	public TimeTrackerLocalService getWrappedService() {
+		return _timeTrackerLocalService;
+	}
+
+	@Override
+	public void setWrappedService(
+		TimeTrackerLocalService timeTrackerLocalService) {
+
+		_timeTrackerLocalService = timeTrackerLocalService;
+	}
+
+	private TimeTrackerLocalService _timeTrackerLocalService;
+
+}

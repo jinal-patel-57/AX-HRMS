@@ -1,0 +1,33 @@
+.ax-hrms-profile-management-web {
+}
+.profilePic{
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    background-color: #f7f7f7;
+    border-radius: 50%;
+    box-sizing: border-box;
+    float: left;
+    overflow: hidden;
+    cursor: pointer;
+    background-size: cover;
+    position: relative;
+    background-position: -36px;
+}
+.data-title{
+    color:red;
+    font-weight: bold;
+    margin: 4px 0;
+}
+.data-value{
+    color:black;
+    margin: 4px 0;
+}
+.cover{
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+.error{
+    color: red;
+}

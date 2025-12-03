@@ -1,0 +1,13 @@
+Bundle-Name: ax-hrms-master-web
+Bundle-SymbolicName: com.ax.hrms.master.web
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.ax.hrms.master.appraisal.status.web.action,\
+	com.ax.hrms.master.department.web.action,\
+	com.ax.hrms.master.education.level.web.action,\
+	com.ax.hrms.master.exception,\
+	com.ax.hrms.master.model,\
+	com.ax.hrms.master.service,\
+	com.ax.hrms.master.service.persistence,\
+	com.ax.hrms.master.web.constants,\
+	com.ax.hrms.master.web.portlet

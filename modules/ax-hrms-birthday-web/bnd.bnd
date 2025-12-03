@@ -1,0 +1,7 @@
+Bundle-Name: ax-hrms-birthday-web
+Bundle-SymbolicName: com.ax.hrms.birthday.web
+Bundle-Version: 1.0.0
+Export-Package: com.ax.hrms.constants,\
+    com.ax.hrms.anniversary.web.util,\
+    com.ax.hrms.anniversary.web.dto,\
+    com.ax.hrms.anniversary.web.notification

@@ -1,0 +1,19 @@
+dependencies {
+	implementation project(":modules:ax-hrms:ax-hrms-api")
+
+	// Portlet API
+    compileOnly group: "javax.portlet", name: "portlet-api", version: "2.0"
+
+    // OSGi annotations (Component, Reference, etc.)
+    compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
+
+    // Liferay API (MVCPortlet, MVCRenderCommand, portal services)
+    compileOnly "com.liferay.portal:release.portal.api:7.4.3.132"
+}
+
+buildService {
+	databaseNameMaxLength=100
+	apiDir = "../ax-hrms-api/src/main/java"
+}
+
+group = "com.ax.hrms"

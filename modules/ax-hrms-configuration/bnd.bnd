@@ -1,0 +1,11 @@
+Bundle-Name: ax-hrms-probation-configuration
+Bundle-SymbolicName: com.ax.hrms.probation.config
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.ax.hrms.probation.config.configuration,\
+	com.ax.hrms.probation.config.constants,\
+	com.ax.hrms.probation.config.configuration.action,\
+    com.ax.hrms.mail.template.config.configuration,\
+    com.ax.hrms.link.config.configuration,\
+    com.ax.hrms.notification.template.config.configuration
+    

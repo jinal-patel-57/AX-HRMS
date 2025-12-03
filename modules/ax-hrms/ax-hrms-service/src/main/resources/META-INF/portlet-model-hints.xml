@@ -1,0 +1,694 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.ax.hrms.model.Address">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="addressId" type="long" />
+		<field name="line1" type="String" />
+		<field name="line2" type="String" />
+		<field name="line3" type="String" />
+		<field name="state" type="String" />
+		<field name="country" type="long" />
+		<field name="pincode" type="String" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalEvaluationFormStatus">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalEvaluationFormStatusId" type="long" />
+		<field name="appraisalProcessId" type="long" />
+		<field name="submissionDate" type="Date" />
+		<field name="employeeId" type="long" />
+		<field name="filledEvaluationDocuemntId" type="long" />
+		<field name="appraisalFormTemplateId" type="long" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalFormTemplates">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalFormTemplateId" type="long" />
+		<field name="templateName" type="String" />
+		<field name="templateDocumentId" type="long" />
+		<field name="templateLevelId" type="long" />
+		<field name="templateYear" type="String" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalHistory">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalId" type="long" />
+		<field name="salaryId" type="long" />
+		<field name="appraisalDate" type="Date" />
+		<field name="appraisalDocumentId" type="long" />
+		<field name="updatedCtcPa" type="double" />
+		<field name="updatedCtcPm" type="double" />
+		<field name="rating" type="double" />
+		<field name="comments" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+	</model>
+	<model name="com.ax.hrms.model.AppraisalMeeting">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalMeetingId" type="long" />
+		<field name="appraisalProcessId" type="long" />
+		<field name="meetingDate" type="Date" />
+		<field name="meetingTime" type="Date" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalMeetingInvitees">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalMeetingInviteeId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="appraisalMeetingId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalProcess">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalProcessId" type="long" />
+		<field name="isSelfEvalutionFormSent" type="boolean" />
+		<field name="isSelfEvalutionFormFilled" type="boolean" />
+		<field name="arePeerEvaluationFormSent" type="boolean" />
+		<field name="arePeerEvaluationFormFilled" type="boolean" />
+		<field name="isManagementFormSent" type="boolean" />
+		<field name="isManagementFormFilled" type="boolean" />
+		<field name="isMeetingScheduled" type="boolean" />
+		<field name="isMeetingDone" type="boolean" />
+		<field name="isSalaryUpdated" type="boolean" />
+		<field name="status" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.AppraisalReminder">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="appraisalRemainderId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="appraisalRemainderMonth" type="String" />
+		<field name="appraisalRemainderYear" type="String" />
+		<field name="appraisalProcessId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.Attachment">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="attachmentId" type="long" />
+		<field name="timeTrackerId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.CompensatoryData">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="compensatoryDataId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="dateOfCompensation" type="Date" />
+		<field name="requestedHours" type="int" />
+		<field name="approvedHours" type="int" />
+		<field name="managerId" type="long" />
+		<field name="leaveCompensatoryStatusMasterId" type="long" />
+		<field name="description" type="String" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeAddress">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeAddressId" type="long" />
+		<field name="presentAddress" type="long" />
+		<field name="permanentAddress" type="long" />
+		<field name="presentPermanentSame" type="boolean" />
+		<field name="status" type="boolean" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeBankAccount">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="bankAccountId" type="long" />
+		<field name="accountNumber" type="String" />
+		<field name="accountType" type="String" />
+		<field name="beneficiaryName" type="String" />
+		<field name="bankName" type="String" />
+		<field name="status" type="boolean" />
+		<field name="ifscCode" type="String" />
+		<field name="bankBranch" type="String" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeDepartment">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeDepartmentId" type="long" />
+		<field name="departmentMasterId" type="long" />
+		<field name="status" type="boolean" />
+		<field name="dateOfChange" type="Date" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeDesignation">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeDesignationId" type="long" />
+		<field name="designationMasterId" type="long" />
+		<field name="status" type="boolean" />
+		<field name="startDate" type="Date" />
+		<field name="endDate" type="Date" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeDetails">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeId" type="long" />
+		<field name="employeeCode" type="String" />
+		<field name="lrUserId" type="long" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="officialEmail" type="String" />
+		<field name="personalEmail" type="String" />
+		<field name="joiningDate" type="Date" />
+		<field name="leavingDate" type="Date" />
+		<field name="mobileNo" type="String" />
+		<field name="gender" type="String" />
+		<field name="fatherName" type="String" />
+		<field name="dateOfBirth" type="Date" />
+		<field name="maritalStatus" type="boolean" />
+		<field name="marriageDate" type="Date" />
+		<field name="spouseName" type="String" />
+		<field name="employeeAddressId" type="long" />
+		<field name="skypeId" type="String" />
+		<field name="nominneeId" type="long" />
+		<field name="bankAccountId" type="long" />
+		<field name="uanEsicId" type="long" />
+		<field name="probationStatusId " type="long" />
+		<field name="isEmployeeOnboarded" type="boolean" />
+		<field name="isExperienced" type="boolean" />
+		<field name="isProbationEnabled" type="boolean" />
+		<field name="profilePicId" type="long" />
+		<field name="insuranceLink" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="isTerminated" type="boolean" />
+		<field name="appraisalDate" type="Date" />
+		<field name="employeeType" type="String" />
+		<field name="stipend" type="double" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeDocument">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="documentId" type="long" />
+		<field name="documentTypeId" type="long" />
+		<field name="documentNumber" type="String" />
+		<field name="documentName" type="String" />
+		<field name="documentMediaId" type="long" />
+		<field name="documentStatus" type="boolean" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeEducation">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="educationId" type="long" />
+		<field name="levelId" type="long" />
+		<field name="institution" type="String" />
+		<field name="degree" type="String" />
+		<field name="startDate" type="Date" />
+		<field name="passingYear" type="String" />
+		<field name="endDate" type="Date" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeExperience">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="experienceId" type="long" />
+		<field name="companyName" type="String" />
+		<field name="joiningDate" type="Date" />
+		<field name="relievingDate" type="Date" />
+		<field name="experienceCertificateMediaId" type="long" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeOffBoarding">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeOffBoardingId" type="long" />
+		<field name="kt" type="boolean" />
+		<field name="assets" type="boolean" />
+		<field name="nda" type="boolean" />
+		<field name="mailAndBiometrics" type="boolean" />
+		<field name="employeeId" type="long" />
+		<field name="experienceLetterId" type="long" />
+		<field name="fullAndFinal" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="relievingLetterId" type="long" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeProbationDetails">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="probationDetailId" type="long" />
+		<field name="probationPeriod" type="int" />
+		<field name="probationEndDate" type="Date" />
+		<field name="probationStatusId" type="long" />
+		<field name="isExtended" type="Boolean" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeSalary">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="salaryId" type="long" />
+		<field name="grossSalaryCtcPm" type="double" />
+		<field name="grossSalaryCtcPa" type="double" />
+		<field name="employeeId" type="long" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeUanEsic">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uanEsicId" type="long" />
+		<field name="uan" type="String" />
+		<field name="esicNo" type="String" />
+		<field name="status" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.EmployeeWish">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="wishId" type="long" />
+		<field name="senderId" type="long" />
+		<field name="receiverId" type="long" />
+		<field name="content" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
+		<field name="wishTypeMasterId" type="long" />
+		<field name="timeStamp" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.ExtendedProbationDetails">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="extendedProbationDetailsId" type="long" />
+		<field name="probationDetailId" type="long" />
+		<field name="extendDate" type="Date" />
+		<field name="evalutionReview" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="extendedProbationPeriod" type="int" />
+		<field name="extendedProbationEndDate" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.Holiday">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="holidayId" type="long" />
+		<field name="holidayName" type="String" />
+		<field name="date" type="Date" />
+		<field name="description" type="String" />
+		<field name="year" type="int" />
+		<field name="isFloater" type="Boolean" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveBalance">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveBalanceId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="year" type="int" />
+		<field name="noOfUsedLeaves" type="double" />
+		<field name="noOfRemainingLeaves" type="double" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveBalanceHistory">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveBalanceHistoryId" type="long" />
+		<field name="leaveBalanceId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="year" type="int" />
+		<field name="noOfUsedLeaves" type="double" />
+		<field name="noOfRemainingLeaves" type="double" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveDayType">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveDayTypeId" type="long" />
+		<field name="leaveRequestId" type="long" />
+		<field name="leaveDate" type="Date" />
+		<field name="isHalfDay" type="boolean" />
+		<field name="isFirstHalf" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveInformToTeamDetail">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveInformId" type="long" />
+		<field name="leaveRequestId" type="long" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveRequest">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveRequestId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="startDateTime" type="Date" />
+		<field name="endDateTime" type="Date" />
+		<field name="reason" type="String">
+			<hint name="max-length">250</hint>
+		</field>
+		<field name="leaveCompensatoryStatusMasterId" type="long" />
+		<field name="hrApprovalId" type="long" />
+		<field name="managerApprovalId" type="long" />
+		<field name="dateOfRequest" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.LeaveTypeViewPermit">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveTypeViewPermitId" type="long" />
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="yearOfLeaveTypeViewPermit" type="int" />
+	</model>
+	<model name="com.ax.hrms.model.Nominee">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="nomineeId" type="long" />
+		<field name="nomineeFirstName" type="String" />
+		<field name="nomineeLastName" type="String" />
+		<field name="nomineeContact" type="String" />
+		<field name="nomineeAddress" type="long" />
+		<field name="relationshipWithNominee" type="String" />
+		<field name="nomineeDob" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.PipProgram">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="pipProgramId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="startDate" type="Date" />
+		<field name="endDate" type="Date" />
+		<field name="numberOfMonths" type="int" />
+		<field name="improvementAreas" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="meetingDate" type="Date" />
+		<field name="status" type="String" />
+		<field name="isExtended" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.Policy">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="policyId" type="long" />
+		<field name="policyName" type="String" />
+		<field name="policyDescription" type="String" />
+		<field name="year" type="int" />
+		<field name="status" type="Boolean" />
+		<field name="policyTypeId" type="long" />
+		<field name="policyDocumentId" type="long" />
+		<field name="applicableDate" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.Project">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="projectId" type="long" />
+		<field name="projectName" type="String" />
+		<field name="description" type="String">
+			<hint name="max-length">256</hint>
+		</field>
+	</model>
+	<model name="com.ax.hrms.model.ProjectEmployeeDetails">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="projectEmployeeDetailsId" type="long" />
+		<field name="projectId" type="long" />
+		<field name="employeeId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.ProjectHistory">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="projectHistoryId" type="long" />
+		<field name="projectId" type="long" />
+		<field name="projectTaskStatusMasterId" type="long" />
+		<field name="managerId" type="long" />
+		<field name="startDate" type="Date" />
+		<field name="isBillble" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.RolePolicies">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="rolePoliciesId" type="long" />
+		<field name="roleId" type="long" />
+		<field name="policyId" type="long" />
+	</model>
+	<model name="com.ax.hrms.model.Task">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="taskId" type="long" />
+		<field name="taskName" type="String" />
+		<field name="description" type="String">
+			<hint name="max-length">256</hint>
+		</field>
+		<field name="projectId" type="long" />
+		<field name="mainTaskId" type="long" />
+		<field name="assignedTo" type="long" />
+		<field name="projectTaskStatusMasterId" type="long" />
+		<field name="priorityMasterId" type="long" />
+		<field name="estimatedHours" type="int" />
+		<field name="managerId" type="long" />
+		<field name="assignDate" type="Date" />
+		<field name="startDate" type="Date" />
+		<field name="dueDate" type="Date" />
+		<field name="completeDate" type="Date" />
+		<field name="isBillble" type="boolean" />
+		<field name="isSubTask" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.model.TaskReview">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="taskReviewId" type="long" />
+		<field name="taskId" type="long" />
+		<field name="reviewerId" type="long" />
+		<field name="review" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
+		<field name="dateOfReview" type="Date" />
+	</model>
+	<model name="com.ax.hrms.model.TimeTracker">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="timeTrackerId" type="long" />
+		<field name="taskId" type="long" />
+		<field name="employeeId" type="long" />
+		<field name="startTime" type="Date" />
+		<field name="endTime" type="Date" />
+		<field name="duration" type="double" />
+		<field name="description" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="managerApproveStatus" type="String" />
+	</model>
+	<model name="com.ax.hrms.model.UpcomingProbationEmployee">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="upcomingProbationEmployeeId" type="long" />
+		<field name="probationDetailId" type="long" />
+		<field name="month" type="int" />
+		<field name="year" type="int" />
+	</model>
+</model-hints>

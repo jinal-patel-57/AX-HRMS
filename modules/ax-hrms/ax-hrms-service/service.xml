@@ -1,0 +1,1454 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="com.ax.hrms">
+	<namespace>ax</namespace>
+
+	<entity local-service="true" name="EmployeeDetails" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="employeeId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeCode" type="String" />
+		<column name="lrUserId" type="long" />
+		<column name="firstName" type="String" />
+		<column name="lastName" type="String" />
+		<column name="officialEmail" type="String" />
+		<column name="personalEmail" type="String" />
+		<column name="joiningDate" type="Date" />
+		<column name="leavingDate" type="Date" />
+		<column name="mobileNo" type="String" />
+		<column name="gender" type="String" />
+		<column name="fatherName" type="String" />
+		<column name="dateOfBirth" type="Date" />
+		<column name="maritalStatus" type="boolean" />
+		<column name="marriageDate" type="Date" />
+		<column name="spouseName" type="String" />
+		<column name="employeeAddressId" type="long" />
+		<column name="skypeId" type="String" />
+		<column name="nominneeId" type="long" />
+		<column name="bankAccountId" type="long" />
+		<column name="uanEsicId" type="long" />
+		<column name="probationStatusId " type="long" />
+		<column name="isEmployeeOnboarded" type="boolean" />
+		<column name="isExperienced" type="boolean" />
+		<column name="isProbationEnabled" type="boolean" />
+		<column name="profilePicId" type="long" />
+		<column name="insuranceLink" type="String" />
+		<column name="isTerminated" type="boolean" />
+		<column name="appraisalDate" type="Date" />
+		<column name="employeeType" type="String" />
+		<column name="stipend" type="double" />
+
+		<!-- finder method  -->
+		<finder return-type="EmployeeDetails" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+		<finder return-type="EmployeeDetails" name="LrUserId">
+			<finder-column name="lrUserId"/>
+		</finder>
+
+		<finder name="LeavingDate" return-type="Collection">
+			<finder-column name="leavingDate" />
+		</finder>
+		
+		<finder name="EmployeeName" return-type="Collection">
+			<finder-column name="firstName" />
+			<finder-column name="lastName" />
+		</finder>
+		<finder return-type="Collection" name="IsTerminated">
+			<finder-column name="isTerminated"></finder-column>
+		</finder>
+		
+	</entity>
+
+
+
+	<entity local-service="true" name="Address" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="addressId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="line1" type="String" />
+		<column name="line2" type="String" />
+		<column name="line3" type="String" />
+		<column name="state" type="String" />
+		<column name="country" type="long" />
+		<column name="pincode" type="String" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="AppraisalHistory" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="salaryId" type="long" />
+		<column name="appraisalDate" type="Date" />
+		<column name="appraisalDocumentId" type="long" />
+		<column name="updatedCtcPa" type="double" />
+		<column name="updatedCtcPm" type="double" />
+		<column name="rating" type="double" />
+		<column name="comments" type="String" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeEducation" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="educationId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="levelId" type="long" />
+		<column name="institution" type="String" />
+		<column name="degree" type="String" />
+		<column name="startDate" type="Date" />
+		<column name="passingYear" type="String" />
+		<column name="endDate" type="Date" />
+		<column name="employeeId" type="long" />
+		<!-- finder method  -->
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+	</entity>
+
+
+
+	<entity local-service="true" name="EmployeeAddress" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="employeeAddressId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="presentAddress" type="long" />
+		<column name="permanentAddress" type="long" />
+		<column name="presentPermanentSame" type="boolean" />
+		<column name="status" type="boolean" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+		<finder name="EmployeeId" return-type="EmployeeAddress">
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+
+	</entity>
+
+
+
+	<entity local-service="true" name="EmployeeBankAccount" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="bankAccountId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="accountNumber" type="String" />
+		<column name="accountType" type="String" />
+		<column name="beneficiaryName" type="String" />
+		<column name="bankName" type="String" />
+		<column name="status" type="boolean" />
+		<column name="ifscCode" type="String" />
+		<column name="bankBranch" type="String" />
+		<column name="employeeId" type="long" />
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeDepartment" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="employeeDepartmentId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="departmentMasterId" type="long" />
+		<column name="status" type="boolean" />
+		<column name="dateOfChange" type="Date" />
+		<column name="employeeId" type="long" />
+
+
+
+		<!-- finder method  -->
+
+		<finder return-type="EmployeeDepartment" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="EmployeeIdGetDepartments">
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+		
+		<finder return-type="Collection" name="departmentMasterId">
+			<finder-column name="departmentMasterId"/>
+		</finder>
+		
+		<finder return-type="EmployeeDepartment" name="EmployeeIdAndStatusAndDepartmentMasterId">
+			<finder-column name="departmentMasterId"/>
+			<finder-column name="status"/>
+			<finder-column name="employeeId"/>
+		</finder>	
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeDesignation" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="employeeDesignationId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="designationMasterId" type="long" />
+		<column name="status" type="boolean" />
+		<column name="startDate" type="Date" />
+		<column name="endDate" type="Date" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+
+		<finder return-type="EmployeeDesignation" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeDocument" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="documentId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="documentTypeId" type="long" />
+		<column name="documentNumber" type="String" />
+		<column name="documentName" type="String" />
+		<column name="documentMediaId" type="long" />
+		<column name="documentStatus" type="boolean" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+
+	<entity local-service="true" name="EmployeeExperience" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="experienceId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="companyName" type="String" />
+		<column name="joiningDate" type="Date" />
+		<column name="relievingDate" type="Date" />
+		<column name="experienceCertificateMediaId" type="long"/>
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+
+	</entity>
+
+
+
+	<entity local-service="true" name="Nominee" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="nomineeId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="nomineeFirstName" type="String" />
+		<column name="nomineeLastName" type="String" />
+		<column name="nomineeContact" type="String" />
+		<column name="nomineeAddress" type="long" />
+		<column name="relationshipWithNominee" type="String" />
+		<column name="nomineeDob" type="Date" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeUanEsic" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="uanEsicId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="uan" type="String" />
+		<column name="esicNo" type="String" />
+		<column name="status" type="boolean" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeSalary" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="salaryId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="grossSalaryCtcPm" type="double" />
+		<column name="grossSalaryCtcPa" type="double" />
+		<column name="employeeId" type="long" />
+		<column name="status" type="boolean" />
+
+		<!-- finder method  -->
+		<finder name="EmployeeIdAndStatus" return-type="EmployeeSalary">
+			<finder-column name="employeeId" />
+			<finder-column name="status" />
+		</finder>
+	</entity>
+
+	<entity local-service="true" name="LeaveBalance" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveBalanceId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="leaveTypeMasterId" type="long" />
+		<column name="year" type="int" />
+		<column name="noOfUsedLeaves" type="double" />
+		<column name="noOfRemainingLeaves" type="double" />
+
+		<!-- finder method  -->
+		<finder return-type="LeaveBalance" name="EmployeeIdAndLeaveTypeMasterId">
+			<finder-column name="employeeId"></finder-column>
+			<finder-column name="leaveTypeMasterId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+		
+		<finder return-type="Collection" name="EmployeeIdAndYear">
+			<finder-column name="employeeId"></finder-column>
+			<finder-column name="year"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="LeaveTypeMasterIdAndYear">
+			<finder-column name="leaveTypeMasterId"></finder-column>
+			<finder-column name="year"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="Year">
+			<finder-column name="year"></finder-column>
+		</finder>
+
+		<finder return-type="LeaveBalance" name="EmployeeIdLeaveTypeMasterIdAndYear">
+			<finder-column name="employeeId"/>
+			<finder-column name="leaveTypeMasterId"/>
+			<finder-column name="year"/>
+
+		</finder>
+
+
+	</entity>
+
+	<entity local-service="true" name="CompensatoryData" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="compensatoryDataId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="dateOfCompensation" type="Date" />
+		<column name="requestedHours" type="int" />
+		<column name="approvedHours" type="int" />
+		<column name="managerId" type="long" />
+		<column name="leaveCompensatoryStatusMasterId" type="long" />
+		<column name="description" type="String" />
+
+
+
+		<!-- finder method  -->
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+
+		<finder return-type="Collection" name="ManagerId">
+			<finder-column name="managerId"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="LeaveRequest" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveRequestId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="leaveTypeMasterId" type="long" />
+		<column name="startDateTime" type="Date" />
+		<column name="endDateTime" type="Date" />
+		<column name="reason" type="String" />
+		<column name="leaveCompensatoryStatusMasterId" type="long" />
+		<column name="hrApprovalId" type="long" />
+		<column name="managerApprovalId" type="long" />
+		<column name="dateOfRequest" type="Date" />
+
+		<order by="desc">
+			<order-column name="dateOfRequest" />
+		</order>
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"/>
+		</finder>
+
+		<finder return-type="LeaveRequest" name="leaveRequestId">
+			<finder-column name="leaveRequestId"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="LeaveDayType" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveDayTypeId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="leaveRequestId" type="long" />
+		<column name="leaveDate" type="Date" />
+		<column name="isHalfDay" type="boolean" />
+		<column name="isFirstHalf" type="boolean" />
+
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="LeaveRequestId">
+			<finder-column name="leaveRequestId"/>
+		</finder>
+
+	</entity>
+	<entity local-service="true" name="LeaveTypeViewPermit" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveTypeViewPermitId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="leaveTypeMasterId" type="long" />
+		<column name="employeeId" type="long" />
+		<column name="yearOfLeaveTypeViewPermit" type="int" />
+
+
+		<!-- finder method  -->
+		<finder return-type="LeaveTypeViewPermit" name="EmployeeIdAndLeaveTypeMasterId">
+			<finder-column name="employeeId"></finder-column>
+			<finder-column name="leaveTypeMasterId"></finder-column>
+		</finder>
+
+	</entity>
+	<entity local-service="true" name="LeaveInformToTeamDetail" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveInformId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="leaveRequestId" type="long" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="LeaveRequestId">
+			<finder-column name="leaveRequestId"></finder-column>
+		</finder>
+
+	</entity>
+	
+	
+	<entity local-service="true" name="Holiday" remote-service="true" uuid="true">
+
+	    <!-- Audit fields -->
+	    <column name="companyId" type="long" />
+	    <column name="createdBy" type="long" />
+	    <column name="modifiedBy" type="long" />
+	    <column name="groupId" type="long" />
+	    <column name="createDate" type="Date" />
+	    <column name="modifiedDate" type="Date" />
+	
+	    <!-- PK fields -->
+	    <column name="holidayId" primary="true" type="long" />
+	
+	    <!-- Other fields -->
+	    <column name="holidayName" type="String" />
+	    <column name="date" type="Date" />
+	    <column name="description" type="String" />
+	    <column name="year" type="int" /> 
+	    <column name="isFloater" type="Boolean" />
+	
+	    <!-- finder methods -->
+
+		<finder name="Year" return-type="Collection">
+			<finder-column name="year" />
+		</finder>
+		
+		<finder return-type="Collection" name="IsFloaterAndCurrentYear">
+			<finder-column name="isFloater"></finder-column>
+			<finder-column name="year"></finder-column>
+		</finder>
+		<finder return-type="Holiday" name="Date">
+			<finder-column name="date"></finder-column>
+		</finder>
+	
+	</entity>
+
+	<entity local-service="true" name="EmployeeProbationDetails" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="probationDetailId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="probationPeriod" type="int" />
+		<column name="probationEndDate" type="Date" />
+		<column name="probationStatusId" type="long" />
+		<column name="isExtended" type="Boolean" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+		<finder name="EmployeeId" return-type="EmployeeProbationDetails">
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+
+	</entity>
+	<entity local-service="true" name="ExtendedProbationDetails" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="extendedProbationDetailsId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="probationDetailId" type="long" />
+		<column name="extendDate" type="Date" />
+		<column name="evalutionReview" type="String" />
+		<column name="extendedProbationPeriod" type="int" />
+		<column name="extendedProbationEndDate" type="Date" />
+
+		<!-- finder method  -->
+
+	</entity>
+	<entity local-service="true" name="UpcomingProbationEmployee" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="upcomingProbationEmployeeId" primary="true" type="long" />
+
+		<!-- Other fields -->
+		<column name="probationDetailId" type="long"/>
+		<column name="month" type="int"/>
+		<column name="year" type="int"/>
+		<!-- finder method  -->
+		<finder name="MonthAndYear" return-type="Collection">
+			<finder-column name="month"></finder-column>
+			<finder-column name="year"></finder-column>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="AppraisalReminder" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalRemainderId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="appraisalRemainderMonth" type="String" />
+		<column name="appraisalRemainderYear" type="String" />
+		<column name="appraisalProcessId" type="long" />
+
+		<!-- finder method  -->
+		<finder name="AppraisalProcessId" return-type="AppraisalReminder">
+			<finder-column name="appraisalProcessId" />
+		</finder>
+	</entity>
+
+
+	<entity local-service="true" name="AppraisalProcess" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalProcessId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="isSelfEvalutionFormSent" type="boolean" />
+		<column name="isSelfEvalutionFormFilled" type="boolean" />
+		<column name="arePeerEvaluationFormSent" type="boolean" />
+		<column name="arePeerEvaluationFormFilled" type="boolean" />
+		<column name="isManagementFormSent" type="boolean" />
+		<column name="isManagementFormFilled" type="boolean" />
+		<column name="isMeetingScheduled" type="boolean" />
+		<column name="isMeetingDone" type="boolean" />
+		<column name="isSalaryUpdated" type="boolean" />
+		<column name="status" type="long" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+	<entity local-service="true" name="AppraisalMeeting" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalMeetingId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="appraisalProcessId" type="long" />
+		<column name="meetingDate" type="Date" />
+		<column name="meetingTime" type="Date" />
+		<column name="status" type="boolean" />
+
+		<!-- finder method  -->
+		<finder name="AppraisalProcessId" return-type="AppraisalMeeting">
+			<finder-column name="appraisalProcessId" />
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="AppraisalMeetingInvitees" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalMeetingInviteeId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="appraisalMeetingId" type="long" />
+
+		<!-- finder method  -->
+		<finder name="AppraisalMeetingId" return-type="Collection">
+			<finder-column name="appraisalMeetingId" />
+		</finder>
+	</entity>
+
+
+	<entity local-service="true" name="AppraisalEvaluationFormStatus" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalEvaluationFormStatusId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="appraisalProcessId" type="long" />
+		<column name="submissionDate" type="Date" />
+		<column name="employeeId" type="long" />
+		<column  name="filledEvaluationDocuemntId" type="long" />
+		<column name="appraisalFormTemplateId" type="long" />
+		<column name="status" type="boolean" />
+
+		<!-- finder method  -->
+		<finder name="AppraisalProcessIdAndAppraisalFormTemplateId" return-type="Collection">
+			<finder-column name="appraisalProcessId" />
+			<finder-column name="appraisalFormTemplateId" />
+		</finder>
+		<finder name="StatusAndSubmissionDate" return-type="Collection">
+			<finder-column name="submissionDate" />
+			<finder-column name="status" />
+		</finder>
+	</entity>
+
+
+	<entity local-service="true" name="AppraisalFormTemplates" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="appraisalFormTemplateId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="templateName" type="String" />
+		<column name="templateDocumentId" type="long" />
+		<column name="templateLevelId" type="long" />
+		<column name="templateYear" type="String" />
+		<column name="status" type="boolean" />
+
+		<!-- finder method  -->
+		<finder name="TemplateYearAndTemplateLevelId" return-type="AppraisalFormTemplates">
+			<finder-column name="templateYear" />
+			<finder-column name="templateLevelId" />
+		</finder>
+		<finder name="TemplateLevelIdAndTemplateYear" return-type="AppraisalFormTemplates">
+			<finder-column name="templateLevelId" case-sensitive="false"></finder-column>
+			<finder-column name="templateYear" case-sensitive="false"></finder-column>
+		</finder>
+
+	</entity>
+	
+	<entity local-service="true" name="EmployeeWish" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="wishId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="senderId" type="long" />
+		<column name="receiverId" type="long" />
+		<column name="content" type="String" />
+		<column name="wishTypeMasterId" type="long"/>
+		<column name="timeStamp" type="Date" />
+
+		<!-- finder method  -->
+
+	</entity>
+
+
+
+	<entity local-service="true" name="Project" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="projectId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+
+		<column name="projectName" type="String" />
+		<column name="description" type="String" />
+
+
+
+		<!-- finder method  -->
+		<finder return-type="Project" name="ProjectId">
+			<finder-column name="projectId"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="ProjectEmployeeDetails" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="projectEmployeeDetailsId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="projectId" type="long" />
+		<column name="employeeId" type="long" />
+
+		<!-- finder method  -->
+	<finder return-type="Collection" name="ProjectId">
+			<finder-column name="projectId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="EmployeeId">
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+		<finder return-type="projectEmployeeDetailsId" name="ProjectIdAndEmployeeId">
+		<finder-column name="projectId"></finder-column>
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="ProjectHistory" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="projectHistoryId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="projectId" type="long" />
+		<column name="projectTaskStatusMasterId" type="long" />
+		<column name="managerId" type="long"/>
+		<column name="startDate" type="Date" />
+		<column name="isBillble" type="boolean" />
+
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="ManagerId">
+			<finder-column name="managerId"></finder-column>
+		</finder>
+
+		<finder return-type="ProjectHistory" name="ProjectId">
+			<finder-column name="projectId"></finder-column>
+		</finder>
+
+
+
+	</entity>
+
+	<entity local-service="true" name="Task" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="taskId" primary="true" type="long" />
+
+		<!-- Other fields -->
+		<column name="taskName" type="String" />
+		<column name="description" type="String" />
+
+		<column name="projectId" type="long" />
+		<column name="mainTaskId" type="long" />
+		<column name="assignedTo" type="long" />
+		<column name="projectTaskStatusMasterId" type="long" />
+		<column name="priorityMasterId" type="long" />
+		<column name="estimatedHours" type="int" />
+		<column name="managerId" type="long"/>
+		<column name="assignDate" type="Date" />
+		<column name="startDate" type="Date" />
+		<column name="dueDate" type="Date" />
+		<column name="completeDate" type="Date" />
+		<column name="isBillble" type="boolean" />
+		<column name="isSubTask" type="boolean" />
+
+		<order by="desc">
+			<order-column name="taskId" />
+		</order>
+
+
+		<!-- finder method  -->
+		<finder return-type="Collection" name="ProjectId">
+			<finder-column name="projectId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="ManagerId">
+			<finder-column name="managerId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="AssignedTo">
+			<finder-column name="assignedTo"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="ProjectIdAndManagerId">
+			<finder-column name="projectId"></finder-column>
+			<finder-column name="managerId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="ProjectIdAndAssigneeId">
+			<finder-column name="projectId"></finder-column>
+			<finder-column name="assignedTo"></finder-column>
+		</finder>
+		
+
+
+	</entity>
+
+	<entity local-service="true" name="TaskReview" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="taskReviewId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="taskId" type="long" />
+		<column name="reviewerId" type="long" />
+		<column name="review" type="String"/>
+		<column name="dateOfReview" type="Date" />
+
+
+		<order by="desc">
+			<order-column name="taskReviewId" />
+		</order>
+		<!-- finder method  -->
+		<finder return-type="Collection" name="TaskId">
+			<finder-column name="taskId"></finder-column>
+		</finder>
+
+		<finder return-type="Collection" name="ReviewerId">
+			<finder-column name="reviewerId"></finder-column>
+		</finder>
+
+
+
+	</entity>
+	<entity local-service="true" name="TimeTracker" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="timeTrackerId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="taskId" type="long" />
+		<column name="employeeId" type="long" />
+		<column name="startTime" type="Date" />
+		<column name="endTime" type="Date" />
+		<column name="duration" type="double" />
+		<column name="description" type="String"/>
+		<column name="managerApproveStatus" type="String"/>
+		
+		
+		<finder return-type="Collection" name="TaskIdAndEmployeeId">
+			<finder-column name="taskId"></finder-column>
+			<finder-column name="employeeId"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="TaskId">
+			<finder-column name="taskId"></finder-column>
+		</finder>
+
+	</entity>
+	
+	<entity local-service="true" name="Attachment" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="attachmentId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="timeTrackerId" type="long" />
+		
+		<finder return-type="Collection" name="TimeTrackerId">
+			<finder-column name="timeTrackerId"></finder-column>
+		</finder>
+	</entity>
+	
+	
+	<entity local-service="true" name="Policy" remote-service="true" uuid="true">
+
+	    <!-- Audit fields -->
+	    <column name="companyId" type="long" />
+	    <column name="createdBy" type="long" />
+	    <column name="modifiedBy" type="long" />
+	    <column name="groupId" type="long" />
+	    <column name="createDate" type="Date" />
+	    <column name="modifiedDate" type="Date" />
+	
+	    <!-- PK fields -->
+	    <column name="policyId" primary="true" type="long" />
+	
+	    <!-- Other fields -->
+	    <column name="policyName" type="String" />
+	    <column name="policyDescription" type="String" />
+	    <column name="year" type="int" /> 
+	    <column name="status" type="Boolean" />
+	    <column name="policyTypeId" type="long" />
+	    <column name="policyDocumentId" type="long" />
+		<column name="applicableDate" type="Date" />
+	    <!-- finder methods -->
+
+		<order by = "asc">
+			<order-column name="applicableDate"></order-column>
+		</order>
+	
+		<finder name="Year" return-type="Collection">
+			<finder-column name="year" />
+		</finder>
+		
+		<finder name="PolicyTypeIdAndPolicyYear" return-type="Policy">
+			<finder-column name="policyTypeId"></finder-column>
+			<finder-column name="year"></finder-column>
+		</finder>
+		
+		
+	</entity>
+	
+	<entity local-service="true" name="RolePolicies" remote-service="true" uuid="true">
+
+	    <!-- Audit fields -->
+	    <column name="companyId" type="long" />
+	    <column name="createdBy" type="long" />
+	    <column name="modifiedBy" type="long" />
+	    <column name="groupId" type="long" />
+	    <column name="createDate" type="Date" />
+	    <column name="modifiedDate" type="Date" />
+	
+	    <!-- PK fields -->
+	    <column name="rolePoliciesId" primary="true" type="long" />
+	
+	    <!-- Other fields -->
+	    <column name="roleId" type="long" />
+	    <column name="policyId" type="long" />
+	    
+	    <finder return-type="Collection" name="PolicyId">
+			<finder-column name="policyId"></finder-column>
+		</finder>
+	    <finder return-type="RolePolicies" name="PolicyIdAndRoleId">
+			<finder-column name="policyId"></finder-column>
+			<finder-column name="roleId"></finder-column>
+		</finder>
+		
+	    
+	</entity>
+
+	<entity local-service="true" name="PipProgram" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="pipProgramId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="employeeId" type="long" />
+		<column name="startDate" type="Date" />
+		<column name="endDate" type="Date" />
+		<column name="numberOfMonths" type="int" />
+		<column name="improvementAreas" type="String"/>
+		<column name="meetingDate" type="Date" />
+		<column name="status" type="String" />
+		<column name="isExtended" type="boolean" />
+
+	</entity>
+
+
+	<entity local-service="true" name="EmployeeOffBoarding" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+		<column name="employeeOffBoardingId" primary="true" type="long" />
+
+		<!-- Other fields -->
+		<column name="kt" type="boolean" />
+		<column name="assets" type="boolean" />
+		<column name="nda" type="boolean" />
+		<column name="mailAndBiometrics" type="boolean" />
+		<column name="employeeId" type="long" />
+		<column name="experienceLetterId" type="long" />
+		<column name="fullAndFinal" type="String" />
+		<column name="relievingLetterId" type="long" />
+		<column name="status" type="boolean" />
+
+
+		<finder name="EmployeeId" return-type="EmployeeOffBoarding">
+			<finder-column name="employeeId" />
+		</finder>
+
+
+	</entity>
+	
+	
+	
+	<entity local-service="true" name="LeaveBalanceHistory" remote-service="true" uuid="true">
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+		<column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- PK fields -->
+
+		<column name="leaveBalanceHistoryId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="leaveBalanceId" type="long" />
+		<column name="employeeId" type="long" />
+		<column name="leaveTypeMasterId" type="long" />
+		<column name="year" type="int" />
+		<column name="noOfUsedLeaves" type="double" />
+		<column name="noOfRemainingLeaves" type="double" />
+
+		<!-- finder method  -->
+		<finder name="EmployeeId" return-type="Collection">
+			<finder-column name="employeeId" />
+		</finder>
+		<finder name="Year" return-type="Collection">
+			<finder-column name="year" />
+		</finder>
+		
+		<finder name="EmployeeIdAndYear" return-type="Collection">
+			<finder-column name="employeeId" />
+			<finder-column name="year" />
+		</finder>
+		
+		
+
+
+	</entity>
+	
+	
+	
+	
+
+
+</service-builder>

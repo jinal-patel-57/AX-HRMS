@@ -1,0 +1,5 @@
+Bundle-Name: ax-hrms-leave-management-system-web
+Bundle-SymbolicName: com.ax.hrms.leave.management.employee.web
+Bundle-Version: 1.0.0
+Export-Package: com.ax.hrms.leave.management.web.constants
+

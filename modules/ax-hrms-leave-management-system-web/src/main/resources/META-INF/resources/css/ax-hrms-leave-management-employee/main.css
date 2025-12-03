@@ -1,0 +1,35 @@
+@charset "ISO-8859-1";
+.selected-options {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.selected-option {
+    background-color: #eee;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.selected-option span {
+    margin-right: 5px;
+}
+
+.selected-option button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    font-size: 14px;
+    padding: 0 5px;
+}
+
+.error{
+    color:red;
+}
+.row{
+    padding: 7px 5px;
+}

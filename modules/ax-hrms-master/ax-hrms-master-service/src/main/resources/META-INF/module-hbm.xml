@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false" default-lazy="false">
+	<import class="com.ax.hrms.master.model.AppraisalStatusMaster" />
+	<import class="com.ax.hrms.master.model.DepartmentMaster" />
+	<import class="com.ax.hrms.master.model.DesignationMaster" />
+	<import class="com.ax.hrms.master.model.DocumentTypeMaster" />
+	<import class="com.ax.hrms.master.model.EducationLevelMaster" />
+	<import class="com.ax.hrms.master.model.LeaveCompensatoryStatusMaster" />
+	<import class="com.ax.hrms.master.model.LeavePolicyMaster" />
+	<import class="com.ax.hrms.master.model.LeaveTypeMaster" />
+	<import class="com.ax.hrms.master.model.PolicyTypeMaster" />
+	<import class="com.ax.hrms.master.model.PriorityMaster" />
+	<import class="com.ax.hrms.master.model.ProbationStatusMaster" />
+	<import class="com.ax.hrms.master.model.ProjectTaskStatusMaster" />
+	<import class="com.ax.hrms.master.model.TemplateLevelMaster" />
+	<import class="com.ax.hrms.master.model.WishTypeMaster" />
+	<class name="com.ax.hrms.master.model.impl.AppraisalStatusMasterImpl" table="ax_master_AppraisalStatusMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="appraisalStatusMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.DepartmentMasterImpl" table="ax_master_DepartmentMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="departmentMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="departmentName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.DesignationMasterImpl" table="ax_master_DesignationMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="designationMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="designationName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.DocumentTypeMasterImpl" table="ax_master_DocumentTypeMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentTypeMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentTypeName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.EducationLevelMasterImpl" table="ax_master_EducationLevelMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="educationLevelMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="levelName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.LeaveCompensatoryStatusMasterImpl" table="ax_master_LeaveCompensatoryStatusMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveCompensatoryStatusMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveCompensatoryStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.LeavePolicyMasterImpl" table="ax_master_LeavePolicyMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leavePolicyMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="accrualRate" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="maximumBalance" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveTypeMasterId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isCheckMax" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="yearOfPolicy" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isCarryForward" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isContinuous" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="eligibleAfterMonths" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isApplicableFloater" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.LeaveTypeMasterImpl" table="ax_master_LeaveTypeMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveTypeMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveTypeName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isActive" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isAppearForAll" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.PolicyTypeMasterImpl" table="ax_master_PolicyTypeMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="policyTypeMasterID" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="policyType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.PriorityMasterImpl" table="ax_master_PriorityMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="priorityMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="priorityName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.ProbationStatusMasterImpl" table="ax_master_ProbationStatusMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="probationStatusMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="statusType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.ProjectTaskStatusMasterImpl" table="ax_master_ProjectTaskStatusMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="projectTaskStatusMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="projectTaskStatusName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isApplicableForProject" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isApplicableForTask" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.TemplateLevelMasterImpl" table="ax_master_TemplateLevelMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="templateLevelMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="levelName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.ax.hrms.master.model.impl.WishTypeMasterImpl" table="ax_master_WishTypeMaster">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="wishTypeMasterId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="wishType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+</hibernate-mapping>

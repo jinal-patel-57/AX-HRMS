@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+
+<service-builder dependency-injector="ds" package-path="com.ax.hrms.master">
+	<namespace>ax_master</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager ">-->
+	<entity local-service="true" name="DepartmentMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="departmentMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="departmentName" type="String" />
+		
+		<!-- finder method  -->
+		
+
+		<finder name="DepartmentName" return-type="DepartmentMaster">
+			<finder-column case-sensitive="false" name="departmentName"/>
+		</finder>
+		
+		<finder name="DepartmentNameById" return-type="DepartmentMaster">
+			<finder-column case-sensitive="false" name="departmentMasterId"/>
+		</finder>
+	</entity>
+	
+	<entity local-service="true" name="DesignationMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="designationMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="designationName" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="DesignationName" return-type="DesignationMaster">
+			<finder-column name="designationName" case-sensitive="false"/>
+		</finder>
+		<finder name="DesignationNameById" return-type="DesignationMaster">
+			<finder-column name="designationMasterId" case-sensitive="false"/>
+		</finder>
+		
+		
+		
+	</entity>
+
+	<entity local-service="true" name="DocumentTypeMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="documentTypeMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="documentTypeName" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="DocumentTypeName" return-type="DocumentTypeMaster">
+			<finder-column name="documentTypeName" case-sensitive="false"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="EducationLevelMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="educationLevelMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="levelName" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="LevelName" return-type="EducationLevelMaster">
+			<finder-column case-sensitive="false" name="levelName"/>
+		</finder>
+		
+	</entity>
+
+	<entity local-service="true" name="AppraisalStatusMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="appraisalStatusMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="status" type="String" />
+
+		<finder name="status" return-type="AppraisalStatusMaster">
+			<finder-column case-sensitive="false" name="status"/>
+		</finder>
+
+
+	</entity>
+
+	<entity local-service="true" name="TemplateLevelMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="templateLevelMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="levelName" type="String" />
+
+		<finder name="levelName" return-type="TemplateLevelMaster">
+			<finder-column case-sensitive="false"  name="levelName"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="PolicyTypeMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="policyTypeMasterID" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="policyType" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="PolicyType" return-type="PolicyTypeMaster">
+			<finder-column case-sensitive="false" name="policyType"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="ProbationStatusMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="probationStatusMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="statusType" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="StatusType" return-type="ProbationStatusMaster">
+			<finder-column case-sensitive="false" name="statusType"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="WishTypeMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="wishTypeMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="wishType" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="WishType" return-type="WishTypeMaster">
+			<finder-column case-sensitive="false" name="wishType"/>
+		</finder>
+		
+	</entity>
+
+	<entity local-service="true" name="ProjectTaskStatusMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="projectTaskStatusMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="projectTaskStatusName" type="String" />
+		<column name="isApplicableForProject" type="boolean" />
+		<column name="isApplicableForTask" type="boolean" />
+
+		<finder name="StatusNameAndApplicableForProjectAndTask" return-type="ProjectTaskStatusMaster">
+			<finder-column  case-sensitive="false" name="projectTaskStatusName"/>
+			<finder-column case-sensitive="false" name="isApplicableForProject"/>
+			<finder-column case-sensitive="false" name="isApplicableForTask"/>
+		</finder>
+		<finder name="ProjectTaskStatusName" return-type="ProjectTaskStatusMaster">
+			<finder-column  case-sensitive="false" name="projectTaskStatusName"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="PriorityMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="priorityMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="priorityName" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="PriorityName" return-type="PriorityMaster">
+			<finder-column name="priorityName" case-sensitive="false"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="LeaveTypeMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="leaveTypeMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="leaveTypeName" type="String" />
+		<column name="description" type="String" />
+		<column name="isActive" type="boolean" />
+		<column name="isAppearForAll" type="boolean" />
+
+		<!-- Finder Method -->
+		<finder name="LeaveTypeName" return-type="LeaveTypeMaster">
+			<finder-column name="leaveTypeName" case-sensitive="false"/>
+		</finder>
+		<finder name="LeaveTypeMasterId" return-type="LeaveTypeMaster">
+			<finder-column name="leaveTypeMasterId"/>
+		</finder>
+
+		<finder name="ActiveAndAppearForAll" return-type="Collection">
+			<finder-column name="isActive" case-sensitive="false"/>
+			<finder-column name="isAppearForAll" case-sensitive="false"/>
+		</finder>
+		
+
+	</entity>
+
+	<entity local-service="true" name="LeavePolicyMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="leavePolicyMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="description" type="String" />
+		<column name="accrualRate" type="double" />
+		<column name="maximumBalance" type="double" />
+		<column name="leaveTypeMasterId" type="long" />
+		<column name="isCheckMax" type="boolean" />
+		<column name="yearOfPolicy" type="int" />
+		<column name="isCarryForward" type="boolean" />
+		<column name="isContinuous" type="boolean" />
+		<column name="eligibleAfterMonths" type="int" />
+		<column name="isApplicableFloater" type="boolean" />
+		
+		<!-- Finder Methods  -->
+		<finder return-type="LeavePolicyMaster" name="LeaveTypeMasterId">
+			<finder-column name="leaveTypeMasterId"></finder-column>
+		</finder>
+		<finder return-type="LeavePolicyMaster" name="LeaveTypeMasterIdAndYear">
+			<finder-column name="leaveTypeMasterId"></finder-column>
+			<finder-column name="yearOfPolicy"></finder-column>
+		</finder>
+		<finder return-type="Collection" name="Year">
+			<finder-column name="yearOfPolicy"></finder-column>
+		</finder>
+
+		<finder name="LeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths" return-type="LeavePolicyMaster">
+			<finder-column case-sensitive="false" name="leaveTypeMasterId"/>
+			<finder-column case-sensitive="false" name="yearOfPolicy"/>
+			<finder-column case-sensitive="false" name="eligibleAfterMonths"/>
+		</finder>
+
+	</entity>
+
+	<entity local-service="true" name="LeaveCompensatoryStatusMaster" remote-service="true" >
+
+		<!-- PK fields -->
+
+		<column name="leaveCompensatoryStatusMasterId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createdBy" type="long" />
+        <column name="modifiedBy" type="long" />
+		<column name="groupId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="leaveCompensatoryStatus" type="String" />
+		
+		<!-- Finder Method -->
+		<finder name="LeaveCompensatoryStatus" return-type="LeaveCompensatoryStatusMaster">
+			<finder-column case-sensitive="false" name="leaveCompensatoryStatus"/>
+		</finder>
+		
+		<finder name="LeaveCompensatoryStatusById" return-type="LeaveCompensatoryStatusMaster">
+			<finder-column case-sensitive="false" name="leaveCompensatoryStatusMasterId"/>
+		</finder>
+
+	</entity>
+
+</service-builder>

@@ -1,0 +1,10 @@
+Bundle-Name: ax-hrms-api
+Bundle-SymbolicName: com.ax.hrms.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.ax.hrms.exception,\
+	com.ax.hrms.model,\
+	com.ax.hrms.service,\
+	com.ax.hrms.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../ax-hrms-service/service.xml

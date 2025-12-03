@@ -1,0 +1,12 @@
+Bundle-Name: ax-hrms-scheduler
+Bundle-SymbolicName: com.ax.hrms.scheduler
+Bundle-Version: 1.0.0
+Export-Package: com.ax.hrms.scheduler.constants
+Export-Package: com.ax.hrms.constants,\
+    com.ax.hrms.anniversary.web.util,\
+    com.ax.hrms.anniversary.web.dto,\
+    com.ax.hrms.anniversary.web.notification
+Export-Package: com.ax.hrms.constants,\
+    com.ax.hrms.birthday.web.util,\
+    com.ax.hrms.birthday.web.dto,\
+    com.ax.hrms.birthday.web.notification

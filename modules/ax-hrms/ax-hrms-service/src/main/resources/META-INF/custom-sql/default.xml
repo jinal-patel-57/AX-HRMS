@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+    <sql id="customSqlQueryXmlForSearch">
+        <![CDATA[
+SELECT 
+    ed.employeeId,
+    ed.employeeCode,
+    ed.firstName,
+    ed.lastName,
+    ed.officialEmail,
+    ed.personalEmail,
+    ed.joiningDate,
+    ed.leavingDate,
+    ed.mobileNo,
+    ed.gender,
+    ed.fatherName,
+    ed.dateOfBirth,
+    ed.maritalStatus,
+    ed.marriageDate,
+    ed.spouseName,
+    ed.employeeAddressId,
+    ed.skypeId,
+    ed.nominneeId,
+    ed.bankAccountId,
+    ed.uanEsicId,
+    ed.probationStatusId,
+    ed.isEmployeeOnboarded,
+    ed.isExperienced,
+    ed.isProbationEnabled,
+    ed.profilePicId,
+    ed.insuranceLink,
+    edp.employeeDepartmentId,
+    edp.status AS departmentStatus,
+    edp.dateOfChange AS departmentDateOfChange,
+    edi.employeeDesignationId,
+    edi.status AS designationStatus,
+    dm_dep.departmentMasterId AS departmentMasterId,
+    dm_dep.departmentName AS departmentName,
+    dm_des.designationMasterId AS designationMasterId,
+    dm_des.designationName AS designationName
+FROM 
+    ax_EmployeeDetails ed
+INNER JOIN 
+    ax_EmployeeDepartment edp ON ed.employeeId = edp.employeeId
+INNER JOIN 
+    ax_EmployeeDesignation edi ON ed.employeeId = edi.employeeId
+INNER JOIN 
+    ax_master_DepartmentMaster dm_dep ON edp.departmentMasterId = dm_dep.departmentMasterId
+INNER JOIN 
+    ax_master_DesignationMaster dm_des ON edi.designationMasterId = dm_des.designationMasterId
+WHERE 
+    ed.firstName LIKE ? OR
+    ed.lastName LIKE ? OR
+    dm_dep.departmentName LIKE ? OR
+    dm_des.designationName LIKE ?
+        ]]>
+    </sql>
+    <sql id="findEmployeeByName">
+        <![CDATA[
+        	SELECT cast(employeeid AS text)
+            from ax_employeedetails
+            WHERE (lower(firstname) LIKE ?
+               OR lower(lastname) LIKE ?)
+               AND isterminated = false
+        ]]>
+    </sql>
+    <sql id="getAllContinuedEmployeeId">
+        <![CDATA[
+        	SELECT cast(employeeid AS text)
+            from ax_employeedetails
+            WHERE isterminated = false;
+        ]]>
+    </sql>
+    <sql id="findEmployeeByDepartmentId">
+        <![CDATA[
+            SELECT cast(employee.employeeid AS text) as employeeid
+            from ax_employeedetails as employee,
+                ax_employeedepartment as employeeDepartment
+            WHERE employee.employeeid = employeeDepartment.employeeid AND
+              employeeDepartment.departmentmasterid = ? AND employee.isterminated = false
+        ]]>
+    </sql>
+    <sql id="findEmployeeByDesignationId">
+        <![CDATA[
+            SELECT cast(employee.employeeid AS text) as employeeid
+            from ax_employeedetails as employee,
+                 ax_employeedesignation as employeeDesignation
+            WHERE employee.employeeid = employeeDesignation.employeeid AND
+                employeeDesignation.designationmasterid = ? AND employee.isterminated = false;
+        ]]>
+    </sql>
+    <sql id="findEmployeeByDesignationIdAndDepartmentId">
+        <![CDATA[
+            SELECT cast(employee.employeeid AS text) as employeeid
+            FROM ax_employeedetails as employee,
+                 ax_employeedesignation as employeeDesignation,
+                 ax_employeedepartment as employeeDepartment
+            WHERE (employee.employeeid = employeeDepartment.employeeid
+                    AND employee.employeeid = employeeDesignation.employeeid)
+                    AND (employeeDesignation.designationmasterid = ? AND employeeDepartment.departmentmasterid = ?)
+                    AND employee.isterminated = false;
+        ]]>
+    </sql>
+</custom-sql>

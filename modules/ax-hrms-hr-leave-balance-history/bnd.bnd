@@ -1,0 +1,4 @@
+Bundle-Name: ax-hrms-hr-leave-balance-history
+Bundle-SymbolicName: ax.hrms.hr.leave.balance.history
+Bundle-Version: 1.0.0
+Export-Package: ax.hrms.hr.leave.balance.history.constants

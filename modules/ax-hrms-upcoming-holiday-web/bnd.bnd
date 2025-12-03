@@ -1,0 +1,4 @@
+Bundle-Name: ax-hrms-upcoming-holiday-web
+Bundle-SymbolicName: ax.hrms.upcoming.holiday.web
+Bundle-Version: 1.0.0
+Export-Package: ax.hrms.upcoming.holiday.web.constants

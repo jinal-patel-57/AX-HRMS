@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.ax.hrms.master.model.AppraisalStatusMaster">
+		<field name="appraisalStatusMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.DepartmentMaster">
+		<field name="departmentMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="departmentName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.DesignationMaster">
+		<field name="designationMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="designationName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.DocumentTypeMaster">
+		<field name="documentTypeMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="documentTypeName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.EducationLevelMaster">
+		<field name="educationLevelMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="levelName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.LeaveCompensatoryStatusMaster">
+		<field name="leaveCompensatoryStatusMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveCompensatoryStatus" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.LeavePolicyMaster">
+		<field name="leavePolicyMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="description" type="String" />
+		<field name="accrualRate" type="double" />
+		<field name="maximumBalance" type="double" />
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="isCheckMax" type="boolean" />
+		<field name="yearOfPolicy" type="int" />
+		<field name="isCarryForward" type="boolean" />
+		<field name="isContinuous" type="boolean" />
+		<field name="eligibleAfterMonths" type="int" />
+		<field name="isApplicableFloater" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.master.model.LeaveTypeMaster">
+		<field name="leaveTypeMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="leaveTypeName" type="String" />
+		<field name="description" type="String">
+			<hint name="max-length">250</hint>
+		</field>
+		<field name="isActive" type="boolean" />
+		<field name="isAppearForAll" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.master.model.PolicyTypeMaster">
+		<field name="policyTypeMasterID" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="policyType" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.PriorityMaster">
+		<field name="priorityMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="priorityName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.ProbationStatusMaster">
+		<field name="probationStatusMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="statusType" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.ProjectTaskStatusMaster">
+		<field name="projectTaskStatusMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="projectTaskStatusName" type="String" />
+		<field name="isApplicableForProject" type="boolean" />
+		<field name="isApplicableForTask" type="boolean" />
+	</model>
+	<model name="com.ax.hrms.master.model.TemplateLevelMaster">
+		<field name="templateLevelMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="levelName" type="String" />
+	</model>
+	<model name="com.ax.hrms.master.model.WishTypeMaster">
+		<field name="wishTypeMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="wishType" type="String" />
+	</model>
+</model-hints>
