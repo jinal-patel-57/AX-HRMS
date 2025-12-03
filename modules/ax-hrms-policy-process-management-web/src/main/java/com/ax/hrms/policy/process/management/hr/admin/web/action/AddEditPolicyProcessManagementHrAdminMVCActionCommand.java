@@ -265,7 +265,7 @@ public class AddEditPolicyProcessManagementHrAdminMVCActionCommand extends BaseM
 			FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(themeDisplay.getUserId(),
 					policyLocalService.getPolicy(policy.getPolicyId()).getPolicyDocumentId(), fileName, mimeType, fileName,
 					fileName, existingFileEntry.getDescription(), null, DLVersionNumberIncrease.MAJOR, file,
-					null, null, serviceContext);
+					null, null, null, serviceContext);
 
 			User user = themeDisplay.getUser();
 			user.setPortraitId(updatedFileEntry.getFileEntryId());
@@ -284,7 +284,7 @@ public class AddEditPolicyProcessManagementHrAdminMVCActionCommand extends BaseM
 	        DLFileEntry currentFile;
 	        if (tempPolicy.getPolicyDocumentId() == policy.getPolicyDocumentId()) {
 	            if (!dlFileEntryLocalService.fetchDLFileEntry(tempPolicy.getPolicyDocumentId()).getFileName().equals(fileName)) {
-	                DLAppLocalServiceUtil.updateFileEntry(themeDisplay.getUserId(), tempPolicy.getPolicyDocumentId(), fileName, mimeType, fileName, null, dlFileEntryLocalService.fetchDLFileEntry(tempPolicy.getPolicyDocumentId()).getDescription(), null, DLVersionNumberIncrease.MAJOR, file, null, null, serviceContext);
+	                DLAppLocalServiceUtil.updateFileEntry(themeDisplay.getUserId(), tempPolicy.getPolicyDocumentId(), fileName, mimeType, fileName, null, dlFileEntryLocalService.fetchDLFileEntry(tempPolicy.getPolicyDocumentId()).getDescription(), null, DLVersionNumberIncrease.MAJOR, file, null, null, null, serviceContext);
 	            }
 	            currentFile = dlFileEntryLocalService.fetchDLFileEntry(tempPolicy.getPolicyDocumentId());
 	        } else {

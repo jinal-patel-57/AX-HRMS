@@ -132,7 +132,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 
 			RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
 
-			roleService.addRole(roleTypeContributor.getClassName(), 0, departmentName, titleMap, descriptionMap, type,null, serviceContext);
+			roleService.addRole("", roleTypeContributor.getClassName(), 0, departmentName, titleMap, descriptionMap, type,null, serviceContext);
 		} catch (Exception e) {
 			log.error("error while add role ===>" + e.getMessage());
 		}

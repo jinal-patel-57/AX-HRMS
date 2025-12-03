@@ -170,7 +170,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
 			roleService.updateRole(role.getRoleId(),roleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
-			Role role = roleService.addRole(roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
+			Role role = roleService.addRole("", roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());
 		}catch (Exception e){
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+e.getMessage());
@@ -191,7 +191,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
 			roleService.updateRole(role.getRoleId(),newRoleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
-			roleService.addRole(roleTypeContributor.getClassName(), 0, newRoleName, titleMap, descriptionMap, type, null, serviceContext);
+			roleService.addRole("", roleTypeContributor.getClassName(), 0, newRoleName, titleMap, descriptionMap, type, null, serviceContext);
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());
 		}
 	}

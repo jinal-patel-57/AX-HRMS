@@ -175,7 +175,7 @@ public class AddEditAppraisalFormTemplateMVCActionCommand extends BaseMVCActionC
             FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(
                     themeDisplay.getUserId(),
                     appraisalFormTemplatesLocalService.getAppraisalFormTemplates(appraisalFormTemplates.getAppraisalFormTemplateId()).getTemplateDocumentId(), fileName, mimeType, fileName, null,
-                    existingFileEntry.getDescription(), StringPool.BLANK, DLVersionNumberIncrease.MAJOR, fileContent, null, null, serviceContext
+                    existingFileEntry.getDescription(), StringPool.BLANK, DLVersionNumberIncrease.MAJOR, fileContent, null, null, null, serviceContext
             );
 
             User user = themeDisplay.getUser();
@@ -198,7 +198,7 @@ public class AddEditAppraisalFormTemplateMVCActionCommand extends BaseMVCActionC
         DLFileEntry currentFile;
         if (tempAppraisalFormTemplate.getTemplateDocumentId() == appraisalFormTemplates.getTemplateDocumentId()) {
             if (!dlFileEntryLocalService.fetchDLFileEntry(tempAppraisalFormTemplate.getTemplateDocumentId()).getFileName().equals(fileName)) {
-                DLAppLocalServiceUtil.updateFileEntry(themeDisplay.getUserId(), tempAppraisalFormTemplate.getTemplateDocumentId(), fileName, mimeType, fileName, null, dlFileEntryLocalService.fetchDLFileEntry(tempAppraisalFormTemplate.getTemplateDocumentId()).getDescription(), null, DLVersionNumberIncrease.MAJOR, file, null, null, serviceContext);
+                DLAppLocalServiceUtil.updateFileEntry(themeDisplay.getUserId(), tempAppraisalFormTemplate.getTemplateDocumentId(), fileName, mimeType, fileName, null, dlFileEntryLocalService.fetchDLFileEntry(tempAppraisalFormTemplate.getTemplateDocumentId()).getDescription(), null, DLVersionNumberIncrease.MAJOR, file, null, null, null, serviceContext);
             }
             currentFile = dlFileEntryLocalService.fetchDLFileEntry(tempAppraisalFormTemplate.getTemplateDocumentId());
         } else {

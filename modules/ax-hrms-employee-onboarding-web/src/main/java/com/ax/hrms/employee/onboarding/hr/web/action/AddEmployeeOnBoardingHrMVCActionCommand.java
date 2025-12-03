@@ -396,7 +396,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
             try {
                 roleService.getRole(themeDisplay.getCompanyId(), roleName);
             } catch (PortalException exception) {
-                roleService.addRole(roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
+                roleService.addRole("", roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
             } catch (Exception e) {
                 log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: " + e.getMessage());
             }

@@ -120,7 +120,7 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 
 						byte[] fileContent = readFileContent(file);
 
-						DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, serviceContext);
+						DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, null, serviceContext);
 				} else {
 					log.error("Error: File does not exist or file name is null");
 				}

@@ -46,7 +46,7 @@ public class EmployeeBasicDetailsUtil {
 		            FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(profilePicId);
 		            String mimeType = MimeTypesUtil.getContentType(file);
 		            byte[] fileContent = Files.readAllBytes(file.toPath());
-		            FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(userId,profilePicId,fileName,mimeType,fileName,null,existingFileEntry.getDescription(),StringPool.BLANK,DLVersionNumberIncrease.MAJOR,fileContent,null,null,serviceContext);
+		            FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(userId,profilePicId,fileName,mimeType,fileName,null,existingFileEntry.getDescription(),StringPool.BLANK,DLVersionNumberIncrease.MAJOR,fileContent,null,null, null, serviceContext);
 		            User user = themeDisplay.getUser();
 		            user.setPortraitId(updatedFileEntry.getFileEntryId());
 		            String  profilePicName =updatedFileEntry.getFileName();
