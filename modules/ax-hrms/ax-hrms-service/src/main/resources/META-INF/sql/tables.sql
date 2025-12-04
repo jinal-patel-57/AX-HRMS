@@ -255,7 +255,7 @@ create table ax_EmployeeDetails (
 	nominneeId LONG,
 	bankAccountId LONG,
 	uanEsicId LONG,
-	probationStatusId  LONG,
+	probationStatusId LONG,
 	isEmployeeOnboarded BOOLEAN,
 	isExperienced BOOLEAN,
 	isProbationEnabled BOOLEAN,

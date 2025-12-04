@@ -635,7 +635,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 		"(appraisalFormTemplates.uuid IS NULL OR appraisalFormTemplates.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
-	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the appraisal form templates where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchAppraisalFormTemplatesException</code> if it could not be found.
@@ -818,62 +817,14 @@ public class AppraisalFormTemplatesPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		uuid = Objects.toString(uuid, "");
+		AppraisalFormTemplates appraisalFormTemplates = fetchByUUID_G(
+			uuid, groupId);
 
-		FinderPath finderPath = _finderPathCountByUUID_G;
-
-		Object[] finderArgs = new Object[] {uuid, groupId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_APPRAISALFORMTEMPLATES_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid.isEmpty()) {
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindUuid) {
-					queryPos.add(uuid);
-				}
-
-				queryPos.add(groupId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (appraisalFormTemplates == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1472,7 +1423,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 		"appraisalFormTemplates.companyId = ?";
 
 	private FinderPath _finderPathFetchByTemplateYearAndTemplateLevelId;
-	private FinderPath _finderPathCountByTemplateYearAndTemplateLevelId;
 
 	/**
 	 * Returns the appraisal form templates where templateYear = &#63; and templateLevelId = &#63; or throws a <code>NoSuchAppraisalFormTemplatesException</code> if it could not be found.
@@ -1687,66 +1637,15 @@ public class AppraisalFormTemplatesPersistenceImpl
 	public int countByTemplateYearAndTemplateLevelId(
 		String templateYear, long templateLevelId) {
 
-		templateYear = Objects.toString(templateYear, "");
+		AppraisalFormTemplates appraisalFormTemplates =
+			fetchByTemplateYearAndTemplateLevelId(
+				templateYear, templateLevelId);
 
-		FinderPath finderPath =
-			_finderPathCountByTemplateYearAndTemplateLevelId;
-
-		Object[] finderArgs = new Object[] {templateYear, templateLevelId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_APPRAISALFORMTEMPLATES_WHERE);
-
-			boolean bindTemplateYear = false;
-
-			if (templateYear.isEmpty()) {
-				sb.append(
-					_FINDER_COLUMN_TEMPLATEYEARANDTEMPLATELEVELID_TEMPLATEYEAR_3);
-			}
-			else {
-				bindTemplateYear = true;
-
-				sb.append(
-					_FINDER_COLUMN_TEMPLATEYEARANDTEMPLATELEVELID_TEMPLATEYEAR_2);
-			}
-
-			sb.append(
-				_FINDER_COLUMN_TEMPLATEYEARANDTEMPLATELEVELID_TEMPLATELEVELID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindTemplateYear) {
-					queryPos.add(templateYear);
-				}
-
-				queryPos.add(templateLevelId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (appraisalFormTemplates == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String
@@ -1762,7 +1661,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 			"appraisalFormTemplates.templateLevelId = ?";
 
 	private FinderPath _finderPathFetchByTemplateLevelIdAndTemplateYear;
-	private FinderPath _finderPathCountByTemplateLevelIdAndTemplateYear;
 
 	/**
 	 * Returns the appraisal form templates where templateLevelId = &#63; and templateYear = &#63; or throws a <code>NoSuchAppraisalFormTemplatesException</code> if it could not be found.
@@ -1977,66 +1875,15 @@ public class AppraisalFormTemplatesPersistenceImpl
 	public int countByTemplateLevelIdAndTemplateYear(
 		long templateLevelId, String templateYear) {
 
-		templateYear = Objects.toString(templateYear, "");
+		AppraisalFormTemplates appraisalFormTemplates =
+			fetchByTemplateLevelIdAndTemplateYear(
+				templateLevelId, templateYear);
 
-		FinderPath finderPath =
-			_finderPathCountByTemplateLevelIdAndTemplateYear;
-
-		Object[] finderArgs = new Object[] {templateLevelId, templateYear};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_APPRAISALFORMTEMPLATES_WHERE);
-
-			sb.append(
-				_FINDER_COLUMN_TEMPLATELEVELIDANDTEMPLATEYEAR_TEMPLATELEVELID_2);
-
-			boolean bindTemplateYear = false;
-
-			if (templateYear.isEmpty()) {
-				sb.append(
-					_FINDER_COLUMN_TEMPLATELEVELIDANDTEMPLATEYEAR_TEMPLATEYEAR_3);
-			}
-			else {
-				bindTemplateYear = true;
-
-				sb.append(
-					_FINDER_COLUMN_TEMPLATELEVELIDANDTEMPLATEYEAR_TEMPLATEYEAR_2);
-			}
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(templateLevelId);
-
-				if (bindTemplateYear) {
-					queryPos.add(StringUtil.toLowerCase(templateYear));
-				}
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (appraisalFormTemplates == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String
@@ -2190,7 +2037,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 			appraisalFormTemplatesModelImpl.getGroupId()
 		};
 
-		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, appraisalFormTemplatesModelImpl);
 
@@ -2200,9 +2046,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 		};
 
 		finderCache.putResult(
-			_finderPathCountByTemplateYearAndTemplateLevelId, args,
-			Long.valueOf(1));
-		finderCache.putResult(
 			_finderPathFetchByTemplateYearAndTemplateLevelId, args,
 			appraisalFormTemplatesModelImpl);
 
@@ -2211,9 +2054,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 			appraisalFormTemplatesModelImpl.getTemplateYear()
 		};
 
-		finderCache.putResult(
-			_finderPathCountByTemplateLevelIdAndTemplateYear, args,
-			Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByTemplateLevelIdAndTemplateYear, args,
 			appraisalFormTemplatesModelImpl);
@@ -2728,11 +2568,6 @@ public class AppraisalFormTemplatesPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
-		_finderPathCountByUUID_G = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false);
-
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -2757,22 +2592,10 @@ public class AppraisalFormTemplatesPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"templateYear", "templateLevelId"}, true);
 
-		_finderPathCountByTemplateYearAndTemplateLevelId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByTemplateYearAndTemplateLevelId",
-			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"templateYear", "templateLevelId"}, false);
-
 		_finderPathFetchByTemplateLevelIdAndTemplateYear = new FinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByTemplateLevelIdAndTemplateYear",
 			new String[] {Long.class.getName(), String.class.getName()},
 			new String[] {"templateLevelId", "templateYear"}, true);
-
-		_finderPathCountByTemplateLevelIdAndTemplateYear = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByTemplateLevelIdAndTemplateYear",
-			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"templateLevelId", "templateYear"}, false);
 
 		AppraisalFormTemplatesUtil.setPersistence(this);
 	}

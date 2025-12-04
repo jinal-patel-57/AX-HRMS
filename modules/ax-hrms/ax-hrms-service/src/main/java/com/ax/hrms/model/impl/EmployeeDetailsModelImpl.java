@@ -79,7 +79,7 @@ public class EmployeeDetailsModelImpl
 		{"spouseName", Types.VARCHAR}, {"employeeAddressId", Types.BIGINT},
 		{"skypeId", Types.VARCHAR}, {"nominneeId", Types.BIGINT},
 		{"bankAccountId", Types.BIGINT}, {"uanEsicId", Types.BIGINT},
-		{"probationStatusId ", Types.BIGINT},
+		{"probationStatusId", Types.BIGINT},
 		{"isEmployeeOnboarded", Types.BOOLEAN},
 		{"isExperienced", Types.BOOLEAN}, {"isProbationEnabled", Types.BOOLEAN},
 		{"profilePicId", Types.BIGINT}, {"insuranceLink", Types.VARCHAR},
@@ -119,7 +119,7 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("nominneeId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("bankAccountId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uanEsicId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("probationStatusId ", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("probationStatusId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("isEmployeeOnboarded", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("isExperienced", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("isProbationEnabled", Types.BOOLEAN);
@@ -132,7 +132,7 @@ public class EmployeeDetailsModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId  LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -367,7 +367,7 @@ public class EmployeeDetailsModelImpl
 			attributeGetterFunctions.put(
 				"uanEsicId", EmployeeDetails::getUanEsicId);
 			attributeGetterFunctions.put(
-				"probationStatusId ", EmployeeDetails::getProbationStatusId);
+				"probationStatusId", EmployeeDetails::getProbationStatusId);
 			attributeGetterFunctions.put(
 				"isEmployeeOnboarded", EmployeeDetails::getIsEmployeeOnboarded);
 			attributeGetterFunctions.put(
@@ -514,7 +514,7 @@ public class EmployeeDetailsModelImpl
 				(BiConsumer<EmployeeDetails, Long>)
 					EmployeeDetails::setUanEsicId);
 			attributeSetterBiConsumers.put(
-				"probationStatusId ",
+				"probationStatusId",
 				(BiConsumer<EmployeeDetails, Long>)
 					EmployeeDetails::setProbationStatusId);
 			attributeSetterBiConsumers.put(
@@ -1499,7 +1499,7 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setUanEsicId(
 			this.<Long>getColumnOriginalValue("uanEsicId"));
 		employeeDetailsImpl.setProbationStatusId(
-			this.<Long>getColumnOriginalValue("probationStatusId "));
+			this.<Long>getColumnOriginalValue("probationStatusId"));
 		employeeDetailsImpl.setIsEmployeeOnboarded(
 			this.<Boolean>getColumnOriginalValue("isEmployeeOnboarded"));
 		employeeDetailsImpl.setIsExperienced(
@@ -1958,7 +1958,7 @@ public class EmployeeDetailsModelImpl
 		_columnOriginalValues.put("nominneeId", _nominneeId);
 		_columnOriginalValues.put("bankAccountId", _bankAccountId);
 		_columnOriginalValues.put("uanEsicId", _uanEsicId);
-		_columnOriginalValues.put("probationStatusId ", _probationStatusId);
+		_columnOriginalValues.put("probationStatusId", _probationStatusId);
 		_columnOriginalValues.put("isEmployeeOnboarded", _isEmployeeOnboarded);
 		_columnOriginalValues.put("isExperienced", _isExperienced);
 		_columnOriginalValues.put("isProbationEnabled", _isProbationEnabled);
@@ -2047,7 +2047,7 @@ public class EmployeeDetailsModelImpl
 
 		columnBitmasks.put("uanEsicId", 134217728L);
 
-		columnBitmasks.put("probationStatusId ", 268435456L);
+		columnBitmasks.put("probationStatusId", 268435456L);
 
 		columnBitmasks.put("isEmployeeOnboarded", 536870912L);
 

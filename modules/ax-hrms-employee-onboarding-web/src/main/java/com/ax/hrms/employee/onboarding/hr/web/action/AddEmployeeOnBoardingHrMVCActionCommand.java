@@ -193,7 +193,9 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 
         User user = null;
         String password = AxHrmsEmployeeOnboardingHrWebPortletConstants.BALNK_STRING;
+        log.info("before for loop -- " + userPassMap);
         for (Map.Entry<User, String> entry : userPassMap.entrySet()) {
+        	log.info("inside for loop -- " + entry.getKey() + "----" + entry.getValue());
             user = entry.getKey();
             password = entry.getValue();
         }
@@ -225,6 +227,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         employeeDetails.setIsEmployeeOnboarded(false);
         employeeDetails.setCreatedBy(themeDisplay.getUserId());
         employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
+        employeeDetails.setProbationStatusId(0);
         if (typeOfEmployee.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN)) {
             employeeDetails.setStipend(stipend);
         }
@@ -254,7 +257,6 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         }
         employeeDetails.setEmployeeType(typeOfEmployee);
 
-
         //adding probation status
         if (isProbationEnabled.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.ENABLED)) {
             adddProationPeriodDetailsToNewEmployee(employeeDetails, themeDisplay);
@@ -266,8 +268,6 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 
         }
 
-
-        boolean contractor1 = contractor;
         if (contractor) {
             sendCredentialMailToInternAndContractor(employeeDetails, password, themeDisplay);
         } else {

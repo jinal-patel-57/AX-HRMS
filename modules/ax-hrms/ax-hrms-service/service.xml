@@ -41,7 +41,7 @@
 		<column name="nominneeId" type="long" />
 		<column name="bankAccountId" type="long" />
 		<column name="uanEsicId" type="long" />
-		<column name="probationStatusId " type="long" />
+		<column name="probationStatusId" type="long" />
 		<column name="isEmployeeOnboarded" type="boolean" />
 		<column name="isExperienced" type="boolean" />
 		<column name="isProbationEnabled" type="boolean" />

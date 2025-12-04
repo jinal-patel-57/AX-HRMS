@@ -112,7 +112,7 @@ public class EmployeeDetailsCacheModel
 		sb.append(bankAccountId);
 		sb.append(", uanEsicId=");
 		sb.append(uanEsicId);
-		sb.append(", probationStatusId =");
+		sb.append(", probationStatusId=");
 		sb.append(probationStatusId);
 		sb.append(", isEmployeeOnboarded=");
 		sb.append(isEmployeeOnboarded);

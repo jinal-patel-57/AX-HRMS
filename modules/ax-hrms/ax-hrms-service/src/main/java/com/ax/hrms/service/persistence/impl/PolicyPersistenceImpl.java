@@ -618,7 +618,6 @@ public class PolicyPersistenceImpl
 		"(policy.uuid IS NULL OR policy.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
-	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the policy where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchPolicyException</code> if it could not be found.
@@ -798,62 +797,13 @@ public class PolicyPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		uuid = Objects.toString(uuid, "");
+		Policy policy = fetchByUUID_G(uuid, groupId);
 
-		FinderPath finderPath = _finderPathCountByUUID_G;
-
-		Object[] finderArgs = new Object[] {uuid, groupId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_POLICY_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid.isEmpty()) {
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindUuid) {
-					queryPos.add(uuid);
-				}
-
-				queryPos.add(groupId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (policy == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1926,7 +1876,6 @@ public class PolicyPersistenceImpl
 	private static final String _FINDER_COLUMN_YEAR_YEAR_2 = "policy.year = ?";
 
 	private FinderPath _finderPathFetchByPolicyTypeIdAndPolicyYear;
-	private FinderPath _finderPathCountByPolicyTypeIdAndPolicyYear;
 
 	/**
 	 * Returns the policy where policyTypeId = &#63; and year = &#63; or throws a <code>NoSuchPolicyException</code> if it could not be found.
@@ -2111,49 +2060,13 @@ public class PolicyPersistenceImpl
 	 */
 	@Override
 	public int countByPolicyTypeIdAndPolicyYear(long policyTypeId, int year) {
-		FinderPath finderPath = _finderPathCountByPolicyTypeIdAndPolicyYear;
+		Policy policy = fetchByPolicyTypeIdAndPolicyYear(policyTypeId, year);
 
-		Object[] finderArgs = new Object[] {policyTypeId, year};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_POLICY_WHERE);
-
-			sb.append(_FINDER_COLUMN_POLICYTYPEIDANDPOLICYYEAR_POLICYTYPEID_2);
-
-			sb.append(_FINDER_COLUMN_POLICYTYPEIDANDPOLICYYEAR_YEAR_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(policyTypeId);
-
-				queryPos.add(year);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (policy == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String
@@ -2268,15 +2181,12 @@ public class PolicyPersistenceImpl
 			policyModelImpl.getUuid(), policyModelImpl.getGroupId()
 		};
 
-		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(_finderPathFetchByUUID_G, args, policyModelImpl);
 
 		args = new Object[] {
 			policyModelImpl.getPolicyTypeId(), policyModelImpl.getYear()
 		};
 
-		finderCache.putResult(
-			_finderPathCountByPolicyTypeIdAndPolicyYear, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByPolicyTypeIdAndPolicyYear, args, policyModelImpl);
 	}
@@ -2761,11 +2671,6 @@ public class PolicyPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
-		_finderPathCountByUUID_G = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false);
-
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -2807,12 +2712,6 @@ public class PolicyPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByPolicyTypeIdAndPolicyYear",
 			new String[] {Long.class.getName(), Integer.class.getName()},
 			new String[] {"policyTypeId", "year"}, true);
-
-		_finderPathCountByPolicyTypeIdAndPolicyYear = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByPolicyTypeIdAndPolicyYear",
-			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"policyTypeId", "year"}, false);
 
 		PolicyUtil.setPersistence(this);
 	}

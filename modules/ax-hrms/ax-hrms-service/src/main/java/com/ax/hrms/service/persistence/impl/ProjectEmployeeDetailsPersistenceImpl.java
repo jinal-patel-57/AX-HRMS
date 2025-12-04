@@ -635,7 +635,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 		"(projectEmployeeDetails.uuid IS NULL OR projectEmployeeDetails.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
-	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the project employee details where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchProjectEmployeeDetailsException</code> if it could not be found.
@@ -818,62 +817,14 @@ public class ProjectEmployeeDetailsPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		uuid = Objects.toString(uuid, "");
+		ProjectEmployeeDetails projectEmployeeDetails = fetchByUUID_G(
+			uuid, groupId);
 
-		FinderPath finderPath = _finderPathCountByUUID_G;
-
-		Object[] finderArgs = new Object[] {uuid, groupId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_PROJECTEMPLOYEEDETAILS_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid.isEmpty()) {
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindUuid) {
-					queryPos.add(uuid);
-				}
-
-				queryPos.add(groupId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (projectEmployeeDetails == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -2485,7 +2436,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 		"projectEmployeeDetails.employeeId = ?";
 
 	private FinderPath _finderPathFetchByProjectIdAndEmployeeId;
-	private FinderPath _finderPathCountByProjectIdAndEmployeeId;
 
 	/**
 	 * Returns the project employee details where projectId = &#63; and employeeId = &#63; or throws a <code>NoSuchProjectEmployeeDetailsException</code> if it could not be found.
@@ -2677,49 +2627,14 @@ public class ProjectEmployeeDetailsPersistenceImpl
 	 */
 	@Override
 	public int countByProjectIdAndEmployeeId(long projectId, long employeeId) {
-		FinderPath finderPath = _finderPathCountByProjectIdAndEmployeeId;
+		ProjectEmployeeDetails projectEmployeeDetails =
+			fetchByProjectIdAndEmployeeId(projectId, employeeId);
 
-		Object[] finderArgs = new Object[] {projectId, employeeId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_PROJECTEMPLOYEEDETAILS_WHERE);
-
-			sb.append(_FINDER_COLUMN_PROJECTIDANDEMPLOYEEID_PROJECTID_2);
-
-			sb.append(_FINDER_COLUMN_PROJECTIDANDEMPLOYEEID_EMPLOYEEID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(projectId);
-
-				queryPos.add(employeeId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (projectEmployeeDetails == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String
@@ -2861,7 +2776,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 			projectEmployeeDetailsModelImpl.getGroupId()
 		};
 
-		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, projectEmployeeDetailsModelImpl);
 
@@ -2870,8 +2784,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 			projectEmployeeDetailsModelImpl.getEmployeeId()
 		};
 
-		finderCache.putResult(
-			_finderPathCountByProjectIdAndEmployeeId, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByProjectIdAndEmployeeId, args,
 			projectEmployeeDetailsModelImpl);
@@ -3387,11 +3299,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
-		_finderPathCountByUUID_G = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false);
-
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -3451,12 +3358,6 @@ public class ProjectEmployeeDetailsPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByProjectIdAndEmployeeId",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"projectId", "employeeId"}, true);
-
-		_finderPathCountByProjectIdAndEmployeeId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByProjectIdAndEmployeeId",
-			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"projectId", "employeeId"}, false);
 
 		ProjectEmployeeDetailsUtil.setPersistence(this);
 	}

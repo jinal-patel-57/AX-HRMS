@@ -246,7 +246,7 @@
 		<field name="nominneeId" type="long" />
 		<field name="bankAccountId" type="long" />
 		<field name="uanEsicId" type="long" />
-		<field name="probationStatusId " type="long" />
+		<field name="probationStatusId" type="long" />
 		<field name="isEmployeeOnboarded" type="boolean" />
 		<field name="isExperienced" type="boolean" />
 		<field name="isProbationEnabled" type="boolean" />

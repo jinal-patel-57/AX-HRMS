@@ -491,7 +491,7 @@ public interface EmployeeDetailsModel
 	/**
 	 * Sets the probation status ID of this employee details.
 	 *
-	 * @param probationStatusId  the probation status ID of this employee details
+	 * @param probationStatusId the probation status ID of this employee details
 	 */
 	public void setProbationStatusId(long probationStatusId);
 

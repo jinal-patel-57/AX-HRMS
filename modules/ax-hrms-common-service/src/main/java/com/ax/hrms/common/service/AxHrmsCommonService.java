@@ -137,7 +137,8 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
             retMp.put(user, password);
             return retMp;
         } catch (Exception e) {
-            log.error("ERROR CREATING THE NEW EMPLOYEE USER");
+        	log.error("ERROR CREATING THE NEW EMPLOYEE USER -- " + e.getMessage());
+        	e.printStackTrace();
         }
         retMp.put(user, password);
         return retMp;

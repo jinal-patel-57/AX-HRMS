@@ -88,8 +88,7 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 		"uanEsicId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Long> probationStatusId =
 		createColumn(
-			"probationStatusId ", Long.class, Types.BIGINT,
-			Column.FLAG_DEFAULT);
+			"probationStatusId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Boolean> isEmployeeOnboarded =
 		createColumn(
 			"isEmployeeOnboarded", Boolean.class, Types.BOOLEAN,

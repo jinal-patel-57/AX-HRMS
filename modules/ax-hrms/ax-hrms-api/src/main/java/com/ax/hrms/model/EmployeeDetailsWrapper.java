@@ -62,7 +62,7 @@ public class EmployeeDetailsWrapper
 		attributes.put("nominneeId", getNominneeId());
 		attributes.put("bankAccountId", getBankAccountId());
 		attributes.put("uanEsicId", getUanEsicId());
-		attributes.put("probationStatusId ", getProbationStatusId());
+		attributes.put("probationStatusId", getProbationStatusId());
 		attributes.put("isEmployeeOnboarded", isIsEmployeeOnboarded());
 		attributes.put("isExperienced", isIsExperienced());
 		attributes.put("isProbationEnabled", isIsProbationEnabled());
@@ -246,7 +246,7 @@ public class EmployeeDetailsWrapper
 			setUanEsicId(uanEsicId);
 		}
 
-		Long probationStatusId = (Long)attributes.get("probationStatusId ");
+		Long probationStatusId = (Long)attributes.get("probationStatusId");
 
 		if (probationStatusId != null) {
 			setProbationStatusId(probationStatusId);
@@ -1102,7 +1102,7 @@ public class EmployeeDetailsWrapper
 	/**
 	 * Sets the probation status ID of this employee details.
 	 *
-	 * @param probationStatusId  the probation status ID of this employee details
+	 * @param probationStatusId the probation status ID of this employee details
 	 */
 	@Override
 	public void setProbationStatusId(long probationStatusId) {

@@ -631,7 +631,6 @@ public class EmployeeDepartmentPersistenceImpl
 		"(employeeDepartment.uuid IS NULL OR employeeDepartment.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
-	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the employee department where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchEmployeeDepartmentException</code> if it could not be found.
@@ -811,62 +810,13 @@ public class EmployeeDepartmentPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		uuid = Objects.toString(uuid, "");
+		EmployeeDepartment employeeDepartment = fetchByUUID_G(uuid, groupId);
 
-		FinderPath finderPath = _finderPathCountByUUID_G;
-
-		Object[] finderArgs = new Object[] {uuid, groupId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_EMPLOYEEDEPARTMENT_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid.isEmpty()) {
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindUuid) {
-					queryPos.add(uuid);
-				}
-
-				queryPos.add(groupId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (employeeDepartment == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1462,7 +1412,6 @@ public class EmployeeDepartmentPersistenceImpl
 		"employeeDepartment.companyId = ?";
 
 	private FinderPath _finderPathFetchByEmployeeId;
-	private FinderPath _finderPathCountByEmployeeId;
 
 	/**
 	 * Returns the employee department where employeeId = &#63; or throws a <code>NoSuchEmployeeDepartmentException</code> if it could not be found.
@@ -1630,45 +1579,13 @@ public class EmployeeDepartmentPersistenceImpl
 	 */
 	@Override
 	public int countByEmployeeId(long employeeId) {
-		FinderPath finderPath = _finderPathCountByEmployeeId;
+		EmployeeDepartment employeeDepartment = fetchByEmployeeId(employeeId);
 
-		Object[] finderArgs = new Object[] {employeeId};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(2);
-
-			sb.append(_SQL_COUNT_EMPLOYEEDEPARTMENT_WHERE);
-
-			sb.append(_FINDER_COLUMN_EMPLOYEEID_EMPLOYEEID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(employeeId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (employeeDepartment == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String _FINDER_COLUMN_EMPLOYEEID_EMPLOYEEID_2 =
@@ -2703,8 +2620,6 @@ public class EmployeeDepartmentPersistenceImpl
 
 	private FinderPath
 		_finderPathFetchByEmployeeIdAndStatusAndDepartmentMasterId;
-	private FinderPath
-		_finderPathCountByEmployeeIdAndStatusAndDepartmentMasterId;
 
 	/**
 	 * Returns the employee department where departmentMasterId = &#63; and status = &#63; and employeeId = &#63; or throws a <code>NoSuchEmployeeDepartmentException</code> if it could not be found.
@@ -2919,59 +2834,15 @@ public class EmployeeDepartmentPersistenceImpl
 	public int countByEmployeeIdAndStatusAndDepartmentMasterId(
 		long departmentMasterId, boolean status, long employeeId) {
 
-		FinderPath finderPath =
-			_finderPathCountByEmployeeIdAndStatusAndDepartmentMasterId;
+		EmployeeDepartment employeeDepartment =
+			fetchByEmployeeIdAndStatusAndDepartmentMasterId(
+				departmentMasterId, status, employeeId);
 
-		Object[] finderArgs = new Object[] {
-			departmentMasterId, status, employeeId
-		};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(4);
-
-			sb.append(_SQL_COUNT_EMPLOYEEDEPARTMENT_WHERE);
-
-			sb.append(
-				_FINDER_COLUMN_EMPLOYEEIDANDSTATUSANDDEPARTMENTMASTERID_DEPARTMENTMASTERID_2);
-
-			sb.append(
-				_FINDER_COLUMN_EMPLOYEEIDANDSTATUSANDDEPARTMENTMASTERID_STATUS_2);
-
-			sb.append(
-				_FINDER_COLUMN_EMPLOYEEIDANDSTATUSANDDEPARTMENTMASTERID_EMPLOYEEID_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(departmentMasterId);
-
-				queryPos.add(status);
-
-				queryPos.add(employeeId);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
+		if (employeeDepartment == null) {
+			return 0;
 		}
 
-		return count.intValue();
+		return 1;
 	}
 
 	private static final String
@@ -3113,14 +2984,11 @@ public class EmployeeDepartmentPersistenceImpl
 			employeeDepartmentModelImpl.getGroupId()
 		};
 
-		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, employeeDepartmentModelImpl);
 
 		args = new Object[] {employeeDepartmentModelImpl.getEmployeeId()};
 
-		finderCache.putResult(
-			_finderPathCountByEmployeeId, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByEmployeeId, args, employeeDepartmentModelImpl);
 
@@ -3130,9 +2998,6 @@ public class EmployeeDepartmentPersistenceImpl
 			employeeDepartmentModelImpl.getEmployeeId()
 		};
 
-		finderCache.putResult(
-			_finderPathCountByEmployeeIdAndStatusAndDepartmentMasterId, args,
-			Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByEmployeeIdAndStatusAndDepartmentMasterId, args,
 			employeeDepartmentModelImpl);
@@ -3641,11 +3506,6 @@ public class EmployeeDepartmentPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
-		_finderPathCountByUUID_G = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false);
-
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -3669,11 +3529,6 @@ public class EmployeeDepartmentPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByEmployeeId",
 			new String[] {Long.class.getName()}, new String[] {"employeeId"},
 			true);
-
-		_finderPathCountByEmployeeId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByEmployeeId",
-			new String[] {Long.class.getName()}, new String[] {"employeeId"},
-			false);
 
 		_finderPathWithPaginationFindByEmployeeIdGetDepartments =
 			new FinderPath(
@@ -3726,17 +3581,6 @@ public class EmployeeDepartmentPersistenceImpl
 				},
 				new String[] {"departmentMasterId", "status", "employeeId"},
 				true);
-
-		_finderPathCountByEmployeeIdAndStatusAndDepartmentMasterId =
-			new FinderPath(
-				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-				"countByEmployeeIdAndStatusAndDepartmentMasterId",
-				new String[] {
-					Long.class.getName(), Boolean.class.getName(),
-					Long.class.getName()
-				},
-				new String[] {"departmentMasterId", "status", "employeeId"},
-				false);
 
 		EmployeeDepartmentUtil.setPersistence(this);
 	}
