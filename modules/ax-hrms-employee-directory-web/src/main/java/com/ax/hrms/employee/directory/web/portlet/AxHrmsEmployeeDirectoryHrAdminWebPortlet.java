@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=Employee Directory HR Admin Web",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.init-param.view-template=/jsp/employee-directory-employee/listEmployeeDirectory.jsp",
 		"com.liferay.portlet.footer-portlet-javascript=" + AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.MAIN_JS_EMPLOYEEDIRECTORY,
 		"javax.portlet.name=" + AxHrmsEmployeeDirectoryHrAdminWebPortletKeys.AXHRMSEMPLOYEEDIRECTORYHRADMINWEB,
 		"javax.portlet.resource-bundle=content.Language",
