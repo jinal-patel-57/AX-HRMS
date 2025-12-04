@@ -277,43 +277,118 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
     }
 
 
-    private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
-        List<LeaveTypeMaster> leaveTypeMasterList = leaveTypeMasterLocalService.findByActiveAndAppearForAll(true, true);
-        for (LeaveTypeMaster ltm : leaveTypeMasterList) {
-            try {
-                //getting year
-                Date date = new Date();
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(date);
-                int year = calendar.get(Calendar.YEAR);
-                //year-end
+//    private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
+//        List<LeaveTypeMaster> leaveTypeMasterList = leaveTypeMasterLocalService.findByActiveAndAppearForAll(true, true);
+//
+//        log.info("Leave type master List :- "+ leaveTypeMasterList);
+//        for (LeaveTypeMaster ltm : leaveTypeMasterList) {
+//            try {
+//                //getting year
+////                Date date = new Date();
+//                Date date = employeeDetails.getJoiningDate();
+//                Calendar calendar = new GregorianCalendar();
+//                calendar.setTime(date);
+//                int year = calendar.get(Calendar.YEAR);
+//                //year-end
+//
+//                LeavePolicyMaster lpm = leavePolicyMasterLocalService.findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(ltm.getLeaveTypeMasterId(), year, AxHrmsEmployeeOnboardingHrWebPortletConstants.ZERO);
+//
+//                log.info("Leave Policy Master :- "+ lpm);
+//                LeaveBalance lb = leaveBalanceLocalService.createLeaveBalance(CounterLocalServiceUtil.increment(LeaveBalance.class.getName()));
+//                lb.setCompanyId(themeDisplay.getCompanyId());
+//                lb.setCreatedBy(themeDisplay.getUserId());
+//                lb.setGroupId(themeDisplay.getCompanyGroupId());
+//                lb.setCreateDate(new Date());
+//                lb.setModifiedDate(new Date());
+//
+//                lb.setEmployeeId(employeeDetails.getEmployeeId());
+//                lb.setEmployeeId(employeeDetails.getEmployeeId());
+//                lb.setLeaveTypeMasterId(ltm.getLeaveTypeMasterId());
+//                lb.setYear(year);
+//                lb.setNoOfUsedLeaves(0);
+//
+//                if (lpm.getIsApplicableFloater()) {
+//                    lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * 12));
+//                } else {
+//                    int leftMonthsOfCurrentYear = 12 - (calendar.get(Calendar.MONTH) + 1);
+//                    lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * leftMonthsOfCurrentYear));
+//                }
+//                leaveBalanceLocalService.addLeaveBalance(lb);
+//            } catch (NoSuchLeavePolicyMasterException e) {
+//                log.error("Error while getting leave policy");
+//            }
+//        }
+//    }
+private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
 
-                LeavePolicyMaster lpm = leavePolicyMasterLocalService.findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(ltm.getLeaveTypeMasterId(), year, AxHrmsEmployeeOnboardingHrWebPortletConstants.ZERO);
-                LeaveBalance lb = leaveBalanceLocalService.createLeaveBalance(CounterLocalServiceUtil.increment(LeaveBalance.class.getName()));
-                lb.setCompanyId(themeDisplay.getCompanyId());
-                lb.setCreatedBy(themeDisplay.getUserId());
-                lb.setGroupId(themeDisplay.getCompanyGroupId());
-                lb.setCreateDate(new Date());
-                lb.setModifiedDate(new Date());
+    List<LeaveTypeMaster> leaveTypeMasterList =
+            leaveTypeMasterLocalService.findByActiveAndAppearForAll(true, true);
 
-                lb.setEmployeeId(employeeDetails.getEmployeeId());
-                lb.setEmployeeId(employeeDetails.getEmployeeId());
-                lb.setLeaveTypeMasterId(ltm.getLeaveTypeMasterId());
-                lb.setYear(year);
-                lb.setNoOfUsedLeaves(0);
+    log.info("Leave type master List :- " + leaveTypeMasterList);
 
-                if (lpm.getIsApplicableFloater()) {
-                    lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * 12));
-                } else {
-                    int leftMonthsOfCurrentYear = 12 - (calendar.get(Calendar.MONTH) + 1);
-                    lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * leftMonthsOfCurrentYear));
-                }
-                leaveBalanceLocalService.addLeaveBalance(lb);
-            } catch (NoSuchLeavePolicyMasterException e) {
-                log.error("Error while getting leave policy");
+    // Always use current year (system year)
+    Calendar todayCal = Calendar.getInstance();
+    int currentYear = todayCal.get(Calendar.YEAR);
+
+    for (LeaveTypeMaster ltm : leaveTypeMasterList) {
+        try {
+
+
+            // Employee joining date
+            Date joiningDate = employeeDetails.getJoiningDate();
+            Calendar joinCal = Calendar.getInstance();
+            joinCal.setTime(joiningDate);
+
+            // If employee joined this year → use joining month
+            // If employee joined in past year → treat joining month = January
+            int joiningMonthForCalculation;
+
+            if (joinCal.get(Calendar.YEAR) == currentYear) {
+                joiningMonthForCalculation = joinCal.get(Calendar.MONTH) + 1;
+            } else {
+                // Past year → full year leave OR company rule
+                joiningMonthForCalculation = 1;
             }
+
+            LeavePolicyMaster lpm =
+                    leavePolicyMasterLocalService
+                            .findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(
+                                    ltm.getLeaveTypeMasterId(), currentYear, 0);
+
+            log.info("Leave Policy Master :- " + lpm);
+
+            LeaveBalance lb = leaveBalanceLocalService.createLeaveBalance(
+                    CounterLocalServiceUtil.increment(LeaveBalance.class.getName())
+            );
+
+            lb.setCompanyId(themeDisplay.getCompanyId());
+            lb.setCreatedBy(themeDisplay.getUserId());
+            lb.setGroupId(themeDisplay.getCompanyGroupId());
+            lb.setCreateDate(new Date());
+            lb.setModifiedDate(new Date());
+
+            lb.setEmployeeId(employeeDetails.getEmployeeId());
+            lb.setLeaveTypeMasterId(ltm.getLeaveTypeMasterId());
+            lb.setYear(currentYear);
+            lb.setNoOfUsedLeaves(0);
+
+            // Calculate months remaining
+            int remainingMonths = 12 - joiningMonthForCalculation + 1;
+
+            if (lpm.getIsApplicableFloater()) {
+                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * 12));
+            } else {
+                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * remainingMonths));
+            }
+
+            leaveBalanceLocalService.addLeaveBalance(lb);
+
+        } catch (NoSuchLeavePolicyMasterException e) {
+            log.error("Error while getting leave policy");
         }
     }
+}
+
 
     private void adddProationPeriodDetailsToNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
 
