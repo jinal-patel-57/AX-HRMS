@@ -1,4 +1,4 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="../../init.jsp" %>
 
 <!-- Different URL Start -->
 
@@ -26,9 +26,7 @@
                                              emptyResultsMessage="no-Leave-request-found-error-message"
                                              iteratorURL="${iteratorURL}">
                     <liferay-ui:search-container-results results="${leaveRequestList }"/>
-                    <liferay-ui:search-container-row
-                            className="package com.ax.hrms.leave.management.web.dto.LeaveRequestDto;"
-                            modelVar="leaveRequest" keyProperty="leaveRequestId">
+                    <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
                         <liferay-ui:search-container-column-text name="Employee Name"
                                                                  value="${leaveRequest.employeeName}"/>
                         <liferay-ui:search-container-column-text name="Department Name"

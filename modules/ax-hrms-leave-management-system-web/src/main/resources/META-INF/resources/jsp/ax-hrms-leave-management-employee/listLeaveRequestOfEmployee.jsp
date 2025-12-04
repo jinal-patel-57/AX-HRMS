@@ -30,13 +30,11 @@
 
         <liferay-portlet:renderURL varImpl="iteratorURL"/>
 
-        <liferay-ui:search-container total="${ totalLeaveRequestOfEmployee}" delta="3"
+        <liferay-ui:search-container total="${totalLeaveRequestOfEmployee}" delta="3"
                                      emptyResultsMessage="no-Leave-Request-found" iteratorURL="${iteratorURL}">
             <liferay-ui:search-container-results results="${ leaveRequestList}"/>
 
-            <liferay-ui:search-container-row
-                    className="package com.ax.hrms.leave.management.employee.web.dto.GetLeaveRequestDetails;"
-                    modelVar="leaveRequest" keyProperty="leaveRequestId">
+            <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
 
                 <liferay-ui:search-container-column-text name="Employee Name"
                                                          value="${ leaveRequest.getEmployeeName() }"></liferay-ui:search-container-column-text>
