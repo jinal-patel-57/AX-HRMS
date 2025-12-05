@@ -420,174 +420,215 @@
     }
 
 
-    function setConfigsForEducationValidation(config) {
-        config.educationIndex = educationIndex;
-        $(document).ready(function () {
-            let rules = {};
-            let messages = {};
+  function setConfigsForEducationValidation(config) {
 
-            function initializeValidation() {
-                const form3 = $("#educationStepperForm");
-                document.querySelectorAll('.education-section').forEach((section, index) => {
-                    const idx = index + 1;
+      jQuery.validator.addMethod("endAfterStart", function (value, element, paramSelector) {
+          var startVal = $(paramSelector).val();
+          if (!startVal || !value) {
+              return true;
+          }
+        
+          try {
+              return new Date(value) >= new Date(startVal);
+          } catch (e) {
+              return false;
+          }
+      }, "End date must be after start date.");
 
-                    const levelNameKey = `${namespace}levelName${idx}`;
-                    const institutionKey = `${namespace}institution${idx}`;
-                    const degreeKey = `${namespace}degree${idx}`;
-                    const startDateKey = `${namespace}startDate${idx}`;
-                    const endDateKey = `${namespace}endDate${idx}`;
-                    const passingYearKey = `${namespace}passingYear${idx}`;
+      config.educationIndex = educationIndex;
 
-                    rules[levelNameKey] = {required: true};
-                    rules[institutionKey] = {required: true, maxlength: 250};
-                    rules[degreeKey] = {required: true, maxlength: 75};
-                    rules[startDateKey] = {required: true, date: true};
-                    rules[endDateKey] = {required: true, date: true};
-                    rules[passingYearKey] = {required: true, digits: true, minlength: 4, maxlength: 4};
+      $(document).ready(function () {
 
-                    messages[levelNameKey] = {required: "Please select an education level name."};
-                    messages[institutionKey] = {
-                        required: "Please enter the institution name.",
-                        maxlength: "Institution name should not exceed 250 characters."
-                    };
-                    messages[degreeKey] = {
-                        required: "Please enter the degree obtained.",
-                        maxlength: "Degree should not exceed 75 characters."
-                    };
-                    messages[startDateKey] = {
-                        required: "Please enter the start date.",
-                        date: "Please enter a valid date."
-                    };
-                    messages[endDateKey] = {
-                        required: "Please enter the end date.",
-                        date: "Please enter a valid date.",
-                        startBeforeEnd: "End date must be after start date."
-                    };
-                    messages[passingYearKey] = {
-                        required: "Please enter the passing year.",
-                        digits: "Passing year should contain only digits.",
-                        minlength: "Passing year should be 4 digits long.",
-                        maxlength: "Passing year should be 4 digits long."
-                    };
-                });
+          function teardownValidator(form) {
 
-                form3.validate({
-                    errorClass: 'is-invalid',
-                    validClass: 'is-valid',
-                    errorElement: 'div',
-                    errorPlacement: function (error, element) {
-                        error.addClass('invalid-feedback');
-                        element.after(error);
-                    },
-                    rules: rules,
-                    messages: messages
-                });
-            }
+              form.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+              form.find('div.invalid-feedback').remove();
+              form.removeData('validator');
+              form.removeData('unobtrusiveValidation');
+          }
 
-            try {
-                var index_edu = parseInt(educationIndex);
-                for (var i = 1; i < index_edu; i++) {
-                    $('.nav-link.active').parent().next().find('.nav-link').click();
-                }
-            } catch (err) {
-                console.log("error" + err);
-            }
+          function initializeValidation() {
+              const form3 = $("#educationStepperForm");
 
-            function addEducationSection() {
-                const originalSection = document.getElementById('initial-education-section');
-                const newSection = originalSection.cloneNode(true);
+              teardownValidator(form3);
 
-                var anchors = newSection.getElementsByTagName('a');
-                while (anchors.length > 0) {
-                    var parent = anchors[0].parentNode;
-                    while (anchors[0].firstChild) {
-                        parent.insertBefore(anchors[0].firstChild, anchors[0]);
-                    }
-                    parent.removeChild(anchors[0]);
-                }
+              const rules = {};
+              const messages = {};
 
-                const index = document.querySelectorAll('.education-section').length + 1;
-
-                newSection.querySelectorAll('input, select').forEach(input => {
-                    input.id = input.id.replace(/[0-9]+$/, '') + index;
-                    input.name = input.name.replace(/[0-9]+$/, '') + index;
-                    input.value = '';
-                });
-
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'btn btn-outline-danger delete-section';
-                // deleteButton.textContent = 'Delete';
-                deleteButton.type = 'button';
-                deleteButton.onclick = function () {
-                    newSection.remove();
-                    initializeValidation();
-                };
-
-                const redundantFooter = newSection.getElementsByClassName("card-footer");
-                if(redundantFooter.length >0){
-                    redundantFooter[0].remove();
-                }
-
-                const footerElementNew = document.createElement("div");
-                footerElementNew.className = "card-footer text-right";
-
-                const icon = document.createElement("i");
-                icon.className="icon-trash";
-                deleteButton.appendChild(icon);
-                footerElementNew.appendChild(deleteButton);
-                const placement = newSection.getElementsByClassName("card");
-                placement[0].appendChild(footerElementNew);
-
-                document.getElementById('education-section-container').appendChild(newSection);
-
-                document.getElementById("educationCurrentIndex").value = index;
-                initializeValidation();
-            }
-
-            document.getElementById('add-education-section').addEventListener('click', addEducationSection);
-
-            $('.next-button-education-details').on('click', function (event) {
-                initializeValidation();
-                const form3 = $('#educationStepperForm');
-                if (!form3.valid()) {
-                    event.preventDefault();
-                    return false;
-                }
-                $.ajax({
-                    url: form3.attr('action'),
-                    method: 'POST',
-                    data: form3.serialize(),
-                    success: function (response) {
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("firstVisitEducation").value = "false";
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).find('input').first().focus();
-                        }
-                    },
-                    error: function () {
-                        console.log('There was an error saving the data. Please try again.');
-                    }
-                });
-            });
+              document.querySelectorAll('.education-section').forEach((section, index) => {
+                  const idx = index + 1;
 
 
-            // noactionbtnEducation
-            $('#noactionbtnEducation').on('click', function (event) {
-                const currentTab = $('.nav-link.active');
-                const nextTabButton = currentTab.parent().next().find('.nav-link');
-                if (nextTabButton.length > 0) {
-                    nextTabButton.tab('show');
-                    const nextTabContentId = nextTabButton.attr('data-bs-target');
-                    $(nextTabContentId).find('input').first().focus();
-                }
-            });
+                  const levelNameName = `${namespace}levelName${idx}`;
+                  const institutionName = `${namespace}institution${idx}`;
+                  const degreeName = `${namespace}degree${idx}`;
+                  const startDateName = `${namespace}startDate${idx}`;
+                  const endDateName = `${namespace}endDate${idx}`;
+                  const passingYearName = `${namespace}passingYear${idx}`;
 
-        });
 
-    }
+                  const startSelector = `[name="${startDateName}"]`;
+
+                  rules[levelNameName] = { required: true };
+                  rules[institutionName] = { required: true, maxlength: 250 };
+                  rules[degreeName] = { required: true, maxlength: 75 };
+                  rules[startDateName] = { required: true, date: true };
+
+                  rules[endDateName] = {
+                      required: true,
+                      date: true,
+                      endAfterStart: startSelector
+                  };
+
+                  rules[passingYearName] = { required: true, digits: true, minlength: 4, maxlength: 4 };
+
+                  messages[levelNameName] = { required: "Please select an education level name." };
+                  messages[institutionName] = {
+                      required: "Please enter the institution name.",
+                      maxlength: "Institution name should not exceed 250 characters."
+                  };
+                  messages[degreeName] = {
+                      required: "Please enter the degree obtained.",
+                      maxlength: "Degree should not exceed 75 characters."
+                  };
+                  messages[startDateName] = {
+                      required: "Please enter the start date.",
+                      date: "Please enter a valid date."
+                  };
+                  messages[endDateName] = {
+                      required: "Please enter the end date.",
+                      date: "Please enter a valid date.",
+                      endAfterStart: "End date must be after start date."
+                  };
+                  messages[passingYearName] = {
+                      required: "Please enter the passing year.",
+                      digits: "Passing year should contain only digits.",
+                      minlength: "Passing year should be 4 digits long.",
+                      maxlength: "Passing year should be 4 digits long."
+                  };
+              });
+
+              form3.validate({
+                  errorClass: 'is-invalid',
+                  validClass: 'is-valid',
+                  errorElement: 'div',
+                  errorPlacement: function (error, element) {
+                      error.addClass('invalid-feedback');
+                      element.after(error);
+                  },
+                  rules: rules,
+                  messages: messages,
+              });
+          }
+
+          try {
+              var index_edu = parseInt(educationIndex);
+              for (var i = 1; i < index_edu; i++) {
+                  $('.nav-link.active').parent().next().find('.nav-link').click();
+              }
+          } catch (err) {
+              console.log("error" + err);
+          }
+
+          function addEducationSection() {
+              const originalSection = document.getElementById('initial-education-section');
+              const newSection = originalSection.cloneNode(true);
+
+              var anchors = newSection.getElementsByTagName('a');
+              while (anchors.length > 0) {
+                  var parent = anchors[0].parentNode;
+                  while (anchors[0].firstChild) {
+                      parent.insertBefore(anchors[0].firstChild, anchors[0]);
+                  }
+                  parent.removeChild(anchors[0]);
+              }
+
+              const index = document.querySelectorAll('.education-section').length + 1;
+
+              newSection.querySelectorAll('input, select').forEach(input => {
+                  input.id = input.id.replace(/[0-9]+$/, '') + index;
+                  input.name = input.name.replace(/[0-9]+$/, '') + index;
+                  input.value = '';
+              });
+
+              const deleteButton = document.createElement('button');
+              deleteButton.className = 'btn btn-outline-danger delete-section';
+              deleteButton.type = 'button';
+              deleteButton.onclick = function () {
+                  newSection.remove();
+                  initializeValidation();
+              };
+
+              const redundantFooter = newSection.getElementsByClassName("card-footer");
+              if (redundantFooter.length > 0) {
+                  redundantFooter[0].remove();
+              }
+
+              const footerElementNew = document.createElement("div");
+              footerElementNew.className = "card-footer text-right";
+
+              const icon = document.createElement("i");
+              icon.className = "icon-trash";
+              deleteButton.appendChild(icon);
+              footerElementNew.appendChild(deleteButton);
+
+              const placement = newSection.getElementsByClassName("card");
+              placement[0].appendChild(footerElementNew);
+
+              document.getElementById('education-section-container').appendChild(newSection);
+
+              document.getElementById("educationCurrentIndex").value = index;
+
+              initializeValidation();
+          }
+
+          $('#add-education-section').on('click', addEducationSection);
+
+          $('.next-button-education-details').on('click', function (event) {
+              initializeValidation();
+
+              const form3 = $('#educationStepperForm');
+
+              if (!form3.valid()) {
+                  event.preventDefault();
+                  return false;
+              }
+
+              $.ajax({
+                  url: form3.attr('action'),
+                  method: 'POST',
+                  data: form3.serialize(),
+                  success: function (response) {
+                      const currentTab = $('.nav-link.active');
+                      document.getElementById("firstVisitEducation").value = "false";
+                      const nextTabButton = currentTab.parent().next().find('.nav-link');
+                      if (nextTabButton.length > 0) {
+                          nextTabButton.tab('show');
+                          const nextTabContentId = nextTabButton.attr('data-bs-target');
+                          $(nextTabContentId).find('input').first().focus();
+                      }
+                  },
+                  error: function () {
+                      console.log('There was an error saving the data. Please try again.');
+                  }
+              });
+          });
+
+          $('#noactionbtnEducation').on('click', function () {
+              const currentTab = $('.nav-link.active');
+              const nextTabButton = currentTab.parent().next().find('.nav-link');
+              if (nextTabButton.length > 0) {
+                  nextTabButton.tab('show');
+                  const nextTabContentId = nextTabButton.attr('data-bs-target');
+                  $(nextTabContentId).find('input').first().focus();
+              }
+          });
+
+          initializeValidation();
+      });
+  }
+
+
 
     function setConfigsForExperienceValidation(config) {
         config.experienceIndex = experienceIndex;

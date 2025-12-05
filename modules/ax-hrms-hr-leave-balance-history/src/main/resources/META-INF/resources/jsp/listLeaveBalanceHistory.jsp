@@ -42,7 +42,7 @@
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${leaveBalanceHistorySearchContainer.total}"
-	delta="3" emptyResultsMessage="no-leave-balance-data"
+	delta="20" emptyResultsMessage="no-leave-balance-data"
 	searchContainer="${leaveBalanceHistorySearchContainer}" iteratorURL="${iteratorURL}">
 	<liferay-ui:search-container-results
 		results="${leaveBalanceHistorySearchContainer.results}" />

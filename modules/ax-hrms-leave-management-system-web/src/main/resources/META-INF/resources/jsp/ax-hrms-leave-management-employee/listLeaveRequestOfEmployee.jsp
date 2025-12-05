@@ -30,7 +30,7 @@
 
         <liferay-portlet:renderURL varImpl="iteratorURL"/>
 
-        <liferay-ui:search-container total="${totalLeaveRequestOfEmployee}" delta="3"
+        <liferay-ui:search-container total="${totalLeaveRequestOfEmployee}" delta="20"
                                      emptyResultsMessage="no-Leave-Request-found" iteratorURL="${iteratorURL}">
             <liferay-ui:search-container-results results="${ leaveRequestList}"/>
 

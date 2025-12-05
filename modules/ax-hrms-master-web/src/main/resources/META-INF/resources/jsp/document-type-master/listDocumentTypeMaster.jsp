@@ -46,7 +46,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 	<liferay-ui:search-container total="${totalDocumentTypeMaster }"
-		delta="3" emptyResultsMessage="no-document-type-found-error-message"
+		delta="20" emptyResultsMessage="no-document-type-found-error-message"
 		iteratorURL="${iteratorURL}">
 
 		<liferay-ui:search-container-results results="${documentTypeList }" />

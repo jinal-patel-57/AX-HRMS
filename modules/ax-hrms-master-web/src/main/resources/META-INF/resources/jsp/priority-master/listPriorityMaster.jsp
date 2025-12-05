@@ -22,7 +22,7 @@
 			
 			<liferay-portlet:renderURL varImpl="iteratorURL" />
 			
-			<liferay-ui:search-container total="${ totalPriorityMaster}" delta="3" emptyResultsMessage="no-priority-found" iteratorURL="${iteratorURL}">
+			<liferay-ui:search-container total="${ totalPriorityMaster}" delta="20" emptyResultsMessage="no-priority-found" iteratorURL="${iteratorURL}">
 			    <liferay-ui:search-container-results results="${ priorityMasterList}" />
 			
 			    <liferay-ui:search-container-row className="com.ax.hrms.master.model.PriorityMaster" modelVar="priorityMaster" keyProperty="priorityMasterId">

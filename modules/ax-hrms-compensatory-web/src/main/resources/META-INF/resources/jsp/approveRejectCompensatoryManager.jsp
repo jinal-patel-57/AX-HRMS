@@ -25,7 +25,7 @@
 
         <liferay-portlet:renderURL varImpl="iteratorURL"/>
 
-        <liferay-ui:search-container total="${ compensatoryDataCount}" delta="3"
+        <liferay-ui:search-container total="${ compensatoryDataCount}" delta="20"
                                      emptyResultsMessage="no-request-found" iteratorURL="${iteratorURL}">
             <liferay-ui:search-container-results results="${compensatoryDataList}"/>
 

@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 			"com.liferay.portlet.display-category=AX HRMS",
 			"com.liferay.portlet.header-portlet-css=/css/main.css",
 			"com.liferay.portlet.header-portlet-javascript=/js/ax-hrms-birthday-web/main.js",
+			"com.liferay.portlet.header-portlet-javascript=/js/ax-hrms-birthday-web/summernote-lite.min.js",
 			"com.liferay.portlet.instanceable=false",
 			"javax.portlet.display-name=AxHrms Birthday Web",
 			"javax.portlet.init-param.template-path=/",
