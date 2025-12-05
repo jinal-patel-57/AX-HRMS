@@ -11,3 +11,6 @@ Export-Package: \
 	com.ax.hrms.master.service.persistence,\
 	com.ax.hrms.master.web.constants,\
 	com.ax.hrms.master.web.portlet
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-project-web
 Bundle-SymbolicName: ax.hrms.project.web
 Bundle-Version: 1.0.0
 Export-Package: ax.hrms.project.web.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

@@ -3,4 +3,7 @@ Bundle-SymbolicName: com.ax.hrms.policy.process.management.web
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.policy.process.management.web.constants
 
-Import-Package: *;resolution:=optional
+Import-Package: *;resolution:=
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

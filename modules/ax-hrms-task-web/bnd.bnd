@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-task-web
 Bundle-SymbolicName: ax.hrms.task.web
 Bundle-Version: 1.0.0
 Export-Package: ax.hrms.task.web.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

@@ -26,7 +26,7 @@
                     	 required: true,
                          digits: true, 
                          minlength: 1, 
-                         maxlength: 2 
+                         maxlength: 3
                     },
                     [namespace + "maximumbalance"]: {
                         required: function(element) {

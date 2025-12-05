@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-hr-leave-balance-management-web
 Bundle-SymbolicName: com.ax.hrms.hr.leave.management.web
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.hr.leave.management.web.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

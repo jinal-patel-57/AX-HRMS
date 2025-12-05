@@ -10,3 +10,6 @@ Export-Package: com.ax.hrms.constants,\
     com.ax.hrms.birthday.web.util,\
     com.ax.hrms.birthday.web.dto,\
     com.ax.hrms.birthday.web.notification
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

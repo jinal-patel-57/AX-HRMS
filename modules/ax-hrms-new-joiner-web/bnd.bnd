@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-new-joiner-web
 Bundle-SymbolicName: com.ax.hrms.new.joiner
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

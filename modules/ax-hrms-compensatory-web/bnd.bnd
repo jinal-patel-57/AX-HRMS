@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-compensatory-web
 Bundle-SymbolicName: com.ax.hrms.compensatory.web
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.compensatory.web.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

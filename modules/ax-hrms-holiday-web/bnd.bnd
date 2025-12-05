@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-holiday-web
 Bundle-SymbolicName: com.ax.hrms.holiday.web.portlet
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.holiday.web.portlet.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"

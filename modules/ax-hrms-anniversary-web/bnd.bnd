@@ -2,3 +2,6 @@ Bundle-Name: ax-hrms-anniversary-web
 Bundle-SymbolicName: ax.hrms.anniversary.web
 Bundle-Version: 1.0.0
 Export-Package: com.ax.hrms.anniversary.web.constants
+Provide-Capability:\
+liferay.language.resources;\
+resource.bundle.base.name="content.Language"
