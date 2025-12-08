@@ -50,6 +50,7 @@ import com.ax.hrms.service.persistence.TaskPersistence;
 import com.ax.hrms.service.persistence.TaskReviewPersistence;
 import com.ax.hrms.service.persistence.TimeTrackerPersistence;
 import com.ax.hrms.service.persistence.UpcomingProbationEmployeePersistence;
+import com.ax.hrms.service.persistence.WorkFromHomePersistence;
 
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
@@ -796,6 +797,9 @@ public abstract class ExtendedProbationDetailsLocalServiceBaseImpl
 	@Reference
 	protected UpcomingProbationEmployeePersistence
 		upcomingProbationEmployeePersistence;
+
+	@Reference
+	protected WorkFromHomePersistence workFromHomePersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

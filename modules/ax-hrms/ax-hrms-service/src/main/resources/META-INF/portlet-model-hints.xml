@@ -691,4 +691,21 @@
 		<field name="month" type="int" />
 		<field name="year" type="int" />
 	</model>
+	<model name="com.ax.hrms.model.WorkFromHome">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="workFromHomeRequestId" type="long" />
+		<field name="userId" type="long" />
+		<field name="teamMailId" type="String" />
+		<field name="status" type="String" />
+		<field name="reason" type="String" />
+		<field name="requestDate" type="Date" />
+		<field name="startDate" type="Date" />
+		<field name="endDate" type="Date" />
+	</model>
 </model-hints>
