@@ -59,7 +59,7 @@
   <div class="card-body mb-0 pb-0">
 <liferay-portlet:renderURL varImpl="iteratorURL" />
     
-<liferay-ui:search-container total="${directorySearchContainer.total}" delta="3" searchContainer="${directorySearchContainer}" emptyResultsMessage="No-Employee-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${directorySearchContainer.total}" delta="20" searchContainer="${directorySearchContainer}" emptyResultsMessage="No-Employee-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${directorySearchContainer.results}" />
         <liferay-ui:search-container-row className="com.ax.hrms.model.CustomEmployeeDetailsDTO" modelVar="employee" keyProperty="employeeId">
         <liferay-ui:search-container-column-text name="Employee Name" value="${employee.getFirstName()} ${employee.getLastName()}" />

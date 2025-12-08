@@ -24,7 +24,7 @@
 </div>
   <div class="card-body"><liferay-portlet:renderURL varImpl="iteratorURL" />
 			
-			<liferay-ui:search-container total="${ totalDesignationMaster}" delta="3" emptyResultsMessage="no-Designation-found" iteratorURL="${iteratorURL}">
+			<liferay-ui:search-container total="${ totalDesignationMaster}" delta="20" emptyResultsMessage="no-Designation-found" iteratorURL="${iteratorURL}">
 			    <liferay-ui:search-container-results results="${ designationList}" />
 			
 			    <liferay-ui:search-container-row className="com.ax.hrms.master.model.DesignationMaster" modelVar="designationMaster" keyProperty="designationMasterId">

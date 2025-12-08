@@ -58,7 +58,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${policySearchContainer.total}" delta="3" searchContainer="${policySearchContainer}" emptyResultsMessage="No-Policy-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${policySearchContainer.total}" delta="20" searchContainer="${policySearchContainer}" emptyResultsMessage="No-Policy-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${policySearchContainer.results}" />
 
 	 <liferay-ui:search-container-row className="com.ax.hrms.policy.process.management.hr.admin.web.dto" modelVar="policy" keyProperty="policyId">

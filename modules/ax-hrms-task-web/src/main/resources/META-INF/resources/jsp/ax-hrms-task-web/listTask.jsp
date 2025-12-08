@@ -76,7 +76,7 @@
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${taskSearchContainer.total}"
-	delta="3" emptyResultsMessage="no-task-data"
+	delta="20" emptyResultsMessage="no-task-data"
 	searchContainer="${taskSearchContainer}" iteratorURL="${iteratorURL}">
 	<liferay-ui:search-container-results
 		results="${taskSearchContainer.results}" />

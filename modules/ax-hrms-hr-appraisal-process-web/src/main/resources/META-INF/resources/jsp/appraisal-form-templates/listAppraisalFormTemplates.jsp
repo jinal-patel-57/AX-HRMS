@@ -25,7 +25,7 @@
         <%--            //Add Appraisal Form Template button here--%>
         <liferay-portlet:renderURL varImpl="iteratorURL"/>
 
-        <liferay-ui:search-container total="${ totalAppraisalFormTemplates}" delta="3"
+        <liferay-ui:search-container total="${ totalAppraisalFormTemplates}" delta="20"
                                      emptyResultsMessage="no-appraisal-form-template-found"
                                      iteratorURL="${iteratorURL}">
             <liferay-ui:search-container-results results="${ appraisalFormTemplateList}"/>

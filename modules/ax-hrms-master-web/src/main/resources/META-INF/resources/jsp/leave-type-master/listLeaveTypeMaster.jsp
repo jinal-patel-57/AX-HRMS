@@ -21,7 +21,7 @@
 	
 			<liferay-portlet:renderURL varImpl="iteratorURL" />
 			
-			<liferay-ui:search-container total="${ totalLeaveTypeMaster}" delta="3" emptyResultsMessage="no-Leave-Type-found" iteratorURL="${iteratorURL}">
+			<liferay-ui:search-container total="${ totalLeaveTypeMaster}" delta="20" emptyResultsMessage="no-Leave-Type-found" iteratorURL="${iteratorURL}">
 			    <liferay-ui:search-container-results results="${ leaveTypeMasterList}" />
 			
 			    <liferay-ui:search-container-row className="com.ax.hrms.master.model.LeaveTypeMaster" modelVar="leaveTypeMaster" keyProperty="leaveTypeMasterId">
