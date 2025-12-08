@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -55,6 +57,14 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -450,5 +460,66 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 		return cal;
     }
     
+    
+    public Workbook getWorkbook(InputStream inputStream, String excelFilePath) {
+		log.info("-----> inside getWorkbook...");
+		Workbook workbook = null;
+		try {
+			if (excelFilePath.endsWith(".xlsx")) {
+				workbook = new XSSFWorkbook(inputStream);
+			} else {
+				workbook = new HSSFWorkbook(inputStream);
+			}
+
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+		return workbook;
+	}
+    
+    public Map<String, Map<String, Object>> readExcelSheet(Sheet worksheet) {
+		log.info("inside readExcelSheet");
+		Iterator<Row> iterator = worksheet.iterator();
+		int rowNum = 0;
+		int columnNum = 0;
+		Row nextRow = null;
+		Iterator<Cell> cellIterator = null;
+		Map<String, Map<String, Object>> excelDataMap = new HashMap<>();
+		Map<String, Object> dataMap = null;
+		while (iterator.hasNext()) {
+			dataMap = new HashMap<>();
+			nextRow = iterator.next();
+			rowNum = nextRow.getRowNum();
+			cellIterator = nextRow.cellIterator();
+			while (cellIterator.hasNext()) {
+				Cell nextCell = cellIterator.next();
+				columnNum = nextCell.getColumnIndex();
+				Object val = getCellValue(nextCell);
+				dataMap.put(String.valueOf(columnNum), val);
+			}
+			excelDataMap.put(String.valueOf(rowNum), dataMap);
+			if (rowNum == worksheet.getLastRowNum()) {
+				break;
+			}
+		}
+
+		return excelDataMap;
+	}
+    
+    private Object getCellValue(Cell cell) {
+		if (CellType.STRING == cell.getCellTypeEnum()) {
+			return cell.getStringCellValue();
+		} else if (CellType.NUMERIC == cell.getCellTypeEnum()) {
+			if (HSSFDateUtil.isCellDateFormatted(cell)) {
+				return cell.getDateCellValue();
+			} else {
+				return cell.getNumericCellValue();
+			}
+		} else if (CellType.BOOLEAN == cell.getCellTypeEnum()) {
+			return cell.getBooleanCellValue();
+		}
+		return null;
+	}
+
     
 }
