@@ -1,0 +1,7 @@
+Bundle-Name: ax-hrms-work-from-home-web
+Bundle-SymbolicName: com.ax.hrms.work.from.home.web
+Bundle-Version: 1.0.0
+Export-Package: com.ax.hrms.work.from.home.web.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

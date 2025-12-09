@@ -1,0 +1,578 @@
+@startuml
+left to right direction
+skinparam nodesep 50
+skinparam ranksep 60
+' !theme blueprint
+' !theme sketchy
+entity Address {
+  + addressId : bigint (PK)
+  - line1 : varchar [250]
+  - line2 : varchar [250]
+  - line3 : varchar [250]
+  - state : varchar [100]
+  - country : bigint
+  - pincode : varchar [10] 
+}
+
+entity AppraisalHistory {
+  + appraisalId : bigint (PK)
+  - salaryId : bigint 
+  - appraisalDate : date
+  - rating : decimal
+  - appraisalAmount : decimal
+  - lastSalaryAmount : decimal
+  - comments : varchar [255]
+}
+
+entity DepartmentMaster {
+  + departmentMasterId : bigint (PK)
+  - departmentName : varchar [75] 
+}
+
+entity DesignationMaster {
+  + designationMasterId : bigint (PK)
+  - departmentMasterId : bigint 
+  - designationName : varchar [75] 
+}
+
+entity DocumentTypeMaster {
+  + documentTypeId : bigint (PK)
+  - documentTypeName : varchar [20] 
+}
+
+entity EmployeeEducation {
+  + educationId : bigint (PK)
+  - levelId : bigint 
+  - institution : varchar [250] 
+  - degree : varchar [75] 
+  - startDate : date 
+  - passingYear : varchar [4]
+  - endDate : date 
+  - employeeId : bigint 
+}
+
+entity EducationLevelMaster {
+  + levelId : bigint (PK)
+  - levelName : varchar [75] 
+}
+
+entity EmployeeDetails {
+  + employeeId : bigint (PK)
+  - employeeCode : varchar [25]
+  - lrUserId : bigint 
+  - firstName : varchar [25] 
+  - middleName : varchar [25] 
+  - lastName : varchar [25] 
+  - officialEmail : varchar [254]
+  - personalEmail : varchar [254]
+  - joiningDate : date
+  - lastAppraisalDate : date 
+  - leavingDate : date
+  - mobileNo : varchar [10] 
+  - gender : varchar [10] 
+  - fatherName : varchar [50]
+  - dateOfBirth : date 
+  - maritalStatus : bool 
+  - marriageDate : date 
+  - spouseName : date
+  - EmployeeAddressId : bigint 
+  - skypeId : varchar [50]
+  - nomineeId : bigint
+  - bankAccountId : bigint
+  - uanEscId : bigint
+  - probationStatusId : bigint
+  - isemployeeOnBoarded : bool
+  - isExperienced : bool 
+}
+
+entity EmployeeAddress {
+  + employeeAddressId : bigint (PK)
+  - presentAddress : bigint [type: addressId]
+  - permanentAddress : bigint [type: addressId]
+  - presentPermanentSame : bool
+  - status : bool
+  - employeeId : bigint
+}
+
+entity EmployeeBankAccount {
+  + bankAccountId : bigint (PK)
+  - accountNumber : varchar [75] 
+  - accountType : varchar [75] 
+  - beneficiaryName : varchar [75]
+  - bankName : varchar [75] 
+  - status : bool
+  - ifscCode : varchar [75] 
+  - bankBranch : varchar [75] 
+  - employeeId : bigint
+}
+
+entity EmployeeDepartment{
+  + employeeDepartmentId : bigint (PK)
+  - departmentMasterId : bigint
+  - status : bool
+  - dateOfChange : date
+  - employeeId : bigint
+}
+
+entity EmployeeDesignation{
+  + employeeDesignationId : bigint (PK)
+  - designationMasterId : bigint
+  - status : bool
+  - startDate : date
+  - endDate : date
+  - employeeId : bigint
+}
+
+entity EmployeeDocument {
+  + documentId : bigint (PK)
+  - documentTypeId : bigint 
+  - documentNumber : varchar [20] 
+  - documentMediaId : bigint
+  - documentStatus : bool
+  - employeeId : bigint 
+}
+
+entity EmployeeExperience {
+  + experienceId : bigint (PK)
+  - companyName : varchar [75] 
+  - joiningDate : date 
+  - relievingDate : date
+  - experienceCertificateMediaId : bigint
+  - employeeId : bigint 
+}
+
+entity Nominee {
+  + nomineeId : bigint (PK)
+  - nomineeFirstName : varchar [75] 
+  - nomineeLastName : varchar [75] 
+  - nomineeContact : varchar [30] 
+  - nomineeAddress : bigint [type: addressId] 
+  - relationshipWithNominee : varchar [75] 
+  - nomineeDob : date 
+}
+
+
+entity EmployeeUanEsic {
+  + uanEscId : bigint (PK)
+  - uan : varchar [12] 
+  - status : bool 
+  - esicNo : varchar [17] 
+}
+
+
+entity EmployeeSalary {
+  + salaryId : bigint (PK)
+  - grossSalaryCtcPm : decimal 
+  - grossSalaryCtcPa : decimal 
+  - employeeId : bigint 
+}
+
+'Appraisal Processes
+entity AppraisalReminder{
+    + appraisalRemainderId : bigint (PK)
+    - employeeId : bigint
+    - appraisalRemainderMonth : varchar [10]
+    - appraisalRemainderYear : varchar [10]
+    - appraisalProcessId : bigint
+    ' - status : bool
+}
+
+entity AppraisalProcess{
+    + appraisalProcessId : bigint (PK)
+    - isSelfEvalutionFormSent : bool
+    - isSelfEvalutionFormFilled : bool
+    - arePeerEvaluationFormSent : bool
+    - arePeerEvaluationFormFilled : bool
+    - isManagementFormSent : bool
+    - isManagementFormFilled : bool
+    - isMeetingScheduled : bool
+    - isMeetingDone : bool
+    - isSalaryUpdated : bool
+    - status : statusId 
+}
+
+entity AppraisalStatusMaster{
+    + statusId : bigint (PK)
+    - status : varchar [50]
+}
+
+entity AppraisalMeeting{
+    + appraisalMeetingId : bigint (PK)
+    - appraisalProcessId : bigint
+    - meetingDate : date
+    - meetingTime : date
+    ' - meetingInvitees : bigint [type : employeeId]
+    - status : bool
+}
+
+entity AppraisalMeetingInvitees {
+    + appraisalMeetingInviteeId : bigint (PK)
+    - appraisalMeetingId : bigint
+    - employeeId : bigint
+}
+
+entity AppraisalEvaluationFormStatus{
+    + appraisalEvaluationFormStatusId : bigint (PK)
+    - submissionDate : date
+    - appraisalProcessId : bigint
+    - employeeId : bigint
+    - filledEvaluationDocuemntId : bigint
+    - appraisalFormTemplateId : bigint
+    - status : long
+}
+
+entity AppraisalFormTemplates{
+    + appraisalFormTemplateId : bigint (PK)
+    - templateName : varchar [75]
+    - templateDocumentId : bigint 
+    - templateLevelId : bigint
+    - templateYear : varchar [10]
+    - status : bool
+}
+
+entity TemplateLevelMaster{
+    + templateLevelId : bigint (PK)
+    - levelName : varchar [25]
+    - type : bigint
+}
+
+
+' POLICY / POLICIES
+entity Policy {
+    + policyID : bigint (PK)
+    - policyTypeID : bigint
+    - policyDocumentId : bigint [type:DocMedia]
+    - policyName : varchar [100]
+    - description : varchar
+    - year : varchar [50]
+    - status : varchar [75]
+}
+
+entity RolePolicies{
+   + rolePoliciesID : bigint (PK)
+   - roleId : bigint
+   - policyID : bigint
+  
+}
+
+entity PolicyTypeMaster{
+  + policyTypeID : bigint (PK)
+  - policyType : Varchar [75]
+}
+
+
+'Leave / Holiday / Leave Management
+
+
+
+
+entity LeaveRequest {
+    + leaveRequestId : bigint(pk)
+    - employeeId : bigint
+    - leaveTypeMasterID : bigint
+    - startDate : datetime[6]
+    - endDate : datetime[6]
+    - reason : varchar[250]
+    - leaveCompensatoryStatusMasterId : bigint
+    - hrApprovalID : bigint
+    - managerApprovalID : bigint
+    - dateOfRequest : datetime[6]
+}
+
+entity LeaveDayType{
+    + leaveDayTypeId : bigint(pk)
+    - leaveRequestId : bigint
+    - leaveDate : datetime
+    - isHalfDay : boolean
+    - isFirstHalf : boolean
+}
+
+entity LeaveInformToTeamDetail{
+    + leaveInformId : bigint(pk)
+    - leaveRequestId : bigint
+    - employeeId : bigint
+}
+
+entity LeaveTypeMaster {
+    + leaveTypeMasterId : bigint(pk)
+    - leaveTypeName : varchar[75]
+    - description : varchar[250]
+    - isActive : boolean
+    - isAppearForAll : boolean
+}
+
+entity LeaveCompensatoryStatusMaster {
+    + leaveCompensatoryStatusMasterId : bigint(pk)
+    - leaveCompensatoryStatus : varchar[75]
+}
+
+entity LeavePolicyMaster {
+    + leavePolicyMasterId : bigint(pk)
+    - description : varchar[250]
+    - accrualRate : double
+    - maximumBalance : double
+    - isCarryForward : boolean
+    - leaveTypeMasterId : bigint
+    - isCheckMax : boolean
+    - yearOfPolicy : int
+    - isContinuous : boolean
+    - eligibleAfterMonths : int
+}
+
+
+entity LeaveBalance {
+    + leaveBalanceId : bigint(pk)
+    - employeeId : bigint
+    - leaveTypeMasterID : bigint
+    - year : int
+    - noOfUsedLeaves : double
+    - noOfRemainingLeaves : double
+}
+
+
+entity Holiday {
+    + holidayId : bigint(pk)
+    - holidayName : varchar[75]
+    - date : datetime[6]
+    - description : varchar[250]
+    - year : int
+    - isFloater : boolean
+}
+
+entity CompensatoryData{
+    + compensatoryDataId : bigint(pk)
+    - employeeId : bigint
+    - startDateTime : datetime[6]
+    - endDateTime : datetime[6]
+    - leaveCompensatoryStatusMasterId : bigint
+    - approvedHours : int
+    - description : varchar[250]
+}
+
+
+entity LeaveTypeViewPermit{
+    + leaveTypeViewPermitId : bigint(pk)
+    - leaveTypeMasterId : bigint
+    - employeeId : bigint
+    - yearOfLeaveTypeViewPermit : int
+}
+
+
+
+
+
+' Probation
+
+entity ProbationStatusMaster{
+    + probationStatusId : bigint (pk)
+    - statusType : varchar [75]
+}
+
+entity EmployeeProbationDetails{
+    + probationDetailId :bigint (pk)
+    - employeeId : bigint
+    - probationPeriod : int
+    - probationEndDate : datetime
+    - probationStatusId : bigint
+    - isExtended : boolean
+}
+
+entity ExtendedProbationDetails{
+    + probationExtendDetailId : bigint (pk)
+    - probationDetailId : bigint
+    - extendDate : datetime
+    - evalutionReview : varchar [500]
+    - extendedProbationPeriod: int
+    - extendedProbationEndDate : datetime
+}
+
+entity UpcomingProbationEmployee{
+    + upcomingProbationEmployeeId : bigint (pk)
+    - probationDetailId : bigint
+    - month : int
+    - year : int
+}
+
+
+' Time Tracking
+
+
+
+entity TimeTrackerTBL{
+    + TimeTrackerId : bigint(pk)
+    - TaskId : bigint
+    - EmployeeId : bigint
+    - Date : DateTime
+    - StartTime : Time
+    - EndTime : Time
+    - Duration : double
+    - isBillable : boolean
+    - Descripion : varchar[500]
+    - ManagerId : bigint
+    - ManagerApproveStatus : varchar[75]
+    - TimeTrackerStatus : varchar[75]
+    - Attachment : bigint
+}
+
+
+'wishes
+
+
+
+entity EmployeeWish {
+    + wishId: bigint (PK)
+    - senderId: long
+    - receiverId: long
+    - content: varchar [255]
+    - wishTypeMasterId: long
+    - timestamp: DateTime
+}
+
+entity WishTypeMaster {
+    + wishTypeMasterId: long (PK)
+    - wishType: varchar (255) (type ==> Work Anniversary, Birthday and New Joinee)
+}
+
+
+
+entity Project {
+    + ProjectId : bigint (PK)
+    - ProjectName : VARCHAR [75]
+    - Description : VARCHAR [256]
+}
+
+entity ProjectHistory {
+    + ProjectHistoryId : bigint (PK)
+    - ProjectId : bigint
+    - ProjectTaskStatusMasterId: bigint
+    - Date : datetime
+     - ManagerId : bigint
+    - isBillable : bool
+
+}
+
+entity Task {
+    + TaskId : bigint (PK)
+    - TaskName : VARCHAR [75]
+    - isSubTask : boolean
+    - mainTaskId : bigint
+    - ProjectId : bigint
+    - Description : VARCHAR [256]
+    - Assignedto : bigint
+    - ProjectTaskStatusMasterId: bigint
+    - PriorityMasterId : bigint
+    - AssignDate : datetime
+    - StartDate : datetime
+    - DueDate : datetime
+    - CompleteDate : datetime
+    - ManagerId : bigint
+    - isBillable : boolean
+   
+}
+
+entity ProjectTaskStatusMaster{
+    + ProjectTaskStatusMasterId : bigint (PK)
+    - ProjectTaskStatusName : VARCHAR[75]
+    - ApplicableFor : VARCAHR[75]
+
+}
+entity PriorityMaster{
+    + PriorityMasterId : bigint (PK)
+    - PriorityName : VARCHAR[75]
+  
+
+}
+
+entity TaskReview{
+ + TaskReviewId : bigint (PK)
+ - TaskId : bigint
+ - ReviewerId : bigint
+ - Review : VARCHAR[256]
+ - DateOfReview : datetime
+}
+
+class ProjectEmployeeDetails{
+ - ProjectEmployeeDetailsId : BigInt
+ - ProjectId : BigInt
+ - EmployeeId: BigInt
+ primaryKey(projectEmployeeDetailsId)
+
+}
+
+
+Project --|{ ProjectEmployeeDetails
+EmployeeDetails }--{ ProjectEmployeeDetails
+
+Project --|{ Task 
+Project --|{ ProjectHistory 
+ProjectTaskStatusMaster --|{ Task 
+ProjectTaskStatusMaster --|{ ProjectHistory 
+EmployeeDetails }--{ ProjectHistory 
+EmployeeDetails }--{ Task 
+EmployeeDetails }--{ TaskReview 
+Task --{ TaskReview 
+PriorityMaster --{ Task 
+
+
+
+EmployeeDetails   --|{ EmployeeWish
+WishTypeMaster --|{ EmployeeWish 
+
+
+
+Task --|{ TimeTrackerTBL 
+EmployeeDetails -- TimeTrackerTBL
+
+
+
+EmployeeDetails--EmployeeProbationDetails 
+ProbationStatusMaster --|{ EmployeeProbationDetails 
+EmployeeProbationDetails --|{ ExtendedProbationDetails 
+EmployeeProbationDetails --|{ UpcomingProbationEmployee 
+
+LeaveTypeMaster --|{ LeaveRequest 
+LeaveTypeMaster --|{ LeaveInformToTeamDetail 
+LeaveRequest --|{ LeaveDayType 
+LeaveTypeMaster --|{ LeaveTypeViewPermit 
+LeaveTypeMaster --|{ LeaveBalance 
+LeaveTypeMaster -- LeavePolicyMaster 
+EmployeeDetails --|{ LeaveRequest 
+EmployeeDetails --|{ CompensatoryData 
+EmployeeDetails --|{ LeaveTypeViewPermit 
+EmployeeDetails --|{ LeaveBalance 
+LeaveCompensatoryStatusMaster --|{ LeaveRequest 
+LeaveCompensatoryStatusMaster --|{ CompensatoryData
+
+EmployeeDetails -- Policy
+RolePolicies }o-- Policy
+Policy }o--|| PolicyTypeMaster
+
+EmployeeDetails --|| AppraisalReminder
+EmployeeDetails }-- AppraisalMeetingInvitees
+AppraisalReminder ---|| AppraisalProcess
+AppraisalProcess --{ AppraisalEvaluationFormStatus
+AppraisalProcess --|| AppraisalMeeting
+AppraisalEvaluationFormStatus }-- AppraisalFormTemplates
+AppraisalFormTemplates }--TemplateLevelMaster
+AppraisalProcess ||-r- AppraisalStatusMaster
+AppraisalMeeting --|{ AppraisalMeetingInvitees
+
+
+EmployeeAddress --|{ Address
+EmployeeDocument }|--- DocumentTypeMaster
+EmployeeDesignation }--- DesignationMaster
+EmployeeDepartment }--- DepartmentMaster
+EmployeeEducation ---|{ EducationLevelMaster
+EmployeeSalary ---o{ AppraisalHistory
+EmployeeDetails ---o{ EmployeeExperience
+EmployeeDetails ---|{ EmployeeDocument
+EmployeeDetails ---o{ EmployeeBankAccount
+EmployeeDetails ---o| Nominee
+EmployeeDetails ---|{ EmployeeDepartment
+EmployeeDetails ---|{ EmployeeDesignation
+EmployeeDetails ---|| EmployeeSalary
+EmployeeDetails ----o{ EmployeeEducation
+EmployeeDetails ----|| EmployeeUanEsic
+EmployeeDetails ---|| EmployeeAddress
+
+@enduml

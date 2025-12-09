@@ -1,0 +1,622 @@
+DATE : 16 APRIL 2024
+
+ALTER TABLE ax_master_AppraisalStatusMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_DepartmentMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_DesignationMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_DocumentTypeMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_EducationLevelMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_LeaveCompensatoryStatusMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_LeaveTypeMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_PolicyTypeMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_PriorityMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_ProbationStatusMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_ProjectTaskStatusMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_TemplateLevelMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+ALTER TABLE ax_master_WishTypeMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+
+-----------------------------------------
+DATE: 16 APRIL 2024
+
+
+ALTER TABLE ax_master_LeavePolicyMaster
+DROP COLUMN userId,
+ADD COLUMN createdBy bigint,
+ADD COLUMN modifiedBy bigint;
+
+
+
+-----------------------------------------
+DATE: 16 APRIL 2024
+
+ALTER TABLE ax_master_LeavePolicyMaster
+	DROP isActive,
+	DROP carryForwardLimit,
+	ADD isCarryForward BOOLEAN,
+	ADD isContinuous BOOLEAN,
+	ADD eligibleAfterMonths INTEGER;
+	
+	
+ALTER TABLE ax_master_LeaveTypeMaster
+	ADD isAppearForAll BOOLEAN;
+	
+	
+-----------------------------------------
+DATE: 17-APRIL-2024
+
+ALTER TABLE ax_master_TemplateLevelMaster
+	DROP COLUMN type_;
+
+	
+	
+-----------------------------------------
+DATE: 25-APRIL-2024
+
+create table ax_EmployeeProbationDetails (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	probationDetailId bigint not null primary key,
+	probationPeriod INTEGER,
+	probationEndDate DATE null,
+	probationStatusId bigint,
+	isExtended BOOLEAN,
+	employeeId bigint
+);
+
+DATE: 25-APRIL-2024
+
+
+create table ax_Holiday (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	holidayId bigint not null primary key,
+	holidayName VARCHAR(75) null,
+	date_ DATE null,
+	description VARCHAR(75) null,
+	year integer,
+	isFloater boolean
+);
+
+
+
+
+
+	
+	
+-----------------------------------------
+DATE: 25-APRIL-2024
+
+
+
+ALTER TABLE ax_employeedocument
+	ADD documentName VARCHAR(75) null;
+
+
+
+
+	
+-----------------------------------------
+DATE: 26-APRIL-2024
+
+
+ALTER TABLE ax_master_projecttaskstatusmaster
+	DROP applicablefor,
+	ADD isapplicableforproject boolean,
+	ADD isapplicablefortask boolean;
+
+--------------------------------------------
+Date 26-APRIL-2024
+
+ALTER TABLE ax_master_leavepolicymaster
+    ADD COLUMN isApplicableFloater BOOLEAN;
+
+	
+-----------------------------------------
+DATE: 29-APRIL-2024
+
+ALTER TABLE ax_employeedetails
+	ADD isProbationEnabled boolean,
+	ADD profilePicId bigint,
+	ADD insuranceLink VARCHAR(75) null;
+
+
+-----------------------------------------
+DATE: 29-APRIL-2024
+
+ALTER TABLE ax_employeedetails
+	ADD probationStatusId bigint;
+
+
+
+-----------------------------------------
+DATE: 30-APRIL-2024
+
+
+create table ax_AppraisalEvaluationFormStatus (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalEvaluationFormStatusId bigint not null primary key,
+	appraisalProcessId bigint,
+	submissionDate DATE null,
+	employeeId bigint,
+	filledEvaluationDocuemntId bigint,
+	appraisalFormTemplateId bigint,
+	status BOOLEAN
+);
+
+
+create table ax_AppraisalFormTemplates (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalFormTemplateId bigint not null primary key,
+	templateName VARCHAR(75) null,
+	templateDocumentId bigint,
+	templateLevelId bigint,
+	templateYear VARCHAR(75) null,
+	status BOOLEAN
+);
+
+
+
+create table ax_AppraisalMeeting (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalMeetingId bigint not null primary key,
+	appraisalProcessId bigint,
+	meetingDate DATE null,
+	meetingTime DATE null,
+	status BOOLEAN
+);
+
+
+
+
+create table ax_AppraisalProcess (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalProcessId bigint not null primary key,
+	isSelfEvalutionFormSent BOOLEAN,
+	isSelfEvalutionFormFilled BOOLEAN,
+	arePeerEvaluationFormSent BOOLEAN,
+	arePeerEvaluationFormFilled BOOLEAN,
+	isManagementFormSent BOOLEAN,
+	isManagementFormFilled BOOLEAN,
+	isMeetingScheduled BOOLEAN,
+	isMeetingDone BOOLEAN,
+	isSalaryUpdated BOOLEAN,
+	status bigint
+);
+
+create table ax_AppraisalReminder (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalRemainderId bigint not null primary key,
+	employeeId bigint,
+	appraisalRemainderMonth VARCHAR(75) null,
+	appraisalRemainderYear VARCHAR(75) null,
+	appraisalProcessId bigint
+);
+
+
+--------------------------------------------------------
+DATE : 3-May-2024
+
+create table ax_EmployeeWish (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	wishId bigint not null primary key,
+	senderId bigint,
+	receiverId bigint,
+	content TEXT null,
+	wishTypeMasterId bigint,
+	timeStamp DATE null
+);
+
+
+--------------------------------------------------------
+DATE : 06-May-2024
+
+create table ax_AppraisalMeetingInvitees (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	appraisalMeetingInviteeId bigint not null primary key,
+	employeeId bigint,
+	appraisalMeetingId bigint
+);
+
+-----------------------------------------------------------
+DATE : 07-May-2024
+
+create table ax_Project (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	projectId bigint not null primary key,
+	projectName VARCHAR(75) null,
+	description VARCHAR(256) null
+);
+
+
+create table ax_ProjectEmployeeDetails (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	projectEmployeeDetailsId bigint not null primary key,
+	projectId bigint,
+	employeeId bigint
+);
+
+create table ax_ProjectHistory (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	projectHistoryId bigint not null primary key,
+	projectId bigint,
+	projectTaskStatusMasterId bigint,
+	managerId bigint,
+	startDate DATE null,
+	isBillble BOOLEAN
+);
+
+--------------------------------------------
+Date : 09-May-2024
+
+create table ax_Task (
+	uuid_ VARCHAR(75) null,
+	companyId bigInt,
+	createdBy bigInt,
+	modifiedBy bigInt,
+	groupId bigInt,
+	createDate DATE null,
+	modifiedDate DATE null,
+	taskId bigInt not null primary key,
+	taskName VARCHAR(75) null,
+	description VARCHAR(256) null,
+	projectId bigInt,
+	mainTaskId bigInt,
+	assignedTo bigInt,
+	projectTaskStatusMasterId bigInt,
+	priorityMasterId bigInt,
+	managerId bigInt,
+	assignDate DATE null,
+	startDate DATE null,
+	dueDate DATE null,
+	completeDate DATE null,
+	isBillble BOOLEAN,
+	isSubTask BOOLEAN
+);
+create table ax_TaskReview (
+	uuid_ VARCHAR(75) null,
+	companyId bigInt,
+	createdBy bigInt,
+	modifiedBy bigInt,
+	groupId bigInt,
+	createDate DATE null,
+	modifiedDate DATE null,
+	taskReviewId bigInt not null primary key,
+	taskId bigInt,
+	reviewerId bigInt,
+	review VARCHAR(256) null,
+	dateOfReview DATE null
+);
+
+
+
+--------------------------------------------------------
+DATE : 09-May-2024
+
+
+ALTER TABLE ax_EmployeeSalary
+	ADD COLUMN status boolean;
+
+ALTER TABLE ax_AppraisalHistory
+	DROP COLUMN appraisalAmount,
+	DROP COLUMN lastSalaryAmount,
+	ADD COLUMN  appraisalDocumentId bigint,
+	ADD COLUMN  updatedCtcPa double precision,
+	ADD COLUMN  updatedCtcPm double precision;
+
+
+--------------------------------------------------------
+DATE : 10-May-2024
+
+
+ALTER TABLE ax_AppraisalHistory
+    DROP COLUMN comments,
+    ADD COLUMN  comments VARCHAR(1000) null;
+----------------------------------------------------------
+Date : 21-May-2024
+
+ALTER TABLE ax_employeedetails
+ADD COLUMN isTerminated boolean;
+------------------------------------------------------------
+Date : 22-May-2024
+
+CREATE TABLE ax_upcomingProbationEmployee(
+    uuid_ VARCHAR(75) null,
+    companyId bigint,
+    createdBy bigint,
+    modifiedBy bigint,
+    groupId bigint,
+    createDate DATE NULL,
+    modifiedDate DATE NULL,
+    upcomingProbationEmployeeId bigint PRIMARY KEY,
+    probationDetailId bigint NULL,
+    month int NULL,
+    year int NULL
+);
+CREATE TABLE ax_extendedProbationDetails(
+    uuid_ VARCHAR(75) null,
+    companyId bigint,
+    createdBy bigint,
+    modifiedBy bigint,
+    groupId bigint,
+    createDate DATE NULL,
+    modifiedDate DATE NULL,
+    extendedProbationDetailsId bigint PRIMARY KEY,
+    probationDetailId bigint NULL,
+    extendDate Date NULL,
+    evalutionReview VARCHAR(75) NULL,
+    extendedProbationPeriod int NULL,
+    extendedProbationEndDate Date NULL
+);
+
+
+-----------------------------------------------------------
+Date : 23 May 2024
+
+Alter table ax_task add column EstimatedHours int;
+
+-------------------------------------------------------------
+-------------------------------------------------------------
+Date 23 May 2024
+
+create table ax_TimeTracker (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate DATE null,
+	modifiedDate DATE null,
+	timeTrackerId bigint not null primary key,
+	taskId bigint,
+	employeeId bigint,
+	startTime DATE null,
+	endTime DATE null,
+	duration double precision ,
+	description VARCHAR(500) null,
+	managerApproveStatus VARCHAR(75) null
+
+);
+
+
+
+---------------------------------------------------------------
+Date: 24 May 2024
+
+create table ax_Attachment (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate timestamp without time zone null,
+	modifiedDate timestamp without time zone null,
+	attachmentId bigint not null primary key,
+	timeTrackerId bigint
+);
+---------------------------------------------------------------
+Date : 28-May-2024
+
+create table ax_CompensatoryData (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate timestamp without time zone null,
+	modifiedDate timestamp without time zone null,
+	compensatoryDataId bigint not null primary key,
+	employeeId bigint,
+	dateOfCompensation timestamp without time zone null,
+	requestedHours INTEGER,
+	approvedHours INTEGER,
+	ManagerId bigint,
+	leaveCompensatoryStatusMasterId bigint,
+	description VARCHAR(75) null
+);
+
+
+
+---------------------------------------------------------------
+Date : 04-JUNE-2024
+
+create table ax_EmployeeOffBoarding (
+	uuid_ VARCHAR(75) null,
+	companyId bigint,
+	createdBy bigint,
+	modifiedBy bigint,
+	groupId bigint,
+	createDate timestamp without time zone null,
+	modifiedDate timestamp without time zone null,
+	employeeOffBoardingId bigint not null primary key,
+	kt BOOLEAN,
+	assets BOOLEAN,
+	nda BOOLEAN,
+	mailAndBiometrics BOOLEAN,
+	employeeId bigint,
+	experienceLetterId bigint,
+	fullAndFinalLetterId bigint,
+	relievingLetterId bigint,
+	status BOOLEAN
+);
+------------------------------------------------------
+Date : 11-06-2024
+
+--------------------------------------------------------------
+Date :11-06-2024
+
+alter table ax_taskreview
+    alter column review type varchar(1000) using review::varchar(1000);
+alter table ax_master_leavetypemaster
+    alter column description type varchar(250) using description::varchar(250);
+---------------------------------------------------------------------------
+Date : 11-06-2024
+
+alter table ax_extendedprobationdetails
+    alter column evalutionreview type varchar(500) using evalutionreview::varchar(500);
+---------------------------------------------------------------------------
+Date : 11-06-2024
+
+alter table ax_leaverequest
+    alter column reason type varchar(250) using reason::varchar(250);
+---------------------------------------------------------------------------
+Date : 11-06-2024
+
+alter table ax_employeedetails
+    alter column insurancelink type varchar(1000) using insurancelink::varchar(1000);
+----------------------------------------------------------------------------------
+Date : 24-06-2024
+
+ALTER TABLE ax_employeedetails
+	ADD employeeType VARCHAR(75);
+
+-------------------------------------------------------------------------------------
+
+Date : 27-06-2024
+
+create table ax_LeaveBalanceHistory (
+	uuid_ VARCHAR(75) null,
+	companyId bigInt,
+	createdBy bigInt,
+	modifiedBy bigInt,
+	groupId bigInt,
+	createDate DATE null,
+	modifiedDate DATE null,
+	leaveBalanceHistoryId bigInt not null primary key,
+	leaveBalanceId bigInt,
+	employeeId bigInt,
+	leaveTypeMasterId bigInt,
+	year INTEGER,
+	noOfUsedLeaves DOUBLE precision,
+	noOfRemainingLeaves DOUBLE precision
+);
+
+------------------------------------------------------------------------
+
+
+__________________________________________________________________________________
+
+Date: 27-06-2024
+
+ALTER TABLE ax_EmployeeOffBoarding
+ADD COLUMN fullAndFinal VARCHAR(2000) NULL;

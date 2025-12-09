@@ -11,5 +11,6 @@ dependencies {
 	implementation project(":modules:ax-hrms:ax-hrms-api")
 	implementation project(":modules:ax-hrms-master:ax-hrms-master-api")
 	implementation 'javax.mail:mail:1.4.7'
+	compileOnly group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 
 }
