@@ -1,5 +1,6 @@
 <%@ include file="/init.jsp" %>
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 
 <%--Liferay Urls start here--%>
 <portlet:actionURL name="/sendAnniversaryWish" var="sendWishesURL"></portlet:actionURL>
