@@ -28,18 +28,14 @@
                 rules: {
                     [namespace+"employeeName"]:{
                         required: true
-                    },
-                    [namespace + "wishType"]: {
-                        required: true
                     }
+
                 },
                 messages: {
                     [namespace+"employeeName"]:{
                         required: "Please Reopen the form to fetch Employee Name"
-                    },
-                    [namespace + "wishType"]: {
-                        required: "Please Reopen the form to fetch Wish Type"
                     }
+
                 },
                 errorPlacement: function (error, element) {
                     error.insertAfter(element);
@@ -63,7 +59,7 @@
 
             console.log(employeeName)
             employeeId = button.data('employee-id');
-            wishId = $('#'+namespace+'wishType').val();
+           // wishId = $('#'+namespace+'wishType').val();
             $('#'+namespace+'employeeName').prop('readOnly', true);
             debugger;
 

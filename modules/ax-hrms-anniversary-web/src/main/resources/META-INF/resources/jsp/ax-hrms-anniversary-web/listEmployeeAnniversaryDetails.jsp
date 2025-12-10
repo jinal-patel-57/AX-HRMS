@@ -71,12 +71,12 @@
                             <input type="text" class="form-control" id="employeeNameAni"
                                    name="<portlet:namespace/>employeeName"/>
                         </div>
-                        <div class="form-group">
+                     <!--   <div class="form-group">
                             <label for="<portlet:namespace/>wishType" class="col-form-label"><liferay-ui:message
                                     key="wish-type"/></label>
                             <input class="form-control" type="text" value="Anniversary"
                                    id="<portlet:namespace/>wishType" name="<portlet:namespace/>wishType" readonly>
-                        </div>
+                        </div> -->
                         <!--                         summerNote  start here-->
                         <div class="form-group">
                             <label for="wishes"><liferay-ui:message key="wishes"/>

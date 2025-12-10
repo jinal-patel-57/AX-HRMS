@@ -65,10 +65,10 @@
                             <label for="<portlet:namespace/>employeeName" class="col-form-label"><liferay-ui:message key="employee-name" /></label>
                             <input type="text" class="form-control" id="<portlet:namespace/>employeeName" name="<portlet:namespace/>employeeName"/>
                         </div>
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label for="<portlet:namespace/>wishType" class="col-form-label"><liferay-ui:message key="wish-type" /></label>
                             <input type="text" value="New Joiner" class="form-control" id="<portlet:namespace/>wishType" name="<portlet:namespace/>wishType" readonly>
-                        </div>
+                        </div> -->
                         <!--                         summerNote  start here-->
                         <div class="form-group">
                             <label for="<portlet:namespace />newJoinerWishNote"><liferay-ui:message key="wishes"/>

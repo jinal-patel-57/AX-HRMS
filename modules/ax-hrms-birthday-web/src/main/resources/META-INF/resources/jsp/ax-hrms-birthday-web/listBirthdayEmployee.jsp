@@ -77,10 +77,10 @@
                                 <label for="employeeName"><liferay-ui:message key="employee-name"/></label>
                                 <input type="text" class="form-control" id="employeeName" readonly>
                             </div>
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <label for="wishType"><liferay-ui:message key="wish-type"/></label>
                                 <input type="text" class="form-control" id="wishType" readonly>
-                            </div>
+                            </div> -->
 
                             <!--                         summerNote -->
 

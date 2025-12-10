@@ -89,12 +89,12 @@
 
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <div class="form-group">
-                            <liferay-ui:message key="team-id"/>
+                            <liferay-ui:message key="team"/>
                             <select id="mySelect" name="<portlet:namespace />teamIdSelectBox"
                                     class="custom-select mr-sm-2">
                                 <option value="">Select an option</option>
                                 <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
-                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.getEmployeeId()} ${employeeDetailsList.getFirstName()}</option>
+                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.getEmployeeId()} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
                                 </c:forEach>
                             </select>
                             <input type="hidden" id="<portlet:namespace />teamId" name="<portlet:namespace />teamId"/>

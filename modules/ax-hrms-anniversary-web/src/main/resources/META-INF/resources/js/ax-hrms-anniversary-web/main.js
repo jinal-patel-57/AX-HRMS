@@ -27,17 +27,11 @@
                 rules: {
                     [namespace+"employeeName"]:{
                         required: true
-                    },
-                    [namespace + "wishType"]: {
-                        required: true
                     }
                 },
                 messages: {
                     [namespace+"employeeName"]:{
                         required: "Please Reopen the form to fetch Employee Name"
-                    },
-                    [namespace + "wishType"]: {
-                        required: "Please Reopen the form to fetch Wish Type"
                     }
                 },
                 errorPlacement: function (error, element) {
@@ -62,7 +56,7 @@
 
             employeeName = button.data('employee-name');
             employeeId = button.data('employee-id');
-            wishId = $('#'+namespace+'wishType').val();
+            //wishId = $('#'+namespace+'wishType').val();
             $('#employeeNameAni').prop('readonly', true);
 
 
@@ -109,7 +103,7 @@
                 $('#anniversaryWishModal').modal('show');
                 employeeName = $(this).data('employee-name');
                 employeeId = $(this).data('employee-id');
-                wishId = $('#'+namespace+'wishType').val();
+             //   wishId = $('#'+namespace+'wishType').val();
                 let empName = $(this).data('employee-name');
                 $('#employeeNameAni').val(empName);
                 $('#'+namespace+'employeeId').val(employeeId);

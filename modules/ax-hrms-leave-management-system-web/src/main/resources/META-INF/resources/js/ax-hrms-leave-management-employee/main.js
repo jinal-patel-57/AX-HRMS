@@ -317,7 +317,7 @@
             remainingLeave = $(this).find(':selected').data('remaining-leaves');
             isApplicableForFloater = $(this).find(':selected').data('is-applicable-floater');
             console.log("isContinuous: ",isContinuous," remainingLeave: ",remainingLeave," isApplicableForFloater: ",isApplicableForFloater);
-            remainingLeavesPar.text('Remaining leaves: ' + remainingLeave);
+            remainingLeavesPar.text('Available Balance: ' + remainingLeave);
             if(remainingLeave == "" || remainingLeave == undefined)
                 remainingLeavesPar.text('')
 
@@ -578,7 +578,7 @@
                     for (const value of selectedValues) {
                         const selectedOptionElement = $('<div>').addClass('selected-option');
                         const span = $('<span>').text(value);
-                        const closeButton = $('<button>').text('*'); // Close icon (multiply sign)
+                        const closeButton = $('<button>').text('x'); // Close icon (multiply sign)
 
                         closeButton.click(function() {
                             const index = selectedValues.indexOf(value);

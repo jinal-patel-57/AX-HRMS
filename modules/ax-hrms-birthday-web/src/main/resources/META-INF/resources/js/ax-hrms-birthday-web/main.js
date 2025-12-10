@@ -72,7 +72,7 @@
 
                 $("#employeeName").val($(this).data("name"));
                 $("#employeeId").val($(this).data("id"));
-                $("#wishType").val("Birthday Wishes");
+               // $("#wishType").val("Birthday Wishes");
 
                 // Show the modal
                 $('#birthdayWishesModal').modal('show');
