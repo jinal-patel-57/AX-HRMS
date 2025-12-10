@@ -29,7 +29,7 @@
 
         <liferay-ui:search-container-column-text name="Holiday Date" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(holiday.getDate()) %>" />
 
-        <liferay-ui:search-container-column-text name="Holiday Is Floater" value="${holiday.getIsFloater() ? 'Yes' : 'No'}" />
+        <liferay-ui:search-container-column-text name="" value="${holiday.getIsFloater() ? 'Restricted Holiday' : ''}" />
 
     </liferay-ui:search-container-row>
 

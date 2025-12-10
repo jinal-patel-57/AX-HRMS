@@ -2,19 +2,25 @@ package com.ax.hrms.holiday.hr.admin.web.action;
 
 import com.ax.hrms.holiday.web.portlet.constants.AxHrmsHolidayHrAdminWebPortletConstants;
 import com.ax.hrms.holiday.web.portlet.constants.AxHrmsHolidayHrAdminWebPortletKeys;
+import com.ax.hrms.model.Holiday;
 import com.ax.hrms.service.HolidayLocalService;
+import com.ax.hrms.service.HolidayLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import java.time.Year;
 
 /**
 
@@ -37,7 +43,8 @@ public class DeleteHolidayHrAdminMVCActionCommand extends BaseMVCActionCommand {
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		long holidayId = ParamUtil.getLong(actionRequest, AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYHRADMIN_ID);
-		
+		// Block past year result from  edit
+
 		try {
 			
 			holidayLocalService.deleteHoliday(holidayId);

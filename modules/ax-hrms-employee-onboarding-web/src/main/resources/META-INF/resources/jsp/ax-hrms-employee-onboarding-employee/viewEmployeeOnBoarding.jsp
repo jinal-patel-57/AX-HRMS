@@ -555,19 +555,44 @@
     <div class="card-footer text-right align-items-center">
         <a onclick="rejectAction()" class="btn btn-outline-danger" id="rejectButton"><i class="icon-ban-circle"></i>
             Reject</a>
-        <a href="${employeeApprovalUrl}" class="btn btn-outline-success" id="approveButton"><i class="icon-ok"></i>
-            Approve</a>
+       <a class="btn btn-outline-success" id="approveButton" onclick="approveAction()">
+           <i class="icon-ok"></i> Approve
+       </a>
+
     </div>
 </div>
 
 <script>
+    const namespace = '<portlet:namespace />';
+    const approvalUrl = '${employeeApprovalUrl}';
+    let rejectUrlTemplate = '${employeeRejectUrl}';
+
+    // Common comment validation
+    function validateComments() {
+        const comment = $('#' + namespace + 'review').val().trim();
+
+        if (comment === "") {
+            $("#comments-error").text("Comments are required.");
+            return false;
+        }
+
+        $("#comments-error").text("");
+        return true;
+    }
+
+    // Handle Approve action
+    function approveAction() {
+        if (!validateComments()) return;
+        window.location.href = approvalUrl;
+    }
+
+    // Handle Reject action
     function rejectAction() {
-        var config = new Object({}),
-            namespace = '<portlet:namespace />';
-        config.namespace = namespace;
-        employeeRejectUrl = '${employeeRejectUrl}';
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForRejectUrl(config);
+        if (!validateComments()) return;
+
+        const comment = $('#' + namespace + 'review').val().trim();
+        const rejectUrl = rejectUrlTemplate.replace("REVIEW", encodeURIComponent(comment));
+
+        window.location.href = rejectUrl;
     }
 </script>
-
-

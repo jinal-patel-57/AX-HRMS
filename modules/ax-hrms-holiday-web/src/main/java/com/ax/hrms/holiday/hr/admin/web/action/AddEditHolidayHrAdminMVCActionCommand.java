@@ -3,12 +3,16 @@ package com.ax.hrms.holiday.hr.admin.web.action;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.ZoneId;
 import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import com.ax.hrms.service.HolidayLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
+import org.jsoup.helper.Validate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -67,6 +71,22 @@ public class AddEditHolidayHrAdminMVCActionCommand extends BaseMVCActionCommand 
 		String backURL = ParamUtil.getString(actionRequest, AxHrmsHolidayHrAdminWebPortletConstants.BACKURL);
 		
 		long holidayId = ParamUtil.getLong(actionRequest, AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYHRADMIN_ID, AxHrmsHolidayHrAdminWebPortletConstants.DEFAULT_LONG_VALUE);
+
+		// Block past year result from  edit
+		if(Validator.isNotNull(holidayId)) {
+			Holiday holidayexisted = HolidayLocalServiceUtil.getHoliday(holidayId);
+
+			int holidayYear = holidayexisted.getYear();
+			int currentYear = Year.now().getValue();
+
+			if (holidayYear < currentYear ) {
+				SessionErrors.add(actionRequest, "not-allowed");
+				return;
+			}
+		}
+
+
+
 
         if (holidayId <= 0) {
         	if(isSameDateExists(date, holidayId)) {

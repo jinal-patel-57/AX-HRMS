@@ -3,11 +3,13 @@ package com.ax.hrms.employee.onboarding.employee.web.action;
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.onboarding.employee.web.util.EmployeeOnBoardingUtil;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
+import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.model.EducationLevelMaster;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
+import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.service.AddressLocalService;
 import com.ax.hrms.service.EmployeeAddressLocalService;
 import com.ax.hrms.service.EmployeeBankAccountLocalService;
@@ -16,6 +18,7 @@ import com.ax.hrms.service.EmployeeEducationLocalService;
 import com.ax.hrms.service.EmployeeExperienceLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Country;
@@ -98,13 +101,17 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
 			List<Country> countryList = CountryLocalServiceUtil.getCountries(-1, -1);
 			List<EducationLevelMaster> educationLevelMastersList = educationLevelMasterLocalService.getEducationLevelMasters(-1, -1);
-
+			EmployeeDetails employeeDetails;
+			employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+			renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_EXPERIENCED, employeeDetails.getIsExperienced());
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST,educationLevelMastersList);
 
 		} catch (NoSuchEmployeeDetailsException e1) {
 			e1.printStackTrace();
-		}
-		return AxHrmsEmployeeOnBoardingEmployeeConstants.ADD_EMPLOYEE_ONBOARDING_JSP;
+		} catch (PortalException e) {
+            e.printStackTrace();
+        }
+        return AxHrmsEmployeeOnBoardingEmployeeConstants.ADD_EMPLOYEE_ONBOARDING_JSP;
 	}
 }

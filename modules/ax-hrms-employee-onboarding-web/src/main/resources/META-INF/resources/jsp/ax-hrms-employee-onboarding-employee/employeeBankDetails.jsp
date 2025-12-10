@@ -27,24 +27,14 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <div class="form-group">
                         <label for="accountType" class="form-label"><liferay-ui:message key="account-type"/></label>
-                        <select id="<portlet:namespace />accountType" name="<portlet:namespace />accountType"
-                                class="form-select"
-                                required>
-                            <option value="">Select account type</option>
-                            <option value="savings" ${employeeBankAccount.accountType == 'savings' ? 'selected' : ''}>
-                                Savings
-                            </option>
-                            <option value="current" ${employeeBankAccount.accountType == 'current' ? 'selected' : ''}>
-                                Current
-                            </option>
-                            <option value="fixed" ${employeeBankAccount.accountType == 'fixed' ? 'selected' : ''}>Fixed
-                                Deposit
-                            </option>
-                            <option value="recurring" ${employeeBankAccount.accountType == 'recurring' ? 'selected' : ''}>
-                                Recurring
-                                Deposit
-                            </option>
-                        </select>
+                        <input
+                            type="text"
+                            id="<portlet:namespace />accountType"
+                            name="<portlet:namespace />accountType"
+                            class="form-control"
+                            value="Salaried"
+                            readonly
+                        />
                     </div>
                 </div>
 

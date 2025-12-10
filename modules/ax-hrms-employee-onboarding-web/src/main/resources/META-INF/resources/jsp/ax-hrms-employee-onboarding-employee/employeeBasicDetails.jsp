@@ -44,7 +44,7 @@
             </div>
 
             <!-- Second Row: Skype ID and Father's Name -->
-            <div class="col-md-4 col-sm-12 mb-3">
+            <!-- <div class="col-md-4 col-sm-12 mb-3">
                 <label for="<portlet:namespace />skypeId" class="form-label">
                     <liferay-ui:message key="skype-id"/><span class="text-danger">*</span>
                 </label>
@@ -52,7 +52,7 @@
                        id="<portlet:namespace />skypeId"
                        name="<portlet:namespace />skypeId"
                        value="${employeeDetail.skypeId}"/>
-            </div>
+            </div> -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <label for="<portlet:namespace />fatherName" class="form-label">
                     <liferay-ui:message key="father-name"/><span class="text-danger">*</span>

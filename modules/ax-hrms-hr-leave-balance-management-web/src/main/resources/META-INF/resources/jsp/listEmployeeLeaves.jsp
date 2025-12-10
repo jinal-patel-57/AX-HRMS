@@ -44,26 +44,38 @@
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
-                <tbody>
-                <c:forEach var="CustomEmployeeLeave" items="${listCustomEmployeeLeave}" varStatus="loop">
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>${CustomEmployeeLeave.leaveName}</td>
-                        <td>${CustomEmployeeLeave.leaveAmount}</td>
-                        <td>
-                            <form class="form-inline" action="${updateLeaveBalanceURL}" method="post">
-                                <input type="number" step="any" class="form-control mb-2 mr-sm-2"
-                                       name="<portlet:namespace/>leaveAmount"
-                                       value="${CustomEmployeeLeave.leaveAmount}">
-                                <input type="hidden" class="form-control mb-2 mr-sm-2"
-                                       name="<portlet:namespace/>leaveTypeMasterId"
-                                       value="${CustomEmployeeLeave.leaveTypeMasterId}">
-                                <button type="submit" class="btn btn-primary mb-2">Update</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
+               <tbody>
+                   <c:set var="totalLeave" value="0" />
+
+                   <c:forEach var="CustomEmployeeLeave" items="${listCustomEmployeeLeave}" varStatus="loop">
+                       <c:set var="totalLeave" value="${totalLeave + CustomEmployeeLeave.leaveAmount}" />
+
+                       <tr>
+                           <th scope="row">${loop.index + 1}</th>
+                           <td>${CustomEmployeeLeave.leaveName}</td>
+                           <td>${CustomEmployeeLeave.leaveAmount}</td>
+                           <td>
+                               <form class="form-inline" action="${updateLeaveBalanceURL}" method="post">
+                                   <input type="number" step="any" class="form-control mb-2 mr-sm-2"
+                                          name="<portlet:namespace/>leaveAmount"
+                                          value="${CustomEmployeeLeave.leaveAmount}">
+                                   <input type="hidden" class="form-control mb-2 mr-sm-2"
+                                          name="<portlet:namespace/>leaveTypeMasterId"
+                                          value="${CustomEmployeeLeave.leaveTypeMasterId}">
+                                   <button type="submit" class="btn btn-primary mb-2">Update</button>
+                               </form>
+                           </td>
+                       </tr>
+                   </c:forEach>
+
+                   <!-- Total Leave Row -->
+                   <tr>
+                       <th colspan="2" class="text-right">Total Leave Balance</th>
+                       <th>${totalLeave}</th>
+                       <th></th>
+                   </tr>
+               </tbody>
+
             </table>
         </c:if>
     </div>

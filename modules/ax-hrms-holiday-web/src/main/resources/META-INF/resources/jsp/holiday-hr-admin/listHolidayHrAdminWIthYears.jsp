@@ -12,6 +12,13 @@
     <portlet:param name="mvcRenderCommandName" value="/fetchDataWithYears"/>
     <portlet:param name="selectedYear" value="SELECTED_YEAR"/>
 </portlet:renderURL>
+<style>
+    .Btn-disabled {
+        pointer-events: none;   /* disables click */
+        opacity: 0.5;           /* looks disabled */
+        cursor: not-allowed;    /* disabled cursor */
+    }
+</style>
 
 <div class="text-right">
 
@@ -22,6 +29,7 @@
 <liferay-ui:success key="holiday-hr-admin-deleted" message="holiday-hr-admin-has-been-deleted-successfully" />
 <liferay-ui:success key="holiday-hr-admin-added" message="holiday-hr-admin-has-been-successfully-added" />
 <liferay-ui:success key="holiday-hr-admin-updated" message="holiday-hr-admin-has-been-successfully-updated" />
+<liferay-ui:error key="not-allowed" message="You cannot update holidays from past years." />
 
 
 
@@ -56,7 +64,7 @@
         
   		<liferay-ui:search-container-column-text name="Holiday Date" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(holiday.getDate()) %>" />
   		
-        <liferay-ui:search-container-column-text name="Holiday Is Floater" value="${holiday.getIsFloater() ? 'Yes' : 'No'}" />
+        <liferay-ui:search-container-column-text name="" value="${holiday.getIsFloater() ? 'Restricted Holiday' : ''}" />
 
         <liferay-ui:search-container-column-text name="Actions" cssClass="text-center">
         
@@ -73,11 +81,11 @@
                     </portlet:actionURL>
                     
                     
-                    <c:set var="isValidYear" value="${holiday.getYear() >= currentYear - 1 && holiday.getYear() <= currentYear + 1}" />
+                    <c:set var="isValidYear" value="${holiday.getYear() >= currentYear}" />
 						        <c:set var="btnClass" value="${isValidYear ? '' : 'Btn-disabled'}" />
-						        
+
 					<div class="dropdown ">
-					<button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+					<button class="btn fa fa-ellipsis-v dropdown-toggle ${btnClass}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 						<i class="icon-ellipsis-vertical"></i>
 					</button>
 					<ul class="dropdown-menu">
@@ -91,7 +99,7 @@
 						</li>
 					</ul>
 				</div>
-                    
+
                     
                     
                       

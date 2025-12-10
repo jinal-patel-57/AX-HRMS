@@ -154,6 +154,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT_IDS, departmentIds);
 
             employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_EXPERIENCED, employeeDetails.getIsExperienced());
             try {
                 FileEntry profilePicPathName = DLAppLocalServiceUtil.getFileEntry(employeeDetails.getProfilePicId());
                 if (profilePicPathName.getFileName() != null) {

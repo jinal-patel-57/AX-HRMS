@@ -3,6 +3,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
 
 <c:if test="${isOnBoarded}">
     <div class="alert alert-warning">You are not authorized to Access this page anymore!
@@ -87,12 +89,14 @@
                         <liferay-ui:message key="education-details"/>
                     </button>
                 </li>
+                <c:if test="${isExperienced}">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="step4-tab" data-bs-toggle="tab" data-bs-target="#step4" type="button"
                             role="tab" aria-controls="step4" aria-selected="false">
                         <liferay-ui:message key="experience-details"/>
                     </button>
                 </li>
+               </c:if>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="step5-tab" data-bs-toggle="tab" data-bs-target="#step5" type="button"
                             role="tab" aria-controls="step5" aria-selected="false">
@@ -205,8 +209,11 @@
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForEducationValidation(config);
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation(config);
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation(config);
+
+
+    AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation(config);
+
+AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForNomineeValidation(config);
     });

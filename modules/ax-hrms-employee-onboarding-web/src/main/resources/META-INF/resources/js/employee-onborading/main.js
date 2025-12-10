@@ -116,6 +116,22 @@
     function setConfigsForValidation(config) {
         namespace = config.namespace;
         config.profilePicName = profilePicName;
+        // Custom age validation
+                $.validator.addMethod("ageRange", function (value, element) {
+                    if (!value) return false;
+
+                    let dob = new Date(value);
+                    let today = new Date();
+
+                    let age = today.getFullYear() - dob.getFullYear();
+                    let monthDiff = today.getMonth() - dob.getMonth();
+
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                        age--;
+                    }
+
+                    return age >= 18 && age <= 60;
+                }, "Age must be between 18 and 60 years.");
         $(document).ready(function () {
             var $form1 = $("#stepperForm");
             $form1.validate({
@@ -132,18 +148,17 @@
                         email: true
                     },
                     [namespace + "dateOfBirth"]: {
-                        required: true,
-                        date: true
-                    },
+                       required: true,
+                       date: true,
+                       ageRange: true
+                   },
                     [namespace + "mobileNo"]: {
                         required: true,
                         digits: true,
                         minlength: 10,
                         maxlength: 15
                     },
-                    [namespace + "skypeId"]: {
-                        required: true
-                    },
+
                     [namespace + "fatherName"]: {
                         required: true
                     },
@@ -164,19 +179,18 @@
                         required: "Please enter your personal email.",
                         email: "Please enter a valid email address."
                     },
-                    [namespace + "dateOfBirth"]: {
-                        required: "Please enter your date of birth.",
-                        date: "Please enter a valid date."
-                    },
+                   [namespace + "dateOfBirth"]: {
+                       required: "Please enter your date of birth.",
+                       date: "Please enter a valid date.",
+                       ageRange: "Age must be between 18 and 60 years."
+                   },
                     [namespace + "mobileNo"]: {
                         required: "Please enter your mobile number.",
                         digits: "Mobile number should contain only digits.",
                         minlength: "Mobile number must be at least 10 digits long.",
                         maxlength: "Mobile number must not exceed 15 digits."
                     },
-                    [namespace + "skypeId"]: {
-                        required: "Please Enter skypeId."
-                    },
+
                     [namespace + "fatherName"]: {
                         required: "Please Enter FatherName."
                     },
@@ -631,6 +645,7 @@
 
 
     function setConfigsForExperienceValidation(config) {
+
         config.experienceIndex = experienceIndex;
 
         $(document).ready(function () {
@@ -751,9 +766,7 @@
                     maxlength: 75,
                     accountNumberValidation: true
                 },
-                [namespace + "accountType"]: {
-                    required: true
-                },
+
                 [namespace + "beneficiaryName"]: {
                     required: true,
                     maxlength: 75
@@ -777,9 +790,7 @@
                     maxlength: "Account number should not exceed 75 characters.",
                     accountNumberValidation: "Account number should not contain alphabet characters, underscores, special characters, or whitespaces."
                 },
-                [namespace + "accountType"]: {
-                    required: "Please select an account type."
-                },
+
                 [namespace + "beneficiaryName"]: {
                     required: "Please enter the beneficiary name.",
                     maxlength: "Beneficiary name should not exceed 75 characters."
