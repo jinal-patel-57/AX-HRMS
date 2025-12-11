@@ -621,6 +621,7 @@ public class RolePoliciesPersistenceImpl
 		"(rolePolicies.uuid IS NULL OR rolePolicies.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
+	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the role policies where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchRolePoliciesException</code> if it could not be found.
@@ -800,13 +801,62 @@ public class RolePoliciesPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		RolePolicies rolePolicies = fetchByUUID_G(uuid, groupId);
+		uuid = Objects.toString(uuid, "");
 
-		if (rolePolicies == null) {
-			return 0;
+		FinderPath finderPath = _finderPathCountByUUID_G;
+
+		Object[] finderArgs = new Object[] {uuid, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_ROLEPOLICIES_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid.isEmpty()) {
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindUuid) {
+					queryPos.add(uuid);
+				}
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1893,6 +1943,7 @@ public class RolePoliciesPersistenceImpl
 		"rolePolicies.policyId = ?";
 
 	private FinderPath _finderPathFetchByPolicyIdAndRoleId;
+	private FinderPath _finderPathCountByPolicyIdAndRoleId;
 
 	/**
 	 * Returns the role policies where policyId = &#63; and roleId = &#63; or throws a <code>NoSuchRolePoliciesException</code> if it could not be found.
@@ -2075,13 +2126,49 @@ public class RolePoliciesPersistenceImpl
 	 */
 	@Override
 	public int countByPolicyIdAndRoleId(long policyId, long roleId) {
-		RolePolicies rolePolicies = fetchByPolicyIdAndRoleId(policyId, roleId);
+		FinderPath finderPath = _finderPathCountByPolicyIdAndRoleId;
 
-		if (rolePolicies == null) {
-			return 0;
+		Object[] finderArgs = new Object[] {policyId, roleId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_ROLEPOLICIES_WHERE);
+
+			sb.append(_FINDER_COLUMN_POLICYIDANDROLEID_POLICYID_2);
+
+			sb.append(_FINDER_COLUMN_POLICYIDANDROLEID_ROLEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(policyId);
+
+				queryPos.add(roleId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_POLICYIDANDROLEID_POLICYID_2 =
@@ -2201,6 +2288,7 @@ public class RolePoliciesPersistenceImpl
 			rolePoliciesModelImpl.getUuid(), rolePoliciesModelImpl.getGroupId()
 		};
 
+		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, rolePoliciesModelImpl);
 
@@ -2209,6 +2297,8 @@ public class RolePoliciesPersistenceImpl
 			rolePoliciesModelImpl.getRoleId()
 		};
 
+		finderCache.putResult(
+			_finderPathCountByPolicyIdAndRoleId, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByPolicyIdAndRoleId, args, rolePoliciesModelImpl);
 	}
@@ -2704,6 +2794,11 @@ public class RolePoliciesPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
+		_finderPathCountByUUID_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"uuid_", "groupId"}, false);
+
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -2745,6 +2840,12 @@ public class RolePoliciesPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByPolicyIdAndRoleId",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"policyId", "roleId"}, true);
+
+		_finderPathCountByPolicyIdAndRoleId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByPolicyIdAndRoleId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"policyId", "roleId"}, false);
 
 		RolePoliciesUtil.setPersistence(this);
 	}

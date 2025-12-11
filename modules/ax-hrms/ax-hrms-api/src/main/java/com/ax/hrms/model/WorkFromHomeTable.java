@@ -43,6 +43,8 @@ public class WorkFromHomeTable extends BaseTable<WorkFromHomeTable> {
 			Column.FLAG_PRIMARY);
 	public final Column<WorkFromHomeTable, Long> userId = createColumn(
 		"userId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<WorkFromHomeTable, Long> reviewerId = createColumn(
+		"reviewerId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<WorkFromHomeTable, String> teamMailId = createColumn(
 		"teamMailId", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<WorkFromHomeTable, String> status = createColumn(

@@ -22,11 +22,10 @@ import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
+import org.osgi.service.component.annotations.Component;
 
 import java.util.Date;
 import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Brian Wing Shun Chan
@@ -45,6 +44,10 @@ public class EmployeeDetailsLocalServiceImpl extends EmployeeDetailsLocalService
 	public EmployeeDetails findByLrUserId(long lrUserId)
 			throws NoSuchEmployeeDetailsException {
 		return employeeDetailsPersistence.findByLrUserId(lrUserId);
+	}
+
+	public List<EmployeeDetails> findByCreateDate(Date createDate) {
+		return employeeDetailsPersistence.findByCreateDate(createDate);
 	}
 	
 	@Override

@@ -64,6 +64,9 @@
         <finder name="LeavingDate" return-type="Collection">
             <finder-column name="leavingDate"/>
         </finder>
+        <finder name="CreateDate" return-type="Collection">
+            <finder-column name="createDate"/>
+        </finder>
 
         <finder name="EmployeeName" return-type="Collection">
             <finder-column name="firstName"/>

@@ -70,9 +70,10 @@ public class WorkFromHomeModelImpl
 		{"groupId", Types.BIGINT}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP},
 		{"workFromHomeRequestId", Types.BIGINT}, {"userId", Types.BIGINT},
-		{"teamMailId", Types.VARCHAR}, {"status", Types.VARCHAR},
-		{"reason", Types.VARCHAR}, {"requestDate", Types.TIMESTAMP},
-		{"startDate", Types.TIMESTAMP}, {"endDate", Types.TIMESTAMP}
+		{"reviewerId", Types.BIGINT}, {"teamMailId", Types.VARCHAR},
+		{"status", Types.VARCHAR}, {"reason", Types.VARCHAR},
+		{"requestDate", Types.TIMESTAMP}, {"startDate", Types.TIMESTAMP},
+		{"endDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -88,6 +89,7 @@ public class WorkFromHomeModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("workFromHomeRequestId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("userId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("reviewerId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("teamMailId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("status", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("reason", Types.VARCHAR);
@@ -97,7 +99,7 @@ public class WorkFromHomeModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_WorkFromHome (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,workFromHomeRequestId LONG not null primary key,userId LONG,teamMailId VARCHAR(75) null,status VARCHAR(75) null,reason VARCHAR(75) null,requestDate DATE null,startDate DATE null,endDate DATE null)";
+		"create table ax_WorkFromHome (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,workFromHomeRequestId LONG not null primary key,userId LONG,reviewerId LONG,teamMailId VARCHAR(75) null,status VARCHAR(75) null,reason VARCHAR(75) null,requestDate DATE null,startDate DATE null,endDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_WorkFromHome";
 
@@ -288,6 +290,8 @@ public class WorkFromHomeModelImpl
 				WorkFromHome::getWorkFromHomeRequestId);
 			attributeGetterFunctions.put("userId", WorkFromHome::getUserId);
 			attributeGetterFunctions.put(
+				"reviewerId", WorkFromHome::getReviewerId);
+			attributeGetterFunctions.put(
 				"teamMailId", WorkFromHome::getTeamMailId);
 			attributeGetterFunctions.put("status", WorkFromHome::getStatus);
 			attributeGetterFunctions.put("reason", WorkFromHome::getReason);
@@ -341,6 +345,9 @@ public class WorkFromHomeModelImpl
 			attributeSetterBiConsumers.put(
 				"userId",
 				(BiConsumer<WorkFromHome, Long>)WorkFromHome::setUserId);
+			attributeSetterBiConsumers.put(
+				"reviewerId",
+				(BiConsumer<WorkFromHome, Long>)WorkFromHome::setReviewerId);
 			attributeSetterBiConsumers.put(
 				"teamMailId",
 				(BiConsumer<WorkFromHome, String>)WorkFromHome::setTeamMailId);
@@ -567,6 +574,21 @@ public class WorkFromHomeModelImpl
 
 	@JSON
 	@Override
+	public long getReviewerId() {
+		return _reviewerId;
+	}
+
+	@Override
+	public void setReviewerId(long reviewerId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_reviewerId = reviewerId;
+	}
+
+	@JSON
+	@Override
 	public String getTeamMailId() {
 		if (_teamMailId == null) {
 			return "";
@@ -768,6 +790,7 @@ public class WorkFromHomeModelImpl
 		workFromHomeImpl.setModifiedDate(getModifiedDate());
 		workFromHomeImpl.setWorkFromHomeRequestId(getWorkFromHomeRequestId());
 		workFromHomeImpl.setUserId(getUserId());
+		workFromHomeImpl.setReviewerId(getReviewerId());
 		workFromHomeImpl.setTeamMailId(getTeamMailId());
 		workFromHomeImpl.setStatus(getStatus());
 		workFromHomeImpl.setReason(getReason());
@@ -800,6 +823,8 @@ public class WorkFromHomeModelImpl
 		workFromHomeImpl.setWorkFromHomeRequestId(
 			this.<Long>getColumnOriginalValue("workFromHomeRequestId"));
 		workFromHomeImpl.setUserId(this.<Long>getColumnOriginalValue("userId"));
+		workFromHomeImpl.setReviewerId(
+			this.<Long>getColumnOriginalValue("reviewerId"));
 		workFromHomeImpl.setTeamMailId(
 			this.<String>getColumnOriginalValue("teamMailId"));
 		workFromHomeImpl.setStatus(
@@ -929,6 +954,8 @@ public class WorkFromHomeModelImpl
 
 		workFromHomeCacheModel.userId = getUserId();
 
+		workFromHomeCacheModel.reviewerId = getReviewerId();
+
 		workFromHomeCacheModel.teamMailId = getTeamMailId();
 
 		String teamMailId = workFromHomeCacheModel.teamMailId;
@@ -1051,6 +1078,7 @@ public class WorkFromHomeModelImpl
 	private boolean _setModifiedDate;
 	private long _workFromHomeRequestId;
 	private long _userId;
+	private long _reviewerId;
 	private String _teamMailId;
 	private String _status;
 	private String _reason;
@@ -1098,6 +1126,7 @@ public class WorkFromHomeModelImpl
 		_columnOriginalValues.put(
 			"workFromHomeRequestId", _workFromHomeRequestId);
 		_columnOriginalValues.put("userId", _userId);
+		_columnOriginalValues.put("reviewerId", _reviewerId);
 		_columnOriginalValues.put("teamMailId", _teamMailId);
 		_columnOriginalValues.put("status", _status);
 		_columnOriginalValues.put("reason", _reason);
@@ -1145,17 +1174,19 @@ public class WorkFromHomeModelImpl
 
 		columnBitmasks.put("userId", 256L);
 
-		columnBitmasks.put("teamMailId", 512L);
+		columnBitmasks.put("reviewerId", 512L);
 
-		columnBitmasks.put("status", 1024L);
+		columnBitmasks.put("teamMailId", 1024L);
 
-		columnBitmasks.put("reason", 2048L);
+		columnBitmasks.put("status", 2048L);
 
-		columnBitmasks.put("requestDate", 4096L);
+		columnBitmasks.put("reason", 4096L);
 
-		columnBitmasks.put("startDate", 8192L);
+		columnBitmasks.put("requestDate", 8192L);
 
-		columnBitmasks.put("endDate", 16384L);
+		columnBitmasks.put("startDate", 16384L);
+
+		columnBitmasks.put("endDate", 32768L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

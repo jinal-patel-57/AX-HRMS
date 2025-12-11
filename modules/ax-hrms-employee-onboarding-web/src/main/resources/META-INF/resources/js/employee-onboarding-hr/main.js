@@ -4,6 +4,19 @@ var setFileInputValues;
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+        $.validator.addMethod("validUsernameEmail", function (value, element) {
+            const domain = $(element).data("domain");  // dynamic domain from JSP
+
+            // Remove domain part
+            let username = value.replace(domain, "");
+
+            // Must not be empty
+            if (username.trim() === "") return false;
+
+            // Username allowed characters: letters, digits, dot, underscore, hyphen
+            const regex = /^[a-zA-Z0-9._-]+$/;
+            return regex.test(username);
+        }, "Please enter a valid email username.");
 
         $(document).ready(function () {
             $("#EmployeeOnBoardingHrForm").validate({
@@ -37,9 +50,11 @@ var setFileInputValues;
                     [namespace + "department"]: {
                         required: true,
                     },
-                    [namespace + "officialEmailId"]: {
-                        required: true,
-                    },
+                 [namespace + "officialEmailId"]: {
+                     required: true,
+                     validUsernameEmail: true
+                 },
+
                     [namespace + "joiningDate"]: {
                         required: true,
                         date: true
@@ -93,9 +108,11 @@ var setFileInputValues;
                         required: "Please select a Department!"
 
                     },
-                    [namespace + "officialEmailId"]: {
-                        required: "Please Enter a valid Email ID",
-                    },
+                   [namespace + "officialEmailId"]: {
+                       required: "Please enter email username.",
+                       validUsernameEmail: "Only letters, numbers, dot, hyphen and underscore allowed."
+                   },
+
                     [namespace + "joiningDate"]: {
                         required: "Please Enter a valid Joining date",
                         date: "Enter a proper Date Only"

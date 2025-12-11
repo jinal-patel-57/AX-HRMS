@@ -7,5 +7,6 @@ Export-Package: \
 	com.ax.hrms.probation.config.configuration.action,\
     com.ax.hrms.mail.template.config.configuration,\
     com.ax.hrms.link.config.configuration,\
+    com.ax.hrms.module.config.configuration,\
     com.ax.hrms.notification.template.config.configuration
     

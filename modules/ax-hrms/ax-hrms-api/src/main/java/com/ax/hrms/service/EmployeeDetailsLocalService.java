@@ -211,6 +211,8 @@ public interface EmployeeDetailsLocalService
 	public List<Object[]> FilterByDepartmentDesignationName(
 		String departName, String desgiName);
 
+	public List<EmployeeDetails> findByCreateDate(Date createDate);
+
 	public EmployeeDetails findByEmployeeId(long employeeId)
 		throws NoSuchEmployeeDetailsException;
 

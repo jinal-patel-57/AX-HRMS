@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <label class="" for="employeeCode"><liferay-ui:message key="employee-code"/><span class="text-danger">*</span></label>
                         <input id="employeeCode" placeholder="<liferay-ui:message key='employee-code'/>"
-                               class="form-control" type="text" name="<portlet:namespace/>employeeCode"/>
+                               class="form-control" type="text" name="<portlet:namespace/>employeeCode" value="${employeCodePattern}" readOnly/>
                         <label id="employeeCode-error" class="error text-danger" for="employeeCode"></label>
                     </div>
                 </div>
@@ -78,12 +78,26 @@
 
 
                 <div class="col-md-4 col-sm-12">
-                    <div class="form-group">
-                        <label class="" for="officialEmailId"><liferay-ui:message key="official-email-id"/><span class="text-danger">*</span></label>
-                        <input id="officialEmailId" placeholder="<liferay-ui:message key='official-email-id'/>"
-                               class="form-control" type="email" name="<portlet:namespace/>officialEmailId"/>
-                        <label id="officialEmailId-error" class="error text-danger" for="officialEmailId"></label>
-                    </div>
+                  <div class="form-group">
+                      <label for="officialEmailId">
+                          <liferay-ui:message key="official-email-id"/> <span class="text-danger">*</span>
+                      </label>
+
+                      <input id="officialEmailId"
+                             class="form-control"
+                             type="text"
+                             name="<portlet:namespace/>officialEmailId"
+                             autocomplete="off"
+                             value=""
+                             data-domain="${domain}" />
+
+                      <small class="text-muted">
+                          Your email will automatically end with ${domain}
+                      </small>
+
+                      <label id="officialEmailId-error" class="error text-danger" for="officialEmailId"></label>
+                  </div>
+
                 </div>
 
 
@@ -243,4 +257,40 @@
 
         AxHrmsEmployeeOnboardingHrWebPortlet.setConfigsForValidation(config);
     });
+
+
+
+    $(document).ready(function () {
+
+        const emailInput = $("#officialEmailId");
+        const domain = emailInput.data("domain");
+
+        // Always ensure domain is attached
+        emailInput.on("input", function () {
+
+            let value = emailInput.val();
+
+            // Remove domain if user tries to type full email manually
+            if (value.endsWith(domain)) {
+                value = value.replace(domain, "");
+            }
+
+            // Append domain again
+            emailInput.val(value + domain);
+        });
+
+        // Prevent cursor from entering domain part
+        emailInput.on("click keyup", function () {
+
+            let fullValue = emailInput.val();
+            let domainIndex = fullValue.indexOf(domain);
+
+            // Lock cursor to before domain
+            if (emailInput[0].selectionStart > domainIndex) {
+                emailInput[0].setSelectionRange(domainIndex, domainIndex);
+            }
+        });
+
+    });
+
 </script>

@@ -621,6 +621,7 @@ public class LeaveBalancePersistenceImpl
 		"(leaveBalance.uuid IS NULL OR leaveBalance.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
+	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the leave balance where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchLeaveBalanceException</code> if it could not be found.
@@ -800,13 +801,62 @@ public class LeaveBalancePersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		LeaveBalance leaveBalance = fetchByUUID_G(uuid, groupId);
+		uuid = Objects.toString(uuid, "");
 
-		if (leaveBalance == null) {
-			return 0;
+		FinderPath finderPath = _finderPathCountByUUID_G;
+
+		Object[] finderArgs = new Object[] {uuid, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_LEAVEBALANCE_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid.isEmpty()) {
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindUuid) {
+					queryPos.add(uuid);
+				}
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1399,6 +1449,7 @@ public class LeaveBalancePersistenceImpl
 		"leaveBalance.companyId = ?";
 
 	private FinderPath _finderPathFetchByEmployeeIdAndLeaveTypeMasterId;
+	private FinderPath _finderPathCountByEmployeeIdAndLeaveTypeMasterId;
 
 	/**
 	 * Returns the leave balance where employeeId = &#63; and leaveTypeMasterId = &#63; or throws a <code>NoSuchLeaveBalanceException</code> if it could not be found.
@@ -1595,14 +1646,52 @@ public class LeaveBalancePersistenceImpl
 	public int countByEmployeeIdAndLeaveTypeMasterId(
 		long employeeId, long leaveTypeMasterId) {
 
-		LeaveBalance leaveBalance = fetchByEmployeeIdAndLeaveTypeMasterId(
-			employeeId, leaveTypeMasterId);
+		FinderPath finderPath =
+			_finderPathCountByEmployeeIdAndLeaveTypeMasterId;
 
-		if (leaveBalance == null) {
-			return 0;
+		Object[] finderArgs = new Object[] {employeeId, leaveTypeMasterId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_LEAVEBALANCE_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEMASTERID_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEMASTERID_LEAVETYPEMASTERID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String
@@ -3693,6 +3782,7 @@ public class LeaveBalancePersistenceImpl
 		"leaveBalance.year = ?";
 
 	private FinderPath _finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear;
+	private FinderPath _finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear;
 
 	/**
 	 * Returns the leave balance where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or throws a <code>NoSuchLeaveBalanceException</code> if it could not be found.
@@ -3903,14 +3993,58 @@ public class LeaveBalancePersistenceImpl
 	public int countByEmployeeIdLeaveTypeMasterIdAndYear(
 		long employeeId, long leaveTypeMasterId, int year) {
 
-		LeaveBalance leaveBalance = fetchByEmployeeIdLeaveTypeMasterIdAndYear(
-			employeeId, leaveTypeMasterId, year);
+		FinderPath finderPath =
+			_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear;
 
-		if (leaveBalance == null) {
-			return 0;
+		Object[] finderArgs = new Object[] {
+			employeeId, leaveTypeMasterId, year
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_LEAVEBALANCE_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_LEAVETYPEMASTERID_2);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_YEAR_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				queryPos.add(year);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String
@@ -4047,6 +4181,7 @@ public class LeaveBalancePersistenceImpl
 			leaveBalanceModelImpl.getUuid(), leaveBalanceModelImpl.getGroupId()
 		};
 
+		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, leaveBalanceModelImpl);
 
@@ -4055,6 +4190,9 @@ public class LeaveBalancePersistenceImpl
 			leaveBalanceModelImpl.getLeaveTypeMasterId()
 		};
 
+		finderCache.putResult(
+			_finderPathCountByEmployeeIdAndLeaveTypeMasterId, args,
+			Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByEmployeeIdAndLeaveTypeMasterId, args,
 			leaveBalanceModelImpl);
@@ -4065,6 +4203,9 @@ public class LeaveBalancePersistenceImpl
 			leaveBalanceModelImpl.getYear()
 		};
 
+		finderCache.putResult(
+			_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear, args,
+			Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear, args,
 			leaveBalanceModelImpl);
@@ -4561,6 +4702,11 @@ public class LeaveBalancePersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
+		_finderPathCountByUUID_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"uuid_", "groupId"}, false);
+
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -4584,6 +4730,12 @@ public class LeaveBalancePersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByEmployeeIdAndLeaveTypeMasterId",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"employeeId", "leaveTypeMasterId"}, true);
+
+		_finderPathCountByEmployeeIdAndLeaveTypeMasterId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByEmployeeIdAndLeaveTypeMasterId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"employeeId", "leaveTypeMasterId"}, false);
 
 		_finderPathWithPaginationFindByEmployeeId = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByEmployeeId",
@@ -4674,6 +4826,15 @@ public class LeaveBalancePersistenceImpl
 				Integer.class.getName()
 			},
 			new String[] {"employeeId", "leaveTypeMasterId", "year"}, true);
+
+		_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByEmployeeIdLeaveTypeMasterIdAndYear",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			new String[] {"employeeId", "leaveTypeMasterId", "year"}, false);
 
 		LeaveBalanceUtil.setPersistence(this);
 	}

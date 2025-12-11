@@ -40,6 +40,7 @@ create unique index IX_98275504 on ax_EmployeeDepartment (uuid_[$COLUMN_LENGTH:7
 create index IX_979025E4 on ax_EmployeeDesignation (employeeId);
 create unique index IX_26DEE73D on ax_EmployeeDesignation (uuid_[$COLUMN_LENGTH:75$], groupId);
 
+create index IX_B9FFE410 on ax_EmployeeDetails (createDate);
 create index IX_B835A06E on ax_EmployeeDetails (firstName[$COLUMN_LENGTH:75$], lastName[$COLUMN_LENGTH:75$]);
 create index IX_9163F673 on ax_EmployeeDetails (isTerminated);
 create index IX_8BF94020 on ax_EmployeeDetails (leavingDate);

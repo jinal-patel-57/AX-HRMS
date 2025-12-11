@@ -11,6 +11,7 @@ import com.ax.hrms.master.model.LeavePolicyMaster;
 import com.ax.hrms.master.model.LeaveTypeMaster;
 import com.ax.hrms.master.service.*;
 import com.ax.hrms.model.*;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.probation.config.configuration.action.AxHrmsProbationConfigurationAction;
 import com.ax.hrms.service.*;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
@@ -64,7 +65,8 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 
     @Reference
     AxHrmsCommonApi axHrmsCommonApi;
-
+    @Reference
+    ModuleConfiguration moduleConfiguration;
     @Reference
     RoleLocalService roleLocalService;
 
@@ -221,6 +223,11 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         employeeDetails.setCompanyId(themeDisplay.getCompanyId());
         employeeDetails.setFirstName(firstName);
         employeeDetails.setLastName(lastName);
+        String domain = moduleConfiguration.domainName();
+
+        if (!officialEmailId.endsWith(domain)) {
+            officialEmailId = officialEmailId + domain;
+        }
         employeeDetails.setOfficialEmail(officialEmailId);
         employeeDetails.setGender(gender);
         employeeDetails.setIsTerminated(false);

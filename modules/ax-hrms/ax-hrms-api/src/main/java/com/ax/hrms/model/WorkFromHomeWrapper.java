@@ -43,6 +43,7 @@ public class WorkFromHomeWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("workFromHomeRequestId", getWorkFromHomeRequestId());
 		attributes.put("userId", getUserId());
+		attributes.put("reviewerId", getReviewerId());
 		attributes.put("teamMailId", getTeamMailId());
 		attributes.put("status", getStatus());
 		attributes.put("reason", getReason());
@@ -108,6 +109,12 @@ public class WorkFromHomeWrapper
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Long reviewerId = (Long)attributes.get("reviewerId");
+
+		if (reviewerId != null) {
+			setReviewerId(reviewerId);
 		}
 
 		String teamMailId = (String)attributes.get("teamMailId");
@@ -250,6 +257,16 @@ public class WorkFromHomeWrapper
 	@Override
 	public Date getRequestDate() {
 		return model.getRequestDate();
+	}
+
+	/**
+	 * Returns the reviewer ID of this work from home.
+	 *
+	 * @return the reviewer ID of this work from home
+	 */
+	@Override
+	public long getReviewerId() {
+		return model.getReviewerId();
 	}
 
 	/**
@@ -425,6 +442,16 @@ public class WorkFromHomeWrapper
 	@Override
 	public void setRequestDate(Date requestDate) {
 		model.setRequestDate(requestDate);
+	}
+
+	/**
+	 * Sets the reviewer ID of this work from home.
+	 *
+	 * @param reviewerId the reviewer ID of this work from home
+	 */
+	@Override
+	public void setReviewerId(long reviewerId) {
+		model.setReviewerId(reviewerId);
 	}
 
 	/**

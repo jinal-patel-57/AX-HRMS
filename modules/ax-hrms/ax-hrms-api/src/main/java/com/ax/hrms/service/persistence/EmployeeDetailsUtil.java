@@ -815,6 +815,177 @@ public class EmployeeDetailsUtil {
 	}
 
 	/**
+	 * Returns all the employee detailses where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @return the matching employee detailses
+	 */
+	public static List<EmployeeDetails> findByCreateDate(Date createDate) {
+		return getPersistence().findByCreateDate(createDate);
+	}
+
+	/**
+	 * Returns a range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @return the range of matching employee detailses
+	 */
+	public static List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end) {
+
+		return getPersistence().findByCreateDate(createDate, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employee detailses
+	 */
+	public static List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end,
+		OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		return getPersistence().findByCreateDate(
+			createDate, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employee detailses
+	 */
+	public static List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end,
+		OrderByComparator<EmployeeDetails> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByCreateDate(
+			createDate, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee details
+	 * @throws NoSuchEmployeeDetailsException if a matching employee details could not be found
+	 */
+	public static EmployeeDetails findByCreateDate_First(
+			Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws com.ax.hrms.exception.NoSuchEmployeeDetailsException {
+
+		return getPersistence().findByCreateDate_First(
+			createDate, orderByComparator);
+	}
+
+	/**
+	 * Returns the first employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee details, or <code>null</code> if a matching employee details could not be found
+	 */
+	public static EmployeeDetails fetchByCreateDate_First(
+		Date createDate, OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		return getPersistence().fetchByCreateDate_First(
+			createDate, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee details
+	 * @throws NoSuchEmployeeDetailsException if a matching employee details could not be found
+	 */
+	public static EmployeeDetails findByCreateDate_Last(
+			Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws com.ax.hrms.exception.NoSuchEmployeeDetailsException {
+
+		return getPersistence().findByCreateDate_Last(
+			createDate, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee details, or <code>null</code> if a matching employee details could not be found
+	 */
+	public static EmployeeDetails fetchByCreateDate_Last(
+		Date createDate, OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		return getPersistence().fetchByCreateDate_Last(
+			createDate, orderByComparator);
+	}
+
+	/**
+	 * Returns the employee detailses before and after the current employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param employeeId the primary key of the current employee details
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee details
+	 * @throws NoSuchEmployeeDetailsException if a employee details with the primary key could not be found
+	 */
+	public static EmployeeDetails[] findByCreateDate_PrevAndNext(
+			long employeeId, Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws com.ax.hrms.exception.NoSuchEmployeeDetailsException {
+
+		return getPersistence().findByCreateDate_PrevAndNext(
+			employeeId, createDate, orderByComparator);
+	}
+
+	/**
+	 * Removes all the employee detailses where createDate = &#63; from the database.
+	 *
+	 * @param createDate the create date
+	 */
+	public static void removeByCreateDate(Date createDate) {
+		getPersistence().removeByCreateDate(createDate);
+	}
+
+	/**
+	 * Returns the number of employee detailses where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @return the number of matching employee detailses
+	 */
+	public static int countByCreateDate(Date createDate) {
+		return getPersistence().countByCreateDate(createDate);
+	}
+
+	/**
 	 * Returns all the employee detailses where firstName = &#63; and lastName = &#63;.
 	 *
 	 * @param firstName the first name

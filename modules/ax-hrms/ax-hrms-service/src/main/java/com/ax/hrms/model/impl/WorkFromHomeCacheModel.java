@@ -56,7 +56,7 @@ public class WorkFromHomeCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -76,6 +76,8 @@ public class WorkFromHomeCacheModel
 		sb.append(workFromHomeRequestId);
 		sb.append(", userId=");
 		sb.append(userId);
+		sb.append(", reviewerId=");
+		sb.append(reviewerId);
 		sb.append(", teamMailId=");
 		sb.append(teamMailId);
 		sb.append(", status=");
@@ -125,6 +127,7 @@ public class WorkFromHomeCacheModel
 
 		workFromHomeImpl.setWorkFromHomeRequestId(workFromHomeRequestId);
 		workFromHomeImpl.setUserId(userId);
+		workFromHomeImpl.setReviewerId(reviewerId);
 
 		if (teamMailId == null) {
 			workFromHomeImpl.setTeamMailId("");
@@ -190,6 +193,8 @@ public class WorkFromHomeCacheModel
 		workFromHomeRequestId = objectInput.readLong();
 
 		userId = objectInput.readLong();
+
+		reviewerId = objectInput.readLong();
 		teamMailId = objectInput.readUTF();
 		status = objectInput.readUTF();
 		reason = objectInput.readUTF();
@@ -220,6 +225,8 @@ public class WorkFromHomeCacheModel
 		objectOutput.writeLong(workFromHomeRequestId);
 
 		objectOutput.writeLong(userId);
+
+		objectOutput.writeLong(reviewerId);
 
 		if (teamMailId == null) {
 			objectOutput.writeUTF("");
@@ -256,6 +263,7 @@ public class WorkFromHomeCacheModel
 	public long modifiedDate;
 	public long workFromHomeRequestId;
 	public long userId;
+	public long reviewerId;
 	public String teamMailId;
 	public String status;
 	public String reason;

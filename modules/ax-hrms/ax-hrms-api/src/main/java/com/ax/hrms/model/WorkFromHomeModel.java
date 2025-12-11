@@ -199,6 +199,20 @@ public interface WorkFromHomeModel
 	public void setUserUuid(String userUuid);
 
 	/**
+	 * Returns the reviewer ID of this work from home.
+	 *
+	 * @return the reviewer ID of this work from home
+	 */
+	public long getReviewerId();
+
+	/**
+	 * Sets the reviewer ID of this work from home.
+	 *
+	 * @param reviewerId the reviewer ID of this work from home
+	 */
+	public void setReviewerId(long reviewerId);
+
+	/**
 	 * Returns the team mail ID of this work from home.
 	 *
 	 * @return the team mail ID of this work from home

@@ -701,6 +701,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="workFromHomeRequestId" type="long" />
 		<field name="userId" type="long" />
+		<field name="reviewerId" type="long" />
 		<field name="teamMailId" type="String" />
 		<field name="status" type="String" />
 		<field name="reason" type="String" />

@@ -226,6 +226,12 @@ public class EmployeeDetailsLocalServiceUtil {
 			departName, desgiName);
 	}
 
+	public static List<EmployeeDetails> findByCreateDate(
+		java.util.Date createDate) {
+
+		return getService().findByCreateDate(createDate);
+	}
+
 	public static EmployeeDetails findByEmployeeId(long employeeId)
 		throws com.ax.hrms.exception.NoSuchEmployeeDetailsException {
 

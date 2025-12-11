@@ -39,6 +39,8 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String ENABLED= "Enabled";
     public static final String DEPARTMENT_MASTER_LIST = "departmentMasterList";
     public static final String DESIGNATION_MASTER_LIST = "designationMasterList";
+    public static final String EMPLOYEE_CODE_PATTERN = "employeCodePattern";
+    public static final String DOMAIN = "domain";
     public static final String EMPLOYEE_ON_BOARDING_HR_FORM_JSP = "/jsp/ax-hrms-employee-onboarding-hr/addEditEmployeeOnboardingHr.jsp";
     public static final String EMPLOYEE_ON_BOARDING_HR_LIST_JSP = "/jsp/ax-hrms-employee-onboarding-hr/listEmployeeOnboardingHr.jsp";
     public static final String CONVERT_INTERN_TO_EMPLOYEE_JSP = "/jsp/ax-hrms-employee-onboarding-hr/convertInternToEmployee.jsp";

@@ -253,6 +253,13 @@ public class EmployeeDetailsLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.EmployeeDetails> findByCreateDate(
+		java.util.Date createDate) {
+
+		return _employeeDetailsLocalService.findByCreateDate(createDate);
+	}
+
+	@Override
 	public com.ax.hrms.model.EmployeeDetails findByEmployeeId(long employeeId)
 		throws com.ax.hrms.exception.NoSuchEmployeeDetailsException {
 

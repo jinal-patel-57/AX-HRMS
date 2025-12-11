@@ -627,6 +627,7 @@ public class EmployeeDetailsPersistenceImpl
 		"(employeeDetails.uuid IS NULL OR employeeDetails.uuid = '')";
 
 	private FinderPath _finderPathFetchByUUID_G;
+	private FinderPath _finderPathCountByUUID_G;
 
 	/**
 	 * Returns the employee details where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchEmployeeDetailsException</code> if it could not be found.
@@ -806,13 +807,62 @@ public class EmployeeDetailsPersistenceImpl
 	 */
 	@Override
 	public int countByUUID_G(String uuid, long groupId) {
-		EmployeeDetails employeeDetails = fetchByUUID_G(uuid, groupId);
+		uuid = Objects.toString(uuid, "");
 
-		if (employeeDetails == null) {
-			return 0;
+		FinderPath finderPath = _finderPathCountByUUID_G;
+
+		Object[] finderArgs = new Object[] {uuid, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_EMPLOYEEDETAILS_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid.isEmpty()) {
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindUuid) {
+					queryPos.add(uuid);
+				}
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
@@ -1407,6 +1457,7 @@ public class EmployeeDetailsPersistenceImpl
 		"employeeDetails.companyId = ?";
 
 	private FinderPath _finderPathFetchByEmployeeId;
+	private FinderPath _finderPathCountByEmployeeId;
 
 	/**
 	 * Returns the employee details where employeeId = &#63; or throws a <code>NoSuchEmployeeDetailsException</code> if it could not be found.
@@ -1574,19 +1625,52 @@ public class EmployeeDetailsPersistenceImpl
 	 */
 	@Override
 	public int countByEmployeeId(long employeeId) {
-		EmployeeDetails employeeDetails = fetchByEmployeeId(employeeId);
+		FinderPath finderPath = _finderPathCountByEmployeeId;
 
-		if (employeeDetails == null) {
-			return 0;
+		Object[] finderArgs = new Object[] {employeeId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_EMPLOYEEDETAILS_WHERE);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEID_EMPLOYEEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_EMPLOYEEID_EMPLOYEEID_2 =
 		"employeeDetails.employeeId = ?";
 
 	private FinderPath _finderPathFetchByLrUserId;
+	private FinderPath _finderPathCountByLrUserId;
 
 	/**
 	 * Returns the employee details where lrUserId = &#63; or throws a <code>NoSuchEmployeeDetailsException</code> if it could not be found.
@@ -1754,13 +1838,45 @@ public class EmployeeDetailsPersistenceImpl
 	 */
 	@Override
 	public int countByLrUserId(long lrUserId) {
-		EmployeeDetails employeeDetails = fetchByLrUserId(lrUserId);
+		FinderPath finderPath = _finderPathCountByLrUserId;
 
-		if (employeeDetails == null) {
-			return 0;
+		Object[] finderArgs = new Object[] {lrUserId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_EMPLOYEEDETAILS_WHERE);
+
+			sb.append(_FINDER_COLUMN_LRUSERID_LRUSERID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(lrUserId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
 		}
 
-		return 1;
+		return count.intValue();
 	}
 
 	private static final String _FINDER_COLUMN_LRUSERID_LRUSERID_2 =
@@ -2307,6 +2423,545 @@ public class EmployeeDetailsPersistenceImpl
 
 	private static final String _FINDER_COLUMN_LEAVINGDATE_LEAVINGDATE_2 =
 		"employeeDetails.leavingDate = ?";
+
+	private FinderPath _finderPathWithPaginationFindByCreateDate;
+	private FinderPath _finderPathWithoutPaginationFindByCreateDate;
+	private FinderPath _finderPathCountByCreateDate;
+
+	/**
+	 * Returns all the employee detailses where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @return the matching employee detailses
+	 */
+	@Override
+	public List<EmployeeDetails> findByCreateDate(Date createDate) {
+		return findByCreateDate(
+			createDate, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @return the range of matching employee detailses
+	 */
+	@Override
+	public List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end) {
+
+		return findByCreateDate(createDate, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employee detailses
+	 */
+	@Override
+	public List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end,
+		OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		return findByCreateDate(
+			createDate, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the employee detailses where createDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeDetailsModelImpl</code>.
+	 * </p>
+	 *
+	 * @param createDate the create date
+	 * @param start the lower bound of the range of employee detailses
+	 * @param end the upper bound of the range of employee detailses (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employee detailses
+	 */
+	@Override
+	public List<EmployeeDetails> findByCreateDate(
+		Date createDate, int start, int end,
+		OrderByComparator<EmployeeDetails> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByCreateDate;
+				finderArgs = new Object[] {_getTime(createDate)};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByCreateDate;
+			finderArgs = new Object[] {
+				_getTime(createDate), start, end, orderByComparator
+			};
+		}
+
+		List<EmployeeDetails> list = null;
+
+		if (useFinderCache) {
+			list = (List<EmployeeDetails>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (EmployeeDetails employeeDetails : list) {
+					if (!Objects.equals(
+							createDate, employeeDetails.getCreateDate())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_EMPLOYEEDETAILS_WHERE);
+
+			boolean bindCreateDate = false;
+
+			if (createDate == null) {
+				sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_1);
+			}
+			else {
+				bindCreateDate = true;
+
+				sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(EmployeeDetailsModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindCreateDate) {
+					queryPos.add(new Timestamp(createDate.getTime()));
+				}
+
+				list = (List<EmployeeDetails>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee details
+	 * @throws NoSuchEmployeeDetailsException if a matching employee details could not be found
+	 */
+	@Override
+	public EmployeeDetails findByCreateDate_First(
+			Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws NoSuchEmployeeDetailsException {
+
+		EmployeeDetails employeeDetails = fetchByCreateDate_First(
+			createDate, orderByComparator);
+
+		if (employeeDetails != null) {
+			return employeeDetails;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("createDate=");
+		sb.append(createDate);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeDetailsException(sb.toString());
+	}
+
+	/**
+	 * Returns the first employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee details, or <code>null</code> if a matching employee details could not be found
+	 */
+	@Override
+	public EmployeeDetails fetchByCreateDate_First(
+		Date createDate, OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		List<EmployeeDetails> list = findByCreateDate(
+			createDate, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee details
+	 * @throws NoSuchEmployeeDetailsException if a matching employee details could not be found
+	 */
+	@Override
+	public EmployeeDetails findByCreateDate_Last(
+			Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws NoSuchEmployeeDetailsException {
+
+		EmployeeDetails employeeDetails = fetchByCreateDate_Last(
+			createDate, orderByComparator);
+
+		if (employeeDetails != null) {
+			return employeeDetails;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("createDate=");
+		sb.append(createDate);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeDetailsException(sb.toString());
+	}
+
+	/**
+	 * Returns the last employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee details, or <code>null</code> if a matching employee details could not be found
+	 */
+	@Override
+	public EmployeeDetails fetchByCreateDate_Last(
+		Date createDate, OrderByComparator<EmployeeDetails> orderByComparator) {
+
+		int count = countByCreateDate(createDate);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<EmployeeDetails> list = findByCreateDate(
+			createDate, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the employee detailses before and after the current employee details in the ordered set where createDate = &#63;.
+	 *
+	 * @param employeeId the primary key of the current employee details
+	 * @param createDate the create date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee details
+	 * @throws NoSuchEmployeeDetailsException if a employee details with the primary key could not be found
+	 */
+	@Override
+	public EmployeeDetails[] findByCreateDate_PrevAndNext(
+			long employeeId, Date createDate,
+			OrderByComparator<EmployeeDetails> orderByComparator)
+		throws NoSuchEmployeeDetailsException {
+
+		EmployeeDetails employeeDetails = findByPrimaryKey(employeeId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			EmployeeDetails[] array = new EmployeeDetailsImpl[3];
+
+			array[0] = getByCreateDate_PrevAndNext(
+				session, employeeDetails, createDate, orderByComparator, true);
+
+			array[1] = employeeDetails;
+
+			array[2] = getByCreateDate_PrevAndNext(
+				session, employeeDetails, createDate, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected EmployeeDetails getByCreateDate_PrevAndNext(
+		Session session, EmployeeDetails employeeDetails, Date createDate,
+		OrderByComparator<EmployeeDetails> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_EMPLOYEEDETAILS_WHERE);
+
+		boolean bindCreateDate = false;
+
+		if (createDate == null) {
+			sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_1);
+		}
+		else {
+			bindCreateDate = true;
+
+			sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(EmployeeDetailsModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		if (bindCreateDate) {
+			queryPos.add(new Timestamp(createDate.getTime()));
+		}
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						employeeDetails)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<EmployeeDetails> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the employee detailses where createDate = &#63; from the database.
+	 *
+	 * @param createDate the create date
+	 */
+	@Override
+	public void removeByCreateDate(Date createDate) {
+		for (EmployeeDetails employeeDetails :
+				findByCreateDate(
+					createDate, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(employeeDetails);
+		}
+	}
+
+	/**
+	 * Returns the number of employee detailses where createDate = &#63;.
+	 *
+	 * @param createDate the create date
+	 * @return the number of matching employee detailses
+	 */
+	@Override
+	public int countByCreateDate(Date createDate) {
+		FinderPath finderPath = _finderPathCountByCreateDate;
+
+		Object[] finderArgs = new Object[] {_getTime(createDate)};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_EMPLOYEEDETAILS_WHERE);
+
+			boolean bindCreateDate = false;
+
+			if (createDate == null) {
+				sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_1);
+			}
+			else {
+				bindCreateDate = true;
+
+				sb.append(_FINDER_COLUMN_CREATEDATE_CREATEDATE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindCreateDate) {
+					queryPos.add(new Timestamp(createDate.getTime()));
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CREATEDATE_CREATEDATE_1 =
+		"employeeDetails.createDate IS NULL";
+
+	private static final String _FINDER_COLUMN_CREATEDATE_CREATEDATE_2 =
+		"employeeDetails.createDate = ?";
 
 	private FinderPath _finderPathWithPaginationFindByEmployeeName;
 	private FinderPath _finderPathWithoutPaginationFindByEmployeeName;
@@ -3556,16 +4211,21 @@ public class EmployeeDetailsPersistenceImpl
 			employeeDetailsModelImpl.getGroupId()
 		};
 
+		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, employeeDetailsModelImpl);
 
 		args = new Object[] {employeeDetailsModelImpl.getEmployeeId()};
 
 		finderCache.putResult(
+			_finderPathCountByEmployeeId, args, Long.valueOf(1));
+		finderCache.putResult(
 			_finderPathFetchByEmployeeId, args, employeeDetailsModelImpl);
 
 		args = new Object[] {employeeDetailsModelImpl.getLrUserId()};
 
+		finderCache.putResult(
+			_finderPathCountByLrUserId, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByLrUserId, args, employeeDetailsModelImpl);
 	}
@@ -4066,6 +4726,11 @@ public class EmployeeDetailsPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "groupId"}, true);
 
+		_finderPathCountByUUID_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"uuid_", "groupId"}, false);
+
 		_finderPathWithPaginationFindByUuid_C = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
 			new String[] {
@@ -4090,10 +4755,20 @@ public class EmployeeDetailsPersistenceImpl
 			new String[] {Long.class.getName()}, new String[] {"employeeId"},
 			true);
 
+		_finderPathCountByEmployeeId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByEmployeeId",
+			new String[] {Long.class.getName()}, new String[] {"employeeId"},
+			false);
+
 		_finderPathFetchByLrUserId = new FinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByLrUserId",
 			new String[] {Long.class.getName()}, new String[] {"lrUserId"},
 			true);
+
+		_finderPathCountByLrUserId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLrUserId",
+			new String[] {Long.class.getName()}, new String[] {"lrUserId"},
+			false);
 
 		_finderPathWithPaginationFindByLeavingDate = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLeavingDate",
@@ -4111,6 +4786,24 @@ public class EmployeeDetailsPersistenceImpl
 		_finderPathCountByLeavingDate = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByLeavingDate",
 			new String[] {Date.class.getName()}, new String[] {"leavingDate"},
+			false);
+
+		_finderPathWithPaginationFindByCreateDate = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCreateDate",
+			new String[] {
+				Date.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"createDate"}, true);
+
+		_finderPathWithoutPaginationFindByCreateDate = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCreateDate",
+			new String[] {Date.class.getName()}, new String[] {"createDate"},
+			true);
+
+		_finderPathCountByCreateDate = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCreateDate",
+			new String[] {Date.class.getName()}, new String[] {"createDate"},
 			false);
 
 		_finderPathWithPaginationFindByEmployeeName = new FinderPath(
