@@ -46,6 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 
 @Component(immediate = true, property = {
 		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
+		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_HR_WEB,
 		"mvc.command.name=/showEmployeeOnboardingURL" }, service = MVCRenderCommand.class)
 public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand {
 
@@ -88,6 +89,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		String viewEmployeeId = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
+		String cmd = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.CMD);
 
 		employeeId = Long.parseLong(viewEmployeeId);
 
@@ -248,6 +250,10 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-		return AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EMPLOYEE_ONBOARDING_JSP;
+		if(cmd.equalsIgnoreCase("view")){
+			return AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EMPLOYEE_DETAILS_JSP;
+		}else {
+			return AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EMPLOYEE_ONBOARDING_JSP;
+		}
 	}
 }

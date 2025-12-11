@@ -5,6 +5,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	//FetchEmployeeOnboardingMVCRenderCommand
 	public static final String ADD_EMPLOYEE_ONBOARDING_JSP="/jsp/ax-hrms-employee-onboarding-employee/addEditEmployeeOnBoarding.jsp";
 	public static final String VIEW_EMPLOYEE_ONBOARDING_JSP="/jsp/ax-hrms-employee-onboarding-employee/viewEmployeeOnBoarding.jsp";
+	public static final String VIEW_EMPLOYEE_DETAILS_JSP="/jsp/ax-hrms-employee-onboarding-hr/viewEmployeeDetails.jsp";
 	public static final String COUNTRY_LIST="countryList";
 	public static final String EDUCATION_LEVEL_MASTERS_LIST="educationLevelMastersList";
 	
@@ -122,7 +123,8 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	
 	public static final String SHOW_EMPLOYEE_ONBOARDING_URL="/showEmployeeOnboardingURL";
 	public static final String EMPLOYEE_ID = "employeeId";
-	
+	public static final String CMD = "cmd";
+
 	
 	//for employee
 	public static final String EMPLOYEE_MAIL_HEAD = "</div>\n <div style=\"padding: 20px;\">\n <p>Dear Employee,</p>\n ";

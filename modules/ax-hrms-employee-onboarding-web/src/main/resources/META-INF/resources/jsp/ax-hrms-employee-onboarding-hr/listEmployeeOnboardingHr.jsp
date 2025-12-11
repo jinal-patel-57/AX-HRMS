@@ -54,6 +54,12 @@
                             <portlet:param name="employeeId" value="${employeeDetails.employeeId}"/>
                         </portlet:renderURL>
 
+                        <portlet:renderURL var="viewEmployeeDetailsURL">
+                            <portlet:param name="mvcRenderCommandName" value="/showEmployeeOnboardingURL"/>
+                            <portlet:param name="employeeId" value="${employeeDetails.employeeId}"/>
+                            <portlet:param name="cmd" value="view"/>
+                        </portlet:renderURL>
+
                         <!-- <a href="" class="btn btn-sm btn-outline-success mr-3"><i
                         class="fa-solid fa-eye"></i></a> -->
 
@@ -73,6 +79,11 @@
                                     <a href="${updateEmployeeOnboardingDetails}"
                                        class="dropdown-item"><i class="icon-edit"></i> <liferay-ui:message
                                             key="update"/></a>
+                                </li>
+                                <li>
+                                    <a href="${viewEmployeeDetailsURL}"
+                                       class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
+                                            key="view"/></a>
                                 </li>
                                 <c:if test="${employeeDetails.employeeType == 'intern'}">
                                     <li>

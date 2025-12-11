@@ -1,20 +1,15 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<portlet:renderURL var="backURL">
+    <portlet:param name="mvcCommand" value="/"/>
+</portlet:renderURL>
 
-<portlet:actionURL var="employeeApprovalUrl" name="/employeeApprovalUrl">
-    <portlet:param name="employeeId" value="${employeeDetail.employeeId}"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="employeeRejectUrl" name="/employeeRejectUrl">
-    <portlet:param name="employeeId" value="${employeeDetail.employeeId}"/>
-    <portlet:param name="review" value="REVIEW"/>
-</portlet:actionURL>
 
 
 <div class="card">
     <div class="card-header">
         <strong>
-            Employee OnBoarding Details (Verification)
+            Employee OnBoarding Details
         </strong>
     </div>
     <div class="card-body">
@@ -348,7 +343,8 @@
                             <div class="form-group-view">
                                 <div class="label-name">Reliving Date</div>
                                 <div class="label-content">
-                                     <a href="${experienceCertificate}" target="_blank" >Download
+                                    <a href="${experienceCertificate}" target="_blank"
+                                       >Download
                                         Experience Certificate</a>
                                 </div>
                             </div>
@@ -532,66 +528,10 @@
         </div>
     </div>
 </div>
+ <div class="card-footer text-right align-items-center">
+            <a href="${backURL}" class="btn btn-outline-danger mr-1  "><i
+                    class="fa-solid fa-angle-left"></i> <liferay-ui:message key="back"/></a>
 
-<div class="card">
-    <div class="card-header">
-        <strong>
-            Decision Panel
-        </strong>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="comments">Comments</label>
-                    <textarea name="<portlet:namespace/>review" id="<portlet:namespace/>review"
-                              class="form-control"></textarea>
-                    <label id="comments-error" class="error text-danger" for="comments"></label>
-                </div>
-            </div>
         </div>
-    </div>
-    <div class="card-footer text-right align-items-center">
-        <a onclick="rejectAction()" class="btn btn-outline-danger" id="rejectButton"><i class="icon-ban-circle"></i>
-            Reject</a>
-       <a class="btn btn-outline-success" id="approveButton" onclick="approveAction()">
-           <i class="icon-ok"></i> Approve
-       </a>
 
-    </div>
-</div>
 
-<script>
-    const namespace = '<portlet:namespace />';
-    const approvalUrl = '${employeeApprovalUrl}';
-    let rejectUrlTemplate = '${employeeRejectUrl}';
-
-    // Common comment validation
-    function validateComments() {
-        const comment = $('#' + namespace + 'review').val().trim();
-
-        if (comment === "") {
-            $("#comments-error").text("Comments are required.");
-            return false;
-        }
-
-        $("#comments-error").text("");
-        return true;
-    }
-
-    // Handle Approve action
-    function approveAction() {
-        if (!validateComments()) return;
-        window.location.href = approvalUrl;
-    }
-
-    // Handle Reject action
-    function rejectAction() {
-        if (!validateComments()) return;
-
-        const comment = $('#' + namespace + 'review').val().trim();
-        const rejectUrl = rejectUrlTemplate.replace("REVIEW", encodeURIComponent(comment));
-
-        window.location.href = rejectUrl;
-    }
-</script>

@@ -92,7 +92,7 @@
                              data-domain="${domain}" />
 
                       <small class="text-muted">
-                          Your email will automatically end with ${domain}
+                          email will automatically end with ${domain}
                       </small>
 
                       <label id="officialEmailId-error" class="error text-danger" for="officialEmailId"></label>
