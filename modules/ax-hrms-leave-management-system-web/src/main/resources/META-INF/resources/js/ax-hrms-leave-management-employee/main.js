@@ -525,7 +525,6 @@
             });
         }
 
-        //Multiple Team id select if inform with team
         function teamIdMultiSelect(){
             localStorage.clear();
 
@@ -552,6 +551,7 @@
                 const mySelect = $('#mySelect');
                 const selectedOptionsContainer = $('#selectedOptionsContainer');
                 let selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+
                 function updateSelectedOptions() {
 
                     const isAlreadyInArray = selectedValues.includes($(this).val());
@@ -570,15 +570,22 @@
                     return teamIdString;
                 }
 
+                // ⭐⭐⭐ THIS FUNCTION IS UPDATED ⭐⭐⭐
                 function renderSelectedOptions() {
                     selectedOptionsContainer.empty(); // Clear previous options
 
                     selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
 
                     for (const value of selectedValues) {
+
                         const selectedOptionElement = $('<div>').addClass('selected-option');
-                        const span = $('<span>').text(value);
-                        const closeButton = $('<button>').text('x'); // Close icon (multiply sign)
+
+                        // ⭐ NEW CODE: Get option TEXT instead of value
+                        const text = $('#mySelect option[value="' + value + '"]').text();
+
+                        const span = $('<span>').text(text); // show text instead of ID
+
+                        const closeButton = $('<button>').text('x'); // Close icon
 
                         closeButton.click(function() {
                             const index = selectedValues.indexOf(value);
@@ -591,18 +598,21 @@
                             }
                             setTeamIdInParams();
                         });
+
                         selectedOptionElement.append(span, closeButton);
                         selectedOptionsContainer.append(selectedOptionElement);
                     }
                 }
+                // ⭐⭐⭐ END UPDATED renderSelectedOptions() ⭐⭐⭐
 
-                // Bind `change` event to capture multiple selections
+                // Bind events
                 mySelect.change(updateSelectedOptions);
                 window.onload = renderSelectedOptions;
-                mySelect.change(setTeamIdInParams);// Render initial options from localStorage
+                mySelect.change(setTeamIdInParams);
             });
         }
         teamIdMultiSelect();
+
 
         //When Hr Select Employee then this ajax call
         employeeNames.change(function () {

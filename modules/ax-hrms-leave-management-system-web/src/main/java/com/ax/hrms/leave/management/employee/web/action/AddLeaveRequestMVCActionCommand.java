@@ -233,6 +233,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
     private void addLeaveInformDetails(long leaveRequestId,ActionRequest actionRequest,ThemeDisplay themeDisplay) {
     	String teamIdString = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.TEAM_ID, GetterUtil.DEFAULT_STRING);
 
+        log.info("TeamIdString :- "+ teamIdString);
+
     	String[] teamIds = (!teamIdString.equals("")) ? teamIdString.split(",") : new String[0];
         try{
             if(!teamIdString.equals("")){

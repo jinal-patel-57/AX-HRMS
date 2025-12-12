@@ -94,7 +94,7 @@
                                     class="custom-select mr-sm-2">
                                 <option value="">Select an option</option>
                                 <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
-                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.getEmployeeId()} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
+                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.employeeCode} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
                                 </c:forEach>
                             </select>
                             <input type="hidden" id="<portlet:namespace />teamId" name="<portlet:namespace />teamId"/>
