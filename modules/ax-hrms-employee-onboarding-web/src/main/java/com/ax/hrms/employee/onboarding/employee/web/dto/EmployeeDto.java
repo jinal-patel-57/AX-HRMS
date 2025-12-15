@@ -32,6 +32,7 @@ public class EmployeeDto {
 	public boolean isExperienced;
 	public boolean isProbationEnabled;
 	public long profilePicId;
+	public long educationCertificateMediaId;
 	public String insuranceLink;
 	
 	//address
@@ -86,7 +87,16 @@ public class EmployeeDto {
 	public long nomineeAddress;
 	public String relationshipWithNominee;
 	public Date nomineeDob;
-	
+
+
+	public long getEducationCertificateMediaId() {
+		return educationCertificateMediaId;
+	}
+
+	public void setEducationCertificateMediaId(long educationCertificateMediaId) {
+		this.educationCertificateMediaId = educationCertificateMediaId;
+	}
+
 	public long getEmployeeId() {
 		return employeeId;
 	}

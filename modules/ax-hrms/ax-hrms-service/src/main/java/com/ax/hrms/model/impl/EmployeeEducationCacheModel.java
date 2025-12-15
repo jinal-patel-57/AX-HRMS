@@ -54,7 +54,7 @@ public class EmployeeEducationCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -86,6 +86,8 @@ public class EmployeeEducationCacheModel
 		sb.append(endDate);
 		sb.append(", employeeId=");
 		sb.append(employeeId);
+		sb.append(", educationCertificateMediaId=");
+		sb.append(educationCertificateMediaId);
 		sb.append("}");
 
 		return sb.toString();
@@ -161,6 +163,8 @@ public class EmployeeEducationCacheModel
 		}
 
 		employeeEducationImpl.setEmployeeId(employeeId);
+		employeeEducationImpl.setEducationCertificateMediaId(
+			educationCertificateMediaId);
 
 		employeeEducationImpl.resetOriginalValues();
 
@@ -191,6 +195,8 @@ public class EmployeeEducationCacheModel
 		endDate = objectInput.readLong();
 
 		employeeId = objectInput.readLong();
+
+		educationCertificateMediaId = objectInput.readLong();
 	}
 
 	@Override
@@ -242,6 +248,8 @@ public class EmployeeEducationCacheModel
 		objectOutput.writeLong(endDate);
 
 		objectOutput.writeLong(employeeId);
+
+		objectOutput.writeLong(educationCertificateMediaId);
 	}
 
 	public String uuid;
@@ -259,5 +267,6 @@ public class EmployeeEducationCacheModel
 	public String passingYear;
 	public long endDate;
 	public long employeeId;
+	public long educationCertificateMediaId;
 
 }

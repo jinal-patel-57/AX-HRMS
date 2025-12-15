@@ -256,6 +256,9 @@ public class EmployeeOnBoardingUtil {
         log.info("EmployeeOnBoardingUtil >>> setEducationList ::: educationLis => " + educationList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LIST, educationList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LIST_SIZE, educationList.size());
+
+
+
     }
 
     public void setExperience(RenderRequest renderRequest, Long employeeId, EmployeeExperienceLocalService employeeExperienceLocalService) {

@@ -291,6 +291,7 @@
 		<field name="passingYear" type="String" />
 		<field name="endDate" type="Date" />
 		<field name="employeeId" type="long" />
+		<field name="educationCertificateMediaId" type="long" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeExperience">
 		<field name="uuid" type="String" />

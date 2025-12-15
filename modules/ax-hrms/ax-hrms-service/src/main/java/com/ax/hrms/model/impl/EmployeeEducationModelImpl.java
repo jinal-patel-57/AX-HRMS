@@ -69,7 +69,8 @@ public class EmployeeEducationModelImpl
 		{"levelId", Types.BIGINT}, {"institution", Types.VARCHAR},
 		{"degree", Types.VARCHAR}, {"startDate", Types.TIMESTAMP},
 		{"passingYear", Types.VARCHAR}, {"endDate", Types.TIMESTAMP},
-		{"employeeId", Types.BIGINT}
+		{"employeeId", Types.BIGINT},
+		{"educationCertificateMediaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -91,10 +92,11 @@ public class EmployeeEducationModelImpl
 		TABLE_COLUMNS_MAP.put("passingYear", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("endDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("employeeId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("educationCertificateMediaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeEducation (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,educationId LONG not null primary key,levelId LONG,institution VARCHAR(75) null,degree VARCHAR(75) null,startDate DATE null,passingYear VARCHAR(75) null,endDate DATE null,employeeId LONG)";
+		"create table ax_EmployeeEducation (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,educationId LONG not null primary key,levelId LONG,institution VARCHAR(75) null,degree VARCHAR(75) null,startDate DATE null,passingYear VARCHAR(75) null,endDate DATE null,employeeId LONG,educationCertificateMediaId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_EmployeeEducation";
@@ -281,6 +283,9 @@ public class EmployeeEducationModelImpl
 				"endDate", EmployeeEducation::getEndDate);
 			attributeGetterFunctions.put(
 				"employeeId", EmployeeEducation::getEmployeeId);
+			attributeGetterFunctions.put(
+				"educationCertificateMediaId",
+				EmployeeEducation::getEducationCertificateMediaId);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -359,6 +364,10 @@ public class EmployeeEducationModelImpl
 				"employeeId",
 				(BiConsumer<EmployeeEducation, Long>)
 					EmployeeEducation::setEmployeeId);
+			attributeSetterBiConsumers.put(
+				"educationCertificateMediaId",
+				(BiConsumer<EmployeeEducation, Long>)
+					EmployeeEducation::setEducationCertificateMediaId);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -655,6 +664,23 @@ public class EmployeeEducationModelImpl
 			this.<Long>getColumnOriginalValue("employeeId"));
 	}
 
+	@JSON
+	@Override
+	public long getEducationCertificateMediaId() {
+		return _educationCertificateMediaId;
+	}
+
+	@Override
+	public void setEducationCertificateMediaId(
+		long educationCertificateMediaId) {
+
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_educationCertificateMediaId = educationCertificateMediaId;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -733,6 +759,8 @@ public class EmployeeEducationModelImpl
 		employeeEducationImpl.setPassingYear(getPassingYear());
 		employeeEducationImpl.setEndDate(getEndDate());
 		employeeEducationImpl.setEmployeeId(getEmployeeId());
+		employeeEducationImpl.setEducationCertificateMediaId(
+			getEducationCertificateMediaId());
 
 		employeeEducationImpl.resetOriginalValues();
 
@@ -774,6 +802,8 @@ public class EmployeeEducationModelImpl
 			this.<Date>getColumnOriginalValue("endDate"));
 		employeeEducationImpl.setEmployeeId(
 			this.<Long>getColumnOriginalValue("employeeId"));
+		employeeEducationImpl.setEducationCertificateMediaId(
+			this.<Long>getColumnOriginalValue("educationCertificateMediaId"));
 
 		return employeeEducationImpl;
 	}
@@ -934,6 +964,9 @@ public class EmployeeEducationModelImpl
 
 		employeeEducationCacheModel.employeeId = getEmployeeId();
 
+		employeeEducationCacheModel.educationCertificateMediaId =
+			getEducationCertificateMediaId();
+
 		return employeeEducationCacheModel;
 	}
 
@@ -1012,6 +1045,7 @@ public class EmployeeEducationModelImpl
 	private String _passingYear;
 	private Date _endDate;
 	private long _employeeId;
+	private long _educationCertificateMediaId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1058,6 +1092,8 @@ public class EmployeeEducationModelImpl
 		_columnOriginalValues.put("passingYear", _passingYear);
 		_columnOriginalValues.put("endDate", _endDate);
 		_columnOriginalValues.put("employeeId", _employeeId);
+		_columnOriginalValues.put(
+			"educationCertificateMediaId", _educationCertificateMediaId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1110,6 +1146,8 @@ public class EmployeeEducationModelImpl
 		columnBitmasks.put("endDate", 8192L);
 
 		columnBitmasks.put("employeeId", 16384L);
+
+		columnBitmasks.put("educationCertificateMediaId", 32768L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -124,6 +124,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String SHOW_EMPLOYEE_ONBOARDING_URL="/showEmployeeOnboardingURL";
 	public static final String EMPLOYEE_ID = "employeeId";
 	public static final String CMD = "cmd";
+	public static final String EDUCATION_CERTIFICATE = "Education Certificate";
 
 	
 	//for employee

@@ -49,6 +49,8 @@ public class EmployeeEducationWrapper
 		attributes.put("passingYear", getPassingYear());
 		attributes.put("endDate", getEndDate());
 		attributes.put("employeeId", getEmployeeId());
+		attributes.put(
+			"educationCertificateMediaId", getEducationCertificateMediaId());
 
 		return attributes;
 	}
@@ -144,6 +146,13 @@ public class EmployeeEducationWrapper
 		if (employeeId != null) {
 			setEmployeeId(employeeId);
 		}
+
+		Long educationCertificateMediaId = (Long)attributes.get(
+			"educationCertificateMediaId");
+
+		if (educationCertificateMediaId != null) {
+			setEducationCertificateMediaId(educationCertificateMediaId);
+		}
 	}
 
 	@Override
@@ -189,6 +198,16 @@ public class EmployeeEducationWrapper
 	@Override
 	public String getDegree() {
 		return model.getDegree();
+	}
+
+	/**
+	 * Returns the education certificate media ID of this employee education.
+	 *
+	 * @return the education certificate media ID of this employee education
+	 */
+	@Override
+	public long getEducationCertificateMediaId() {
+		return model.getEducationCertificateMediaId();
 	}
 
 	/**
@@ -354,6 +373,18 @@ public class EmployeeEducationWrapper
 	@Override
 	public void setDegree(String degree) {
 		model.setDegree(degree);
+	}
+
+	/**
+	 * Sets the education certificate media ID of this employee education.
+	 *
+	 * @param educationCertificateMediaId the education certificate media ID of this employee education
+	 */
+	@Override
+	public void setEducationCertificateMediaId(
+		long educationCertificateMediaId) {
+
+		model.setEducationCertificateMediaId(educationCertificateMediaId);
 	}
 
 	/**

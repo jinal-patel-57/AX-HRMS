@@ -438,14 +438,26 @@
 
 
     function setConfigsForEducationValidation(config) {
-        config.educationIndex = educationIndex;
+
+        var namespace = config.namespace;
+        var educationIndex = config.educationIndex;
+
         $(document).ready(function () {
+
             let rules = {};
             let messages = {};
 
+            // ======================================================
+            // VALIDATION INITIALIZER
+            // ======================================================
             function initializeValidation() {
+
                 const form3 = $("#educationStepperForm");
+                rules = {};
+                messages = {};
+
                 document.querySelectorAll('.education-section').forEach((section, index) => {
+
                     const idx = index + 1;
 
                     const levelNameKey = `${namespace}levelName${idx}`;
@@ -460,31 +472,37 @@
                     rules[degreeKey] = {required: true, maxlength: 75};
                     rules[startDateKey] = {required: true, date: true};
                     rules[endDateKey] = {required: true, date: true};
-                    rules[passingYearKey] = {required: true, digits: true, minlength: 4, maxlength: 4};
+                    rules[passingYearKey] = {
+                        required: true,
+                        digits: true,
+                        minlength: 4,
+                        maxlength: 4
+                    };
 
-                    messages[levelNameKey] = {required: "Please select an education level name."};
+                    messages[levelNameKey] = {
+                        required: "Please select an education level name."
+                    };
                     messages[institutionKey] = {
-                        required: "Please enter the institution name.",
-                        maxlength: "Institution name should not exceed 250 characters."
+                        required: "Please enter institution name.",
+                        maxlength: "Institution name must not exceed 250 characters."
                     };
                     messages[degreeKey] = {
-                        required: "Please enter the degree obtained.",
-                        maxlength: "Degree should not exceed 75 characters."
+                        required: "Please enter degree.",
+                        maxlength: "Degree must not exceed 75 characters."
                     };
                     messages[startDateKey] = {
-                        required: "Please enter the start date.",
-                        date: "Please enter a valid date."
+                        required: "Please enter start date.",
+                        date: "Enter a valid date."
                     };
                     messages[endDateKey] = {
-                        required: "Please enter the end date.",
-                        date: "Please enter a valid date.",
-                        startBeforeEnd: "End date must be after start date."
+                        required: "Please enter end date.",
+                        date: "Enter a valid date."
                     };
                     messages[passingYearKey] = {
-                        required: "Please enter the passing year.",
-                        digits: "Passing year should contain only digits.",
-                        minlength: "Passing year should be 4 digits long.",
-                        maxlength: "Passing year should be 4 digits long."
+                        required: "Please enter passing year.",
+                        digits: "Only digits allowed.",
+                        minlength: "Year must be 4 digits.",
+                        maxlength: "Year must be 4 digits."
                     };
                 });
 
@@ -501,96 +519,144 @@
                 });
             }
 
+            // ======================================================
+            // RESTORE TAB POSITION IF NEEDED
+            // ======================================================
             try {
-                var index_edu = parseInt(educationIndex);
-                for (var i = 1; i < index_edu; i++) {
+                const index_edu = parseInt(educationIndex);
+                for (let i = 1; i < index_edu; i++) {
                     $('.nav-link.active').parent().next().find('.nav-link').click();
                 }
             } catch (err) {
-                console.log("error" + err);
+                console.log("error", err);
             }
 
+
+            // ======================================================
+            // ADD EDUCATION SECTION (CLONING)
+            // ======================================================
             function addEducationSection() {
+
                 const originalSection = document.getElementById('initial-education-section');
                 const newSection = originalSection.cloneNode(true);
 
-                var anchors = newSection.getElementsByTagName('a');
-                while (anchors.length > 0) {
-                    var parent = anchors[0].parentNode;
-                    while (anchors[0].firstChild) {
-                        parent.insertBefore(anchors[0].firstChild, anchors[0]);
-                    }
-                    parent.removeChild(anchors[0]);
-                }
+                // Remove anchor tags (existing previews)
+                newSection.querySelectorAll("a").forEach(a => a.remove());
 
                 const index = document.querySelectorAll('.education-section').length + 1;
 
-                newSection.querySelectorAll('input, select').forEach(input => {
-                    input.id = input.id.replace(/[0-9]+$/, '') + index;
-                    input.name = input.name.replace(/[0-9]+$/, '') + index;
-                    input.value = '';
+                newSection.querySelectorAll("input, select").forEach(input => {
+
+                    // Set new ID & name
+                    if (input.id) {
+                        input.id = input.id.replace(/[0-9]+$/, '') + index;
+                    }
+                    if (input.name) {
+                        input.name = input.name.replace(/[0-9]+$/, '') + index;
+                    }
+
+                    // Handle file input safely
+                    if (input.type === "file") {
+                        const freshFile = document.createElement("input");
+                        freshFile.type = "file";
+                        freshFile.className = input.className;
+                        freshFile.id = input.id;
+                        freshFile.name = input.name;
+                        input.parentNode.replaceChild(freshFile, input);
+                    }
+                    // Reset select
+                    else if (input.tagName.toLowerCase() === "select") {
+                        input.selectedIndex = 0;
+                    }
+                    // Reset text/date
+                    else {
+                        input.value = "";
+                    }
                 });
 
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'btn btn-outline-danger delete-section';
-                // deleteButton.textContent = 'Delete';
-                deleteButton.type = 'button';
-                deleteButton.onclick = function () {
+                // Remove older footer if present
+                const oldFooter = newSection.querySelector(".card-footer");
+                if (oldFooter) oldFooter.remove();
+
+                // Add delete button for new section
+                const footer = document.createElement("div");
+                footer.className = "card-footer text-right";
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.type = "button";
+                deleteBtn.className = "btn btn-outline-danger delete-section";
+
+                const icon = document.createElement("i");
+                icon.className = "icon-trash";
+
+                deleteBtn.appendChild(icon);
+                footer.appendChild(deleteBtn);
+
+                deleteBtn.onclick = function () {
                     newSection.remove();
                     initializeValidation();
                 };
 
-                const redundantFooter = newSection.getElementsByClassName("card-footer");
-                if(redundantFooter.length >0){
-                    redundantFooter[0].remove();
-                }
+                newSection.querySelector(".card").appendChild(footer);
 
-                const footerElementNew = document.createElement("div");
-                footerElementNew.className = "card-footer text-right";
+                document.getElementById("education-section-container").appendChild(newSection);
 
-                const icon = document.createElement("i");
-                icon.className="icon-trash";
-                deleteButton.appendChild(icon);
-                footerElementNew.appendChild(deleteButton);
-                const placement = newSection.getElementsByClassName("card");
-                placement[0].appendChild(footerElementNew);
-
-                document.getElementById('education-section-container').appendChild(newSection);
-
+                // Update index
                 document.getElementById("educationCurrentIndex").value = index;
+
                 initializeValidation();
             }
 
-            document.getElementById('add-education-section').addEventListener('click', addEducationSection);
 
+            // Add section button
+            document.getElementById("add-education-section")
+                .addEventListener("click", addEducationSection);
+
+
+            // ======================================================
+            // SUBMIT BUTTON (AJAX WITH FILE SUPPORT)
+            // ======================================================
             $('.next-button-education-details').on('click', function (event) {
+
                 initializeValidation();
                 const form3 = $('#educationStepperForm');
+
                 if (!form3.valid()) {
-                    event.preventDefault();
                     return false;
                 }
+
+                // Use FormData to support file upload
+                const formData = new FormData(form3[0]);
+
                 $.ajax({
-                    url: form3.attr('action'),
-                    method: 'POST',
-                    data: form3.serialize(),
-                    success: function (response) {
+                    url: form3.attr("action"),
+                    method: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+
                         const currentTab = $('.nav-link.active');
                         document.getElementById("firstVisitEducation").value = "false";
+
                         const nextTabButton = currentTab.parent().next().find('.nav-link');
+
                         if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).find('input').first().focus();
+                            nextTabButton.tab("show");
+
+                            const nextId = nextTabButton.attr("data-bs-target");
+                            $(nextId).find("input").first().focus();
                         }
                     },
                     error: function () {
-                        console.log('There was an error saving the data. Please try again.');
+                        console.log("Error saving data. Please try again.");
                     }
                 });
             });
+
         });
     }
+
 
     function setConfigsForExperienceValidation(config) {
         config.experienceIndex = experienceIndex;

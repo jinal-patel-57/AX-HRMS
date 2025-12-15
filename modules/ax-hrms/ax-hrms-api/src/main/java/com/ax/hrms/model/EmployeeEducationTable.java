@@ -58,6 +58,10 @@ public class EmployeeEducationTable extends BaseTable<EmployeeEducationTable> {
 		"endDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<EmployeeEducationTable, Long> employeeId = createColumn(
 		"employeeId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeEducationTable, Long>
+		educationCertificateMediaId = createColumn(
+			"educationCertificateMediaId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 
 	private EmployeeEducationTable() {
 		super("ax_EmployeeEducation", EmployeeEducationTable::new);

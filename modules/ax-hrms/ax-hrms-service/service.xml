@@ -162,6 +162,7 @@
         <column name="passingYear" type="String"/>
         <column name="endDate" type="Date"/>
         <column name="employeeId" type="long"/>
+        <column name="educationCertificateMediaId" type="long"/>
         <!-- finder method  -->
         <finder return-type="Collection" name="EmployeeId">
             <finder-column name="employeeId"/>

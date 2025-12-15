@@ -299,7 +299,8 @@ create table ax_EmployeeEducation (
 	startDate DATE null,
 	passingYear VARCHAR(75) null,
 	endDate DATE null,
-	employeeId LONG
+	employeeId LONG,
+	educationCertificateMediaId LONG
 );
 
 create table ax_EmployeeExperience (

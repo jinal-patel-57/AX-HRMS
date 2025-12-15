@@ -271,6 +271,21 @@ public interface EmployeeEducationModel
 	 */
 	public void setEmployeeId(long employeeId);
 
+	/**
+	 * Returns the education certificate media ID of this employee education.
+	 *
+	 * @return the education certificate media ID of this employee education
+	 */
+	public long getEducationCertificateMediaId();
+
+	/**
+	 * Sets the education certificate media ID of this employee education.
+	 *
+	 * @param educationCertificateMediaId the education certificate media ID of this employee education
+	 */
+	public void setEducationCertificateMediaId(
+		long educationCertificateMediaId);
+
 	@Override
 	public EmployeeEducation cloneWithOriginalValues();
 

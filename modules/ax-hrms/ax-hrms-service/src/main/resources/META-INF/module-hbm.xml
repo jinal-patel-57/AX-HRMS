@@ -365,6 +365,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="passingYear" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="endDate" type="org.hibernate.type.TimestampType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="educationCertificateMediaId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeExperienceImpl" table="ax_EmployeeExperience">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="experienceId" type="long">
