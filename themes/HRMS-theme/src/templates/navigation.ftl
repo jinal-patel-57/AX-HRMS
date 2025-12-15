@@ -27,7 +27,7 @@
 					<#list nav_item.getChildren() as nav_child>
 						<#assign nav_child_css_class="" />
 
-						<#if nav_item.isSelected()>
+						<#if nav_child.isSelected()>
 							<#assign nav_child_css_class="selected" />
 						</#if>
 

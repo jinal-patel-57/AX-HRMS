@@ -57,16 +57,17 @@
   <div class="col-md-4 col-sm-12 ">
   <div class="form-group">
   <label for="isFloater"><liferay-ui:message key="holidayFloater" /><span class="text-danger">*</span></label>
-            <div class="form-check">
-                <input value="Yes" type="radio" class="form-check-input" id="isFloaterYes" ${holidayData.getIsFloater() eq true ? 'checked' : ''} name="<portlet:namespace/>isFloater">
-                <label class="form-check-label" for="isFloaterYes"><liferay-ui:message key="yes" /></label>
-            </div>
+    <div class="d-flex c-gap-3 align-items-center">
+      <div class="form-check">
+          <input value="Yes" type="radio" class="form-check-input" id="isFloaterYes" ${holidayData.getIsFloater() eq true ? 'checked' : ''} name="<portlet:namespace/>isFloater">
+          <label class="form-check-label" for="isFloaterYes"><liferay-ui:message key="yes" /></label>
+      </div>
 
-            <div class="form-check">
-                <input value="No" type="radio" class="form-check-input" id="isFloaterNo" ${holidayData.getIsFloater() eq false ? 'checked' : ''} name="<portlet:namespace/>isFloater">
-                <label class="form-check-label" for="isFloaterNo"><liferay-ui:message key="no" /></label>
-            </div>
-  
+      <div class="form-check">
+          <input value="No" type="radio" class="form-check-input" id="isFloaterNo" ${holidayData.getIsFloater() eq false ? 'checked' : ''} name="<portlet:namespace/>isFloater">
+          <label class="form-check-label" for="isFloaterNo"><liferay-ui:message key="no" /></label>
+      </div>
+    </div>
   </div>
   
   </div>
