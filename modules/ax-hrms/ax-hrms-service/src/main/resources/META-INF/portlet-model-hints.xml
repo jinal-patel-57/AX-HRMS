@@ -258,6 +258,7 @@
 		<field name="appraisalDate" type="Date" />
 		<field name="employeeType" type="String" />
 		<field name="stipend" type="double" />
+		<field name="managerId" type="long" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeDocument">
 		<field name="uuid" type="String" />
@@ -704,7 +705,7 @@
 		<field name="userId" type="long" />
 		<field name="reviewerId" type="long" />
 		<field name="teamMailId" type="String" />
-		<field name="status" type="String" />
+		<field name="status" type="long" />
 		<field name="reason" type="String" />
 		<field name="requestDate" type="Date" />
 		<field name="startDate" type="Date" />

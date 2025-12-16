@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(77);
+		StringBundler sb = new StringBundler(79);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -132,6 +132,8 @@ public class EmployeeDetailsCacheModel
 		sb.append(employeeType);
 		sb.append(", stipend=");
 		sb.append(stipend);
+		sb.append(", managerId=");
+		sb.append(managerId);
 		sb.append("}");
 
 		return sb.toString();
@@ -306,6 +308,7 @@ public class EmployeeDetailsCacheModel
 		}
 
 		employeeDetailsImpl.setStipend(stipend);
+		employeeDetailsImpl.setManagerId(managerId);
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -370,6 +373,8 @@ public class EmployeeDetailsCacheModel
 		employeeType = objectInput.readUTF();
 
 		stipend = objectInput.readDouble();
+
+		managerId = objectInput.readLong();
 	}
 
 	@Override
@@ -509,6 +514,8 @@ public class EmployeeDetailsCacheModel
 		}
 
 		objectOutput.writeDouble(stipend);
+
+		objectOutput.writeLong(managerId);
 	}
 
 	public String uuid;
@@ -549,5 +556,6 @@ public class EmployeeDetailsCacheModel
 	public long appraisalDate;
 	public String employeeType;
 	public double stipend;
+	public long managerId;
 
 }

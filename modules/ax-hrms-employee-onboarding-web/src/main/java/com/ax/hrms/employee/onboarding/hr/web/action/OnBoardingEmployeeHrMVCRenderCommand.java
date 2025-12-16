@@ -16,6 +16,16 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -26,6 +36,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +49,9 @@ import java.util.Map;
         service = MVCRenderCommand.class
 )
 public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
-    private Log log = LogFactoryUtil.getLog(OnBoardingEmployeeHrMVCRenderCommand.class);
+
+    private static final Log log = LogFactoryUtil.getLog(OnBoardingEmployeeHrMVCRenderCommand.class);
+
     @Reference
     DepartmentMasterLocalService departmentMasterLocalService;
 
@@ -51,8 +64,17 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
     @Reference
     EmployeeDetailsLocalService employeeDetailsLocalService;
 
+    @Reference
+    private RoleLocalService roleLocalService;
+
+    @Reference
+    private UserLocalService userLocalService;
+
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 
         List<DepartmentMaster> departmentMasterList = departmentMasterLocalService.getDepartmentMasters(-1,-1);
@@ -62,6 +84,35 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION_MASTER_LIST, designationMasterList);
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_CODE_PATTERN, generateEmployeeCode());
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DOMAIN, moduleConfiguration.domainName());
+
+        List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
+
+
+        /**
+         * @implNote : listOfFilteredEmployeeDetails is a list of Employee Details in which auth user's role is Employee
+         */
+        List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
+
+        for(EmployeeDetails employeeDetails : listOfEmployeeDetails) {
+
+            try {
+                long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE).getRoleId();
+                long[] userRoles = userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
+                for(long userRole : userRoles) {
+                    if(userRole == employeeRoleId)
+                        listOfFilteredEmployeeDetails.add(employeeDetails);
+                }
+            } catch (PortalException e) {
+                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "+e.getMessage());
+            }catch (NullPointerException e) {
+                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "+e.getMessage());
+            }catch(Exception e) {
+                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
+            }
+
+        }
+        renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DETAILS_LIST,listOfFilteredEmployeeDetails);
+
         return AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ON_BOARDING_HR_FORM_JSP;
     }
     public String generateEmployeeCode() {

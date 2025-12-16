@@ -264,7 +264,8 @@ create table ax_EmployeeDetails (
 	isTerminated BOOLEAN,
 	appraisalDate DATE null,
 	employeeType VARCHAR(75) null,
-	stipend DOUBLE
+	stipend DOUBLE,
+	managerId LONG
 );
 
 create table ax_EmployeeDocument (
@@ -721,7 +722,7 @@ create table ax_WorkFromHome (
 	userId LONG,
 	reviewerId LONG,
 	teamMailId VARCHAR(75) null,
-	status VARCHAR(75) null,
+	status LONG,
 	reason VARCHAR(75) null,
 	requestDate DATE null,
 	startDate DATE null,

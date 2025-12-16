@@ -123,7 +123,7 @@ public class WorkFromHomeWrapper
 			setTeamMailId(teamMailId);
 		}
 
-		String status = (String)attributes.get("status");
+		Long status = (Long)attributes.get("status");
 
 		if (status != null) {
 			setStatus(status);
@@ -285,7 +285,7 @@ public class WorkFromHomeWrapper
 	 * @return the status of this work from home
 	 */
 	@Override
-	public String getStatus() {
+	public long getStatus() {
 		return model.getStatus();
 	}
 
@@ -470,7 +470,7 @@ public class WorkFromHomeWrapper
 	 * @param status the status of this work from home
 	 */
 	@Override
-	public void setStatus(String status) {
+	public void setStatus(long status) {
 		model.setStatus(status);
 	}
 

@@ -122,7 +122,7 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 		} catch (Exception e) {
 			log.error("ListLeaveRequestMVCRenderCommand >>> Render >>> " + e.getMessage());
 		}
-		return AxHrmsHrLeaveManagementSystemWebPortletConstants.LIST_VIEW_LEAVE_REQUEST_JSP;
+		return AxHrmsHrLeaveManagementSystemWebPortletConstants.LIST_VIEW_LEAVE_REQUEST_JSP_HR;
 	}
 
 }

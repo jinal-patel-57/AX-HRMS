@@ -68,6 +68,14 @@ public class WorkFromHomeModelArgumentsResolver implements ArgumentsResolver {
 					workFromHomeModelImpl.getColumnBitmask(columnName);
 			}
 
+			if (finderPath.isBaseModelResult() &&
+				(WorkFromHomePersistenceImpl.
+					FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION ==
+						finderPath.getCacheName())) {
+
+				finderPathColumnBitmask |= _ORDER_BY_COLUMNS_BITMASK;
+			}
+
 			_finderPathColumnBitmasksCache.put(
 				finderPath, finderPathColumnBitmask);
 		}
@@ -112,5 +120,16 @@ public class WorkFromHomeModelArgumentsResolver implements ArgumentsResolver {
 
 	private static final Map<FinderPath, Long> _finderPathColumnBitmasksCache =
 		new ConcurrentHashMap<>();
+
+	private static final long _ORDER_BY_COLUMNS_BITMASK;
+
+	static {
+		long orderByColumnsBitmask = 0;
+
+		orderByColumnsBitmask |= WorkFromHomeModelImpl.getColumnBitmask(
+			"createDate");
+
+		_ORDER_BY_COLUMNS_BITMASK = orderByColumnsBitmask;
+	}
 
 }

@@ -13,4 +13,7 @@ public class AxHrmsLeaveManagementSystemWebPortletKeys {
 	
 	public static final String AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET = "com_ax_hrms_hr_leave_management_system_web_AxHrmsLeaveManagementSystemWebPortlet";
 
+
+    public static final String AXHRMS_MANAGER_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET = "com_ax_hrms_manager_leave_management_system_web_AxHrmsLeaveManagementSystemWebPortlet";
+
 }

@@ -282,6 +282,32 @@
                         <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
                     </div>
                 </div>
+
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+
+                        <liferay-ui:message key="manager" />
+                        <span class="text-danger">*</span>
+
+                        <select id="managerSelectBox"
+                                name="<portlet:namespace/>manager"
+                                class="custom-select mr-sm-2">
+
+                            <option value="">
+                                <liferay-ui:message key="select-manager"/>
+                            </option>
+
+                            <c:forEach var="employee" items="${employeeDetailsList}">
+                                <option value="${employee.getEmployeeId()}"       ${employee.getEmployeeId()==employeeDetail.getManagerId()? 'selected' : '' }>
+                                    ${employee.firstName} ${employee.lastName}  (${employee.getEmployeeId()})
+                                </option>
+                            </c:forEach>
+
+                        </select>
+
+                    </div>
+                </div>
+
             </div>
         </c:if>
 

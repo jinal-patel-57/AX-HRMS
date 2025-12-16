@@ -269,7 +269,17 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
         return _configuration.mailLeaveManagementTeamBody();
     }
 
-	@Override
+    @Override
+    public String mailLeaveRequestManagerSubject() {
+        return _configuration.mailLeaveRequestManagerSubject();
+    }
+
+    @Override
+    public String mailLeaveRequestManagerBody() {
+        return _configuration.mailLeaveRequestManagerBody();
+    }
+
+    @Override
 	public String mailRemovalProjectSubject() {
 		// TODO Auto-generated method stub
 		return _configuration.mailRemovalProjectSubject();

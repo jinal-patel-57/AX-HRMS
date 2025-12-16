@@ -84,7 +84,8 @@ public class EmployeeDetailsModelImpl
 		{"isExperienced", Types.BOOLEAN}, {"isProbationEnabled", Types.BOOLEAN},
 		{"profilePicId", Types.BIGINT}, {"insuranceLink", Types.VARCHAR},
 		{"isTerminated", Types.BOOLEAN}, {"appraisalDate", Types.TIMESTAMP},
-		{"employeeType", Types.VARCHAR}, {"stipend", Types.DOUBLE}
+		{"employeeType", Types.VARCHAR}, {"stipend", Types.DOUBLE},
+		{"managerId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -129,10 +130,11 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("appraisalDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("employeeType", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stipend", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("managerId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -201,6 +203,7 @@ public class EmployeeDetailsModelImpl
 	 */
 	@Deprecated
 	public static final long LRUSERID_COLUMN_BITMASK = 256L;
+	public static final long MANAGERID_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
@@ -392,6 +395,8 @@ public class EmployeeDetailsModelImpl
 				"employeeType", EmployeeDetails::getEmployeeType);
 			attributeGetterFunctions.put(
 				"stipend", EmployeeDetails::getStipend);
+			attributeGetterFunctions.put(
+				"managerId", EmployeeDetails::getManagerId);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -559,6 +564,10 @@ public class EmployeeDetailsModelImpl
 				"stipend",
 				(BiConsumer<EmployeeDetails, Double>)
 					EmployeeDetails::setStipend);
+			attributeSetterBiConsumers.put(
+				"managerId",
+				(BiConsumer<EmployeeDetails, Long>)
+					EmployeeDetails::setManagerId);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -1347,6 +1356,31 @@ public class EmployeeDetailsModelImpl
 		_stipend = stipend;
 	}
 
+	@JSON
+	@Override
+	public long getManagerId() {
+		return _managerId;
+	}
+
+	@Override
+	public void setManagerId(long managerId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_managerId = managerId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalManagerId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("managerId"));
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1447,6 +1481,7 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setAppraisalDate(getAppraisalDate());
 		employeeDetailsImpl.setEmployeeType(getEmployeeType());
 		employeeDetailsImpl.setStipend(getStipend());
+		employeeDetailsImpl.setManagerId(getManagerId());
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -1533,6 +1568,8 @@ public class EmployeeDetailsModelImpl
 			this.<String>getColumnOriginalValue("employeeType"));
 		employeeDetailsImpl.setStipend(
 			this.<Double>getColumnOriginalValue("stipend"));
+		employeeDetailsImpl.setManagerId(
+			this.<Long>getColumnOriginalValue("managerId"));
 
 		return employeeDetailsImpl;
 	}
@@ -1814,6 +1851,8 @@ public class EmployeeDetailsModelImpl
 
 		employeeDetailsCacheModel.stipend = getStipend();
 
+		employeeDetailsCacheModel.managerId = getManagerId();
+
 		return employeeDetailsCacheModel;
 	}
 
@@ -1914,6 +1953,7 @@ public class EmployeeDetailsModelImpl
 	private Date _appraisalDate;
 	private String _employeeType;
 	private double _stipend;
+	private long _managerId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1983,6 +2023,7 @@ public class EmployeeDetailsModelImpl
 		_columnOriginalValues.put("appraisalDate", _appraisalDate);
 		_columnOriginalValues.put("employeeType", _employeeType);
 		_columnOriginalValues.put("stipend", _stipend);
+		_columnOriginalValues.put("managerId", _managerId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -2081,6 +2122,8 @@ public class EmployeeDetailsModelImpl
 		columnBitmasks.put("employeeType", 68719476736L);
 
 		columnBitmasks.put("stipend", 137438953472L);
+
+		columnBitmasks.put("managerId", 274877906944L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

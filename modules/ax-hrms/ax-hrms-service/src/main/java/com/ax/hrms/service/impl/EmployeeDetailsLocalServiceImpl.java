@@ -35,8 +35,13 @@ import java.util.List;
 	service = AopService.class
 )
 public class EmployeeDetailsLocalServiceImpl extends EmployeeDetailsLocalServiceBaseImpl {
-	
-	public EmployeeDetails findByEmployeeId(long employeeId)
+
+    public List<EmployeeDetails> findByManagerId(long managerId) {
+
+        return employeeDetailsPersistence.findByManagerId(managerId);
+    }
+
+    public EmployeeDetails findByEmployeeId(long employeeId)
 			throws NoSuchEmployeeDetailsException {
 		return employeeDetailsPersistence.findByEmployeeId(employeeId);
 	}

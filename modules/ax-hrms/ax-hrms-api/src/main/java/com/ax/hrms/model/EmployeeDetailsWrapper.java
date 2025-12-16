@@ -72,6 +72,7 @@ public class EmployeeDetailsWrapper
 		attributes.put("appraisalDate", getAppraisalDate());
 		attributes.put("employeeType", getEmployeeType());
 		attributes.put("stipend", getStipend());
+		attributes.put("managerId", getManagerId());
 
 		return attributes;
 	}
@@ -306,6 +307,12 @@ public class EmployeeDetailsWrapper
 
 		if (stipend != null) {
 			setStipend(stipend);
+		}
+
+		Long managerId = (Long)attributes.get("managerId");
+
+		if (managerId != null) {
+			setManagerId(managerId);
 		}
 	}
 
@@ -552,6 +559,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public String getLrUserUuid() {
 		return model.getLrUserUuid();
+	}
+
+	/**
+	 * Returns the manager ID of this employee details.
+	 *
+	 * @return the manager ID of this employee details
+	 */
+	@Override
+	public long getManagerId() {
+		return model.getManagerId();
 	}
 
 	/**
@@ -1007,6 +1024,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setLrUserUuid(String lrUserUuid) {
 		model.setLrUserUuid(lrUserUuid);
+	}
+
+	/**
+	 * Sets the manager ID of this employee details.
+	 *
+	 * @param managerId the manager ID of this employee details
+	 */
+	@Override
+	public void setManagerId(long managerId) {
+		model.setManagerId(managerId);
 	}
 
 	/**

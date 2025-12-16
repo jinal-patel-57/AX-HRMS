@@ -296,6 +296,13 @@ public class EmployeeDetailsLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.EmployeeDetails> findByManagerId(
+		long managerId) {
+
+		return _employeeDetailsLocalService.findByManagerId(managerId);
+	}
+
+	@Override
 	public java.util.List<Object[]> findEmployeeByName(
 		String fName, String lName) {
 

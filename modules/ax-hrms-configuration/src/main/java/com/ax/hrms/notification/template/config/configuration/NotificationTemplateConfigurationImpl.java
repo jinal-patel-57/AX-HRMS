@@ -74,7 +74,12 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
 		return _configuration.leaveCancelledNotificationToEmployee();
 	}
 
-	@Override
+    @Override
+    public String leaveRequestedNotificationToManager() {
+        return _configuration.leaveRequestedNotificationToManager();
+    }
+
+    @Override
 	public String notificationApproveLogTime() {
 		// TODO Auto-generated method stub
 		return _configuration.notificationApproveLogTime();

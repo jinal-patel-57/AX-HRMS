@@ -1,7 +1,9 @@
 package com.ax.hrms.leave.management.employee.web.util;
 
 import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemWebPortletConstants;
+import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.dto.LeaveRequestDto;
+import com.ax.hrms.leave.management.web.notification.SendNotificationToUserHandler;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.model.LeavePolicyMaster;
 import com.ax.hrms.master.model.LeaveTypeMaster;
@@ -9,8 +11,14 @@ import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.model.LeaveDayType;
 import com.ax.hrms.model.LeaveRequest;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.kernel.model.UserNotificationEvent;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -189,4 +197,34 @@ public class LeaveRequestUtil {
 
 		return ChronoUnit.DAYS.between(startDateTime, endDateTime);
 	}
+
+
+    public static void sendNotificationToManager(String body, EmployeeDetails employee)  {
+
+        try {
+            JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
+
+            notificationJSON.put("body", body);
+
+            // Notification........
+            UserNotificationEvent userNotification = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
+                    employee.getLrUserId(),
+                    AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_EMPLOYEE_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+                    UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
+
+
+
+            ServiceContext serviceContext = new ServiceContext();
+            SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
+            sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
+
+            log.info("SENDING NOTIFICATION IN LEAVE REQUEST PORTLET ...." + userNotification.getPayload());
+
+
+        } catch (Exception e) {
+            log.error("Error in notification employee");
+        }
+
+    }
+
 }

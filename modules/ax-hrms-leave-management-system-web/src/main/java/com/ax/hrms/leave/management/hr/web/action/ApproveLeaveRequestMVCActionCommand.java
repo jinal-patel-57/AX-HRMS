@@ -102,7 +102,7 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.APPROVED_ID);
 
 			LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
-			EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
+            EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
 
 			leaveRequest.setLeaveCompensatoryStatusMasterId(approvedStatusId);
 			leaveRequest.setHrApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());

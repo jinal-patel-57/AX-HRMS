@@ -226,6 +226,8 @@ public interface EmployeeDetailsLocalService
 	public EmployeeDetails findByLrUserId(long lrUserId)
 		throws NoSuchEmployeeDetailsException;
 
+	public List<EmployeeDetails> findByManagerId(long managerId);
+
 	public List<Object[]> findEmployeeByName(String fName, String lName);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

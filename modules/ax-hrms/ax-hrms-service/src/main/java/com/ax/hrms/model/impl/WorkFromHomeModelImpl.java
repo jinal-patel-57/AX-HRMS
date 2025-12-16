@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.impl.BaseModelImpl;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -71,7 +72,7 @@ public class WorkFromHomeModelImpl
 		{"modifiedDate", Types.TIMESTAMP},
 		{"workFromHomeRequestId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"reviewerId", Types.BIGINT}, {"teamMailId", Types.VARCHAR},
-		{"status", Types.VARCHAR}, {"reason", Types.VARCHAR},
+		{"status", Types.BIGINT}, {"reason", Types.VARCHAR},
 		{"requestDate", Types.TIMESTAMP}, {"startDate", Types.TIMESTAMP},
 		{"endDate", Types.TIMESTAMP}
 	};
@@ -91,7 +92,7 @@ public class WorkFromHomeModelImpl
 		TABLE_COLUMNS_MAP.put("userId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("reviewerId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("teamMailId", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("status", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("status", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("reason", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("requestDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("startDate", Types.TIMESTAMP);
@@ -99,15 +100,15 @@ public class WorkFromHomeModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_WorkFromHome (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,workFromHomeRequestId LONG not null primary key,userId LONG,reviewerId LONG,teamMailId VARCHAR(75) null,status VARCHAR(75) null,reason VARCHAR(75) null,requestDate DATE null,startDate DATE null,endDate DATE null)";
+		"create table ax_WorkFromHome (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,workFromHomeRequestId LONG not null primary key,userId LONG,reviewerId LONG,teamMailId VARCHAR(75) null,status LONG,reason VARCHAR(75) null,requestDate DATE null,startDate DATE null,endDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_WorkFromHome";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY workFromHome.workFromHomeRequestId ASC";
+		" ORDER BY workFromHome.createDate DESC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY ax_WorkFromHome.workFromHomeRequestId ASC";
+		" ORDER BY ax_WorkFromHome.createDate DESC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -162,7 +163,7 @@ public class WorkFromHomeModelImpl
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long WORKFROMHOMEREQUESTID_COLUMN_BITMASK = 128L;
+	public static final long CREATEDATE_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -353,7 +354,7 @@ public class WorkFromHomeModelImpl
 				(BiConsumer<WorkFromHome, String>)WorkFromHome::setTeamMailId);
 			attributeSetterBiConsumers.put(
 				"status",
-				(BiConsumer<WorkFromHome, String>)WorkFromHome::setStatus);
+				(BiConsumer<WorkFromHome, Long>)WorkFromHome::setStatus);
 			attributeSetterBiConsumers.put(
 				"reason",
 				(BiConsumer<WorkFromHome, String>)WorkFromHome::setReason);
@@ -609,17 +610,12 @@ public class WorkFromHomeModelImpl
 
 	@JSON
 	@Override
-	public String getStatus() {
-		if (_status == null) {
-			return "";
-		}
-		else {
-			return _status;
-		}
+	public long getStatus() {
+		return _status;
 	}
 
 	@Override
-	public void setStatus(String status) {
+	public void setStatus(long status) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -632,8 +628,8 @@ public class WorkFromHomeModelImpl
 	 *             #getColumnOriginalValue(String)}
 	 */
 	@Deprecated
-	public String getOriginalStatus() {
-		return getColumnOriginalValue("status");
+	public long getOriginalStatus() {
+		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("status"));
 	}
 
 	@JSON
@@ -827,8 +823,7 @@ public class WorkFromHomeModelImpl
 			this.<Long>getColumnOriginalValue("reviewerId"));
 		workFromHomeImpl.setTeamMailId(
 			this.<String>getColumnOriginalValue("teamMailId"));
-		workFromHomeImpl.setStatus(
-			this.<String>getColumnOriginalValue("status"));
+		workFromHomeImpl.setStatus(this.<Long>getColumnOriginalValue("status"));
 		workFromHomeImpl.setReason(
 			this.<String>getColumnOriginalValue("reason"));
 		workFromHomeImpl.setRequestDate(
@@ -843,17 +838,18 @@ public class WorkFromHomeModelImpl
 
 	@Override
 	public int compareTo(WorkFromHome workFromHome) {
-		long primaryKey = workFromHome.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = DateUtil.compareTo(
+			getCreateDate(), workFromHome.getCreateDate());
+
+		value = value * -1;
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -966,12 +962,6 @@ public class WorkFromHomeModelImpl
 
 		workFromHomeCacheModel.status = getStatus();
 
-		String status = workFromHomeCacheModel.status;
-
-		if ((status != null) && (status.length() == 0)) {
-			workFromHomeCacheModel.status = null;
-		}
-
 		workFromHomeCacheModel.reason = getReason();
 
 		String reason = workFromHomeCacheModel.reason;
@@ -1080,7 +1070,7 @@ public class WorkFromHomeModelImpl
 	private long _userId;
 	private long _reviewerId;
 	private String _teamMailId;
-	private String _status;
+	private long _status;
 	private String _reason;
 	private Date _requestDate;
 	private Date _startDate;
