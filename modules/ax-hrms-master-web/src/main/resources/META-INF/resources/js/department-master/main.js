@@ -24,7 +24,7 @@
             });
             
             $.validator.addMethod("validLetters", function(value, element) {
-            	return this.optional(element) || /^[a-zA-Z]+[a-zA-Z0-9.\s]*$/.test(value);
+            	return this.optional(element) || /^[a-zA-Z]+[a-zA-Z0-9.\s-]*$/.test(value);
             }, "Department Name must start with a letter");
         });
     }
