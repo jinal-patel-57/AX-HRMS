@@ -17,6 +17,7 @@
 <liferay-ui:success key="leave-updated" message="leave-updated-success"
 />
 <liferay-ui:error key="leave-update-failed" message="leave-update-failed"/>
+<liferay-ui:error key="leave-can-not-be-negative" message="leave-value-negative"/>
 
 
 <div class="card">
@@ -55,16 +56,34 @@
                            <td>${CustomEmployeeLeave.leaveName}</td>
                            <td>${CustomEmployeeLeave.leaveAmount}</td>
                            <td>
-                               <form class="form-inline" action="${updateLeaveBalanceURL}" method="post">
-                                   <input type="number" step="any" class="form-control mb-2 mr-sm-2"
-                                          name="<portlet:namespace/>leaveAmount"
-                                          value="${CustomEmployeeLeave.leaveAmount}">
-                                   <input type="hidden" class="form-control mb-2 mr-sm-2"
-                                          name="<portlet:namespace/>leaveTypeMasterId"
-                                          value="${CustomEmployeeLeave.leaveTypeMasterId}">
-                                   <button type="submit" class="btn btn-primary mb-2">Update</button>
+                               <form action="${updateLeaveBalanceURL}" method="post">
+                                   <!-- Row for input + button -->
+                                   <div class="d-flex align-items-start">
+                                       <div class="mr-2">
+                                           <input type="number"
+                                                  step="any"
+                                                  min="0"
+                                                  class="form-control leaveAmountInput"
+                                                  name="<portlet:namespace/>leaveAmount"
+                                                  value="${CustomEmployeeLeave.leaveAmount}">
+                                       </div>
+
+                                       <input type="hidden"
+                                              name="<portlet:namespace/>leaveTypeMasterId"
+                                              value="${CustomEmployeeLeave.leaveTypeMasterId}">
+
+                                       <button type="submit" class="btn btn-primary">
+                                           Update
+                                       </button>
+                                   </div>
+
+                                   <!-- Error message (below input + button) -->
+                                   <div class="text-danger leave-error d-none mt-1">
+                                       Leave balance cannot be negative.
+                                   </div>
                                </form>
                            </td>
+
                        </tr>
                    </c:forEach>
 
@@ -82,5 +101,32 @@
 </div>
 
 <script>
-    $('#employeeSelect').val('${employeeId}');
+    // Prevent negative leave value submission (inline error)
+    $(document).on('submit', 'form[action="${updateLeaveBalanceURL}"]', function (e) {
+
+        let leaveAmountInput = $(this).find('.leaveAmountInput');
+        let errorSpan = $(this).find('.leave-error');
+        let value = parseFloat(leaveAmountInput.val());
+
+        // Reset error
+        errorSpan.addClass('d-none');
+        leaveAmountInput.removeClass('is-invalid');
+
+        if (isNaN(value) || value < 0) {
+            e.preventDefault();
+
+            // Show error inline
+            errorSpan.removeClass('d-none');
+            leaveAmountInput.addClass('is-invalid');
+            leaveAmountInput.focus();
+
+            return false;
+        }
+    });
+
+    // Hide error when user corrects value
+    $(document).on('input', '.leaveAmountInput', function () {
+        $(this).removeClass('is-invalid');
+        $(this).closest('form').find('.leave-error').addClass('d-none');
+    });
 </script>

@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -93,6 +94,12 @@ public class EditLeaveBalanceMVCActionCommand extends BaseMVCActionCommand {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
 
+        if(leaveAmount <0){
+            SessionMessages.add(actionRequest,"leave-can-not-be-negative");
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            return;
+        }
+
         try{
             LeaveBalance leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId,leaveTypeMasterId,year);
             leaveBalance.setNoOfRemainingLeaves(leaveAmount);
@@ -112,6 +119,7 @@ public class EditLeaveBalanceMVCActionCommand extends BaseMVCActionCommand {
             leaveBalanceLocalService.addLeaveBalance(lb);
         }
         SessionMessages.add(actionRequest,"leave-updated");
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
     }
 }
