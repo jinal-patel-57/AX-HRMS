@@ -252,8 +252,8 @@
                     <label id="department-error" class="error text-danger" for="department"></label>
                 </div>
 
-                <div class="col-md-4 col-sm-12 mb-3">
-                    <!-- Gender -->
+                <!-- <div class="col-md-4 col-sm-12 mb-3">
+                    
                     <label class="" for="gender"><liferay-ui:message key="gender"/><span class="text-danger">*</span></label><br/>
                     <div class="d-flex c-gap-3 align-items-center">
                         <div class="form-check">
@@ -270,7 +270,7 @@
                         </div>
                     </div>
                     <label id="gender-error" class="error text-danger" for="gender"></label>
-                </div>
+                </div> -->
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Probation Status -->

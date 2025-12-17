@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.*;
@@ -35,7 +34,6 @@ import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -52,7 +50,7 @@ import java.util.*;
 )
 public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionCommand {
 
-    Log log = LogFactoryUtil.getLog(ListEmployeesMVCRenderCommand.class);
+    public static Log log = LogFactoryUtil.getLog(ListEmployeesMVCRenderCommand.class);
 
     @Reference
     MailTemplateConfiguration mailTemplateConfiguration;
@@ -130,8 +128,8 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         String insuranceLink = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.INSURANCE_LINK);
         String joiningDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.JOINING_DATE);
         long managerId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.MANAGER);
-        System.out.println("manager id: " + managerId);
-        System.out.println("Selected Manager ID : " + managerId);
+        log.info("manager id: " + managerId);
+        log.info("Selected Manager ID : " + managerId);
         String gender = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.GENDER);
         String[] designations = ParamUtil.getStringValues(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION);
         String[] departments = ParamUtil.getStringValues(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT);
@@ -203,9 +201,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 
         User user = null;
         String password = AxHrmsEmployeeOnboardingHrWebPortletConstants.BALNK_STRING;
-        log.info("before for loop -- " + userPassMap);
         for (Map.Entry<User, String> entry : userPassMap.entrySet()) {
-        	log.info("inside for loop -- " + entry.getKey() + "----" + entry.getValue());
             user = entry.getKey();
             password = entry.getValue();
         }
@@ -352,7 +348,7 @@ public static void assignRegularRole(long userId, long companyId, String roleNam
         // Assign the role to the user
         UserLocalServiceUtil.addRoleUsers(role.getRoleId(), new long[]{userId});
 
-        System.out.println("Role assigned successfully: " + roleName);
+        log.info("Role assigned successfully: " + roleName);
     } catch (PortalException e) {
         e.printStackTrace();
     }
