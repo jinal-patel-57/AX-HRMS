@@ -24,15 +24,15 @@
 					<textarea class="form-control" id="<portlet:namespace />description" name="<portlet:namespace />description" rows="4" cols="30" placeholder="<liferay-ui:message key='description-placeholder' />">${not empty existedLeaveTypeMaster ? existedLeaveTypeMaster.getDescription(): (not empty leaveTypeMasterData ? leaveTypeMasterData.getDescription() : '')}</textarea>
 			  	</div>
 			  	
-			  	<div class="form-group">
-			    	<label for="isActiveLeaveType"><liferay-ui:message key="is-active"/></label>&nbsp;&nbsp;
+			  	<div class="form-group d-flex align-items-center">
 					<input type="checkbox" name="<portlet:namespace />isActive" id="<portlet:namespace />isActive" ${not empty leaveTypeMasterData ? (leaveTypeMasterData.getIsActive() == true ? 'checked' :'')  : (not empty existedLeaveTypeMaster ? (existedLeaveTypeMaster.getIsActive() == true ? 'checked' : '') : '')}>
-			  	</div>
+					<label for="isActiveLeaveType" class="ml-2 mb-0"><liferay-ui:message key="is-active"/></label>
+				</div>
 			  	
-			  	<div class="form-group">
-			    	<label for="isAppearForAll"><liferay-ui:message key="is-appear-for-all"/></label>&nbsp;&nbsp;
+			  	<div class="form-group d-flex align-items-center">
 					<input type="checkbox" name="<portlet:namespace />isAppearForAll" id="<portlet:namespace />isAppearForAll" ${not empty leaveTypeMasterData ? (leaveTypeMasterData.getIsAppearForAll() == true ? 'checked' :'')  : (not empty existedLeaveTypeMaster ? (existedLeaveTypeMaster.getIsAppearForAll() == true ? 'checked' : '') : '')}>
-			  	</div>
+					<label for="isAppearForAll" class="ml-2 mb-0"><liferay-ui:message key="is-appear-for-all"/></label>
+				</div>
 </div>
   <div class="card-footer text-right mb-0">
 			  	<a href="${homeUrl}" class="btn btn-outline-danger mr-1"><liferay-ui:message key="back"/></a>
