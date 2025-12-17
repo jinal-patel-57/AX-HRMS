@@ -346,4 +346,48 @@ public interface MailTemplateConfiguration {
     public String mailLeaveManagementTeamBody();
 
 
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name = "Compensatory Leave Request Cancel Mail to Employee (SUBJECT)",
+            required = false)
+    public String mailCompensatoryLeaveRequestCancelEmployeeSubject();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            //description = "${EMPLOYEE_NAME} ${BODY} ",
+            name = "Compensatory Leave Request Cancel Mail to Employee (BODY)",
+            required = false)
+    public String mailCompensatoryLeaveRequestCancelEmployeeBody();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name = "Compensatory Leave Request Approved Mail to Employee (SUBJECT)",
+            required = false)
+    public String mailCompensatoryLeaveRequestApprovedEmployeeSubject();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            //description = "${EMPLOYEE_NAME} ${BODY} ",
+            name = "Compensatory Leave Request Approved Mail to Employee (BODY)",
+            required = false)
+    public String mailCompensatoryLeaveRequestApprovedEmployeeBody();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name = "Compensatory Leave Request Rejected Mail to Employee (SUBJECT)",
+            required = false)
+    public String mailCompensatoryLeaveRequestRejectedEmployeeSubject();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            //description = "${EMPLOYEE_NAME} ${BODY} ",
+            name = "Compensatory Leave Request Rejected Mail to Employee (BODY)",
+            required = false)
+    public String mailCompensatoryLeaveRequestRejectedEmployeeBody();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name = "Compensatory Leave Request Manager And HR (SUBJECT)",
+            required = false)
+    public String mailCompensatoryLeaveRequestManagerAndHrSubject();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            //description = "${EMPLOYEE_NAME} ${BODY} ",
+            name = "Compensatory Leave Request Manager And HR (BODY)",
+            required = false)
+    public String mailCompensatoryLeaveRequestManagerAndHrBody();
+
+
 }

@@ -27,6 +27,9 @@ var submit_compensatory_form;
 
             $("#addCompensatoryDataForm").validate({
                 rules: {
+                 [namespace + "employeeNames"]: {
+                            required: true
+                        },
                     [namespace + "compensationDate"]: {
                         required: true,
                         notAfterToday: true
@@ -44,6 +47,9 @@ var submit_compensatory_form;
                     }
                 },
                 messages: {
+                 [namespace + "employeeNames"]: {
+                            required: "Please select an employee."
+                        },
                     [namespace + "compensationDate"]: {
                         required: "Please enter a date.",
                     },
@@ -58,7 +64,7 @@ var submit_compensatory_form;
                     error.insertAfter(element);
                 },
             });
-      
+
 
     
       

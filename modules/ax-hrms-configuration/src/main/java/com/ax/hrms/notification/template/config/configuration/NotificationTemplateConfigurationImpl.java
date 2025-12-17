@@ -73,6 +73,23 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
 	public String leaveCancelledNotificationToEmployee() {
 		return _configuration.leaveCancelledNotificationToEmployee();
 	}
+	@Override
+	public String compensatoryLeaveRequestCancelledNotificationToEmployee() {
+		return _configuration.compensatoryLeaveRequestCancelledNotificationToEmployee();
+	}
+	@Override
+	public String compensatoryLeaveRequestApprovedNotificationToEmployee() {
+		return _configuration.compensatoryLeaveRequestApprovedNotificationToEmployee();
+	}
+	@Override
+	public String compensatoryLeaveRequestRejectedNotificationToEmployee() {
+		return _configuration.compensatoryLeaveRequestRejectedNotificationToEmployee();
+	}
+
+	@Override
+	public String compensatoryLeaveRequestNotificationToManagerAndHr() {
+		return _configuration.compensatoryLeaveRequestNotificationToManagerAndHr();
+	}
 
 	@Override
 	public String notificationApproveLogTime() {

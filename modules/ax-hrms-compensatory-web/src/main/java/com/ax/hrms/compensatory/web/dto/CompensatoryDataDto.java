@@ -9,6 +9,16 @@ public class CompensatoryDataDto {
     int requestedHours;
     String managerName;
 
+    String employeeName;
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
     public long getCompensatoryDataId() {
         return compensatoryDataId;
     }

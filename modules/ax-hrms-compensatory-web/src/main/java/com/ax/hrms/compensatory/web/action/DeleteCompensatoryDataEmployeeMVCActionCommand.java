@@ -13,7 +13,10 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -85,9 +88,11 @@ public class DeleteCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActio
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long compensatoryDataId = ParamUtil.getLong(actionRequest, AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_ID);
         compensatoryDataLocalService.deleteCompensatoryData(compensatoryDataId);
         SessionMessages.add(actionRequest, AxHrmsCompensatoryDataConstants.COMPENSATION_REQUEST_DELETED);
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
     }
 }
 

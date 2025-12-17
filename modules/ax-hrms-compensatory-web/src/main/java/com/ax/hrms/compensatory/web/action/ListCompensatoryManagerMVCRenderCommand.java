@@ -11,7 +11,10 @@ import com.ax.hrms.service.*;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -23,12 +26,13 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component(immediate = true, property = {"javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_MANAGER_WEB_PORTLET, "mvc.command.name=/"}, service = MVCRenderCommand.class)
 public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand {
 
-
+    Log log = LogFactoryUtil.getLog(ListCompensatoryManagerMVCRenderCommand.class);
     @Reference
     EducationLevelMasterLocalService educationLevelMasterLocalService;
 
@@ -72,7 +76,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
+        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
 
         int compensatoryDatasCount = 0;
 
@@ -82,7 +86,19 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
             ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
-            List<CompensatoryData> compensatoryDataList = compensatoryDataLocalService.findByManagerId(employeeDetails.getEmployeeId());
+            long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
+            long[] hrRoles = themeDisplay.getUser().getRoleIds();
+            boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
+            log.info("IsHR :- "+ isHr);
+            List<CompensatoryData> compensatoryDataList = new ArrayList<>();
+            if(isHr) {
+                // for hr admin person
+                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_HR, isHr);
+                compensatoryDataList = compensatoryDataLocalService.getCompensatoryDatas(-1,-1);
+            }else {
+                // for managet person
+                compensatoryDataList = compensatoryDataLocalService.findByManagerId(employeeDetails.getEmployeeId());
+            }
             for (CompensatoryData compensatoryData : compensatoryDataList) {
                 CompensatoryDataDto compensatoryDataDto = new CompensatoryDataDto();
                 compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
@@ -95,6 +111,8 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(compensatoryData.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
                 EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
                 compensatoryDataDto.setManagerName(managerDetails.getFirstName() + StringPool.SPACE + managerDetails.getLastName());
+                EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getEmployeeId());
+                compensatoryDataDto.setEmployeeName(employee.getFirstName()+ StringPool.SPACE + employee.getLastName());
                 compensatoryDataDtoList.add(compensatoryDataDto);
                 compensatoryDatasCount += 1;
             }

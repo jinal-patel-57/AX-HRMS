@@ -269,7 +269,47 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
         return _configuration.mailLeaveManagementTeamBody();
     }
 
-	@Override
+    @Override
+    public String mailCompensatoryLeaveRequestCancelEmployeeSubject() {
+        return _configuration.mailCompensatoryLeaveRequestCancelEmployeeSubject();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestCancelEmployeeBody() {
+        return _configuration.mailCompensatoryLeaveRequestCancelEmployeeBody();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestApprovedEmployeeSubject() {
+        return _configuration.mailCompensatoryLeaveRequestApprovedEmployeeSubject();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestApprovedEmployeeBody() {
+        return _configuration.mailCompensatoryLeaveRequestApprovedEmployeeBody();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestRejectedEmployeeSubject() {
+        return _configuration.mailCompensatoryLeaveRequestRejectedEmployeeSubject();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestRejectedEmployeeBody() {
+        return _configuration.mailCompensatoryLeaveRequestRejectedEmployeeBody();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestManagerAndHrSubject() {
+        return _configuration.mailCompensatoryLeaveRequestManagerAndHrSubject();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestManagerAndHrBody() {
+        return _configuration.mailCompensatoryLeaveRequestManagerAndHrBody();
+    }
+
+    @Override
 	public String mailRemovalProjectSubject() {
 		// TODO Auto-generated method stub
 		return _configuration.mailRemovalProjectSubject();
@@ -328,5 +368,6 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
 		// TODO Auto-generated method stub
 		return _configuration.mailDailySchedulerAnniversaryBody();
 	}
+
 
 }

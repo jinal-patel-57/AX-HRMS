@@ -118,6 +118,22 @@ public String notificationAnniversary();
             name="Leave Cancelled Notification to Employee (Employee)",
             required = false)
     public String leaveCancelledNotificationToEmployee();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="Compensatory Leave Request Cancelled Notification to Employee (Employee)",
+            required = false)
+    public String compensatoryLeaveRequestCancelledNotificationToEmployee();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="Compensatory Leave Request Approved Notification to Employee (Employee)",
+            required = false)
+    public String compensatoryLeaveRequestApprovedNotificationToEmployee();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="Compensatory Leave Request Rejected Notification to Employee (Employee)",
+            required = false)
+    public String compensatoryLeaveRequestRejectedNotificationToEmployee();
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="Compensatory Leave Request Notification to Manager And HR (Employee)",
+            required = false)
+    public String compensatoryLeaveRequestNotificationToManagerAndHr();
 
 
 

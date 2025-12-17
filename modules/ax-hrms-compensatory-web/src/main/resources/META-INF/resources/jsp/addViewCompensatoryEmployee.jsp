@@ -37,6 +37,9 @@
                     <liferay-ui:search-container-column-text name="Date of Compensation"
                                                              value="${ compensatoryDataDto.getDateOfCompensation() }"/>
 
+                    <liferay-ui:search-container-column-text name="Employee Name"
+                                                             value="${ compensatoryDataDto.getEmployeeName() }"/>
+
                     <liferay-ui:search-container-column-text name="Requested Hours"
                                                              value="${ compensatoryDataDto.getRequestedHours() }"/>
 
@@ -100,6 +103,30 @@
             </div>
             <div class="modal-body">
                 <form action="${addCompensatoryDataURL}" id="addCompensatoryDataForm" method="post">
+
+                   <c:if test="${isManager or isHR}">
+
+                                            <div class="form-group">
+                                                <input type="hidden" id="<portlet:namespace />hrManagerStatus"
+                                                       name="<portlet:namespace />hrManagerStatus"
+                                                       value="${isManager or isHR}" style="display:none;"/>
+
+                                               <label for="employeeNamesSelect">  <liferay-ui:message key="employee-detail"/><span class="text-danger">*</span>
+                                                <select id="<portlet:namespace />employeeNames"
+                                                        name="<portlet:namespace />employeeNames"
+                                                        class="custom-select mr-sm-2">
+                                                    <option value="">-- Select Employee --</option>
+                                                    <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
+                                                        <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.firstName} ${employeeDetailsList.lastName}
+                                                            (${employeeDetailsList.employeeCode})
+                                                        </option>
+                                                    </c:forEach>
+                                                </select>
+
+                                            </div>
+
+
+                                    </c:if>
                     <div class="form-group">
                         <label class="" for="compensationDate"><liferay-ui:message
                                 key="compensation-date"/><span class="text-danger">*</span></label>
