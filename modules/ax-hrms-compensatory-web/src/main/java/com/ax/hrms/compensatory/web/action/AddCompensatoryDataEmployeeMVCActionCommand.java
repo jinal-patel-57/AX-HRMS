@@ -145,7 +145,7 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
                 compensatoryData.setModifiedDate(new Date());
 
                 CompensatoryData compensatoryData1 =  compensatoryDataLocalService.addCompensatoryData(compensatoryData);
-                log.info("Compansatory Ata :- "+ compensatoryData1);
+
 
             // Request Notification and mail to the HR and Manager
             try {

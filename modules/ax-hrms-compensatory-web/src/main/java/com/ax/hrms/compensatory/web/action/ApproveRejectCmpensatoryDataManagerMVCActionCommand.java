@@ -116,8 +116,7 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-        log.info("Approval Hours :- "+ approvedHours);
-        log.info("compensatoryDataId"+ compensatoryDataId);
+
         if (approvedHours > 0) {
 
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);

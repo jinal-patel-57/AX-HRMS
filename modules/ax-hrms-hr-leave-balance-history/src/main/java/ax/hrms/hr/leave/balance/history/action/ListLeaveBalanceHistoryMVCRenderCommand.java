@@ -1,6 +1,7 @@
 package ax.hrms.hr.leave.balance.history.action;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -82,18 +83,33 @@ public class ListLeaveBalanceHistoryMVCRenderCommand implements MVCRenderCommand
 			
 				leaveBalanceHistoryList = leaveBalanceHistoryLocalService.getLeaveBalanceHistories(-1, -1);
 			}
-			
-			
-			
-			
-		
-		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+
+
+
+			if (Validator.isNotNull(leaveBalanceHistoryList)) {
+				leaveBalanceHistoryList = new ArrayList<>(leaveBalanceHistoryList);
+
+				leaveBalanceHistoryList.sort(
+						Comparator.comparingInt(LeaveBalanceHistory::getYear).reversed()
+				);
+			}
+
+
+
+
+
+			PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 		SearchContainer<LeaveBalanceHistoryDto> leaveBalanceHistorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
 				StringPool.BLANK);
 		List<LeaveBalanceHistoryDto> leaveBalanceHistoryDtoList = leaveBalanceUtil.getLeaveData(leaveBalanceHistoryList);
 		leaveBalanceHistorySearchContainer.setResultsAndTotal(leaveBalanceHistoryDtoList);
-		List<Integer> yearList = leaveBalanceHistoryLocalService.getAllYear();
-		
+
+			List<Integer> yearList =
+					new ArrayList<>(leaveBalanceHistoryLocalService.getAllYear());
+
+			yearList.sort(Comparator.reverseOrder());
+
+
 		List<EmployeeDetails> employeeDetailsList = employeeDetailsLocalService.getEmployeeDetailses(-1, -1);
 			
 		
@@ -107,6 +123,7 @@ public class ListLeaveBalanceHistoryMVCRenderCommand implements MVCRenderCommand
 		
 		}catch(Exception e) {
 			log.error("ListLeaveBalanceHistoryMVCRenderCommand >>> "+ e.getMessage());
+			e.printStackTrace();
 		}
 
 		

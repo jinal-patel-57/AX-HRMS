@@ -89,7 +89,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
             long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
             long[] hrRoles = themeDisplay.getUser().getRoleIds();
             boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
-            log.info("IsHR :- "+ isHr);
+
             List<CompensatoryData> compensatoryDataList = new ArrayList<>();
             if(isHr) {
                 // for hr admin person

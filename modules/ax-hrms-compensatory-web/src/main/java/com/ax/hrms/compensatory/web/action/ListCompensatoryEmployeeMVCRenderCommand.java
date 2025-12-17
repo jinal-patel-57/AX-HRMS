@@ -125,14 +125,14 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
             long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
             long[] hrRoles = themeDisplay.getUser().getRoleIds();
             boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
-            log.info("IsHR :- "+ isHr);
+
             if(isHr) {
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_HR, isHr);
             }
             long managerId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER).getRoleId();
             long[] managerRoles = themeDisplay.getUser().getRoleIds();
             boolean isManager = Arrays.stream(managerRoles).anyMatch(id -> id == managerId);
-            log.info("IsManager :- "+ isManager);
+
             if(isManager) {
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_MANAGER, isManager);
             }
