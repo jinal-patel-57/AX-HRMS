@@ -19,11 +19,10 @@ public class SendNotificationToUserHandler extends BaseUserNotificationHandler{
 	public static final  String PORTLET_ID= AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET;
 	
 	
-	public SendNotificationToUserHandler( ) {
+    public SendNotificationToUserHandler() {
 		setPortletId(PORTLET_ID);
 	}
-	
-	
+
 
 	@Override
 	protected String getBody(UserNotificationEvent userNotificationEvent, ServiceContext serviceContext)

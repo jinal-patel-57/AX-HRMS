@@ -22,6 +22,7 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String IS_PROBBATION_ENABLED = "isProbationEnabled";
     public static final String INSURANCE_LINK = "insuranceLink";
     public static final String JOINING_DATE = "joiningDate";
+    public static final String MANAGER = "manager";
     public static final String GENDER = "gender";
     public static final String DESIGNATION = "designation";
     public static final String DEPARTMENT = "department";
@@ -41,6 +42,8 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String DESIGNATION_MASTER_LIST = "designationMasterList";
     public static final String EMPLOYEE_CODE_PATTERN = "employeCodePattern";
     public static final String DOMAIN = "domain";
+    public static final String EMPLOYEE = "Employee";
+    public static final String EMPLOYEE_DETAILS_LIST = "employeeDetailsList";
     public static final String EMPLOYEE_ON_BOARDING_HR_FORM_JSP = "/jsp/ax-hrms-employee-onboarding-hr/addEditEmployeeOnboardingHr.jsp";
     public static final String EMPLOYEE_ON_BOARDING_HR_LIST_JSP = "/jsp/ax-hrms-employee-onboarding-hr/listEmployeeOnboardingHr.jsp";
     public static final String CONVERT_INTERN_TO_EMPLOYEE_JSP = "/jsp/ax-hrms-employee-onboarding-hr/convertInternToEmployee.jsp";

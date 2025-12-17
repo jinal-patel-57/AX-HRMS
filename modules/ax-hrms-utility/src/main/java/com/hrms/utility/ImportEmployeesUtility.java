@@ -1,0 +1,353 @@
+package com.hrms.utility;
+
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.link.config.configuration.LinksConfiguration;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.exception.NoSuchLeaveTypeMasterException;
+import com.ax.hrms.master.model.LeaveTypeMaster;
+import com.ax.hrms.master.service.DepartmentMasterLocalService;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
+import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
+import com.ax.hrms.master.service.ProbationStatusMasterLocalService;
+import com.ax.hrms.model.EmployeeDepartment;
+import com.ax.hrms.model.EmployeeDesignation;
+import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.EmployeeSalary;
+import com.ax.hrms.model.LeaveBalance;
+import com.ax.hrms.service.EmployeeDepartmentLocalService;
+import com.ax.hrms.service.EmployeeDesignationLocalService;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.EmployeeProbationDetailsLocalService;
+import com.ax.hrms.service.EmployeeSalaryLocalService;
+import com.ax.hrms.service.LeaveBalanceLocalService;
+import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.RoleService;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.Localization;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+@Component(
+	immediate = true,
+	property = {
+			"com.liferay.portlet.display-category=category.hidden",
+			"com.liferay.portlet.header-portlet-css=/css/main.css", 
+			"com.liferay.portlet.instanceable=false",
+			"javax.portlet.display-name=Import Employee Utility", 
+			"javax.portlet.init-param.template-path=/",
+			"javax.portlet.init-param.view-template=/jsp/importemployee/view.jsp",
+			"javax.portlet.name=ImportEmployee", 
+			"javax.portlet.resource-bundle=content.Language",
+			"javax.portlet.security-role-ref=administrator,power-user,user"
+	},
+	service = Portlet.class
+)
+public class ImportEmployeesUtility extends MVCPortlet {
+
+	private Log log = LogFactoryUtil.getLog(ImportEmployeesUtility.class);
+	
+	@Reference
+	AxHrmsCommonApi axHrmsCommonApi;
+	
+	@Reference
+    MailTemplateConfiguration mailTemplateConfiguration;
+
+    @Reference
+    LinksConfiguration linksConfiguration;
+
+    @Reference
+    UserLocalService userLocalService;
+
+    @Reference
+    RoleLocalService roleLocalService;
+
+    @Reference
+    EmployeeDetailsLocalService employeeDetailsLocalService;
+
+    @Reference
+    EmployeeSalaryLocalService employeeSalaryLocalService;
+
+    @Reference
+    LeaveTypeMasterLocalService leaveTypeMasterLocalService;
+
+    @Reference
+    LeavePolicyMasterLocalService leavePolicyMasterLocalService;
+
+    @Reference
+    LeaveBalanceLocalService leaveBalanceLocalService;
+
+    @Reference
+    EmployeeProbationDetailsLocalService employeeProbationDetailsLocalService;
+
+    @Reference
+    ProbationStatusMasterLocalService probationStatusMasterLocalService;
+
+    @Reference
+    DepartmentMasterLocalService departmentMasterLocalService;
+
+    @Reference
+    DesignationMasterLocalService designationMasterLocalService;
+
+    @Reference
+    EmployeeDepartmentLocalService employeeDepartmentLocalService;
+
+    @Reference
+    EmployeeDesignationLocalService employeeDesignationLocalService;
+
+    @Reference
+    private Localization localization;
+
+
+    @Reference
+    private RoleService roleService;
+
+    @Reference
+    private RoleTypeContributorProvider roleTypeContributorProvider;
+	
+	@Override
+	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+		log.info("inside render");
+		
+		super.render(renderRequest, renderResponse);
+	}
+	
+	@Override
+	public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		File zohoEmployeesFile = uploadRequest.getFile("zohoEmployeesFile");
+		String fileName = uploadRequest.getFileName("zohoEmployeesFile");
+		Workbook workbook = axHrmsCommonApi.getWorkbook(fileName, zohoEmployeesFile);
+		
+		Map<String, Map<String, Object>> zohoEmployeeMap = axHrmsCommonApi.readExcelSheet(workbook.getSheetAt(0));
+		
+		zohoEmployeeMap.forEach((outerKey, innerMap) -> {
+			try {
+				
+			
+				log.info("Outer: " + outerKey);
+			    if(!"0".equalsIgnoreCase(outerKey)) {
+			    	
+			    	
+			    	log.info("innerMap -- " + innerMap);
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
+			        // converting role names into role IDS
+			        List<Long> roleIds = new ArrayList<>();
+					long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal
+			        roleIds.add(employeeRoleId);
+			        log.info(employeeRoleId + " role");
+			        String[] designations = new String[] {innerMap.get("6").toString()};
+			        for (String designation : designations) {
+			            // Get the role ID for the current designation
+			        	log.info("designation -- " + designation);
+			            long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
+			            EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
+			            employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
+			            employeeDesignation.setCreatedBy(themeDisplay.getUserId());
+			            employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
+			            employeeDesignation.setCreateDate(new Date());
+			            employeeDesignation.setModifiedDate(new Date());
+			            employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
+			            employeeDesignation.setStatus(true);
+			            employeeDesignation.setStartDate(new Date());
+			            employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
+			            employeeDesignationLocalService.addEmployeeDesignation(employeeDesignation);
+			            
+			            // Add the role ID to the array
+			            roleIds.add(designationRoleId);
+			        }
+	
+			        String[] departments = new String[] {innerMap.get("5").toString()};
+			        for (String department : departments) {
+			            // Get the role ID for the current department
+			            long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
+			            EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
+			            employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
+			            employeeDepartment.setCreatedBy(themeDisplay.getUserId());
+			            employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
+			            employeeDepartment.setCreateDate(new Date());
+			            employeeDepartment.setModifiedDate(new Date());
+			            employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
+			            employeeDepartment.setStatus(true);
+			            employeeDepartment.setDateOfChange(new Date());
+			            employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
+			            employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
+	
+			            // Add the role ID to the array
+			            roleIds.add(departmentRoleId);
+			        }
+	
+			        long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
+	
+			        //creating new user in the database of Liferay and sending the message also.
+			        Map<User, String> userPassMap = axHrmsCommonApi.createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles);
+	
+			        User user = null;
+			        String password = StringPool.BLANK;
+			        log.info("before for loop -- " + userPassMap);
+			        for (Map.Entry<User, String> entry : userPassMap.entrySet()) {
+			        	log.info("inside for loop -- " + entry.getKey() + "----" + entry.getValue());
+			            user = entry.getKey();
+			            password = entry.getValue();
+			        }
+			        assert user != null;
+			        long userId = user.getUserId();
+	
+			        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+			        Date joiningDateParsed = formatter.parse(innerMap.get("7").toString());
+	
+			        //converting iExperienced from string to bool
+			        boolean isExperiencedBool = true;
+			        //isExperiencedBool = isExperienced.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.YES);
+	
+			        //Audit fields
+			        employeeDetails.setCompanyId(themeDisplay.getCompanyId());
+			        employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
+			        employeeDetails.setCreateDate(new Date());
+			        employeeDetails.setModifiedDate(new Date());
+			        employeeDetails.setLrUserId(userId);
+			        employeeDetails.setJoiningDate(joiningDateParsed);
+			        employeeDetails.setEmployeeCode(innerMap.get("11").toString());
+			        employeeDetails.setFirstName(innerMap.get("2").toString());
+			        employeeDetails.setLastName(innerMap.get("3").toString());
+			        employeeDetails.setOfficialEmail(innerMap.get("4").toString());
+			        employeeDetails.setGender(innerMap.get("10").toString());
+			        employeeDetails.setIsTerminated(false);
+			        employeeDetails.setIsEmployeeOnboarded(false);
+			        employeeDetails.setCreatedBy(themeDisplay.getUserId());
+			        employeeDetails.setProbationStatusId(0);
+	
+			        employeeDetailsLocalService.addEmployeeDetails(employeeDetails);
+			        
+		            //adding new salary object to the ddb
+		            EmployeeSalary employeeSalary = employeeSalaryLocalService.createEmployeeSalary(CounterLocalServiceUtil.increment(EmployeeSalary.class.getName()));
+		            employeeSalary.setEmployeeId(employeeDetails.getEmployeeId());
+		            employeeSalary.setGrossSalaryCtcPa(0);
+		            employeeSalary.setGrossSalaryCtcPm(0);
+		            employeeSalary.setStatus(true);
+		            employeeSalaryLocalService.addEmployeeSalary(employeeSalary);
+			        
+		            employeeDetails.setIsExperienced(isExperiencedBool);
+		            employeeDetails.setInsuranceLink(StringPool.BLANK);
+		            
+			        employeeDetails.setEmployeeType("Permanent");
+	
+			        //adding probation status
+		            employeeDetails.setProbationStatusId(probationStatusMasterLocalService.findByProbationStatusName("Completed").getProbationStatusMasterId());
+		            employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+			        
+			        sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
+			        
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("12").toString(), "Earned Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("13").toString(), "Loyalty Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Paternity Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Personal Floater");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Compensatory Off");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Festival Floater");
+			        
+			    }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
+		String redirect = ParamUtil.getString(actionRequest, "redirect");
+		if (Validator.isNotNull(redirect)) {
+			actionResponse.sendRedirect(redirect);  
+		}
+	}
+
+	private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay, String leaveCount, String typeOfLeave) {
+
+		
+		Calendar todayCal = Calendar.getInstance();
+	    int currentYear = todayCal.get(Calendar.YEAR);
+		
+	    if(Validator.isNotNull(leaveCount) && !leaveCount.isBlank() && !leaveCount.equalsIgnoreCase("-")) {
+	    	LeaveTypeMaster leaveTypeMaster;
+			try {
+				log.info("type of leave -- " + typeOfLeave);
+				log.info("leave count -- " + leaveCount);
+				leaveTypeMaster = leaveTypeMasterLocalService.findByLeaveTypeName(typeOfLeave);
+				log.info("Leave type master :- " + leaveTypeMaster);
+				LeaveBalance lb = leaveBalanceLocalService.createLeaveBalance(CounterLocalServiceUtil.increment(LeaveBalance.class.getName()));
+				lb.setCompanyId(themeDisplay.getCompanyId());
+				lb.setCreatedBy(themeDisplay.getUserId());
+				lb.setGroupId(themeDisplay.getCompanyGroupId());
+				lb.setCreateDate(new Date());
+				lb.setModifiedDate(new Date());
+				lb.setEmployeeId(employeeDetails.getEmployeeId());
+				lb.setLeaveTypeMasterId(leaveTypeMaster.getLeaveTypeMasterId());
+				lb.setYear(currentYear);
+				lb.setNoOfUsedLeaves(0);
+				
+				lb.setNoOfRemainingLeaves(Double.valueOf(leaveCount));
+				
+				leaveBalanceLocalService.addLeaveBalance(lb);
+			} catch (NoSuchLeaveTypeMasterException e) {
+				e.printStackTrace();
+			}
+	    } else {
+	    	log.info("Blank leave -- " + leaveCount);
+	    }
+	}
+	
+	private void sendCredentialMailToEmployee(EmployeeDetails employeeDetails, String password, ThemeDisplay themeDisplay) {
+        String subject = mailTemplateConfiguration.mailOnBoardingPermanentAndTemporaryEmployeesSubject();
+        String body = mailTemplateConfiguration.mailOnBoardingPermanentAndTemporaryEmployeesBody();
+
+        body = body.replace("${EMPLOYEE_MAIL}", employeeDetails.getOfficialEmail());
+        body = body.replace("${EMPLOYEE_NAME}", employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
+        body = body.replace("${EMPLOYEE_PASSWORD}", password);
+        body = body.replace("${LOGIN_LINK}", themeDisplay.getURLPortal() + linksConfiguration.loginLink());
+        body = body.replace("${ONBOARDING_LINK}", themeDisplay.getURLPortal() + linksConfiguration.employeeOnBoardingLink());
+        body = body.replace("${INSURANCE_LINK}", employeeDetails.getInsuranceLink());
+
+        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), PrefsPropsUtil.getString(themeDisplay.getCompanyId(), "admin.email.from.address"), PrefsPropsUtil.getString(themeDisplay.getCompanyId(), "admin.email.from.name"), subject, body);
+
+    }
+	
+}

@@ -47,8 +47,8 @@ public class WorkFromHomeTable extends BaseTable<WorkFromHomeTable> {
 		"reviewerId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<WorkFromHomeTable, String> teamMailId = createColumn(
 		"teamMailId", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<WorkFromHomeTable, String> status = createColumn(
-		"status", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<WorkFromHomeTable, Long> status = createColumn(
+		"status", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<WorkFromHomeTable, String> reason = createColumn(
 		"reason", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<WorkFromHomeTable, Date> requestDate = createColumn(

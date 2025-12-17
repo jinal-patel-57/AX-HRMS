@@ -651,6 +651,20 @@ public interface EmployeeDetailsModel
 	 */
 	public void setStipend(double stipend);
 
+	/**
+	 * Returns the manager ID of this employee details.
+	 *
+	 * @return the manager ID of this employee details
+	 */
+	public long getManagerId();
+
+	/**
+	 * Sets the manager ID of this employee details.
+	 *
+	 * @param managerId the manager ID of this employee details
+	 */
+	public void setManagerId(long managerId);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

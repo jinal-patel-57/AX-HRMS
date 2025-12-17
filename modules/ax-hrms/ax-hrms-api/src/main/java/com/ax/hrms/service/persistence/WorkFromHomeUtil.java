@@ -694,7 +694,7 @@ public class WorkFromHomeUtil {
 	 * @param status the status
 	 * @return the matching work from homes
 	 */
-	public static List<WorkFromHome> findByStatus(String status) {
+	public static List<WorkFromHome> findByStatus(long status) {
 		return getPersistence().findByStatus(status);
 	}
 
@@ -711,7 +711,7 @@ public class WorkFromHomeUtil {
 	 * @return the range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByStatus(
-		String status, int start, int end) {
+		long status, int start, int end) {
 
 		return getPersistence().findByStatus(status, start, end);
 	}
@@ -730,7 +730,7 @@ public class WorkFromHomeUtil {
 	 * @return the ordered range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().findByStatus(
@@ -752,7 +752,7 @@ public class WorkFromHomeUtil {
 	 * @return the ordered range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator,
 		boolean useFinderCache) {
 
@@ -769,7 +769,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public static WorkFromHome findByStatus_First(
-			String status, OrderByComparator<WorkFromHome> orderByComparator)
+			long status, OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
 		return getPersistence().findByStatus_First(status, orderByComparator);
@@ -783,7 +783,7 @@ public class WorkFromHomeUtil {
 	 * @return the first matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public static WorkFromHome fetchByStatus_First(
-		String status, OrderByComparator<WorkFromHome> orderByComparator) {
+		long status, OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().fetchByStatus_First(status, orderByComparator);
 	}
@@ -797,7 +797,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public static WorkFromHome findByStatus_Last(
-			String status, OrderByComparator<WorkFromHome> orderByComparator)
+			long status, OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
 		return getPersistence().findByStatus_Last(status, orderByComparator);
@@ -811,7 +811,7 @@ public class WorkFromHomeUtil {
 	 * @return the last matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public static WorkFromHome fetchByStatus_Last(
-		String status, OrderByComparator<WorkFromHome> orderByComparator) {
+		long status, OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().fetchByStatus_Last(status, orderByComparator);
 	}
@@ -826,7 +826,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a work from home with the primary key could not be found
 	 */
 	public static WorkFromHome[] findByStatus_PrevAndNext(
-			long workFromHomeRequestId, String status,
+			long workFromHomeRequestId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
@@ -839,7 +839,7 @@ public class WorkFromHomeUtil {
 	 *
 	 * @param status the status
 	 */
-	public static void removeByStatus(String status) {
+	public static void removeByStatus(long status) {
 		getPersistence().removeByStatus(status);
 	}
 
@@ -849,7 +849,7 @@ public class WorkFromHomeUtil {
 	 * @param status the status
 	 * @return the number of matching work from homes
 	 */
-	public static int countByStatus(String status) {
+	public static int countByStatus(long status) {
 		return getPersistence().countByStatus(status);
 	}
 
@@ -861,7 +861,7 @@ public class WorkFromHomeUtil {
 	 * @return the matching work from homes
 	 */
 	public static List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status) {
+		long userId, long status) {
 
 		return getPersistence().findByUserIdAndStatus(userId, status);
 	}
@@ -880,7 +880,7 @@ public class WorkFromHomeUtil {
 	 * @return the range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end) {
+		long userId, long status, int start, int end) {
 
 		return getPersistence().findByUserIdAndStatus(
 			userId, status, start, end);
@@ -901,7 +901,7 @@ public class WorkFromHomeUtil {
 	 * @return the ordered range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().findByUserIdAndStatus(
@@ -924,7 +924,7 @@ public class WorkFromHomeUtil {
 	 * @return the ordered range of matching work from homes
 	 */
 	public static List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator,
 		boolean useFinderCache) {
 
@@ -942,7 +942,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public static WorkFromHome findByUserIdAndStatus_First(
-			long userId, String status,
+			long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
@@ -959,7 +959,7 @@ public class WorkFromHomeUtil {
 	 * @return the first matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public static WorkFromHome fetchByUserIdAndStatus_First(
-		long userId, String status,
+		long userId, long status,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().fetchByUserIdAndStatus_First(
@@ -976,7 +976,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public static WorkFromHome findByUserIdAndStatus_Last(
-			long userId, String status,
+			long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
@@ -993,7 +993,7 @@ public class WorkFromHomeUtil {
 	 * @return the last matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public static WorkFromHome fetchByUserIdAndStatus_Last(
-		long userId, String status,
+		long userId, long status,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return getPersistence().fetchByUserIdAndStatus_Last(
@@ -1011,7 +1011,7 @@ public class WorkFromHomeUtil {
 	 * @throws NoSuchWorkFromHomeException if a work from home with the primary key could not be found
 	 */
 	public static WorkFromHome[] findByUserIdAndStatus_PrevAndNext(
-			long workFromHomeRequestId, long userId, String status,
+			long workFromHomeRequestId, long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws com.ax.hrms.exception.NoSuchWorkFromHomeException {
 
@@ -1025,7 +1025,7 @@ public class WorkFromHomeUtil {
 	 * @param userId the user ID
 	 * @param status the status
 	 */
-	public static void removeByUserIdAndStatus(long userId, String status) {
+	public static void removeByUserIdAndStatus(long userId, long status) {
 		getPersistence().removeByUserIdAndStatus(userId, status);
 	}
 
@@ -1036,7 +1036,7 @@ public class WorkFromHomeUtil {
 	 * @param status the status
 	 * @return the number of matching work from homes
 	 */
-	public static int countByUserIdAndStatus(long userId, String status) {
+	public static int countByUserIdAndStatus(long userId, long status) {
 		return getPersistence().countByUserIdAndStatus(userId, status);
 	}
 

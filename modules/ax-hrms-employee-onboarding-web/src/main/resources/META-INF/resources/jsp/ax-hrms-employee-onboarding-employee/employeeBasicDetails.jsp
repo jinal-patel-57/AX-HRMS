@@ -170,17 +170,19 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Gender -->
                     <label class="" for="gender"><liferay-ui:message key="gender"/><span class="text-danger">*</span></label><br/>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />gender" id="male" value="Male"
-                            ${employeeDetail.gender == 'Male' ? 'checked' : '' }>
-                        <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />gender" id="female" value="Female"
-                            ${employeeDetail.gender == 'Female' ? 'checked' : '' }>
-                        <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                    <div class="d-flex c-gap-3 align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />gender" id="male" value="Male"
+                                ${employeeDetail.gender == 'Male' ? 'checked' : '' }>
+                            <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />gender" id="female" value="Female"
+                                ${employeeDetail.gender == 'Female' ? 'checked' : '' }>
+                            <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                        </div>
                     </div>
                     <label id="gender-error" class="error text-danger" for="gender"></label>
                 </div>
@@ -188,17 +190,19 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Is Experienced -->
                     <label class="" for="isExperienced"><liferay-ui:message key="is-experienced"/><span class="text-danger">*</span></label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />isExperienced" id="yes" value="Yes"
-                            ${employeeDetail.isExperienced == 'Yes' ? 'checked' : '' }>
-                        <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />isExperienced" id="no" value="No"
-                            ${employeeDetail.isExperienced == 'No' ? 'checked' : '' }>
-                        <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
+                    <div class="d-flex c-gap-3 align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />isExperienced" id="yes" value="Yes"
+                                ${employeeDetail.isExperienced == 'Yes' ? 'checked' : '' }>
+                            <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />isExperienced" id="no" value="No"
+                                ${employeeDetail.isExperienced == 'No' ? 'checked' : '' }>
+                            <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
+                        </div>
                     </div>
                     <label id="isExperienced-error" class="error text-danger" for="isExperienced"></label>
                 </div>
@@ -251,17 +255,19 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Gender -->
                     <label class="" for="gender"><liferay-ui:message key="gender"/><span class="text-danger">*</span></label><br/>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />gender" id="male" value="Male"
-                            ${employeeDetail.gender == 'Male' ? 'checked' : '' }>
-                        <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />gender" id="female" value="Female"
-                            ${employeeDetail.gender == 'Female' ? 'checked' : '' }>
-                        <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                    <div class="d-flex c-gap-3 align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />gender" id="male" value="Male"
+                                ${employeeDetail.gender == 'Male' ? 'checked' : '' }>
+                            <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />gender" id="female" value="Female"
+                                ${employeeDetail.gender == 'Female' ? 'checked' : '' }>
+                            <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                        </div>
                     </div>
                     <label id="gender-error" class="error text-danger" for="gender"></label>
                 </div>
@@ -269,19 +275,47 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Probation Status -->
                     <label class="" for="isProbationEnabled"><liferay-ui:message key="probation-status"/><span class="text-danger">*</span></label><br/>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />isProbationEnabled" id="enabled" value="Enabled"
-                            ${employeeDetail.isProbationEnabled ? 'checked' : '' }>
-                        <label class="form-check-label" for="enabled"><liferay-ui:message key="enabled"/></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<portlet:namespace />isProbationEnabled" id="disabled" value="Disabled"
-                            ${!employeeDetail.isProbationEnabled ? 'checked' : '' }>
-                        <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
+                    <div class="d-flex c-gap-3 align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />isProbationEnabled" id="enabled" value="Enabled"
+                                ${employeeDetail.isProbationEnabled ? 'checked' : '' }>
+                            <label class="form-check-label" for="enabled"><liferay-ui:message key="enabled"/></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                name="<portlet:namespace />isProbationEnabled" id="disabled" value="Disabled"
+                                ${!employeeDetail.isProbationEnabled ? 'checked' : '' }>
+                            <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+
+                        <liferay-ui:message key="manager" />
+                        <span class="text-danger">*</span>
+
+                        <select id="managerSelectBox"
+                                name="<portlet:namespace/>manager"
+                                class="custom-select mr-sm-2">
+
+                            <option value="">
+                                <liferay-ui:message key="select-manager"/>
+                            </option>
+
+                            <c:forEach var="employee" items="${employeeDetailsList}">
+                                <option value="${employee.getEmployeeId()}"       ${employee.getEmployeeId()==employeeDetail.getManagerId()? 'selected' : '' }>
+                                    ${employee.firstName} ${employee.lastName}  (${employee.getEmployeeId()})
+                                </option>
+                            </c:forEach>
+
+                        </select>
+
+                    </div>
+                </div>
+
             </div>
         </c:if>
 

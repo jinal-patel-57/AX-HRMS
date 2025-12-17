@@ -136,7 +136,8 @@ public String notificationAnniversary();
     public String compensatoryLeaveRequestNotificationToManagerAndHr();
 
 
-
-
-
+    @Meta.AD(deflt = "<h1>Leave is Requested.</h1>",
+            name="Leave Rejected Notification to Manager.",
+            required = false)
+    public String leaveRequestedNotificationToManager();
 }

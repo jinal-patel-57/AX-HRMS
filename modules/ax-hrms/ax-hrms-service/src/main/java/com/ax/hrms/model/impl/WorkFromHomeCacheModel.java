@@ -136,12 +136,7 @@ public class WorkFromHomeCacheModel
 			workFromHomeImpl.setTeamMailId(teamMailId);
 		}
 
-		if (status == null) {
-			workFromHomeImpl.setStatus("");
-		}
-		else {
-			workFromHomeImpl.setStatus(status);
-		}
+		workFromHomeImpl.setStatus(status);
 
 		if (reason == null) {
 			workFromHomeImpl.setReason("");
@@ -196,7 +191,8 @@ public class WorkFromHomeCacheModel
 
 		reviewerId = objectInput.readLong();
 		teamMailId = objectInput.readUTF();
-		status = objectInput.readUTF();
+
+		status = objectInput.readLong();
 		reason = objectInput.readUTF();
 		requestDate = objectInput.readLong();
 		startDate = objectInput.readLong();
@@ -235,12 +231,7 @@ public class WorkFromHomeCacheModel
 			objectOutput.writeUTF(teamMailId);
 		}
 
-		if (status == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(status);
-		}
+		objectOutput.writeLong(status);
 
 		if (reason == null) {
 			objectOutput.writeUTF("");
@@ -265,7 +256,7 @@ public class WorkFromHomeCacheModel
 	public long userId;
 	public long reviewerId;
 	public String teamMailId;
-	public String status;
+	public long status;
 	public String reason;
 	public long requestDate;
 	public long startDate;

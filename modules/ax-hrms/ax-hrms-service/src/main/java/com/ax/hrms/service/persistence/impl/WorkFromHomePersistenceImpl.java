@@ -1949,7 +1949,7 @@ public class WorkFromHomePersistenceImpl
 	 * @return the matching work from homes
 	 */
 	@Override
-	public List<WorkFromHome> findByStatus(String status) {
+	public List<WorkFromHome> findByStatus(long status) {
 		return findByStatus(status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
@@ -1966,7 +1966,7 @@ public class WorkFromHomePersistenceImpl
 	 * @return the range of matching work from homes
 	 */
 	@Override
-	public List<WorkFromHome> findByStatus(String status, int start, int end) {
+	public List<WorkFromHome> findByStatus(long status, int start, int end) {
 		return findByStatus(status, start, end, null);
 	}
 
@@ -1985,7 +1985,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return findByStatus(status, start, end, orderByComparator, true);
@@ -2007,11 +2007,9 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator,
 		boolean useFinderCache) {
-
-		status = Objects.toString(status, "");
 
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2037,7 +2035,7 @@ public class WorkFromHomePersistenceImpl
 
 			if ((list != null) && !list.isEmpty()) {
 				for (WorkFromHome workFromHome : list) {
-					if (!status.equals(workFromHome.getStatus())) {
+					if (status != workFromHome.getStatus()) {
 						list = null;
 
 						break;
@@ -2059,16 +2057,7 @@ public class WorkFromHomePersistenceImpl
 
 			sb.append(_SQL_SELECT_WORKFROMHOME_WHERE);
 
-			boolean bindStatus = false;
-
-			if (status.isEmpty()) {
-				sb.append(_FINDER_COLUMN_STATUS_STATUS_3);
-			}
-			else {
-				bindStatus = true;
-
-				sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
-			}
+			sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -2089,9 +2078,7 @@ public class WorkFromHomePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				if (bindStatus) {
-					queryPos.add(status);
-				}
+				queryPos.add(status);
 
 				list = (List<WorkFromHome>)QueryUtil.list(
 					query, getDialect(), start, end);
@@ -2123,7 +2110,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome findByStatus_First(
-			String status, OrderByComparator<WorkFromHome> orderByComparator)
+			long status, OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
 
 		WorkFromHome workFromHome = fetchByStatus_First(
@@ -2154,7 +2141,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome fetchByStatus_First(
-		String status, OrderByComparator<WorkFromHome> orderByComparator) {
+		long status, OrderByComparator<WorkFromHome> orderByComparator) {
 
 		List<WorkFromHome> list = findByStatus(status, 0, 1, orderByComparator);
 
@@ -2175,7 +2162,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome findByStatus_Last(
-			String status, OrderByComparator<WorkFromHome> orderByComparator)
+			long status, OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
 
 		WorkFromHome workFromHome = fetchByStatus_Last(
@@ -2206,7 +2193,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome fetchByStatus_Last(
-		String status, OrderByComparator<WorkFromHome> orderByComparator) {
+		long status, OrderByComparator<WorkFromHome> orderByComparator) {
 
 		int count = countByStatus(status);
 
@@ -2235,11 +2222,9 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome[] findByStatus_PrevAndNext(
-			long workFromHomeRequestId, String status,
+			long workFromHomeRequestId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
-
-		status = Objects.toString(status, "");
 
 		WorkFromHome workFromHome = findByPrimaryKey(workFromHomeRequestId);
 
@@ -2269,7 +2254,7 @@ public class WorkFromHomePersistenceImpl
 	}
 
 	protected WorkFromHome getByStatus_PrevAndNext(
-		Session session, WorkFromHome workFromHome, String status,
+		Session session, WorkFromHome workFromHome, long status,
 		OrderByComparator<WorkFromHome> orderByComparator, boolean previous) {
 
 		StringBundler sb = null;
@@ -2285,16 +2270,7 @@ public class WorkFromHomePersistenceImpl
 
 		sb.append(_SQL_SELECT_WORKFROMHOME_WHERE);
 
-		boolean bindStatus = false;
-
-		if (status.isEmpty()) {
-			sb.append(_FINDER_COLUMN_STATUS_STATUS_3);
-		}
-		else {
-			bindStatus = true;
-
-			sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
-		}
+		sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields =
@@ -2365,9 +2341,7 @@ public class WorkFromHomePersistenceImpl
 
 		QueryPos queryPos = QueryPos.getInstance(query);
 
-		if (bindStatus) {
-			queryPos.add(status);
-		}
+		queryPos.add(status);
 
 		if (orderByComparator != null) {
 			for (Object orderByConditionValue :
@@ -2393,7 +2367,7 @@ public class WorkFromHomePersistenceImpl
 	 * @param status the status
 	 */
 	@Override
-	public void removeByStatus(String status) {
+	public void removeByStatus(long status) {
 		for (WorkFromHome workFromHome :
 				findByStatus(
 					status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
@@ -2409,9 +2383,7 @@ public class WorkFromHomePersistenceImpl
 	 * @return the number of matching work from homes
 	 */
 	@Override
-	public int countByStatus(String status) {
-		status = Objects.toString(status, "");
-
+	public int countByStatus(long status) {
 		FinderPath finderPath = _finderPathCountByStatus;
 
 		Object[] finderArgs = new Object[] {status};
@@ -2423,16 +2395,7 @@ public class WorkFromHomePersistenceImpl
 
 			sb.append(_SQL_COUNT_WORKFROMHOME_WHERE);
 
-			boolean bindStatus = false;
-
-			if (status.isEmpty()) {
-				sb.append(_FINDER_COLUMN_STATUS_STATUS_3);
-			}
-			else {
-				bindStatus = true;
-
-				sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
-			}
+			sb.append(_FINDER_COLUMN_STATUS_STATUS_2);
 
 			String sql = sb.toString();
 
@@ -2445,9 +2408,7 @@ public class WorkFromHomePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				if (bindStatus) {
-					queryPos.add(status);
-				}
+				queryPos.add(status);
 
 				count = (Long)query.uniqueResult();
 
@@ -2467,9 +2428,6 @@ public class WorkFromHomePersistenceImpl
 	private static final String _FINDER_COLUMN_STATUS_STATUS_2 =
 		"workFromHome.status = ?";
 
-	private static final String _FINDER_COLUMN_STATUS_STATUS_3 =
-		"(workFromHome.status IS NULL OR workFromHome.status = '')";
-
 	private FinderPath _finderPathWithPaginationFindByUserIdAndStatus;
 	private FinderPath _finderPathWithoutPaginationFindByUserIdAndStatus;
 	private FinderPath _finderPathCountByUserIdAndStatus;
@@ -2482,9 +2440,7 @@ public class WorkFromHomePersistenceImpl
 	 * @return the matching work from homes
 	 */
 	@Override
-	public List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status) {
-
+	public List<WorkFromHome> findByUserIdAndStatus(long userId, long status) {
 		return findByUserIdAndStatus(
 			userId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
@@ -2504,7 +2460,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end) {
+		long userId, long status, int start, int end) {
 
 		return findByUserIdAndStatus(userId, status, start, end, null);
 	}
@@ -2525,7 +2481,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		return findByUserIdAndStatus(
@@ -2549,11 +2505,9 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		OrderByComparator<WorkFromHome> orderByComparator,
 		boolean useFinderCache) {
-
-		status = Objects.toString(status, "");
 
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2582,7 +2536,7 @@ public class WorkFromHomePersistenceImpl
 			if ((list != null) && !list.isEmpty()) {
 				for (WorkFromHome workFromHome : list) {
 					if ((userId != workFromHome.getUserId()) ||
-						!status.equals(workFromHome.getStatus())) {
+						(status != workFromHome.getStatus())) {
 
 						list = null;
 
@@ -2607,16 +2561,7 @@ public class WorkFromHomePersistenceImpl
 
 			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_USERID_2);
 
-			boolean bindStatus = false;
-
-			if (status.isEmpty()) {
-				sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_3);
-			}
-			else {
-				bindStatus = true;
-
-				sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
-			}
+			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -2639,9 +2584,7 @@ public class WorkFromHomePersistenceImpl
 
 				queryPos.add(userId);
 
-				if (bindStatus) {
-					queryPos.add(status);
-				}
+				queryPos.add(status);
 
 				list = (List<WorkFromHome>)QueryUtil.list(
 					query, getDialect(), start, end);
@@ -2674,7 +2617,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome findByUserIdAndStatus_First(
-			long userId, String status,
+			long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
 
@@ -2710,7 +2653,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome fetchByUserIdAndStatus_First(
-		long userId, String status,
+		long userId, long status,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		List<WorkFromHome> list = findByUserIdAndStatus(
@@ -2734,7 +2677,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome findByUserIdAndStatus_Last(
-			long userId, String status,
+			long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
 
@@ -2770,7 +2713,7 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome fetchByUserIdAndStatus_Last(
-		long userId, String status,
+		long userId, long status,
 		OrderByComparator<WorkFromHome> orderByComparator) {
 
 		int count = countByUserIdAndStatus(userId, status);
@@ -2801,11 +2744,9 @@ public class WorkFromHomePersistenceImpl
 	 */
 	@Override
 	public WorkFromHome[] findByUserIdAndStatus_PrevAndNext(
-			long workFromHomeRequestId, long userId, String status,
+			long workFromHomeRequestId, long userId, long status,
 			OrderByComparator<WorkFromHome> orderByComparator)
 		throws NoSuchWorkFromHomeException {
-
-		status = Objects.toString(status, "");
 
 		WorkFromHome workFromHome = findByPrimaryKey(workFromHomeRequestId);
 
@@ -2836,7 +2777,7 @@ public class WorkFromHomePersistenceImpl
 	}
 
 	protected WorkFromHome getByUserIdAndStatus_PrevAndNext(
-		Session session, WorkFromHome workFromHome, long userId, String status,
+		Session session, WorkFromHome workFromHome, long userId, long status,
 		OrderByComparator<WorkFromHome> orderByComparator, boolean previous) {
 
 		StringBundler sb = null;
@@ -2854,16 +2795,7 @@ public class WorkFromHomePersistenceImpl
 
 		sb.append(_FINDER_COLUMN_USERIDANDSTATUS_USERID_2);
 
-		boolean bindStatus = false;
-
-		if (status.isEmpty()) {
-			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_3);
-		}
-		else {
-			bindStatus = true;
-
-			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
-		}
+		sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields =
@@ -2936,9 +2868,7 @@ public class WorkFromHomePersistenceImpl
 
 		queryPos.add(userId);
 
-		if (bindStatus) {
-			queryPos.add(status);
-		}
+		queryPos.add(status);
 
 		if (orderByComparator != null) {
 			for (Object orderByConditionValue :
@@ -2965,7 +2895,7 @@ public class WorkFromHomePersistenceImpl
 	 * @param status the status
 	 */
 	@Override
-	public void removeByUserIdAndStatus(long userId, String status) {
+	public void removeByUserIdAndStatus(long userId, long status) {
 		for (WorkFromHome workFromHome :
 				findByUserIdAndStatus(
 					userId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2983,9 +2913,7 @@ public class WorkFromHomePersistenceImpl
 	 * @return the number of matching work from homes
 	 */
 	@Override
-	public int countByUserIdAndStatus(long userId, String status) {
-		status = Objects.toString(status, "");
-
+	public int countByUserIdAndStatus(long userId, long status) {
 		FinderPath finderPath = _finderPathCountByUserIdAndStatus;
 
 		Object[] finderArgs = new Object[] {userId, status};
@@ -2999,16 +2927,7 @@ public class WorkFromHomePersistenceImpl
 
 			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_USERID_2);
 
-			boolean bindStatus = false;
-
-			if (status.isEmpty()) {
-				sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_3);
-			}
-			else {
-				bindStatus = true;
-
-				sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
-			}
+			sb.append(_FINDER_COLUMN_USERIDANDSTATUS_STATUS_2);
 
 			String sql = sb.toString();
 
@@ -3023,9 +2942,7 @@ public class WorkFromHomePersistenceImpl
 
 				queryPos.add(userId);
 
-				if (bindStatus) {
-					queryPos.add(status);
-				}
+				queryPos.add(status);
 
 				count = (Long)query.uniqueResult();
 
@@ -3047,9 +2964,6 @@ public class WorkFromHomePersistenceImpl
 
 	private static final String _FINDER_COLUMN_USERIDANDSTATUS_STATUS_2 =
 		"workFromHome.status = ?";
-
-	private static final String _FINDER_COLUMN_USERIDANDSTATUS_STATUS_3 =
-		"(workFromHome.status IS NULL OR workFromHome.status = '')";
 
 	private FinderPath _finderPathWithPaginationFindByDateRange;
 	private FinderPath _finderPathWithoutPaginationFindByDateRange;
@@ -4314,25 +4228,24 @@ public class WorkFromHomePersistenceImpl
 		_finderPathWithPaginationFindByStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByStatus",
 			new String[] {
-				String.class.getName(), Integer.class.getName(),
+				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
 			new String[] {"status"}, true);
 
 		_finderPathWithoutPaginationFindByStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStatus",
-			new String[] {String.class.getName()}, new String[] {"status"},
-			true);
+			new String[] {Long.class.getName()}, new String[] {"status"}, true);
 
 		_finderPathCountByStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStatus",
-			new String[] {String.class.getName()}, new String[] {"status"},
+			new String[] {Long.class.getName()}, new String[] {"status"},
 			false);
 
 		_finderPathWithPaginationFindByUserIdAndStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserIdAndStatus",
 			new String[] {
-				Long.class.getName(), String.class.getName(),
+				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			},
@@ -4340,12 +4253,12 @@ public class WorkFromHomePersistenceImpl
 
 		_finderPathWithoutPaginationFindByUserIdAndStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserIdAndStatus",
-			new String[] {Long.class.getName(), String.class.getName()},
+			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"userId", "status"}, true);
 
 		_finderPathCountByUserIdAndStatus = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserIdAndStatus",
-			new String[] {Long.class.getName(), String.class.getName()},
+			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"userId", "status"}, false);
 
 		_finderPathWithPaginationFindByDateRange = new FinderPath(

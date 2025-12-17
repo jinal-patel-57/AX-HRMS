@@ -166,11 +166,19 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 
 		RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
 		try{
+			log.info("in try --" + roleName);
 			Role role = roleService.getRole(themeDisplay.getCompanyId(),roleName);
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
 			roleService.updateRole(role.getRoleId(),roleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
-			Role role = roleService.addRole("", roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
+			log.info("in catch  -- " + roleName);
+			try {
+				Role role = roleService.addRole("", roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
+				log.info("after role  -- " + role.getName());
+			}catch(PortalException e) {
+				e.printStackTrace();
+			}
+			
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());
 		}catch (Exception e){
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+e.getMessage());

@@ -1,0 +1,9 @@
+Bundle-Name: ax-hrms-utility
+Bundle-SymbolicName: ax.hrms.utility
+Bundle-Version: 1.0.0
+Export-Package: ax.hrms.utility.constants
+Liferay-Configuration-Path: /configuration
+Import-Package: *; version="0";resolution:=optional
+Provide-Capability: \
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

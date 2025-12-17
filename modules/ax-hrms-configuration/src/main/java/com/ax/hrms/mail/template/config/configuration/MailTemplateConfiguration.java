@@ -345,6 +345,12 @@ public interface MailTemplateConfiguration {
             required = false)
     public String mailLeaveManagementTeamBody();
 
+    @Meta.AD(
+            deflt = "Leave Request Submitted",
+            name = "Leave Request Mail to Manager (SUBJECT)",
+            required = false
+    )
+    public String mailLeaveRequestManagerSubject();
 
 
     @Meta.AD(deflt = "<h1>HELLO</h1>",
@@ -390,4 +396,11 @@ public interface MailTemplateConfiguration {
     public String mailCompensatoryLeaveRequestManagerAndHrBody();
 
 
+
+    @Meta.AD(
+            deflt = "<h1>Leave Request Submitted.</h1>",
+            name = "Leave Request Mail to Manager (BODY)",
+            required = false
+    )
+    public String mailLeaveRequestManagerBody();
 }

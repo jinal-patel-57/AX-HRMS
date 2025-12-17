@@ -232,15 +232,14 @@ public interface WorkFromHomeModel
 	 *
 	 * @return the status of this work from home
 	 */
-	@AutoEscape
-	public String getStatus();
+	public long getStatus();
 
 	/**
 	 * Sets the status of this work from home.
 	 *
 	 * @param status the status of this work from home
 	 */
-	public void setStatus(String status);
+	public void setStatus(long status);
 
 	/**
 	 * Returns the reason of this work from home.

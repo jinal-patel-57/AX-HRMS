@@ -12,7 +12,12 @@
 			<a ${nav_item_attr_has_popup} href="${nav_item.getURL()}" ${nav_item.getTarget()} role="menuitem" data-sena-off="true"
 				class="trans" title="${nav_item.getName()}">
 				<div class="span_flex">
-					<span class="nav_img"><img src="${themeDisplay.getPathThemeImages()}/nav_admin.png" alt="" />
+					<span class="nav_img">
+						<#if nav_item_layout.getIconImageId() != 0>
+							<img src="/image/layout_icon?img_id=${nav_item_layout.getIconImageId()}" alt="" />
+						<#else>
+						 	<img src="${themeDisplay.getPathThemeImages()}/nav_admin.png" alt="" />
+						</#if>
 						<!-- <@liferay_theme["layout-icon"] layout=nav_item_layout /> -->
 					</span>
 					<span class="nav_text">
@@ -27,7 +32,7 @@
 					<#list nav_item.getChildren() as nav_child>
 						<#assign nav_child_css_class="" />
 
-						<#if nav_item.isSelected()>
+						<#if nav_child.isSelected()>
 							<#assign nav_child_css_class="selected" />
 						</#if>
 

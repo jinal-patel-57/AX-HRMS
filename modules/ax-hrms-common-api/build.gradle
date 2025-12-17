@@ -9,4 +9,5 @@ dependencies {
     compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	implementation project(":modules:ax-hrms:ax-hrms-api")
 	implementation project(":modules:ax-hrms-master:ax-hrms-master-api")
+	compileOnly group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 }

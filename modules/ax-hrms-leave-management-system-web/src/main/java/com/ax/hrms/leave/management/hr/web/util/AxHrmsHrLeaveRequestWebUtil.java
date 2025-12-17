@@ -130,9 +130,9 @@ public class AxHrmsHrLeaveRequestWebUtil {
 			
 
 			ServiceContext serviceContext = new ServiceContext();
-SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
-sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
-			
+            SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
+            sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
+
 			log.info("SENDING NOTIFICATION IN LEAVE REQUEST PORTLET ...." + userNotification.getPayload());
 
 
@@ -141,6 +141,8 @@ sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
 		}
 
 	}
+
+
 
 	public LeaveRequestDto setLeaveRequestData(Long leaveRequestId)
 			throws PortalException {

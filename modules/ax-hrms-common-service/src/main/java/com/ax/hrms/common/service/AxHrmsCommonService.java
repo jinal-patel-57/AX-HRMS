@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,10 +58,10 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -460,7 +461,7 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 		return cal;
     }
     
-    
+    @Override
     public Workbook getWorkbook(InputStream inputStream, String excelFilePath) {
 		log.info("-----> inside getWorkbook...");
 		Workbook workbook = null;
@@ -470,13 +471,29 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 			} else {
 				workbook = new HSSFWorkbook(inputStream);
 			}
-
 		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
 		return workbook;
 	}
     
+    @Override
+    public Workbook getWorkbook(String fileName, File zohoEmployeesFile) {
+		Workbook workbook = null;
+		try (FileInputStream fis = new FileInputStream(zohoEmployeesFile)) {
+
+		    if (fileName.endsWith(".xls")) {
+		        workbook = new HSSFWorkbook(fis); // For .xls
+		    } else if (fileName.endsWith(".xlsx")) {
+		        workbook = new XSSFWorkbook(fis); // For .xlsx
+		    }
+		} catch (Exception e) {
+		    log.error("unable to get workbook -- " + e.getMessage());
+		}
+		return workbook;
+	}
+    
+    @Override
     public Map<String, Map<String, Object>> readExcelSheet(Sheet worksheet) {
 		log.info("inside readExcelSheet");
 		Iterator<Row> iterator = worksheet.iterator();
@@ -507,15 +524,15 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 	}
     
     private Object getCellValue(Cell cell) {
-		if (CellType.STRING == cell.getCellTypeEnum()) {
+		if (CellType.STRING == cell.getCellType()) {
 			return cell.getStringCellValue();
-		} else if (CellType.NUMERIC == cell.getCellTypeEnum()) {
-			if (HSSFDateUtil.isCellDateFormatted(cell)) {
+		} else if (CellType.NUMERIC == cell.getCellType()) {
+			if (DateUtil.isCellDateFormatted(cell)) {
 				return cell.getDateCellValue();
 			} else {
 				return cell.getNumericCellValue();
 			}
-		} else if (CellType.BOOLEAN == cell.getCellTypeEnum()) {
+		} else if (CellType.BOOLEAN == cell.getCellType()) {
 			return cell.getBooleanCellValue();
 		}
 		return null;

@@ -1,6 +1,7 @@
 package com.ax.hrms.common.api.api;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,9 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import javax.portlet.ActionRequest;
+
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @author nivid.koradiya
@@ -40,4 +44,7 @@ public interface AxHrmsCommonApi {
                                     AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService,
                                     EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate);
     public Calendar setDateAndTime(String date,String time) ;
+	public Map<String, Map<String, Object>> readExcelSheet(Sheet worksheet);
+	public Workbook getWorkbook(String fileName, File zohoEmployeesFile);
+	public Workbook getWorkbook(InputStream inputStream, String excelFilePath);
     }

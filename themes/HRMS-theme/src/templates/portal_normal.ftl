@@ -50,11 +50,7 @@
 									</a>
 								</div>
 								<a id="toggle_btn" href="javascript:void(0);">
-									<span class="bar-icon">
-										<span></span>
-										<span></span>
-										<span></span>
-									</span>
+									<img class="bar-icon" src="${themeDisplay.getPathThemeImages()}/sidebar_arrow.png"" />
 								</a>
 							</div>
 							<div class="header_right">

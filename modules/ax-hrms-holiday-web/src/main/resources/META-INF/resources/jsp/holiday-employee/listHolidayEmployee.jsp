@@ -12,14 +12,15 @@
 
 <div class="card">
   <div class="card-header d-flex align-items-center justify-content-between">
-  <div>
-			<select class="form-control" id="selectedYear2" onchange="updateURLAndFetchData(this.id)">
-    <c:forEach items="${fullList}" var="year">
-        <c:if test="${year ne null and year ne ''}">
-            <option value="${year}" ${year eq selectedYear ? 'selected' : ''}>${year}</option>
-        </c:if>
-    </c:forEach>
-</select>
+  <div class="d-flex align-items-center c-gap-2">
+    <strong>Holiday</strong>
+	<select class="form-control" id="selectedYear2" onchange="updateURLAndFetchData(this.id)">
+        <c:forEach items="${fullList}" var="year">
+            <c:if test="${year ne null and year ne ''}">
+                <option value="${year}" ${year eq selectedYear ? 'selected' : ''}>${year}</option>
+            </c:if>
+        </c:forEach>
+    </select>
 </div>
 </div>
   <div class="card-body mb-0">

@@ -2,9 +2,11 @@ package com.ax.hrms.leave.management.web.constants;
 
 public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 
-	public static final String LIST_VIEW_LEAVE_REQUEST_JSP = "/jsp/ax-hrms-leave-management-hr/listLeaveRequest.jsp";
+	public static final String LIST_VIEW_LEAVE_REQUEST_JSP = "/jsp/ax-hrms-leave-management-manager/listLeaveRequest.jsp";
+    public static final String LIST_VIEW_LEAVE_REQUEST_JSP_HR = "/jsp/ax-hrms-leave-management-hr/listLeaveRequest.jsp";
 
 	public static final String VIEW_LEAVE_REQUEST_JSP = "/jsp/ax-hrms-leave-management-hr/viewLeaveRequest.jsp";
+    public static final String VIEW_LEAVE_REQUEST_JSP_MANAGER = "/jsp/ax-hrms-leave-management-manager/viewLeaveRequest.jsp";
 
 	public static final String DEFAULT_JSP = "/";
 	public static final String APPROVED = "Approved";

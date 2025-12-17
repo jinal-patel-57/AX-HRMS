@@ -116,6 +116,8 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 			"employeeType", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Double> stipend = createColumn(
 		"stipend", Double.class, Types.DOUBLE, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> managerId = createColumn(
+		"managerId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

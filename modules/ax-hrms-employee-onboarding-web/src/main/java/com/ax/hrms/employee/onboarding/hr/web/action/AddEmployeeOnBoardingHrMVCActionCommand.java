@@ -113,6 +113,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
     @Reference
     private RoleTypeContributorProvider roleTypeContributorProvider;
 
+
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -128,6 +129,9 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         String isProbationEnabled = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_PROBBATION_ENABLED);
         String insuranceLink = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.INSURANCE_LINK);
         String joiningDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.JOINING_DATE);
+        long managerId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.MANAGER);
+        System.out.println("manager id: " + managerId);
+        System.out.println("Selected Manager ID : " + managerId);
         String gender = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.GENDER);
         String[] designations = ParamUtil.getStringValues(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION);
         String[] departments = ParamUtil.getStringValues(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT);
@@ -136,6 +140,10 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         double grossSalaryCTCPA = ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.GROSS_SALARY_CTC_PA);
         String typeOfEmployee = ParamUtil.getString(actionRequest, "typeOfEmployee");
         double stipend = ParamUtil.getDouble(actionRequest, "stipend");
+
+
+
+
 
 
         EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
@@ -235,7 +243,15 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         employeeDetails.setCreatedBy(themeDisplay.getUserId());
         employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
         employeeDetails.setProbationStatusId(0);
-        if (typeOfEmployee.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN)) {
+        employeeDetails.setManagerId(managerId);
+        EmployeeDetails managerDetails =
+        employeeDetailsLocalService.getEmployeeDetails(managerId);
+        long managerUserId = managerDetails.getLrUserId();
+        assignRegularRole(managerUserId, themeDisplay.getCompanyId(), "Manager");
+//        public static void assignRegularRole(long userId, long companyId, String roleName) {
+
+
+            if (typeOfEmployee.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN)) {
             employeeDetails.setStipend(stipend);
         }
 
@@ -326,6 +342,22 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 //            }
 //        }
 //    }
+
+
+public static void assignRegularRole(long userId, long companyId, String roleName) {
+    try {
+        // Get role by name
+        Role role = RoleLocalServiceUtil.getRole(companyId, roleName);
+
+        // Assign the role to the user
+        UserLocalServiceUtil.addRoleUsers(role.getRoleId(), new long[]{userId});
+
+        System.out.println("Role assigned successfully: " + roleName);
+    } catch (PortalException e) {
+        e.printStackTrace();
+    }
+}
+
 private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
 
     List<LeaveTypeMaster> leaveTypeMasterList =

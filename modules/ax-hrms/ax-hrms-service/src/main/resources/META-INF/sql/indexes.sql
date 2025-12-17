@@ -45,6 +45,7 @@ create index IX_B835A06E on ax_EmployeeDetails (firstName[$COLUMN_LENGTH:75$], l
 create index IX_9163F673 on ax_EmployeeDetails (isTerminated);
 create index IX_8BF94020 on ax_EmployeeDetails (leavingDate);
 create index IX_3B591D32 on ax_EmployeeDetails (lrUserId);
+create index IX_E7C37C6 on ax_EmployeeDetails (managerId);
 create unique index IX_89E591C8 on ax_EmployeeDetails (uuid_[$COLUMN_LENGTH:75$], groupId);
 
 create unique index IX_ED50280D on ax_EmployeeDocument (uuid_[$COLUMN_LENGTH:75$], groupId);
@@ -132,6 +133,6 @@ create index IX_B1BC1331 on ax_UpcomingProbationEmployee (month, year);
 create unique index IX_85B23666 on ax_UpcomingProbationEmployee (uuid_[$COLUMN_LENGTH:75$], groupId);
 
 create index IX_3D180981 on ax_WorkFromHome (startDate, endDate);
-create index IX_BE38EB2E on ax_WorkFromHome (status[$COLUMN_LENGTH:75$]);
-create index IX_C72A168 on ax_WorkFromHome (userId, status[$COLUMN_LENGTH:75$]);
+create index IX_BE38EB2E on ax_WorkFromHome (status);
+create index IX_C72A168 on ax_WorkFromHome (userId, status);
 create unique index IX_B0B0D9BE on ax_WorkFromHome (uuid_[$COLUMN_LENGTH:75$], groupId);

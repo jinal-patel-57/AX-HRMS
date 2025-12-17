@@ -20,6 +20,7 @@ AUI().ready(function () {
   
   $(".header #toggle_btn").click(function () {
     $("body").toggleClass('collapsedMenu');
+    $(this).toggleClass("active");
   });
   
   sidebarNavigation();

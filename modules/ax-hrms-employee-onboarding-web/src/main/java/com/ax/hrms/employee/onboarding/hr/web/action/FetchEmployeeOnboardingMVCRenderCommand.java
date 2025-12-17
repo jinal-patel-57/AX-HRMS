@@ -144,6 +144,32 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DEPARTMENTLIST, employeeDepratmentList);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_SALARY, employeeSalary);
 
+
+            List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
+            List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
+
+            for(EmployeeDetails employeeDetail : listOfEmployeeDetails) {
+
+                try {
+                    long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE).getRoleId();
+                    long[] userRoles = userLocalService.getUserById(employeeDetail.getLrUserId()).getRoleIds();
+                    for(long userRole : userRoles) {
+                        if(userRole == employeeRoleId)
+                            listOfFilteredEmployeeDetails.add(employeeDetail);
+                    }
+                } catch (PortalException e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "+e.getMessage());
+                }catch (NullPointerException e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "+e.getMessage());
+                }catch(Exception e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
+                }
+
+            }
+
+            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DETAILS_LIST,listOfFilteredEmployeeDetails);
+
+
             List<Long> departmentIds = new ArrayList<>();
 
             for (EmployeeDepartment tempEmployeeDepartment : employeeDepartments) {

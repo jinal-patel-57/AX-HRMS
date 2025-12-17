@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 			"com.liferay.portlet.instanceable=false",
 			"javax.portlet.display-name=AxHrms HR Leave Management System Web",
 			"javax.portlet.init-param.template-path=/",
-			"javax.portlet.init-param.view-template="+AxHrmsHrLeaveManagementSystemWebPortletConstants.LIST_VIEW_LEAVE_REQUEST_JSP,
+			"javax.portlet.init-param.view-template="+AxHrmsHrLeaveManagementSystemWebPortletConstants.LIST_VIEW_LEAVE_REQUEST_JSP_HR,
 			"javax.portlet.name=" + AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
 			"javax.portlet.resource-bundle=content.Language",
 			"javax.portlet.security-role-ref=power-user,user"

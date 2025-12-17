@@ -531,7 +531,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @param status the status
 	 * @return the matching work from homes
 	 */
-	public java.util.List<WorkFromHome> findByStatus(String status);
+	public java.util.List<WorkFromHome> findByStatus(long status);
 
 	/**
 	 * Returns a range of all the work from homes where status = &#63;.
@@ -546,7 +546,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByStatus(
-		String status, int start, int end);
+		long status, int start, int end);
 
 	/**
 	 * Returns an ordered range of all the work from homes where status = &#63;.
@@ -562,7 +562,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the ordered range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -581,7 +581,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the ordered range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByStatus(
-		String status, int start, int end,
+		long status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator,
 		boolean useFinderCache);
@@ -595,7 +595,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public WorkFromHome findByStatus_First(
-			String status,
+			long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -608,7 +608,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the first matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public WorkFromHome fetchByStatus_First(
-		String status,
+		long status,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -621,7 +621,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public WorkFromHome findByStatus_Last(
-			String status,
+			long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -634,7 +634,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the last matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public WorkFromHome fetchByStatus_Last(
-		String status,
+		long status,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -648,7 +648,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a work from home with the primary key could not be found
 	 */
 	public WorkFromHome[] findByStatus_PrevAndNext(
-			long workFromHomeRequestId, String status,
+			long workFromHomeRequestId, long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -658,7 +658,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 *
 	 * @param status the status
 	 */
-	public void removeByStatus(String status);
+	public void removeByStatus(long status);
 
 	/**
 	 * Returns the number of work from homes where status = &#63;.
@@ -666,7 +666,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @param status the status
 	 * @return the number of matching work from homes
 	 */
-	public int countByStatus(String status);
+	public int countByStatus(long status);
 
 	/**
 	 * Returns all the work from homes where userId = &#63; and status = &#63;.
@@ -676,7 +676,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status);
+		long userId, long status);
 
 	/**
 	 * Returns a range of all the work from homes where userId = &#63; and status = &#63;.
@@ -692,7 +692,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end);
+		long userId, long status, int start, int end);
 
 	/**
 	 * Returns an ordered range of all the work from homes where userId = &#63; and status = &#63;.
@@ -709,7 +709,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the ordered range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -729,7 +729,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the ordered range of matching work from homes
 	 */
 	public java.util.List<WorkFromHome> findByUserIdAndStatus(
-		long userId, String status, int start, int end,
+		long userId, long status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator,
 		boolean useFinderCache);
@@ -744,7 +744,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public WorkFromHome findByUserIdAndStatus_First(
-			long userId, String status,
+			long userId, long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -758,7 +758,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the first matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public WorkFromHome fetchByUserIdAndStatus_First(
-		long userId, String status,
+		long userId, long status,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -772,7 +772,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a matching work from home could not be found
 	 */
 	public WorkFromHome findByUserIdAndStatus_Last(
-			long userId, String status,
+			long userId, long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -786,7 +786,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @return the last matching work from home, or <code>null</code> if a matching work from home could not be found
 	 */
 	public WorkFromHome fetchByUserIdAndStatus_Last(
-		long userId, String status,
+		long userId, long status,
 		com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 			orderByComparator);
 
@@ -801,7 +801,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @throws NoSuchWorkFromHomeException if a work from home with the primary key could not be found
 	 */
 	public WorkFromHome[] findByUserIdAndStatus_PrevAndNext(
-			long workFromHomeRequestId, long userId, String status,
+			long workFromHomeRequestId, long userId, long status,
 			com.liferay.portal.kernel.util.OrderByComparator<WorkFromHome>
 				orderByComparator)
 		throws NoSuchWorkFromHomeException;
@@ -812,7 +812,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @param userId the user ID
 	 * @param status the status
 	 */
-	public void removeByUserIdAndStatus(long userId, String status);
+	public void removeByUserIdAndStatus(long userId, long status);
 
 	/**
 	 * Returns the number of work from homes where userId = &#63; and status = &#63;.
@@ -821,7 +821,7 @@ public interface WorkFromHomePersistence extends BasePersistence<WorkFromHome> {
 	 * @param status the status
 	 * @return the number of matching work from homes
 	 */
-	public int countByUserIdAndStatus(long userId, String status);
+	public int countByUserIdAndStatus(long userId, long status);
 
 	/**
 	 * Returns all the work from homes where startDate = &#63; and endDate = &#63;.
