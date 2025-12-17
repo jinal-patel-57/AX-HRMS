@@ -28,6 +28,7 @@ import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,6 +41,7 @@ import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
@@ -200,6 +202,13 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             User user = userLocalService.getUser(employeeDetails.getLrUserId());
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_USER, user);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DETAIL, employeeDetails);
+            long managerId = employeeDetails.getManagerId();
+            String managerName = StringPool.BLANK;
+            if(Validator.isNotNull(managerId) && managerId>0) {
+            	EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(managerId);
+            	managerName = managerDetails.getFirstName() + managerDetails.getLastName() + "("+managerId+")";
+            }
+            renderRequest.setAttribute("managerName", managerName);
         } catch (PortalException e) {
             log.error("Error In EmployeeBasic Details" + e.getMessage());
         }
@@ -218,6 +227,8 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
         List<Country> countryList = CountryLocalServiceUtil.getCountries(-1, -1);
         List<EducationLevelMaster> educationLevelMastersList = educationLevelMasterLocalService.getEducationLevelMasters(-1, -1);
+        
+        
 
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST, educationLevelMastersList);

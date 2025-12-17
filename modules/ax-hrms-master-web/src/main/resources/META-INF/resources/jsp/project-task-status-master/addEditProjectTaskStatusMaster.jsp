@@ -26,30 +26,30 @@
         </div>
 
 
-        <div class="form-group">
-            <div class="form-check form-check-inline">
-                <input id="isApplicableForProject" class="form-check-input" type="checkbox"
-                    name="<portlet:namespace/>isApplicableForProject" 
-                    <c:if test="${projectTaskStatusMaster.isApplicableForProject}">
-                        checked
-                    </c:if>
-                />
-                <label class="form-check-label" for="isApplicableForProject">
-                    <liferay-ui:message key="is-applicable-for-project" />
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input id="isApplicableForTask" class="form-check-input" type="checkbox"
-                    name="<portlet:namespace/>isApplicableForTask" 
-                    <c:if test="${projectTaskStatusMaster.isApplicableForTask}">
-                        checked
-                    </c:if>
-                />
-                <label class="form-check-label" for="isApplicableForTask">
-                    <liferay-ui:message key="is-applicable-for-task" />
-                </label>
-            </div>
+        
+        <div class="form-group d-flex align-items-center">
+            <input id="isApplicableForProject" class="form-check-input" type="checkbox"
+                name="<portlet:namespace/>isApplicableForProject" 
+                <c:if test="${projectTaskStatusMaster.isApplicableForProject}">
+                    checked
+                </c:if>
+            />
+            <label class="ml-2 mb-0" for="isApplicableForProject">
+                <liferay-ui:message key="is-applicable-for-project" />
+            </label>
         </div>
+        <div class="form-group d-flex align-items-center">
+            <input id="isApplicableForTask" class="form-check-input" type="checkbox"
+                name="<portlet:namespace/>isApplicableForTask" 
+                <c:if test="${projectTaskStatusMaster.isApplicableForTask}">
+                    checked
+                </c:if>
+            />
+            <label class="ml-2 mb-0" for="isApplicableForTask">
+                <liferay-ui:message key="is-applicable-for-task" />
+            </label>
+        </div>
+        
         
 </div>
   <div class="card-footer text-right mb-0">

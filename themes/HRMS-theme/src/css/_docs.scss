@@ -272,9 +272,8 @@ span.collapsed_icon.active::before{transform: translateX(-50%) rotate(-135deg);}
 
 /*=== Login page overwrite styling ===*/
 
-.login-container {
-    width: 50%;
-}
+.login-container {width: 50%;}
+.login-container .panel-body{padding-left: 0;}
 
 /*=== Radio button overwrite styling ===*/
 
@@ -302,4 +301,12 @@ span.collapsed_icon.active::before{transform: translateX(-50%) rotate(-135deg);}
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.selected-options .selected-option{background-color: #893D9633; color: var(--text-primary); font-weight: 600;}
+.selected-options .selected-option button{color: #494949;}
+
+@media only screen and (max-width: 767px) {
+    .login-container {
+        width: 100%;
+    }
 }

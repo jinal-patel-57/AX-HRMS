@@ -60,12 +60,6 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
-                            <div class="label-name">Skype ID</div>
-                            <div class="label-content">${employeeDetail.skypeId}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
                             <div class="label-name">Father Name</div>
                             <div class="label-content">${employeeDetail.fatherName}</div>
                         </div>
@@ -100,6 +94,12 @@
                         <div class="form-group-view">
                             <div class="label-name">Gender</div>
                             <div class="label-content">${employeeDetail.gender}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Manager</div>
+                            <div class="label-content">${managerName}</div>
                         </div>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
 
         <div class="card">
             <div class="card-header">
-                <strong>Address Details</strong>
+                <strong>Education Details</strong>
             </div>
             <div class="card-body">
                 <c:forEach var="education" items="${educationList}">

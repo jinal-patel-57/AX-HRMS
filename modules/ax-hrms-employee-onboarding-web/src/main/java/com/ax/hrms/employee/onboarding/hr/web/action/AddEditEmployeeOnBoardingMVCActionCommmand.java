@@ -5,7 +5,8 @@
     import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
     import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
     import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
-    import com.ax.hrms.master.model.DepartmentMaster;
+import com.ax.hrms.exception.NoSuchEmployeeSalaryException;
+import com.ax.hrms.master.model.DepartmentMaster;
     import com.ax.hrms.master.model.DesignationMaster;
     import com.ax.hrms.master.service.DepartmentMasterLocalService;
     import com.ax.hrms.master.service.DesignationMasterLocalService;
@@ -178,28 +179,45 @@
 
 //                updateEmployeeWithManager(themeDisplay.getCompanyId(),employeeDetails,ParamUtil.getLong(actionRequest, "manager"),oldManagerId);
 
-                System.out.println("Above the updaation part ok ...................................1");
-
-                EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, false);
-                employeeSalary.setGrossSalaryCtcPa(grossSalaryCTCPA);
-                employeeSalary.setGrossSalaryCtcPm(grossSalaryCTCPM);
-                employeeSalaryLocalService.updateEmployeeSalary(employeeSalary);
-                System.out.println("Above the updaation part ok ...................................2");
+                log.info("Above the updaation part ok ...................................1");
+				try {
+					EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, false);
+	                
+	                log.info("employee salary -- " + employeeSalary);
+	                
+	                employeeSalary.setGrossSalaryCtcPa(grossSalaryCTCPA);
+	                employeeSalary.setGrossSalaryCtcPm(grossSalaryCTCPM);
+	                log.info("before update ");
+	                employeeSalaryLocalService.updateEmployeeSalary(employeeSalary);
+				} catch(NoSuchEmployeeSalaryException nsese) {
+					nsese.printStackTrace();
+				}
+                
+                log.info("Above the updaation part ok ...................................2");
 
                 User user = userLocalService.getUser(employeeDetails.getLrUserId());
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setMiddleName(middleName);
                 userLocalService.updateUser(user);
-                System.out.println("Above the updaation part ok ...................................3");
-
+                log.info("Above the updaation part ok ...................................3");
+                log.info("Above the updaation part ok ...................................3....");
 
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
-
+                log.info("Above the updaation part ok ...................................31.........");
                 for(DesignationMaster old:oldDesignationMasterList) {
-                     Role role = roleService.getRole(themeDisplay.getCompanyId(), old.getDesignationName());
-                     RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
+                	log.info("Above the updaation part ok ...................................32...... " + old.getDesignationName());
+                    try {
+                    	Role role = roleService.getRole(themeDisplay.getCompanyId(), old.getDesignationName());
+                        log.info("Above the updaation part ok ...................................33..................");
+                        RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
+                        log.info("Above the updaation part ok ...................................34............");
+                    }catch(PortalException e) {
+                    	log.error("Error while fetching designation role");
+                    } 
                 }
+                
+                log.info("Above the updaation part ok ...................................4");
 
                 DesignationMaster designationMaster;
                 try {
@@ -230,28 +248,30 @@
                 } catch (Exception e) {
                     log.error(e.getMessage());
                 }
+                log.info("Above the updaation part ok ...................................5");
 
                 List<DepartmentMaster> oldDepartmentMastersList = axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeId); // depratments already assigned to the employee
                 List<DepartmentMaster> recievedDepartmentMasterList = new ArrayList<>(); // departments coming from the request
                 List<DepartmentMaster> addedDepartmentMasterList = new ArrayList<>();
                 List<DepartmentMaster> removedDepartmentMasterList = new ArrayList<>();
-
+                log.info("Above the updaation part ok ...................................6");
                 for (long dId : departments) {
                     recievedDepartmentMasterList.add(departmentMasterLocalService.getDepartmentMaster(dId));
                 }
+                log.info("Above the updaation part ok ...................................7");
 
                 // Fill addedDepartmentMasterList
                 addedDepartmentMasterList.addAll(recievedDepartmentMasterList.stream()
                         .filter(received -> oldDepartmentMastersList.stream()
                                 .noneMatch(old -> old.getDepartmentMasterId() == (received.getDepartmentMasterId())))
                         .collect(Collectors.toList()));
-
+                log.info("Above the updaation part ok ...................................8");
                 // Fill removedDepartmentMasterList
                 removedDepartmentMasterList.addAll(oldDepartmentMastersList.stream()
                         .filter(old -> recievedDepartmentMasterList.stream()
                                 .noneMatch(received -> received.getDepartmentMasterId() == (old.getDepartmentMasterId())))
                         .collect(Collectors.toList()));
-
+                log.info("Above the updaation part ok ...................................9");
                 DepartmentMaster departmentMaster;
                 for (DepartmentMaster added : addedDepartmentMasterList) {
 
@@ -268,7 +288,7 @@
                      employeeDepartment.setStatus(true);
                      employeeDepartment.setDateOfChange(new Date());
                      employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
-
+                     log.info("Above the updaation part ok ...................................10");
                      employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
 
                      departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
@@ -276,11 +296,12 @@
                      Role newDesignationsRole = roleService.getRole(themeDisplay.getCompanyId(), newDepartmentName);
 
                     RoleLocalServiceUtil.addUserRole(employeeDetails.getLrUserId(), newDesignationsRole);
+                    log.info("Above the updaation part ok ...................................11");
 
                 }
 
                 for(DepartmentMaster delete:removedDepartmentMasterList ) {
-
+                	log.info("Above the updaation part ok ...................................12");
                     EmployeeDepartment employeeDepartment=employeeDepartmentLocalService.findByEmployeeIdAndStatusAndDepartmentMasterId(delete.getDepartmentMasterId(), true, employeeId);
                     employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
                      employeeDepartment.setCreatedBy(themeDisplay.getUserId());
@@ -292,21 +313,24 @@
                      employeeDepartment.setDateOfChange(new Date());
                      employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
                     employeeDepartmentLocalService.updateEmployeeDepartment(employeeDepartment);
-
+                    log.info("Above the updaation part ok ...................................13");
                     departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
                     String oldDepartmentName =departmentMaster.getDepartmentName();
 
                     Role role = roleService.getRole(themeDisplay.getCompanyId(), oldDepartmentName);
                     RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
+                    log.info("Above the updaation part ok ...................................14");
 
                 }
             }
-
+            log.info("Above the updaation part ok ...................................15");
             EmployeeBasicDetailsUtil employeeBasicDetailsUtil = new EmployeeBasicDetailsUtil();
+            log.info("Above the updaation part ok ...................................16");
             employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
-            System.out.println("Above the updaation part ok ...................................");
+            log.info("Above the updaation part ok ...................................17");
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+            log.info("Above the updaation part ok ...................................18");
         }
 
 
