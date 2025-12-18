@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -119,6 +120,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 	}
 
 	public void addRole(String departmentName, ActionRequest actionRequest) throws PortalException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		try {
 			Map<Locale, String> titleMap = localization.getLocalizationMap(actionRequest, departmentName);
 
@@ -132,7 +134,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 
 			RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
 
-			roleService.addRole("", roleTypeContributor.getClassName(), 0, departmentName, titleMap, descriptionMap, type,null, serviceContext);
+			RoleLocalServiceUtil.addRole("", themeDisplay.getUserId(), roleTypeContributor.getClassName(), 0, departmentName, titleMap, descriptionMap, type,null, serviceContext);
 		} catch (Exception e) {
 			log.error("error while add role ===>" + e.getMessage());
 		}
@@ -150,7 +152,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 
 			Role role = roleService.getRole(themeDisplay.getCompanyId(), olddepartmentName);
 
-			roleService.updateRole(role.getRoleId(), newDepartmentName, titleMap, descriptionMap, null, serviceContext);
+			RoleLocalServiceUtil.updateRole(role.getRoleId(), newDepartmentName, titleMap, descriptionMap, null, serviceContext);
 		} catch (Exception e) {
 			log.error("error while add role ===>" + e.getMessage());
 		}
