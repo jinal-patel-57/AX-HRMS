@@ -5,7 +5,6 @@ import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.web.constants.AxHrmsDesignationMasterWebPortletConstants;
 import com.ax.hrms.master.web.constants.AxHrmsDesignationMasterWebPortletKeys;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -13,13 +12,13 @@ import com.liferay.portal.kernel.model.*;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.*;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -161,7 +160,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 		Map<Locale, String> descriptionMap = localization.getLocalizationMap(actionRequest, "description");
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Role.class.getName(), actionRequest);
-
+		
 		int type = ParamUtil.getInteger(actionRequest, "roleType", RoleConstants.TYPE_REGULAR);
 
 		RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
@@ -169,12 +168,12 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 			log.info("in try --" + roleName);
 			Role role = roleService.getRole(themeDisplay.getCompanyId(),roleName);
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
-			roleService.updateRole(role.getRoleId(),roleName,titleMap,descriptionMap,null,serviceContext);
+			RoleLocalServiceUtil.updateRole(role.getRoleId(),roleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
 			log.info("in catch  -- " + roleName);
 			try {
-				Role role = roleService.addRole("", roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
-				log.info("after role  -- " + role.getName());
+				 Role role = RoleLocalServiceUtil.addRole("", themeDisplay.getUserId(), roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
+				 log.info("role -- " + role.getName());
 			}catch(PortalException e) {
 				e.printStackTrace();
 			}
@@ -190,7 +189,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 		Map<Locale, String> descriptionMap = localization.getLocalizationMap(actionRequest, "description");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Role.class.getName(), actionRequest);
-
+		
 		int type = ParamUtil.getInteger(actionRequest, "roleType", RoleConstants.TYPE_REGULAR);
 
 		RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
@@ -199,7 +198,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
 			roleService.updateRole(role.getRoleId(),newRoleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
-			roleService.addRole("", roleTypeContributor.getClassName(), 0, newRoleName, titleMap, descriptionMap, type, null, serviceContext);
+			RoleLocalServiceUtil.addRole("", themeDisplay.getUserId(), roleTypeContributor.getClassName(), 0, newRoleName, titleMap, descriptionMap, type, null, serviceContext);
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());
 		}
 	}
