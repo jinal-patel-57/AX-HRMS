@@ -161,17 +161,9 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		
 		zohoEmployeeMap.forEach((outerKey, innerMap) -> {
 			try {
-				
-			
 				log.info("Outer: " + outerKey);
 			    if(!"0".equalsIgnoreCase(outerKey)) {
-			    	
-			    	
 			    	log.info("innerMap -- " + innerMap);
-			    	
-			    	
-			    	
-			    	
 			    	
 			    	EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
 			        // converting role names into role IDS
@@ -301,12 +293,11 @@ public class ImportEmployeesUtility extends MVCPortlet {
 	}
 
 	private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay, String leaveCount, String typeOfLeave) {
-
 		
 		Calendar todayCal = Calendar.getInstance();
 	    int currentYear = todayCal.get(Calendar.YEAR);
 		
-	    if(Validator.isNotNull(leaveCount) && !leaveCount.isBlank() && !leaveCount.equalsIgnoreCase("-")) {
+	    if(Validator.isNotNull(leaveCount) && !leaveCount.isBlank()) {
 	    	LeaveTypeMaster leaveTypeMaster;
 			try {
 				log.info("type of leave -- " + typeOfLeave);
@@ -324,11 +315,28 @@ public class ImportEmployeesUtility extends MVCPortlet {
 				lb.setYear(currentYear);
 				lb.setNoOfUsedLeaves(0);
 				
-				lb.setNoOfRemainingLeaves(Double.valueOf(leaveCount));
+				String leaveValue = Validator.isNull(leaveCount) ? "" : leaveCount.trim();
+
+				double remainingLeaves = 0.0;
+
+				log.info("leaveValue -- " + leaveValue);
+				if (!leaveValue.isEmpty() && !"-".equals(leaveValue)) {
+				    try {
+				        double count = Double.parseDouble(leaveValue);
+				        if (count > 0) {
+				            remainingLeaves = count;
+				        }
+				    } catch (NumberFormatException e) {
+				        log.error("NumberFormatException -- " + e.getMessage());
+				    }
+				}
+				log.info("remainingLeaves -- " + remainingLeaves);
+
+				lb.setNoOfRemainingLeaves(remainingLeaves);
 				
 				leaveBalanceLocalService.addLeaveBalance(lb);
 			} catch (NoSuchLeaveTypeMasterException e) {
-				e.printStackTrace();
+				log.error("NoSuchLeaveTypeMasterException -- " + e.getMessage());
 			}
 	    } else {
 	    	log.info("Blank leave -- " + leaveCount);
