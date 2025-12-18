@@ -83,7 +83,7 @@
 //        System.out.println("Employees: " + employeesUnderManager);
 //
 ////
-////        // 3️⃣ Fetch leave requests for all employees under this manager
+////        //  Fetch leave requests for all employees under this manager
 ////        List<LeaveRequest> managerLeaveList = new ArrayList<>();
 ////        for (EmployeeDetails emp : employeesUnderManager) {
 ////            long empId = emp.getEmployeeId();
@@ -180,7 +180,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         List<LeaveRequestDto> leaveRequestDtoList = new ArrayList<>();
 
         // ===========================================
-        // 1️⃣ GET EMPLOYEE ID FROM LR USER ID (returns List<BigInteger>)
+        //  GET EMPLOYEE ID FROM LR USER ID (returns List<BigInteger>)
         // ===========================================
         List<Long> empIdList = employeeDetailsLocalService.getEmployeeIdByLruserid(lrUserId);
 
@@ -203,7 +203,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         log.info("Manager Employee ID resolved = " + managerEmployeeId);
 
         // ===========================================
-        // 2️⃣ GET EMPLOYEES UNDER THIS MANAGER
+        // GET EMPLOYEES UNDER THIS MANAGER
         // ===========================================
         List<EmployeeDetails> employeesUnderManager =
                 employeeDetailsLocalService.findByManagerId(managerEmployeeId);
@@ -212,7 +212,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         log.info("Employee List: " + employeesUnderManager);
 
         // ===========================================
-        // 3️⃣ FETCH LEAVE REQUESTS FOR ALL EMPLOYEES
+        // FETCH LEAVE REQUESTS FOR ALL EMPLOYEES
         // ===========================================
         List<LeaveRequest> managerLeaveList = new ArrayList<>();
         List<LeaveWithEmployeeDTO> finalList = new ArrayList<>();

@@ -119,7 +119,6 @@ public class EditLeaveBalanceMVCActionCommand extends BaseMVCActionCommand {
             leaveBalanceLocalService.addLeaveBalance(lb);
         }
         SessionMessages.add(actionRequest,"leave-updated");
-        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
     }
 }

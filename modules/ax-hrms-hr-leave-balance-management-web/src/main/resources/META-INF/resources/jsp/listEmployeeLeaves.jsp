@@ -101,6 +101,7 @@
 </div>
 
 <script>
+ $('#employeeSelect').val('${employeeId}');
     // Prevent negative leave value submission (inline error)
     $(document).on('submit', 'form[action="${updateLeaveBalanceURL}"]', function (e) {
 

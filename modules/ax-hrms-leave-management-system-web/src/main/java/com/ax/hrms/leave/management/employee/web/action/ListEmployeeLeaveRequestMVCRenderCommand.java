@@ -78,7 +78,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,1);
-        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long userId = themeDisplay.getUserId();

@@ -347,7 +347,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //
 //            try {
 //                System.out.println("==============================================");
-//                System.out.println("🔄 Starting Manager Update Logic");
+//                System.out.println(" Starting Manager Update Logic");
 //                System.out.println("Company ID      : " + companyId);
 //                System.out.println("Employee ID     : " + employeeDetails.getEmployeeId());
 //                System.out.println("Old Manager ID  : " + oldManagerId);
@@ -362,7 +362,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //                System.out.println("✔ Manager Role ID fetched: " + managerRoleId);
 //
 //                // ================================================================
-//                // 1️⃣ CHECK NEW MANAGER — GIVE MANAGER ROLE IF NOT ALREADY HAS
+//                //  CHECK NEW MANAGER — GIVE MANAGER ROLE IF NOT ALREADY HAS
 //                // ================================================================
 //                EmployeeDetails newManagerDetails =
 //                        employeeDetailsLocalService.fetchEmployeeDetailsByLrUserId(newManagerId);
@@ -384,7 +384,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //                }
 //
 //                // ================================================================
-//                // 2️⃣ ASSIGN EMPLOYEE TO NEW MANAGER
+//                //  ASSIGN EMPLOYEE TO NEW MANAGER
 //                // ================================================================
 //                System.out.println("Updating employee’s managerId to → " + newManagerId);
 //                employeeDetails.setManagerId(newManagerId);
@@ -393,7 +393,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //                System.out.println("✔ Employee updated with new manager successfully.");
 //
 //                // ================================================================
-//                // 3️⃣ CHECK OLD MANAGER — REMOVE MANAGER ROLE IF NO EMPLOYEES LEFT
+//                //  CHECK OLD MANAGER — REMOVE MANAGER ROLE IF NO EMPLOYEES LEFT
 //                // ================================================================
 //                if (oldManagerId > 0 && oldManagerId != newManagerId) {
 //
@@ -422,7 +422,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //                        if (oldManagerHasRole) {
 //                            userLocalService.deleteRoleUser(managerRoleId, oldManagerUserId);
 //
-//                            System.out.println("❌ Manager role removed from OLD manager (ID: " + oldManagerUserId + ")");
+//                            System.out.println(" Manager role removed from OLD manager (ID: " + oldManagerUserId + ")");
 //                        } else {
 //                            System.out.println("✔ OLD manager already does NOT have manager role.");
 //                        }
@@ -436,7 +436,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 //                System.out.println("==============================================");
 //
 //            } catch (Exception e) {
-//                System.out.println("❌ ERROR OCCURRED IN updateEmployeeWithManager()");
+//                System.out.println(" ERROR OCCURRED IN updateEmployeeWithManager()");
 //                e.printStackTrace();
 //            }
 //        }

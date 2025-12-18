@@ -75,7 +75,7 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse)  {
 		int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
 
 		int totalLeaveRequest = leaveRequestLocalService.getLeaveRequestsCount();
 		int totalPageContainer = (totalLeaveRequest + deltaValue - 1) / deltaValue;

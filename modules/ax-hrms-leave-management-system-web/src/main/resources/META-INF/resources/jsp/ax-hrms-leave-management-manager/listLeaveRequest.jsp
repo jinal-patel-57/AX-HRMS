@@ -12,7 +12,7 @@
 
         <liferay-ui:search-container
                 total="${fn:length(managerLeaves)}"
-                delta="10"
+                delta="20"
                 emptyResultsMessage="No leave requests found">
 
             <liferay-ui:search-container-results results="${managerLeaves}" />
