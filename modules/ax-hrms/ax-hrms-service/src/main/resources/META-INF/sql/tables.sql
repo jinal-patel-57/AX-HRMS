@@ -7,9 +7,9 @@ create table ax_Address (
 	createDate DATE null,
 	modifiedDate DATE null,
 	addressId LONG not null primary key,
-	line1 VARCHAR(75) null,
-	line2 VARCHAR(75) null,
-	line3 VARCHAR(75) null,
+	line1 VARCHAR(500) null,
+	line2 VARCHAR(500) null,
+	line3 VARCHAR(500) null,
 	state_ VARCHAR(75) null,
 	country LONG,
 	pincode VARCHAR(75) null

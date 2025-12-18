@@ -441,7 +441,6 @@
         <column name="modifiedDate" type="Date"/>
 
         <!-- PK fields -->
-
         <column name="salaryId" primary="true" type="long"/>
 
         <!-- Other fields -->

@@ -10,9 +10,15 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="addressId" type="long" />
-		<field name="line1" type="String" />
-		<field name="line2" type="String" />
-		<field name="line3" type="String" />
+		<field name="line1" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="line2" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="line3" type="String">
+			<hint name="max-length">500</hint>
+		</field>
 		<field name="state" type="String" />
 		<field name="country" type="long" />
 		<field name="pincode" type="String" />

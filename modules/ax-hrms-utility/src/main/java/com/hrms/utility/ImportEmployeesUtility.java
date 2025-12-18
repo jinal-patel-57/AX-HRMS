@@ -10,11 +10,15 @@ import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.master.service.ProbationStatusMasterLocalService;
+import com.ax.hrms.model.Address;
+import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeDepartment;
 import com.ax.hrms.model.EmployeeDesignation;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.EmployeeSalary;
 import com.ax.hrms.model.LeaveBalance;
+import com.ax.hrms.service.AddressLocalService;
+import com.ax.hrms.service.EmployeeAddressLocalService;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -119,6 +123,12 @@ public class ImportEmployeesUtility extends MVCPortlet {
 
     @Reference
     DepartmentMasterLocalService departmentMasterLocalService;
+    
+    @Reference
+	EmployeeAddressLocalService employeeAddressLocalService;
+
+	@Reference
+	AddressLocalService addressLocalService;
 
     @Reference
     DesignationMasterLocalService designationMasterLocalService;
@@ -161,17 +171,9 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		
 		zohoEmployeeMap.forEach((outerKey, innerMap) -> {
 			try {
-				
-			
 				log.info("Outer: " + outerKey);
 			    if(!"0".equalsIgnoreCase(outerKey)) {
-			    	
-			    	
 			    	log.info("innerMap -- " + innerMap);
-			    	
-			    	
-			    	
-			    	
 			    	
 			    	EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
 			        // converting role names into role IDS
@@ -250,7 +252,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			        employeeDetails.setModifiedDate(new Date());
 			        employeeDetails.setLrUserId(userId);
 			        employeeDetails.setJoiningDate(joiningDateParsed);
-			        employeeDetails.setEmployeeCode(innerMap.get("11").toString());
+			        employeeDetails.setEmployeeCode(innerMap.get("13").toString());
 			        employeeDetails.setFirstName(innerMap.get("2").toString());
 			        employeeDetails.setLastName(innerMap.get("3").toString());
 			        employeeDetails.setOfficialEmail(innerMap.get("4").toString());
@@ -274,19 +276,48 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		            employeeDetails.setInsuranceLink(StringPool.BLANK);
 		            
 			        employeeDetails.setEmployeeType("Permanent");
-	
-			        //adding probation status
+			        
+			        Address address = addressLocalService.createAddress(CounterLocalServiceUtil.increment(Address.class.getName()));
+			        address.setCompanyId(themeDisplay.getCompanyId());
+					address.setGroupId(themeDisplay.getScopeGroupId());
+					address.setCreatedBy(themeDisplay.getUserId());
+					address.setModifiedBy(themeDisplay.getUserId());
+					address.setLine1(innerMap.get("11").toString());
+					addressLocalService.addAddress(address);
+					EmployeeAddress employeeAddress = employeeAddressLocalService.createEmployeeAddress(CounterLocalServiceUtil.increment(EmployeeAddress.class.getName()));
+					
+					employeeAddress.setCompanyId(themeDisplay.getCompanyId());
+					employeeAddress.setGroupId(themeDisplay.getScopeGroupId());
+					employeeAddress.setCreatedBy(themeDisplay.getUserId());
+					employeeAddress.setModifiedBy(themeDisplay.getUserId());
+					employeeAddress.setPermanentAddress(address.getAddressId());
+					employeeAddress.setPresentAddress(address.getAddressId());
+					employeeAddress.setPresentPermanentSame(true);
+					employeeAddress.setStatus(true);
+					employeeAddress.setEmployeeId(employeeDetails.getEmployeeId());
+					
+					employeeAddressLocalService.addEmployeeAddress(employeeAddress);
+
+					employeeDetails.setEmployeeAddressId(employeeAddress.getEmployeeAddressId());
+					
+
+					boolean isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
+					employeeDetails.setMaritalStatus(isMarried);
+					
+			        
+					
+					//adding probation status
 		            employeeDetails.setProbationStatusId(probationStatusMasterLocalService.findByProbationStatusName("Completed").getProbationStatusMasterId());
 		            employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
 			        
 			        sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
 			        
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("12").toString(), "Earned Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("13").toString(), "Loyalty Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Paternity Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Personal Floater");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Compensatory Off");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Festival Floater");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Earned Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Loyalty Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Paternity Leave");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Personal Floater");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString(), "Compensatory Off");
+			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString(), "Festival Floater");
 			        
 			    }
 			} catch (Exception e) {
@@ -301,12 +332,11 @@ public class ImportEmployeesUtility extends MVCPortlet {
 	}
 
 	private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay, String leaveCount, String typeOfLeave) {
-
 		
 		Calendar todayCal = Calendar.getInstance();
 	    int currentYear = todayCal.get(Calendar.YEAR);
 		
-	    if(Validator.isNotNull(leaveCount) && !leaveCount.isBlank() && !leaveCount.equalsIgnoreCase("-")) {
+	    if(Validator.isNotNull(leaveCount) && !leaveCount.isBlank()) {
 	    	LeaveTypeMaster leaveTypeMaster;
 			try {
 				log.info("type of leave -- " + typeOfLeave);
@@ -324,11 +354,28 @@ public class ImportEmployeesUtility extends MVCPortlet {
 				lb.setYear(currentYear);
 				lb.setNoOfUsedLeaves(0);
 				
-				lb.setNoOfRemainingLeaves(Double.valueOf(leaveCount));
+				String leaveValue = Validator.isNull(leaveCount) ? "" : leaveCount.trim();
+
+				double remainingLeaves = 0.0;
+
+				log.info("leaveValue -- " + leaveValue);
+				if (!leaveValue.isEmpty() && !"-".equals(leaveValue)) {
+				    try {
+				        double count = Double.parseDouble(leaveValue);
+				        if (count > 0) {
+				            remainingLeaves = count;
+				        }
+				    } catch (NumberFormatException e) {
+				        log.error("NumberFormatException -- " + e.getMessage());
+				    }
+				}
+				log.info("remainingLeaves -- " + remainingLeaves);
+
+				lb.setNoOfRemainingLeaves(remainingLeaves);
 				
 				leaveBalanceLocalService.addLeaveBalance(lb);
 			} catch (NoSuchLeaveTypeMasterException e) {
-				e.printStackTrace();
+				log.error("NoSuchLeaveTypeMasterException -- " + e.getMessage());
 			}
 	    } else {
 	    	log.info("Blank leave -- " + leaveCount);

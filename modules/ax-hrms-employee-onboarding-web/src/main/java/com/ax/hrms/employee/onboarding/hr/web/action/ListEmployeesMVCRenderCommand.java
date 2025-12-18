@@ -2,13 +2,13 @@ package com.ax.hrms.employee.onboarding.hr.web.action;
 
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
-import com.ax.hrms.master.service.ProjectTaskStatusMasterLocalServiceUtil;
 import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.service.EmployeeDepartmentLocalServiceUtil;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import org.osgi.service.component.annotations.Component;
@@ -29,11 +29,15 @@ import javax.portlet.RenderResponse;
 )
 public class ListEmployeesMVCRenderCommand implements MVCRenderCommand {
 
-    @Reference
+	private Log log = LogFactoryUtil.getLog(ListEmployeesMVCRenderCommand.class);
+    
+	@Reference
     EmployeeDetailsLocalService employeeDetailsLocalService;
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-
+    	
+    	log.info("ListEmployeesMVCRenderCommand --");
+    	
         PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
         SearchContainer<EmployeeDetails> customerOrderSearchContainer = new SearchContainer<>(renderRequest, iteratorURL,
                 null, StringPool.BLANK); // New search container
@@ -42,6 +46,8 @@ public class ListEmployeesMVCRenderCommand implements MVCRenderCommand {
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ON_BOARDING_HR_SC, customerOrderSearchContainer);
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.COUNT, EmployeeDetailsLocalServiceUtil.getEmployeeDetailsesCount());
         // END setting search container
+        
+        log.info("before jsp --");
 
         return AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ON_BOARDING_HR_LIST_JSP;
     }
