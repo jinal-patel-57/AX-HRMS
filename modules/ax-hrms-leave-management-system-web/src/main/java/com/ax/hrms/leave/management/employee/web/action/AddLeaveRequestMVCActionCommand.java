@@ -1,19 +1,18 @@
 package com.ax.hrms.leave.management.employee.web.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.exception.NoSuchLeaveBalanceException;
 import com.ax.hrms.leave.management.employee.web.util.LeaveRequestUtil;
-import com.ax.hrms.leave.management.hr.web.util.AxHrmsHrLeaveRequestWebUtil;
+import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemWebPortletConstants;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementWebPortletConstants;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.service.DepartmentMasterLocalService;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.*;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.LeaveBalanceLocalService;
-import com.ax.hrms.service.LeaveDayTypeLocalService;
-import com.ax.hrms.service.LeaveInformToTeamDetailLocalService;
-import com.ax.hrms.service.LeaveRequestLocalService;
-
+import com.ax.hrms.service.*;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -27,10 +26,12 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,24 +40,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author krish.moradiya
  * @implNote : Add Leave Request in leave balance and other...
  */
-@Component(
-        immediate = true,
-        property = {
-                "javax.portlet.name=" + AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_EMPLOYEE_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
-                "mvc.command.name=" + AxHrmsLeaveManagementWebPortletConstants.ADD_LEAVE_REQUEST_MVC_COMMAND_NAME
-        },
-        service = MVCActionCommand.class
-)
+@Component(immediate = true, property = {"javax.portlet.name=" + AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_EMPLOYEE_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET, "mvc.command.name=" + AxHrmsLeaveManagementWebPortletConstants.ADD_LEAVE_REQUEST_MVC_COMMAND_NAME}, service = MVCActionCommand.class)
 
 public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
@@ -77,6 +65,22 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
     private LeaveBalanceLocalService leaveBalanceLocalService;
     @Reference
     NotificationTemplateConfiguration notificationTemplateConfiguration;
+    @Reference
+    MailTemplateConfiguration mailTemplateConfiguration;
+    @Reference
+    AxHrmsCommonApi axHrmsCommonApi;
+    @Reference
+    DepartmentMasterLocalService departmentMasterLocalService;
+
+    @Reference
+    DesignationMasterLocalService designationMasterLocalService;
+
+    @Reference
+    EmployeeDepartmentLocalService employeeDepartmentLocalService;
+
+    @Reference
+    EmployeeDesignationLocalService employeeDesignationLocalService;
+
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -85,28 +89,43 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         long companyId = themeDisplay.getCompanyId();
         String roleName = "HR Admin";
 
-        Role role =RoleLocalServiceUtil.fetchRole(companyId, roleName);
-        List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
-        for (User user : users) {
-            System.out.println("User: " + user.getFullName() + " | Email: " + user.getEmailAddress());
-        }
+
         super.hideDefaultErrorMessage(actionRequest);
         super.hideDefaultSuccessMessage(actionRequest);
 
         long leaveRequestId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
-
+        log.info("leaveRequestId: " + leaveRequestId);
         LeaveRequest leaveRequest = setLeaveRequestData(actionRequest, leaveRequestId);
-
+        log.info("leaveRequest = " + leaveRequest);
         if (leaveRequest != null) {
             try {
                 addLeaveRequestData(actionRequest, leaveRequest);
                 SessionMessages.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_INSERTED_MESSAGE_KEY);
+
+
+
+
                 EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
-                EmployeeDetails manager=employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
-                String managerNotification =notificationTemplateConfiguration.leaveRequestedNotificationToManager();
+                EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
+                String managerNotification = notificationTemplateConfiguration.leaveRequestedNotificationToManager();
                 LeaveRequestUtil.sendNotificationToManager(managerNotification, manager);
+                Role role = RoleLocalServiceUtil.fetchRole(companyId, roleName);
+                List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
+                String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+                String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+                StringBuilder employeeMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
+                LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), manager.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+
+                for (User user : users) {
+                    log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                    EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                    log.info("Employee Id: " + employeeDetails.toString());
+                    LeaveRequestUtil.sendNotificationToManager(managerNotification, employeeDetails);
+                    LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), employeeDetails.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                }
 
             } catch (Exception e) {
+                log.info("exception raised ::::   " + e.getMessage());
                 SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY);
             }
         } else {
@@ -125,12 +144,12 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
         boolean updateLeaveStatus = false;
 
-
+        log.info("reach here....");
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long employeeId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE_ID_PARAM_NAME, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
         String reason = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.REASON, null);
         long leaveTypeMasterId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_TYPE, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
-
+        log.info("leaveTypeMasterId:------------------------------> " + leaveTypeMasterId);
         DateFormat dateFormat = new SimpleDateFormat(AxHrmsLeaveManagementWebPortletConstants.LIFERAY_DB_DATETIME_FORMAT);
         String start = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.START_DATE);
         String end = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.END_DATE);
@@ -143,7 +162,6 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } catch (ParseException e1) {
             log.info("AddEditLeaveRequestMVCActionCommand >>> setLeaveRequestData ::: Exception: " + e1.getMessage());
         }
-
 
         Date[] leaveDatesArray = getDatesBetween(startDate, endDate);
         int[] leaveDates = new int[leaveDatesArray.length];
@@ -163,6 +181,14 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } else {
             leaveRequest = leaveRequestLocalService.createLeaveRequest(CounterLocalServiceUtil.increment(LeaveRequest.class.getName()));
             leaveRequest.setCreatedBy(themeDisplay.getUserId());
+            long companyId = themeDisplay.getCompanyId();
+            String roleName = "HR Admin";
+            log.info("leaveRequestId: " + leaveRequest.getLeaveRequestId());
+            EmployeeDetails employee = null;
+
+
+
+
         }
         try {
             if (leaveRequest != null) {
@@ -186,10 +212,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } catch (Exception e) {
             log.error("AddEditLeaveRequestMVCActionCommand >>> setLeaveRequestData (MVCActionCommand) ::: Exception is: " + e.getMessage());
         }
-        if (updateLeaveStatus)
-            return leaveRequest;
-        else
-            return null;
+        if (updateLeaveStatus) return leaveRequest;
+        else return null;
     }
 
     public static Date[] getDatesBetween(Date startDate, Date endDate) {
@@ -201,8 +225,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         while (calendar.getTime().compareTo(endDate) < 0 || calendar.getTime().compareTo(endDate) == 0) {
             Date result = calendar.getTime();
 
-            if (calendar.getTime().getDay() != 6 && calendar.getTime().getDay() != 0)
-                datesBetween.add(result);
+            if (calendar.getTime().getDay() != 6 && calendar.getTime().getDay() != 0) datesBetween.add(result);
 
             calendar.add(Calendar.DATE, 1);
         }
@@ -214,10 +237,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         LeaveDayType leaveDayType = null;
         for (int i : leaveDates) {
             String actualDate = "";
-            if (i / 10 == 0)
-                actualDate = "0" + i;
-            else
-                actualDate = "" + i;
+            if (i / 10 == 0) actualDate = "0" + i;
+            else actualDate = "" + i;
 
             leaveDayType = leaveDayTypeLocalService.createLeaveDayType(CounterLocalServiceUtil.increment(LeaveDayType.class.getName()));
             String dateString = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.DAY + actualDate + AxHrmsLeaveManagementWebPortletConstants.DATE);
@@ -274,10 +295,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         List<LeaveDayType> listOfLeaveDayType = leaveDayTypeLocalService.findByLeaveRequestId(leaveRequestId);
         int noOfHoursInLeaveDayType = 0;
         for (LeaveDayType leaveDayTypeTemp : listOfLeaveDayType) {
-            if (leaveDayTypeTemp.getIsHalfDay())
-                noOfHoursInLeaveDayType += 4;
-            else
-                noOfHoursInLeaveDayType += 8;
+            if (leaveDayTypeTemp.getIsHalfDay()) noOfHoursInLeaveDayType += 4;
+            else noOfHoursInLeaveDayType += 8;
         }
         LeaveBalance leaveBalance = null;
 

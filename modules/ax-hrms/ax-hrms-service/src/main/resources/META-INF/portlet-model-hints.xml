@@ -693,7 +693,7 @@
 		<field name="month" type="int" />
 		<field name="year" type="int" />
 	</model>
-	<model name="com.ax.hrms.model.WorkFromHome">
+	<model name="com.ax.hrms.model.WorkFromHomeRequest">
 		<field name="uuid" type="String" />
 		<field name="companyId" type="long" />
 		<field name="createdBy" type="long" />
@@ -702,7 +702,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="workFromHomeRequestId" type="long" />
-		<field name="userId" type="long" />
+		<field name="employeeId" type="long" />
 		<field name="reviewerId" type="long" />
 		<field name="teamMailId" type="String" />
 		<field name="status" type="long" />

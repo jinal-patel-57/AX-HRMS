@@ -212,9 +212,11 @@
 
 package com.ax.hrms.work.from.home.web.hr.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.WorkFromHome;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
@@ -226,9 +228,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -260,6 +264,13 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
     @Reference
     private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
 
+
+    @Reference
+    EmployeeDetailsLocalService employeeDetailsLocalService;
+
+    @Reference
+    AxHrmsCommonApi axHrmsCommonApi;
+
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
 
@@ -269,26 +280,66 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
             // Pagination parameters
             int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
             int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
+            int start = (curValue - 1) * deltaValue;
+            int end = start + deltaValue;
 
             log.info("Pagination - Current Page: " + curValue + ", Delta: " + deltaValue);
+            List<WorkFromHome> wfhList = new ArrayList<>();
+            int totalWFHRequests = 0;
+//            int totalWFHRequests = workFromHomeLocalService.getWorkFromHomesCount();
+//            log.info("Total WFH Requests found: " + totalWFHRequests);
 
-            int totalWFHRequests = workFromHomeLocalService.getWorkFromHomesCount();
-            log.info("Total WFH Requests found: " + totalWFHRequests);
+//            int totalPageContainer = (totalWFHRequests + deltaValue - 1) / deltaValue;
 
-            int totalPageContainer = (totalWFHRequests + deltaValue - 1) / deltaValue;
+            ThemeDisplay themeDisplay =
+                    (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+            boolean isHRAdmin =
+                    axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+
+            boolean isManager =
+                    axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
+            long currentUserId = themeDisplay.getUserId();
+            log.info("Logged-in User ID: " + currentUserId);
+            log.info("Is HR Admin: " + isHRAdmin);
+            log.info("Is Manager: " + isManager);
+            if (isHRAdmin) {
+
+                // HR Admin → All Requests
+                totalWFHRequests = workFromHomeLocalService.getWorkFromHomesCount();
+                wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
+
+                log.info("HR Admin access → fetching all WFH requests");
+
+            } else if (isManager) {
+
+                // Manager → Only employees under this manager
+//                totalWFHRequests =
+//                        workFromHomeLocalService.getWorkFromHomesCountByManagerId(currentUserId);
+//                wfhList =
+//                        workFromHomeLocalService.getWorkFromHomesByManagerId(
+//                                currentUserId, start, end);
+                log.info("Manager access → fetching WFH requests for managerId: " + currentUserId);
+
+            } else {
+
+                // Other roles → no access
+                log.warn("User has no permission to view WFH requests");
+            }
+            int totalPageContainer =
+                    (totalWFHRequests + deltaValue - 1) / deltaValue;
 
             if (curValue > totalPageContainer && totalPageContainer > 0) {
                 curValue = totalPageContainer;
                 log.warn("Current page exceeded number of pages. Reset to: " + curValue);
             }
 
-            int start = (curValue - 1) * deltaValue;
-            int end = start + deltaValue;
 
             log.info("Fetching records from index " + start + " to " + end);
 
+
+
             // Fetch WFH entities
-            List<WorkFromHome> wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
+//            List<WorkFromHome> wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
 
             if (wfhList == null || wfhList.isEmpty()) {
                 log.warn("No WFH records found for the given range.");
@@ -362,7 +413,7 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
         }
 
         log.info("===== Exiting ListWFHHRRenderCommand#render() =====");
-
-        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
+return null;
+//        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
     }
 }

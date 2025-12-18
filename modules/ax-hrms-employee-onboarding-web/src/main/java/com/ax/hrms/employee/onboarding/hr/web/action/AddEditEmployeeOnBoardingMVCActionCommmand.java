@@ -202,6 +202,8 @@ import com.ax.hrms.master.model.DepartmentMaster;
                 userLocalService.updateUser(user);
                 log.info("Above the updaation part ok ...................................3");
                 log.info("Above the updaation part ok ...................................3....");
+                log.info("Above the updaation part ok after iuser local service...................................3");
+
 
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
                 log.info("Above the updaation part ok ...................................31.........");
@@ -284,7 +286,6 @@ import com.ax.hrms.master.model.DepartmentMaster;
                      employeeDepartment.setModifiedDate(new Date());
                      employeeDepartment.setDepartmentMasterId(added.getDepartmentMasterId());
 
-
                      employeeDepartment.setStatus(true);
                      employeeDepartment.setDateOfChange(new Date());
                      employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
@@ -328,6 +329,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
             log.info("Above the updaation part ok ...................................16");
             employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
             log.info("Above the updaation part ok ...................................17");
+            log.info("Above the updation part ok ...................................");
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
             log.info("Above the updaation part ok ...................................18");

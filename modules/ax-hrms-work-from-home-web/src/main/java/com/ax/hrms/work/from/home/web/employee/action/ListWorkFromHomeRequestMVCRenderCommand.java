@@ -279,9 +279,13 @@
 package com.ax.hrms.work.from.home.web.employee.action;
 
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
+import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.WorkFromHome;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
+import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeLocalService;
+import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
@@ -314,13 +318,17 @@ import java.util.List;
 public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand {
 
     @Reference
-    private WorkFromHomeLocalService workFromHomeLocalService;
+    private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
 
     @Reference
     private UserLocalService userLocalService;
 
     @Reference
     private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
+
+    @Reference
+    EmployeeDetailsLocalService employeeDetailsLocalService;
+
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -333,28 +341,27 @@ public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand
         int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
         int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 5);
 
-        int total = workFromHomeLocalService.getWorkFromHomesCount();
+        int total =  workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
 
         int start = (cur - 1) * delta;
         int end = start + delta;
 
         // Fetch paginated WFH records
-        List<WorkFromHome> wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
-
-        // Fetch all statuses
+        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
+                // Fetch all statuses
         List<LeaveCompensatoryStatusMaster> statusList =
                 leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
         List<WFHRequestDto> dtoList = new ArrayList<>();
 
         // Convert to DTO
-        for (WorkFromHome wfh : wfhList) {
+        for (WorkFromHomeRequest wfh : wfhList) {
 
-            User user = userLocalService.fetchUser(wfh.getUserId());
-
+//            User user = userLocalService.fetchUser(wfh.getUserId());
+            EmployeeDetails employeeDetails=employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
             WFHRequestDto dto = new WFHRequestDto();
             dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-            dto.setEmployeeName(user != null ? user.getFullName() : "");
+            dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName() +" "+employeeDetails.getLastName() : "");
             dto.setTeamMailId(wfh.getTeamMailId());
             dto.setReason(wfh.getReason());
             dto.setRequestDate(wfh.getRequestDate());

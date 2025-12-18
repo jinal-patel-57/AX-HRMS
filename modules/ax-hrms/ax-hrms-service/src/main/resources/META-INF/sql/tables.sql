@@ -728,3 +728,22 @@ create table ax_WorkFromHome (
 	startDate DATE null,
 	endDate DATE null
 );
+
+create table ax_WorkFromHomeRequest (
+	uuid_ VARCHAR(75) null,
+	companyId LONG,
+	createdBy LONG,
+	modifiedBy LONG,
+	groupId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	workFromHomeRequestId LONG not null primary key,
+	employeeId LONG,
+	reviewerId LONG,
+	teamMailId VARCHAR(75) null,
+	status LONG,
+	reason VARCHAR(75) null,
+	requestDate DATE null,
+	startDate DATE null,
+	endDate DATE null
+);

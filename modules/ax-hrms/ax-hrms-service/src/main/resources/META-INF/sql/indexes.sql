@@ -136,3 +136,8 @@ create index IX_3D180981 on ax_WorkFromHome (startDate, endDate);
 create index IX_BE38EB2E on ax_WorkFromHome (status);
 create index IX_C72A168 on ax_WorkFromHome (userId, status);
 create unique index IX_B0B0D9BE on ax_WorkFromHome (uuid_[$COLUMN_LENGTH:75$], groupId);
+
+create index IX_FE60BAB6 on ax_WorkFromHomeRequest (employeeId, status);
+create index IX_2809B96C on ax_WorkFromHomeRequest (startDate, endDate);
+create index IX_139AE399 on ax_WorkFromHomeRequest (status);
+create unique index IX_59353729 on ax_WorkFromHomeRequest (uuid_[$COLUMN_LENGTH:75$], groupId);

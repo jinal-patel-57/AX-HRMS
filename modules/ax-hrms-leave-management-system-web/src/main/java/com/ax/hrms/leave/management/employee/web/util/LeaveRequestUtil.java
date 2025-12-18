@@ -1,16 +1,21 @@
 package com.ax.hrms.leave.management.employee.web.util;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.leave.management.hr.web.util.AxHrmsHrLeaveRequestWebUtil;
 import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemWebPortletConstants;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.dto.LeaveRequestDto;
 import com.ax.hrms.leave.management.web.notification.SendNotificationToUserHandler;
-import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
-import com.ax.hrms.master.model.LeavePolicyMaster;
-import com.ax.hrms.master.model.LeaveTypeMaster;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.LeaveBalance;
-import com.ax.hrms.model.LeaveDayType;
-import com.ax.hrms.model.LeaveRequest;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.model.*;
+import com.ax.hrms.master.service.DepartmentMasterLocalService;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
+import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
+import com.ax.hrms.model.*;
+import com.ax.hrms.service.*;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -19,6 +24,7 @@ import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
+import org.osgi.service.component.annotations.Reference;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -37,12 +43,51 @@ import java.util.stream.Collectors;
  */
 public class LeaveRequestUtil {
 
-	private LeaveRequestUtil() {
-	}
-
 	private static Log log = LogFactoryUtil.getLog(LeaveRequestUtil.class);
 
 	private static int currentYear = Year.now().getValue();
+
+    public static StringBuilder getBody(LeaveRequest leaveRequest, EmployeeDetails employee, StringBuilder body,EmployeeDepartmentLocalService employeeDepartmentLocalService,DepartmentMasterLocalService departmentMasterLocalService,EmployeeDesignationLocalService employeeDesignationLocalService,DesignationMasterLocalService designationMasterLocalService,LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService)
+            throws PortalException {
+        AxHrmsHrLeaveRequestWebUtil leaveRequestUtil = new AxHrmsHrLeaveRequestWebUtil();
+
+        // FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
+        EmployeeDepartment employeeDepartment = employeeDepartmentLocalService
+                .findByEmployeeId(employee.getEmployeeId());
+
+        DepartmentMaster departmentMaster = departmentMasterLocalService
+                .findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
+
+        EmployeeDesignation employeeDesignation = employeeDesignationLocalService
+                .findByEmployeeId(employee.getEmployeeId());
+        DesignationMaster designationMaster = designationMasterLocalService
+                .findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+
+        // FETCH DATA OF STATUS
+        LeaveCompensatoryStatusMaster status = leaveCompensatoryStatusMasterLocalService
+                .findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId());
+
+        // SET DATA OF LEAVE REQUEST IN THE BODY OF MAIL
+
+        body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE).append(employee.getEmployeeCode())
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(employee.getFirstName()).append(" ").append(employee.getLastName())
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(departmentMaster.getDepartmentName())
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(designationMaster.getDesignationName())
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(status.getLeaveCompensatoryStatus())
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getDateOfRequest()))
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getStartDateTime()))
+                .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getEndDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING);
+
+        body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_FOOTER);
+        return body;
+    }
 
 	public static List<LeaveRequestDto> getListOfLeaveType(List<LeaveTypeMaster> leaveTypeMasterList, List<LeaveBalance> leaveBalanceList, long employeeId, List<LeavePolicyMaster> leavePolicyMasterList) {
 		log.info("GetLeaveTypeFilterUsingLeaveBalanceUtil >>> getListOfLeaveType ::: current year :::"+currentYear);
@@ -227,4 +272,31 @@ public class LeaveRequestUtil {
 
     }
 
+
+    public static void sendMailtoManager(String fromName, String fromEmailAddress,StringBuilder body,long leaveRequestId, Long employeeId,
+                                    MailTemplateConfiguration mailTemplateConfiguration,EmployeeDetailsLocalService employeeDetailsLocalService,LeaveRequestLocalService leaveRequestLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService, DepartmentMasterLocalService departmentMasterLocalService,EmployeeDesignationLocalService employeeDesignationLocalService,DesignationMasterLocalService designationMasterLocalService,LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService,AxHrmsCommonApi axHrmsCommonApi) {
+        try {
+            log.info("SENDING MAIL TO MANAGER");
+            LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
+            EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+            EmployeeDetails employee1 = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
+
+            body = getBody(leaveRequest, employee1, body,employeeDepartmentLocalService,departmentMasterLocalService,employeeDesignationLocalService,designationMasterLocalService,leaveCompensatoryStatusMasterLocalService);
+
+            // SEND MAIL TO EMPLOYE
+
+            String mailContent = mailTemplateConfiguration.mailLeaveApproveEmployeeBody();
+            mailContent =  mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName()+ StringPool.SPACE+employee.getLastName());
+            mailContent =  mailContent.replace("${BODY}", body);
+                log.info("SENDING MAIL TO MANAGER ...." + mailContent);
+//            String subject =  isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() :isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
+         log.info("mail is senting to "+employee.getFirstName()+" "+employee.getFirstName());
+            String subject=mailTemplateConfiguration.mailLeaveRequestManagerSubject();
+            axHrmsCommonApi.sendMail(employee.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
+
+        } catch (Exception e) {
+            log.error("ApproveLeaveRequestMVCActionCommand >>>sendMailtoEmployee >>>  " + e.getMessage());
+        }
+
+    }
 }

@@ -93,7 +93,10 @@ public class ApproveLeaveRequestActionCommand implements MVCActionCommand {
             StringBuilder teamMailBody = new StringBuilder(
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_TEAM_MAIL_HEAD);
             axHrmsManagerLeaveRequestWebUtil.sendMailtoTeam(fromName, fromEmailAddress, leaveRequestId, teamMailBody,mailTemplateConfiguration);
-
+            log.info("leave is sending shortly.......");
+            axHrmsManagerLeaveRequestWebUtil.sendNotificationToTeam("approved is done",leaveRequestId);
+            log.info(" leave request id : " + leaveRequestId);
+            log.info("leave to team is done....");
             // SENDING NOTIFICATION TO EMPLOYEE
             axHrmsManagerLeaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
             SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);

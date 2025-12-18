@@ -50,7 +50,7 @@ import com.ax.hrms.service.persistence.TaskPersistence;
 import com.ax.hrms.service.persistence.TaskReviewPersistence;
 import com.ax.hrms.service.persistence.TimeTrackerPersistence;
 import com.ax.hrms.service.persistence.UpcomingProbationEmployeePersistence;
-import com.ax.hrms.service.persistence.WorkFromHomePersistence;
+import com.ax.hrms.service.persistence.WorkFromHomeRequestPersistence;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -291,7 +291,7 @@ public abstract class LeaveBalanceServiceBaseImpl
 		upcomingProbationEmployeePersistence;
 
 	@Reference
-	protected WorkFromHomePersistence workFromHomePersistence;
+	protected WorkFromHomeRequestPersistence workFromHomeRequestPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

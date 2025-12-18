@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, property = {
 		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
 		"mvc.command.name=/addEditEmployeeAddressURL" }, service = MVCActionCommand.class)
-public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand {
+public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	EmployeeAddressLocalService employeeAddressLocalService;

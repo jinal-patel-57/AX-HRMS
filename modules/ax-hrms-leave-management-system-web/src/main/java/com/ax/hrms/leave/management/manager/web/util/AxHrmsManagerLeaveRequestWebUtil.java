@@ -233,7 +233,6 @@ public class AxHrmsManagerLeaveRequestWebUtil {
 
             String subject = isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
 
-
             axHrmsCommonApi.sendMail(employee.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
 
         } catch (Exception e) {
@@ -283,6 +282,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             for (LeaveInformToTeamDetail leaveInformDetail : leaveInformToTeamDetailList) {
                 EmployeeDetails teamMember = employeeDetailsLocalService.getEmployeeDetails(leaveInformDetail.getEmployeeId());
                 String mailContent = mailTemplateConfiguration.mailLeaveManagementTeamBody();
+                mailContent = mailContent.replace("${EMPLOYEE_NAME}", teamMember.getFirstName() + StringPool.SPACE + teamMember.getLastName());
                 mailContent = mailContent.replace("${BODY}", body);
 
                 String subject = mailTemplateConfiguration.mailLeaveManagementTeamSubject();
@@ -291,6 +291,36 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             }
         } catch (Exception e) {
             log.error("Error in sending team mail >>> " + e.getMessage());
+        }
+    }
+
+    public void sendNotificationToTeam(String body, Long leaveRequestId) {
+        LeaveRequest leaveRequest = null;
+        log.info("inside the sendNotificationToTeam");
+        try {
+            leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
+            log.info("leaveRequest :: "+leaveRequest.toString());
+            EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
+            List<LeaveInformToTeamDetail> leaveInformToTeamDetailList = leaveInformToTeamDetailLocalService.findByLeaveRequestId(leaveRequestId);
+            for (LeaveInformToTeamDetail leaveInformDetail : leaveInformToTeamDetailList) {
+                EmployeeDetails teamMember = employeeDetailsLocalService.getEmployeeDetails(leaveInformDetail.getEmployeeId());
+                JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
+                notificationJSON.put("body", body);
+                UserNotificationEvent userNotification = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(teamMember.getLrUserId(), AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_MANAGER_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET, UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
+                ServiceContext serviceContext = new ServiceContext();
+                SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
+                sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
+                log.info("inside the loop :: "+teamMember.toString());
+            }
+        } catch (NoSuchLeaveRequestException e) {
+            log.error("Error in sending notification >>>" + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (PortalException e) {
+            log.error("Error in sending notification >>>" + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Error in sending notification >>>" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

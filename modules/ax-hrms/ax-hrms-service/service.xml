@@ -1442,7 +1442,7 @@
     </entity>
 
 
-    <entity local-service="true" name="WorkFromHome" remote-service="true" uuid="true">
+    <entity local-service="true" name="WorkFromHomeRequest" remote-service="true" uuid="true">
 
         <!-- Audit fields -->
 
@@ -1460,7 +1460,7 @@
 
         <!-- Other fields -->
 
-        <column name="userId" type="long"/>
+        <column name="employeeId" type="long"/>
         <column name="reviewerId" type="long"/>
         <column name="teamMailId" type="String"/>
         <column name="status" type="long"/>
@@ -1472,16 +1472,16 @@
             <order-column name="createDate" />
         </order>
         <!-- FINDERS -->
-        <finder name="UserId" return-type="Collection">
-            <finder-column name="userId"/>
+        <finder name="EmployeeId" return-type="Collection">
+            <finder-column name="employeeId"/>
         </finder>
 
         <finder name="Status" return-type="Collection">
             <finder-column name="status"/>
         </finder>
 
-        <finder name="UserIdAndStatus" return-type="Collection">
-            <finder-column name="userId"/>
+        <finder name="EmployeeIdAndStatus" return-type="Collection">
+            <finder-column name="employeeId"/>
             <finder-column name="status"/>
         </finder>
 
