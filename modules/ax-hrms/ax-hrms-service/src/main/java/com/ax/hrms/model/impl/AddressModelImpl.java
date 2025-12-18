@@ -92,7 +92,7 @@ public class AddressModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_Address (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,addressId LONG not null primary key,line1 VARCHAR(75) null,line2 VARCHAR(75) null,line3 VARCHAR(75) null,state_ VARCHAR(75) null,country LONG,pincode VARCHAR(75) null)";
+		"create table ax_Address (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,addressId LONG not null primary key,line1 VARCHAR(500) null,line2 VARCHAR(500) null,line3 VARCHAR(500) null,state_ VARCHAR(75) null,country LONG,pincode VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_Address";
 
