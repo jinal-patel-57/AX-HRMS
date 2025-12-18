@@ -96,6 +96,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 			employeeOnBoardingUtil.setNominee(renderRequest, employeeId);
 			employeeOnBoardingUtil.setBankAccount(renderRequest, employeeId);
 			employeeOnBoardingUtil.setUanEsic(renderRequest, employeeId,employeeUanEsicLocalService);
+			log.info("beforeeeee log");
 			employeeOnBoardingUtil.setEducationList(renderRequest, employeeId, employeeEducationLocalService);
 			employeeOnBoardingUtil.setExperience(renderRequest, employeeId, employeeExperienceLocalService);
 

@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.text.SimpleDateFormat;
@@ -153,6 +154,9 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 			log.info("AddEmployeeNomineeMVCActionCommand >>> doProcessAction ::: update called :::");
 		}
 		actionRequest.setAttribute("employeeId", ParamUtil.getLong(actionRequest,"employeeId"));
+		log.info("before command --" + PortalUtil.getLayoutFullURL(themeDisplay));
+		//actionResponse.setRenderParameter("mvcRenderCommandName", "/");
+		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 	}
 }
 

@@ -212,6 +212,8 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         } catch (PortalException e) {
             log.error("Error In EmployeeBasic Details" + e.getMessage());
         }
+        
+        log.info("before log");
 
         employeeOnBoardingUtil.setEducationList(renderRequest, employeeId, employeeEducationLocalService);
 
