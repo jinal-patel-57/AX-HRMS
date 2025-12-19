@@ -57,31 +57,41 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
-                        <td><p class="text-center my-0"><b><liferay-ui:message key="day-type"/></b></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="leaveDayType" items="${leaveDayTypeList}">
-                        <tr>
-                            <td>
-                                <fmt:formatDate value="${leaveDayType.leaveDate}" pattern="dd/MM/yyyy"
-                                                var="formatedLeaveDate"/>
-                                <p class="text-center my-0">${formatedLeaveDate }</p>
-                            </td>
-                            <td>
-                                <p class="text-center my-0">${leaveDayType.isHalfDay ? (leaveDayType.isFirstHalf ? 'First Half' : 'Second Half') : "Full Day" }</p>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>
+                            Leave Summary
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
+                                <td><p class="text-center my-0"><b><liferay-ui:message key="day-type"/></b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="leaveDayType" items="${leaveDayTypeList}">
+                                <tr>
+                                    <td>
+                                        <fmt:formatDate value="${leaveDayType.leaveDate}" pattern="dd/MM/yyyy"
+                                                        var="formatedLeaveDate"/>
+                                        <p class="text-center my-0">${formatedLeaveDate }</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center my-0">${leaveDayType.isHalfDay ? (leaveDayType.isFirstHalf ? 'First Half' : 'Second Half') : "Full Day" }</p>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+        
     </div>
 
     <div class="card-footer text-right align-items-center">

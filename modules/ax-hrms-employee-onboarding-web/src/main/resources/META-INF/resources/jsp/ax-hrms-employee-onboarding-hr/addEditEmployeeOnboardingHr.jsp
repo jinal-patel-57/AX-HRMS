@@ -146,31 +146,34 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
                         <label class="" for="isProbationEnabled"><liferay-ui:message key="probation-status"/></label>
-                        <br/>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />isProbationEnabled"
-                                   id="enabled" value="Enabled" checked>
-                            <label class="form-check-label" for="enabled"><liferay-ui:message key="enabled"/><span class="text-danger">*</span></label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />isProbationEnabled"
-                                   id="disabled" value="Disabled">
-                            <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
+                        <div class="d-flex c-gap-3 align-items-center"> 
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />isProbationEnabled"
+                                    id="enabled" value="Enabled" checked>
+                                <label class="form-check-label" for="enabled"><liferay-ui:message key="enabled"/><span class="text-danger">*</span></label>
+                            </div>
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />isProbationEnabled"
+                                    id="disabled" value="Disabled">
+                                <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
                         <label class="" for="isExperienced"><liferay-ui:message key="is-experienced"/><span class="text-danger">*</span></label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />isExperienced"
-                                   id="yes" value="Yes">
-                            <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />isExperienced"
-                                   id="no" value="No" checked>
-                            <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
+                        <div class="d-flex c-gap-3 align-items-center">
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />isExperienced"
+                                    id="yes" value="Yes">
+                                <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
+                            </div>
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />isExperienced"
+                                    id="no" value="No" checked>
+                                <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
+                            </div>
                         </div>
                         <label id="isExperienced-error" class="error text-danger" for="isExperienced"></label>
                     </div>
@@ -178,16 +181,17 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
                         <label class="" for="gender"><liferay-ui:message key="gender"/><span class="text-danger">*</span></label>
-                        <br/>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />gender" id="male"
-                                   value="Male">
-                            <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="<portlet:namespace />gender" id="female"
-                                   value="Female" checked>
-                            <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                        <div class="d-flex c-gap-3 align-items-center">
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />gender" id="male"
+                                    value="Male">
+                                <label class="form-check-label" for="male"><liferay-ui:message key="male"/></label>
+                            </div>
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input class="form-check-input" type="radio" name="<portlet:namespace />gender" id="female"
+                                    value="Female" checked>
+                                <label class="form-check-label" for="female"><liferay-ui:message key="female"/></label>
+                            </div>
                         </div>
                         <label id="gender-error" class="error text-danger" for="gender"></label>
                     </div>
