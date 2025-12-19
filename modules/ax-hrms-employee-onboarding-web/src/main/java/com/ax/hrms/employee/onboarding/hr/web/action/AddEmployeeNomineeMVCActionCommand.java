@@ -156,7 +156,7 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 		actionRequest.setAttribute("employeeId", ParamUtil.getLong(actionRequest,"employeeId"));
 		log.info("before command --" + PortalUtil.getLayoutFullURL(themeDisplay));
 		//actionResponse.setRenderParameter("mvcRenderCommandName", "/");
-		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		//actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 	}
 }
 
