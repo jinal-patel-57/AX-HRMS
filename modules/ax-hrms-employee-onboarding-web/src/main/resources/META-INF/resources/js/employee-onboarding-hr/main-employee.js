@@ -997,7 +997,12 @@
                 data: form7.serialize(),
                 success: function (response) {
                     form7.hide();
-                    window.location.href = getEmployeeUrl;
+//                    window.location.href = getEmployeeUrl;
+                    const questionMarkIndex = window.location.href.indexOf('?');
+					if (questionMarkIndex !== -1) {
+					    const cleanURL = window.location.href.substring(0, questionMarkIndex);
+					    window.location.href = cleanURL;
+					}
                     document.getElementById("employeeOnBorading").style.display = "none";
                 },
                 error: function () {
