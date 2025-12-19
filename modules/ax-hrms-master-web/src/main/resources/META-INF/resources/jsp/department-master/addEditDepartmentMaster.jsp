@@ -15,8 +15,16 @@
 
 		<div class="form-group">
 			<label class="" for="departmentName"><liferay-ui:message key="department-name-label" /><span class="text-danger">*</span></label>
-				<input id="<portlet:namespace />departmentName" placeholder="<liferay-ui:message key='department-name-placeholder' />" class="form-control" type="text" name="<portlet:namespace/>departmentName"
-				value="${not empty getdepartmentMaster ? getdepartmentMaster.departmentName : (not empty existedDepartmentName ? existedDepartmentName : '')}">
+				<input
+                    id="<portlet:namespace />departmentName"
+                    name="<portlet:namespace/>departmentName"
+                    class="form-control"
+                    type="text"
+                    minlength="2"
+                    maxlength="70"
+                    placeholder="<liferay-ui:message key='department-name-placeholder' />"
+                    value="${not empty getdepartmentMaster ? getdepartmentMaster.departmentName : (not empty existedDepartmentName ? existedDepartmentName : '')}" />
+
 			<label id="departmentName-error" class="error text-danger" for="departmentName"></label>
 		</div>
 		<input type="hidden" id="departmentMasterId" name="<portlet:namespace/>departmentMasterId" value="${getdepartmentMaster.departmentMasterId}">

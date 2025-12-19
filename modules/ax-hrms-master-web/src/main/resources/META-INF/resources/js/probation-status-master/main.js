@@ -1,50 +1,61 @@
-(function($, AxProbationStatusMasterWebPortlet) {
+(function ($, AxProbationStatusMasterWebPortlet) {
+
     let namespace;
-    
-    function setConfigsForValidation(config){
+
+    function setConfigsForValidation(config) {
         namespace = config.namespace;
-        $(document).ready(function(){
-        	$("#addEditProbationStatusMaster").validate({
-        		rules:{
-        			[namespace+"probationStatus"]:{
-        				required:true,
-        				validLetters:true
-        			}
-        		},
-        		messages:{
-        			[namespace+"probationStatus"]:{
-        				required:"Enter Probation Status name",
-        				validLetters:"Enter letters only"
-        			}
-        		},
-        		errorPlacement:function(error,element){
-        			error.insertAfter(element);
-        		}
-        	});
-        	$.validator.addMethod("validLetters", function(value, element) {
-                var firstCharValid = /^[a-zA-Z\s]/.test(value.charAt(0));
 
-                var restValid = /^[a-zA-Z0-9\s\W]+$/.test(value.substring(1));
+        $(document).ready(function () {
 
-                return this.optional(element) || (firstCharValid && restValid);
-                
-            }, "Please enter letters only");
+            // Custom validator for Probation Status Name
+            $.validator.addMethod("validProbationStatusName", function (value, element) {
+                // Starts with letter, allows letters, spaces, hyphen only
+                return this.optional(element) ||
+                    /^[A-Za-z][A-Za-z\s-]*$/.test(value);
+            }, "Enter a valid Probation Status name");
+
+            $("#addEditProbationStatusMaster").validate({
+                rules: {
+                    [namespace + "probationStatus"]: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 70,
+                        validProbationStatusName: true
+                    }
+                },
+                messages: {
+                    [namespace + "probationStatus"]: {
+                        required: "Enter Probation Status name",
+                        minlength: "Probation Status must be at least 2 characters",
+                        maxlength: "Probation Status cannot exceed 70 characters",
+                        validProbationStatusName: "Only letters, spaces and hyphen (-) are allowed"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.addClass("text-danger");
+                    error.insertAfter(element);
+                }
+            });
         });
-        
     }
-    function setConfigsForDeleteProbationStatusMaster(config){
+
+    function setConfigsForDeleteProbationStatusMaster(config) {
         namespace = config.namespace;
-        console.log(config);
-			let url = config.deleteUrl;
-			url = url.replace('PROBATIONSTATUS_MASTER_ID', config.probationStatusMasterId);
-            let text = "Are you sure you want to delete this PROBATION STATUS?";
-            if (confirm(text) == true) {
-                window.location.href = url;
-            } else {
-                text = "You canceled!";
-            }
+
+        let url = config.deleteUrl.replace(
+            'PROBATIONSTATUS_MASTER_ID',
+            config.probationStatusMasterId
+        );
+
+        let text = "Are you sure you want to delete this Probation Status?";
+        if (confirm(text)) {
+            window.location.href = url;
+        }
     }
-    
+
     AxProbationStatusMasterWebPortlet.setConfigsForValidation = setConfigsForValidation;
-    AxProbationStatusMasterWebPortlet.setConfigsForDeleteProbationStatusMaster = setConfigsForDeleteProbationStatusMaster;
-})($, (window.AxProbationStatusMasterWebPortlet = window.AxProbationStatusMasterWebPortlet || {}));
+    AxProbationStatusMasterWebPortlet.setConfigsForDeleteProbationStatusMaster =
+        setConfigsForDeleteProbationStatusMaster;
+
+})($, (window.AxProbationStatusMasterWebPortlet =
+    window.AxProbationStatusMasterWebPortlet || {}));

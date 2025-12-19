@@ -15,11 +15,12 @@
   <div class="card-body mb-0">
             <div class="form-group">
             
-            <input value= "${probationStatusMasterData.getProbationStatusMasterId()}" type="hidden" name = "<portlet:namespace />probationStatusMasterId">
+            <input value= "${probationStatusMasterData.getProbationStatusMasterId()}" minlength="2" maxlength="70" type="hidden" name = "<portlet:namespace />probationStatusMasterId">
                 <label class="" for="probationStatusName"><liferay-ui:message key="probationStatusName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${probationStatusMasterData.getStatusType()}" id="probationStatus" placeholder="Enter Probation Status Name" class="form-control" type="text"
-                    name="<portlet:namespace/>probationStatus" value="">
+                <input  value= "${probationStatusMasterData.getStatusType()}"  minlength="2" maxlength="70" id="probationStatus" placeholder="Enter Probation Status Name" class="form-control" type="text"
+                    name="<portlet:namespace/>probationStatus" >
+
             </div>
 </div>
   <div class="card-footer text-right mb-0">

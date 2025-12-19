@@ -18,10 +18,10 @@
   <div class="card-body mb-0"> 
             <div class="form-group">
             
-            <input value= "${educationLevelMasterData.getEducationLevelMasterId()}" type="hidden" name = "<portlet:namespace />educationLevelMasterId">
+            <input value= "${educationLevelMasterData.getEducationLevelMasterId()}"  type="hidden" name = "<portlet:namespace />educationLevelMasterId">
                 <label class="" for="educationLevelName"><liferay-ui:message key="educationLevelName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${educationLevelMasterData.getLevelName()}" id="levelName" placeholder="Enter Education Level Name" class="form-control" type="text"
+                <input  value= "${educationLevelMasterData.getLevelName()}" minlength="2" maxlength="70" id="levelName" placeholder="Enter Education Level Name" class="form-control" type="text"
                     name="<portlet:namespace/>levelName" value="">
             </div></div>
   <div class="card-footer text-right mb-0">

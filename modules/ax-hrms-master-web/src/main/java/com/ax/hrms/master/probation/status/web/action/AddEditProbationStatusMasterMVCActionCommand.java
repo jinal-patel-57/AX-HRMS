@@ -66,7 +66,9 @@ public class AddEditProbationStatusMasterMVCActionCommand extends BaseMVCActionC
 		       SessionMessages.add(actionRequest, AxProbationStatusMasterWebPortletConstants.PROBATION_STATUS_ADDED);
 		       }
 		       else {
-		           SessionErrors.add(actionRequest, AxProbationStatusMasterWebPortletConstants.PROBATION_STATUS_EXISTS);
+			   actionRequest.setAttribute(AxProbationStatusMasterWebPortletConstants.PROBATIONSTATUS_MASTER_DATA, probationStatusMasterLocalService.getProbationStatusMaster(probationStatusMasterId));
+
+			   SessionErrors.add(actionRequest, AxProbationStatusMasterWebPortletConstants.PROBATION_STATUS_EXISTS);
 		           super.hideDefaultErrorMessage(actionRequest);
 
 		           actionResponse.setRenderParameter(AxProbationStatusMasterWebPortletConstants.PROBATIONSTATUS_PATH, AxProbationStatusMasterWebPortletConstants.FORM_PROBATION_STATUS_MASTER);
@@ -88,8 +90,10 @@ public class AddEditProbationStatusMasterMVCActionCommand extends BaseMVCActionC
 		   else {
 		       SessionErrors.add(actionRequest, AxProbationStatusMasterWebPortletConstants.PROBATION_STATUS_EXISTS);
 		       super.hideDefaultErrorMessage(actionRequest);
-		       
-		       actionResponse.setRenderParameter(AxProbationStatusMasterWebPortletConstants.PROBATIONSTATUS_PATH, AxProbationStatusMasterWebPortletConstants.FORM_PROBATION_STATUS_MASTER);
+			   actionRequest.setAttribute(AxProbationStatusMasterWebPortletConstants.PROBATIONSTATUS_MASTER_DATA, probationStatusMasterLocalService.getProbationStatusMaster(probationStatusMasterId));
+
+
+			   actionResponse.setRenderParameter(AxProbationStatusMasterWebPortletConstants.PROBATIONSTATUS_PATH, AxProbationStatusMasterWebPortletConstants.FORM_PROBATION_STATUS_MASTER);
 		   }
 		}
 		}

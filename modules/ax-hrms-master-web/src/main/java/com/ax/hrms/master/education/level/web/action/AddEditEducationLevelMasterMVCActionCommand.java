@@ -122,9 +122,12 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
         }
     }
 
-    private boolean isLevelNameValid(String educationLevelName) { 
-        return Validator.isNotNull(educationLevelName) && Validator.isName(educationLevelName);
-    }
+	private boolean isLevelNameValid(String educationLevelName) {
+		return Validator.isNotNull(educationLevelName)
+				&& Validator.isName(educationLevelName)
+				&& educationLevelName.length() <= 70
+				&& educationLevelName.length() >= 2;
+	}
 
 
 }
