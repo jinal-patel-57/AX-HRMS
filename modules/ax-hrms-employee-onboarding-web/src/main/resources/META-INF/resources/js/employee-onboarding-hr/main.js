@@ -199,7 +199,7 @@ var setFileInputValues;
 
             setFileInputValues = function (filename, fileInputId) {
                 var fileName = filename;
-                if (fileName != '') {
+                if (fileName != '' && fileName != 'undefined' && fileName != undefined) {
                     const myFile = new File([''], fileName, {
                         type: 'text/plain',
                         lastModified: new Date(),

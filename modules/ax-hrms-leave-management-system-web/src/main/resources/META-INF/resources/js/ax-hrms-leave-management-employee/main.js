@@ -142,6 +142,9 @@
                 let dateString = year + '-' + month + '-' + day;
                 console.log(dateString);
 
+                const dateContainer = $('<div>');
+                dateContainer.attr('class',namespace+'day'+day+'Date d-flex align-items-center c-gap-4 mb-3');
+
                 //Create div for inputed dates: Line to Line
                 const dateDiv = $('<input>').attr('type', 'date');
                 dateDiv.attr('class','form-control');
@@ -155,16 +158,21 @@
                 halfTypeDiv.attr('name',namespace+'day'+day+'IsHalf');
                 halfTypeDiv.attr('id',namespace+'day'+day+'IsHalf');
 
+                const halfTypeLabel = $('<label>').html('Is Half leave');
+                halfTypeLabel.attr('class','my-0 ml-1')
+                halfTypeLabel.attr('for',namespace+'day'+day+'IsHalf');
+
                 const dayTypeSelectContainerDiv = $('<div>').attr('id','dayTypeSelectContainer');
-                dayTypeSelectContainerDiv.attr('class','dayTypeSelectContainer');
+                dayTypeSelectContainerDiv.attr('class','dayTypeSelectContainer d-flex align-items-center');
                 dayTypeSelectContainer = $('#dayTypeSelectContainer');
 
                 dayTypeSelectContainerDiv.append(halfTypeDiv);
-                dayTypeSelectContainerDiv.append("Is Half leave");
+                dayTypeSelectContainerDiv.append(halfTypeLabel);
 
                 if (date.getDay() !== 0 && date.getDay() !== 6) {
-                    dateInputsContainer.append(dateDiv);
-                    dateInputsContainer.append(dayTypeSelectContainerDiv);
+                    dateContainer.append(dateDiv);
+                    dateContainer.append(dayTypeSelectContainerDiv);
+                    dateInputsContainer.append(dateContainer);
                     daysDiff++;
                 }
                 dayTypeSelectContainer = $('.dayTypeSelectContainer');
@@ -457,9 +465,9 @@
 
             // Check if the checkbox is checked
             if (isChecked) {
-                let isFirstHalfCheckbox = '<div class="'+$(this).attr('name').replace('IsHalf', 'halfType')+'"><input type="radio" name="' + $(this).attr('name').replace('IsHalf', 'halfType') + '" id="' + $(this).attr('id').replace('IsHalf', 'IsFirstHalf') + '" value="firstHalf" checked/> First Half';
-                let isSecondHalfCheckbox = '<input type="radio" name="' + $(this).attr('name').replace('IsHalf', 'halfType') + '" id="' + $(this).attr('id').replace('IsHalf', 'IsSecondHalf') + '" value="secondHalf"> Second Half</div>';
-                parentDiv.append(isFirstHalfCheckbox + '<br>' + isSecondHalfCheckbox);
+                let isFirstHalfCheckbox = '<div class="d-flex align-items-center c-gap-2 ml-4 '+$(this).attr('name').replace('IsHalf', 'halfType')+'"><div class="d-flex align-items-center c-gap-2"> <input class="form-check-input" type="radio" name="' + $(this).attr('name').replace('IsHalf', 'halfType') + '" id="' + $(this).attr('id').replace('IsHalf', 'IsFirstHalf') + '" value="firstHalf" checked/>' + '<label class="m-0" for="' + $(this).attr('id').replace('IsHalf', 'IsFirstHalf') + '"> First Half</label></div>';
+                let isSecondHalfCheckbox = '<div class="d-flex align-items-center c-gap-2"> <input class="form-check-input" type="radio" name="' + $(this).attr('name').replace('IsHalf', 'halfType') + '" id="' + $(this).attr('id').replace('IsHalf', 'IsSecondHalf') + '" value="secondHalf"><label class="m-0" for="' + $(this).attr('id').replace('IsHalf', 'IsFirstHalf') + '"> Second Half</label></div></div>';
+                parentDiv.append(isFirstHalfCheckbox  + isSecondHalfCheckbox);
             } else {
                 $('.'+$(this).attr('name').replace('IsHalf', 'halfType')).remove();
             }
@@ -491,7 +499,7 @@
 
                     // Add the new <select> element to the page
                     if(remainingLeave != 0.0)
-                        floaterDaysContainer.empty().append(floaterSelectElement);
+                        floaterDaysContainer.empty().append('Date').append(floaterSelectElement);
 
                     hideEndDateContainer();
                     hideStartDateContainer();

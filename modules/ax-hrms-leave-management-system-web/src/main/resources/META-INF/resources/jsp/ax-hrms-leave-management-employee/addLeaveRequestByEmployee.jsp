@@ -106,9 +106,9 @@
                             <div id="floaterDaysContainer"></div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="col-sm-12 col-md-8">
                         <div class="form-group">
-                            <div id="dateInputsContainer" style="display:none;"></div>
+                            <div id="dateInputsContainer" style="display:none;" ></div>
                         </div>
                     </div>
 

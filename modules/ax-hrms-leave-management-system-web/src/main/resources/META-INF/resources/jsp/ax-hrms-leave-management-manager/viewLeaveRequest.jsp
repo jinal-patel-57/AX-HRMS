@@ -67,15 +67,15 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-header">
-                <strong>
-                    Leave Summary
-                </strong>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>
+                            Leave Summary
+                        </strong>
+                    </div>
+                    <div class="card-body">
                         <table class="table">
                             <thead>
                             <tr>
@@ -99,8 +99,8 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <c:if test="${data.halfDay}">
-                                        <td>
+                                    <td>
+                                        <c:if test="${data.halfDay}">
                                             <c:choose>
                                                 <c:when test="${data.firstHalf}">
                                                     <liferay-ui:message key="first-half"/>
@@ -109,8 +109,8 @@
                                                     <liferay-ui:message key="second-half"/>
                                                 </c:otherwise>
                                             </c:choose>
-                                        </td>
-                                    </c:if>
+                                        </c:if>
+                                    </td>
                                 </tr>
                                 </tbody>
 
