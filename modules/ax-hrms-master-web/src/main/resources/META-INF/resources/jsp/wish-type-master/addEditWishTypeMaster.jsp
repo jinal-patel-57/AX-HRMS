@@ -17,8 +17,18 @@
             <input value= "${wishTypeMasterData.getWishTypeMasterId()}" type="hidden" name = "<portlet:namespace />wishTypeMasterId">
                 <label class="" for="wishTypeName"><liferay-ui:message key="wishTypeName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${wishTypeMasterData.getWishType()}" id="wishType" placeholder="Enter Wish Type Name" class="form-control" type="text"
-                    name="<portlet:namespace/>wishType" value="">
+              <input
+                  value="${wishTypeMasterData.getWishType()}"
+                  id="wishType"
+                  class="form-control"
+                  type="text"
+                  name="<portlet:namespace/>wishType"
+                  minlength="2"
+                  maxlength="50"
+                  placeholder="Enter Wish Type Name"
+              />
+
+
             </div>
 			          
 </div>

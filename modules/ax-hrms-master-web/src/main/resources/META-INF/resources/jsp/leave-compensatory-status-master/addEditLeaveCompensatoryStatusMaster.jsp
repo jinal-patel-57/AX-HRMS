@@ -19,8 +19,17 @@
             <input value= "${leaveCompensatoryStatusMasterData.getLeaveCompensatoryStatusMasterId()}" type="hidden" name = "<portlet:namespace />leaveCompensatoryStatusMasterId">
                 <label class="" for="leaveCompensatoryStatusName"><liferay-ui:message key="leaveCompensatoryStatusName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${leaveCompensatoryStatusMasterData.getLeaveCompensatoryStatus()}" id="leaveCompensatoryStatus" placeholder="Enter Leave Compensatory Status Name" class="form-control" type="text"
-                    name="<portlet:namespace/>leaveCompensatoryStatus" value="">
+                <input
+                    value="${leaveCompensatoryStatusMasterData.getLeaveCompensatoryStatus()}"
+                    id="leaveCompensatoryStatus"
+                    class="form-control"
+                    type="text"
+                    name="<portlet:namespace/>leaveCompensatoryStatus"
+                    minlength="2"
+                    maxlength="50"
+                    placeholder="Enter Leave Compensatory Status Name"
+                />
+
             </div>
 </div>
   <div class="card-footer text-right mb-0">

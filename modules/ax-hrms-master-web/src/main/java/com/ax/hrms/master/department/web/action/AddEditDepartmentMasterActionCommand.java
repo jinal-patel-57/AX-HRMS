@@ -71,7 +71,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 		if (departmentMasterId <= 0) {
 			// Insert Employee Master Details
 			try {
-				if (!(departmentMasterLocalService.isNameExist(departmentName.toLowerCase()))) {
+				if (!(departmentMasterLocalService.isNameExist(departmentName))) {
 
 					departmentMaster = departmentMasterLocalService.createDepartmentMaster(CounterLocalServiceUtil.increment(DepartmentMaster.class.getName()));
 					departmentMaster.setCompanyId(themeDisplay.getCompanyId());
@@ -89,11 +89,13 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 				} else {
 					SessionErrors.add(actionRequest, AxDepartmentMasterWebPortletConstants.DEPARTMENT_EXISTS);
 					actionRequest.setAttribute(AxDepartmentMasterWebPortletConstants.EXISTED_DEPARTMENT_NAME,departmentName);
+
 					actionResponse.setRenderParameter(AxDepartmentMasterWebPortletConstants.MVC_PATH,AxDepartmentMasterWebPortletConstants.ADD_DEPARTMENT_MASTER_JSP);
 					super.hideDefaultErrorMessage(actionRequest);
 				}
 			} catch (Exception e) {
 				log.info("Error in catch ===> " + e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			// Updated Employee Master Details
@@ -109,12 +111,14 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 					departmentMasterLocalService.updateDepartmentMaster(departmentMaster);
 				} else {
 					SessionErrors.add(actionRequest, AxDepartmentMasterWebPortletConstants.DEPARTMENT_EXISTS);
+					DepartmentMaster getdepartmentMaster=departmentMasterLocalService.getDepartmentMaster(departmentMasterId);
+					actionRequest.setAttribute(AxDepartmentMasterWebPortletConstants.GET_DEPARTMENT_MASTER, getdepartmentMaster);
 					actionRequest.setAttribute(AxDepartmentMasterWebPortletConstants.EXISTED_DEPARTMENT_NAME,departmentName);
 					actionResponse.setRenderParameter(AxDepartmentMasterWebPortletConstants.MVC_PATH,AxDepartmentMasterWebPortletConstants.ADD_DEPARTMENT_MASTER_JSP);
 					super.hideDefaultErrorMessage(actionRequest);
 				}
 			} catch (Exception e) {
-				log.info("Error  in Update Empolyee Master Details " + e.getMessage());
+				log.info("Error  in Update Employee Master Details " + e.getMessage());
 			}
 		}
 	}

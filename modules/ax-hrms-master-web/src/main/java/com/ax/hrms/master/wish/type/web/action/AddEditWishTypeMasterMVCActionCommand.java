@@ -54,7 +54,7 @@ public class AddEditWishTypeMasterMVCActionCommand extends BaseMVCActionCommand 
 		       WishTypeMaster wishTypeMaster = wishTypeMasterLocalService.createWishTypeMaster(CounterLocalServiceUtil.increment(WishTypeMaster.class.getName()));
 		       
 		       ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		       wishTypeMaster.setWishType(wishTypeName);
+		       wishTypeMaster.setWishType(wishTypeName.trim());
 		       wishTypeMaster.setCompanyId(themeDisplay.getCompanyId());
 		       wishTypeMaster.setCreatedBy(themeDisplay.getUserId());
 		       wishTypeMaster.setGroupId(themeDisplay.getCompanyGroupId());
@@ -76,7 +76,7 @@ public class AddEditWishTypeMasterMVCActionCommand extends BaseMVCActionCommand 
 		   if (isLevelMasterAvailable(wishTypeName, wishTypeMasterId) && isLevelNameValid(wishTypeName)) {
 			 
 		       WishTypeMaster wishTypeMaster = wishTypeMasterLocalService.getWishTypeMaster(wishTypeMasterId);
-		       wishTypeMaster.setWishType(wishTypeName);
+		       wishTypeMaster.setWishType(wishTypeName.trim());
 		       ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		       wishTypeMaster.setModifiedBy(themeDisplay.getUserId());
 		       
@@ -87,8 +87,9 @@ public class AddEditWishTypeMasterMVCActionCommand extends BaseMVCActionCommand 
 		   else {
 		       SessionErrors.add(actionRequest, AxWishTypeMasterWebPortletConstants.WISH_TYPE_EXISTS);
 		       super.hideDefaultErrorMessage(actionRequest);
-		       
-		       actionResponse.setRenderParameter(AxWishTypeMasterWebPortletConstants.WISHTYPE_PATH, AxWishTypeMasterWebPortletConstants.FORM_WISH_TYPE_MASTER);
+			   actionRequest.setAttribute(AxWishTypeMasterWebPortletConstants.WISHTYPE_MASTER_DATA, wishTypeMasterLocalService.getWishTypeMaster(wishTypeMasterId));
+
+			   actionResponse.setRenderParameter(AxWishTypeMasterWebPortletConstants.WISHTYPE_PATH, AxWishTypeMasterWebPortletConstants.FORM_WISH_TYPE_MASTER);
 		   }
 		}
 		}

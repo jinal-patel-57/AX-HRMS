@@ -42,7 +42,7 @@ public class ListLeaveTypeMasterMVCRenderCommand implements MVCRenderCommand {
         List<LeaveTypeMaster> leaveTypeMasterList = null;
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,1);
-        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 
         int totalLeaveTypeMaster = leaveTypeMasterLocalService.getLeaveTypeMastersCount();
         int totalPageContainer = (totalLeaveTypeMaster + deltaValue - 1) / deltaValue;

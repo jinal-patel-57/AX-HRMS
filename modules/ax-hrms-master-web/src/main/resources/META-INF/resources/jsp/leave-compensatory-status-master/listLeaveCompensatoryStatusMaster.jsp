@@ -23,7 +23,7 @@
   <div class="card-body mb-0">
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${totalLeaveCompensatoryStatus}" delta= "3" emptyResultsMessage="No-Leave Compensatory Status-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${totalLeaveCompensatoryStatus}" delta= "20" emptyResultsMessage="No-Leave Compensatory Status-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${getLeaveCompensatoryStatus}" />
 
 

@@ -87,8 +87,9 @@ public class AddEditLeaveCompensatoryStatusMasterMVCActionCommand extends BaseMV
 		   else {
 		       SessionErrors.add(actionRequest, AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVE_COMPENSATORY_STATUS_EXISTS);
 		       super.hideDefaultErrorMessage(actionRequest);
-		       
-		       actionResponse.setRenderParameter(AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVECOMPENSATORYSTATUS_PATH, AxLeaveCompensatoryStatusMasterWebPortletConstants.FORM_LEAVE_COMPENSATORY_STATUS_MASTER);
+			   actionRequest.setAttribute(AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVECOMPENSATORYSTATUS_MASTER_DATA, leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(leaveCompensatoryStatusMasterId));
+
+			   actionResponse.setRenderParameter(AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVECOMPENSATORYSTATUS_PATH, AxLeaveCompensatoryStatusMasterWebPortletConstants.FORM_LEAVE_COMPENSATORY_STATUS_MASTER);
 		   }
 		}
 		}

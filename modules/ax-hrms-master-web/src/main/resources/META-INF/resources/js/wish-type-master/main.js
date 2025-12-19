@@ -1,55 +1,66 @@
-(function($, AxWishTypeMasterWebPortlet) {
+(function ($, AxWishTypeMasterWebPortlet) {
+
     let namespace;
-    
-    function setConfigsForValidation(config){
+
+    function setConfigsForValidation(config) {
         namespace = config.namespace;
-        $(document).ready(function(){
-        	
-        	$("#addEditWishTypeMaster").validate({
-        		rules:{
 
-        			[namespace+"wishType"]:{
+        $(document).ready(function () {
 
-        				required:true,
-        				validLetters:true
-        			}
-        		},
-        		messages:{
+            // Custom validator for Wish Type Name
+            $.validator.addMethod("validWishTypeName", function (value, element) {
 
-        			[namespace+"wishType"]:{
+                value = value.trim();
 
-        				required:"Enter wish Type name",
-        				validLetters:"Enter letters only"
-        			}
-        		},
-        		errorPlacement:function(error,element){
-        			error.insertAfter(element);
-        		}
-        	});
-        	$.validator.addMethod("validLetters", function(value, element) {
-                var firstCharValid = /^[a-zA-Z\s]/.test(value.charAt(0));
+                // Starts with letter
+                // Allows letters, spaces, hyphen, ampersand
+                return this.optional(element) ||
+                    /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
 
-                var restValid = /^[a-zA-Z0-9\s\W]+$/.test(value.substring(1));
+            }, "Enter a valid Wish Type name");
 
-                return this.optional(element) || (firstCharValid && restValid);
-                
-            }, "Please enter letters only");
+            $("#addEditWishTypeMaster").validate({
+                rules: {
+                    [namespace + "wishType"]: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 50,
+                        validWishTypeName: true
+                    }
+                },
+                messages: {
+                    [namespace + "wishType"]: {
+                        required: "Enter Wish Type name",
+                        minlength: "Wish Type must be at least 2 characters",
+                        maxlength: "Wish Type cannot exceed 50 characters",
+                        validWishTypeName:
+                            "Only letters, spaces, '&' and '-' are allowed"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.addClass("text-danger");
+                    error.insertAfter(element);
+                }
+            });
         });
-        
     }
-    function setConfigsForDeleteWishTypeMaster(config){
+
+    function setConfigsForDeleteWishTypeMaster(config) {
         namespace = config.namespace;
-        console.log(config);
-            let url = config.deleteUrl;
-            url = url.replace('WISHTYPE_MASTER_ID', config.wishTypeMasterId);
-            let text = "Are you sure you want to delete this wish type?";
-            if (confirm(text) == true) {
-                window.location.href = url;
-            } else {
-                text = "You canceled!";
-            }
+
+        let url = config.deleteUrl.replace(
+            'WISHTYPE_MASTER_ID',
+            config.wishTypeMasterId
+        );
+
+        if (confirm("Are you sure you want to delete this Wish Type?")) {
+            window.location.href = url;
+        }
     }
-    
+
     AxWishTypeMasterWebPortlet.setConfigsForValidation = setConfigsForValidation;
-    AxWishTypeMasterWebPortlet.setConfigsForDeleteWishTypeMaster = setConfigsForDeleteWishTypeMaster;
-})($, (window.AxWishTypeMasterWebPortlet = window.AxWishTypeMasterWebPortlet || {}));
+    AxWishTypeMasterWebPortlet.setConfigsForDeleteWishTypeMaster =
+        setConfigsForDeleteWishTypeMaster;
+
+})($, (window.AxWishTypeMasterWebPortlet =
+    window.AxWishTypeMasterWebPortlet || {}));

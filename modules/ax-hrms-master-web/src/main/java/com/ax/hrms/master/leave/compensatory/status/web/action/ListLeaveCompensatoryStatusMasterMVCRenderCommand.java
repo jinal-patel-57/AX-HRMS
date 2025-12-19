@@ -46,7 +46,7 @@ public class ListLeaveCompensatoryStatusMasterMVCRenderCommand implements MVCRen
 		List<LeaveCompensatoryStatusMaster> leaveCompensatoryStatusMasters = null;
 		
 		int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 		
 		int totalOfLeaveCompensatoryStatus = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMastersCount();
 	    int totalPageContainer = (totalOfLeaveCompensatoryStatus + deltaValue - 1) / deltaValue;

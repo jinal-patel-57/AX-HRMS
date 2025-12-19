@@ -47,7 +47,7 @@ public class ListDesignationMasterMVCRenderCommand implements MVCRenderCommand{
 		List<DesignationMaster> designationMasterList = null;
 		
 		int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 		
 		int totalOfDesignationMaster = designationMasterLocalService.getDesignationMastersCount();
 	    int totalPageContainer = (totalOfDesignationMaster + deltaValue - 1) / deltaValue;
