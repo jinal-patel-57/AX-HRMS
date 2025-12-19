@@ -320,8 +320,57 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
     }
 
     @Override
+    public String mailWFHApproveEmployeeSubject() {
+        return _configuration.mailWFHApproveEmployeeSubject();
+    }
+
+    @Override
+    public String mailWFHApproveEmployeeBody() {
+        return _configuration.mailWFHApproveEmployeeBody();
+    }
+
+    @Override
+    public String mailWFHRejectEmployeeSubject() {
+        return _configuration.mailWFHRejectEmployeeSubject();
+    }
+
+    @Override
+    public String mailWFHRejectEmployeeBody() {
+        return _configuration.mailWFHRejectEmployeeBody();
+    }
+
+    @Override
+    public String mailWFHCancelEmployeeSubject() {
+        return _configuration.mailWFHCancelEmployeeSubject();
+    }
+
+    @Override
+    public String mailWFHCancelEmployeeBody() {
+        return _configuration.mailWFHCancelEmployeeBody();
+    }
+
+    @Override
+    public String mailWFHRequestManagerAndHrSubject() {
+        return _configuration.mailWFHRequestManagerAndHrSubject();
+    }
+
+    @Override
+    public String mailWFHRequestManagerAndHrBody() {
+        return _configuration.mailWFHRequestManagerAndHrBody();
+    }
+
+    @Override
+    public String mailWFHApproveTeamSubject() {
+        return _configuration.mailWFHApproveTeamSubject();
+    }
+
+    @Override
+    public String mailWFHApproveTeamBody() {
+        return _configuration.mailWFHApproveTeamBody();
+    }
+
+    @Override
 	public String mailRemovalProjectSubject() {
-		// TODO Auto-generated method stub
 		return _configuration.mailRemovalProjectSubject();
 	}
 

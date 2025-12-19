@@ -1,4 +1,4 @@
-package com.ax.hrms.work.from.home.web.employee.util;
+package com.ax.hrms.work.from.home.web.hr.util;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
@@ -8,10 +8,7 @@ import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDesignation;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.model.*;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -27,12 +24,10 @@ import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Utility class to get readable WFH status from LeaveCompensatoryStatusMaster
@@ -87,17 +82,10 @@ public class WFHStatusUtil {
             log.debug("Notification JSON payload created: " + notificationJSON.toString());
 
             // Send notification
-            UserNotificationEvent userNotification =
-                    UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
-                            employee.getLrUserId(),
-                            AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-                            UserNotificationDeliveryConstants.TYPE_WEBSITE,
-                            notificationJSON
-                    );
+            UserNotificationEvent userNotification = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(employee.getLrUserId(), AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOMEHR, UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
 
             if (userNotification != null) {
-                log.info("UserNotificationEvent created successfully. Event ID: "
-                        + userNotification.getUserNotificationEventId());
+                log.info("UserNotificationEvent created successfully. Event ID: " + userNotification.getUserNotificationEventId());
             } else {
                 log.warn("UserNotificationEvent is null after sending notification.");
             }
@@ -113,18 +101,14 @@ public class WFHStatusUtil {
             }
 
         } catch (Exception e) {
-            log.error(
-                    "Error occurred while sending notification to employee. LR User ID: "
-                            + employee.getLrUserId(),
-                    e
-            );
+            log.error("Error occurred while sending notification to employee. LR User ID: " + employee.getLrUserId(), e);
         }
 
         log.info("Completed sendNotificationToEmployee()");
     }
 
 
-    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap) {
+    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap, boolean isApprove, boolean isCancelled) {
         try {
             log.info("SENDING MAIL TO MANAGER");
             EmployeeDetails managerOrHr = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getEmployeeId());
@@ -147,7 +131,7 @@ public class WFHStatusUtil {
 //
             // SEND MAIL TO EMPLOYE
 
-            String mailContent = mailTemplateConfiguration.mailWFHRequestManagerAndHrBody();
+            String mailContent = isApprove ? mailTemplateConfiguration.mailWFHApproveEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailWFHCancelEmployeeBody() : mailTemplateConfiguration.mailWFHRejectEmployeeBody();
 
 
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", managerOrHr.getFirstName() + StringPool.SPACE + managerOrHr.getLastName());
@@ -156,7 +140,7 @@ public class WFHStatusUtil {
 //            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 //            mailContent =  mailContent.replace("${BODY}", body);
             log.info("SENDING MAIL TO MANAGER ...." + mailContent);
-            String subject = mailTemplateConfiguration.mailWFHRequestManagerAndHrSubject();
+            String subject = isApprove ? mailTemplateConfiguration.mailWFHApproveEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailWFHCancelEmployeeSubject() : mailTemplateConfiguration.mailWFHRejectEmployeeSubject();
             log.info("mail is senting to " + managerOrHr.getFirstName() + " " + managerOrHr.getFirstName());
 //            String subject=mailTemplateConfiguration.mailLeaveRequestManagerSubject();
             axHrmsCommonApi.sendMail(managerOrHr.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
@@ -166,19 +150,73 @@ public class WFHStatusUtil {
         }
     }
 
-    public String setDateFormat(Date inputDate) {
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsWorkFromHomePortletKeys.DATE_FORMAT);
-        String dateStr = null;
+
+//    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body) throws PortalException {
+//
+//        // START TABLE
+//        body.append("<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse;width:100%;'>");
+//
+//        body.append("<tr><th align='left'>Employee Code</th><td>").append(employee.getEmployeeCode()).append("</td></tr>");
+//
+//        body.append("<tr><th align='left'>Employee Name</th><td>").append(employee.getFirstName()).append(" ").append(employee.getLastName()).append("</td></tr>");
+//
+//        // END TABLE
+//        body.append("</table>");
+//
+//        body.append("<br/><p>This is a system generated email.</p>");
+//
+//        return body;
+//    }
+
+    public static void sendMailtoTeam(String fromName, String fromEmailAddress,List<String> teamEmailList,Map<String, Object> serviceMap,StringBuilder body,WorkFromHomeRequest workFromHomeRequest,AxHrmsCommonApi axHrmsCommonApi, MailTemplateConfiguration mailTemplateConfiguration)
+    {
+        DepartmentMasterLocalService departmentMasterLocalService =
+                (DepartmentMasterLocalService) serviceMap.get("departmentMasterLocalService");
+
+        DesignationMasterLocalService designationMasterLocalService =
+                (DesignationMasterLocalService) serviceMap.get("designationMasterLocalService");
+
+        EmployeeDepartmentLocalService employeeDepartmentLocalService =
+                (EmployeeDepartmentLocalService) serviceMap.get("employeeDepartmentLocalService");
+
+        EmployeeDesignationLocalService employeeDesignationLocalService =
+                (EmployeeDesignationLocalService) serviceMap.get("employeeDesignationLocalService");
+        LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService =
+                (LeaveCompensatoryStatusMasterLocalService) serviceMap.get("leaveStatusLocalService");
+        EmployeeDetailsLocalService employeeDetailsLocalService=(EmployeeDetailsLocalService) serviceMap.get("employeeDetailsLocalService");
+        EmployeeDetails employee= null;
         try {
+            employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
+            String subject=mailTemplateConfiguration.mailWFHApproveTeamSubject();
+            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
+            String mailContent=mailTemplateConfiguration.mailWFHApproveTeamBody();
+            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 
-            // Format the current date to the desired format
-            dateStr = outputDateFormat.format(inputDate);
+            mailContent = mailContent.replace("${BODY}", body);
 
-        } catch (Exception e) {
-            log.error("AxHrmsHrLeaveRequestWebUtil >>> setDateFormat Method >>Error in Set the Date..!!" + e.getMessage());
+
+
+            for (String teamEmail : teamEmailList) {
+
+                log.info("Sending WFH mail to team member :: " + teamEmail);
+
+
+                axHrmsCommonApi.sendMail(
+                        teamEmail,
+                        fromEmailAddress,
+                        fromName,
+                        subject,
+                        mailContent
+                );
+            }
+
+
+
+
+
+        } catch (PortalException e) {
+            throw new RuntimeException(e);
         }
-
-        return dateStr;
 
     }
 
@@ -224,6 +262,46 @@ public class WFHStatusUtil {
         body.append(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_FOOTER);
 
         return body;
+    }
+
+
+    public static List<String> extractValidEmails(String emailString) {
+
+        List<String> emailList = new ArrayList<>();
+
+        if (Validator.isNull(emailString)) {
+            return emailList;
+        }
+
+        String[] emails = emailString.split(",");
+
+        for (String email : emails) {
+            if (Validator.isNotNull(email)) {
+                String trimmedEmail = email.trim();
+                if (Validator.isEmailAddress(trimmedEmail)) {
+                    emailList.add(trimmedEmail);
+                }
+            }
+        }
+
+        return emailList;
+    }
+
+
+    public String setDateFormat(Date inputDate) {
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsWorkFromHomePortletKeys.DATE_FORMAT);
+        String dateStr = null;
+        try {
+
+            // Format the current date to the desired format
+            dateStr = outputDateFormat.format(inputDate);
+
+        } catch (Exception e) {
+            log.error("AxHrmsHrLeaveRequestWebUtil >>> setDateFormat Method >>Error in Set the Date..!!" + e.getMessage());
+        }
+
+        return dateStr;
+
     }
 
 }

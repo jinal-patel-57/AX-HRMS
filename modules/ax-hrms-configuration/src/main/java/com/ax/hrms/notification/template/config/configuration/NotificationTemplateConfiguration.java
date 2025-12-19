@@ -140,4 +140,27 @@ public String notificationAnniversary();
             name="Leave Rejected Notification to Manager.",
             required = false)
     public String leaveRequestedNotificationToManager();
+
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="WFH Approved Notification to Employee (Employee)",
+            required = false)
+    public String WFHRequestApprovedNotificationToEmployee();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="WFH Rejected Notification to Employee (Employee)",
+            required = false)
+    public String WFHRequestRejectedNotificationToEmployee();
+
+    @Meta.AD(deflt = "<h1>HELLO</h1>",
+            name="WFH Canceled Notification to Employee (Employee)",
+            required = false)
+    public String WFHRequestCanceledNotificationToEmployee();
+
+    @Meta.AD(
+            deflt = "<h1>HELLO</h1>",
+            name = "Work From Home Request Manager And HR",
+            required = false
+    )
+    public String WFHRequestManagerAndHr();
 }
