@@ -1,255 +1,33 @@
-//package com.ax.hrms.work.from.home.web.action;
-//
-//
-//
-//import com.ax.hrms.model.WorkFromHome;
-//import com.ax.hrms.service.WorkFromHomeLocalService;
-//import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-//import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-//import com.liferay.portal.kernel.theme.ThemeDisplay;
-//import com.liferay.portal.kernel.util.ParamUtil;
-//import com.liferay.portal.kernel.util.PortalUtil;
-//import com.liferay.portal.kernel.util.WebKeys;
-//import com.liferay.portal.kernel.servlet.SessionMessages;
-//import org.osgi.service.component.annotations.Component;
-//import org.osgi.service.component.annotations.Reference;
-//
-//import javax.portlet.ActionRequest;
-//import javax.portlet.ActionResponse;
-//import java.util.Date;
-//
-//@Component(
-//        property = {
-//                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-//                "mvc.command.name=/addWorkFromHomeRequest"
-//        },
-//        service = MVCActionCommand.class
-//)
-//public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand {
-//
-//    @Reference
-//    WorkFromHomeLocalService workFromHomeLocalService;
-//
-//    @Override
-//    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse)
-//            throws Exception {
-//   System.out.println("Hello odfdsfsdf");
-//        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-//
-//        String teamMailId = ParamUtil.getString(actionRequest, "teamMailId");
-//        String reason = ParamUtil.getString(actionRequest, "reason");
-//        Date startDate = ParamUtil.getDate(actionRequest, "startDate", null);
-//        Date endDate = ParamUtil.getDate(actionRequest, "endDate", null);
-//
-//        long wfhId = CounterLocalServiceUtil.increment(WorkFromHome.class.getName());
-//
-//        WorkFromHome  wfh = workFromHomeLocalService.createWorkFromHome(wfhId);
-//
-//        // Audit Fields
-//        wfh.setCompanyId(themeDisplay.getCompanyId());
-//        wfh.setGroupId(themeDisplay.getScopeGroupId());
-//        wfh.setCreatedBy(themeDisplay.getUserId());
-//        wfh.setModifiedBy(themeDisplay.getUserId());
-//        wfh.setCreateDate(new Date());
-//        wfh.setModifiedDate(new Date());
-//
-//        // User Input Fields
-//        wfh.setUserId(themeDisplay.getUserId());
-//        wfh.setTeamMailId(teamMailId);
-//        wfh.setReason(reason);
-//        wfh.setStatus("Pending");  // default
-//        wfh.setStartDate(startDate);
-//        wfh.setEndDate(endDate);
-//        wfh.setRequestDate(new Date());
-//
-//        // Save
-//        workFromHomeLocalService.addWorkFromHome(wfh);
-//
-//        SessionMessages.add(actionRequest, "success");
-//        SessionMessages.add(actionRequest,
-//                PortalUtil.getPortletId(actionRequest) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//package com.ax.hrms.work.from.home.web.action;
-//
-//import com.ax.hrms.model.WorkFromHome;
-//import com.ax.hrms.service.WorkFromHomeLocalService;
-//import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-//import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-//import com.liferay.portal.kernel.servlet.SessionErrors;
-//import com.liferay.portal.kernel.servlet.SessionMessages;
-//import com.liferay.portal.kernel.theme.ThemeDisplay;
-//import com.liferay.portal.kernel.util.ParamUtil;
-//import com.liferay.portal.kernel.util.PortalUtil;
-//import com.liferay.portal.kernel.util.Validator;
-//import com.liferay.portal.kernel.util.WebKeys;
-//import org.osgi.service.component.annotations.Component;
-//import org.osgi.service.component.annotations.Reference;
-//
-//import javax.portlet.ActionRequest;
-//import javax.portlet.ActionResponse;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-//
-//@Component(
-//        property = {
-//                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-//                "mvc.command.name=/addEditWFH"
-//        },
-//        service = MVCActionCommand.class
-//)
-//public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand {
-//
-//    @Reference
-//    WorkFromHomeLocalService workFromHomeLocalService;
-//
-//    @Override
-//    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-//
-//        long wfhId = ParamUtil.getLong(actionRequest, "workFromHomeRequestId");
-//
-//        String teamMailId = ParamUtil.getString(actionRequest, "teamMailId");
-//        String reason = ParamUtil.getString(actionRequest, "reason");
-////        Date startDate = ParamUtil.getDate(actionRequest, "startDate", null);
-////        Date endDate = ParamUtil.getDate(actionRequest, "endDate", null);
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//
-//        String startDateStr = ParamUtil.getString(actionRequest, "startDate");
-//        String endDateStr = ParamUtil.getString(actionRequest, "endDate");
-//
-//        Date startDate = Validator.isNotNull(startDateStr) ? sdf.parse(startDateStr) : null;
-//        Date endDate = Validator.isNotNull(endDateStr) ? sdf.parse(endDateStr) : null;
-//
-//        System.out.println("startDate :: " + startDate + " endDate :: " + endDate);
-//
-//         System.out.println("startDate ::  "+startDate+"  endDate ::  "+endDate);
-//        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-//
-//        // ---------- ADD ----------
-//        if (wfhId <= 0) {
-//            WorkFromHome wfh = workFromHomeLocalService.createWorkFromHome(
-//                    CounterLocalServiceUtil.increment(WorkFromHome.class.getName())
-//            );
-//
-//            wfh.setCompanyId(themeDisplay.getCompanyId());
-//            wfh.setGroupId(themeDisplay.getScopeGroupId());
-//            wfh.setCreatedBy(themeDisplay.getUserId());
-//            wfh.setModifiedBy(themeDisplay.getUserId());
-//            wfh.setCreateDate(new Date());
-//            wfh.setModifiedDate(new Date());
-//
-//            wfh.setUserId(themeDisplay.getUserId());
-//            wfh.setTeamMailId(teamMailId);
-//            wfh.setReason(reason);
-//            wfh.setStatus("Pending");
-//            wfh.setStartDate(startDate);
-//            wfh.setEndDate(endDate);
-//            wfh.setRequestDate(new Date());
-//
-//            workFromHomeLocalService.addWorkFromHome(wfh);
-//
-//            SessionMessages.add(actionRequest, "success");
-//        }
-//
-//        // ---------- EDIT ----------
-//        else {
-//            WorkFromHome wfh = workFromHomeLocalService.getWorkFromHome(wfhId);
-//
-//            wfh.setTeamMailId(teamMailId);
-//            wfh.setReason(reason);
-//            wfh.setStartDate(startDate);
-//            wfh.setEndDate(endDate);
-//            wfh.setModifiedBy(themeDisplay.getUserId());
-//            wfh.setModifiedDate(new Date());
-//
-//            workFromHomeLocalService.updateWorkFromHome(wfh);
-//
-//            SessionMessages.add(actionRequest, "success-edit");
-//        }
-//
-//        SessionMessages.add(actionRequest,
-//                PortalUtil.getPortletId(actionRequest) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.ax.hrms.work.from.home.web.employee.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.service.DepartmentMasterLocalService;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
+import com.ax.hrms.service.EmployeeDepartmentLocalService;
+import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
+import com.ax.hrms.service.persistence.LeaveRequestUtil;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -257,14 +35,11 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@Component(
-        property = {
-                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-                "mvc.command.name=/addEditWFH"
-        },
-        service = MVCActionCommand.class
-)
+@Component(property = {"javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME, "mvc.command.name=/addEditWFH"}, service = MVCActionCommand.class)
 public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand {
     private static final Log log = LogFactoryUtil.getLog(AddWorkFromHomeRequestMVCActionCommand.class);
 
@@ -276,6 +51,27 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
     @Reference
     private EmployeeDetailsLocalService employeeDetailsLocalService;
+    @Reference
+    NotificationTemplateConfiguration notificationTemplateConfiguration;
+
+    @Reference
+    MailTemplateConfiguration mailTemplateConfiguration;
+    @Reference
+    AxHrmsCommonApi axHrmsCommonApi;
+    @Reference
+    LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
+    @Reference
+    DepartmentMasterLocalService departmentMasterLocalService;
+
+    @Reference
+    DesignationMasterLocalService designationMasterLocalService;
+
+
+    @Reference
+    EmployeeDepartmentLocalService employeeDepartmentLocalService;
+
+    @Reference
+    EmployeeDesignationLocalService employeeDesignationLocalService;
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -297,65 +93,65 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         Date endDate = Validator.isNotNull(endDateStr) ? sdf.parse(endDateStr) : null;
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-       log.info("here ok.....");
+        log.info("here ok.....");
 
         // -----------------------------
         // VALIDATION SECTION
         // -----------------------------
 
-//        boolean hasError = false;
-//
-//        // Empty fields check
-//        if (Validator.isNull(teamMailId) ||
-//                Validator.isNull(reason) ||
-//                Validator.isNull(startDateStr) ||
-//                Validator.isNull(endDateStr)) {
-//
-//            SessionErrors.add(actionRequest, "empty-fields");
-//            hasError = true;
-//        }
-//
-//        // Email validation
-//        if (Validator.isNull(teamMailId) || !Validator.isEmailAddress(teamMailId)) {
-//            SessionErrors.add(actionRequest, "email-invalid");
-//            hasError = true;
-//        }
-//
-//        // Reason validation (min 10 chars)
-//        if (reason.length() < 10) {
-//            SessionErrors.add(actionRequest, "reason-min-char-invalid");
-//            hasError = true;
-//        }
-//
-//        // Reason validation (max 250 chars)
-//        if (reason.length() > 250) {
-//            SessionErrors.add(actionRequest, "reason-max-char-invalid");
-//            hasError = true;
-//        }
-//
-//        // Start date required
-//        if (startDate == null) {
-//            SessionErrors.add(actionRequest, "start-date-invalid");
-//            hasError = true;
-//        }
-//
-//        // End date required
-//        if (endDate == null) {
-//            SessionErrors.add(actionRequest, "end-date-invalid");
-//            hasError = true;
-//        }
-//
-//        // End date must be after start date
-//        if (startDate != null && endDate != null && endDate.before(startDate)) {
-//            SessionErrors.add(actionRequest, "end-before-start");
-//            hasError = true;
-//        }
-//
-//        // If any validation failed → stop processing
-//        if (hasError) {
-//            actionResponse.setRenderParameter("mvcPath", "/jsp/ax-hrms-work-from-home-employee/add_edit_work_from_home.jsp");
-//            return;
-//        }
+        boolean hasError = false;
+
+        // Empty fields check
+        if (Validator.isNull(teamMailId) ||
+                Validator.isNull(reason) ||
+                Validator.isNull(startDateStr) ||
+                Validator.isNull(endDateStr)) {
+
+            SessionErrors.add(actionRequest, "empty-fields");
+            hasError = true;
+        }
+
+        // Email validation
+        if (Validator.isNull(teamMailId)) {
+            SessionErrors.add(actionRequest, "email-invalid");
+            hasError = true;
+        }
+
+        // Reason validation (min 10 chars)
+        if (reason.length() < 10) {
+            SessionErrors.add(actionRequest, "reason-min-char-invalid");
+            hasError = true;
+        }
+
+        // Reason validation (max 250 chars)
+        if (reason.length() > 250) {
+            SessionErrors.add(actionRequest, "reason-max-char-invalid");
+            hasError = true;
+        }
+
+        // Start date required
+        if (startDate == null) {
+            SessionErrors.add(actionRequest, "start-date-invalid");
+            hasError = true;
+        }
+
+        // End date required
+        if (endDate == null) {
+            SessionErrors.add(actionRequest, "end-date-invalid");
+            hasError = true;
+        }
+
+        // End date must be after start date
+        if (startDate != null && endDate != null && endDate.before(startDate)) {
+            SessionErrors.add(actionRequest, "end-before-start");
+            hasError = true;
+        }
+
+        // If any validation failed → stop processing
+        if (hasError) {
+            actionResponse.setRenderParameter("mvcPath", "/jsp/ax-hrms-work-from-home-employee/add_edit_work_from_home.jsp");
+            return;
+        }
 
 
         // -----------------------------
@@ -366,9 +162,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
             log.info("inside the ....................");
             // ADD NEW ENTRY
-            WorkFromHomeRequest wfh = workFromHomeRequestLocalService.createWorkFromHomeRequest(
-                    CounterLocalServiceUtil.increment(WorkFromHomeRequest.class.getName())
-            );
+            WorkFromHomeRequest wfh = workFromHomeRequestLocalService.createWorkFromHomeRequest(CounterLocalServiceUtil.increment(WorkFromHomeRequest.class.getName()));
             log.info("inside the condition check");
 
             wfh.setCompanyId(themeDisplay.getCompanyId());
@@ -377,14 +171,14 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setCreateDate(new Date());
             wfh.setModifiedDate(new Date());
-try {
-    EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-    log.info("employee details " + employeeDetails.toString());
-//            wfh.setEmployeeId(employeeDetails.getEmployeeId());
-    wfh.setEmployeeId(employeeDetails.getEmployeeId());
-}catch (Exception e) {
-    e.printStackTrace();
-}
+            EmployeeDetails employeeDetails = null;
+            try {
+                employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+                log.info("employee details " + employeeDetails.toString());
+                wfh.setEmployeeId(employeeDetails.getEmployeeId());
+            } catch (Exception e) {
+                log.error("Error while fetching employee details for ID: " + wfhId+"     "+ e.getMessage());
+            }
             wfh.setTeamMailId(teamMailId);
             wfh.setReason(reason);
             wfh.setStatus(leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsWorkFromHomePortletKeys.PENDING).getLeaveCompensatoryStatusMasterId());
@@ -394,8 +188,46 @@ try {
             log.info("over here");
             workFromHomeRequestLocalService.addWorkFromHomeRequest(wfh);
             log.info("add successfullyt");
+            Map<String, Object> serviceMap = new HashMap<>();
+            serviceMap.put("departmentMasterLocalService", departmentMasterLocalService);
+            serviceMap.put("designationMasterLocalService", designationMasterLocalService);
+            serviceMap.put("employeeDepartmentLocalService", employeeDepartmentLocalService);
+            serviceMap.put("employeeDesignationLocalService", employeeDesignationLocalService);
+            serviceMap.put("leaveStatusLocalService", leaveStatusLocalService);
+            serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
 
-//            SessionMessages.add(actionRequest, "wfh-added");
+            String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+            String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                    PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+            StringBuilder employeeMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+            //Sending notification to Manager
+
+
+            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails.getManagerId());
+            String HrAndManagerNotification =notificationTemplateConfiguration.WFHRequestManagerAndHr();
+
+            WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, manager);
+
+
+            //Sending notification to the HR Admin
+            String roleName="HR Admin";
+            Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
+            List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
+            for (User user : users) {
+                log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                log.info("Employee Id: " + HremployeeDetails.toString());
+                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+            }
+
+            //send mail to Manager
+
+
+            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+
+
+            SessionMessages.add(actionRequest, "wfh-added");
         } else {
 
             // EDIT EXISTING ENTRY
@@ -412,9 +244,14 @@ try {
 
             SessionMessages.add(actionRequest, "wfh-updated");
         }
+//        String redirect = ParamUtil.getString(actionRequest, "redirect");
+//        if (Validator.isNotNull(redirect)) {
+//            actionResponse.sendRedirect(redirect);
+//        }
 
         // Hide default Liferay error message
-//        SessionMessages.add(actionRequest,
-//                PortalUtil.getPortletId(actionRequest) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+        SessionMessages.add(actionRequest, PortalUtil.getPortletId(actionRequest) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
     }
 }

@@ -1,223 +1,12 @@
-//package com.ax.hrms.work.from.home.web.hr.action;
-//
-//
-//import com.ax.hrms.model.WorkFromHome;
-//import com.ax.hrms.service.WorkFromHomeLocalService;
-//import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-//import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
-//import com.liferay.portal.kernel.dao.search.SearchContainer;
-//import com.liferay.portal.kernel.portlet.PortletURLUtil;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-//import com.liferay.portal.kernel.model.User;
-//import com.liferay.portal.kernel.service.UserLocalService;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import javax.portlet.PortletException;
-//import javax.portlet.PortletURL;
-//import javax.portlet.RenderRequest;
-//import javax.portlet.RenderResponse;
-//
-//import org.osgi.service.component.annotations.Component;
-//import org.osgi.service.component.annotations.Reference;
-//
-//@Component(property = {"javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOMEHR, "mvc.command.name=/"}, service = MVCRenderCommand.class)
-//public class ListWFHHRRenderCommand implements MVCRenderCommand {
-//
-//    @Reference
-//    private WorkFromHomeLocalService workFromHomeLocalService;
-//
-//    @Reference
-//    private UserLocalService userLocalService;
-//
-//    @Override
-//    public String render(RenderRequest request, RenderResponse response) throws PortletException {
-//        PortletURL iteratorURL = PortletURLUtil.getCurrent(request, response);
-//        System.out.println("Heleo dkvhsdfiusdhf");
-//        // Get SearchContainer from JSP
-//        SearchContainer<WFHRequestDto> searchContainer = new SearchContainer<>(request, iteratorURL, null, "No Work From Home requests found.");
-//
-/// /        int start = 0;
-/// /        int end = 20; // default
-/// /
-/// /        if (searchContainer != null) {
-/// /            start = searchContainer.getStart();
-/// /            end = searchContainer.getEnd();
-/// /        }
-/// /
-/// /        // Fetch paginated WFH entries
-/// /        List<WorkFromHome> wfhListRaw = workFromHomeLocalService.getWorkFromHomes(start, end);
-/// /
-/// /        int total = workFromHomeLocalService.getWorkFromHomesCount();
-/// /
-/// /
-/// /
-/// /        searchContainer.setResultsAndTotal(() -> workFromHomeLocalService.getWorkFromHomes(searchContainer.getStart(), searchContainer.getEnd()), total);
-/// /
-/// /        // Correct method
-/// /        request.setAttribute("wfhSC", searchContainer);
-/// /        request.setAttribute("totalWFH", total);
-//
-//
-//
-//        int start = searchContainer.getStart();
-//        int end = searchContainer.getEnd();
-//
-//        // Fetch WorkFromHome records
-//        List<WorkFromHome> wfhListRaw = workFromHomeLocalService.getWorkFromHomes(start, end);
-//        int total = workFromHomeLocalService.getWorkFromHomesCount();
-//
-//        // Convert to DTO
-//        List<WFHRequestDto> dtoList = new ArrayList<>();
-//        for (WorkFromHome wfh : workFromHomeLocalService.getWorkFromHomes(start, end)) {
-//            User user = userLocalService.fetchUser(wfh.getUserId());
-//            WFHRequestDto dto = new WFHRequestDto();
-//            dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-//            dto.setEmployeeName(user != null ? user.getFullName() : "Unknown");
-//            dto.setTeamMailId(wfh.getTeamMailId());
-//            dto.setReason(wfh.getReason());
-/// /            dto.setStatus(wfh.getStatus());
-//            dto.setRequestDate(wfh.getRequestDate());
-//            dto.setStartDate(wfh.getStartDate());
-//            dto.setEndDate(wfh.getEndDate());
-//            dtoList.add(dto);
-//        }
-//
-//        // Set results and total in SearchContainer
-//        searchContainer.setResultsAndTotal(() -> dtoList, total);
-//
-//        request.setAttribute("wfhSC", searchContainer);
-//        request.setAttribute("totalWFH", total);
-//
-//        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
-//    }
-//}
-
-
-//
-//package com.ax.hrms.work.from.home.web.hr.action;
-//
-//import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
-//import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-//import com.ax.hrms.model.WorkFromHome;
-//import com.ax.hrms.service.WorkFromHomeLocalService;
-//import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-//import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
-//import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
-//import com.liferay.portal.kernel.dao.search.SearchContainer;
-//import com.liferay.portal.kernel.model.User;
-//import com.liferay.portal.kernel.portlet.PortletURLUtil;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-//import com.liferay.portal.kernel.service.UserLocalService;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import javax.portlet.PortletException;
-//import javax.portlet.PortletURL;
-//import javax.portlet.RenderRequest;
-//import javax.portlet.RenderResponse;
-//
-//import org.osgi.service.component.annotations.Component;
-//import org.osgi.service.component.annotations.Reference;
-//
-//@Component(
-//        property = {
-//                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOMEHR,
-//                "mvc.command.name=/"
-//        },
-//        service = MVCRenderCommand.class
-//)
-//public class ListWFHHRRenderCommand implements MVCRenderCommand {
-//
-//    @Reference
-//    private WorkFromHomeLocalService workFromHomeLocalService;
-//
-//    @Reference
-//    private UserLocalService userLocalService;
-//
-//    @Reference
-//    private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
-//
-//    @Override
-//    public String render(RenderRequest request, RenderResponse response) throws PortletException {
-//
-//        // Create SearchContainer
-//        PortletURL iteratorURL = PortletURLUtil.getCurrent(request, response);
-//        SearchContainer<WFHRequestDto> searchContainer =
-//                new SearchContainer<>(request, iteratorURL, null, "No Work From Home requests found.");
-//
-//        int start = searchContainer.getStart();
-//        int end = searchContainer.getEnd();
-//
-//        // Fetch records
-//        List<WorkFromHome> wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
-//        int total = workFromHomeLocalService.getWorkFromHomesCount();
-//
-//        // Fetch LeaveCompensatoryStatusMaster list for status mapping
-//        List<LeaveCompensatoryStatusMaster> statusList =
-//                leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
-//
-//        // Convert WorkFromHome → WFHRequestDto
-//        List<WFHRequestDto> dtoList = new ArrayList<>();
-//
-//        for (WorkFromHome wfh : wfhList) {
-//
-//            User user = userLocalService.fetchUser(wfh.getUserId());
-//
-//            WFHRequestDto dto = new WFHRequestDto();
-//            dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-//            dto.setEmployeeName(user != null ? user.getFullName() : "Unknown");
-//            dto.setTeamMailId(wfh.getTeamMailId());
-//            dto.setReason(wfh.getReason());
-//
-//            // Status mapping from LeaveCompensatoryStatusMaster
-//            String statusName = WFHStatusUtil.getStatusNameById(
-//                    wfh.getStatus(),   // statusId
-//                    statusList
-//            );
-//            dto.setStatus(statusName);
-//
-//            dto.setRequestDate(wfh.getRequestDate());
-//            dto.setStartDate(wfh.getStartDate());
-//            dto.setEndDate(wfh.getEndDate());
-//
-//            dtoList.add(dto);
-//        }
-//
-//        // Apply results to SearchContainer
-//        searchContainer.setResultsAndTotal(() -> dtoList, total);
-//
-//        // Set attributes for JSP
-//        request.setAttribute("wfhSC", searchContainer);
-//        request.setAttribute("totalWFH", total);
-//
-//        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.ax.hrms.work.from.home.web.hr.action;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-import com.ax.hrms.model.WorkFromHome;
+import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.WorkFromHomeLocalService;
+import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
@@ -229,21 +18,18 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.portlet.PortletURLUtil;
-
 import com.liferay.portal.kernel.util.WebKeys;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * HR – Work From Home List Page Renderer
- */
 @Component(
         property = {
                 "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOMEHR,
@@ -256,164 +42,140 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
     private static final Log log = LogFactoryUtil.getLog(ListWFHHRRenderCommand.class);
 
     @Reference
-    private WorkFromHomeLocalService workFromHomeLocalService;
+    private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
+
+    @Reference
+    private EmployeeDetailsLocalService employeeDetailsLocalService;
+
+    @Reference
+    private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
 
     @Reference
     private UserLocalService userLocalService;
 
     @Reference
-    private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
-
-
-    @Reference
-    EmployeeDetailsLocalService employeeDetailsLocalService;
-
-    @Reference
-    AxHrmsCommonApi axHrmsCommonApi;
+    private AxHrmsCommonApi axHrmsCommonApi;
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
 
-        log.info("===== Entering ListWFHHRRenderCommand#render() =====");
+        ThemeDisplay themeDisplay =
+                (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        long currentUserId = themeDisplay.getUserId();
+
+        boolean isHRAdmin =
+                axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+
+        boolean isManager =
+                axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
+
+        // ✅ SearchContainer owns pagination
+        PortletURL iteratorURL = renderResponse.createRenderURL();
+
+        SearchContainer<WFHRequestDto> searchContainer =
+                new SearchContainer<>(
+                        renderRequest,
+                        iteratorURL,
+                        null,
+                        "no-wfh-request-found"
+                );
+
+        int start = searchContainer.getStart();
+        int end = searchContainer.getEnd();
+
+        List<WorkFromHomeRequest> wfhRequestList = new ArrayList<>();
+        int totalWFHRequests = 0;
 
         try {
-            // Pagination parameters
-            int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-            int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
-            int start = (curValue - 1) * deltaValue;
-            int end = start + deltaValue;
 
-            log.info("Pagination - Current Page: " + curValue + ", Delta: " + deltaValue);
-            List<WorkFromHome> wfhList = new ArrayList<>();
-            int totalWFHRequests = 0;
-//            int totalWFHRequests = workFromHomeLocalService.getWorkFromHomesCount();
-//            log.info("Total WFH Requests found: " + totalWFHRequests);
-
-//            int totalPageContainer = (totalWFHRequests + deltaValue - 1) / deltaValue;
-
-            ThemeDisplay themeDisplay =
-                    (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-            boolean isHRAdmin =
-                    axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
-
-            boolean isManager =
-                    axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
-            long currentUserId = themeDisplay.getUserId();
-            log.info("Logged-in User ID: " + currentUserId);
-            log.info("Is HR Admin: " + isHRAdmin);
-            log.info("Is Manager: " + isManager);
             if (isHRAdmin) {
 
-                // HR Admin → All Requests
-                totalWFHRequests = workFromHomeLocalService.getWorkFromHomesCount();
-                wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
+                // HR Admin → ALL requests
 
-                log.info("HR Admin access → fetching all WFH requests");
-
+                log.info("inside the hr admin");
+                totalWFHRequests =
+                        workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
+                log.info("total wfh requests: " + totalWFHRequests);
+                wfhRequestList =
+                        workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
+                log.info("total wfh requests: " + wfhRequestList.size());
             } else if (isManager) {
 
-                // Manager → Only employees under this manager
-//                totalWFHRequests =
-//                        workFromHomeLocalService.getWorkFromHomesCountByManagerId(currentUserId);
-//                wfhList =
-//                        workFromHomeLocalService.getWorkFromHomesByManagerId(
-//                                currentUserId, start, end);
-                log.info("Manager access → fetching WFH requests for managerId: " + currentUserId);
+                // Find manager employee record
+                EmployeeDetails managerEmployee =
+                        employeeDetailsLocalService.findByLrUserId(currentUserId);
 
-            } else {
+                if (managerEmployee != null) {
 
-                // Other roles → no access
-                log.warn("User has no permission to view WFH requests");
+                    // Employees under this manager
+                    List<EmployeeDetails> teamEmployees =
+                            employeeDetailsLocalService.findByManagerId(
+                                    managerEmployee.getEmployeeId());
+
+                    List<Long> teamUserIds = teamEmployees.stream()
+                            .map(EmployeeDetails::getEmployeeId)
+                            .collect(Collectors.toList());
+
+                    log.info("teamUserIds :: "+teamUserIds);
+                    if (!teamUserIds.isEmpty()) {
+
+                        List<WorkFromHomeRequest> allRequests =
+                                workFromHomeRequestLocalService
+                                        .getWorkFromHomeRequests(-1, -1)
+                                        .stream()
+                                        .filter(req ->
+                                                teamUserIds.contains(req.getEmployeeId()))
+                                        .collect(Collectors.toList());
+
+                        totalWFHRequests = allRequests.size();
+
+                        wfhRequestList = allRequests.stream()
+                                .skip(start)
+                                .limit(end - start)
+                                .collect(Collectors.toList());
+                    }
+                }
             }
-            int totalPageContainer =
-                    (totalWFHRequests + deltaValue - 1) / deltaValue;
 
-            if (curValue > totalPageContainer && totalPageContainer > 0) {
-                curValue = totalPageContainer;
-                log.warn("Current page exceeded number of pages. Reset to: " + curValue);
-            }
-
-
-            log.info("Fetching records from index " + start + " to " + end);
-
-
-
-            // Fetch WFH entities
-//            List<WorkFromHome> wfhList = workFromHomeLocalService.getWorkFromHomes(start, end);
-
-            if (wfhList == null || wfhList.isEmpty()) {
-                log.warn("No WFH records found for the given range.");
-            }
-
-            // Fetch status list
+            // Fetch status master
             List<LeaveCompensatoryStatusMaster> statusList =
                     leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
-            log.info("Status Master List fetched. Total statuses: " + statusList.size());
-
-            List<WFHRequestDto> wfhRequestDtoList = new ArrayList<>();
-
-            for (WorkFromHome wfh : wfhList) {
-
-                log.info("Processing WFH Request ID: " + wfh.getWorkFromHomeRequestId());
-
-                User user = userLocalService.fetchUser(wfh.getUserId());
-                if (user != null) {
-                    log.debug("Fetched user: " + user.getFullName());
-                } else {
-                    log.warn("User not found for ID: " + wfh.getUserId());
-                }
+            // Convert to DTO
+            List<WFHRequestDto> dtoList = new ArrayList<>();
+            log.info("outside the hr admin");
+            for (WorkFromHomeRequest wfh : wfhRequestList) {
+                 log.info("inside the loop ::"+wfh.toString());
+//                User user = userLocalService.fetchUser(wfh.getUserId());
+                EmployeeDetails employeeDetails=employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
 
                 WFHRequestDto dto = new WFHRequestDto();
                 dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-                dto.setEmployeeName(user != null ? user.getFullName() : "Unknown");
-
+                dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName()+"  "+employeeDetails.getLastName() : "Unknown");
                 dto.setTeamMailId(wfh.getTeamMailId());
                 dto.setReason(wfh.getReason());
-
-                // Status mapping
-                String statusName = WFHStatusUtil.getStatusNameById(
-                        wfh.getStatus(),
-                        statusList
+                dto.setStatus(
+                        WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList)
                 );
-
-                log.debug("Mapped Status ID " + wfh.getStatus() + " to Status Name: " + statusName);
-
-                dto.setStatus(statusName);
-
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
 
-                wfhRequestDtoList.add(dto);
+                dtoList.add(dto);
             }
-
-            // Set JSP attributes
-            renderRequest.setAttribute("wfhRequestList", wfhRequestDtoList);
-            renderRequest.setAttribute("totalWFHRequest", totalWFHRequests);
-            renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);
-            renderRequest.setAttribute("iteratorURL", renderResponse.createRenderURL());
-
-            // Setup SearchContainer
-            SearchContainer<WFHRequestDto> searchContainer = new SearchContainer<>(
-                    renderRequest,
-                    renderResponse.createRenderURL(),
-                    null,
-                    "no-wfh-request-found"
+            log.info("Outside the loops ok.......");
+            searchContainer.setResultsAndTotal(
+                    () -> dtoList,
+                    totalWFHRequests
             );
-
-            searchContainer.setResultsAndTotal(wfhRequestDtoList);
-
+            log.info("here ok.....");
             renderRequest.setAttribute("wfhSC", searchContainer);
 
-            log.info("WFH DTO List prepared successfully. Total DTOs: " + wfhRequestDtoList.size());
-
         } catch (Exception e) {
-            log.error("Exception in ListWFHHRRenderCommand: ", e);
+            log.error("Error while listing WFH requests", e);
         }
 
-        log.info("===== Exiting ListWFHHRRenderCommand#render() =====");
-return null;
-//        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
+        return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
     }
 }

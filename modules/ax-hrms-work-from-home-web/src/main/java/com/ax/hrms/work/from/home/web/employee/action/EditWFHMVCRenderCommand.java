@@ -1,8 +1,10 @@
 package com.ax.hrms.work.from.home.web.employee.action;
 
-import com.ax.hrms.model.WorkFromHome;
-import com.ax.hrms.service.WorkFromHomeLocalService;
+import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import org.osgi.service.component.annotations.Component;
@@ -20,16 +22,18 @@ import javax.portlet.RenderResponse;
 )
 public class EditWFHMVCRenderCommand implements MVCRenderCommand {
 
+    private static final Log log = LogFactoryUtil.getLog(EditWFHMVCRenderCommand.class);
+
     @Reference
-    private WorkFromHomeLocalService workFromHomeLocalService;
+    private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
-            System.out.println("Hello in the render");
+            log.info("Hello in the render");
         long wfhId = ParamUtil.getLong(renderRequest, "workFromHomeRequestId");
 
         if (wfhId > 0) {
-            WorkFromHome wfh = workFromHomeLocalService.fetchWorkFromHome(wfhId);
+            WorkFromHomeRequest wfh = workFromHomeRequestLocalService.fetchWorkFromHomeRequest(wfhId);
             renderRequest.setAttribute("wfh", wfh);
         }
 

@@ -17,7 +17,7 @@
 //import javax.portlet.RenderRequest;
 //import javax.portlet.RenderResponse;
 //
-///**
+/// **
 // * Listing WFH Records
 // */
 //@Component(
@@ -65,66 +65,6 @@
 //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //package com.ax.hrms.work.from.home.web.employee.action;
 //
@@ -151,7 +91,7 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-///**
+/// **
 // * Listing WFH Records for Employee
 // */
 //@Component(
@@ -228,93 +168,36 @@
 //}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.ax.hrms.work.from.home.web.employee.action;
 
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
+import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHome;
-import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.WorkFromHomeLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
-
 import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.portlet.PortletURL;
 import javax.portlet.PortletException;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Component(
-        property = {
-                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-                "mvc.command.name=/"
-        },
-        service = MVCRenderCommand.class
-)
+@Component(property = {"javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME, "mvc.command.name=/"}, service = MVCRenderCommand.class)
 public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand {
 
     @Reference
@@ -331,26 +214,33 @@ public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand
 
 
     @Override
-    public String render(RenderRequest renderRequest, RenderResponse renderResponse)
-            throws PortletException {
-
+    public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         // Create iterator URL
         PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+        long userId = themeDisplay.getUserId();
 
         // Pagination values
         int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
         int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 5);
 
-        int total =  workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
+        int total = workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
 
         int start = (cur - 1) * delta;
         int end = start + delta;
-
+        // Get employee details for logged-in user
+        EmployeeDetails employeeDetail = null;
+        try {
+            employeeDetail = employeeDetailsLocalService.findByLrUserId(userId);
+        } catch (NoSuchEmployeeDetailsException e) {
+            throw new RuntimeException(e);
+        }
         // Fetch paginated WFH records
-        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
-                // Fetch all statuses
-        List<LeaveCompensatoryStatusMaster> statusList =
-                leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
+//        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
+        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.findByEmployeeId(employeeDetail.getEmployeeId(), start, end);
+        // Fetch all statuses
+
+        List<LeaveCompensatoryStatusMaster> statusList = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
         List<WFHRequestDto> dtoList = new ArrayList<>();
 
@@ -358,10 +248,10 @@ public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand
         for (WorkFromHomeRequest wfh : wfhList) {
 
 //            User user = userLocalService.fetchUser(wfh.getUserId());
-            EmployeeDetails employeeDetails=employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
+            EmployeeDetails employeeDetails = employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
             WFHRequestDto dto = new WFHRequestDto();
             dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-            dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName() +" "+employeeDetails.getLastName() : "");
+            dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName() + " " + employeeDetails.getLastName() : "");
             dto.setTeamMailId(wfh.getTeamMailId());
             dto.setReason(wfh.getReason());
             dto.setRequestDate(wfh.getRequestDate());
@@ -374,20 +264,14 @@ public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand
         }
 
         // Setup SearchContainer
-        SearchContainer<WFHRequestDto> wfhSC = new SearchContainer<>(
-                renderRequest,
-                iteratorURL,
-                null,
-                "no-wfh-request-found"
-        );
+        SearchContainer<WFHRequestDto> wfhSC = new SearchContainer<>(renderRequest, iteratorURL, null, "no-wfh-request-found");
 
         wfhSC.setDelta(delta);
         wfhSC.setDeltaConfigurable(true);
 //        wfhSC.setTotal(total);
 //        wfhSC.setResults(dtoList);
 
-        wfhSC.setResultsAndTotal(
-                () -> dtoList,  // supplier
+        wfhSC.setResultsAndTotal(() -> dtoList,  // supplier
                 total           // correct total count
         );
         // Set attributes for JSP

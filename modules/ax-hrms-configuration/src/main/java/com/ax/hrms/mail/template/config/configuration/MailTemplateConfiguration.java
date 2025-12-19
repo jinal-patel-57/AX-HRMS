@@ -403,4 +403,91 @@ public interface MailTemplateConfiguration {
             required = false
     )
     public String mailLeaveRequestManagerBody();
+
+    @Meta.AD(
+            deflt = "Work From Home Request Approved",
+            name = "Work From Home Request Approved Mail to Employee (SUBJECT)",
+            required = false
+    )
+    public String mailWFHApproveEmployeeSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Dear ${EMPLOYEE_NAME},</p>" +
+                    "<p>Work From Home request has been <b>approved</b>.</p>" +
+                    "${BODY}",
+            name = "Work From Home Request Approved Mail to Employee (BODY)",
+            required = false
+    )
+    public String mailWFHApproveEmployeeBody();
+
+    @Meta.AD(
+            deflt = "Work From Home Request Rejected",
+            name = "Work From Home Request Rejected Mail to Employee (SUBJECT)",
+            required = false
+    )
+    public String mailWFHRejectEmployeeSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Dear ${EMPLOYEE_NAME},</p>" +
+                    "<p>Work From Home request has been <b>rejected</b>.</p>" +
+                    "${BODY}",
+            name = "Work From Home Request Rejected Mail to Employee (BODY)",
+            required = false
+    )
+    public String mailWFHRejectEmployeeBody();
+
+    @Meta.AD(
+            deflt = "Work From Home Request Cancelled",
+            name = "Work From Home Request Cancelled Mail to Employee (SUBJECT)",
+            required = false
+    )
+    public String mailWFHCancelEmployeeSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Dear ${EMPLOYEE_NAME},</p>" +
+                    "<p>Work From Home request has been <b>cancelled</b>.</p>" +
+                    "${BODY}",
+            name = "Work From Home Request Cancelled Mail to Employee (BODY)",
+            required = false
+    )
+    public String mailWFHCancelEmployeeBody();
+
+    @Meta.AD(
+            deflt = "Work From Home Request Notification",
+            name = "Work From Home Request Manager And HR (SUBJECT)",
+            required = false
+    )
+    public String mailWFHRequestManagerAndHrSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Hello ${EMPLOYEE_NAME},</p>" +
+                    "<p>A new <b>Work From Home</b> request has been submitted.</p>" +
+                    "<p>Employee details are given below:</p>" +
+                    "${BODY}" +
+                    "<p>Please review and take the necessary action.</p>" +
+                    "<p>Regards,<br/>HRMS</p>",
+            name = "Work From Home Request Manager And HR (BODY)",
+            required = false
+    )
+    public String mailWFHRequestManagerAndHrBody();
+
+    @Meta.AD(
+            deflt = "Work From Home Request Approved",
+            name = "Work From Home Request Approved Mail to Employee (SUBJECT)",
+            required = false
+    )
+    public String mailWFHApproveTeamSubject();
+
+    @Meta.AD(
+            deflt = "<p>Dear Team Members,</p>" +
+                    "<p>Work From Home request has been <b>approved</b>.</p>" +
+                    "${BODY}" ,
+            name = "Work From Home Request Approved Mail to Employee (BODY)",
+            required = false
+    )
+    public String mailWFHApproveTeamBody();
 }

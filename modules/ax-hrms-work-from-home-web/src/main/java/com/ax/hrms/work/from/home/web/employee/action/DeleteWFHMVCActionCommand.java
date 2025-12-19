@@ -1,6 +1,7 @@
 package com.ax.hrms.work.from.home.web.employee.action;
 
 import com.ax.hrms.service.WorkFromHomeLocalService;
+import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -24,7 +25,7 @@ import org.osgi.service.component.annotations.Reference;
 public class DeleteWFHMVCActionCommand extends BaseMVCActionCommand {
 
     @Reference
-    private WorkFromHomeLocalService workFromHomeLocalService;
+    private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -32,7 +33,7 @@ public class DeleteWFHMVCActionCommand extends BaseMVCActionCommand {
         long wfhId = ParamUtil.getLong(actionRequest, "workFromHomeRequestId");
 
         if (wfhId > 0) {
-            workFromHomeLocalService.deleteWorkFromHome(wfhId);
+            workFromHomeRequestLocalService.deleteWorkFromHomeRequest(wfhId);
 
             // success message
             SessionMessages.add(actionRequest, "delete-success");

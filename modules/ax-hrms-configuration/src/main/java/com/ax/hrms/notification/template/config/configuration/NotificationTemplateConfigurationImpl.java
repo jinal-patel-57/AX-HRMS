@@ -97,6 +97,26 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
     }
 
     @Override
+    public String WFHRequestApprovedNotificationToEmployee() {
+        return _configuration.WFHRequestApprovedNotificationToEmployee();
+    }
+
+    @Override
+    public String WFHRequestRejectedNotificationToEmployee() {
+        return _configuration.WFHRequestRejectedNotificationToEmployee();
+    }
+
+    @Override
+    public String WFHRequestCanceledNotificationToEmployee() {
+        return _configuration.WFHRequestCanceledNotificationToEmployee();
+    }
+
+    @Override
+    public String WFHRequestManagerAndHr() {
+        return _configuration.WFHRequestManagerAndHr();
+    }
+
+    @Override
 	public String notificationApproveLogTime() {
 		// TODO Auto-generated method stub
 		return _configuration.notificationApproveLogTime();

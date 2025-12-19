@@ -1,90 +1,12 @@
-//package com.ax.hrms.work.from.home.web.employee.action;
-//
-//import com.ax.hrms.model.WorkFromHome;
-//import com.ax.hrms.service.WorkFromHomeLocalServiceUtil;
-//import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-//import com.liferay.portal.kernel.util.ParamUtil;
-//import com.liferay.portal.kernel.util.Validator;
-//
-//import javax.portlet.RenderRequest;
-//import javax.portlet.RenderResponse;
-//
-//import org.osgi.service.component.annotations.Component;
-//
-//@Component(
-//        immediate = true,
-//        property = {
-//                "javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME,
-//                "mvc.command.name=/viewWFH"
-//        },
-//        service = MVCRenderCommand.class
-//)
-//public class ViewWFHRenderCommand implements MVCRenderCommand {
-//
-//    @Override
-//    public String render(RenderRequest request, RenderResponse response) {
-//
-//        long wfhId = ParamUtil.getLong(request, "workFromHomeRequestId");
-//        System.out.println("wfhId = " + wfhId);
-//        if (Validator.isNotNull(wfhId)) {
-//            WorkFromHome wfh = WorkFromHomeLocalServiceUtil.fetchWorkFromHome(wfhId);
-//            System.out.println("wfh = " + wfh);
-//            if (wfh != null) {
-//                request.setAttribute("wfh", wfh);
-//            }
-//        }
-//
-//        return "/jsp/ax-hrms-work-from-home-employee/view_work_from_home.jsp";
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 package com.ax.hrms.work.from.home.web.employee.action;
 
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.WorkFromHome;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
+import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.WorkFromHomeLocalServiceUtil;
+import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
@@ -112,6 +34,9 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
     @Reference
     private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 
+    @Reference
+    private WorkFromHomeRequestLocalService  workFromHomeRequestLocalService;
+
     @Override
     public String render(RenderRequest request, RenderResponse response) {
 
@@ -119,7 +44,7 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
 
         if (Validator.isNotNull(wfhId)) {
 
-            WorkFromHome wfh = WorkFromHomeLocalServiceUtil.fetchWorkFromHome(wfhId);
+            WorkFromHomeRequest wfh = workFromHomeRequestLocalService.fetchWorkFromHomeRequest(wfhId);
 
             if (wfh != null) {
 
