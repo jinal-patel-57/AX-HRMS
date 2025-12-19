@@ -21,8 +21,17 @@
             <input value= "${educationLevelMasterData.getEducationLevelMasterId()}"  type="hidden" name = "<portlet:namespace />educationLevelMasterId">
                 <label class="" for="educationLevelName"><liferay-ui:message key="educationLevelName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${educationLevelMasterData.getLevelName()}" minlength="2" maxlength="70" id="levelName" placeholder="Enter Education Level Name" class="form-control" type="text"
-                    name="<portlet:namespace/>levelName" value="">
+              <input
+                  value="${educationLevelMasterData.getLevelName()}"
+                  id="levelName"
+                  class="form-control"
+                  type="text"
+                  name="<portlet:namespace/>levelName"
+                  minlength="2"
+                  maxlength="70"
+                  placeholder="Enter Education Level Name"
+              />
+
             </div></div>
   <div class="card-footer text-right mb-0">
 			            <a href="${goBack}" class="btn btn-outline-danger mr-1"><liferay-ui:message key="back" /></a> <!-- Adjust margin as needed -->

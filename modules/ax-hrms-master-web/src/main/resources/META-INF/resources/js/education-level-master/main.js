@@ -1,50 +1,75 @@
-(function($, AxEducationLevelMasterWebPortlet) {
+(function ($, AxEducationLevelMasterWebPortlet) {
+
     let namespace;
-    
-    function setConfigsForValidation(config){
-        namespace = config.namespace;
-        $(document).ready(function(){
-        	$("#addEditEducationLevelMaster").validate({
-        		rules:{
-        			[namespace+"levelName"]:{
-        				required:true,
-        				validLetters:true
-        			}
-        		},
-        		messages:{
-        			[namespace+"levelName"]:{
-        				required:"Enter Education Level name",
-        				validLetters:"Enter letters only"
-        			}
-        		},
-        		errorPlacement:function(error,element){
-        			error.insertAfter(element);
-        		}
-        	});
-        	$.validator.addMethod("validLetters", function(value, element) {
-                var firstCharValid = /^[a-zA-Z\s]/.test(value.charAt(0));
 
-                var restValid = /^[a-zA-Z0-9\s\W]+$/.test(value.substring(1));
 
-                return this.optional(element) || (firstCharValid && restValid);
-                
-            }, "Please enter letters only");
-        });
-        
-    }
-    function setConfigsForDeleteEducationLevelMaster(config){
+
+    $.validator.addMethod("validEducationLevelName", function (value, element) {
+        value = value.trim();
+
+        // Starts with letter
+        // Allows letters, spaces, dot and hyphen
+        return this.optional(element) ||
+            /^[A-Za-z]+([A-Za-z\s.-]*[A-Za-z])?$/.test(value);
+
+    }, "Enter a valid Education Level name");
+
+
+
+    function setConfigsForValidation(config) {
         namespace = config.namespace;
-        console.log(config);
-			let url = config.deleteUrl;
-			url = url.replace('EDUCATIONLEVEL_MASTER_ID', config.educationLevelMasterId);
-            let text = "Are you sure you want to delete this education level?";
-            if (confirm(text) == true) {
-                window.location.href = url;
-            } else {
-                text = "You canceled!";
+
+        const form = $("#addEditEducationLevelMaster");
+
+        // Prevent duplicate initialization
+        if (!form.length || form.data("validator")) {
+            return;
+        }
+
+        form.validate({
+            rules: {
+                [namespace + "levelName"]: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 70,
+                    validEducationLevelName: true
+                }
+            },
+
+            messages: {
+                [namespace + "levelName"]: {
+                    required: "Enter Education Level name",
+                    minlength: "Education Level must be at least 2 characters",
+                    maxlength: "Education Level cannot exceed 70 characters",
+                    validEducationLevelName:
+                        "Only letters, spaces, '.' and '-' are allowed"
+                }
+            },
+
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger");
+                error.insertAfter(element);
             }
+        });
     }
-    
-    AxEducationLevelMasterWebPortlet.setConfigsForValidation = setConfigsForValidation;
-    AxEducationLevelMasterWebPortlet.setConfigsForDeleteEducationLevelMaster = setConfigsForDeleteEducationLevelMaster;
-})($, (window.AxEducationLevelMasterWebPortlet = window.AxEducationLevelMasterWebPortlet || {}));
+
+
+
+    function setConfigsForDeleteEducationLevelMaster(config) {
+        let url = config.deleteUrl.replace(
+            'EDUCATIONLEVEL_MASTER_ID',
+            config.educationLevelMasterId
+        );
+
+        if (confirm("Are you sure you want to delete this Education Level?")) {
+            window.location.href = url;
+        }
+    }
+
+    AxEducationLevelMasterWebPortlet.setConfigsForValidation =
+        setConfigsForValidation;
+    AxEducationLevelMasterWebPortlet.setConfigsForDeleteEducationLevelMaster =
+        setConfigsForDeleteEducationLevelMaster;
+
+})($, (window.AxEducationLevelMasterWebPortlet =
+    window.AxEducationLevelMasterWebPortlet || {}));

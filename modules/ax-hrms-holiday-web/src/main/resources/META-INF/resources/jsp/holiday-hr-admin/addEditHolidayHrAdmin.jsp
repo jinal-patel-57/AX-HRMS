@@ -36,7 +36,16 @@
   
    <input value="${holidayData.getHolidayId()}" type="hidden" name="<portlet:namespace />holidayId">
             <label for="holidayName"><liferay-ui:message key="holidayName" /><span class="text-danger">*</span></label>
-            <input value="${holidayData.getHolidayName()}" id="holidayName" placeholder="Enter Holiday Name" class="form-control" type="text" name="<portlet:namespace/>holidayName">
+<input
+    value="${holidayData.getHolidayName()}"
+    id="holidayName"
+    class="form-control"
+    type="text"
+    name="<portlet:namespace/>holidayName"
+    minlength="2"
+    maxlength="70"
+    placeholder="Enter Holiday Name"
+/>
   
   </div>
   
@@ -75,8 +84,17 @@
   <div class="form-group">
    <label for="holidayDesc"><liferay-ui:message key="Holiday Description" /><span class="text-danger">*</span></label>
 <%--             <input value="${holidayData.getDescription()}" id="holidayDesc" placeholder="Enter Holiday Description" class="form-control" type="text" name="<portlet:namespace/>holidayDesc"> --%>
-  <textarea rows="4" cols="30" id="holidayDesc"  placeholder="Enter Holiday Description" class="form-control"  name="<portlet:namespace/>holidayDesc">${holidayData.getDescription()}</textarea>
-  
+  <textarea
+      rows="4"
+      cols="30"
+      class="form-control"
+      id="holidayDesc"
+      name="<portlet:namespace/>holidayDesc"
+      minlength="5"
+      maxlength="250"
+      placeholder="Enter Holiday Description"
+  >${holidayData.getDescription()}</textarea>
+
   </div>
   
   </div>
@@ -94,38 +112,30 @@
     </form>
  </div>
 
-
+</body>
 
 
                
 
- <!-- Initialize Datepicker -->
-  <script>
-  $(document).ready(function() {
-	    var currentYear = new Date().getFullYear();
-	    var startDate = new Date(currentYear - 2, 0, 1); // January 1st of previous year
-	    var endDate = new Date(currentYear + 1, 11, 31); // December 31st of next year
-	    
-	    $('.datepicker').datepicker({
-	      format: 'yyyy-mm-dd',
-	      autoclose: true,
-	      startDate: startDate,
-	      endDate: endDate
-	    });
-	  });
-    
-    $(document).ready(function(){
-    	var config = {
-    	   	namespace: '<portlet:namespace />'
-        };
-    	config.holidayName='holidayName';
-    	config.holidayDate='holidayDate';
-    	config.holidayDesc='holidayDesc';
-    	config.isFloater='isFloater';
-    	
-    	AxHrmsHolidayHrAdminWebPortlet.setConfigsForValidation(config);
-    });	
-  </script>
- 
-</body>
+<script>
+$(function () {
+
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+    });
+
+    var config = {
+        namespace: '<portlet:namespace />',
+        holidayName: 'holidayName',
+        holidayDate: 'holidayDate',
+        holidayDesc: 'holidayDesc',
+        isFloater: 'isFloater'
+    };
+
+    AxHrmsHolidayHrAdminWebPortlet.setConfigsForValidation(config);
+});
+</script>
+
+
 

@@ -20,7 +20,14 @@
 				<input type="hidden" value="${designationMasterData.designationMasterId}" name="<portlet:namespace/>designationMasterId">
 				<div class="form-group">
 			    	<label for="<portlet:namespace />designationName"><liferay-ui:message key="designation-name"/><span class="text-danger">*</span></label>
-				    <input type="text" class="form-control" id="<portlet:namespace />designationName" name="<portlet:namespace />designationName" placeholder="<liferay-ui:message key='designation-name-placeholder' />" value="${not empty existedDesignationName ? existedDesignationName : (not empty designationMasterData ? designationMasterData.designationName : '') }">
+<input type="text"
+       class="form-control"
+       id="<portlet:namespace />designationName"
+       name="<portlet:namespace />designationName"
+       minlength="2"
+       maxlength="70"
+       placeholder="<liferay-ui:message key='designation-name-placeholder' />"
+       value="${not empty existedDesignationName ? existedDesignationName : (not empty designationMasterData ? designationMasterData.designationName : '') }" />
 			  	</div>
 				</div>
   <div class="card-footer text-right mb-0">

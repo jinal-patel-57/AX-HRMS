@@ -1,133 +1,83 @@
-(function($, AxHrmsHolidayHrAdminWebPortlet) {
-    let namespace;
-    let holidayName;
-    let holidayDesc;
-    let holidayDate;
-    let isFloater;
-    
-    function setConfigsForValidation(config){
-        namespace = config.namespace;
-        holidayName =  config.holidayName;
-        holidayDate = config.holidayDate;
-    	holidayDesc = config.holidayDesc;
-    	isFloater  = config.isFloater;
-        $(document).ready(function(){
-        	
-        	$("#addEditHolidayHrAdmin").validate({
-        		rules:{
+(function ($, window) {
 
-        			[namespace + holidayName]:{
-        				required:true,
-        				validLetters:true
-        			},
+    window.AxHrmsHolidayHrAdminWebPortlet =
+        window.AxHrmsHolidayHrAdminWebPortlet || {};
 
-					[namespace + holidayDesc]:{
-        				required:true,
-        				validLetters:true
-        			},
-
-					[namespace + holidayDate]:{
-        				required:true,
-        				validDate:true
-        			},
-
-					[namespace + isFloater]:{
-        				required:true,
-        				
-        			}
-
-
-        		},
-        		messages:{
-
-        			[namespace + holidayName]:{
-
-        				required:"Enter Holiday name",
-        				validLetters:"Enter letters only"
-        			}
-        		},
-        		
-        		messages:{
-
-        			[namespace + holidayDesc]:{
-
-        				required:"Enter Holiday Description",
-        				validLetters:"Enter letters only"
-        			}
-        		},
-        		
-        		messages:{
-
-        			[namespace + holidayDate]:{
-
-        				required:"Enter Holiday Date",
-        				validDate:"Enter Date"
-        			}
-        		},
-        		
-        		messages:{
-
-        			[namespace + isFloater]:{
-
-        				required:"Select Any one Option"
-        			}
-        		},
-        		errorPlacement:function(error,element){
-        			error.insertAfter(element);
-        		}
-        	});
-        	$.validator.addMethod("validLetters", function(value, element) {
-                var firstCharValid = /^[a-zA-Z\s]/.test(value.charAt(0));
-
-                return this.optional(element) || (firstCharValid);
-                
-            }, "Please enter letters only");
-        	
-        	 $.validator.addMethod("validDate", function(value, element) {
-        	   
-        	    function isWithinAllowedYears(year, currentYear) {
-        	        return year >= currentYear - 2 && year <= currentYear + 1;
-        	    }
-        	    var selectedYear = new Date(value).getFullYear();
-        	    var currentYear = new Date().getFullYear();
-        	    var isValidYear = isWithinAllowedYears(selectedYear, currentYear);
-        	    return this.optional(element) || isValidYear;
-        	}, "Please enter a valid date within the current year and the two previous years");
-
-        });
-        
+    // ================= PREVENT DUPLICATE REGISTRATION =================
+    if (!$.validator || $.validator.methods.validHolidayName) {
+        return;
     }
-    function setConfigsForDeleteHoliday(config){
-        namespace = config.namespace;
-        console.log(config);
-            let url = config.deleteUrl;
-            url = url.replace('HOLIDAYHRADMIN_ID', config.holidayId);
-            url = url.replace('SELECTED_YEAR', config.selectedYear);
-            let text = "Are you sure you want to delete this holiday?";
-            if (confirm(text) == true) {
-                window.location.href = url;
-            } else {
-                text = "You canceled!";
+
+    /* ================= Custom Validators ================= */
+
+    $.validator.addMethod("validHolidayName", function (value, element) {
+        value = value.trim();
+        return this.optional(element) ||
+            /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
+    }, "Invalid holiday name");
+
+    $.validator.addMethod("validHolidayDesc", function (value, element) {
+        value = value.trim();
+        return this.optional(element) ||
+            /^[A-Za-z0-9\s.,()-]+$/.test(value);
+    }, "Invalid description");
+
+    $.validator.addMethod("validHolidayDate", function (value, element) {
+        if (!value) return true;
+        let year = new Date(value).getFullYear();
+        let current = new Date().getFullYear();
+        return year >= current - 2 && year <= current + 1;
+    }, "Invalid holiday date");
+
+    /* ================= Validation Init ================= */
+
+    window.AxHrmsHolidayHrAdminWebPortlet.setConfigsForValidation = function (config) {
+
+        const namespace = config.namespace;
+        const form = $("#addEditHolidayHrAdmin");
+
+        if (!form.length || form.data("validator")) {
+            return;
+        }
+
+        form.validate({
+            ignore: [],
+
+            rules: {
+                [namespace + "holidayName"]: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 70,
+                    validHolidayName: true
+                },
+                [namespace + "holidayDesc"]: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 250,
+                    validHolidayDesc: true
+                },
+                [namespace + "holidayDate"]: {
+                    required: true,
+                    validHolidayDate: true
+                },
+                [namespace + "isFloater"]: {
+                    required: true
+                }
+            },
+
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger");
+                if (element.attr("type") === "radio") {
+                    error.insertAfter(element.closest(".form-group"));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+
+            submitHandler: function (form) {
+                form.submit();
             }
-    }
-    
-    
-    function setConfigsForRenderHolidayWithYear(config){
-        namespace = config.namespace;
-        console.log(config);
-        
-            var url = config.renderUrl;
-            console.log(url);
-            url = url.replace('SELECTED_YEAR', config.selectedYear);
-            console.log(url);
+        });
+    };
 
-			window.location.href = url;
-            
-    }
-    
-    AxHrmsHolidayHrAdminWebPortlet.setConfigsForRenderHolidayWithYear = setConfigsForRenderHolidayWithYear;
-    
-    AxHrmsHolidayHrAdminWebPortlet.setConfigsForValidation = setConfigsForValidation;
-    AxHrmsHolidayHrAdminWebPortlet.setConfigsForDeleteHoliday = setConfigsForDeleteHoliday;
-})($, (window.AxHrmsHolidayHrAdminWebPortlet = window.AxHrmsHolidayHrAdminWebPortlet || {}));
-
+})(jQuery, window);
