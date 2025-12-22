@@ -21,19 +21,24 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
+<style>
+.datepicker {
+    z-index: 9999 !important;
+}
 
+</style>
 <body>
 
 <div class="card">
   <div class="card-header"><strong> <liferay-ui:message key="add-holiday"></liferay-ui:message>  </strong></div>
       <form action="${addEditHolidayHrAdminURL}" method="post" id="addEditHolidayHrAdmin">
-  
+
   <div class="card-body mb-0">
   <div class="row ">
 
   <div class="col-md-4 col-sm-12 ">
   <div class="form-group">
-  
+
    <input value="${holidayData.getHolidayId()}" type="hidden" name="<portlet:namespace />holidayId">
             <label for="holidayName"><liferay-ui:message key="holidayName" /><span class="text-danger">*</span></label>
 <input
@@ -46,23 +51,23 @@
     maxlength="70"
     placeholder="Enter Holiday Name"
 />
-  
+
   </div>
-  
+
   </div>
-  
+
   <div class="col-md-4 col-sm-12 ">
   <div class="form-group">
-  
+
    <label for="holidayDate"><liferay-ui:message key="holidayDate" /><span class="text-danger">*</span></label>
             <input value="<fmt:formatDate pattern='yyyy-MM-dd' value='${holidayData.getDate()}'/>" id="holidayDate" placeholder="Enter Holiday Date" class="form-control datepicker" name="<portlet:namespace/>holidayDate">
-  
+
   </div>
-  
+
   </div>
-  
-  
-  
+
+
+
   <div class="col-md-4 col-sm-12 ">
   <div class="form-group">
   <label for="isFloater"><liferay-ui:message key="holidayFloater" /><span class="text-danger">*</span></label>
@@ -78,7 +83,7 @@
       </div>
     </div>
   </div>
-  
+
   </div>
   <div class="col-md-12 col-sm-12 ">
   <div class="form-group">
@@ -96,10 +101,10 @@
   >${holidayData.getDescription()}</textarea>
 
   </div>
-  
+
   </div>
-  
-				
+
+
 </div>
 </div>
   <div class="card-footer text-right mb-0 ">
@@ -107,7 +112,7 @@
                     <a href="${homeUrl}" class="btn btn-outline-danger mr-1"><liferay-ui:message key="back" /></a>
                     <button class="btn btn-outline-success" type="submit"><liferay-ui:message key="submit" /></button>
                 </div>
-  
+
   </div>
     </form>
  </div>
@@ -115,26 +120,27 @@
 </body>
 
 
-               
+
+
 
 <script>
-$(function () {
+$(document).ready(function () {
 
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
-        autoclose: true
+        autoclose: true,
+        container: 'body'   // prevents cut-off issue
+    }).on('changeDate clearDate', function () {
+        $(this).trigger('blur'); // 🔥 IMPORTANT
+        $(this).valid();         // 🔥 FORCE validation
     });
 
-    var config = {
-        namespace: '<portlet:namespace />',
-        holidayName: 'holidayName',
-        holidayDate: 'holidayDate',
-        holidayDesc: 'holidayDesc',
-        isFloater: 'isFloater'
-    };
+    var config = {};
+    config.namespace = '<portlet:namespace />';
 
     AxHrmsHolidayHrAdminWebPortlet.setConfigsForValidation(config);
 });
+
 </script>
 
 

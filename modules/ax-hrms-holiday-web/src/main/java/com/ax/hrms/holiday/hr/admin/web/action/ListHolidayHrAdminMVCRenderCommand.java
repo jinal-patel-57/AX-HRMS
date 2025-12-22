@@ -70,8 +70,11 @@ public class ListHolidayHrAdminMVCRenderCommand implements MVCRenderCommand {
         
 			 List<Integer> holidayYears = holidayLocalService.getYear();
 			    
-		        Collections.sort(holidayYears);
-		        
+				if(!holidayYears.contains(currentYear)){
+					holidayYears.add(currentYear);
+				}
+		Collections.sort(holidayYears);
+
 				
 				
 	

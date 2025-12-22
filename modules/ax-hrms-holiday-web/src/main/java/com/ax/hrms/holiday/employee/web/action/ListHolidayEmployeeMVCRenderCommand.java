@@ -66,8 +66,11 @@ public class ListHolidayEmployeeMVCRenderCommand implements MVCRenderCommand {
 			
         
 			 List<Integer> holidayYears = holidayLocalService.getYear();
-			    
-		        Collections.sort(holidayYears);
+
+		if(!holidayYears.contains(currentYear)){
+			holidayYears.add(currentYear);
+		}
+		Collections.sort(holidayYears);
 	
 			    renderRequest.setAttribute(AxHrmsHolidayHrAdminWebPortletConstants.SELECTED_YEAR, selectedYear);
 			    renderRequest.setAttribute(AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYHRADMIN_FULLLIST, holidayYears);

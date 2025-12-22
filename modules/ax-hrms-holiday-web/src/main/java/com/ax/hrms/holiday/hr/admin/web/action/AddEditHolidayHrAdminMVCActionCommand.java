@@ -126,6 +126,7 @@ public class AddEditHolidayHrAdminMVCActionCommand extends BaseMVCActionCommand 
                 holiday.setDescription(holidayDesc);
                 holiday.setIsFloater(floater.equals(AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYFLOATERVALUE));
                 holiday.setDate(date);
+				holiday.setYear(year);
                 holiday.setModifiedBy(themeDisplay.getUserId());
                 holidayLocalService.updateHoliday(holiday);
 //                backURL = backURL.replace(AxHrmsHolidayHrAdminWebPortletConstants.SELECTED_YEAR_STRING,Integer.toString(holiday.getYear()));
