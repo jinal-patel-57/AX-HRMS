@@ -46,7 +46,7 @@ public class ListWishTypeMasterMVCRenderCommand implements MVCRenderCommand {
 		List<WishTypeMaster> wishTypeMasters = null;
 		
 		int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 		
 		int totalOfWishType = wishTypeMasterLocalService.getWishTypeMastersCount();
 	    int totalPageContainer = (totalOfWishType + deltaValue - 1) / deltaValue;

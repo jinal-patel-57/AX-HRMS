@@ -45,7 +45,7 @@ public class ListProbationStatusMasterMVCRenderCommand implements MVCRenderComma
 
 		
 		int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 		
 		int totalOfprobationStatus = probationStatusMasterLocalService.getProbationStatusMastersCount();
 	    int totalPageContainer = (totalOfprobationStatus + deltaValue - 1) / deltaValue;

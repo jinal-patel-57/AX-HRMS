@@ -129,11 +129,11 @@ $(document).ready(function () {
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
-        container: 'body'   // prevents cut-off issue
+        container: 'body',
+        daysOfWeekDisabled: [0, 6]
     }).on('changeDate clearDate', function () {
-        $(this).trigger('blur'); // 🔥 IMPORTANT
-        $(this).valid();         // 🔥 FORCE validation
-    });
+          $(this).val($(this).val()).valid();
+      });
 
     var config = {};
     config.namespace = '<portlet:namespace />';

@@ -56,7 +56,7 @@
 <!-- Start -->
 <liferay-portlet:renderURL varImpl="iteratorURL" />
     
-<liferay-ui:search-container total="${holidaySearchContainer.total}" delta="20" emptyResultsMessage="No-Holiday-found" searchContainer="${holidaySearchContainer}" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${holidaySearchContainer.total}" delta="20" emptyResultsMessage="No Holiday Found" searchContainer="${holidaySearchContainer}" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${holidaySearchContainer.results}" />
 
     <liferay-ui:search-container-row className="com.ax.hrms.model.Holiday" modelVar="holiday" keyProperty="holidayId">

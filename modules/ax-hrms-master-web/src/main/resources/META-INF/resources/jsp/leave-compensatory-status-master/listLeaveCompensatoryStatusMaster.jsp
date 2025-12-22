@@ -47,7 +47,7 @@
 			</portlet:renderURL>
 	        
 	        <portlet:actionURL var="deleteLeaveCompensatoryStatusURL" name="/deleteLeaveCompensatoryStatus">
-				<portlet:param name="leaveCompensatoryStatusMasterId" value="${leaveCompensatoryStatusMaster.leaveCompensatoryStatusMasterId}" />
+				<portlet:param name="leaveCompensatoryStatusMasterId" value="LEAVECOMPENSATORYSTATUS_MASTER_ID" />
 			</portlet:actionURL>
             
             

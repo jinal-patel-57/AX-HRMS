@@ -9,7 +9,7 @@
 <portlet:renderURL var="goBack"/>
 
 <div class="card">
-  <div class="card-header"><strong> <liferay-ui:message key="addWishType" /></strong></div>
+  <div class="card-header"><strong> <liferay-ui:message key="WishType" /></strong></div>
  <form action="${addEditWishTypeURL}" method="post" id="addEditWishTypeMaster">
   <div class="card-body mb-0">
             <div class="form-group">
@@ -24,7 +24,7 @@
                   type="text"
                   name="<portlet:namespace/>wishType"
                   minlength="2"
-                  maxlength="50"
+                  maxlength="70"
                   placeholder="Enter Wish Type Name"
               />
 

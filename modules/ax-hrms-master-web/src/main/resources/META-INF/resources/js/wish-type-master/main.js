@@ -5,43 +5,59 @@
     function setConfigsForValidation(config) {
         namespace = config.namespace;
 
-        $(document).ready(function () {
+        if (!$.validator || !$("#addEditWishTypeMaster").length) {
+            return;
+        }
 
-            // Custom validator for Wish Type Name
-            $.validator.addMethod("validWishTypeName", function (value, element) {
+        $.validator.addMethod("validWishTypeName", function (value, element) {
+            value = value.trim();
+            return this.optional(element) ||
+                /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
+        });
 
-                value = value.trim();
+        $("#" + namespace + "wishType").attr({
+            minlength: 2,
+            maxlength: 70
+        });
 
-                // Starts with letter
-                // Allows letters, spaces, hyphen, ampersand
-                return this.optional(element) ||
-                    /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
-
-            }, "Enter a valid Wish Type name");
-
-            $("#addEditWishTypeMaster").validate({
-                rules: {
-                    [namespace + "wishType"]: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 50,
-                        validWishTypeName: true
-                    }
-                },
-                messages: {
-                    [namespace + "wishType"]: {
-                        required: "Enter Wish Type name",
-                        minlength: "Wish Type must be at least 2 characters",
-                        maxlength: "Wish Type cannot exceed 50 characters",
-                        validWishTypeName:
-                            "Only letters, spaces, '&' and '-' are allowed"
-                    }
-                },
-                errorPlacement: function (error, element) {
-                    error.addClass("text-danger");
-                    error.insertAfter(element);
+        $("#addEditWishTypeMaster").validate({
+            rules: {
+                [namespace + "wishType"]: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 70,
+                    validWishTypeName: true
                 }
-            });
+            },
+            messages: {
+                [namespace + "wishType"]: {
+                    required: "Enter Wish Type name",
+                    minlength: "Wish Type must be at least 2 characters",
+                    maxlength: "Wish Type cannot exceed 70 characters",
+                    validWishTypeName:
+                        "Only letters, spaces, '&' and '-' are allowed"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger");
+                error.insertAfter(element);
+            },
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+            onkeyup: function (element) {
+                $(element).valid();
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
         });
     }
 

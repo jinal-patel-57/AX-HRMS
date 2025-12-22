@@ -17,13 +17,13 @@
 
 <div class="card">
   <div class="card-header d-flex align-items-center justify-content-end"><a href="${addEditEducationLevelUrl}" class="btn  btn-primary btn-sm ">
-        <liferay-ui:message key="add-education-level" />    
+        <liferay-ui:message key="add-education" />
     </a></div>
   <div class="card-body mb-0">
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${totalEducationLevel}" delta= "3" emptyResultsMessage="no-Education Level-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${totalEducationLevel}" delta= "20" emptyResultsMessage="no-Education Level-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${getEducationLevel}" />
        
     <liferay-ui:search-container-row className="com.ax.hrms.master.model.EducationLevelMaster" modelVar="educationLevelMaster" keyProperty="educationLevelMasterId">

@@ -154,7 +154,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(Role.class.getName(), actionRequest);
 
-			Role role = roleService.getRole(themeDisplay.getCompanyId(), olddepartmentName);
+			Role role = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), olddepartmentName);
 
 			RoleLocalServiceUtil.updateRole(role.getRoleId(), newDepartmentName, titleMap, descriptionMap, null, serviceContext);
 		} catch (Exception e) {

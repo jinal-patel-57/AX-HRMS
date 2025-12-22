@@ -6,12 +6,14 @@ import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.master.web.constants.AxEducationLevelMasterWebPortletConstants;
 import com.ax.hrms.master.web.constants.AxEducationLevelMasterWebPortletKeys;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -45,7 +47,7 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		String educationLevelName = ParamUtil.getString(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_NAME, null);
 		long educationLevelMasterId = ParamUtil.getLong(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_MASTER_ID, AxEducationLevelMasterWebPortletConstants.DEFAULT_LONG_VALUE);
@@ -57,7 +59,6 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
             	
 	            	EducationLevelMaster educationLevelMaster = educationLevelMasterLocalService.createEducationLevelMaster(CounterLocalServiceUtil.increment(EducationLevelMaster.class.getName()));
 	                
-	                ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 	                educationLevelMaster.setLevelName(educationLevelName);
 	                educationLevelMaster.setCompanyId(themeDisplay.getCompanyId());
 	                educationLevelMaster.setCreatedBy(themeDisplay.getUserId());
@@ -71,6 +72,7 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
             	else {
             		
             		SessionErrors.add(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATION_LEVEL_INCORRECT);
+
 					super.hideDefaultErrorMessage(actionRequest);
 
 					actionResponse.setRenderParameter(AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_PATH, AxEducationLevelMasterWebPortletConstants.FORM_EDUCATION_LEVEL_MASTER);
@@ -89,13 +91,14 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
 	            	if(isLevelNameValid(educationLevelName)) {
 	            		EducationLevelMaster educationLevelMaster = educationLevelMasterLocalService.getEducationLevelMaster(educationLevelMasterId);
 	                	educationLevelMaster.setLevelName(educationLevelName);
-	                    ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 	                    educationLevelMaster.setModifiedBy(themeDisplay.getUserId());
 	                    educationLevelMasterLocalService.updateEducationLevelMaster(educationLevelMaster);
 	                    SessionMessages.add(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATION_LEVEL_UPDATED);
 	    			}
 	            	else {
 	            		SessionErrors.add(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATION_LEVEL_INCORRECT);
+						actionRequest.setAttribute(AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_MASTER_DATA, educationLevelMasterLocalService.getEducationLevelMaster(educationLevelMasterId));
+
 						super.hideDefaultErrorMessage(actionRequest);
 
 						actionResponse.setRenderParameter(AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_PATH, AxEducationLevelMasterWebPortletConstants.FORM_EDUCATION_LEVEL_MASTER);
@@ -105,7 +108,9 @@ public class AddEditEducationLevelMasterMVCActionCommand extends BaseMVCActionCo
             	
 				else {
 					SessionErrors.add(actionRequest, AxEducationLevelMasterWebPortletConstants.EDUCATION_LEVEL_EXISTS);
-					super.hideDefaultErrorMessage(actionRequest);
+				actionRequest.setAttribute(AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_MASTER_DATA, educationLevelMasterLocalService.getEducationLevelMaster(educationLevelMasterId));
+
+				super.hideDefaultErrorMessage(actionRequest);
 
 					actionResponse.setRenderParameter(AxEducationLevelMasterWebPortletConstants.EDUCATIONLEVEL_PATH, AxEducationLevelMasterWebPortletConstants.FORM_EDUCATION_LEVEL_MASTER);
 				}

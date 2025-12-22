@@ -22,7 +22,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${totalWishType}" delta= "3" emptyResultsMessage="No-Wish Type-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${totalWishType}" delta= "20" emptyResultsMessage="No-Wish Type-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${getWishType}" />
 
     <liferay-ui:search-container-row className="com.ax.hrms.master.model.WishTypeMaster" modelVar="wishTypeMaster" keyProperty="WishTypeMaster">
@@ -43,7 +43,7 @@
 			</portlet:renderURL>
 	        
 	        <portlet:actionURL var="deleteWishTypeURL" name="/deleteWishType">
-				<portlet:param name="wishTypeMasterId" value="${wishTypeMaster.wishTypeMasterId}" />
+				<portlet:param name="wishTypeMasterId" value="WISHTYPE_MASTER_ID" />
 			</portlet:actionURL>
             
             

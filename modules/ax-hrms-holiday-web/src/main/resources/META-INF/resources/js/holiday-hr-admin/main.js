@@ -25,6 +25,27 @@
                     /^[A-Za-z0-9\s.,()-]+$/.test(value.trim());
             }, "Invalid characters in description");
         }
+        $.validator.addMethod("noWeekend", function (value, element) {
+
+            if (!value) return true;
+
+            var parts = value.split("-");
+            if (parts.length !== 3) return true;
+
+            var date = new Date(
+                parseInt(parts[0], 10),
+                parseInt(parts[1], 10) - 1,
+                parseInt(parts[2], 10)
+            );
+
+            if (isNaN(date.getTime())) return true;
+
+            var day = date.getDay();
+            return day !== 0 && day !== 6;
+
+        }, "Saturday and Sunday are not allowed");
+
+
 
       if (!$.validator.methods.validHolidayDate) {
           $.validator.addMethod(
@@ -82,7 +103,8 @@
                 },
                 [namespace + "holidayDate"]: {
                     required: true,
-                    validHolidayDate: true
+                    validHolidayDate: true,
+                    noWeekend: true
                 },
                 [namespace + "holidayDesc"]: {
                     required: true,

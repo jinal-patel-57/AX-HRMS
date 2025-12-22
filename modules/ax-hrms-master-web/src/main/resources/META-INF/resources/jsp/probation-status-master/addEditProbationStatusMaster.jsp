@@ -10,7 +10,7 @@
 
 
 <div class="card">
-  <div class="card-header"><strong><liferay-ui:message key="add-probation-status" /></strong></div>
+  <div class="card-header"><strong><liferay-ui:message key="probation-status" /></strong></div>
 <form action="${addEditProbationStatusURL}" method="post" id="addEditProbationStatusMaster">
   <div class="card-body mb-0">
             <div class="form-group">

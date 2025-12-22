@@ -36,7 +36,7 @@ public class ViewDepartmentMasterListMVCRenderCommand implements MVCRenderComman
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
 		int currentPage = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 5);
+        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
 
         int totalRecords = DepartmentMasterLocalServiceUtil.getDepartmentMastersCount();
         int totalPages = (totalRecords + delta - 1) / delta; // Calculate total pages

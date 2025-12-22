@@ -10,7 +10,7 @@
 <portlet:actionURL name="/addEditLeaveType" var="addLeaveTypeUrl" />
 <!-- Different URL End -->
 <div class="card">
-  <div class="card-header"><strong><liferay-ui:message key="add-leave-type"/> </strong></div>
+  <div class="card-header"><strong><liferay-ui:message key="leave-type"/> </strong></div>
 <form method="Post" action="${addLeaveTypeUrl }" id="leaveTypeMasterForm">
   <div class="card-body mb-0">
 				<input type="hidden" value="${leaveTypeMasterData.leaveTypeMasterId}" name="<portlet:namespace/>leaveTypeMasterId">

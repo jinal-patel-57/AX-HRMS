@@ -43,7 +43,7 @@ public class ListLeavePolicyMasterMVCRenderCommand implements MVCRenderCommand {
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		try {
 			int currentPage = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-	        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 5);
+	        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
 
 	        int totalRecords = LeavePolicyMasterLocalServiceUtil.getLeavePolicyMastersCount();
 	        int totalPages = (totalRecords + delta - 1) / delta;

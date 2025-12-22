@@ -56,8 +56,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 	@Reference
 	private RoleLocalService roleLocalService;
 
-	@Reference
-	private RoleService roleService;
+
 
 	@Reference
 	private RoleTypeContributorProvider roleTypeContributorProvider;
@@ -166,7 +165,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 		RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
 		try{
 			log.info("in try --" + roleName);
-			Role role = roleService.getRole(themeDisplay.getCompanyId(),roleName);
+			Role role = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),roleName);
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
 			RoleLocalServiceUtil.updateRole(role.getRoleId(),roleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
@@ -194,9 +193,9 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 
 		RoleTypeContributor roleTypeContributor = roleTypeContributorProvider.getRoleTypeContributor(type);
 		try{
-			Role role = roleService.getRole(themeDisplay.getCompanyId(),oldRoleName);
+			Role role = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),oldRoleName);
 			log.info("Roles Company ID: "+themeDisplay.getCompanyId());
-			roleService.updateRole(role.getRoleId(),newRoleName,titleMap,descriptionMap,null,serviceContext);
+			RoleLocalServiceUtil.updateRole(role.getRoleId(),newRoleName,titleMap,descriptionMap,null,serviceContext);
 		}catch(PortalException exception){
 			RoleLocalServiceUtil.addRole("", themeDisplay.getUserId(), roleTypeContributor.getClassName(), 0, newRoleName, titleMap, descriptionMap, type, null, serviceContext);
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());

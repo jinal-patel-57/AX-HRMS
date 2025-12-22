@@ -9,7 +9,7 @@
 
 <div class="card">
   <div class="card-header">
-  <strong> <liferay-ui:message key='add-department' /></strong>
+  <strong> <liferay-ui:message key='department' /></strong>
   </div>
   <div class="card-body mb-0">
 

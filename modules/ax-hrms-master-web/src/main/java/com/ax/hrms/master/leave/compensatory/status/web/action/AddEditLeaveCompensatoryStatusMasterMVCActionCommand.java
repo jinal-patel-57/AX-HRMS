@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -45,7 +46,7 @@ public class AddEditLeaveCompensatoryStatusMasterMVCActionCommand extends BaseMV
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String leaveCompensatoryStatusName = ParamUtil.getString(actionRequest, AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVECOMPENSATORYSTATUS_NAME, null);
 		long leaveCompensatoryStatusMasterId = ParamUtil.getLong(actionRequest, AxLeaveCompensatoryStatusMasterWebPortletConstants.LEAVECOMPENSATORYSTATUS_MASTER_ID, AxLeaveCompensatoryStatusMasterWebPortletConstants.DEFAULT_LONG_VALUE);
 
@@ -53,7 +54,7 @@ public class AddEditLeaveCompensatoryStatusMasterMVCActionCommand extends BaseMV
 		   if (isLevelMasterAvailable(leaveCompensatoryStatusName, 0)) {
 		       LeaveCompensatoryStatusMaster leaveCompensatoryStatusMaster = leaveCompensatoryStatusMasterLocalService.createLeaveCompensatoryStatusMaster(CounterLocalServiceUtil.increment(LeaveCompensatoryStatusMaster.class.getName()));
 		       
-		       ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 		       leaveCompensatoryStatusMaster.setLeaveCompensatoryStatus(leaveCompensatoryStatusName);
 		       leaveCompensatoryStatusMaster.setCompanyId(themeDisplay.getCompanyId());
 		       leaveCompensatoryStatusMaster.setCreatedBy(themeDisplay.getUserId());
@@ -77,7 +78,6 @@ public class AddEditLeaveCompensatoryStatusMasterMVCActionCommand extends BaseMV
 			 
 		       LeaveCompensatoryStatusMaster leaveCompensatoryStatusMaster = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(leaveCompensatoryStatusMasterId);
 		       leaveCompensatoryStatusMaster.setLeaveCompensatoryStatus(leaveCompensatoryStatusName);
-		       ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		       leaveCompensatoryStatusMaster.setModifiedBy(themeDisplay.getUserId());
 		       
 		       leaveCompensatoryStatusMasterLocalService.updateLeaveCompensatoryStatusMaster(leaveCompensatoryStatusMaster);

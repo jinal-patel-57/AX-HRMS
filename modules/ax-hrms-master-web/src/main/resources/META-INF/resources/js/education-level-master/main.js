@@ -1,32 +1,51 @@
 (function ($, AxEducationLevelMasterWebPortlet) {
 
+    'use strict';
+
     let namespace;
 
 
+    $(document).ready(function () {
 
-    $.validator.addMethod("validEducationLevelName", function (value, element) {
-        value = value.trim();
-
-        // Starts with letter
-        // Allows letters, spaces, dot and hyphen
-        return this.optional(element) ||
-            /^[A-Za-z]+([A-Za-z\s.-]*[A-Za-z])?$/.test(value);
-
-    }, "Enter a valid Education Level name");
-
-
-
-    function setConfigsForValidation(config) {
-        namespace = config.namespace;
-
-        const form = $("#addEditEducationLevelMaster");
-
-        // Prevent duplicate initialization
-        if (!form.length || form.data("validator")) {
+        if (!$.validator || !$.validator.addMethod) {
+            console.error("jQuery Validation plugin not loaded");
             return;
         }
 
-        form.validate({
+        if (!$.validator.methods.validEducationLevelName) {
+            $.validator.addMethod(
+                "validEducationLevelName",
+                function (value, element) {
+                    value = value.trim();
+
+                    return this.optional(element) ||
+                        /^[A-Za-z]+([A-Za-z\s.-]*[A-Za-z])?$/.test(value);
+                },
+                "Only letters, spaces, '.' and '-' are allowed"
+            );
+        }
+    });
+
+
+    function setConfigsForValidation(config) {
+
+        namespace = config.namespace;
+
+        const $form = $("#addEditEducationLevelMaster");
+
+        if (!$form.length) {
+            return;
+        }
+
+
+        if ($form.data("validator")) {
+            $form.validate().destroy();
+        }
+
+        $form.validate({
+
+            ignore: [],
+
             rules: {
                 [namespace + "levelName"]: {
                     required: true,
@@ -46,16 +65,36 @@
                 }
             },
 
+            errorElement: "small",
+
             errorPlacement: function (error, element) {
                 error.addClass("text-danger");
                 error.insertAfter(element);
+            },
+
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+            onkeyup: function (element) {
+                    $(element).valid();
+                },
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+
+            submitHandler: function (form) {
+                form.submit(); // submit ONLY when valid
             }
         });
     }
 
 
-
     function setConfigsForDeleteEducationLevelMaster(config) {
+
         let url = config.deleteUrl.replace(
             'EDUCATIONLEVEL_MASTER_ID',
             config.educationLevelMasterId
@@ -66,10 +105,15 @@
         }
     }
 
+
     AxEducationLevelMasterWebPortlet.setConfigsForValidation =
         setConfigsForValidation;
+
     AxEducationLevelMasterWebPortlet.setConfigsForDeleteEducationLevelMaster =
         setConfigsForDeleteEducationLevelMaster;
 
-})($, (window.AxEducationLevelMasterWebPortlet =
-    window.AxEducationLevelMasterWebPortlet || {}));
+})(
+    jQuery,
+    window.AxEducationLevelMasterWebPortlet =
+        window.AxEducationLevelMasterWebPortlet || {}
+);

@@ -10,7 +10,7 @@
 
 
 <div class="card">
-  <div class="card-header"><strong> <liferay-ui:message key="add-leave-compensatory" /></strong></div>
+  <div class="card-header"><strong> <liferay-ui:message key="leave-compensatory" /></strong></div>
  <form action="${addEditLeaveCompensatoryStatusURL}" method="post" id="addEditLeaveCompensatoryStatusMaster">
  
   <div class="card-body mb-0">

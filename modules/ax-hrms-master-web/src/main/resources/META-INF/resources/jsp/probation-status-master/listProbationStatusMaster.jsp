@@ -22,7 +22,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${totalProbationStatus}" delta= "3" emptyResultsMessage="No-Probation Status -found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${totalProbationStatus}" delta= "20" emptyResultsMessage="No-Probation Status -found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${getProbationStatus}" />
 
 
@@ -46,7 +46,7 @@
 			</portlet:renderURL>
 	        
 	        <portlet:actionURL var="deleteProbationStatusURL" name="/deleteProbationStatus">
-				<portlet:param name="probationStatusMasterId" value="${probationStatusMaster.probationStatusMasterId}" />
+				<portlet:param name="probationStatusMasterId" value="PROBATIONSTATUS_MASTER_ID" />
 			</portlet:actionURL>
             
             

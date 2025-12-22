@@ -2,57 +2,97 @@
 
     let namespace;
 
+    $(document).ready(function () {
+
+        if (!$.validator || !$.validator.addMethod) {
+            return;
+        }
+
+        if (!$.validator.methods.validLeaveCompStatusName) {
+            $.validator.addMethod(
+                "validLeaveCompStatusName",
+                function (value, element) {
+                    value = value.trim();
+                    return this.optional(element) ||
+                        /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
+                },
+                "Only letters, spaces, '&' and '-' are allowed"
+            );
+        }
+    });
+
     function setConfigsForValidation(config) {
+
         namespace = config.namespace;
 
-        $(document).ready(function () {
+        const $form = $("#addEditLeaveCompensatoryStatusMaster");
 
-            // Custom validator for Leave Compensatory Status Name
-            $.validator.addMethod("validLeaveCompStatusName", function (value, element) {
+        if (!$form.length) {
+            return;
+        }
 
-                value = value.trim();
+        if ($form.data("validator")) {
+            $form.validate().destroy();
+        }
 
-                // Starts with letter
-                // Allows letters, spaces and hyphen
-                return this.optional(element) ||
-                    /^[A-Za-z]+([A-Za-z\s-]*[A-Za-z])?$/.test(value);
+        $form.validate({
 
-            }, "Enter a valid Leave Compensatory Status name");
+            ignore: [],
 
-            $("#addEditLeaveCompensatoryStatusMaster").validate({
-                rules: {
-                    [namespace + "leaveCompensatoryStatus"]: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 50,
-                        validLeaveCompStatusName: true
-                    }
-                },
-                messages: {
-                    [namespace + "leaveCompensatoryStatus"]: {
-                        required: "Enter Leave Compensatory Status name",
-                        minlength: "Must be at least 2 characters",
-                        maxlength: "Cannot exceed 50 characters",
-                        validLeaveCompStatusName:
-                            "Only letters, spaces and '-' are allowed"
-                    }
-                },
-                errorPlacement: function (error, element) {
-                    error.addClass("text-danger");
-                    error.insertAfter(element);
+            rules: {
+                [namespace + "leaveCompensatoryStatus"]: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 50,
+                    validLeaveCompStatusName: true
                 }
-            });
+            },
+
+            messages: {
+                [namespace + "leaveCompensatoryStatus"]: {
+                    required: "Enter Leave Compensatory Status name",
+                    minlength: "Must be at least 2 characters",
+                    maxlength: "Cannot exceed 50 characters",
+                    validLeaveCompStatusName:
+                        "Only letters, spaces, '&' and '-' are allowed"
+                }
+            },
+
+            errorElement: "small",
+
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger");
+                error.insertAfter(element);
+            },
+
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+
+            onkeyup: function (element) {
+                $(element).valid();
+            },
+
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+
+            submitHandler: function (form) {
+                form.submit();
+            }
         });
     }
 
     function setConfigsForDeleteLeaveCompensatoryStatusMaster(config) {
-        namespace = config.namespace;
 
         let url = config.deleteUrl.replace(
-            'LEAVECOMPENSATORYSTATUS_MASTER_ID',
-            config.leaveCompensatoryStatusMasterId
-        );
-
+                   'LEAVECOMPENSATORYSTATUS_MASTER_ID',
+                   config.leaveCompensatoryStatusMasterId
+               );
         if (confirm(
             "Are you sure you want to delete this Leave Compensatory Status?"
         )) {
@@ -62,9 +102,13 @@
 
     AxLeaveCompensatoryStatusMasterWebPortlet.setConfigsForValidation =
         setConfigsForValidation;
+
     AxLeaveCompensatoryStatusMasterWebPortlet
         .setConfigsForDeleteLeaveCompensatoryStatusMaster =
         setConfigsForDeleteLeaveCompensatoryStatusMaster;
 
-})($, (window.AxLeaveCompensatoryStatusMasterWebPortlet =
-    window.AxLeaveCompensatoryStatusMasterWebPortlet || {}));
+})(
+    jQuery,
+    window.AxLeaveCompensatoryStatusMasterWebPortlet =
+        window.AxLeaveCompensatoryStatusMasterWebPortlet || {}
+);

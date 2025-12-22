@@ -12,7 +12,7 @@
 
 <div class="card">
   <div class="card-header ">
-  <strong> <liferay-ui:message key="add-designation"/> </strong>
+  <strong> <liferay-ui:message key="designation"/> </strong>
 </div>
   <form method="Post" action="${addDesignationUrl }" id="designationMasterForm">
   <div class="card-body mb-0">

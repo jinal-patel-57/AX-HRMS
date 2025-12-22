@@ -5,37 +5,56 @@
     function setConfigsForValidation(config) {
         namespace = config.namespace;
 
-        $(document).ready(function () {
+        if (!$.validator || !$("#addEditProbationStatusMaster").length) {
+            return;
+        }
 
-            // Custom validator for Probation Status Name
-            $.validator.addMethod("validProbationStatusName", function (value, element) {
-                // Starts with letter, allows letters, spaces, hyphen only
-                return this.optional(element) ||
-                    /^[A-Za-z][A-Za-z\s-]*$/.test(value);
-            }, "Enter a valid Probation Status name");
+        $.validator.addMethod("validProbationStatusName", function (value, element) {
+            return this.optional(element) || /^[A-Za-z][A-Za-z\s-]*$/.test(value);
+        });
 
-            $("#addEditProbationStatusMaster").validate({
-                rules: {
-                    [namespace + "probationStatus"]: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 70,
-                        validProbationStatusName: true
-                    }
-                },
-                messages: {
-                    [namespace + "probationStatus"]: {
-                        required: "Enter Probation Status name",
-                        minlength: "Probation Status must be at least 2 characters",
-                        maxlength: "Probation Status cannot exceed 70 characters",
-                        validProbationStatusName: "Only letters, spaces and hyphen (-) are allowed"
-                    }
-                },
-                errorPlacement: function (error, element) {
-                    error.addClass("text-danger");
-                    error.insertAfter(element);
+        $("#" + namespace + "probationStatus").attr({
+            minlength: 2,
+            maxlength: 70
+        });
+
+        $("#addEditProbationStatusMaster").validate({
+            rules: {
+                [namespace + "probationStatus"]: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 70,
+                    validProbationStatusName: true
                 }
-            });
+            },
+            messages: {
+                [namespace + "probationStatus"]: {
+                    required: "Enter Probation Status name",
+                    minlength: "Probation Status must be at least 2 characters",
+                    maxlength: "Probation Status cannot exceed 70 characters",
+                    validProbationStatusName: "Only letters, spaces and hyphen (-) are allowed"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("text-danger");
+                error.insertAfter(element);
+            },
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+            onkeyup: function (element) {
+                $(element).valid();
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
         });
     }
 
@@ -47,8 +66,7 @@
             config.probationStatusMasterId
         );
 
-        let text = "Are you sure you want to delete this Probation Status?";
-        if (confirm(text)) {
+        if (confirm("Are you sure you want to delete this Probation Status?")) {
             window.location.href = url;
         }
     }
