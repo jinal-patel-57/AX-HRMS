@@ -30,7 +30,7 @@
 <body>
 
 <div class="card">
-  <div class="card-header"><strong> <liferay-ui:message key="add-holiday"></liferay-ui:message>  </strong></div>
+  <div class="card-header"><strong> <liferay-ui:message key="holiday"></liferay-ui:message>  </strong></div>
       <form action="${addEditHolidayHrAdminURL}" method="post" id="addEditHolidayHrAdmin">
 
   <div class="card-body mb-0">

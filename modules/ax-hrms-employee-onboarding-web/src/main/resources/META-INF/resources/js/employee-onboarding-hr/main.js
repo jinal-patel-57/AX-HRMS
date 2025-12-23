@@ -78,25 +78,25 @@ var setFileInputValues;
                 messages: {
                     [namespace + "employeeCode"]: {
                         required: "Please enter Employee Code",
-                        maxlength: "Employee Code exceeding maximum lenght!",
+                        maxlength: "Employee Code exceeding maximum length!",
                         lettersAndNumbersOnly:
                             "Use only letters and numbers for Employee Code!",
                     },
                     [namespace + "firstName"]: {
                         required: "Please enter First Name",
-                        maxlength: "First Name exceeding maximum lenght!",
+                        maxlength: "First Name exceeding maximum length!",
                         lettersOnly:
                             "Use only letters for First Name!",
                     },
                     [namespace + "lastName"]: {
                         required: "Please enter Last Name",
-                        maxlength: "Last Name exceeding maximum lenght!",
+                        maxlength: "Last Name exceeding maximum length!",
                         lettersOnly:
                             "Use only letters for Last Name!",
                     },
                     [namespace + "middleName"]: {
                         required: "Please enter Middle Name",
-                        maxlength: "Middle Name exceeding maximum lenght!",
+                        maxlength: "Middle Name exceeding maximum length!",
                         lettersOnly:
                             "Use only letters for Middle Name!",
                     },
@@ -110,7 +110,7 @@ var setFileInputValues;
                     },
                    [namespace + "officialEmailId"]: {
                        required: "Please enter email username.",
-                       validUsernameEmail: "Only letters, numbers, dot, hyphen and underscore allowed."
+                       validUsernameEmail: "Only letters, numbers, ., - and _ allowed."
                    },
 
                     [namespace + "joiningDate"]: {
