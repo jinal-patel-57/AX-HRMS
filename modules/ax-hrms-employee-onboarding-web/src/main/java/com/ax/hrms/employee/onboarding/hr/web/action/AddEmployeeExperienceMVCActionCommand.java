@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -100,6 +102,12 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 
 		Folder profilePictureFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE, parentfolder.getFolderId(),themeDisplay, serviceContext);
 
+		List<Long> experienceIds =
+			    employeeExperienceLocalService.findByEmployeeId(employeeId)
+			        .stream()
+			        .map(EmployeeExperience::getExperienceId)
+			        .collect(Collectors.toList());
+		
 		for (int index = 1; index <= experienceIds.size(); index++) {
 			
 			Long experienceId = experienceIds.get(index - 1);
@@ -122,10 +130,9 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 
 				long existingFileEntryId = employeeExperience.getExperienceCertificateMediaId();
 
-				FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
-
-				if (file != null && file.exists() && fileName != null) {
-
+				if (file != null && file.exists() && fileName != null && Validator.isNotNull(existingFileEntryId) && existingFileEntryId>0) {
+					try {
+						FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
 						long userId = themeDisplay.getUserId();
 						String sourceFileName = fileName;
 						String title = fileName;
@@ -136,21 +143,25 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 						DLVersionNumberIncrease dlVersionNumberIncrease = DLVersionNumberIncrease.MAJOR;
 
 						byte[] fileContent;
-						
-							fileContent = readFileContent(file);
-
-							DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, null, serviceContext);
+						fileContent = readFileContent(file);
+						DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, null, serviceContext);
+					}catch(Exception e) {
+						log.error("error while updating file entry -- " + e.getMessage());
+					}
 				} else {
 					log.error("Error: File does not exist or file name is null");
 				}
 				
 				employeeExperience.setCompanyName(companyName);
 				SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,Locale.ENGLISH);
-				Date joiningDate = formatter.parse(joiningDateStr);
-				Date relievingDate = formatter.parse(relievingDateStr);
-
-				employeeExperience.setJoiningDate(joiningDate);
-				employeeExperience.setRelievingDate(relievingDate);
+				if(Validator.isNotNull(joiningDateStr) && !joiningDateStr.isBlank()) {
+					Date joiningDate = formatter.parse(joiningDateStr);
+					employeeExperience.setJoiningDate(joiningDate);
+				}
+				if(Validator.isNotNull(relievingDateStr) && !relievingDateStr.isBlank()) {
+					Date relievingDate = formatter.parse(relievingDateStr);
+					employeeExperience.setRelievingDate(relievingDate);
+				}
 
 				employeeExperienceLocalService.updateEmployeeExperience(employeeExperience);
 			} catch (Exception e) {
@@ -164,7 +175,7 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 			String joiningDate = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.JOINING_DATE + i);
 			String relievingDate = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.RELIEVING_DATE + i);
 			try {
-				employeeExperience = employeeExperienceLocalService.createEmployeeExperience(CounterLocalServiceUtil.increment(EmployeeEducation.class.getName()));
+				employeeExperience = employeeExperienceLocalService.createEmployeeExperience(CounterLocalServiceUtil.increment(EmployeeExperience.class.getName()));
 
 				employeeExperience.setCompanyId(themeDisplay.getCompanyId());
 				employeeExperience.setGroupId(themeDisplay.getScopeGroupId());
@@ -180,11 +191,14 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 				File file = uploadPortletRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
 
 				if (file != null && file.exists() && fileName != null) {
-
+					try {
 						FileEntry entry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),themeDisplay.getScopeGroupId(), profilePictureFolder.getFolderId(), fileName,MimeTypesUtil.getContentType(file), fileName, StringPool.BLANK, StringPool.BLANK, file,serviceContext);
 						log.info("AddEmployeeExperienceMVCActionCommand >>> doProcessAction ::: entry ==>" + entry.getFileEntryId());
 						employeeExperience.setExperienceCertificateMediaId(entry.getFileEntryId());
 						fileEntryId = employeeExperience.getExperienceCertificateMediaId();
+					} catch(Exception e) {
+						log.error("error while uploading file -- " + e.getMessage());
+					}
 				} else {
 					log.error("error when upload file");
 				}
