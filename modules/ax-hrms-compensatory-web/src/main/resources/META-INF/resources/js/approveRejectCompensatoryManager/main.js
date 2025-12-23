@@ -24,12 +24,23 @@ var submit_compensatory_form;
             $.validator.addMethod("maxCharThousand", function (value, element) {
                 return this.optional(element) || value.length <= 1000;
             }, "Please enter no more than 1000 characters.");
+            $.validator.addMethod("lessThanOrEqualRequested", function (value, element) {
+                var requestedHours = parseFloat($('#requestedHours').val());
+
+                if (isNaN(requestedHours)) {
+                    return true; // safety fallback
+                }
+
+                return parseFloat(value) <= requestedHours;
+            }, "Approved hours cannot be more than requested hours.");
+
 
             $("#approveCompensationForm").validate({
                 rules: {
                    [namespace + "approvedHours"]: {
                         required: true,
-                        positiveInteger: true
+                        positiveInteger: true,
+                        lessThanOrEqualRequested: true
                     },
                 },
                 messages: {

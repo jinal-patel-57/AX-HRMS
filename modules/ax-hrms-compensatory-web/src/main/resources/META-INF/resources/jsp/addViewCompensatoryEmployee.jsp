@@ -10,6 +10,11 @@
         .modal-open .modal:not(.show) {
             display: none !important;
         }
+        .error{
+
+         color: #dc3545 !important;
+
+        }
     </style>
 
 </head>

@@ -117,10 +117,12 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
-        if (approvedHours > 0) {
+        if (approvedHours > 0 ) {
 
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
-            compensatoryData.setApprovedHours(approvedHours);
+
+
+            compensatoryData.setApprovedHours(Math.min(approvedHours, compensatoryData.getRequestedHours()));
             compensatoryData.setLeaveCompensatoryStatusMasterId(
                     leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsCompensatoryDataConstants.APPROVED)
                             .getLeaveCompensatoryStatusMasterId()
@@ -131,8 +133,15 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             LeaveBalance leaveBalance;
             try {
                  leaveBalance = leaveBalanceLocalService.findByEmployeeIdAndLeaveTypeMasterId(compensatoryData.getEmployeeId(), leaveTypeMaster.getLeaveTypeMasterId());
-                double hoursToDays = (double) approvedHours /8;
-                leaveBalance.setNoOfRemainingLeaves(leaveBalance.getNoOfRemainingLeaves() + hoursToDays);
+                double hoursToDays = (double) approvedHours / 8;
+
+// apply custom rounding
+                double roundedDays = roundToNearestQuarter(hoursToDays);
+
+                leaveBalance.setNoOfRemainingLeaves(
+                        leaveBalance.getNoOfRemainingLeaves() + roundedDays
+                );
+
                 leaveBalanceLocalService.updateLeaveBalance(leaveBalance);
                 log.info("compensatory updated successfully..!!");
             } catch (Exception e) {
@@ -159,9 +168,22 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                 leaveBalanceLocalService.addLeaveBalance(leaveBalance);
 
                 leaveBalance = leaveBalanceLocalService.findByEmployeeIdAndLeaveTypeMasterId(compensatoryData.getEmployeeId(), leaveTypeMaster.getLeaveTypeMasterId());
-                double hoursToDays = Math.round((float) approvedHours / 8);
-                leaveBalance.setNoOfRemainingLeaves(leaveBalance.getNoOfRemainingLeaves() + hoursToDays);
+
+
+
+
+                double hoursToDays = (double) approvedHours / 8;
+
+// apply custom rounding
+                double roundedDays = roundToNearestQuarter(hoursToDays);
+
+                leaveBalance.setNoOfRemainingLeaves(
+                        leaveBalance.getNoOfRemainingLeaves() + roundedDays
+                );
+
+
                 leaveBalanceLocalService.updateLeaveBalance(leaveBalance);
+                log.info("Compensatory Leave Balance :- "+ leaveBalance);
                 log.info("Compensatory leave added successfully..!!!");
 
 
@@ -206,6 +228,26 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
         }
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
     }
+    private double roundToNearestQuarter(double value) {
+
+        int wholePart = (int) value;          // e.g. 1 from 1.30
+        double decimalPart = value - wholePart;
+
+        double roundedDecimal;
+
+        if (decimalPart < 0.25) {
+            roundedDecimal = 0.0;
+        } else if (decimalPart < 0.50) {
+            roundedDecimal = 0.25;
+        } else if (decimalPart < 0.75) {
+            roundedDecimal = 0.50;
+        } else {
+            roundedDecimal = 0.75;
+        }
+
+        return wholePart + roundedDecimal;
+    }
+
 }
 
 

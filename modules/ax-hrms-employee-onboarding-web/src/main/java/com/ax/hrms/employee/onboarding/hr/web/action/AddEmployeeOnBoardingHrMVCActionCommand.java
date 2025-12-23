@@ -407,14 +407,31 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
             lb.setYear(currentYear);
             lb.setNoOfUsedLeaves(0);
 
+//            // Calculate months remaining
+//            int remainingMonths = 12 - joiningMonthForCalculation + 1;
+//
+//            if (lpm.getIsApplicableFloater()) {
+//                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * 12));
+//            } else {
+//                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * remainingMonths));
+//            }
+
             // Calculate months remaining
             int remainingMonths = 12 - joiningMonthForCalculation + 1;
 
+            double calculatedLeaves;
+
             if (lpm.getIsApplicableFloater()) {
-                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * 12));
+                calculatedLeaves = lpm.getAccrualRate() * 12;
             } else {
-                lb.setNoOfRemainingLeaves(Math.round(lpm.getAccrualRate() * remainingMonths));
+                calculatedLeaves = lpm.getAccrualRate() * remainingMonths;
             }
+
+// apply quarter rounding
+            double roundedLeaves = roundToNearestQuarter(calculatedLeaves);
+
+            lb.setNoOfRemainingLeaves(roundedLeaves);
+
 
             leaveBalanceLocalService.addLeaveBalance(lb);
 
@@ -489,6 +506,7 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
     }
 
     private void checkRolePrerequisite(ThemeDisplay themeDisplay, ActionRequest actionRequest) throws PortalException {
+
         List<String> roleNameList = new ArrayList<>();
         roleNameList.add("Employee");
         roleNameList.add("Contractor");
@@ -512,6 +530,26 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
             }
         }
     }
+    private double roundToNearestQuarter(double value) {
+
+        int wholePart = (int) value;
+        double decimalPart = value - wholePart;
+
+        double roundedDecimal;
+
+        if (decimalPart < 0.25) {
+            roundedDecimal = 0.0;
+        } else if (decimalPart < 0.50) {
+            roundedDecimal = 0.25;
+        } else if (decimalPart < 0.75) {
+            roundedDecimal = 0.50;
+        } else {
+            roundedDecimal = 0.75;
+        }
+
+        return wholePart + roundedDecimal;
+    }
+
 
 }
 

@@ -16,7 +16,7 @@ var setFileInputValues;
             // Username allowed characters: letters, digits, dot, underscore, hyphen
             const regex = /^[a-zA-Z0-9._-]+$/;
             return regex.test(username);
-        }, "Please enter a valid email username.");
+        }, "Please enter a valid email.");
 
         $(document).ready(function () {
             $("#EmployeeOnBoardingHrForm").validate({
@@ -110,7 +110,7 @@ var setFileInputValues;
                     },
                    [namespace + "officialEmailId"]: {
                        required: "Please enter email username.",
-                       validUsernameEmail: "Only letters, numbers, ., - and _ allowed."
+                       validUsernameEmail: "Only letters, numbers, dot, hyphen and underscore allowed."
                    },
 
                     [namespace + "joiningDate"]: {

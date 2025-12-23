@@ -326,37 +326,48 @@
 
 
 
-    $(document).ready(function () {
+   $(document).ready(function () {
 
-        const emailInput = $("#officialEmailId");
-        const domain = emailInput.data("domain");
+       const emailInput = $("#officialEmailId");
+       const domain = emailInput.data("domain");
 
-        // Always ensure domain is attached
-        emailInput.on("input", function () {
+       let isDeleting = false;
 
-            let value = emailInput.val();
+       emailInput.on("keydown", function (e) {
+           if (e.key === "Backspace" || e.key === "Delete") {
+               isDeleting = true;
+           }
+       });
 
-            // Remove domain if user tries to type full email manually
-            if (value.endsWith(domain)) {
-                value = value.replace(domain, "");
-            }
+       emailInput.on("input", function () {
+           let value = emailInput.val() || "";
 
-            // Append domain again
-            emailInput.val(value + domain);
-        });
+           // Remove all duplicate domains
+           value = value.replace(new RegExp(domain.replace(".", "\\."), "g"), "");
 
-        // Prevent cursor from entering domain part
-        emailInput.on("click keyup", function () {
+           // If deleting, do NOT auto-append domain
+           if (isDeleting) {
+               emailInput.val(value);
+               isDeleting = false;
+               return;
+           }
 
-            let fullValue = emailInput.val();
-            let domainIndex = fullValue.indexOf(domain);
+           // Append domain only once
+           emailInput.val(value + domain);
+       });
 
-            // Lock cursor to before domain
-            if (emailInput[0].selectionStart > domainIndex) {
-                emailInput[0].setSelectionRange(domainIndex, domainIndex);
-            }
-        });
+       // Prevent cursor entering domain
+       emailInput.on("click keyup", function () {
+           const value = emailInput.val();
+           const domainIndex = value.indexOf(domain);
 
-    });
+           if (domainIndex !== -1 && this.selectionStart > domainIndex) {
+               this.setSelectionRange(domainIndex, domainIndex);
+           }
+       });
+
+   });
+
+
 
 </script>
