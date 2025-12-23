@@ -34,7 +34,8 @@ public class EmployeeDto {
 	public long profilePicId;
 	public long educationCertificateMediaId;
 	public String insuranceLink;
-	
+	public String reportingManager;
+
 	//address
 	public String line1;
 	public String line2;
@@ -95,6 +96,14 @@ public class EmployeeDto {
 
 	public void setEducationCertificateMediaId(long educationCertificateMediaId) {
 		this.educationCertificateMediaId = educationCertificateMediaId;
+	}
+
+	public String getReportingManager() {
+		return reportingManager;
+	}
+
+	public void setReportingManager(String reportingManager) {
+		this.reportingManager = reportingManager;
 	}
 
 	public long getEmployeeId() {

@@ -194,13 +194,13 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isExperienced" id="yes" value="Yes"
-                                ${employeeDetail.isExperienced == 'Yes' ? 'checked' : '' }>
+                                ${employeeDetail.isExperienced == 'true' ? 'checked' : '' }>
                             <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isExperienced" id="no" value="No"
-                                ${employeeDetail.isExperienced == 'No' ? 'checked' : '' }>
+                                ${employeeDetail.isExperienced == 'false' ? 'checked' : '' }>
                             <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
                         </div>
                     </div>

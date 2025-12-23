@@ -120,6 +120,9 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setJoiningDate(employeeDetails.getJoiningDate());
 			employeeDto.setLeavingDate(employeeDetails.getLeavingDate());
 			employeeDto.setGender(employeeDetails.getGender());
+			employeeDto.setExperienced(employeeDetails.getIsExperienced());
+			EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
+			employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());
 			FileEntry fileEntry = DLAppServiceUtil.getFileEntry(employeeDto.getProfilePicId());
 
 			if (Validator.isNotNull(fileEntry)) {
