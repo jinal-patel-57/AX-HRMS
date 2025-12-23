@@ -40,7 +40,6 @@
                 <liferay-ui:search-container-column-text
                         name="Reason"
                         value="${wfh.reason}" />
-                <liferay-ui:search-container-column-text name="Team Mail" value="${wfh.teamMailId}" />
 
                <liferay-ui:search-container-column-text name="Request Date">
                     <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />

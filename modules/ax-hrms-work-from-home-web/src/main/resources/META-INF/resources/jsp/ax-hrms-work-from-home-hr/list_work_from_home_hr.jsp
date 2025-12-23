@@ -43,9 +43,7 @@
                     <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />
                 </liferay-ui:search-container-column-text>
 
-                <liferay-ui:search-container-column-text
-                        name="Team Mail"
-                        value="${wfh.teamMailId}" />
+
 
                 <liferay-ui:search-container-column-text name="Action">
 
