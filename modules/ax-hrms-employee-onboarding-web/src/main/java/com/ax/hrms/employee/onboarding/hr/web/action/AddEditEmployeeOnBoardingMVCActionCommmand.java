@@ -201,9 +201,6 @@ import com.ax.hrms.master.model.DepartmentMaster;
                 user.setMiddleName(middleName);
                 userLocalService.updateUser(user);
                 log.info("Above the updaation part ok ...................................3");
-                log.info("Above the updaation part ok ...................................3....");
-                log.info("Above the updaation part ok after iuser local service...................................3");
-
 
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
                 log.info("Above the updaation part ok ...................................31.........");
