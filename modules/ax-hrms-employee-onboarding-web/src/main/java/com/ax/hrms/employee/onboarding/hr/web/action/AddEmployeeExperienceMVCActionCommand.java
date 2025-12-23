@@ -124,27 +124,35 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 				employeeExperience = employeeExperienceLocalService.getEmployeeExperience(experienceId);
 
 				UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-				String fileName = uploadPortletRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + dynamicIndex);
+				
+				String fileName = generateFileName(uploadPortletRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + dynamicIndex));
 
 				File file = uploadPortletRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + dynamicIndex);
 
 				long existingFileEntryId = employeeExperience.getExperienceCertificateMediaId();
 
-				if (file != null && file.exists() && fileName != null && Validator.isNotNull(existingFileEntryId) && existingFileEntryId>0) {
+				if (file != null && file.exists() && fileName != null && file.length()>0) {
 					try {
-						FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
+						
 						long userId = themeDisplay.getUserId();
-						String sourceFileName = fileName;
-						String title = fileName;
-						String urlTitle = null;
-						String description = existingFileEntry.getDescription();
-						String changeLog = StringPool.BLANK;
-						String mimeType = MimeTypesUtil.getContentType(file);
+						
 						DLVersionNumberIncrease dlVersionNumberIncrease = DLVersionNumberIncrease.MAJOR;
 
-						byte[] fileContent;
-						fileContent = readFileContent(file);
-						DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, null, serviceContext);
+						FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(userId, themeDisplay.getScopeGroupId(), profilePictureFolder.getFolderId(), fileName,
+						            MimeTypesUtil.getContentType(file), fileName, "", "", file, serviceContext);
+						    
+						    employeeExperience.setExperienceCertificateMediaId(fileEntry.getFileEntryId());
+						    log.info("New file added in the db.....");
+				
+						    if (existingFileEntryId > 0) {
+						        try {
+						            DLAppLocalServiceUtil.deleteFileEntry(existingFileEntryId);
+						            log.info("Deleted old experience certificate fileEntryId: " + existingFileEntryId);
+						        } catch (Exception e) {
+						            log.warn("Failed to delete old file entry: " + existingFileEntryId, e);
+						        }
+						    }
+						
 					}catch(Exception e) {
 						log.error("error while updating file entry -- " + e.getMessage());
 					}
@@ -216,6 +224,11 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
 			
 			actionRequest.setAttribute("employeeId", ParamUtil.getLong(actionRequest,"employeeId"));
 		}
+	}
+	
+	private String generateFileName(String original) {
+	    String timestamp = String.valueOf(System.currentTimeMillis());
+	    return timestamp + "_" + original.replaceAll("\\s+", "_");
 	}
 
 	public byte[] readFileContent(File file) throws IOException, java.io.IOException {

@@ -138,8 +138,8 @@
                                                 <input id="<portlet:namespace />experienceCertificateAttachment${status.index+1}"
                                                        type="file"
                                                        name="<portlet:namespace />experienceCertificateAttachment${status.index+1}"
-                                                       class="form-control" required
-                                                       title="Please select a experience Certificate Attachment">
+                                                       class="form-control"
+                                                       title="Please select a experience Certificate Attachment" >
                                                        <c:if test="${experienceItem.experienceCertificateMediaId > 0}">
                                                   <%
                                                       com.ax.hrms.model.EmployeeExperience edu =
