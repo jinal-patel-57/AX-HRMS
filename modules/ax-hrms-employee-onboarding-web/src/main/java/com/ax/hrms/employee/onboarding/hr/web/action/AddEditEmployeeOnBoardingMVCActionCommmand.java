@@ -181,7 +181,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
 
                 log.info("Above the updaation part ok ...................................1");
 				try {
-					EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, false);
+					EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
 	                
 	                log.info("employee salary -- " + employeeSalary);
 	                

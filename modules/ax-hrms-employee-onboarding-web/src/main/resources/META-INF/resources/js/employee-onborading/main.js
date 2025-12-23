@@ -244,6 +244,8 @@
                         if (nextTabButton.length > 0) {
                             nextTabButton.tab('show');
                             var nextTabContentId = nextTabButton.attr('data-bs-target');
+                            $(nextTabContentId).addClass('show active');
+                            $(currentTab.attr('data-bs-target')).removeClass('show active');
                             $(nextTabContentId).find('input').first().focus();
                         }
                     },
@@ -253,6 +255,20 @@
                 });
             });
 
+		    $('.previous-button').on('click', function (event) {
+		    	debugger;
+		        event.preventDefault();
+		        const currentTab = $('.nav-link.active');
+		        const previousTabButton = currentTab.parent().prev().find('.nav-link');
+		        if (previousTabButton.length > 0) {
+		            previousTabButton.tab('show');
+		            const previousTabContentId = previousTabButton.attr('data-bs-target');
+		            $(previousTabContentId).addClass('show active');
+		            $(currentTab.attr('data-bs-target')).removeClass('show active');
+		            $(previousTabContentId).find('input').first().focus();
+		        }
+		    });
+				
             function toggleMaritalStatusFields() {
                 var maritalStatusCheckbox = $("#" + namespace + "maritalStatus");
                 var marriageDateField = $("#" + namespace + "marriageDate");
@@ -282,17 +298,6 @@
         });
     }
 
-
-    $('.previous-button').on('click', function (event) {
-        event.preventDefault();
-        const currentTab = $('.nav-link.active');
-        const previousTabButton = currentTab.parent().prev().find('.nav-link');
-        if (previousTabButton.length > 0) {
-            previousTabButton.tab('show');
-            const previousTabContentId = previousTabButton.attr('data-bs-target');
-            $(previousTabContentId).find('input').first().focus();
-        }
-    });
 
     function setConfigsForAddressValidation(config) {
         const namespace = config.namespace;
@@ -421,6 +426,8 @@
                         if (nextTabButton.length > 0) {
                             nextTabButton.tab('show');
                             const nextTabContentId = nextTabButton.attr('data-bs-target');
+                            $(nextTabContentId).addClass('show active');
+                            $(currentTab.attr('data-bs-target')).removeClass('show active');
                             $(nextTabContentId).find('input').first().focus();
                         }
                     },
@@ -619,6 +626,8 @@
                       if (nextTabButton.length > 0) {
                           nextTabButton.tab('show');
                           const nextTabContentId = nextTabButton.attr('data-bs-target');
+                          $(nextTabContentId).addClass('show active');
+                          $(currentTab.attr('data-bs-target')).removeClass('show active');
                           $(nextTabContentId).find('input').first().focus();
                       }
                   },
@@ -725,6 +734,8 @@
                         if (nextTabButton.length > 0) {
                             nextTabButton.tab('show');
                             const nextTabContentId = nextTabButton.attr('data-bs-target');
+                            $(nextTabContentId).addClass('show active');
+                            $(currentTab.attr('data-bs-target')).removeClass('show active');
                             $(nextTabContentId).find('input').first().focus();
                         }
                     },
@@ -831,6 +842,8 @@
                     if (nextTabButton.length > 0) {
                         nextTabButton.tab('show');
                         const nextTabContentId = nextTabButton.attr('data-bs-target');
+                        $(nextTabContentId).addClass('show active');
+                        $(currentTab.attr('data-bs-target')).removeClass('show active');
                         $(nextTabContentId).find('input').first().focus();
                     }
                 },
@@ -858,6 +871,8 @@
                     if (nextTabButton.length > 0) {
                         nextTabButton.tab('show');
                         const nextTabContentId = nextTabButton.attr('data-bs-target');
+                        $(nextTabContentId).addClass('show active');
+                        $(currentTab.attr('data-bs-target')).removeClass('show active');
                         $(nextTabContentId).find('input').first().focus();
                     }
                 },
