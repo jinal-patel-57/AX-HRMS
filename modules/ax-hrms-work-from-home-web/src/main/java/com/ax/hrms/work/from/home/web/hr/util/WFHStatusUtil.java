@@ -185,6 +185,9 @@ public class WFHStatusUtil {
                 (LeaveCompensatoryStatusMasterLocalService) serviceMap.get("leaveStatusLocalService");
         EmployeeDetailsLocalService employeeDetailsLocalService=(EmployeeDetailsLocalService) serviceMap.get("employeeDetailsLocalService");
         EmployeeDetails employee= null;
+        body =
+                new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+
         try {
             employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
             String subject=mailTemplateConfiguration.mailWFHApproveTeamSubject();
@@ -194,7 +197,9 @@ public class WFHStatusUtil {
 
             mailContent = mailContent.replace("${BODY}", body);
 
-
+           log.info("-----------------------------------------------------------");
+           log.info("Mail Content...." + mailContent);
+           log.info("------------------------------------------------------------");
 
             for (String teamEmail : teamEmailList) {
 

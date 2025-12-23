@@ -2,11 +2,14 @@ package com.ax.hrms.work.from.home.web.hr.action;
 
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
+import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -31,13 +34,19 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
     @Reference
     private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
 
+    @Reference
+    private EmployeeDetailsLocalService employeeDetailsLocalService;
     @Override
     public String render(RenderRequest request, RenderResponse response) throws PortletException {
 
         long wfhId = Long.parseLong(request.getParameter("wfhId"));
-
+        EmployeeDetails employeeDetails=null;
         WorkFromHomeRequest wfh = workFromHomeRequestLocalService.fetchWorkFromHomeRequest(wfhId);
-
+        try {
+             employeeDetails=employeeDetailsLocalService.getEmployeeDetails(wfh.getEmployeeId());
+        } catch (PortalException e) {
+            throw new RuntimeException(e);
+        }
         if (wfh != null) {
 
             // Convert Entity → DTO
@@ -49,7 +58,7 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
             dto.setRequestDate(wfh.getRequestDate());
             dto.setStartDate(wfh.getStartDate());
             dto.setEndDate(wfh.getEndDate());
-
+            dto.setEmployeeName(employeeDetails.getFirstName()+" "+employeeDetails.getLastName());
             // Get all status values
             List<LeaveCompensatoryStatusMaster> statusList =
                     leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);

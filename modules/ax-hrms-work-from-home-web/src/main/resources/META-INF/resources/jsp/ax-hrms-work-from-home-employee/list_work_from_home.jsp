@@ -1,6 +1,8 @@
 <%@ include file="../../init.jsp" %>
 <%@ page import="com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<liferay-ui:success key="wfh-added" message="Work From Home request added successfully!" />
+<liferay-ui:success key="wfh-updated" message="Work From Home request updated successfully!" />
 
 <portlet:renderURL var="addWFHForm">
     <portlet:param name="mvcPath" value="/jsp/ax-hrms-work-from-home-employee/add_edit_work_from_home.jsp" />
@@ -17,9 +19,6 @@
 
         <liferay-ui:search-container
                 searchContainer="${wfhSC}"
-                total="${totalWFHRequest}"
-                delta="${delta}"
-                iteratorURL="${iteratorURL}"
                 emptyResultsMessage="No WFH records found">
 
             <!-- FIXED -->
@@ -29,18 +28,23 @@
                     className="com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto"
                     modelVar="wfh"
                     keyProperty="workFromHomeRequestId">
-
-                <liferay-ui:search-container-column-text name="Team Mail" value="${wfh.teamMailId}" />
                 <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" />
+                <liferay-ui:search-container-column-text name="Employee Name" value="${wfh.employeeName}" />
+                                <liferay-ui:search-container-column-text name="Start Date">
+                                    <fmt:formatDate value="${wfh.startDate}" pattern="dd/MM/yyyy" />
+                                </liferay-ui:search-container-column-text>
 
-                <liferay-ui:search-container-column-text name="Start Date">
-                    <fmt:formatDate value="${wfh.startDate}" pattern="dd/MM/yyyy" />
+                                <liferay-ui:search-container-column-text name="End Date">
+                                    <fmt:formatDate value="${wfh.endDate}" pattern="dd/MM/yyyy" />
+                                </liferay-ui:search-container-column-text>
+                <liferay-ui:search-container-column-text
+                        name="Reason"
+                        value="${wfh.reason}" />
+                <liferay-ui:search-container-column-text name="Team Mail" value="${wfh.teamMailId}" />
+
+               <liferay-ui:search-container-column-text name="Request Date">
+                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />
                 </liferay-ui:search-container-column-text>
-
-                <liferay-ui:search-container-column-text name="End Date">
-                    <fmt:formatDate value="${wfh.endDate}" pattern="dd/MM/yyyy" />
-                </liferay-ui:search-container-column-text>
-
                 <liferay-ui:search-container-column-text name="Actions">
 
                     <portlet:renderURL var="viewWFH">

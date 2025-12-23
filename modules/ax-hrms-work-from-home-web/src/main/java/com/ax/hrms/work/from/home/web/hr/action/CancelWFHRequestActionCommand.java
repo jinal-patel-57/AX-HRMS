@@ -123,21 +123,27 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
             EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
+            StringBuilder managerMailBody =new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+
             WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
+            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
 
             String employeeCanceledNotification =notificationTemplateConfiguration.WFHRequestCanceledNotificationToEmployee();
 
             WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, employeeDetails1);
+            WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, manager);
+
             String roleName = "HR Admin";
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
             for (User user : users) {
+                StringBuilder hrMailBody =
+                        new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
                 EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
             }
 
             SessionMessages.add(request, "wfhCancelled");

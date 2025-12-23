@@ -19,7 +19,10 @@
     <div class="card-body">
 
         <table class="table table-bordered">
-
+            <tr>
+                <th>Employee Name</th>
+                <td>${wfh.employeeName}</td>
+            </tr>
             <tr>
                 <th>Team Mail ID</th>
                 <td>${wfh.teamMailId}</td>
@@ -38,7 +41,7 @@
             <tr>
                 <th>Request Date</th>
                 <td>
-                    <fmt:formatDate value="${wfh.requestDate}" pattern="yyyy-MM-dd HH:mm" />
+                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />
                 </td>
             </tr>
 

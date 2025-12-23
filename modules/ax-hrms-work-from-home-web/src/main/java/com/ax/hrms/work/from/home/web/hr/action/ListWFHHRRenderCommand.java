@@ -14,10 +14,10 @@ import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import org.osgi.service.component.annotations.Component;
@@ -28,7 +28,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component(
         property = {
@@ -51,126 +50,121 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
     private LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService;
 
     @Reference
-    private UserLocalService userLocalService;
-
-    @Reference
     private AxHrmsCommonApi axHrmsCommonApi;
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
 
-        ThemeDisplay themeDisplay =
-                (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
+        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long currentUserId = themeDisplay.getUserId();
 
-        boolean isHRAdmin =
-                axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+        boolean isHRAdmin = axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+        boolean isManager = axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
 
-        boolean isManager =
-                axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
-
-        // ✅ SearchContainer owns pagination
-        PortletURL iteratorURL = renderResponse.createRenderURL();
-
+        // Setup SearchContainer like employee version
+        PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
         SearchContainer<WFHRequestDto> searchContainer =
-                new SearchContainer<>(
-                        renderRequest,
-                        iteratorURL,
-                        null,
-                        "no-wfh-request-found"
-                );
+                new SearchContainer<>(renderRequest, iteratorURL, null, "no-wfh-request-found");
 
-        int start = searchContainer.getStart();
-        int end = searchContainer.getEnd();
+        // Pagination params like employee version
+        int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
+        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
+        int start = (cur - 1) * delta;
+        int end = start + delta;
 
         List<WorkFromHomeRequest> wfhRequestList = new ArrayList<>();
         int totalWFHRequests = 0;
 
         try {
-
             if (isHRAdmin) {
+                // HR Admin → fetch all requests
+                totalWFHRequests = workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
+                if (start >= totalWFHRequests) {
+                    start = 0;
+                    end = delta;
+                }
+                end = Math.min(totalWFHRequests, end);
+                wfhRequestList = workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
 
-                // HR Admin → ALL requests
-
-                log.info("inside the hr admin");
-                totalWFHRequests =
-                        workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
-                log.info("total wfh requests: " + totalWFHRequests);
-                wfhRequestList =
-                        workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
-                log.info("total wfh requests: " + wfhRequestList.size());
             } else if (isManager) {
-
-                // Find manager employee record
-                EmployeeDetails managerEmployee =
-                        employeeDetailsLocalService.findByLrUserId(currentUserId);
+                // Manager → fetch requests for their team
+                EmployeeDetails managerEmployee = employeeDetailsLocalService.findByLrUserId(currentUserId);
 
                 if (managerEmployee != null) {
+                    List<EmployeeDetails> teamEmployees = employeeDetailsLocalService.findByManagerId(managerEmployee.getEmployeeId());
 
-                    // Employees under this manager
-                    List<EmployeeDetails> teamEmployees =
-                            employeeDetailsLocalService.findByManagerId(
-                                    managerEmployee.getEmployeeId());
+                    if (!teamEmployees.isEmpty()) {
+                        // Count total WFH requests for the team
+                        totalWFHRequests = 0;
+                        for (EmployeeDetails emp : teamEmployees) {
+                            totalWFHRequests += workFromHomeRequestLocalService.countByEmployeeId(emp.getEmployeeId());
+                        }
 
-                    List<Long> teamUserIds = teamEmployees.stream()
-                            .map(EmployeeDetails::getEmployeeId)
-                            .collect(Collectors.toList());
+                        if (start >= totalWFHRequests) {
+                            start = 0;
+                            end = delta;
+                        }
+                        end = Math.min(totalWFHRequests, start + delta);
 
-                    log.info("teamUserIds :: "+teamUserIds);
-                    if (!teamUserIds.isEmpty()) {
+                        int toFetch = end - start;
+                        int skipped = 0;
+                        wfhRequestList = new ArrayList<>();
 
-                        List<WorkFromHomeRequest> allRequests =
-                                workFromHomeRequestLocalService
-                                        .getWorkFromHomeRequests(-1, -1)
-                                        .stream()
-                                        .filter(req ->
-                                                teamUserIds.contains(req.getEmployeeId()))
-                                        .collect(Collectors.toList());
+                        for (EmployeeDetails emp : teamEmployees) {
+                            int empCount = workFromHomeRequestLocalService.countByEmployeeId(emp.getEmployeeId());
 
-                        totalWFHRequests = allRequests.size();
+                            if (skipped + empCount <= start) {
+                                skipped += empCount;
+                                continue;
+                            }
 
-                        wfhRequestList = allRequests.stream()
-                                .skip(start)
-                                .limit(end - start)
-                                .collect(Collectors.toList());
+                            int empStart = Math.max(0, start - skipped);
+                            int empEnd = Math.min(empCount, empStart + toFetch);
+
+                            wfhRequestList.addAll(
+                                    workFromHomeRequestLocalService.findByEmployeeId(emp.getEmployeeId(), empStart, empEnd)
+                            );
+
+                            toFetch -= (empEnd - empStart);
+                            skipped += empCount;
+
+                            if (toFetch <= 0) break;
+                        }
                     }
                 }
             }
 
             // Fetch status master
-            List<LeaveCompensatoryStatusMaster> statusList =
-                    leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
+            List<LeaveCompensatoryStatusMaster> statusList = leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
-            // Convert to DTO
+            // Convert WFH records to DTO
             List<WFHRequestDto> dtoList = new ArrayList<>();
-            log.info("outside the hr admin");
             for (WorkFromHomeRequest wfh : wfhRequestList) {
-                 log.info("inside the loop ::"+wfh.toString());
-//                User user = userLocalService.fetchUser(wfh.getUserId());
-                EmployeeDetails employeeDetails=employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
+                EmployeeDetails employeeDetails = employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
 
                 WFHRequestDto dto = new WFHRequestDto();
                 dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-                dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName()+"  "+employeeDetails.getLastName() : "Unknown");
+                dto.setEmployeeName(employeeDetails != null
+                        ? employeeDetails.getFirstName() + " " + employeeDetails.getLastName()
+                        : "Unknown");
                 dto.setTeamMailId(wfh.getTeamMailId());
                 dto.setReason(wfh.getReason());
-                dto.setStatus(
-                        WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList)
-                );
+                dto.setStatus(WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList));
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
 
                 dtoList.add(dto);
             }
-            log.info("Outside the loops ok.......");
-            searchContainer.setResultsAndTotal(
-                    () -> dtoList,
-                    totalWFHRequests
-            );
-            log.info("here ok.....");
+
+            // Set results and total like employee version
+            searchContainer.setDelta(delta);
+            searchContainer.setDeltaConfigurable(true);
+            searchContainer.setResultsAndTotal(() -> dtoList, totalWFHRequests);
+
             renderRequest.setAttribute("wfhSC", searchContainer);
+            renderRequest.setAttribute("totalWFHRequest", totalWFHRequests);
+            renderRequest.setAttribute("delta", delta);
 
         } catch (Exception e) {
             log.error("Error while listing WFH requests", e);

@@ -34,7 +34,6 @@ public class AxHrmsWorkFromHomePortletKeys {
                     "<tbody>";
 
     public static final String WFH_REQUEST_MAIL_HEAD_v2 =
-            "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;\">" +
                     "<div style=\"padding: 20px;\">" +
                     "<table style=\"width: 100%; border-collapse: collapse;\">" +
                     "<thead>" +
@@ -51,6 +50,8 @@ public class AxHrmsWorkFromHomePortletKeys {
                     "</thead>" +
                     "<tbody>";
     public static final String WFH_REQUEST_MAIL_FOOTER =
-            "</tbody></table></div></body></html>";
+            "</tbody></table></div>";
 
 }
+
+//<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;"></body></html>

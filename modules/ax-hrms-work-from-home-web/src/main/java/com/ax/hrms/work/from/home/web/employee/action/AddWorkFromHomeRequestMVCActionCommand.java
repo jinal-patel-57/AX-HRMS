@@ -75,7 +75,8 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-
+        super.hideDefaultErrorMessage(actionRequest);
+//        super.hideDefaultSuccessMessage(actionRequest);
         long wfhId = ParamUtil.getLong(actionRequest, "workFromHomeRequestId");
 
         System.out.println("workFromHomeRequestId:" + wfhId);
@@ -250,7 +251,6 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 //        }
 
         // Hide default Liferay error message
-        SessionMessages.add(actionRequest, PortalUtil.getPortletId(actionRequest) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
     }

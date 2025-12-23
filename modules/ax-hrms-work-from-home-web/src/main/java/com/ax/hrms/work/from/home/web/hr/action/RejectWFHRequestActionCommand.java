@@ -115,21 +115,26 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
             EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
-            WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
+            StringBuilder managerMailBody =new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+
+            WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
             WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, employeeDetails1, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
 
             String employeeRejectedNotification = notificationTemplateConfiguration.WFHRequestRejectedNotificationToEmployee();
 
             WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, employeeDetails1);
+            WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, manager);
+
             String roleName = "HR Admin";
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
             for (User user : users) {
                 log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
                 EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                StringBuilder hrMailBody =new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
             }
 
 

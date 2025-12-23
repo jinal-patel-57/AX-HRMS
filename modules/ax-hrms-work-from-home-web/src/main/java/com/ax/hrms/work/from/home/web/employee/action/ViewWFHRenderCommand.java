@@ -2,9 +2,11 @@
 package com.ax.hrms.work.from.home.web.employee.action;
 
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
+import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.WorkFromHome;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeLocalServiceUtil;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
@@ -37,6 +39,9 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
     @Reference
     private WorkFromHomeRequestLocalService  workFromHomeRequestLocalService;
 
+    @Reference
+    private EmployeeDetailsLocalService  employeeDetailsLocalService;
+
     @Override
     public String render(RenderRequest request, RenderResponse response) {
 
@@ -60,11 +65,13 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
                     statusId =wfh.getStatus();
                 } catch (Exception ignored) {}
 
+                EmployeeDetails employeeDetails=employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
+
                 String statusName = WFHStatusUtil.getStatusNameById(statusId, statusList);
 
                 // ---------- BUILD DTO ----------
                 WFHRequestDto dto = new WFHRequestDto();
-
+                dto.setEmployeeName(employeeDetails.getFirstName()+" "+employeeDetails.getLastName());
                 dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
                 dto.setTeamMailId(wfh.getTeamMailId());
                 dto.setStatus(statusName);

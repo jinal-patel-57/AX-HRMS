@@ -1,10 +1,10 @@
 <%@ include file="../../init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<liferay-ui:success key="wfh-approved" message="wfh-request-approved-message" />
-<liferay-ui:success key="wfh-rejected" message="wfh-request-rejected-message" />
-<liferay-ui:success key="wfh-cancelled" message="wfh-request-cancelled-message" />
-<liferay-ui:error key="wfh-error" message="some-error-found-message" />
+<liferay-ui:success key="wfh-approved" message="Work From Home request Approved successfully!" />
+<liferay-ui:success key="wfh-rejected" message="Work From Home request Rejected successfully!" />
+<liferay-ui:success key="wfh-cancelled" message="Work From Home request Cancelled successfully!" />
+<liferay-ui:error key="wfh-error" message="Sorry,Some Error Found!" />
 
 <div class="card">
     <div class="card-header">
@@ -20,18 +20,12 @@
                     className="com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto"
                     modelVar="wfh"
                     keyProperty="workFromHomeRequestId">
-
+                <liferay-ui:search-container-column-text
+                        name="Status"
+                        value="${wfh.status}" />
                 <liferay-ui:search-container-column-text
                         name="Employee Name"
                         value="${wfh.employeeName}" />
-
-                <liferay-ui:search-container-column-text
-                        name="Team Mail"
-                        value="${wfh.teamMailId}" />
-
-                <liferay-ui:search-container-column-text
-                        name="Reason"
-                        value="${wfh.reason}" />
 
                 <liferay-ui:search-container-column-text name="Start Date">
                     <fmt:formatDate value="${wfh.startDate}" pattern="dd/MM/yyyy" />
@@ -41,13 +35,17 @@
                     <fmt:formatDate value="${wfh.endDate}" pattern="dd/MM/yyyy" />
                 </liferay-ui:search-container-column-text>
 
+                <liferay-ui:search-container-column-text
+                        name="Reason"
+                        value="${wfh.reason}" />
+
        <liferay-ui:search-container-column-text name="Request Date">
                     <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />
                 </liferay-ui:search-container-column-text>
 
                 <liferay-ui:search-container-column-text
-                        name="Status"
-                        value="${wfh.status}" />
+                        name="Team Mail"
+                        value="${wfh.teamMailId}" />
 
                 <liferay-ui:search-container-column-text name="Action">
 
@@ -70,7 +68,7 @@
 
                     <div class="dropdown">
                         <button class="btn fa fa-ellipsis-v dropdown-toggle"
-                                data-toggle="dropdown"></button>
+                                data-toggle="dropdown"><i class="icon-ellipsis-vertical"></i></button>
 
                         <ul class="dropdown-menu">
                             <c:choose>
