@@ -54,6 +54,10 @@ public class WorkFromHomeRequestLocalServiceUtil {
 		return getService().addWorkFromHomeRequest(workFromHomeRequest);
 	}
 
+	public static int countByEmployeeId(long employeeId) {
+		return getService().countByEmployeeId(employeeId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

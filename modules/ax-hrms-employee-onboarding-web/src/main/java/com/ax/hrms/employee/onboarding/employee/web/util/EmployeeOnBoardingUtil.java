@@ -264,6 +264,7 @@ public class EmployeeOnBoardingUtil {
     public void setExperience(RenderRequest renderRequest, Long employeeId, EmployeeExperienceLocalService employeeExperienceLocalService) {
         try {
             List<EmployeeExperience> experienceList = employeeExperienceLocalService.findByEmployeeId(employeeId);
+
             renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_LIST, experienceList);
             renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_LIST_SIZE, experienceList.size());
         } catch (Exception e) {

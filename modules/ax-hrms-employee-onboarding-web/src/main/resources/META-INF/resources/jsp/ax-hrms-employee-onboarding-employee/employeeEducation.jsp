@@ -294,6 +294,7 @@
                                 </div>
 
                                 <!-- Delete Button -->
+                                 <c:if test="${educationListSize > 1}">
                                 <div class="card-footer text-right">
                                     <portlet:actionURL var="deleteEmployeeEducationURL"
                                                        name="/deleteEmployeeEducationURL">
@@ -305,6 +306,7 @@
                                         <i class="icon-trash"></i>
                                     </a>
                                 </div>
+                                </c:if>
 
                             </div>
                         </div>

@@ -47,6 +47,11 @@ public class WorkFromHomeRequestLocalServiceWrapper
 			workFromHomeRequest);
 	}
 
+	@Override
+	public int countByEmployeeId(long employeeId) {
+		return _workFromHomeRequestLocalService.countByEmployeeId(employeeId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

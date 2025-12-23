@@ -29,4 +29,8 @@ public class WorkFromHomeRequestLocalServiceImpl
 
         return workFromHomeRequestPersistence.findByEmployeeId(employeeId, start, end);
     }
+
+    public int countByEmployeeId(long employeeId) {
+        return workFromHomeRequestPersistence.countByEmployeeId(employeeId);
+    }
 }

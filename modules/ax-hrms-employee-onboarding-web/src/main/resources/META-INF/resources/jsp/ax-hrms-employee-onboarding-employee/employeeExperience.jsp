@@ -1,5 +1,10 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
+<%@ page import="com.liferay.document.library.kernel.service.DLAppLocalServiceUtil" %>
+<%@ page import="com.liferay.document.library.kernel.util.DLUtil" %>
+<%@ page import="com.liferay.portal.kernel.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <portlet:actionURL name="/addEditEmployeeExperienceURL" var="addEditEmployeeExperienceURL"/>
 <form id="experienceStepperForm" action="${addEditEmployeeExperienceURL}"
       method="POST" enctype="multipart/form-data">
@@ -131,10 +136,37 @@
                                                         key="experience-certificate-attachment"/><span class="text-danger">*</span>
                                                 </label>
                                                 <input id="<portlet:namespace />experienceCertificateAttachment${status.index+1}"
-                                                       type="file" value="${certificateMediaIdPath}" readonly
+                                                       type="file"
                                                        name="<portlet:namespace />experienceCertificateAttachment${status.index+1}"
                                                        class="form-control" required
                                                        title="Please select a experience Certificate Attachment">
+                                                       <c:if test="${experienceItem.experienceCertificateMediaId > 0}">
+                                                  <%
+                                                      com.ax.hrms.model.EmployeeExperience edu =
+                                                          (com.ax.hrms.model.EmployeeExperience) pageContext.findAttribute("experienceItem");
+
+                                                      long fileEntryId = edu.getExperienceCertificateMediaId();
+                                                      String previewURL = "";
+
+                                                      if (fileEntryId > 0) {
+                                                          try {
+                                                              FileEntry fe = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+                                                              ThemeDisplay td = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+                                                              previewURL = DLUtil.getPreviewURL(
+                                                                      fe,
+                                                                      fe.getFileVersion(),
+                                                                      td,
+                                                                      ""
+                                                              );
+                                                          } catch (Exception e) {
+                                                              e.printStackTrace();
+                                                          }
+                                                      }
+                                                  %>
+
+                                                  <a target="_blank" href="<%= previewURL %>">View Existing Attachment</a>
+                                              </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -146,7 +178,7 @@
 
 
                                     <input type="hidden" id="firstVisit" name="<portlet:namespace/>firstVisit"
-                                           value="true"/>
+                                           value="false"/>
                                     <input type="hidden" id="currentIndex" name="<portlet:namespace/>currentIndex"
                                            value="1"/>
                                 </div>

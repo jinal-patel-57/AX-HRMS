@@ -70,6 +70,8 @@ public interface WorkFromHomeRequestLocalService
 	public WorkFromHomeRequest addWorkFromHomeRequest(
 		WorkFromHomeRequest workFromHomeRequest);
 
+	public int countByEmployeeId(long employeeId);
+
 	/**
 	 * @throws PortalException
 	 */
