@@ -79,7 +79,7 @@
                                     <input type="hidden" id="firstVisit" name="<portlet:namespace/>firstVisit"
                                            value="true"/>
                                     <input type="hidden" id="currentIndex" name="<portlet:namespace/>currentIndex"
-                                           value="1"/>
+                                           value="${status.index+1}"/>
                                 </div>
                             </div>
                         </div>
