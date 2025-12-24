@@ -23,7 +23,7 @@
                 <liferay-ui:search-container-column-text
                         name="Status"
                         value="${wfh.status}" />
-                <liferay-ui:search-container-column-text
+                        <liferay-ui:search-container-column-text
                         name="Employee Name"
                         value="${wfh.employeeName}" />
 
@@ -93,3 +93,12 @@
         </liferay-ui:search-container>
     </div>
 </div>
+<script>
+$('.table-responsive').on('show.bs.dropdown', function () {
+     $('.table-responsive').css( "overflow", "inherit" );
+});
+
+$('.table-responsive').on('hide.bs.dropdown', function () {
+     $('.table-responsive').css( "overflow", "auto" );
+})
+</script>

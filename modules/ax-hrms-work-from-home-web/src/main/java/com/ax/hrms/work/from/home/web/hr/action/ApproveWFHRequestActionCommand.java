@@ -70,6 +70,7 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
 
     @Reference
     EmployeeDesignationLocalService employeeDesignationLocalService;
+
     @Override
     public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
 
@@ -100,6 +101,8 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             // Update the status
             wfh.setStatus(approvedId);
             long currentUserId = themeDisplay.getUserId();
+            EmployeeDetails approverEmployeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
+
             Map<String, Object> serviceMap = new HashMap<>();
             serviceMap.put("departmentMasterLocalService", departmentMasterLocalService);
             serviceMap.put("designationMasterLocalService", designationMasterLocalService);
@@ -109,42 +112,44 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
 
             String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-            String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
-                    PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+            String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
             StringBuilder employeeMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             wfh.setReviewerId(employeeDetails.getEmployeeId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
-            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true,false);
-            StringBuilder managerMailBody =
-                    new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true,false);
-            String employeeApprovedNotification =notificationTemplateConfiguration.WFHRequestApprovedNotificationToEmployee();
-            WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification , employeeDetails1);
-            WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification , manager);
+            WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, employeeDetails1, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false);
+            String employeeApprovedNotification = notificationTemplateConfiguration.WFHRequestApprovedNotificationToEmployee();
 
+            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
+            if (manager != null && manager.getEmployeeId() != approverEmployeeDetails.getEmployeeId()) {
+                StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false);
+                WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification, manager);
+            }
+            WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification, employeeDetails1);
             String roleName = "HR Admin";
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
 
             for (User user : users) {
-                StringBuilder hrMailBody =
-                        new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                if (user.getUserId() == currentUserId) {
+                    continue;
+                }
+                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
                 EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true,false);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false);
             }
 
             //Send mail to team
 
-            log.info("Team Mail Id is the :: "+wfh.getTeamMailId());
-            List<String> teamEmailList =WFHStatusUtil.extractValidEmails(wfh.getTeamMailId());
-            WFHStatusUtil.sendMailtoTeam(fromName,fromEmailAddress,teamEmailList,serviceMap,employeeMailBody,wfh,axHrmsCommonApi,mailTemplateConfiguration);
+            log.info("Team Mail Id is the :: " + wfh.getTeamMailId());
+            List<String> teamEmailList = WFHStatusUtil.extractValidEmails(wfh.getTeamMailId());
+            WFHStatusUtil.sendMailtoTeam(fromName, fromEmailAddress, teamEmailList, serviceMap, employeeMailBody, wfh, axHrmsCommonApi, mailTemplateConfiguration);
             log.info("mail sent successfully");
             // Send success message
             SessionMessages.add(actionRequest, "wfh-approved");

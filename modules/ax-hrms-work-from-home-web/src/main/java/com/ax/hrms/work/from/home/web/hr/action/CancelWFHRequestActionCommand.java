@@ -124,19 +124,26 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
             EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
             StringBuilder managerMailBody =new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
-
+            EmployeeDetails cancelEmployeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             String employeeCanceledNotification =notificationTemplateConfiguration.WFHRequestCanceledNotificationToEmployee();
 
+            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
+            if (manager != null && manager.getEmployeeId() != cancelEmployeeDetails.getEmployeeId()) {
+
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, true);
+                WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, manager);
+
+            }
+
             WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, employeeDetails1);
-            WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, manager);
 
             String roleName = "HR Admin";
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
             for (User user : users) {
+                if (user.getUserId() == currentUserId) {
+                    continue;
+                }
                 StringBuilder hrMailBody =
                         new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());

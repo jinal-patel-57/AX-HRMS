@@ -200,7 +200,6 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
             String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                     PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-            StringBuilder employeeMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             //Sending notification to Manager
 
 
@@ -219,13 +218,15 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
                 EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
             }
 
             //send mail to Manager
 
+            StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
 
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
 
 
             SessionMessages.add(actionRequest, "wfh-added");
