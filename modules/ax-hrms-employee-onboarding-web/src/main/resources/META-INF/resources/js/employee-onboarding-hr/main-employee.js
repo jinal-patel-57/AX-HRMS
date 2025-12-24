@@ -171,15 +171,12 @@
                         date: true
                     },
                     [namespace + "employeeProfilePicture"]: {
-
-                        profilePicRequired: true
-                    },
-
+                        profilePicRequired: true,
                         required: function () {
-                            // profilePicName exists = UPDATE case → NOT required
                             return !profilePicName || profilePicName.trim() === "";
                         }
                     },
+
 
 
                     [namespace + "spouseName"]: {
