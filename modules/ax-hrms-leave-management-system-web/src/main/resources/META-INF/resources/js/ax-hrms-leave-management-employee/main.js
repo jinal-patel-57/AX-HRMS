@@ -346,6 +346,7 @@
             }
 
         let selectedLeaveTypeName =  $(this).find('option:selected').text().trim().toLowerCase();
+
             // After change Leave Type if leave type is floater then run this if...else...
             if(isApplicableForFloater && selectedLeaveTypeName === 'festival floater'){
                 hideStartDateContainer();
@@ -367,6 +368,11 @@
 
             // After change Leave Type if leave type is Continuous then run this if...else...
             if(isContinuous){
+             if (isApplicableForFloater && selectedLeaveTypeName === 'personal floater') {
+                            $('#startDateLabel').text('Date');
+                        } else {
+                            $('#startDateLabel').text('Start Date');
+                        }
                 hideEndDateContainer();
                 showStartDateContainer();
                 hideDateInputContainer();
