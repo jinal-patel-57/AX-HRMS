@@ -604,38 +604,78 @@
           }
 
           $('#add-education-section').on('click', addEducationSection);
+//
+//          $('.next-button-education-details').on('click', function (event) {
+//              initializeValidation();
+//
+//              const form3 = $('#educationStepperForm');
+//
+//              if (!form3.valid()) {
+//                  event.preventDefault();
+//                  return false;
+//              }
+//
+//              $.ajax({
+//                  url: form3.attr('action'),
+//                  method: 'POST',
+//                  data: form3.serialize(),
+//                  success: function (response) {
+//                      const currentTab = $('.nav-link.active');
+//                      document.getElementById("firstVisitEducation").value = "false";
+//                      const nextTabButton = currentTab.parent().next().find('.nav-link');
+//                      if (nextTabButton.length > 0) {
+//                          nextTabButton.tab('show');
+//                          const nextTabContentId = nextTabButton.attr('data-bs-target');
+//                          $(nextTabContentId).addClass('show active');
+//                          $(currentTab.attr('data-bs-target')).removeClass('show active');
+//                          $(nextTabContentId).find('input').first().focus();
+//                      }
+//                  },
+//                  error: function () {
+//                      console.log('There was an error saving the data. Please try again.');
+//                  }
+//              });
+//
+//
+//          });
+                $('.next-button-education-details').on('click', function (event) {
 
-          $('.next-button-education-details').on('click', function (event) {
-              initializeValidation();
+                    event.preventDefault();
 
-              const form3 = $('#educationStepperForm');
+                    initializeValidation();
 
-              if (!form3.valid()) {
-                  event.preventDefault();
-                  return false;
-              }
+                    const form3 = $('#educationStepperForm');
 
-              $.ajax({
-                  url: form3.attr('action'),
-                  method: 'POST',
-                  data: form3.serialize(),
-                  success: function (response) {
-                      const currentTab = $('.nav-link.active');
-                      document.getElementById("firstVisitEducation").value = "false";
-                      const nextTabButton = currentTab.parent().next().find('.nav-link');
-                      if (nextTabButton.length > 0) {
-                          nextTabButton.tab('show');
-                          const nextTabContentId = nextTabButton.attr('data-bs-target');
-                          $(nextTabContentId).addClass('show active');
-                          $(currentTab.attr('data-bs-target')).removeClass('show active');
-                          $(nextTabContentId).find('input').first().focus();
-                      }
-                  },
-                  error: function () {
-                      console.log('There was an error saving the data. Please try again.');
-                  }
-              });
-          });
+                    if (!form3.valid()) {
+                        return false;
+                    }
+
+                    const formData = new FormData(form3[0]);
+
+                    $.ajax({
+                        url: form3.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+                            const currentTab = $('.nav-link.active');
+                            document.getElementById("firstVisitEducation").value = "false";
+
+                            const nextTabButton = currentTab.parent().next().find('.nav-link');
+                            if (nextTabButton.length > 0) {
+                                nextTabButton.tab('show');
+
+                                const nextTabContentId = nextTabButton.attr('data-bs-target');
+                                $(nextTabContentId).addClass('show active');
+                                $(currentTab.attr('data-bs-target')).removeClass('show active');
+                            }
+                        },
+                        error: function () {
+                            console.log("Error saving education details");
+                        }
+                    });
+                });
 
           $('#noactionbtnEducation').on('click', function () {
               const currentTab = $('.nav-link.active');
@@ -759,6 +799,7 @@
         });
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
     }
+
 
     // bank account details
     function setConfigsForBankAccountValidation(config) {

@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.roles.admin.role.type.contributor.RoleTypeContributor;
 import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
@@ -242,11 +243,14 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
         employeeDetails.setProbationStatusId(0);
         employeeDetails.setManagerId(managerId);
-        EmployeeDetails managerDetails =
-        employeeDetailsLocalService.getEmployeeDetails(managerId);
-        long managerUserId = managerDetails.getLrUserId();
-        assignRegularRole(managerUserId, themeDisplay.getCompanyId(), "Manager");
+        if(Validator.isNotNull(managerId)) {
+            EmployeeDetails managerDetails =
+                    employeeDetailsLocalService.getEmployeeDetails(managerId);
+            long managerUserId = managerDetails.getLrUserId();
+            assignRegularRole(managerUserId, themeDisplay.getCompanyId(), "Manager");
+        }
 //        public static void assignRegularRole(long userId, long companyId, String roleName) {
+
 
 
             if (typeOfEmployee.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN)) {

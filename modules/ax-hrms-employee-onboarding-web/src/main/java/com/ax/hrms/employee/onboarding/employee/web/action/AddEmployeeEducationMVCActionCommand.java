@@ -1,6 +1,6 @@
 package com.ax.hrms.employee.onboarding.employee.web.action;
 
-import com.ax.hrms.employee.onboarding.employee.web.util.EmployeeOnBoardingUtil;
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.model.EmployeeDetails;
@@ -8,14 +8,20 @@ import com.ax.hrms.model.EmployeeEducation;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.EmployeeEducationLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.*;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -27,105 +33,236 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-@Component(immediate = true, property = {
-		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
-		"mvc.command.name=/addEditEmployeeEducationURL" }, service = MVCActionCommand.class)
+@Component(
+		immediate = true,
+		property = {
+				"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
+				"mvc.command.name=/addEditEmployeeEducationURL"
+		},
+		service = MVCActionCommand.class
+)
 public class AddEmployeeEducationMVCActionCommand extends BaseMVCActionCommand {
 
-	@Reference
-	EmployeeEducationLocalService employeeEducationLocalService;
+	private static final Log log =
+			LogFactoryUtil.getLog(AddEmployeeEducationMVCActionCommand.class);
 
 	@Reference
-	EmployeeDetailsLocalService employeeDetailsLocalService;
-	
-	private Log log = LogFactoryUtil.getLog(AddEmployeeEducationMVCActionCommand.class);
+	private EmployeeEducationLocalService employeeEducationLocalService;
+
+	@Reference
+	private EmployeeDetailsLocalService employeeDetailsLocalService;
+
+	@Reference
+	private AxHrmsCommonApi axHrmsCommonApi;
 
 	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws Exception {
 
-		log.info("AddEmployeeEducationMVCActionCommand >>> doProcessAction ::: Action Called :::");
-		List<Long> educationIds=EmployeeOnBoardingUtil.educationIds();
-		
-		int currentIndex = ParamUtil.getInteger(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_CURRENT_INDEX, 1);
-		log.info("currentIndex ===..........>>>" +currentIndex);
-		for (int index = 1; index <= educationIds.size(); index++) {
-			Long educationId = educationIds.get(index - 1);
-			log.info("AddEmployeeEducationMVCActionCommand >>> doProcessAction ::: update called ::: ");
-			try {
-				ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-				log.info("AddEmployeeEducationMVCActionCommand >>> doProcessAction ::: Updating record with experience ID " + educationId);
-				int dynamicIndex = index;
+		ThemeDisplay themeDisplay =
+				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-				long levelName = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.LEVEL_NAME + dynamicIndex);
-				String institution = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.INSTITUTION + dynamicIndex);
-				String degree = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.DEGREE + dynamicIndex);
-				String startDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.START_DATE + dynamicIndex);
-				String endDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.END_DATE + dynamicIndex);
-				String passingYear = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PASSING_YEAR + dynamicIndex);
+		EmployeeDetails employeeDetails =
+				employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
-				EmployeeEducation employeeEducation = employeeEducationLocalService.getEmployeeEducation(educationId);
+		long employeeId = employeeDetails.getEmployeeId();
 
-				employeeEducation.setCompanyId(themeDisplay.getCompanyId());
-				employeeEducation.setGroupId(themeDisplay.getScopeGroupId());
-				employeeEducation.setCreatedBy(themeDisplay.getUserId());
-				employeeEducation.setModifiedBy(themeDisplay.getUserId());
-				employeeEducation.setLevelId(levelName);
-				employeeEducation.setInstitution(institution);
-				employeeEducation.setDegree(degree);
+		int currentIndex = ParamUtil.getInteger(
+				actionRequest,
+				AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_CURRENT_INDEX,
+				1
+		);
 
-				SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT, Locale.ENGLISH);
-				Date sDate = formatter.parse(startDate);
-				Date eDate = formatter.parse(endDate);
-				employeeEducation.setStartDate(sDate);
-				employeeEducation.setEndDate(eDate);
-				employeeEducation.setPassingYear(passingYear);
-				EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+		UploadPortletRequest uploadRequest =
+				PortalUtil.getUploadPortletRequest(actionRequest);
 
-				employeeEducation.setEmployeeId(employeeDetails.getEmployeeId());
-				employeeEducationLocalService.updateEmployeeEducation(employeeEducation);
-			} catch (Exception e) {
-				log.error("Error updating record with experience ID " + educationId + ": ", e);
-			}
+		ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(false);
+
+		Folder rootFolder =
+				axHrmsCommonApi.createFolder(
+						AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT,
+						0,
+						themeDisplay,
+						serviceContext
+				);
+
+		Folder userFolder =
+				axHrmsCommonApi.createFolder(
+						themeDisplay.getUser().getScreenName() + themeDisplay.getUserId(),
+						rootFolder.getFolderId(),
+						themeDisplay,
+						serviceContext
+				);
+
+		Folder educationFolder =
+				axHrmsCommonApi.createFolder(
+						AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_CERTIFICATE,
+						userFolder.getFolderId(),
+						themeDisplay,
+						serviceContext
+				);
+
+		List<Long> educationIds =
+				employeeEducationLocalService.findByEmployeeId(employeeId)
+						.stream()
+						.map(EmployeeEducation::getEducationId)
+						.toList();
+
+		SimpleDateFormat formatter =
+				new SimpleDateFormat(
+						AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,
+						Locale.ENGLISH
+				);
+
+		/* ================= UPDATE EXISTING ================= */
+		for (int i = 1; i <= educationIds.size(); i++) {
+
+			EmployeeEducation education =
+					employeeEducationLocalService.getEmployeeEducation(
+							educationIds.get(i - 1)
+					);
+
+			populateEducationFields(actionRequest, education, i, formatter, employeeId, themeDisplay);
+
+			handleFileUpload(
+					uploadRequest,
+					education,
+					"educationCertificateAttachment" + i,
+					educationFolder,
+					themeDisplay,
+					serviceContext,
+					true
+			);
+
+			employeeEducationLocalService.updateEmployeeEducation(education);
 		}
 
+		/* ================= INSERT NEW ================= */
 		for (int i = educationIds.size() + 1; i <= currentIndex; i++) {
-			
-			log.info("AddEmployeeEducationMVCActionCommand >>> doProcessAction ::: insert called :::");
-			long levelName = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.LEVEL_NAME + i);
-			String institution = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.INSTITUTION + i);
-			String degree = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.DEGREE + i);
-			String startDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.START_DATE + i);
-			String endDate = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.END_DATE + i);
-			String passingYear = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PASSING_YEAR + i);
-			
-			try {
-				ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-				EmployeeEducation employeeEducation = employeeEducationLocalService.createEmployeeEducation(CounterLocalServiceUtil.increment(EmployeeEducation.class.getName()));
-				employeeEducation.setCompanyId(themeDisplay.getCompanyId());
-				employeeEducation.setGroupId(themeDisplay.getScopeGroupId());
-				employeeEducation.setCreatedBy(themeDisplay.getUserId());
-				employeeEducation.setModifiedBy(themeDisplay.getUserId());
-				employeeEducation.setLevelId(levelName);
-				employeeEducation.setInstitution(institution);
-				employeeEducation.setDegree(degree);
-				long educationId = employeeEducation.getEducationId();
-				
-				EmployeeOnBoardingUtil.handleEducationIds(educationId);
-			    
-				SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT, Locale.ENGLISH);
-				Date sDate = formatter.parse(startDate);
-				Date eDate = formatter.parse(endDate);
-				employeeEducation.setStartDate(sDate);
-				employeeEducation.setEndDate(eDate);
-				employeeEducation.setPassingYear(passingYear);
-				EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-				employeeEducation.setEmployeeId(employeeDetails.getEmployeeId());
 
-				employeeEducationLocalService.addEmployeeEducation(employeeEducation);
-			} catch (Exception e) {
-				e.getMessage();
-			}
+			EmployeeEducation education =
+					employeeEducationLocalService.createEmployeeEducation(
+							CounterLocalServiceUtil.increment(EmployeeEducation.class.getName())
+					);
+
+			populateEducationFields(actionRequest, education, i, formatter, employeeId, themeDisplay);
+
+			handleFileUpload(
+					uploadRequest,
+					education,
+					"educationCertificateAttachment" + i,
+					educationFolder,
+					themeDisplay,
+					serviceContext,
+					false
+			);
+
+			employeeEducationLocalService.addEmployeeEducation(education);
 		}
 	}
-}
 
+	/* ================= COMMON FIELD POPULATOR ================= */
+	private void populateEducationFields(
+			ActionRequest request,
+			EmployeeEducation education,
+			int index,
+			SimpleDateFormat formatter,
+			long employeeId,
+			ThemeDisplay themeDisplay
+	) throws Exception {
+
+		education.setCompanyId(themeDisplay.getCompanyId());
+		education.setGroupId(themeDisplay.getScopeGroupId());
+		education.setCreatedBy(themeDisplay.getUserId());
+		education.setModifiedBy(themeDisplay.getUserId());
+
+		education.setLevelId(
+				ParamUtil.getLong(request,
+						AxHrmsEmployeeOnBoardingEmployeeConstants.LEVEL_NAME + index)
+		);
+
+		education.setInstitution(
+				ParamUtil.getString(request,
+						AxHrmsEmployeeOnBoardingEmployeeConstants.INSTITUTION + index)
+		);
+
+		education.setDegree(
+				ParamUtil.getString(request,
+						AxHrmsEmployeeOnBoardingEmployeeConstants.DEGREE + index)
+		);
+
+		education.setStartDate(
+				formatter.parse(
+						ParamUtil.getString(request,
+								AxHrmsEmployeeOnBoardingEmployeeConstants.START_DATE + index)
+				)
+		);
+
+		education.setEndDate(
+				formatter.parse(
+						ParamUtil.getString(request,
+								AxHrmsEmployeeOnBoardingEmployeeConstants.END_DATE + index)
+				)
+		);
+
+		education.setPassingYear(
+				ParamUtil.getString(request,
+						AxHrmsEmployeeOnBoardingEmployeeConstants.PASSING_YEAR + index)
+		);
+
+		education.setEmployeeId(employeeId);
+	}
+
+	/* ================= FILE UPLOAD HANDLER ================= */
+	private void handleFileUpload(
+			UploadPortletRequest uploadRequest,
+			EmployeeEducation education,
+			String fileField,
+			Folder folder,
+			ThemeDisplay themeDisplay,
+			ServiceContext serviceContext,
+			boolean isUpdate
+	) throws Exception {
+
+		String originalFileName = uploadRequest.getFileName(fileField);
+		File uploadedFile = uploadRequest.getFile(fileField);
+
+		if (Validator.isNull(originalFileName)
+				|| uploadedFile == null
+				|| uploadedFile.length() == 0) {
+			return;
+		}
+
+		String newFileName = generateFileName(originalFileName);
+
+		FileEntry fileEntry =
+				DLAppLocalServiceUtil.addFileEntry(
+						themeDisplay.getUserId(),
+						themeDisplay.getScopeGroupId(),
+						folder.getFolderId(),
+						newFileName,
+						MimeTypesUtil.getContentType(uploadedFile),
+						newFileName,
+						"",
+						"",
+						uploadedFile,
+						serviceContext
+				);
+
+		if (isUpdate && education.getEducationCertificateMediaId() > 0) {
+			DLAppLocalServiceUtil.deleteFileEntry(
+					education.getEducationCertificateMediaId()
+			);
+		}
+
+		education.setEducationCertificateMediaId(fileEntry.getFileEntryId());
+	}
+
+	private String generateFileName(String original) {
+		return System.currentTimeMillis() + "_" + original.replaceAll("\\s+", "_");
+	}
+}
