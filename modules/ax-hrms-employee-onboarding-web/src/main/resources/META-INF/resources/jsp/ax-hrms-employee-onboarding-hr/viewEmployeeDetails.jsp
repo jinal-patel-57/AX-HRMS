@@ -148,10 +148,23 @@
                         <div class="form-group-view">
                             <div class="label-name">Country</div>
                             <div class="label-content">
-                            <%Address presentaddresss = (Address)request.getAttribute("presentaddresss"); %>
-							    <%= CountryLocalServiceUtil
-							            .getCountry(presentaddresss.getCountry())
-							            .getName() %>
+                            <%
+							Address presentaddresss = (Address) request.getAttribute("presentaddresss");
+							
+							String countryName = "";
+							
+							if (presentaddresss != null && presentaddresss.getCountry() > 0) {
+							    try {
+							        countryName = CountryLocalServiceUtil
+							                .getCountry(presentaddresss.getCountry())
+							                .getName();
+							    } catch (Exception e) {
+							        countryName = "";
+							    }
+							}
+							%>
+							
+							<%= countryName %>
 							</div>
                         </div>
                     </div>
@@ -198,9 +211,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
                                 <div class="label-content">
-								    <%= CountryLocalServiceUtil
-								            .getCountry(presentaddresss.getCountry())
-								            .getName() %>
+								    <%= countryName %>
 								</div>
                             </div>
                         </div>
@@ -246,10 +257,23 @@
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
                                 <div class="label-content">
-                                	<%Address permanentaddresss = (Address)request.getAttribute("permanentaddresss"); %>
-								    <%= CountryLocalServiceUtil
-								            .getCountry(permanentaddresss.getCountry())
-								            .getName() %>
+                                	<%
+									Address permanentaddresss = (Address) request.getAttribute("permanentaddresss");
+									
+									String permanentCountryName = "";
+									
+									if (permanentaddresss != null && permanentaddresss.getCountry() > 0) {
+									    try {
+									        permanentCountryName = CountryLocalServiceUtil
+									                .getCountry(permanentaddresss.getCountry())
+									                .getName();
+									    } catch (Exception e) {
+									        permanentCountryName = "";
+									    }
+									}
+									%>
+									
+									<%= permanentCountryName %>
 								</div>
                             </div>
                         </div>

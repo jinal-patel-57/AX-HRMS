@@ -123,17 +123,45 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID, employeeId);
 
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        
         EmployeeDetails employeeDetails;
         try {
+        	long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.HR_ADMIN).getRoleId();
+            long[] hrRoles = themeDisplay.getUser().getRoleIds();
+            boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
+
+            if (isHr) {
+                renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_HR_STATUS, isHr);
+            }
+            
             List<DesignationMaster> designationMastersList = designationMasterLocalService.getDesignationMasters(-1, -1); //Fetch all Designation List
 
             List<DepartmentMaster> departmentMastersList = departmentMasterLocalService.getDepartmentMasters(-1, -1);  //Fetch All Department List
 
-            EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeId); //fetch employeeDesignation by EmployeeId
+            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION_MASTER_LIST, designationMastersList);
+            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT_MASTER_LIST, departmentMastersList);
+            
+            
+            try {
+            	EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeId); //fetch employeeDesignation by EmployeeId
+            	renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DESIGNATION, employeeDesignation);
+            } catch (Exception e) {
+            	log.error("no such designation  --- " + e.getMessage());
+            }
 
-            EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employeeId); //fetch employeeDepartment by employeeId
+            try {
+            	EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employeeId); //fetch employeeDepartment by employeeId
+            	renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPOYEE_DEPARTMENT, employeeDepartment);
+            } catch (Exception e) {
+            	log.error("No such department -- " + e.getMessage());
+            }
 
-            List<DepartmentMaster> employeeDepratmentList = axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeId); //fetch employeeDepartmentList by Id and status is true
+            try {
+            	List<DepartmentMaster> employeeDepratmentList = axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeId); //fetch employeeDepartmentList by Id and status is true
+            	renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DEPARTMENTLIST, employeeDepratmentList);
+            } catch (Exception e) {
+            	log.error("No such department -- "+ e.getMessage());
+            }
 
             List<EmployeeDepartment> employeeDepartments = employeeDepartmentLocalService.getEmployeeDepartments(-1, -1); // fetch All employeeDepartments
             try {
@@ -143,14 +171,6 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             }catch(Exception e){
                 log.info("No salary exist with this employeeId :-"+ employeeId);
             }
-
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION_MASTER_LIST, designationMastersList);
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT_MASTER_LIST, departmentMastersList);
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DESIGNATION, employeeDesignation);
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPOYEE_DEPARTMENT, employeeDepartment);
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DEPARTMENTLIST, employeeDepratmentList);
-
-
 
             List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
             List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
@@ -197,13 +217,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
                 log.error("ERROR gettig Profile PIC.");
             }
 
-            long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.HR_ADMIN).getRoleId();
-            long[] hrRoles = themeDisplay.getUser().getRoleIds();
-            boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
-
-            if (isHr) {
-                renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_HR_STATUS, isHr);
-            }
+            
             User user = userLocalService.getUser(employeeDetails.getLrUserId());
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_USER, user);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DETAIL, employeeDetails);

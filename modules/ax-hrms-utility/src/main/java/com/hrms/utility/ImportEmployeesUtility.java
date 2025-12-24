@@ -181,45 +181,57 @@ public class ImportEmployeesUtility extends MVCPortlet {
 					long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal
 			        roleIds.add(employeeRoleId);
 			        log.info(employeeRoleId + " role");
-			        String[] designations = new String[] {innerMap.get("6").toString()};
+			        String[] designations = new String[] {Validator.isNotNull(innerMap.get("6"))? innerMap.get("6").toString():""};
 			        for (String designation : designations) {
 			            // Get the role ID for the current designation
 			        	log.info("designation -- " + designation);
-			            long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
-			            EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
-			            employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
-			            employeeDesignation.setCreatedBy(themeDisplay.getUserId());
-			            employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
-			            employeeDesignation.setCreateDate(new Date());
-			            employeeDesignation.setModifiedDate(new Date());
-			            employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
-			            employeeDesignation.setStatus(true);
-			            employeeDesignation.setStartDate(new Date());
-			            employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
-			            employeeDesignationLocalService.addEmployeeDesignation(employeeDesignation);
-			            
-			            // Add the role ID to the array
-			            roleIds.add(designationRoleId);
+			        	if(!designation.isBlank()) {
+			        		try {
+			        			long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
+			        			EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
+			        			employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
+			        			employeeDesignation.setCreatedBy(themeDisplay.getUserId());
+			        			employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
+			        			employeeDesignation.setCreateDate(new Date());
+			        			employeeDesignation.setModifiedDate(new Date());
+			        			employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
+			        			employeeDesignation.setStatus(true);
+			        			employeeDesignation.setStartDate(new Date());
+			        			employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
+			        			employeeDesignationLocalService.addEmployeeDesignation(employeeDesignation);
+			        			
+			        			// Add the role ID to the array
+			        			roleIds.add(designationRoleId);
+			        		} catch(Exception e) {
+			        			log.error("Error while adding designation -- " + e.getMessage());
+			        		}
+			        	}
 			        }
 	
-			        String[] departments = new String[] {innerMap.get("5").toString()};
+			        String[] departments = new String[] {Validator.isNotNull(innerMap.get("5"))?innerMap.get("5").toString():""};
 			        for (String department : departments) {
 			            // Get the role ID for the current department
-			            long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
-			            EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
-			            employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
-			            employeeDepartment.setCreatedBy(themeDisplay.getUserId());
-			            employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
-			            employeeDepartment.setCreateDate(new Date());
-			            employeeDepartment.setModifiedDate(new Date());
-			            employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
-			            employeeDepartment.setStatus(true);
-			            employeeDepartment.setDateOfChange(new Date());
-			            employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
-			            employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
-	
-			            // Add the role ID to the array
-			            roleIds.add(departmentRoleId);
+			        	if(!department.isBlank()) {
+			        		try {
+			        			long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
+			        			EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
+			        			employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
+			        			employeeDepartment.setCreatedBy(themeDisplay.getUserId());
+			        			employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
+			        			employeeDepartment.setCreateDate(new Date());
+			        			employeeDepartment.setModifiedDate(new Date());
+			        			employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
+			        			employeeDepartment.setStatus(true);
+			        			employeeDepartment.setDateOfChange(new Date());
+			        			employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
+			        			employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
+			        			
+			        			// Add the role ID to the array
+			        			roleIds.add(departmentRoleId);
+			        		} catch(Exception e) {
+			        			log.error("Error while adding department -- " + e.getMessage());
+			        		}
+			        	}
 			        }
 	
 			        long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
@@ -240,6 +252,10 @@ public class ImportEmployeesUtility extends MVCPortlet {
 	
 			        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 			        Date joiningDateParsed = formatter.parse(innerMap.get("7").toString());
+			        if(Validator.isNotNull(innerMap.get("8"))) {
+			        	Date dob = formatter.parse(innerMap.get("8").toString());
+			        	employeeDetails.setDateOfBirth(dob);
+			        }
 	
 			        //converting iExperienced from string to bool
 			        boolean isExperiencedBool = true;
@@ -256,7 +272,8 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			        employeeDetails.setFirstName(innerMap.get("2").toString());
 			        employeeDetails.setLastName(innerMap.get("3").toString());
 			        employeeDetails.setOfficialEmail(innerMap.get("4").toString());
-			        employeeDetails.setGender(innerMap.get("10").toString());
+			        employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString():"Male");
+			        employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
 			        employeeDetails.setIsTerminated(false);
 			        employeeDetails.setIsEmployeeOnboarded(false);
 			        employeeDetails.setCreatedBy(themeDisplay.getUserId());
@@ -282,7 +299,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 					address.setGroupId(themeDisplay.getScopeGroupId());
 					address.setCreatedBy(themeDisplay.getUserId());
 					address.setModifiedBy(themeDisplay.getUserId());
-					address.setLine1(innerMap.get("11").toString());
+					address.setLine1(Validator.isNotNull(innerMap.get("11"))?innerMap.get("11").toString():"");
 					addressLocalService.addAddress(address);
 					EmployeeAddress employeeAddress = employeeAddressLocalService.createEmployeeAddress(CounterLocalServiceUtil.increment(EmployeeAddress.class.getName()));
 					
@@ -300,8 +317,10 @@ public class ImportEmployeesUtility extends MVCPortlet {
 
 					employeeDetails.setEmployeeAddressId(employeeAddress.getEmployeeAddressId());
 					
-
-					boolean isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
+					boolean isMarried = false;
+					if(Validator.isNotNull(innerMap.get("12"))) {
+						isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
+					} 
 					employeeDetails.setMaritalStatus(isMarried);
 					
 			        
