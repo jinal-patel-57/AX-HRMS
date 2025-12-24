@@ -102,9 +102,6 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                 addLeaveRequestData(actionRequest, leaveRequest);
                 SessionMessages.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_INSERTED_MESSAGE_KEY);
 
-
-
-
                 EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
                 EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
                 String managerNotification = notificationTemplateConfiguration.leaveRequestedNotificationToManager();

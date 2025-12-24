@@ -788,7 +788,8 @@
                 },
                 [namespace + "ifscCode"]: {
                     required: true,
-                    maxlength: 75
+                    maxlength: 75,
+                    ifscCodeValidation: true
                 },
                 [namespace + "bankBranch"]: {
                     required: true,
@@ -816,7 +817,8 @@
                 },
                 [namespace + "bankBranch"]: {
                     required: "Please enter the bank branch.",
-                    maxlength: "Bank branch should not exceed 75 characters."
+                    maxlength: "Bank branch should not exceed 75 characters.",
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
                 }
             }
         });
@@ -824,6 +826,10 @@
         $.validator.addMethod("accountNumberValidation", function (value, element) {
             return /^[0-9]*$/.test(value);
         }, "Account number should not contain alphabet characters, underscores, special characters, or whitespaces.");
+        
+        $.validator.addMethod("ifscCodeValidation", function (value, element) {
+      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
+    	}, "Please enter a valid IFSC code (Format: AAAA0BBBBBB)");
 
         $('.next-button-bank-account-details').on('click', function (event) {
             event.preventDefault();
@@ -857,9 +863,53 @@
 
     // uanEsic Details
     function setConfigsForUanEsicValidation() {
+    
+    	var form6 = $('#uanEsicStepperForm');
+		
+		form6.validate({
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            errorElement: 'div',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.after(error);
+            },
+            rules: {
+                [namespace + "uan"]: {
+                    maxlength: 75,
+                    uanValidation: true
+                },
+
+                [namespace + "esicNo"]: {
+                    maxlength: 75,
+                    esicValidation: true
+                }
+            },
+            messages: {
+                [namespace + "uan"]: {
+                    maxlength: "UAN should not exceed 75 characters.",
+                    uanValidation: "UAN must be exactly 12 digits (numbers only, no spaces or special characters)"
+                },
+                [namespace + "esicNo"]: {
+                    maxlength: "ESIC No. should not exceed 75 characters.",
+                    esicValidation: "ESIC number must be exactly 17 digits (numbers only, no spaces or special characters)"
+                }
+            }
+        });
+
+        $.validator.addMethod("uanValidation", function (value, element) {
+        	return this.optional(element) || /^[0-9]{12}$/.test(value); 
+        }, "UAN must be exactly 12 digits (numbers only, no spaces or special characters)");
+
+		$.validator.addMethod("esicValidation", function (value, element) {
+	        return this.optional(element) || /^[0-9]{17}$/.test(value); 
+	    }, "ESIC number must be exactly 17 digits (numbers only, no spaces or special characters)");
 
         $('.next-button-uan-esic-details').on('click', function (event) {
-            const form6 = $('#uanEsicStepperForm');
+        	event.preventDefault();
+            if (!form6.valid()) {
+                return;
+            }
             $.ajax({
                 url: form6.attr('action'),
                 method: 'POST',

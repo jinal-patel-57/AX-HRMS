@@ -882,7 +882,7 @@
         }, "Account number should not contain alphabet characters, underscores, special characters, or whitespaces.");
 
 		$.validator.addMethod("ifscCodeValidation", function (value, element) {
-      		return this.optional(element) || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
+      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
     	}, "Please enter a valid IFSC code (Format: AAAA0BBBBBB)");
 
         $('.next-button-bank-account-details').on('click', function (event) {

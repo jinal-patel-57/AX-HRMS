@@ -79,9 +79,6 @@
                        class="form-control"
                        accept="image/*" >
 
-                       class="form-control" required
-                       title="Please select a profile picture" accept="image/*">
-
                        <c:if test="${employeeDetail.profilePicId > 0}">
                                       <%
                                           com.ax.hrms.model.EmployeeDetails edu =
