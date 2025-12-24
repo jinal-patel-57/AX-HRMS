@@ -170,6 +170,9 @@
                         },
                         date: true
                     },
+                    [namespace + "employeeProfilePicture"]: {
+                        profilePicRequired: true
+                    },
                     [namespace + "spouseName"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
@@ -192,6 +195,9 @@
                         minlength: "Mobile number must be at least 10 digits long.",
                         maxlength: "Mobile number must not exceed 15 digits."
                     },
+                    [namespace + "employeeProfilePicture"]: {
+                        profilePicRequired: "Please select a profile picture jinal"
+                    },
 
                     [namespace + "fatherName"]: {
                         required: "Please Enter FatherName."
@@ -213,6 +219,12 @@
             $("#" + namespace + "fatherName").rules("add", {
                 lettersOnly: true
             });
+            $.validator.addMethod("profilePicRequired", function (value, element) {
+		    	if (profilePicName) {
+		        	return true; // already uploaded earlier
+		    	}
+		    	return element.files && element.files.length > 0; }, 
+		    "Please select a profile picture jinal");
 
             var fileInput = document.getElementById(namespace + 'employeeProfilePicture');
 

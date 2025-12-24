@@ -70,8 +70,8 @@
                 <input id="<portlet:namespace />employeeProfilePicture" type="file"
                        value="${profilePicName}" readonly
                        name="<portlet:namespace />employeeProfilePicture"
-                       class="form-control" required
-                       title="Please select a profile picture" accept="image/*">
+                       class="form-control"
+                       accept="image/*" >
             </div>
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">

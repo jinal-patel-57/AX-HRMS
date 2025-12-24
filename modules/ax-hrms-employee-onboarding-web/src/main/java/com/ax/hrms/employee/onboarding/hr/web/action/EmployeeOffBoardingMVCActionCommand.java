@@ -67,6 +67,7 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+    	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long employeeId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ID);
         String offBoard = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.OFF_BOARD);
 
@@ -148,6 +149,7 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
             }
             //setting the session message
             SessionMessages.add(actionRequest, "off-boarded");
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
         } else {
             SessionMessages.add(actionRequest, "draft-saved");
             MutableRenderParameters renderParams = actionResponse.getRenderParameters();
@@ -243,10 +245,15 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         file1Name = uploadPortletRequest.getFileName(fieldName);
         if (file1Name != null && !file1Name.isEmpty() && length != 0) {
             Folder folder1 = folderNavigatorForOffBoardingFileUpload(documentFolder, employeeId, themeDisplay, serviceContext);
+            file1Name = generateFileName(file1Name);
             FileEntry entry1 = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), themeDisplay.getScopeGroupId(), folder1.getFolderId(), file1Name, MimeTypesUtil.getContentType(file1), file1Name, StringPool.BLANK, StringPool.BLANK, file1, serviceContext);
             return entry1.getFileEntryId();
         } else {
             return 0;
         }
+    }
+    private String generateFileName(String original) {
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        return timestamp + "_" + original.replaceAll("\\s+", "_");
     }
 }

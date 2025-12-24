@@ -10,7 +10,8 @@
 
 <div class="card">
     <div class="card-header"><strong>Employee Off-Boarding HR</strong></div>
-    <form action="${employeeOffBoardingHrURL}" method="post">
+    <form action="${employeeOffBoardingHrURL}" method="post" enctype="multipart/form-data"
+      data-senna="off">
 
         <div class="card-body">
             <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeId}">
@@ -69,12 +70,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="fileUpload1"><liferay-ui:message key='exp-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled
+                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled accept="application/pdf"
                                name="<portlet:namespace/>file1">
                     </div>
                     <div class="form-group">
                         <label for="fileUpload2"><liferay-ui:message key='rel-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control-file file-upload" id="fileUpload2" disabled
+                        <input type="file" class="form-control-file file-upload" id="fileUpload2" disabled accept="application/pdf"
                                name="<portlet:namespace/>file2">
                     </div>
                     <div class="form-group">
