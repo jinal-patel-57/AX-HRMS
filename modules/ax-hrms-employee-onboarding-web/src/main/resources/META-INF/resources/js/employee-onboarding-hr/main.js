@@ -148,7 +148,7 @@ var setFileInputValues;
 			    "linkUrlValidation",
 			    function (value, element) {
 			        return this.optional(element) ||
-			               /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/.test(value);
+			               /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(value);
 			    },
 			    "Please enter a valid URL"
 			);
