@@ -332,5 +332,6 @@
     values.push('${i.departmentMasterId}');
     </c:forEach>
     $('#department').val(values).trigger('change');
+
 </script>
 

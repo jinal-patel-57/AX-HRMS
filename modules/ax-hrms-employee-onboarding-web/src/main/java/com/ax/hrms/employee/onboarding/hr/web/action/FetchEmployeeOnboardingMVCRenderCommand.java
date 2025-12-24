@@ -136,15 +136,20 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             List<DepartmentMaster> employeeDepratmentList = axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeId); //fetch employeeDepartmentList by Id and status is true
 
             List<EmployeeDepartment> employeeDepartments = employeeDepartmentLocalService.getEmployeeDepartments(-1, -1); // fetch All employeeDepartments
-
-            EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
+            try {
+                EmployeeSalary employeeSalary;
+                employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
+                renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_SALARY, employeeSalary);
+            }catch(Exception e){
+                log.info("No salary exist with this employeeId :-"+ employeeId);
+            }
 
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DESIGNATION_MASTER_LIST, designationMastersList);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DEPARTMENT_MASTER_LIST, departmentMastersList);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DESIGNATION, employeeDesignation);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPOYEE_DEPARTMENT, employeeDepartment);
             renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_DEPARTMENTLIST, employeeDepratmentList);
-            renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_SALARY, employeeSalary);
+
 
 
             List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();

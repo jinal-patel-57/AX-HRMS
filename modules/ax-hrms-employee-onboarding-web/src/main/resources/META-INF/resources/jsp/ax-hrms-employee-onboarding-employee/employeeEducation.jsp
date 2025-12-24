@@ -22,13 +22,13 @@
     <div class="card-body">
 
         <!-- Message for Intern / Contractor -->
-        <c:if test="${employeeDetail.employeeType == 'intern' || employeeDetail.employeeType == 'contractor'}">
+        <c:if test="${employeeDetail.employeeType == 'contractor'}">
             <div class="alert alert-info">
                 You are not required to fill this data! You can proceed to the next step.
             </div>
         </c:if>
 
-        <c:if test="${employeeDetail.employeeType != 'intern' && employeeDetail.employeeType != 'contractor'}">
+        <c:if test="${employeeDetail.employeeType != 'contractor'}">
 
             <div id="education-section-container">
 
@@ -330,12 +330,12 @@
     <!-- FOOTER BUTTONS -->
     <div class="card-footer text-right">
 
-        <c:if test="${employeeDetail.employeeType != 'intern' && employeeDetail.employeeType != 'contractor'}">
+        <c:if test="${employeeDetail.employeeType != 'contractor'}">
             <button type="button" class="btn btn-outline-primary previous-button">Previous</button>
             <button type="button" class="btn btn-outline-primary next-button-education-details">Next</button>
         </c:if>
 
-        <c:if test="${employeeDetail.employeeType == 'intern' || employeeDetail.employeeType == 'contractor'}">
+        <c:if test="${employeeDetail.employeeType == 'contractor'}">
             <button type="button" class="btn btn-outline-primary previous-button">Previous</button>
             <button type="button" class="btn btn-outline-primary" id="noactionbtnEducation">Next</button>
         </c:if>
