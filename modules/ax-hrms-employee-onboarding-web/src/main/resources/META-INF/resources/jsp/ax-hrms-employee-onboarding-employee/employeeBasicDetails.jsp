@@ -60,7 +60,7 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace />fatherName"
                        name="<portlet:namespace />fatherName"
-                       value="${employeeDetail.fatherName}"/>
+                       value="${employeeDetail.fatherName}" maxlength="50"/>
             </div>
             <!-- Fourth Row: Employee Profile Picture -->
             <div class="col-md-4 col-sm-12 mb-3">
@@ -71,7 +71,7 @@
                        value="${profilePicName}" readonly
                        name="<portlet:namespace />employeeProfilePicture"
                        class="form-control" required
-                       title="Please select a profile picture">
+                       title="Please select a profile picture" accept="image/*">
             </div>
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">
@@ -103,7 +103,7 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace />spouseName"
                        name="<portlet:namespace />spouseName"
-                       value="${employeeDetail.spouseName}"/>
+                       value="${employeeDetail.spouseName}" maxlength="50"/>
             </div>
 
 
@@ -279,13 +279,13 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isProbationEnabled" id="enabled" value="Enabled"
-                                ${employeeDetail.isProbationEnabled ? 'checked' : '' }>
+                                ${employeeDetail.isProbationEnabled == 'true' ? 'checked' : '' }>
                             <label class="form-check-label" for="enabled"><liferay-ui:message key="enabled"/></label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isProbationEnabled" id="disabled" value="Disabled"
-                                ${!employeeDetail.isProbationEnabled ? 'checked' : '' }>
+                                ${employeeDetail.isProbationEnabled  == 'false' ? 'checked' : '' }>
                             <label class="form-check-label" for="disabled"><liferay-ui:message key="disabled"/></label>
                         </div>
                     </div>

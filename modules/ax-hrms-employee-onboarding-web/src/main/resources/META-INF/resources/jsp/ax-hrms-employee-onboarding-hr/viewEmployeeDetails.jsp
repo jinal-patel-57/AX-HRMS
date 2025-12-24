@@ -1,3 +1,5 @@
+<%@page import="com.ax.hrms.model.Address"%>
+<%@page import="com.liferay.portal.kernel.service.CountryLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <portlet:renderURL var="backURL">
@@ -145,7 +147,12 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Country</div>
-                            <div class="label-content">${presentaddresss.country}</div>
+                            <div class="label-content">
+                            <%Address presentaddresss = (Address)request.getAttribute("presentaddresss"); %>
+							    <%= CountryLocalServiceUtil
+							            .getCountry(presentaddresss.getCountry())
+							            .getName() %>
+							</div>
                         </div>
                     </div>
 
@@ -190,7 +197,11 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
-                                <div class="label-content">${presentaddresss.country}</div>
+                                <div class="label-content">
+								    <%= CountryLocalServiceUtil
+								            .getCountry(presentaddresss.getCountry())
+								            .getName() %>
+								</div>
                             </div>
                         </div>
 
@@ -234,7 +245,12 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
-                                <div class="label-content">${permanentaddresss.country}</div>
+                                <div class="label-content">
+                                	<%Address permanentaddresss = (Address)request.getAttribute("permanentaddresss"); %>
+								    <%= CountryLocalServiceUtil
+								            .getCountry(permanentaddresss.getCountry())
+								            .getName() %>
+								</div>
                             </div>
                         </div>
 
@@ -319,7 +335,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Company Name</div>
                                 <div class="label-content">
-                                        ${education.companyName}
+                                        ${experience.companyName}
                                 </div>
                             </div>
                         </div>
@@ -341,7 +357,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
-                                <div class="label-name">Reliving Date</div>
+                                <div class="label-name">Experience Certificate</div>
                                 <div class="label-content">
                                     <a href="${experienceCertificate}" target="_blank"
                                        >Download
@@ -470,21 +486,21 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group-view">
-                            <div class="label-name">Line 1</div>
+                            <div class="label-name">Address Line 1</div>
                             <div class="label-content">${nominee.line1}</div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group-view">
-                            <div class="label-name">Line 2</div>
+                            <div class="label-name">Address Line 2</div>
                             <div class="label-content">${nominee.line2}</div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group-view">
-                            <div class="label-name">Line 3</div>
+                            <div class="label-name">Address Line 3</div>
                             <div class="label-content">${nominee.line3}</div>
                         </div>
                     </div>

@@ -49,7 +49,7 @@
                         <liferay-ui:message key="nominee-contact"/><span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control" id="<portlet:namespace />nomineeContact"
-                           name="<portlet:namespace />nomineeContact" maxlength="30" value="${nominee.nomineeContact}"
+                           name="<portlet:namespace />nomineeContact" maxlength="15" value="${nominee.nomineeContact}"
                            required/>
                 </div>
             </div>

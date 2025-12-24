@@ -72,7 +72,8 @@ var setFileInputValues;
                         numericality: true
                     },
                     [namespace + "insuranceLink"]: {
-                        required: true
+                        required: true,
+                        linkUrlValidation: true
                     }
                 },
                 messages: {
@@ -127,6 +128,7 @@ var setFileInputValues;
                     },
                     [namespace + "insuranceLink"]: {
                         required: "Please Enter a valid Insurance Link",
+                        linkUrlValidation: "Please enter a valid URL"
                     }
                 },
                 errorPlacement: function (error, element) {
@@ -141,6 +143,15 @@ var setFileInputValues;
                 },
                 "Please enter only alphabetical characters and spaces"
             );
+            
+            $.validator.addMethod(
+			    "linkUrlValidation",
+			    function (value, element) {
+			        return this.optional(element) ||
+			               /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/.test(value);
+			    },
+			    "Please enter a valid URL"
+			);
 
             $.validator.addMethod(
                 "lettersOnly",

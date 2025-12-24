@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -60,6 +61,9 @@ public class EmployeeApprovalMVCActionCommand extends BaseMVCActionCommand {
 
 				employeeUtil.sendMailToEmployeeApproved(employeeId, themeDisplay, actionRequest, "");
 				log.info("EmployeeApprovalMVCActionCommand >>> doProcessAction ::: Approved mail sent ::: ");
+				log.info("PortalUtil.getLayoutFullURL(themeDisplay) -- " + PortalUtil.getLayoutFullURL(themeDisplay));
+				log.info("PortalUtil.getLayoutFullURL(themeDisplay) with replace -- " + PortalUtil.getLayoutFullURL(themeDisplay).replace("/employee-on-boarding", "/employee-onboarding-hr"));
+				actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay).replace("/employee-on-boarding", "/employee-onboarding-hr"));
 			}
 		} catch (NoSuchEmployeeDetailsException e) {
 			log.error("Employee details not found for ID: " + employeeId);

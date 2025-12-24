@@ -116,7 +116,7 @@
                                         <input type="file"
                                                class="form-control"
                                                id="<portlet:namespace/>educationCertificateAttachment1"
-                                               name="<portlet:namespace/>educationCertificateAttachment1"/>
+                                               name="<portlet:namespace/>educationCertificateAttachment1" accept="image/*,application/pdf"/>
                                     </div>
 
                                     <!-- Passing Year -->
@@ -236,7 +236,7 @@
                                             <input type="file"
                                                    class="form-control"
                                                    id="<portlet:namespace/>educationCertificateAttachment${status.index+1}"
-                                                   name="<portlet:namespace/>educationCertificateAttachment${status.index+1}"/>
+                                                   name="<portlet:namespace/>educationCertificateAttachment${status.index+1}" accept="image/*,application/pdf"/>
 
                                            <c:if test="${educationItem.educationCertificateMediaId > 0}">
                                                                                                <%

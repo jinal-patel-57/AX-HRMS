@@ -72,7 +72,7 @@
                                                    type="file"
                                                    name="<portlet:namespace />experienceCertificateAttachment1"
                                                    class="form-control"
-                                                   required title="Please select a experience Certificate Attachment">
+                                                   required title="Please select a experience Certificate Attachment" accept="image/*,application/pdf">
                                         </div>
                                     </div>
 
@@ -139,7 +139,7 @@
                                                        type="file"
                                                        name="<portlet:namespace />experienceCertificateAttachment${status.index+1}"
                                                        class="form-control"
-                                                       title="Please select a experience Certificate Attachment" >
+                                                       title="Please select a experience Certificate Attachment" accept="image/*,application/pdf">
                                                        <c:if test="${experienceItem.experienceCertificateMediaId > 0}">
                                                   <%
                                                       com.ax.hrms.model.EmployeeExperience edu =
