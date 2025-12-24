@@ -20,7 +20,7 @@
                     return this.optional(element) ||
                         /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
                 },
-                "Only letters, spaces, '&' and '-' are allowed"
+                "Please enter valid Department Name"
             );
         }
     });
