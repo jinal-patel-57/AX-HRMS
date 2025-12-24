@@ -155,7 +155,7 @@
 
 
 
-                        <div class="education-section">
+                        <div class="education-section" id="initial-education-section">
                             <div class="card">
                                 <div class="card-body">
 
