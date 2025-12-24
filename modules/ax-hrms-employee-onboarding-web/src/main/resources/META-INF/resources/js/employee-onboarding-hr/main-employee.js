@@ -171,8 +171,17 @@
                         date: true
                     },
                     [namespace + "employeeProfilePicture"]: {
+
                         profilePicRequired: true
                     },
+
+                        required: function () {
+                            // profilePicName exists = UPDATE case → NOT required
+                            return !profilePicName || profilePicName.trim() === "";
+                        }
+                    },
+
+
                     [namespace + "spouseName"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
@@ -206,6 +215,10 @@
                         required: "Please enter your marriage date.",
                         date: "Please enter a valid date."
                     },
+                    [namespace + "employeeProfilePicture"]: {
+                        required: "Please select a profile picture."
+                    },
+
                     [namespace + "spouseName"]: {
                         required: "Please enter your spouse's name."
                     }
@@ -226,15 +239,15 @@
 		    	return element.files && element.files.length > 0; }, 
 		    "Please select a profile picture jinal");
 
-            var fileInput = document.getElementById(namespace + 'employeeProfilePicture');
-
-            const myFile = new File([''], profilePicName, {
-                type: 'text/plain',
-                lastModified: new Date(),
-            });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(myFile);
-            fileInput.files = dataTransfer.files;
+//            var fileInput = document.getElementById(namespace + 'employeeProfilePicture');
+//
+//            const myFile = new File([''], profilePicName, {
+//                type: 'text/plain',
+//                lastModified: new Date(),
+//            });
+//            const dataTransfer = new DataTransfer();
+//            dataTransfer.items.add(myFile);
+//            fileInput.files = dataTransfer.files;
 
 
             $('.next-button-basic-details').on('click', function (event) {

@@ -131,7 +131,10 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } else {
             SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY);
         }
+
         
+      actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
 
     }
 

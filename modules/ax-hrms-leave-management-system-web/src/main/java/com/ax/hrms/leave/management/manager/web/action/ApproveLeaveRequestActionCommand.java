@@ -10,22 +10,21 @@ import com.ax.hrms.model.LeaveRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.LeaveRequestLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
+import java.io.IOException;
 
 @Component(
         immediate = true,
@@ -35,7 +34,7 @@ import javax.portlet.PortletException;
         },
         service = MVCActionCommand.class
 )
-public class ApproveLeaveRequestActionCommand implements MVCActionCommand {
+public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
     private static final Log log = LogFactoryUtil.getLog(ApproveLeaveRequestActionCommand.class);
 
     @Reference
@@ -54,9 +53,8 @@ public class ApproveLeaveRequestActionCommand implements MVCActionCommand {
 
     @Reference
     MailTemplateConfiguration mailTemplateConfiguration;
-    @Override
-    public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse)
-            throws PortletException {
+
+    public void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, IOException {
 
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -101,7 +99,7 @@ public class ApproveLeaveRequestActionCommand implements MVCActionCommand {
             axHrmsManagerLeaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
             SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);
 
-             return true;
+
 
 
 
@@ -141,7 +139,8 @@ public class ApproveLeaveRequestActionCommand implements MVCActionCommand {
             e.printStackTrace();
             SessionErrors.add(actionRequest, "leave-error");
         }
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
-        return true;
+
     }
 }

@@ -4,6 +4,8 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -29,10 +31,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.WebKeys;
+
+import java.io.IOException;
 
 /**
  * 
@@ -84,7 +84,7 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 	MailTemplateConfiguration mailTemplateConfiguration;
 
 	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) {
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, IOException {
 		super.hideDefaultErrorMessage(actionRequest);
 		super.hideDefaultSuccessMessage(actionRequest);
 
@@ -129,12 +129,12 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 			leaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
 			SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);
 
-
 		} catch (Exception e) {
 			log.error("ApproveLeaveRequestMVCRenderActionCommand >>> Action >>> Error in this method !!!!! "
 					+ e.getMessage());
 			SessionErrors.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.SOME_ERROR_FOUND);
 		}
+		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
 	}
 

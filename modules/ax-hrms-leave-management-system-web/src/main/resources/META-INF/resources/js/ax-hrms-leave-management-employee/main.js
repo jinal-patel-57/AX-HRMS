@@ -345,8 +345,9 @@
                 setReadOnlyEndDate();
             }
 
+        let selectedLeaveTypeName =  $(this).find('option:selected').text().trim().toLowerCase();
             // After change Leave Type if leave type is floater then run this if...else...
-            if(isApplicableForFloater){
+            if(isApplicableForFloater && selectedLeaveTypeName === 'festival floater'){
                 hideStartDateContainer();
                 hideEndDateContainer();
                 setReadOnlyReason();
@@ -355,6 +356,7 @@
                 ajaxForFloaterHolidayList();
             }
             else{
+
                 floaterDaysContainer.empty();
                 setBlankStartDate();
                 setBlankEndDate();
@@ -372,6 +374,8 @@
                 showEndDateContainer();
             }
         });
+
+
 
         startDate.on('change',function(){
             setBlankEndDate();

@@ -14,6 +14,7 @@ import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.*;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -26,6 +27,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Component(
@@ -86,11 +88,12 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
     private MailTemplateConfiguration mailTemplateConfiguration;
 
     @Override
-    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) {
+    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, IOException {
 
         super.hideDefaultErrorMessage(actionRequest);
         super.hideDefaultSuccessMessage(actionRequest);
         boolean status=false;
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         try {
 
             Long leaveRequestId = ParamUtil.getLong(actionRequest,
@@ -100,7 +103,6 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.CANCELLED_ID);
             long rejectedId = ParamUtil.getLong(actionRequest,
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED_ID);
-            ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
             String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
             String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                     PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
@@ -269,6 +271,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
             } catch (Exception ex) {
                 log.error("Failed to send email/notification for leaveId=", ex);
             }
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
     }
 }

@@ -1,14 +1,5 @@
 package com.ax.hrms.leave.management.hr.web.action;
 
-import java.time.LocalDate;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-
-import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.leave.management.hr.web.util.AxHrmsHrLeaveRequestWebUtil;
 import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemWebPortletConstants;
@@ -21,12 +12,9 @@ import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveRequest;
-import com.ax.hrms.service.EmployeeDepartmentLocalService;
-import com.ax.hrms.service.EmployeeDesignationLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.LeaveBalanceLocalService;
-import com.ax.hrms.service.LeaveDayTypeLocalService;
-import com.ax.hrms.service.LeaveRequestLocalService;
+import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
+import com.ax.hrms.service.*;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -34,11 +22,14 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * 
@@ -95,10 +86,11 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 	private MailTemplateConfiguration mailTemplateConfiguration;
 
 	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse)  {
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, IOException {
 
 		super.hideDefaultErrorMessage(actionRequest);
 		super.hideDefaultSuccessMessage(actionRequest);
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		try {
 
@@ -109,7 +101,6 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 			long rejectedId = ParamUtil.getLong(actionRequest,
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED_ID);
 
-			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 			String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 			String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
 					PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
@@ -186,6 +177,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 			SessionErrors.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.SOME_ERROR_FOUND);
 
 		}
+		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 	}
 
 

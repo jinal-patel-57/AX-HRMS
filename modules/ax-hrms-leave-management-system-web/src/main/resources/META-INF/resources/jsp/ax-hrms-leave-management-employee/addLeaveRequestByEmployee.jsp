@@ -74,7 +74,9 @@
 
                     <div class="col-sm-12 col-md-4 col-lg-4" id="startDateContainer">
                         <div class="form-group">
-                            <liferay-ui:message key="start-date"/><span class="text-danger">*</span>
+                            <label id="startDateLabel">
+                                <liferay-ui:message key="start-date"/>
+                            </label><span class="text-danger">*</span>
                             <input type="date" id="<portlet:namespace />startDate" name="<portlet:namespace />startDate"
                                    class="form-control"/>
                         </div>
@@ -114,7 +116,7 @@
 
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <liferay-ui:message key="reason"/>
+                            <liferay-ui:message key="reason"/><span class="text-danger">*</span>
                             <textarea id="<portlet:namespace />reason" name="<portlet:namespace />reason" rows="4"
                                       cols="30"
                                       class="form-control"></textarea>

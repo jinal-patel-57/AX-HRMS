@@ -1,4 +1,9 @@
 <%@ include file="/init.jsp" %>
+<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
+<%@ page import="com.liferay.document.library.kernel.service.DLAppLocalServiceUtil" %>
+<%@ page import="com.liferay.document.library.kernel.util.DLUtil" %>
+<%@ page import="com.liferay.portal.kernel.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <portlet:actionURL name="/addEditEmployeeOnBoarding"
                    var="addEditEmployeeOnBoardingURL"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -70,8 +75,44 @@
                 <input id="<portlet:namespace />employeeProfilePicture" type="file"
                        value="${profilePicName}" readonly
                        name="<portlet:namespace />employeeProfilePicture"
+
                        class="form-control"
                        accept="image/*" >
+
+                       class="form-control" required
+                       title="Please select a profile picture" accept="image/*">
+
+                       <c:if test="${employeeDetail.profilePicId > 0}">
+                                      <%
+                                          com.ax.hrms.model.EmployeeDetails edu =
+                                              (com.ax.hrms.model.EmployeeDetails) request.getAttribute("employeeDetail");
+
+                                          long fileEntryId = edu.getProfilePicId();
+                                          String previewURL = "";
+
+                                          if (fileEntryId > 0) {
+                                              try {
+                                                  FileEntry fe = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+                                                  ThemeDisplay td = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+                                                  previewURL = DLUtil.getPreviewURL(
+                                                          fe,
+                                                          fe.getFileVersion(),
+                                                          td,
+                                                          ""
+                                                  );
+                                              } catch (Exception e) {
+                                                  e.printStackTrace();
+                                              }
+                                          }
+                                      %>
+
+                                      <a target="_blank" href="<%= previewURL %>">View Profile Picture</a>
+                                  </c:if>
+
+
+
+
             </div>
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">

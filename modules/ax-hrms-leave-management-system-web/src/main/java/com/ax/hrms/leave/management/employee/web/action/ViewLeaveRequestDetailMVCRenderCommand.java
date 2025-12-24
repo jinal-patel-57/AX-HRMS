@@ -83,13 +83,16 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 				leaveInformToTeamMap.put(leaveInformToTeamDetail.getEmployeeId(),employeeName);
 			}
 
-			boolean isFestivalFloater = leavePolicyMasterLocalService.findByLeaveTypeMasterId(leaveRequest.getLeaveTypeMasterId()).getIsApplicableFloater();
-			if(isFestivalFloater){
-				Date date = leaveRequest.getStartDateTime();
-				String floaterHolidayName = holidayLocalService.findByDate(date).getHolidayName();
-				renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.FLOATER_HOLIDAY_NAME, floaterHolidayName);
+			try {
+				boolean isFestivalFloater = leavePolicyMasterLocalService.findByLeaveTypeMasterId(leaveRequest.getLeaveTypeMasterId()).getIsApplicableFloater();
+				if (isFestivalFloater) {
+					Date date = leaveRequest.getStartDateTime();
+					String floaterHolidayName = holidayLocalService.findByDate(date).getHolidayName();
+					renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.FLOATER_HOLIDAY_NAME, floaterHolidayName);
+				}
+			}catch (Exception e){
+				e.printStackTrace();
 			}
-
 			String leaveRequestStatus = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus();
 
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST, leaveRequest);
