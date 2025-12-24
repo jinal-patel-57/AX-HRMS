@@ -678,6 +678,23 @@
             let rules = {};
             let messages = {};
 
+            // Relieving date must be after joining date (section-wise)
+            $.validator.addMethod("afterJoiningDate", function (value, element, params) {
+
+                if (!value) return true;
+
+                const relievingDate = new Date(value);
+                const joiningInput = document.getElementById(params);
+
+                if (!joiningInput || !joiningInput.value) return true;
+
+                const joiningDate = new Date(joiningInput.value);
+
+                return relievingDate > joiningDate;
+
+            }, "Relieving date must be after joining date.");
+
+
             function initializeValidationForExperience() {
                 const form4 = $("#experienceStepperForm");
 
@@ -688,7 +705,12 @@
                     const relievingDateKey = `${namespace}relievingDate${idx}`;
                     rules[companyNameKey] = {required: true};
                     rules[joiningDateKey] = {required: true, date: true};
-                    rules[relievingDateKey] = {required: true, date: true};
+                    rules[relievingDateKey] = {
+                        required: true,
+                        date: true,
+                        afterJoiningDate: `${namespace}joiningDate${idx}`
+                    };
+
 
                     messages[companyNameKey] = {
                         required: "Please select Company Name."
@@ -698,10 +720,12 @@
                         required: "Please enter the start date.",
                         date: "Please enter a valid date."
                     };
-                    messages[relievingDateKey] = {
-                        required: "Please enter the end date.",
-                        date: "Please enter a valid date."
-                    };
+                   messages[relievingDateKey] = {
+                       required: "Please enter the end date.",
+                       date: "Please enter a valid date.",
+                       afterJoiningDate: "Relieving date must be after joining date."
+                   };
+
                 });
 
 

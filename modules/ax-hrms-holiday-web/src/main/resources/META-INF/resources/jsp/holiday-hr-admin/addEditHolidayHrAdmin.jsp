@@ -96,7 +96,7 @@
       id="holidayDesc"
       name="<portlet:namespace/>holidayDesc"
       minlength="5"
-      maxlength="250"
+      maxlength="70"
       placeholder="Enter Holiday Description"
   >${holidayData.getDescription()}</textarea>
 

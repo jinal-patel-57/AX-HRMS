@@ -70,7 +70,7 @@
                                                class="form-control"
                                                id="<portlet:namespace/>institution1"
                                                name="<portlet:namespace/>institution1"
-                                               maxlength="250"/>
+                                               maxlength="70"/>
                                     </div>
 
                                     <!-- Degree -->

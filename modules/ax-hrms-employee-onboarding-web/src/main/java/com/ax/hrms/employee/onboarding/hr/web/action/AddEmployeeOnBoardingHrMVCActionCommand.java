@@ -214,6 +214,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         //converting iExperienced from string to bool
         boolean isExperiencedBool;
         isExperiencedBool = isExperienced.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.YES);
+        log.info("IsExperienced:- "+ isExperienced);
 
         //Audit fields
         employeeDetails.setCompanyId(themeDisplay.getCompanyId());
@@ -227,6 +228,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         employeeDetails.setCompanyId(themeDisplay.getCompanyId());
         employeeDetails.setFirstName(firstName);
         employeeDetails.setLastName(lastName);
+
         String domain = moduleConfiguration.domainName();
 
         if (!officialEmailId.endsWith(domain)) {
@@ -461,6 +463,7 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
 
         employeeProbationDetails.setEmployeeId(employeeDetails.getEmployeeId());
         employeeProbationDetails.setProbationPeriod(probationPeriod);
+
         employeeProbationDetails.setProbationEndDate(calendar.getTime());
         employeeProbationDetails.setIsExtended(false);
 
