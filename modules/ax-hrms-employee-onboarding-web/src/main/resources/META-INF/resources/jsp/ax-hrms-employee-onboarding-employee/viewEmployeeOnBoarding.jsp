@@ -386,7 +386,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Experience Certificate</div>
                                 <div class="label-content">
-                                     <a href="${experienceCertificate}" target="_blank" >Download
+                                     <a href="${experience.experienceCertificatePreviewUrl}" target="_blank" >Download
                                         Experience Certificate</a>
                                 </div>
                             </div>

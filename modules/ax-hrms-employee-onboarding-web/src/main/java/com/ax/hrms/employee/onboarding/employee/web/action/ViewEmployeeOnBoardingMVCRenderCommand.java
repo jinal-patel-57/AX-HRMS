@@ -198,7 +198,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(experienceDto.getExperienceCertificateMediaId());
 
 				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
-				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EXPERIENCE_CERTIFICATE, previewURL);
+				experienceDto.setExperienceCertificatePreviewUrl(previewURL);
+//				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EXPERIENCE_CERTIFICATE, previewURL);
 				
 				experienceDtoList.add(experienceDto);
 			}

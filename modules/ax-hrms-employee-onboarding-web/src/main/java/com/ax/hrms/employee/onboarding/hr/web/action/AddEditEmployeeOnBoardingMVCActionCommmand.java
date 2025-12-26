@@ -196,17 +196,17 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 					nsese.printStackTrace();
 				}
                 
-                log.info("Above the updaation part ok ...................................2");
+
 
                 User user = userLocalService.getUser(employeeDetails.getLrUserId());
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setMiddleName(middleName);
                 userLocalService.updateUser(user);
-                log.info("Above the updaation part ok ...................................3");
+
 
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
-                log.info("Above the updaation part ok ...................................31.........");
+              
                 for(DesignationMaster old:oldDesignationMasterList) {
                 	log.info("Above the updaation part ok ...................................32...... " + old.getDesignationName());
                     try {

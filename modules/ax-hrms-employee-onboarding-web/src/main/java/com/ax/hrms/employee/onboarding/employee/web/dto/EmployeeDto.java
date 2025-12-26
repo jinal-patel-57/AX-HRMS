@@ -89,6 +89,24 @@ public class EmployeeDto {
 	public String relationshipWithNominee;
 	public Date nomineeDob;
 
+	String experienceCertificatePreviewUrl;
+	String educationCertificatePreviewUrl;
+
+	public String getExperienceCertificatePreviewUrl() {
+		return experienceCertificatePreviewUrl;
+	}
+
+	public void setExperienceCertificatePreviewUrl(String experienceCertificatePreviewUrl) {
+		this.experienceCertificatePreviewUrl = experienceCertificatePreviewUrl;
+	}
+
+	public String getEducationCertificatePreviewUrl() {
+		return educationCertificatePreviewUrl;
+	}
+
+	public void setEducationCertificatePreviewUrl(String educationCertificatePreviewUrl) {
+		this.educationCertificatePreviewUrl = educationCertificatePreviewUrl;
+	}
 
 	public long getEducationCertificateMediaId() {
 		return educationCertificateMediaId;

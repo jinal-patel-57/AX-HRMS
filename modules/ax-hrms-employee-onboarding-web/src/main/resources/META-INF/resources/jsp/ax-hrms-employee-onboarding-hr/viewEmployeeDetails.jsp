@@ -101,7 +101,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Manager</div>
-                            <div class="label-content">${managerName}</div>
+                            <div class="label-content">${employeeDetail.reportingManager}</div>
                         </div>
                     </div>
                 </div>
@@ -383,7 +383,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Experience Certificate</div>
                                 <div class="label-content">
-                                    <a href="${experienceCertificate}" target="_blank"
+                                    <a href="${experience.experienceCertificatePreviewUrl}" target="_blank"
                                        >Download
                                         Experience Certificate</a>
                                 </div>
