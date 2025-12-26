@@ -37,7 +37,8 @@ import com.ax.hrms.master.model.DepartmentMaster;
     import com.liferay.portal.kernel.service.ServiceContext;
     import com.liferay.portal.kernel.service.ServiceContextFactory;
     import com.liferay.portal.kernel.service.UserLocalService;
-    import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
     import com.liferay.portal.kernel.upload.UploadPortletRequest;
     import com.liferay.portal.kernel.util.*;
     import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
@@ -111,7 +112,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
             ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
             serviceContext.setAddGroupPermissions(true);
             serviceContext.setAddGuestPermissions(false);
-
+            long oldManagerId = 0l;
             Folder folder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT, 0,themeDisplay, serviceContext);
             Folder parentFolder = axHrmsCommonApi.createFolder(String.format("%s%d", themeDisplay.getUser().getScreenName(), themeDisplay.getUserId()),folder.getFolderId(), themeDisplay, serviceContext);
             Folder profilePictureFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PICTURE, parentFolder.getFolderId(), themeDisplay,serviceContext);
@@ -175,7 +176,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
                 employeeDetails.setIsProbationEnabled(isProbationEnabled.equalsIgnoreCase("Enabled"));
 
                 log.info("Manager id in the employee side: " + ParamUtil.getLong(actionRequest, "manager"));
-                long oldManagerId = employeeDetails.getManagerId();
+                oldManagerId = employeeDetails.getManagerId();
                 employeeDetails.setManagerId(ParamUtil.getLong(actionRequest, "manager"));
                 log.info("Old Manager: "   + oldManagerId);
 
@@ -331,11 +332,49 @@ import com.ax.hrms.master.model.DepartmentMaster;
             log.info("Above the updation part ok ...................................");
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+            updateEmployeeWithManager(themeDisplay.getCompanyId(), employeeDetails, employeeDetails.getManagerId(),oldManagerId);
+            
             log.info("Above the updaation part ok ...................................18");
         }
 
-
-
+        
+        public void updateEmployeeWithManager(long companyId, EmployeeDetails employeeDetails, long newManagerId, long oldManagerId) {
+        	String managerRoleName = "Manager";
+        	
+        		try {
+        			log.info(" Starting Manager Update Logic");
+        			log.info("Company ID      : " + companyId);
+        			log.info("Employee ID     : " + employeeDetails.getEmployeeId());
+        			log.info("Old Manager ID  : " + oldManagerId);
+        			log.info("New Manager ID  : " + newManagerId);
+        			
+        			Role managerRole = RoleLocalServiceUtil.getRole(companyId, managerRoleName);
+        			log.info("managerRole -- " + managerRole);
+        			
+        			long managerRoleId = managerRole.getRoleId();
+        			log.info("managerRoleId -- " + managerRoleId);
+        			
+        			UserLocalServiceUtil.addRoleUsers(managerRoleId, new long[]{employeeDetailsLocalService.getEmployeeDetails(newManagerId).getLrUserId()});
+        			log.info("oldManagerId -- " + oldManagerId);
+        			if(oldManagerId>0) {
+        				List<EmployeeDetails> managerDetailsList = employeeDetailsLocalService.findByManagerId(oldManagerId);
+        				log.info("managerDetailsList -- " + managerDetailsList);
+        				if(Validator.isNull(managerDetailsList) || managerDetailsList.isEmpty() || managerDetailsList.size() == 0) {
+        					log.info("oldManagerId -- " + oldManagerId);
+        					EmployeeDetails oldManager = employeeDetailsLocalService.getEmployeeDetails(oldManagerId);
+        					log.info("oldManager -- " + oldManager);
+        					long oldManagerUserId = oldManager.getLrUserId();
+        					log.info("oldManagerUserId -- " + oldManagerUserId);
+        					UserLocalServiceUtil.deleteRoleUser(managerRole.getRoleId(), oldManagerUserId);
+        				}
+        			}
+        		} catch(Exception e) {
+        			log.error("Unable to fetch manager role -- " + e.getMessage());
+        		}
+        	
+        	
+        }
+        
 //        public void updateEmployeeWithManager(
 //                long companyId,
 //                EmployeeDetails employeeDetails,
