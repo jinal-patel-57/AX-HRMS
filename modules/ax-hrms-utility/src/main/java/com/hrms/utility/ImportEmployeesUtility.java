@@ -167,8 +167,8 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		String fileName = uploadRequest.getFileName("zohoEmployeesFile");
 		Workbook workbook = axHrmsCommonApi.getWorkbook(fileName, zohoEmployeesFile);
 		
-		Map<String, Map<String, Object>> zohoEmployeeMap = axHrmsCommonApi.readExcelSheet(workbook.getSheetAt(0));
-		
+		Map<String, Map<String, Object>> zohoEmployeeMap = axHrmsCommonApi.readExcelSheetForImportEmployee(workbook.getSheetAt(0));
+		log.info("after read -- " + zohoEmployeeMap);
 		zohoEmployeeMap.forEach((outerKey, innerMap) -> {
 			try {
 				log.info("Outer: " + outerKey);

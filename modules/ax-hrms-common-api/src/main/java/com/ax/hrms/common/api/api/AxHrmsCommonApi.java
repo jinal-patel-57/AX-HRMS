@@ -47,4 +47,5 @@ public interface AxHrmsCommonApi {
 	public Map<String, Map<String, Object>> readExcelSheet(Sheet worksheet);
 	public Workbook getWorkbook(String fileName, File zohoEmployeesFile);
 	public Workbook getWorkbook(InputStream inputStream, String excelFilePath);
+	public Map<String, Map<String, Object>> readExcelSheetForImportEmployee(Sheet worksheet);
     }

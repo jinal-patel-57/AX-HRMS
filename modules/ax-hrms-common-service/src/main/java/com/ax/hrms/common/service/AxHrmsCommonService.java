@@ -61,6 +61,7 @@ import javax.portlet.ActionRequest;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -531,6 +532,54 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 				return cell.getDateCellValue();
 			} else {
 				return cell.getNumericCellValue();
+			}
+		} else if (CellType.BOOLEAN == cell.getCellType()) {
+			return cell.getBooleanCellValue();
+		}
+		return null;
+	}
+    
+    @Override
+    public Map<String, Map<String, Object>> readExcelSheetForImportEmployee(Sheet worksheet) {
+		log.info("inside readExcelSheet");
+		Iterator<Row> iterator = worksheet.iterator();
+		int rowNum = 0;
+		int columnNum = 0;
+		Row nextRow = null;
+		Iterator<Cell> cellIterator = null;
+		Map<String, Map<String, Object>> excelDataMap = new HashMap<>();
+		Map<String, Object> dataMap = null;
+		while (iterator.hasNext()) {
+			log.info("in iterator");
+			dataMap = new HashMap<>();
+			nextRow = iterator.next();
+			rowNum = nextRow.getRowNum();
+			cellIterator = nextRow.cellIterator();
+			while (cellIterator.hasNext()) {
+				Cell nextCell = cellIterator.next();
+				columnNum = nextCell.getColumnIndex();
+				Object val = getImportEmployeeCellValue(nextCell);
+				dataMap.put(String.valueOf(columnNum), val);
+			}
+			excelDataMap.put(String.valueOf(rowNum), dataMap);
+			if (rowNum == worksheet.getLastRowNum()) {
+				break;
+			}
+		}
+		log.info("excelDataMap -- " + excelDataMap);
+		return excelDataMap;
+	}
+
+    private Object getImportEmployeeCellValue(Cell cell) {
+		if (CellType.STRING == cell.getCellType()) {
+			return cell.getStringCellValue();
+		} else if (CellType.NUMERIC == cell.getCellType()) {
+			if (DateUtil.isCellDateFormatted(cell)) {
+				return cell.getDateCellValue();
+			} else {
+				DataFormatter formatter = new DataFormatter();
+			    return formatter.formatCellValue(cell).trim();
+				//return cell.getStringCellValue();
 			}
 		} else if (CellType.BOOLEAN == cell.getCellType()) {
 			return cell.getBooleanCellValue();
