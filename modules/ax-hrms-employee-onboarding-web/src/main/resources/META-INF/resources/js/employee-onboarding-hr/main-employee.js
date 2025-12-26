@@ -9,60 +9,114 @@
         window.location.href = rejectUrl;
     }
 
-    function setConfigsForAddExperienceSection(config) {
-        namespace = config.namespace;
+//    function setConfigsForAddExperienceSection(config) {
+//        namespace = config.namespace;
+//
+//        var originalSection = document.querySelector('.experience-section');
+//        var newSection = originalSection.cloneNode(true);
+//
+//        var anchors = newSection.getElementsByTagName('a');
+//        while (anchors.length > 0) {
+//            var parent = anchors[0].parentNode;
+//            while (anchors[0].firstChild) {
+//                parent.insertBefore(anchors[0].firstChild, anchors[0]);
+//            }
+//            parent.removeChild(anchors[0]);
+//        }
+//
+//        var inputs = newSection.querySelectorAll('input,select');
+//        var index = document.querySelectorAll('.experience-section').length + 1;
+//
+//        var previous = document.getElementById("currentIndex").value
+//        document.getElementById("currentIndex").value = 1 + parseInt(previous);
+//
+//        inputs.forEach(function (input) {
+//
+//            input.id = input.id.replace(/[0-9]+$/, '') + index;
+//            input.name = input.name.replace(/\d+$/, '') + index;
+//
+//            input.value = '';
+//        });
+//
+//        document.getElementById('experience-section-container').appendChild(newSection);
+//        const redundantFooter = newSection.getElementsByClassName("card-footer");
+//        if(redundantFooter.length >0){
+//            redundantFooter[0].remove();
+//        }
+//
+//        var deleteButton = document.createElement('button');
+//        deleteButton.className = 'btn btn-outline-danger delete-section';
+//        // deleteButton.textContent = 'Delete';
+//        deleteButton.type = 'button';
+//        const icon = document.createElement("i");
+//        icon.className= "icon-trash";
+//        deleteButton.appendChild(icon);
+//
+//        const footerExpDel = document.createElement("div");
+//        footerExpDel.className="card-footer text-right";
+//        footerExpDel.appendChild(deleteButton);
+//        const card = newSection.getElementsByClassName("card")[0];
+//        card.appendChild(footerExpDel);
+//
+//
+//        deleteButton.addEventListener('click', function () {
+//            newSection.remove();
+//        });
+//    }
+function setConfigsForAddExperienceSection(config) {
 
-        var originalSection = document.querySelector('.experience-section');
-        var newSection = originalSection.cloneNode(true);
+    const namespace = config.namespace;
 
-        var anchors = newSection.getElementsByTagName('a');
-        while (anchors.length > 0) {
-            var parent = anchors[0].parentNode;
-            while (anchors[0].firstChild) {
-                parent.insertBefore(anchors[0].firstChild, anchors[0]);
-            }
-            parent.removeChild(anchors[0]);
+    const original = document.querySelector(".experience-section");
+    const clone = original.cloneNode(true);
+
+    clone.removeAttribute("data-experience-id");
+    clone.querySelectorAll("a").forEach(a => a.remove());
+
+    const index =
+        document.querySelectorAll(".experience-section").length + 1;
+
+    clone.querySelectorAll("input").forEach(input => {
+
+        input.name = input.name.replace(/\d+$/, "") + index;
+
+        if (input.type === "file") {
+            const fresh = document.createElement("input");
+            fresh.type = "file";
+            fresh.className = input.className;
+            fresh.name = input.name;
+            fresh.accept = input.accept;
+            input.parentNode.replaceChild(fresh, input);
+        } else {
+            input.value = "";
         }
+    });
 
-        var inputs = newSection.querySelectorAll('input,select');
-        var index = document.querySelectorAll('.experience-section').length + 1;
+    const oldFooter = clone.querySelector(".card-footer");
+    if (oldFooter) oldFooter.remove();
 
-        var previous = document.getElementById("currentIndex").value
-        document.getElementById("currentIndex").value = 1 + parseInt(previous);
+    const footer = document.createElement("div");
+    footer.className = "card-footer text-right";
 
-        inputs.forEach(function (input) {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn-outline-danger delete-section";
 
-            input.id = input.id.replace(/[0-9]+$/, '') + index;
-            input.name = input.name.replace(/\d+$/, '') + index;
+    deleteBtn.innerHTML = '<i class="icon-trash"></i>';
 
-            input.value = '';
-        });
+    deleteBtn.addEventListener("click", function () {
+        clone.remove();
+    });
 
-        document.getElementById('experience-section-container').appendChild(newSection);
-        const redundantFooter = newSection.getElementsByClassName("card-footer");
-        if(redundantFooter.length >0){
-            redundantFooter[0].remove();
-        }
+    footer.appendChild(deleteBtn);
+    clone.querySelector(".card").appendChild(footer);
 
-        var deleteButton = document.createElement('button');
-        deleteButton.className = 'btn btn-outline-danger delete-section';
-        // deleteButton.textContent = 'Delete';
-        deleteButton.type = 'button';
-        const icon = document.createElement("i");
-        icon.className= "icon-trash";
-        deleteButton.appendChild(icon);
+    document
+        .getElementById("experience-section-container")
+        .appendChild(clone);
 
-        const footerExpDel = document.createElement("div");
-        footerExpDel.className="card-footer text-right";
-        footerExpDel.appendChild(deleteButton);
-        const card = newSection.getElementsByClassName("card")[0];
-        card.appendChild(footerExpDel);
-
-
-        deleteButton.addEventListener('click', function () {
-            newSection.remove();
-        });
-    }
+    document.getElementById("currentIndex").value = index;
+}
 
 
     function setConfigsForToggleAddress(config) {
@@ -694,123 +748,283 @@
 
 
 
-    function setConfigsForExperienceValidation(config) {
-        config.experienceIndex = experienceIndex;
+//    function setConfigsForExperienceValidation(config) {
+//        config.experienceIndex = experienceIndex;
+//
+//        $(document).ready(function () {
+//            let rules = {};
+//            let messages = {};
+//
+//            // Relieving date must be after joining date (section-wise)
+//            $.validator.addMethod("afterJoiningDate", function (value, element, params) {
+//
+//                if (!value) return true;
+//
+//                const relievingDate = new Date(value);
+//                const joiningInput = document.getElementById(params);
+//
+//                if (!joiningInput || !joiningInput.value) return true;
+//
+//                const joiningDate = new Date(joiningInput.value);
+//
+//                return relievingDate > joiningDate;
+//
+//            }, "Relieving date must be after joining date.");
+//
+//
+//            function initializeValidationForExperience() {
+//                const form4 = $("#experienceStepperForm");
+//
+//                document.querySelectorAll('.experience-section').forEach((section, index) => {
+//                    const idx = index + 1;
+//                    const companyNameKey = `${namespace}companyName${idx}`;
+//                    const joiningDateKey = `${namespace}joiningDate${idx}`;
+//                    const relievingDateKey = `${namespace}relievingDate${idx}`;
+//                    rules[companyNameKey] = {required: true};
+//                    rules[joiningDateKey] = {required: true, date: true};
+//                    rules[relievingDateKey] = {
+//                        required: true,
+//                        date: true,
+//                        afterJoiningDate: `${namespace}joiningDate${idx}`
+//                    };
+//
+//
+//                    messages[companyNameKey] = {
+//                        required: "Please select Company Name."
+//                    };
+//
+//                    messages[joiningDateKey] = {
+//                        required: "Please enter the start date.",
+//                        date: "Please enter a valid date."
+//                    };
+//                   messages[relievingDateKey] = {
+//                       required: "Please enter the end date.",
+//                       date: "Please enter a valid date.",
+//                       afterJoiningDate: "Relieving date must be after joining date."
+//                   };
+//
+//                });
+//
+//
+//                form4.validate({
+//                    errorClass: 'is-invalid',
+//                    validClass: 'is-valid',
+//                    errorElement: 'div',
+//                    errorPlacement: function (error, element) {
+//                        error.addClass('invalid-feedback');
+//                        element.after(error);
+//                    },
+//                    rules: rules,
+//                    messages: messages
+//                });
+//
+//            }
+//
+//            try {
+//                var index_experience = parseInt(experienceIndex);
+//                for (var i = 1; i < index_experience; i++) {
+//                    $('.nav-link.active').parent().next().find('.nav-link').click();
+//                }
+//            } catch (err) {
+//                console.log(err);
+//            }
+//
+//            $('.next-button-experience-details').on('click', function (event) {
+//                initializeValidationForExperience();
+//                event.preventDefault();
+//                const form4 = $('#experienceStepperForm');
+//                if (!form4.valid()) {
+//                    return false;
+//                }
+//
+//                var formData = new FormData(form4[0]);
+//
+//                $.ajax({
+//                    url: form4.attr('action'),
+//                    data: formData,
+//                    method: 'POST',
+//                    contentType: false,
+//                    processData: false,
+//                    success: function (response) {
+//                        const currentTab = $('.nav-link.active');
+//                        document.getElementById("firstVisit").value = "false";
+//                        const nextTabButton = currentTab.parent().next().find('.nav-link');
+//                        if (nextTabButton.length > 0) {
+//                            nextTabButton.tab('show');
+//                            const nextTabContentId = nextTabButton.attr('data-bs-target');
+//                            $(nextTabContentId).addClass('show active');
+//                            $(currentTab.attr('data-bs-target')).removeClass('show active');
+//                            $(nextTabContentId).find('input').first().focus();
+//                        }
+//                    },
+//                    error: function () {
+//                        console.log('There was an error saving the data. Please try again.');
+//                    }
+//                });
+//            });
+//        });
+//        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
+//    }
 
-        $(document).ready(function () {
-            let rules = {};
-            let messages = {};
+function setConfigsForExperienceValidation(config) {
 
-            // Relieving date must be after joining date (section-wise)
-            $.validator.addMethod("afterJoiningDate", function (value, element, params) {
+    const namespace = config.namespace;
+
+    $(document).ready(function () {
+
+        /* ================= VALIDATION ================= */
+
+        $.validator.addMethod(
+            "afterJoiningDate",
+            function (value, element, joiningInputName) {
 
                 if (!value) return true;
 
-                const relievingDate = new Date(value);
-                const joiningInput = document.getElementById(params);
+                const joiningInput =
+                    document.getElementsByName(joiningInputName)[0];
 
                 if (!joiningInput || !joiningInput.value) return true;
 
-                const joiningDate = new Date(joiningInput.value);
+                return new Date(value) > new Date(joiningInput.value);
+            },
+            "Relieving date must be after joining date."
+        );
 
-                return relievingDate > joiningDate;
+        function initializeValidation() {
 
-            }, "Relieving date must be after joining date.");
+            const form = $("#experienceStepperForm");
+            form.removeData("validator");
 
+            let rules = {};
+            let messages = {};
 
-            function initializeValidationForExperience() {
-                const form4 = $("#experienceStepperForm");
+            document
+                .querySelectorAll(".experience-section")
+                .forEach((section, index) => {
 
-                document.querySelectorAll('.experience-section').forEach((section, index) => {
                     const idx = index + 1;
-                    const companyNameKey = `${namespace}companyName${idx}`;
-                    const joiningDateKey = `${namespace}joiningDate${idx}`;
-                    const relievingDateKey = `${namespace}relievingDate${idx}`;
-                    rules[companyNameKey] = {required: true};
-                    rules[joiningDateKey] = {required: true, date: true};
-                    rules[relievingDateKey] = {
+
+                    const company = `${namespace}companyName${idx}`;
+                    const joining = `${namespace}joiningDate${idx}`;
+                    const relieving = `${namespace}relievingDate${idx}`;
+
+                    rules[company] = { required: true };
+                    rules[joining] = { required: true, date: true };
+                    rules[relieving] = {
                         required: true,
                         date: true,
-                        afterJoiningDate: `${namespace}joiningDate${idx}`
+                        afterJoiningDate: joining
                     };
 
-
-                    messages[companyNameKey] = {
-                        required: "Please select Company Name."
+                    messages[company] = {
+                        required: "Please enter company name."
                     };
-
-                    messages[joiningDateKey] = {
-                        required: "Please enter the start date.",
-                        date: "Please enter a valid date."
+                    messages[joining] = {
+                        required: "Please enter joining date."
                     };
-                   messages[relievingDateKey] = {
-                       required: "Please enter the end date.",
-                       date: "Please enter a valid date.",
-                       afterJoiningDate: "Relieving date must be after joining date."
-                   };
-
+                    messages[relieving] = {
+                        required: "Please enter relieving date.",
+                        afterJoiningDate:
+                            "Relieving date must be after joining date."
+                    };
                 });
 
+            form.validate({
+                errorClass: "is-invalid",
+                validClass: "is-valid",
+                errorElement: "div",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback");
+                    element.after(error);
+                },
+                rules: rules,
+                messages: messages
+            });
+        }
 
-                form4.validate({
-                    errorClass: 'is-invalid',
-                    validClass: 'is-valid',
-                    errorElement: 'div',
-                    errorPlacement: function (error, element) {
-                        error.addClass('invalid-feedback');
-                        element.after(error);
-                    },
-                    rules: rules,
-                    messages: messages
-                });
+        /* ================= ADD EXPERIENCE SECTION ================= */
 
-            }
+//        $("#add-experience-section").on("click", function () {
+//
+//            const original =
+//                document.getElementById("initial-experience-section");
+//
+//            const clone = original.cloneNode(true);
+//
+//            clone.querySelectorAll("a").forEach(a => a.remove());
+//
+//            const index =
+//                document.querySelectorAll(".experience-section").length + 1;
+//
+//            clone.querySelectorAll("input").forEach(input => {
+//
+//                input.name =
+//                    input.name.replace(/\d+$/, "") + index;
+//
+//                if (input.type === "file") {
+//                    const fresh = document.createElement("input");
+//                    fresh.type = "file";
+//                    fresh.className = input.className;
+//                    fresh.name = input.name;
+//                    fresh.accept = input.accept;
+//                    input.parentNode.replaceChild(fresh, input);
+//                } else {
+//                    input.value = "";
+//                }
+//            });
+//
+//            document
+//                .getElementById("experience-section-container")
+//                .appendChild(clone);
+//
+//            document.getElementById("currentIndex").value = index;
+//
+//            initializeValidation();
+//        });
 
-            try {
-                var index_experience = parseInt(experienceIndex);
-                for (var i = 1; i < index_experience; i++) {
-                    $('.nav-link.active').parent().next().find('.nav-link').click();
-                }
-            } catch (err) {
-                console.log(err);
-            }
+        /* ================= SUBMIT ================= */
 
-            $('.next-button-experience-details').on('click', function (event) {
-                initializeValidationForExperience();
-                event.preventDefault();
-                const form4 = $('#experienceStepperForm');
-                if (!form4.valid()) {
-                    return false;
-                }
+        $(".next-button-experience-details").on("click", function () {
 
-                var formData = new FormData(form4[0]);
+            initializeValidation();
 
-                $.ajax({
-                    url: form4.attr('action'),
-                    data: formData,
-                    method: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("firstVisit").value = "false";
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).addClass('show active');
-                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            $(nextTabContentId).find('input').first().focus();
-                        }
-                    },
-                    error: function () {
-                        console.log('There was an error saving the data. Please try again.');
+            const form = $("#experienceStepperForm");
+            if (!form.valid()) return;
+
+            const formData = new FormData(form[0]);
+
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+
+                    const currentTab = $('.nav-link.active');
+                    const nextTabButton = currentTab.parent().next().find('.nav-link');
+
+                    if (nextTabButton.length > 0) {
+
+                        nextTabButton.tab('show');
+
+                        const nextTabContentId = nextTabButton.attr('data-bs-target');
+
+                        $(nextTabContentId).addClass('show active');
+                        $(currentTab.attr('data-bs-target')).removeClass('show active');
+
+                        $(nextTabContentId).find('input,select').first().focus();
                     }
-                });
+                },
+                error: function () {
+                    console.error("Error saving experience (HR)");
+                }
             });
         });
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
-    }
+
+    });
+}
+
 
     // bank account details
     function setConfigsForBankAccountValidation(config) {

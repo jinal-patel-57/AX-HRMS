@@ -9,60 +9,114 @@
         window.location.href = rejectUrl;
     }
 
-    function setConfigsForAddExperienceSection(config) {
-        namespace = config.namespace;
+//    function setConfigsForAddExperienceSection(config) {
+//        namespace = config.namespace;
+//
+//        var originalSection = document.querySelector('.experience-section');
+//        var newSection = originalSection.cloneNode(true);
+//
+//        var anchors = newSection.getElementsByTagName('a');
+//        while (anchors.length > 0) {
+//            var parent = anchors[0].parentNode;
+//            while (anchors[0].firstChild) {
+//                parent.insertBefore(anchors[0].firstChild, anchors[0]);
+//            }
+//            parent.removeChild(anchors[0]);
+//        }
+//
+//        var inputs = newSection.querySelectorAll('input,select');
+//        var index = document.querySelectorAll('.experience-section').length + 1;
+//
+//        var previous = document.getElementById("currentIndex").value
+//        document.getElementById("currentIndex").value = 1 + parseInt(previous);
+//
+//        inputs.forEach(function (input) {
+//
+//            input.id = input.id.replace(/[0-9]+$/, '') + index;
+//            input.name = input.name.replace(/\d+$/, '') + index;
+//
+//            input.value = '';
+//        });
+//
+//        document.getElementById('experience-section-container').appendChild(newSection);
+//        const redundantFooter = newSection.getElementsByClassName("card-footer");
+//        if(redundantFooter.length >0){
+//            redundantFooter[0].remove();
+//        }
+//
+//        var deleteButton = document.createElement('button');
+//        deleteButton.className = 'btn btn-outline-danger delete-section';
+//        // deleteButton.textContent = 'Delete';
+//        deleteButton.type = 'button';
+//        const icon = document.createElement("i");
+//        icon.className= "icon-trash";
+//        deleteButton.appendChild(icon);
+//
+//        const footerExpDel = document.createElement("div");
+//        footerExpDel.className="card-footer text-right";
+//        footerExpDel.appendChild(deleteButton);
+//        const card = newSection.getElementsByClassName("card")[0];
+//        card.appendChild(footerExpDel);
+//
+//
+//        deleteButton.addEventListener('click', function () {
+//            newSection.remove();
+//        });
+//    }
+function setConfigsForAddExperienceSection(config) {
 
-        var originalSection = document.querySelector('.experience-section');
-        var newSection = originalSection.cloneNode(true);
+    const namespace = config.namespace;
 
-        var anchors = newSection.getElementsByTagName('a');
-        while (anchors.length > 0) {
-            var parent = anchors[0].parentNode;
-            while (anchors[0].firstChild) {
-                parent.insertBefore(anchors[0].firstChild, anchors[0]);
-            }
-            parent.removeChild(anchors[0]);
+    const original = document.querySelector(".experience-section");
+    const clone = original.cloneNode(true);
+
+    clone.removeAttribute("data-experience-id");
+    clone.querySelectorAll("a").forEach(a => a.remove());
+
+    const index =
+        document.querySelectorAll(".experience-section").length + 1;
+
+    clone.querySelectorAll("input").forEach(input => {
+
+        input.name = input.name.replace(/\d+$/, "") + index;
+
+        if (input.type === "file") {
+            const fresh = document.createElement("input");
+            fresh.type = "file";
+            fresh.className = input.className;
+            fresh.name = input.name;
+            fresh.accept = input.accept;
+            input.parentNode.replaceChild(fresh, input);
+        } else {
+            input.value = "";
         }
+    });
 
-        var inputs = newSection.querySelectorAll('input,select');
-        var index = document.querySelectorAll('.experience-section').length + 1;
+    const oldFooter = clone.querySelector(".card-footer");
+    if (oldFooter) oldFooter.remove();
 
-        var previous = document.getElementById("currentIndex").value
-        document.getElementById("currentIndex").value = 1 + parseInt(previous);
+    const footer = document.createElement("div");
+    footer.className = "card-footer text-right";
 
-        inputs.forEach(function (input) {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn-outline-danger delete-section";
 
-            input.id = input.id.replace(/[0-9]+$/, '') + index;
-            input.name = input.name.replace(/\d+$/, '') + index;
+    deleteBtn.innerHTML = '<i class="icon-trash"></i>';
 
-            input.value = '';
-        });
+    deleteBtn.addEventListener("click", function () {
+        clone.remove();
+    });
 
-        document.getElementById('experience-section-container').appendChild(newSection);
-        const redundantFooter = newSection.getElementsByClassName("card-footer");
-        if(redundantFooter.length >0){
-            redundantFooter[0].remove();
-        }
+    footer.appendChild(deleteBtn);
+    clone.querySelector(".card").appendChild(footer);
 
-        var deleteButton = document.createElement('button');
-        deleteButton.className = 'btn btn-outline-danger delete-section';
-        // deleteButton.textContent = 'Delete';
-        deleteButton.type = 'button';
-        const icon = document.createElement("i");
-        icon.className= "icon-trash";
-        deleteButton.appendChild(icon);
+    document
+        .getElementById("experience-section-container")
+        .appendChild(clone);
 
-        const footerExpDel = document.createElement("div");
-        footerExpDel.className="card-footer text-right";
-        footerExpDel.appendChild(deleteButton);
-        const card = newSection.getElementsByClassName("card")[0];
-        card.appendChild(footerExpDel);
-
-
-        deleteButton.addEventListener('click', function () {
-            newSection.remove();
-        });
-    }
+    document.getElementById("currentIndex").value = index;
+}
 
 
     function setConfigsForToggleAddress(config) {
@@ -693,112 +747,298 @@
 
 
 
-    function setConfigsForExperienceValidation(config) {
+//    function setConfigsForExperienceValidation(config) {
+//
+//        config.experienceIndex = experienceIndex;
+//
+//        $(document).ready(function () {
+//            let rules = {};
+//            let messages = {};
+//
+//            function initializeValidationForExperience() {
+//                const form4 = $("#experienceStepperForm");
+//
+//                document.querySelectorAll('.experience-section').forEach((section, index) => {
+//                    const idx = index + 1;
+//                    const companyNameKey = `${namespace}companyName${idx}`;
+//                    const joiningDateKey = `${namespace}joiningDate${idx}`;
+//                    const relievingDateKey = `${namespace}relievingDate${idx}`;
+//                    rules[companyNameKey] = {required: true};
+//                    rules[joiningDateKey] = {required: true, date: true};
+//                    rules[relievingDateKey] = {required: true, date: true};
+//
+//                    messages[companyNameKey] = {
+//                        required: "Please select Company Name."
+//                    };
+//
+//                    messages[joiningDateKey] = {
+//                        required: "Please enter the start date.",
+//                        date: "Please enter a valid date."
+//                    };
+//                    messages[relievingDateKey] = {
+//                        required: "Please enter the end date.",
+//                        date: "Please enter a valid date."
+//                    };
+//                });
+//
+//
+//                form4.validate({
+//                    errorClass: 'is-invalid',
+//                    validClass: 'is-valid',
+//                    errorElement: 'div',
+//                    errorPlacement: function (error, element) {
+//                        error.addClass('invalid-feedback');
+//                        element.after(error);
+//                    },
+//                    rules: rules,
+//                    messages: messages
+//                });
+//
+//            }
+//
+//            try {
+//                var index_experience = parseInt(experienceIndex);
+//                for (var i = 1; i < index_experience; i++) {
+//                    $('.nav-link.active').parent().next().find('.nav-link').click();
+//                }
+//            } catch (err) {
+//                console.log(err);
+//            }
+//
+//            $('.next-button-experience-details').on('click', function (event) {
+//                initializeValidationForExperience();
+//                event.preventDefault();
+//                const form4 = $('#experienceStepperForm');
+//                if (!form4.valid()) {
+//                    return false;
+//                }
+//
+//                var formData = new FormData(form4[0]);
+//
+//                $.ajax({
+//                    url: form4.attr('action'),
+//                    data: formData,
+//                    method: 'POST',
+//                    contentType: false,
+//                    processData: false,
+//                    success: function (response) {
+//                        const currentTab = $('.nav-link.active');
+//                        document.getElementById("firstVisit").value = "false";
+//                        const nextTabButton = currentTab.parent().next().find('.nav-link');
+//                        if (nextTabButton.length > 0) {
+//                            nextTabButton.tab('show');
+//                            const nextTabContentId = nextTabButton.attr('data-bs-target');
+//                            $(nextTabContentId).addClass('show active');
+//                            $(currentTab.attr('data-bs-target')).removeClass('show active');
+//                            $(nextTabContentId).find('input').first().focus();
+//                        }
+//                    },
+//                    error: function () {
+//                        console.log('There was an error saving the data. Please try again.');
+//                    }
+//                });
+//            });
+//
+//
+//            $('#noactionbtnExperience').on('click', function (event) {
+//                const currentTab = $('.nav-link.active');
+//                const nextTabButton = currentTab.parent().next().find('.nav-link');
+//                if (nextTabButton.length > 0) {
+//                    nextTabButton.tab('show');
+//                    const nextTabContentId = nextTabButton.attr('data-bs-target');
+//                    $(nextTabContentId).find('input').first().focus();
+//                }
+//            });
+//
+//        });
+//        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
+//    }
+function setConfigsForExperienceValidation(config) {
 
-        config.experienceIndex = experienceIndex;
+    const namespace = config.namespace;
 
-        $(document).ready(function () {
+    $(document).ready(function () {
+
+        /* =====================================================
+           VALIDATION
+           ===================================================== */
+
+        $.validator.addMethod(
+            "afterJoiningDate",
+            function (value, element, joiningInputName) {
+
+                if (!value) return true;
+
+                const joiningInput =
+                    document.getElementsByName(joiningInputName)[0];
+
+                if (!joiningInput || !joiningInput.value) return true;
+
+                return new Date(value) > new Date(joiningInput.value);
+            },
+            "Relieving date must be after joining date."
+        );
+
+        function initializeValidation() {
+
+            const form = $("#experienceStepperForm");
+            form.removeData("validator");
+
             let rules = {};
             let messages = {};
 
-            function initializeValidationForExperience() {
-                const form4 = $("#experienceStepperForm");
+            document
+                .querySelectorAll(".experience-section")
+                .forEach((section, index) => {
 
-                document.querySelectorAll('.experience-section').forEach((section, index) => {
                     const idx = index + 1;
-                    const companyNameKey = `${namespace}companyName${idx}`;
-                    const joiningDateKey = `${namespace}joiningDate${idx}`;
-                    const relievingDateKey = `${namespace}relievingDate${idx}`;
-                    rules[companyNameKey] = {required: true};
-                    rules[joiningDateKey] = {required: true, date: true};
-                    rules[relievingDateKey] = {required: true, date: true};
 
-                    messages[companyNameKey] = {
-                        required: "Please select Company Name."
+                    const company = `${namespace}companyName${idx}`;
+                    const joining = `${namespace}joiningDate${idx}`;
+                    const relieving = `${namespace}relievingDate${idx}`;
+
+                    rules[company] = { required: true };
+                    rules[joining] = { required: true, date: true };
+                    rules[relieving] = {
+                        required: true,
+                        date: true,
+                        afterJoiningDate: joining
                     };
 
-                    messages[joiningDateKey] = {
-                        required: "Please enter the start date.",
-                        date: "Please enter a valid date."
+                    messages[company] = {
+                        required: "Please enter company name."
                     };
-                    messages[relievingDateKey] = {
-                        required: "Please enter the end date.",
-                        date: "Please enter a valid date."
+                    messages[joining] = {
+                        required: "Please enter joining date."
+                    };
+                    messages[relieving] = {
+                        required: "Please enter relieving date.",
+                        afterJoiningDate:
+                            "Relieving date must be after joining date."
                     };
                 });
 
+            form.validate({
+                errorClass: "is-invalid",
+                validClass: "is-valid",
+                errorElement: "div",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback");
+                    element.after(error);
+                },
+                rules: rules,
+                messages: messages
+            });
+        }
 
-                form4.validate({
-                    errorClass: 'is-invalid',
-                    validClass: 'is-valid',
-                    errorElement: 'div',
-                    errorPlacement: function (error, element) {
-                        error.addClass('invalid-feedback');
-                        element.after(error);
-                    },
-                    rules: rules,
-                    messages: messages
-                });
+        /* =====================================================
+           ADD EXPERIENCE SECTION
+           ===================================================== */
 
+//        $("#add-experience-section").on("click", function () {
+//
+//            const original =
+//                document.getElementById("initial-experience-section");
+//
+//            const clone = original.cloneNode(true);
+//
+//            // remove attachment preview links
+//            clone.querySelectorAll("a").forEach(a => a.remove());
+//
+//            const index =
+//                document.querySelectorAll(".experience-section").length + 1;
+//
+//            clone.querySelectorAll("input").forEach(input => {
+//
+//                input.name =
+//                    input.name.replace(/\d+$/, "") + index;
+//
+//                if (input.type === "file") {
+//                    const fresh = document.createElement("input");
+//                    fresh.type = "file";
+//                    fresh.className = input.className;
+//                    fresh.name = input.name;
+//                    fresh.accept = input.accept;
+//                    input.parentNode.replaceChild(fresh, input);
+//                } else {
+//                    input.value = "";
+//                }
+//            });
+//
+//            document
+//                .getElementById("experience-section-container")
+//                .appendChild(clone);
+//
+//            document.getElementById("currentIndex").value = index;
+//
+//            initializeValidation();
+//        });
+
+        /* =====================================================
+           SUBMIT (AJAX)
+           ===================================================== */
+
+        $(".next-button-experience-details").on("click", function () {
+
+            initializeValidation();
+
+            const form = $("#experienceStepperForm");
+
+            if (!form.valid()) {
+                return false;
             }
 
-            try {
-                var index_experience = parseInt(experienceIndex);
-                for (var i = 1; i < index_experience; i++) {
-                    $('.nav-link.active').parent().next().find('.nav-link').click();
-                }
-            } catch (err) {
-                console.log(err);
-            }
+            const formData = new FormData(form[0]);
 
-            $('.next-button-experience-details').on('click', function (event) {
-                initializeValidationForExperience();
-                event.preventDefault();
-                const form4 = $('#experienceStepperForm');
-                if (!form4.valid()) {
-                    return false;
-                }
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+               success: function () {
 
-                var formData = new FormData(form4[0]);
+                   const currentTab = $('.nav-link.active');
+                   const nextTabButton = currentTab.parent().next().find('.nav-link');
 
-                $.ajax({
-                    url: form4.attr('action'),
-                    data: formData,
-                    method: 'POST',
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("firstVisit").value = "false";
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).addClass('show active');
-                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            $(nextTabContentId).find('input').first().focus();
-                        }
-                    },
-                    error: function () {
-                        console.log('There was an error saving the data. Please try again.');
-                    }
-                });
-            });
+                   if (nextTabButton.length > 0) {
 
+                       nextTabButton.tab('show');
 
-            $('#noactionbtnExperience').on('click', function (event) {
-                const currentTab = $('.nav-link.active');
-                const nextTabButton = currentTab.parent().next().find('.nav-link');
-                if (nextTabButton.length > 0) {
-                    nextTabButton.tab('show');
-                    const nextTabContentId = nextTabButton.attr('data-bs-target');
-                    $(nextTabContentId).find('input').first().focus();
+                       const nextTabContentId = nextTabButton.attr('data-bs-target');
+
+                       $(nextTabContentId).addClass('show active');
+                       $(currentTab.attr('data-bs-target')).removeClass('show active');
+
+                       $(nextTabContentId).find('input,select').first().focus();
+                   }
+
+               },
+
+                error: function () {
+                    console.error("Error saving experience (Employee)");
                 }
             });
-
         });
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
-    }
+
+        /* =====================================================
+           NO-ACTION BUTTON (INTERN / CONTRACTOR)
+           ===================================================== */
+
+        $("#noactionbtnExperience").on("click", function () {
+
+            const currentTab = $(".nav-link.active");
+            const nextTab =
+                currentTab.parent().next().find(".nav-link");
+
+            if (nextTab.length > 0) {
+                nextTab.tab("show");
+            }
+        });
+
+    });
+}
+
 
 
     // bank account details

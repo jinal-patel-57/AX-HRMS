@@ -9,7 +9,6 @@ import com.ax.hrms.model.EmployeeEducation;
 import com.ax.hrms.model.EmployeeExperience;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.EmployeeExperienceLocalService;
-import com.liferay.adaptive.media.exception.AMRuntimeException.IOException;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
@@ -27,6 +26,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -43,157 +44,260 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-@Component(immediate = true, property = {
-		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
-		"mvc.command.name=/addEditEmployeeExperienceURL" }, service = MVCActionCommand.class)
+@Component(
+        immediate = true,
+        property = {
+                "javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
+                "mvc.command.name=/addEditEmployeeExperienceURL"
+        },
+        service = MVCActionCommand.class
+)
 public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand {
 
-	@Reference
-	EmployeeExperienceLocalService employeeExperienceLocalService;
+    private static final Log log =
+            LogFactoryUtil.getLog(AddEmployeeExperienceMVCActionCommand.class);
 
-	@Reference
-	EmployeeDetailsLocalService employeeDetailsLocalService;
+    @Reference
+    private EmployeeExperienceLocalService employeeExperienceLocalService;
 
-	@Reference
-	AxHrmsCommonApi axHrmsCommonApi;
+    @Reference
+    private EmployeeDetailsLocalService employeeDetailsLocalService;
 
-	private static Log log = LogFactoryUtil.getLog(AddEmployeeExperienceMVCActionCommand.class);
+    @Reference
+    private AxHrmsCommonApi axHrmsCommonApi;
 
-	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
-		log.info("AddEmployeeExperienceMVCActionCommand >>> doProcessAction ::: Action Called :::");
-		
-		EmployeeExperience employeeExperience = null;
-		
-		List<Long> experienceIds =EmployeeOnBoardingUtil.experienceIds();
-		
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		int currentIndex = ParamUtil.getInteger(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.CURRENT_INDEX,1);
+    @Override
+    protected void doProcessAction(
+            ActionRequest actionRequest,
+            ActionResponse actionResponse) throws Exception {
 
-		log.info("AddEmployeeExperienceMVCActionCommand >>> doProcessAction ::: " + currentIndex);
+        log.info("Employee Experience Action Called");
+try {
+    ThemeDisplay themeDisplay =
+            (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(false);
+    long employeeId =
+            ParamUtil.getLong(
+                    actionRequest,
+                    AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 
-		Folder folder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT, 0, themeDisplay, serviceContext);
+    int currentIndex =
+            ParamUtil.getInteger(
+                    actionRequest,
+                    AxHrmsEmployeeOnBoardingEmployeeConstants.CURRENT_INDEX,
+                    1);
 
-		String parentFolderName = String.valueOf(themeDisplay.getUser().getScreenName() + themeDisplay.getUserId());
+    ServiceContext serviceContext =
+            ServiceContextFactory.getInstance(
+                    Folder.class.getName(),
+                    actionRequest);
+    serviceContext.setAddGroupPermissions(true);
+    serviceContext.setAddGuestPermissions(false);
 
-		Folder parentfolder = axHrmsCommonApi.createFolder(parentFolderName, folder.getFolderId(), themeDisplay,serviceContext);
+    Folder rootFolder =
+            axHrmsCommonApi.createFolder(
+                    AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT,
+                    0,
+                    themeDisplay,
+                    serviceContext);
 
-		Folder profilePictureFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE, parentfolder.getFolderId(),themeDisplay, serviceContext);
+    Folder userFolder =
+            axHrmsCommonApi.createFolder(
+                    themeDisplay.getUser().getScreenName() + themeDisplay.getUserId(),
+                    rootFolder.getFolderId(),
+                    themeDisplay,
+                    serviceContext);
 
-		for (int index = 1; index <= experienceIds.size(); index++) {
-			Long experienceId = experienceIds.get(index - 1);
-			try {
-				log.info("AddEmployeeExperienceMVCActionCommand >>> doProcessAction ::: Updating record with experience ID " + experienceId);
-				int dynamicIndex = index;
+    Folder experienceFolder =
+            axHrmsCommonApi.createFolder(
+                    AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE,
+                    userFolder.getFolderId(),
+                    themeDisplay,
+                    serviceContext);
 
-				String companyName = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.COMPANY_NAME + dynamicIndex);
-				String joiningDateStr = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.JOINING_DATE + dynamicIndex);
-				String relievingDateStr = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.RELIEVING_DATE + dynamicIndex);
+    List<Long> experienceIds =
+            employeeExperienceLocalService.findByEmployeeId(employeeId)
+                    .stream()
+                    .map(EmployeeExperience::getExperienceId)
+                    .collect(Collectors.toList());
 
-				employeeExperience = employeeExperienceLocalService.getEmployeeExperience(experienceId);
+    SimpleDateFormat formatter =
+            new SimpleDateFormat(
+                    AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,
+                    Locale.ENGLISH);
 
-				UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-				String fileName = uploadPortletRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + dynamicIndex);
+    UploadPortletRequest uploadRequest =
+            PortalUtil.getUploadPortletRequest(actionRequest);
 
-				File file = uploadPortletRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + dynamicIndex);
+    /* ================= UPDATE EXISTING RECORDS ================= */
+    log.info("current index :-" + currentIndex);
+    log.info("size :-" + experienceIds.size());
 
-				if (file != null && file.exists() && fileName != null) {
+    for (int i = 1; i <= experienceIds.size(); i++) {
+        log.info("In Update code");
+        log.info("employee uid :-"+ employeeId);
+        String joiningDateStr =
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.JOINING_DATE + i);
 
-					   long existingFileEntryId = employeeExperience.getExperienceCertificateMediaId();
+        String relievingDateStr =
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.RELIEVING_DATE + i);
 
-					   FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
-					
-						long userId = themeDisplay.getUserId();
-						String sourceFileName = fileName;
-						String title = fileName;
-						String urlTitle = null;
-						String description = existingFileEntry.getDescription();
-						String changeLog = StringPool.BLANK;
-						String mimeType = MimeTypesUtil.getContentType(file);
-						DLVersionNumberIncrease dlVersionNumberIncrease = DLVersionNumberIncrease.MAJOR;
+        if (Validator.isNull(joiningDateStr) ||
+                Validator.isNull(relievingDateStr)) {
 
-						byte[] fileContent = readFileContent(file);
+            log.info("Skipping empty existing row index = " + i);
+            continue;
+        }
 
-						DLAppLocalServiceUtil.updateFileEntry(userId, existingFileEntryId,sourceFileName, mimeType, title, urlTitle, description, changeLog,dlVersionNumberIncrease, fileContent, null, null, null, serviceContext);
-				} else {
-					log.error("Error: File does not exist or file name is null");
-				}
-				
-				employeeExperience.setCompanyName(companyName);
-				SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,Locale.ENGLISH);
-				Date joiningDate = formatter.parse(joiningDateStr);
-				Date relievingDate = formatter.parse(relievingDateStr);
+        EmployeeExperience experience =
+                employeeExperienceLocalService.getEmployeeExperience(
+                        experienceIds.get(i - 1));
 
-				employeeExperience.setJoiningDate(joiningDate);
-				employeeExperience.setRelievingDate(relievingDate);
+        experience.setCompanyName(
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.COMPANY_NAME + i));
 
-				employeeExperienceLocalService.updateEmployeeExperience(employeeExperience);
-			} catch (Exception e) {
-				log.error("Error updating record with experience ID " + experienceId + ": ", e);
-			}
-		}
+        experience.setJoiningDate(formatter.parse(joiningDateStr));
+        experience.setRelievingDate(formatter.parse(relievingDateStr));
 
-		for (int i = experienceIds.size() + 1; i <= currentIndex; i++) {
-			String companyName = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.COMPANY_NAME + i);
-			String joiningDate = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.JOINING_DATE + i);
-			String relievingDate = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.RELIEVING_DATE + i);
-			try {
-				employeeExperience = employeeExperienceLocalService.createEmployeeExperience(CounterLocalServiceUtil.increment(EmployeeEducation.class.getName()));
+        File file =
+                uploadRequest.getFile(
+                        AxHrmsEmployeeOnBoardingEmployeeConstants
+                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
 
-				employeeExperience.setCompanyId(themeDisplay.getCompanyId());
-				employeeExperience.setGroupId(themeDisplay.getScopeGroupId());
-				employeeExperience.setCreatedBy(themeDisplay.getUserId());
-				employeeExperience.setModifiedBy(themeDisplay.getUserId());
-				employeeExperience.setCompanyName(companyName);
+        String fileName = generateFileName(
+                uploadRequest.getFileName(
+                        AxHrmsEmployeeOnBoardingEmployeeConstants
+                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i));
 
-				long experienceId = employeeExperience.getExperienceId();
-				
-				EmployeeOnBoardingUtil.handleExperienceIds(experienceId);
+        if (file != null && file.exists() && file.length() > 0) {
 
-				UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-				String fileName = uploadPortletRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
-				File file = uploadPortletRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
+            long oldFileEntryId =
+                    experience.getExperienceCertificateMediaId();
 
-				if (file != null && file.exists() && fileName != null) {
-						FileEntry entry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),themeDisplay.getScopeGroupId(), profilePictureFolder.getFolderId(), fileName,MimeTypesUtil.getContentType(file), fileName, StringPool.BLANK, StringPool.BLANK, file,serviceContext);
-						employeeExperience.setExperienceCertificateMediaId(entry.getFileEntryId());
-				} else {
-					log.error("error when upload file");
-				}
-					SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,Locale.ENGLISH);
-					Date jDate = formatter.parse(joiningDate);
-					Date rDate = formatter.parse(relievingDate);
-					employeeExperience.setJoiningDate(jDate);
-					employeeExperience.setRelievingDate(rDate);
-				
-				
-				EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-				employeeExperience.setEmployeeId(employeeDetails.getEmployeeId());
+            FileEntry newEntry =
+                    DLAppLocalServiceUtil.addFileEntry(
+                            themeDisplay.getUserId(),
+                            themeDisplay.getScopeGroupId(),
+                            experienceFolder.getFolderId(),
+                            fileName,
+                            MimeTypesUtil.getContentType(file),
+                            fileName,
+                            StringPool.BLANK,
+                            StringPool.BLANK,
+                            file,
+                            serviceContext);
 
-				employeeExperienceLocalService.addEmployeeExperience(employeeExperience);
-			} catch (Exception e) {
-				e.getMessage();
-			}
-		}
-	}
+            experience.setExperienceCertificateMediaId(
+                    newEntry.getFileEntryId());
 
-	public byte[] readFileContent(File file) throws IOException, java.io.IOException {
-		try (FileInputStream fis = new FileInputStream(file);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            if (oldFileEntryId > 0) {
+                DLAppLocalServiceUtil.deleteFileEntry(oldFileEntryId);
+            }
+        }
 
-			byte[] buffer = new byte[1024];
-			int bytesRead;
+        employeeExperienceLocalService.updateEmployeeExperience(experience);
+    }
 
-			while ((bytesRead = fis.read(buffer)) != -1) {
-				baos.write(buffer, 0, bytesRead);
-			}
-			return baos.toByteArray();
-		}
-	}
+    /* ================= ADD NEW RECORDS ================= */
+
+    for (int i = experienceIds.size() + 1; i <= currentIndex; i++) {
+        log.info("In add section");
+        log.info("Employee Id"+ employeeId);
+        String joiningDateStr =
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.JOINING_DATE + i);
+
+        String relievingDateStr =
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.RELIEVING_DATE + i);
+
+        if (Validator.isNull(joiningDateStr) ||
+                Validator.isNull(relievingDateStr)) {
+
+            log.info("Skipping empty new row index = " + i);
+            continue;
+        }
+
+        EmployeeExperience experience =
+                employeeExperienceLocalService.createEmployeeExperience(
+                        CounterLocalServiceUtil.increment(
+                                EmployeeEducation.class.getName()));
+
+        experience.setCompanyId(themeDisplay.getCompanyId());
+        experience.setGroupId(themeDisplay.getScopeGroupId());
+        experience.setCreatedBy(themeDisplay.getUserId());
+        experience.setModifiedBy(themeDisplay.getUserId());
+        experience.setEmployeeId(employeeId);
+
+        experience.setCompanyName(
+                ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsEmployeeOnBoardingEmployeeConstants.COMPANY_NAME + i));
+
+        experience.setJoiningDate(formatter.parse(joiningDateStr));
+        experience.setRelievingDate(formatter.parse(relievingDateStr));
+
+        File file =
+                uploadRequest.getFile(
+                        AxHrmsEmployeeOnBoardingEmployeeConstants
+                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
+
+        String fileName = generateFileName(
+                uploadRequest.getFileName(
+                        AxHrmsEmployeeOnBoardingEmployeeConstants
+                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i));
+
+        if (file != null && file.exists() && file.length() > 0) {
+
+            FileEntry entry =
+                    DLAppLocalServiceUtil.addFileEntry(
+                            themeDisplay.getUserId(),
+                            themeDisplay.getScopeGroupId(),
+                            experienceFolder.getFolderId(),
+                            fileName,
+                            MimeTypesUtil.getContentType(file),
+                            fileName,
+                            StringPool.BLANK,
+                            StringPool.BLANK,
+                            file,
+                            serviceContext);
+
+            experience.setExperienceCertificateMediaId(
+                    entry.getFileEntryId());
+        }
+
+        employeeExperienceLocalService.addEmployeeExperience(experience);
+    }
+}catch (Exception e){
+    e.printStackTrace();
+}
+    }
+
+    /* ========== FILE UTILITY (UNCHANGED) ========== */
+
+    private byte[] readFileContent(File file) throws Exception {
+
+        try (FileInputStream fis = new FileInputStream(file);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
+        }
+    }
+    private String generateFileName(String original) {
+        return System.currentTimeMillis() + "_" + original.replaceAll("\\s+", "_");
+    }
 }
