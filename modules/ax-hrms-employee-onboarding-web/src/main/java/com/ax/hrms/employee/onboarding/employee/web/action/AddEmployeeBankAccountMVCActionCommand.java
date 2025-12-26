@@ -47,11 +47,12 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 		String bankName = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_NAME);
 		String ifscCode = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.IFSC_CODE);
 		String bankBranch = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_BRANCH);
-
+		long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 		String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_BANK);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		if (!areAnyFieldsEmpty(accountNumber, accountType, beneficiaryName, bankName, ifscCode, bankBranch)) {
+		log.info("Bank Flag ===>" + flag);
+		log.info("employeeId " + employeeId);
 			if (flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)) {
 				try {
 					EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.createEmployeeBankAccount(CounterLocalServiceUtil.increment(EmployeeBankAccount.class.getName()));
@@ -71,11 +72,19 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 
 					employeeBankAccountId = employeeBankAccount.getBankAccountId();
 					
-					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
-
-					employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
-					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+					if(employeeId>0) {
+						EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+						employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
+						
+						employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
+						employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+					} else {
+						EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+						employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
+						
+						employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
+						employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+					}
 
 					employeeBankAccountLocalService.addEmployeeBankAccount(employeeBankAccount);
 				} catch (Exception e) {
@@ -83,7 +92,8 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				}
 			} else {
 				try {
-					EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeBankAccountId);
+					EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+					EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeDetails.getBankAccountId());
 
 					employeeBankAccount.setCompanyId(themeDisplay.getCompanyId());
 					employeeBankAccount.setGroupId(themeDisplay.getScopeGroupId());
@@ -96,7 +106,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setIfscCode(ifscCode);
 					employeeBankAccount.setBankBranch(bankBranch);
 					employeeBankAccount.setStatus(true);
-					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+					//EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
 
 					employeeBankAccountLocalService.updateEmployeeBankAccount(employeeBankAccount);
@@ -106,9 +116,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 			}
 		
 		
-		} 
-
-	
 	}
 	private boolean areAnyFieldsEmpty(String... fields) {
 	    for (String field : fields) {

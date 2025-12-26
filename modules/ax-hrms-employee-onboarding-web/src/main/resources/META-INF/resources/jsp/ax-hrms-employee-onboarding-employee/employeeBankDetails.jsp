@@ -89,7 +89,7 @@
                 <input type="hidden" id="updateFlagBank" name="<portlet:namespace/>updateFlagBank"
                        value="${not empty flagStatuss? flagStatuss : 'false' }"/>
 
-                <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeId}">
+                <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeDetail.employeeId}">
             </div>
 
         </div>
