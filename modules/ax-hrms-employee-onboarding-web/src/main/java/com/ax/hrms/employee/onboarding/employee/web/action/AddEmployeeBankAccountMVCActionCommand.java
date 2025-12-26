@@ -70,6 +70,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setStatus(true);
 
 					employeeBankAccountId = employeeBankAccount.getBankAccountId();
+					
 					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
 

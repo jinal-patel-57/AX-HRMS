@@ -51,7 +51,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		log.info("Bank Flag ===>" + flag);
-		if (!areAnyFieldsEmpty(accountNumber, accountType, beneficiaryName, bankName, ifscCode, bankBranch)) {
+		log.info("employeeId " + employeeId);
 
 		if(flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)){
 			try {
@@ -71,11 +71,19 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setStatus(true);
 				
 				employeeBankAccountId=employeeBankAccount.getBankAccountId();
-				EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-				employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
-
-				employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
-				employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+				if(employeeId>0) {
+					EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
+					
+					employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
+					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+				} else {
+					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
+					
+					employeeDetails.setBankAccountId(employeeBankAccount.getBankAccountId());
+					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+				}
 
 				employeeBankAccountLocalService.addEmployeeBankAccount(employeeBankAccount);
 			} catch (Exception e) {
@@ -83,7 +91,8 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 			}
 		} else {
 			try {
-				EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeBankAccountId);
+				EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+				EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeDetails.getBankAccountId());
 
 				employeeBankAccount.setCompanyId(themeDisplay.getCompanyId());
 				employeeBankAccount.setGroupId(themeDisplay.getScopeGroupId());
@@ -96,14 +105,13 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setIfscCode(ifscCode);
 				employeeBankAccount.setBankBranch(bankBranch);
 				employeeBankAccount.setStatus(true);
-				EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+				
 				employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
 
 				employeeBankAccountLocalService.updateEmployeeBankAccount(employeeBankAccount);
 			} catch (Exception e) {
 				log.error("error in bankAccount while Update");
 			}
-		}
 		}
 	}
 	private boolean areAnyFieldsEmpty(String... fields) {

@@ -65,6 +65,16 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 
 	public boolean processAddresses(ActionRequest actionRequest, boolean sameAsPermanent, ThemeDisplay themeDisplay,AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService,EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate) {
 		try {
+			log.info("isUpdate  -- " + isUpdate );
+			log.info("sameAsPermanent  -- " + sameAsPermanent);
+			log.info("permanentAddressId  -- " + permanentAddressId);
+			Long employeeId = ParamUtil.getLong(actionRequest,"employeeId");
+			if(isUpdate) {
+				EmployeeAddress employeeAddress = employeeAddressLocalService.findByEmployeeId(employeeId);
+				permanentAddressId = employeeAddress.getPermanentAddress();
+				presentAddressId = employeeAddress.getPresentAddress();
+				employeeAddressId = employeeAddress.getEmployeeAddressId();
+			}
 			Address permanentAddress = createOrUpdateAddress(actionRequest, permanentAddressId, true, addressLocalService, isUpdate,sameAsPermanent);
 			Address presentAddress = null;
 			if (!sameAsPermanent) {

@@ -121,13 +121,20 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setLeavingDate(employeeDetails.getLeavingDate());
 			employeeDto.setGender(employeeDetails.getGender());
 			employeeDto.setExperienced(employeeDetails.getIsExperienced());
-			EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
-			employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());
-			FileEntry fileEntry = DLAppServiceUtil.getFileEntry(employeeDto.getProfilePicId());
-
-			if (Validator.isNotNull(fileEntry)) {
-				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
-				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PIC, previewURL);
+			if(employeeDetails.getManagerId()>0) {
+				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
+				employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());
+			} else {
+				employeeDto.setReportingManager("");
+			}
+			
+			if(Validator.isNotNull(employeeDto.getProfilePicId()) && employeeDto.getProfilePicId()>0) {
+				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(employeeDto.getProfilePicId());
+				
+				if (Validator.isNotNull(fileEntry)) {
+					String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
+					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PIC, previewURL);
+				}
 			}
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDto);
 		} catch (PortalException e) {

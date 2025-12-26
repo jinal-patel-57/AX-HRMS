@@ -66,13 +66,30 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 
 	public boolean processAddresses(ActionRequest actionRequest, boolean sameAsPermanent, ThemeDisplay themeDisplay,AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService,EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate) {
 		try {
+			log.info("isUpdate  -- " + isUpdate );
+			log.info("sameAsPermanent  -- " + sameAsPermanent);
+			log.info("permanentAddressId  -- " + permanentAddressId);
+			Long employeeId = ParamUtil.getLong(actionRequest,"employeeId");
+			if(isUpdate) {
+				EmployeeAddress employeeAddress = employeeAddressLocalService.findByEmployeeId(employeeId);
+				permanentAddressId = employeeAddress.getPermanentAddress();
+				presentAddressId = employeeAddress.getPresentAddress();
+				employeeAddressId = employeeAddress.getEmployeeAddressId();
+			}
 			Address permanentAddress = createOrUpdateAddress(actionRequest, permanentAddressId, true, addressLocalService, isUpdate,sameAsPermanent);
+			log.info("permanentAddress  -- " + permanentAddress );
+			
 			Address presentAddress = null;
 			if (!sameAsPermanent) {
+				log.info("presentAddressId  -- " + presentAddressId );
+				log.info("isUpdate  -- " + isUpdate );
+				log.info("sameAsPermanent  -- " + sameAsPermanent);
 				presentAddress = createOrUpdateAddress(actionRequest, presentAddressId, false, addressLocalService, isUpdate,sameAsPermanent);
+				log.info("presentAddress -- " + presentAddress);
 			}
 
 			EmployeeAddress employeeAddress = createOrUpdateEmployeeAddress(actionRequest ,permanentAddress, presentAddress, themeDisplay, employeeAddressLocalService, employeeDetailsLocalService, isUpdate);
+			log.info("employeeAddress -- " + employeeAddress);
 			return true;
 		} catch (Exception e) {
 			log.error("Error in processAddresses: " + e.getMessage());

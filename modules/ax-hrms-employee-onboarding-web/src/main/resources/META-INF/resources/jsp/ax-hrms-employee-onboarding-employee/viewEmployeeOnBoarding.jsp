@@ -153,10 +153,24 @@
                         <div class="form-group-view">
                             <div class="label-name">Country</div>
                             <div class="label-content">
-                            	<%Address permanentaddresss = (Address)request.getAttribute("permanentaddresss"); %>
-                            	<%= CountryLocalServiceUtil
-							            .getCountry(permanentaddresss.getCountry())
-							            .getName() %></div>
+                            	<%
+								Address permanentaddresss = (Address) request.getAttribute("permanentaddresss");
+								String permanentCountryName = "";
+								%>
+								
+								<%
+								if (permanentaddresss != null && permanentaddresss.getCountry() > 0) {
+								    try {
+								        permanentCountryName =
+								            CountryLocalServiceUtil
+								                .getCountry(permanentaddresss.getCountry())
+								                .getName();
+								    } catch (Exception ignored) {}
+								}
+								%>
+								
+								<%= permanentCountryName %>
+							</div>
                         </div>
                     </div>
 
@@ -202,9 +216,24 @@
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
                                 <div class="label-content">
-                                <%Address presentaddresss = (Address)request.getAttribute("presentaddresss"); %><%= CountryLocalServiceUtil
-							            .getCountry(presentaddresss.getCountry())
-							            .getName() %></div>
+                                <%
+								Address presentaddresss = (Address) request.getAttribute("presentaddresss");
+								String presentCountryName = "";
+								%>
+								
+								<%
+								if (presentaddresss != null && presentaddresss.getCountry() > 0) {
+								    try {
+								        presentCountryName =
+								            CountryLocalServiceUtil
+								                .getCountry(presentaddresss.getCountry())
+								                .getName();
+								    } catch (Exception ignored) {}
+								}
+								%>
+								
+								<%= presentCountryName %>
+								</div>
                             </div>
                         </div>
 
@@ -248,9 +277,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Country</div>
-                                <div class="label-content"><%= CountryLocalServiceUtil
-							            .getCountry(permanentaddresss.getCountry())
-							            .getName() %></div>
+                                <div class="label-content"><%= permanentCountryName %></div>
                             </div>
                         </div>
 

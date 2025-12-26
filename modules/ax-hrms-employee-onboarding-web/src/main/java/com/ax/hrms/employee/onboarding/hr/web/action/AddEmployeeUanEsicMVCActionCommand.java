@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -44,6 +45,7 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN);
 		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER);
         String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_UAN_ESIC);
+        long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 
         log.info("uanEsic Flag ===> " + flag);
 		if(flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)) {
@@ -68,15 +70,36 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 				}
 		} else {
 			try {
-				EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.getEmployeeUanEsic(employeeUanEsicId);
-				employeeUanEsic.setCompanyId(themeDisplay.getCompanyId());
-				employeeUanEsic.setGroupId(themeDisplay.getScopeGroupId());
-				employeeUanEsic.setCreatedBy(themeDisplay.getUserId());
-				employeeUanEsic.setModifiedBy(themeDisplay.getUserId());
-				employeeUanEsic.setUan(uan);
-				employeeUanEsic.setEsicNo(esicNo);
-				employeeUanEsic.setStatus(true);
-				employeeUanEsicLocalService.updateEmployeeUanEsic(employeeUanEsic);
+				EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+				log.info("employeeDetails -- " + employeeDetails.getUanEsicId());
+				employeeUanEsicId = employeeDetails.getUanEsicId();
+				
+				if(Validator.isNotNull(employeeDetails.getUanEsicId()) && employeeDetails.getUanEsicId()>0) {
+					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.getEmployeeUanEsic(employeeUanEsicId);
+					employeeUanEsic.setCompanyId(themeDisplay.getCompanyId());
+					employeeUanEsic.setGroupId(themeDisplay.getScopeGroupId());
+					employeeUanEsic.setCreatedBy(themeDisplay.getUserId());
+					employeeUanEsic.setModifiedBy(themeDisplay.getUserId());
+					employeeUanEsic.setUan(uan);
+					employeeUanEsic.setEsicNo(esicNo);
+					employeeUanEsic.setStatus(true);
+					employeeUanEsicLocalService.updateEmployeeUanEsic(employeeUanEsic);
+				} else {
+					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.createEmployeeUanEsic(CounterLocalServiceUtil.increment(EmployeeUanEsic.class.getName()));
+					employeeUanEsic.setCompanyId(themeDisplay.getCompanyId());
+					employeeUanEsic.setGroupId(themeDisplay.getScopeGroupId());
+					employeeUanEsic.setCreatedBy(themeDisplay.getUserId());
+					employeeUanEsic.setModifiedBy(themeDisplay.getUserId());
+					
+					employeeUanEsicId=employeeUanEsic.getUanEsicId();
+					employeeUanEsic.setUan(uan);
+					employeeUanEsic.setEsicNo(esicNo);
+					employeeUanEsic.setStatus(true);
+					
+					employeeDetails.setUanEsicId(employeeUanEsic.getUanEsicId());
+					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+					employeeUanEsicLocalService.addEmployeeUanEsic(employeeUanEsic);
+				}
 			} catch (Exception e) {
 				log.error("error in catch while update EmployeeUanEsic Details" + e.getMessage());
 			}
