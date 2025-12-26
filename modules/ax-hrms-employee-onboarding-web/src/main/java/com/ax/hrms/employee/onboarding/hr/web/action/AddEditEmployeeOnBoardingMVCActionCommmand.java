@@ -273,6 +273,27 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                                 .noneMatch(received -> received.getDepartmentMasterId() == (old.getDepartmentMasterId())))
                         .collect(Collectors.toList()));
                 DepartmentMaster departmentMaster;
+                
+                for(DepartmentMaster delete:removedDepartmentMasterList ) {
+                    EmployeeDepartment employeeDepartment=employeeDepartmentLocalService.findByEmployeeIdAndStatusAndDepartmentMasterId(delete.getDepartmentMasterId(), true, employeeId);
+                    employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
+                     employeeDepartment.setCreatedBy(themeDisplay.getUserId());
+                     employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
+                     employeeDepartment.setCreateDate(new Date());
+                     employeeDepartment.setModifiedDate(new Date());
+                     employeeDepartment.setDepartmentMasterId(delete.getDepartmentMasterId());
+                     employeeDepartment.setStatus(false);
+                     employeeDepartment.setDateOfChange(new Date());
+                     employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
+                    employeeDepartmentLocalService.updateEmployeeDepartment(employeeDepartment);
+                    departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
+                    String oldDepartmentName =departmentMaster.getDepartmentName();
+
+                    Role role = roleService.getRole(themeDisplay.getCompanyId(), oldDepartmentName);
+                    RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
+
+                }
+                
                 for (DepartmentMaster added : addedDepartmentMasterList) {
 
                     EmployeeDepartment	employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
@@ -297,25 +318,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
                 }
 
-                for(DepartmentMaster delete:removedDepartmentMasterList ) {
-                    EmployeeDepartment employeeDepartment=employeeDepartmentLocalService.findByEmployeeIdAndStatusAndDepartmentMasterId(delete.getDepartmentMasterId(), true, employeeId);
-                    employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
-                     employeeDepartment.setCreatedBy(themeDisplay.getUserId());
-                     employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
-                     employeeDepartment.setCreateDate(new Date());
-                     employeeDepartment.setModifiedDate(new Date());
-                     employeeDepartment.setDepartmentMasterId(delete.getDepartmentMasterId());
-                     employeeDepartment.setStatus(false);
-                     employeeDepartment.setDateOfChange(new Date());
-                     employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
-                    employeeDepartmentLocalService.updateEmployeeDepartment(employeeDepartment);
-                    departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
-                    String oldDepartmentName =departmentMaster.getDepartmentName();
-
-                    Role role = roleService.getRole(themeDisplay.getCompanyId(), oldDepartmentName);
-                    RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
-
-                }
+                
             }
             EmployeeBasicDetailsUtil employeeBasicDetailsUtil = new EmployeeBasicDetailsUtil();
             employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
