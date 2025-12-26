@@ -181,6 +181,8 @@ import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -199,7 +201,7 @@ import java.util.List;
 
 @Component(property = {"javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME, "mvc.command.name=/"}, service = MVCRenderCommand.class)
 public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand {
-
+Log log = LogFactoryUtil.getLog(ListWorkFromHomeRequestMVCRenderCommand.class.getName());
     @Reference
     private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
 
@@ -224,79 +226,83 @@ public class ListWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand
         // Create iterator URL
         long userId = themeDisplay.getUserId();
         EmployeeDetails employee;
+        int total = 0;
         try {
             employee = employeeDetailsLocalService.findByLrUserId(userId);
-        } catch (NoSuchEmployeeDetailsException e) {
-            throw new RuntimeException(e);
-        }
-        // Pagination values
-        int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-        int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
+             total =
+                    workFromHomeRequestLocalService
+                            .countByEmployeeId(employee.getEmployeeId());
+            // Pagination values
+            int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
+            int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
 
 //        int total = workFromHomeRequestLocalService.getWorkFromHomeRequestsCount();
-        int total =
-                workFromHomeRequestLocalService
-                        .countByEmployeeId(employee.getEmployeeId());
 
 
-        int start = (cur - 1) * delta;
-        int end = start + delta;
 
-        if (start >= total) {
-            start = 0;
-            end = wfhSC.getDelta();
-        }
+            int start = (cur - 1) * delta;
+            int end = start + delta;
 
-        // Get employee details for logged-in user
+            if (start >= total) {
+                start = 0;
+                end = wfhSC.getDelta();
+            }
+
+            // Get employee details for logged-in user
 //        EmployeeDetails employeeDetail = null;
 //        try {
 //            employeeDetail = employeeDetailsLocalService.findByLrUserId(userId);
 //        } catch (NoSuchEmployeeDetailsException e) {
 //            throw new RuntimeException(e);
 //        }
-        // Fetch paginated WFH records
+            // Fetch paginated WFH records
 //        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.getWorkFromHomeRequests(start, end);
-        List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.findByEmployeeId(employee.getEmployeeId(), start, end);
-        // Fetch all statuses
+            List<WorkFromHomeRequest> wfhList = workFromHomeRequestLocalService.findByEmployeeId(employee.getEmployeeId(), start, end);
+            // Fetch all statuses
 //         total =wfhList.size();
 
-        List<LeaveCompensatoryStatusMaster> statusList = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
+            List<LeaveCompensatoryStatusMaster> statusList = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
-        List<WFHRequestDto> dtoList = new ArrayList<>();
+            List<WFHRequestDto> dtoList = new ArrayList<>();
 
-        // Convert to DTO
-        for (WorkFromHomeRequest wfh : wfhList) {
+            // Convert to DTO
+            for (WorkFromHomeRequest wfh : wfhList) {
 
 //            User user = userLocalService.fetchUser(wfh.getUserId());
-            EmployeeDetails employeeDetails = employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
-            WFHRequestDto dto = new WFHRequestDto();
-            dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-            dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName() + " " + employeeDetails.getLastName() : "");
-            dto.setTeamMailId(wfh.getTeamMailId());
-            dto.setReason(wfh.getReason());
-            dto.setRequestDate(wfh.getRequestDate());
-            dto.setStartDate(wfh.getStartDate());
-            dto.setEndDate(wfh.getEndDate());
+                EmployeeDetails employeeDetails = employeeDetailsLocalService.fetchEmployeeDetails(wfh.getEmployeeId());
+                WFHRequestDto dto = new WFHRequestDto();
+                dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
+                dto.setEmployeeName(employeeDetails != null ? employeeDetails.getFirstName() + " " + employeeDetails.getLastName() : "");
+                dto.setTeamMailId(wfh.getTeamMailId());
+                dto.setReason(wfh.getReason());
+                dto.setRequestDate(wfh.getRequestDate());
+                dto.setStartDate(wfh.getStartDate());
+                dto.setEndDate(wfh.getEndDate());
 
-            dto.setStatus(WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList));
+                dto.setStatus(WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList));
 
-            dtoList.add(dto);
-        }
+                dtoList.add(dto);
+            }
 
 
-        wfhSC.setDelta(delta);
-        wfhSC.setDeltaConfigurable(true);
+            wfhSC.setDelta(delta);
+            wfhSC.setDeltaConfigurable(true);
 //        wfhSC.setResultsAndTotal(
 //                () -> dtoList,
 //                total
 //        );
-        wfhSC.setResultsAndTotal(() -> dtoList,  // supplier
-                total           // correct total count
-        );
-        // Set attributes for JSP
-        renderRequest.setAttribute("wfhSC", wfhSC);
-        renderRequest.setAttribute("totalWFHRequest", total);
-        renderRequest.setAttribute("delta", delta);
+            wfhSC.setResultsAndTotal(() -> dtoList,  // supplier
+                    total           // correct total count
+            );
+            // Set attributes for JSP
+            renderRequest.setAttribute("wfhSC", wfhSC);
+            renderRequest.setAttribute("totalWFHRequest", total);
+            renderRequest.setAttribute("delta", delta);
+        } catch (NoSuchEmployeeDetailsException e) {
+
+            log.info("No employee Details are exists for this user."+ e.getMessage());
+        }
+
 
         return AxHrmsWorkFromHomePortletKeys.WFH_LIST_JSP;
     }
