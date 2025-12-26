@@ -53,6 +53,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		log.info("AddEditEmployeeAddressMVCActionCommand >>> doProcessAction :::" + flag);
 		boolean isUpdate = flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.TRUE);
 
+		log.info("employeeId -- " + ParamUtil.getLong(actionRequest,"employeeId"));
 		boolean result = processAddresses(actionRequest,sameAsPermanent, themeDisplay, addressLocalService,employeeAddressLocalService, employeeDetailsLocalService, isUpdate);
 
 		if (result) {
@@ -60,7 +61,6 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		} else {
 			log.info(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_FAILED);
 		}
-		
 		actionRequest.setAttribute("employeeId", ParamUtil.getLong(actionRequest,"employeeId"));
 	}
 

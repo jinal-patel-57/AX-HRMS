@@ -69,6 +69,7 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			log.info("sameAsPermanent  -- " + sameAsPermanent);
 			log.info("permanentAddressId  -- " + permanentAddressId);
 			Long employeeId = ParamUtil.getLong(actionRequest,"employeeId");
+			log.info("employeeId-- " + employeeId);
 			if(isUpdate) {
 				EmployeeAddress employeeAddress = employeeAddressLocalService.findByEmployeeId(employeeId);
 				permanentAddressId = employeeAddress.getPermanentAddress();

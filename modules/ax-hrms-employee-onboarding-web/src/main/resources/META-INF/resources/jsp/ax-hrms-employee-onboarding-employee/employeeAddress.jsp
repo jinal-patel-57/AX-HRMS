@@ -216,7 +216,7 @@
         <input type="hidden" id="updateFlagAddress" name="<portlet:namespace/>updateFlagAddress"
                value="${not empty addressFlagStatus? addressFlagStatus : 'false' }"/>
 
-        <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeId}">
+        <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeDetail.employeeId}">
         <!-- Navigation buttons -->
 
     </div>
