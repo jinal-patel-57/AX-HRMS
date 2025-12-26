@@ -154,6 +154,11 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				educationDto.setStartDate(education.getStartDate());
 				educationDto.setPassingYear(education.getPassingYear());
 				educationDto.setEndDate(education.getEndDate());
+				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(education.getEducationCertificateMediaId());
+
+				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
+
+				educationDto.setEducationCertificatePreviewUrl(previewURL);
 				educationDtoList.add(educationDto);
 			}
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LIST, educationDtoList);
@@ -198,6 +203,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(experienceDto.getExperienceCertificateMediaId());
 
 				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
+
 				experienceDto.setExperienceCertificatePreviewUrl(previewURL);
 //				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EXPERIENCE_CERTIFICATE, previewURL);
 				

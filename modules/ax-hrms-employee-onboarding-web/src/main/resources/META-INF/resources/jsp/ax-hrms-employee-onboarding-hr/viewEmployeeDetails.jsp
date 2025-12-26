@@ -340,6 +340,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">Education Certificate</div>
+                                <div class="label-content">
+                                    <a href="${education.educationCertificatePreviewUrl}" target="_blank"
+                                       >Download
+                                        Education Certificate</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
             </div>
