@@ -37,7 +37,7 @@ create index IX_D396A9D1 on ax_EmployeeDepartment (departmentMasterId);
 create index IX_A9FA7DD4 on ax_EmployeeDepartment (employeeId, departmentMasterId, status);
 create unique index IX_98275504 on ax_EmployeeDepartment (uuid_[$COLUMN_LENGTH:75$], groupId);
 
-create index IX_979025E4 on ax_EmployeeDesignation (employeeId);
+create index IX_7531D4E6 on ax_EmployeeDesignation (employeeId, designationMasterId, status);
 create unique index IX_26DEE73D on ax_EmployeeDesignation (uuid_[$COLUMN_LENGTH:75$], groupId);
 
 create index IX_B9FFE410 on ax_EmployeeDetails (createDate);

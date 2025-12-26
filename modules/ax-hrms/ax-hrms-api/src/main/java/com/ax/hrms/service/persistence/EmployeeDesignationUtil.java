@@ -588,6 +588,90 @@ public class EmployeeDesignationUtil {
 	}
 
 	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or throws a <code>NoSuchEmployeeDesignationException</code> if it could not be found.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the matching employee designation
+	 * @throws NoSuchEmployeeDesignationException if a matching employee designation could not be found
+	 */
+	public static EmployeeDesignation
+			findByEmployeeDesignationStatusAndEmployeeId(
+				long designationMasterId, boolean status, long employeeId)
+		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {
+
+		return getPersistence().findByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId);
+	}
+
+	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the matching employee designation, or <code>null</code> if a matching employee designation could not be found
+	 */
+	public static EmployeeDesignation
+		fetchByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId) {
+
+		return getPersistence().fetchByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId);
+	}
+
+	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching employee designation, or <code>null</code> if a matching employee designation could not be found
+	 */
+	public static EmployeeDesignation
+		fetchByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId,
+			boolean useFinderCache) {
+
+		return getPersistence().fetchByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId, useFinderCache);
+	}
+
+	/**
+	 * Removes the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; from the database.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the employee designation that was removed
+	 */
+	public static EmployeeDesignation
+			removeByEmployeeDesignationStatusAndEmployeeId(
+				long designationMasterId, boolean status, long employeeId)
+		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {
+
+		return getPersistence().removeByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId);
+	}
+
+	/**
+	 * Returns the number of employee designations where designationMasterId = &#63; and status = &#63; and employeeId = &#63;.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the number of matching employee designations
+	 */
+	public static int countByEmployeeDesignationStatusAndEmployeeId(
+		long designationMasterId, boolean status, long employeeId) {
+
+		return getPersistence().countByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId);
+	}
+
+	/**
 	 * Caches the employee designation in the entity cache if it is enabled.
 	 *
 	 * @param employeeDesignation the employee designation

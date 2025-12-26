@@ -182,7 +182,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 //                updateEmployeeWithManager(themeDisplay.getCompanyId(),employeeDetails,ParamUtil.getLong(actionRequest, "manager"),oldManagerId);
 
-                log.info("Above the updaation part ok ...................................1");
 				try {
 					EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
 	                
@@ -208,21 +207,26 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
               
                 for(DesignationMaster old:oldDesignationMasterList) {
-                	log.info("Above the updaation part ok ...................................32...... " + old.getDesignationName());
                     try {
                     	Role role = roleService.getRole(themeDisplay.getCompanyId(), old.getDesignationName());
-                        log.info("Above the updaation part ok ...................................33..................");
                         RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
-                        log.info("Above the updaation part ok ...................................34............");
+                        EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeDesignationStatusAndEmployeeId(old.getDesignationMasterId(),true,employeeDetails.getEmployeeId());
+                        employeeDesignation.setStatus(false);
+                        employeeDesignation.setEndDate(new Date());
+                        employeeDesignationLocalService.updateEmployeeDesignation(employeeDesignation);
                     }catch(PortalException e) {
                     	log.error("Error while fetching designation role");
-                    } 
+                        e.printStackTrace();
+                    }
+
                 }
                 
-                log.info("Above the updaation part ok ...................................4");
 
                 DesignationMaster designationMaster;
                 try {
+
+
+
                     EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
 
                     employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
@@ -232,9 +236,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                     employeeDesignation.setModifiedDate(new Date());
 
                     employeeDesignation.setDesignationMasterId(designations);
-                    employeeDesignation.setStatus(false);
+                    employeeDesignation.setStatus(true);
                     employeeDesignation.setStartDate(new Date());
-                    employeeDesignation.setEndDate(new Date());
                     employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
 
                     designationMaster = designationMasterLocalService.findByDesignationNameById(employeeDesignation.getDesignationMasterId());
@@ -250,30 +253,25 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 } catch (Exception e) {
                     log.error(e.getMessage());
                 }
-                log.info("Above the updaation part ok ...................................5");
 
                 List<DepartmentMaster> oldDepartmentMastersList = axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeId); // depratments already assigned to the employee
                 List<DepartmentMaster> recievedDepartmentMasterList = new ArrayList<>(); // departments coming from the request
                 List<DepartmentMaster> addedDepartmentMasterList = new ArrayList<>();
                 List<DepartmentMaster> removedDepartmentMasterList = new ArrayList<>();
-                log.info("Above the updaation part ok ...................................6");
                 for (long dId : departments) {
                     recievedDepartmentMasterList.add(departmentMasterLocalService.getDepartmentMaster(dId));
                 }
-                log.info("Above the updaation part ok ...................................7");
 
                 // Fill addedDepartmentMasterList
                 addedDepartmentMasterList.addAll(recievedDepartmentMasterList.stream()
                         .filter(received -> oldDepartmentMastersList.stream()
                                 .noneMatch(old -> old.getDepartmentMasterId() == (received.getDepartmentMasterId())))
                         .collect(Collectors.toList()));
-                log.info("Above the updaation part ok ...................................8");
                 // Fill removedDepartmentMasterList
                 removedDepartmentMasterList.addAll(oldDepartmentMastersList.stream()
                         .filter(old -> recievedDepartmentMasterList.stream()
                                 .noneMatch(received -> received.getDepartmentMasterId() == (old.getDepartmentMasterId())))
                         .collect(Collectors.toList()));
-                log.info("Above the updaation part ok ...................................9");
                 DepartmentMaster departmentMaster;
                 for (DepartmentMaster added : addedDepartmentMasterList) {
 
@@ -289,7 +287,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                      employeeDepartment.setStatus(true);
                      employeeDepartment.setDateOfChange(new Date());
                      employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
-                     log.info("Above the updaation part ok ...................................10");
                      employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
 
                      departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
@@ -297,12 +294,10 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                      Role newDesignationsRole = roleService.getRole(themeDisplay.getCompanyId(), newDepartmentName);
 
                     RoleLocalServiceUtil.addUserRole(employeeDetails.getLrUserId(), newDesignationsRole);
-                    log.info("Above the updaation part ok ...................................11");
 
                 }
 
                 for(DepartmentMaster delete:removedDepartmentMasterList ) {
-                	log.info("Above the updaation part ok ...................................12");
                     EmployeeDepartment employeeDepartment=employeeDepartmentLocalService.findByEmployeeIdAndStatusAndDepartmentMasterId(delete.getDepartmentMasterId(), true, employeeId);
                     employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
                      employeeDepartment.setCreatedBy(themeDisplay.getUserId());
@@ -314,27 +309,20 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                      employeeDepartment.setDateOfChange(new Date());
                      employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
                     employeeDepartmentLocalService.updateEmployeeDepartment(employeeDepartment);
-                    log.info("Above the updaation part ok ...................................13");
                     departmentMaster=departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
                     String oldDepartmentName =departmentMaster.getDepartmentName();
 
                     Role role = roleService.getRole(themeDisplay.getCompanyId(), oldDepartmentName);
                     RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
-                    log.info("Above the updaation part ok ...................................14");
 
                 }
             }
-            log.info("Above the updaation part ok ...................................15");
             EmployeeBasicDetailsUtil employeeBasicDetailsUtil = new EmployeeBasicDetailsUtil();
-            log.info("Above the updaation part ok ...................................16");
             employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
-            log.info("Above the updaation part ok ...................................17");
-            log.info("Above the updation part ok ...................................");
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
             updateEmployeeWithManager(themeDisplay.getCompanyId(), employeeDetails, employeeDetails.getManagerId(),oldManagerId);
             
-            log.info("Above the updaation part ok ...................................18");
         }
 
         

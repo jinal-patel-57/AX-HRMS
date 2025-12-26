@@ -50,4 +50,9 @@ public class EmployeeDesignationLocalServiceImpl
         }
 		return 0L;
     }
+	public EmployeeDesignation findByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId)
+			throws NoSuchEmployeeDesignationException {
+		return employeeDesignationPersistence.findByEmployeeDesignationStatusAndEmployeeId(designationMasterId,status,employeeId);
+	}
 }

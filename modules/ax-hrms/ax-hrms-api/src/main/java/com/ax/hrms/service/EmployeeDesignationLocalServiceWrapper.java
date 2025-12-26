@@ -250,6 +250,17 @@ public class EmployeeDesignationLocalServiceWrapper
 	}
 
 	@Override
+	public com.ax.hrms.model.EmployeeDesignation
+			findByEmployeeDesignationStatusAndEmployeeId(
+				long designationMasterId, boolean status, long employeeId)
+		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {
+
+		return _employeeDesignationLocalService.
+			findByEmployeeDesignationStatusAndEmployeeId(
+				designationMasterId, status, employeeId);
+	}
+
+	@Override
 	public com.ax.hrms.model.EmployeeDesignation findByEmployeeId(
 			long employeeId)
 		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {

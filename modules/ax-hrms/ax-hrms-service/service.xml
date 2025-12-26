@@ -310,6 +310,11 @@
         <finder return-type="EmployeeDesignation" name="EmployeeId">
             <finder-column name="employeeId"/>
         </finder>
+        <finder return-type="EmployeeDesignation" name="EmployeeDesignationStatusAndEmployeeId">
+            <finder-column name="designationMasterId"/>
+            <finder-column name="status"/>
+            <finder-column name="employeeId"/>
+        </finder>
 
     </entity>
 

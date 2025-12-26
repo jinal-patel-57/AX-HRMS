@@ -225,6 +225,15 @@ public class EmployeeDesignationLocalServiceUtil {
 			uuid, groupId);
 	}
 
+	public static EmployeeDesignation
+			findByEmployeeDesignationStatusAndEmployeeId(
+				long designationMasterId, boolean status, long employeeId)
+		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {
+
+		return getService().findByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId);
+	}
+
 	public static EmployeeDesignation findByEmployeeId(long employeeId)
 		throws com.ax.hrms.exception.NoSuchEmployeeDesignationException {
 

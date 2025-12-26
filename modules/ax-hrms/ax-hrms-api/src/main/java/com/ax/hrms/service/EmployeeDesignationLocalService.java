@@ -211,6 +211,10 @@ public interface EmployeeDesignationLocalService
 	public EmployeeDesignation fetchEmployeeDesignationByUuidAndGroupId(
 		String uuid, long groupId);
 
+	public EmployeeDesignation findByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId)
+		throws NoSuchEmployeeDesignationException;
+
 	public EmployeeDesignation findByEmployeeId(long employeeId)
 		throws NoSuchEmployeeDesignationException;
 

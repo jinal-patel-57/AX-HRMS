@@ -1677,6 +1677,290 @@ public class EmployeeDesignationPersistenceImpl
 	private static final String _FINDER_COLUMN_EMPLOYEEID_EMPLOYEEID_2 =
 		"employeeDesignation.employeeId = ?";
 
+	private FinderPath _finderPathFetchByEmployeeDesignationStatusAndEmployeeId;
+	private FinderPath _finderPathCountByEmployeeDesignationStatusAndEmployeeId;
+
+	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or throws a <code>NoSuchEmployeeDesignationException</code> if it could not be found.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the matching employee designation
+	 * @throws NoSuchEmployeeDesignationException if a matching employee designation could not be found
+	 */
+	@Override
+	public EmployeeDesignation findByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId)
+		throws NoSuchEmployeeDesignationException {
+
+		EmployeeDesignation employeeDesignation =
+			fetchByEmployeeDesignationStatusAndEmployeeId(
+				designationMasterId, status, employeeId);
+
+		if (employeeDesignation == null) {
+			StringBundler sb = new StringBundler(8);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("designationMasterId=");
+			sb.append(designationMasterId);
+
+			sb.append(", status=");
+			sb.append(status);
+
+			sb.append(", employeeId=");
+			sb.append(employeeId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchEmployeeDesignationException(sb.toString());
+		}
+
+		return employeeDesignation;
+	}
+
+	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the matching employee designation, or <code>null</code> if a matching employee designation could not be found
+	 */
+	@Override
+	public EmployeeDesignation fetchByEmployeeDesignationStatusAndEmployeeId(
+		long designationMasterId, boolean status, long employeeId) {
+
+		return fetchByEmployeeDesignationStatusAndEmployeeId(
+			designationMasterId, status, employeeId, true);
+	}
+
+	/**
+	 * Returns the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching employee designation, or <code>null</code> if a matching employee designation could not be found
+	 */
+	@Override
+	public EmployeeDesignation fetchByEmployeeDesignationStatusAndEmployeeId(
+		long designationMasterId, boolean status, long employeeId,
+		boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {designationMasterId, status, employeeId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByEmployeeDesignationStatusAndEmployeeId,
+				finderArgs, this);
+		}
+
+		if (result instanceof EmployeeDesignation) {
+			EmployeeDesignation employeeDesignation =
+				(EmployeeDesignation)result;
+
+			if ((designationMasterId !=
+					employeeDesignation.getDesignationMasterId()) ||
+				(status != employeeDesignation.isStatus()) ||
+				(employeeId != employeeDesignation.getEmployeeId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_SELECT_EMPLOYEEDESIGNATION_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_DESIGNATIONMASTERID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_STATUS_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_EMPLOYEEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(designationMasterId);
+
+				queryPos.add(status);
+
+				queryPos.add(employeeId);
+
+				List<EmployeeDesignation> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByEmployeeDesignationStatusAndEmployeeId,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									designationMasterId, status, employeeId
+								};
+							}
+
+							_log.warn(
+								"EmployeeDesignationPersistenceImpl.fetchByEmployeeDesignationStatusAndEmployeeId(long, boolean, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					EmployeeDesignation employeeDesignation = list.get(0);
+
+					result = employeeDesignation;
+
+					cacheResult(employeeDesignation);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (EmployeeDesignation)result;
+		}
+	}
+
+	/**
+	 * Removes the employee designation where designationMasterId = &#63; and status = &#63; and employeeId = &#63; from the database.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the employee designation that was removed
+	 */
+	@Override
+	public EmployeeDesignation removeByEmployeeDesignationStatusAndEmployeeId(
+			long designationMasterId, boolean status, long employeeId)
+		throws NoSuchEmployeeDesignationException {
+
+		EmployeeDesignation employeeDesignation =
+			findByEmployeeDesignationStatusAndEmployeeId(
+				designationMasterId, status, employeeId);
+
+		return remove(employeeDesignation);
+	}
+
+	/**
+	 * Returns the number of employee designations where designationMasterId = &#63; and status = &#63; and employeeId = &#63;.
+	 *
+	 * @param designationMasterId the designation master ID
+	 * @param status the status
+	 * @param employeeId the employee ID
+	 * @return the number of matching employee designations
+	 */
+	@Override
+	public int countByEmployeeDesignationStatusAndEmployeeId(
+		long designationMasterId, boolean status, long employeeId) {
+
+		FinderPath finderPath =
+			_finderPathCountByEmployeeDesignationStatusAndEmployeeId;
+
+		Object[] finderArgs = new Object[] {
+			designationMasterId, status, employeeId
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_EMPLOYEEDESIGNATION_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_DESIGNATIONMASTERID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_STATUS_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_EMPLOYEEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(designationMasterId);
+
+				queryPos.add(status);
+
+				queryPos.add(employeeId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_DESIGNATIONMASTERID_2 =
+			"employeeDesignation.designationMasterId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_STATUS_2 =
+			"employeeDesignation.status = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEDESIGNATIONSTATUSANDEMPLOYEEID_EMPLOYEEID_2 =
+			"employeeDesignation.employeeId = ?";
+
 	public EmployeeDesignationPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1713,6 +1997,15 @@ public class EmployeeDesignationPersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByEmployeeId,
 			new Object[] {employeeDesignation.getEmployeeId()},
+			employeeDesignation);
+
+		finderCache.putResult(
+			_finderPathFetchByEmployeeDesignationStatusAndEmployeeId,
+			new Object[] {
+				employeeDesignation.getDesignationMasterId(),
+				employeeDesignation.isStatus(),
+				employeeDesignation.getEmployeeId()
+			},
 			employeeDesignation);
 	}
 
@@ -1805,6 +2098,19 @@ public class EmployeeDesignationPersistenceImpl
 			_finderPathCountByEmployeeId, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByEmployeeId, args, employeeDesignationModelImpl);
+
+		args = new Object[] {
+			employeeDesignationModelImpl.getDesignationMasterId(),
+			employeeDesignationModelImpl.isStatus(),
+			employeeDesignationModelImpl.getEmployeeId()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByEmployeeDesignationStatusAndEmployeeId, args,
+			Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByEmployeeDesignationStatusAndEmployeeId, args,
+			employeeDesignationModelImpl);
 	}
 
 	/**
@@ -2343,6 +2649,28 @@ public class EmployeeDesignationPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByEmployeeId",
 			new String[] {Long.class.getName()}, new String[] {"employeeId"},
 			false);
+
+		_finderPathFetchByEmployeeDesignationStatusAndEmployeeId =
+			new FinderPath(
+				FINDER_CLASS_NAME_ENTITY,
+				"fetchByEmployeeDesignationStatusAndEmployeeId",
+				new String[] {
+					Long.class.getName(), Boolean.class.getName(),
+					Long.class.getName()
+				},
+				new String[] {"designationMasterId", "status", "employeeId"},
+				true);
+
+		_finderPathCountByEmployeeDesignationStatusAndEmployeeId =
+			new FinderPath(
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"countByEmployeeDesignationStatusAndEmployeeId",
+				new String[] {
+					Long.class.getName(), Boolean.class.getName(),
+					Long.class.getName()
+				},
+				new String[] {"designationMasterId", "status", "employeeId"},
+				false);
 
 		EmployeeDesignationUtil.setPersistence(this);
 	}
