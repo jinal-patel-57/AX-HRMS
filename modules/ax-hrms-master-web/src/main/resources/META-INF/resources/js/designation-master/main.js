@@ -14,7 +14,7 @@
             $.validator.addMethod("validDesignationName", function (value, element) {
                 value = value.trim();
                 return this.optional(element) ||
-                    /^[A-Za-z]+([A-Za-z\s.&-]*[A-Za-z])?$/.test(value);
+                  /^[A-Za-z]+([A-Za-z\s&\/-]*[A-Za-z])?$/.test(value);
             }, "Enter a valid Designation Name");
 
         }

@@ -79,7 +79,7 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 			List<LeaveInformToTeamDetail> leaveInformToTeamList = leaveInformToTeamDetailLocalService.findByLeaveRequestId(leaveRequest.getLeaveRequestId());
 			Map<Long,String> leaveInformToTeamMap = new HashMap<>();
 			for(LeaveInformToTeamDetail leaveInformToTeamDetail: leaveInformToTeamList) {
-				String employeeName = employeeDetailsLocalService.findByEmployeeId(leaveInformToTeamDetail.getEmployeeId()).getPersonalEmail();
+				String employeeName = employeeDetailsLocalService.findByEmployeeId(leaveInformToTeamDetail.getEmployeeId()).getOfficialEmail();
 				leaveInformToTeamMap.put(leaveInformToTeamDetail.getEmployeeId(),employeeName);
 			}
 

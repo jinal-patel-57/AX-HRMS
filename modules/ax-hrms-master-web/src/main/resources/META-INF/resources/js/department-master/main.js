@@ -18,7 +18,7 @@
                 function (value, element) {
                     value = value.trim();
                     return this.optional(element) ||
-                        /^[A-Za-z]+([A-Za-z\s&-]*[A-Za-z])?$/.test(value);
+                       /^[A-Za-z]+([A-Za-z\s&\/-]*[A-Za-z])?$/.test(value);
                 },
                 "Please enter valid Department Name"
             );
