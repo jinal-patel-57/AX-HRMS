@@ -258,7 +258,7 @@
                                                                                                                    ""
                                                                                                            );
                                                                                                        } catch (Exception e) {
-                                                                                                           e.printStackTrace();
+                                                                                                           System.out.println("Inside exception -- " + e.getMessage());
                                                                                                        }
                                                                                                    }
                                                                                                %>
@@ -301,10 +301,19 @@
                                         <portlet:param name="educationId" value="${educationItem.educationId}"/>
                                     </portlet:actionURL>
 
-                                    <a href="${deleteEmployeeEducationURL}"
-                                       class="btn btn-outline-danger delete-section">
+                                    <%-- <a href="#" data-url="${deleteEmployeeEducationURL}" data-education-id="${educationItem.educationId}"
+                                       class="btn btn-outline-danger delete-section delete-education-btn">
                                         <i class="icon-trash"></i>
-                                    </a>
+                                    </a> --%>
+                                    
+                                    <button
+							            type="button"
+							            class="btn btn-outline-danger delete-education-btn"
+							            data-education-id="${educationItem.educationId}"
+							            data-url="${deleteEmployeeEducationURL}" >
+							            <i class="icon-trash"></i>
+							        </button>
+                                    
                                 </div>
                                 </c:if>
 

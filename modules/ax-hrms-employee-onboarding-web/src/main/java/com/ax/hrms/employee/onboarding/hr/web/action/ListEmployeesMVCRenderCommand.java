@@ -1,5 +1,6 @@
 package com.ax.hrms.employee.onboarding.hr.web.action;
 
+import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.model.EmployeeDetails;
@@ -11,13 +12,15 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 @Component(
         immediate = true,
@@ -47,7 +50,14 @@ public class ListEmployeesMVCRenderCommand implements MVCRenderCommand {
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.COUNT, EmployeeDetailsLocalServiceUtil.getEmployeeDetailsesCount());
         // END setting search container
         
-        log.info("before jsp --");
+        String eduCurrentIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX);
+        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX, eduCurrentIndex);
+        log.info("before jsp -- " +eduCurrentIndex);
+        
+        String experienceCurIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX);
+        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX, experienceCurIndex);
+        log.info("before jsp -- " +experienceCurIndex);
+        
 
         return AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ON_BOARDING_HR_LIST_JSP;
     }

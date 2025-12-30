@@ -40,6 +40,7 @@ public class DeleteEmployeeEducationMVCActionCommand extends BaseMVCActionComman
 
 			EmployeeOnBoardingUtil.deleteEducationIds(educationId);
 			actionRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.THREE);
+			actionResponse.setRenderParameter(AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.THREE);
 		} catch (Exception e) {
 			log.error("Error In when Delete Education Details" + e.getMessage());
 		}

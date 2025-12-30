@@ -202,10 +202,15 @@
         experienceIndex = '${ExperienceCurIndex}';
 
         config.getEmployeeUrl = '${showEmployeeOnBoardingStatusUrl}';
+        console.log('EdCurIndex -- ', ${EdCurIndex});
+        console.log('ExperienceCurIndex -- ', ${ExperienceCurIndex});
+        console.log('portlet:namespace : ', namespace);
         var getEmployeeUrl = config.getEmployeeUrl;
         config.namespace = namespace;
         config.educationList = educationList;
-
+		config.educationIndex = educationIndex;
+		config.experienceIndex = experienceIndex;
+        
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation(config);
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForEducationValidation(config);

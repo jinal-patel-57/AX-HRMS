@@ -181,6 +181,7 @@
                                 </div>
 
                                 <!-- DELETE (EXISTING RECORD) -->
+                                <c:if test="${experienceListSize > 1}">
                                 <div class="card-footer text-right">
                                     <portlet:actionURL var="deleteEmployeeExperienceURL"
                                                        name="/deleteEmployeeExperienceURL">
@@ -188,12 +189,20 @@
                                                        value="${experienceItem.experienceId}"/>
                                     </portlet:actionURL>
 
-                                    <a href="${deleteEmployeeExperienceURL}"
+                                    <%-- <a href="${deleteEmployeeExperienceURL}"
                                        data-delete-url="${deleteEmployeeExperienceURL}"
                                        class="btn btn-outline-danger delete-section">
                                         <i class="icon-trash"></i>
-                                    </a>
+                                    </a> --%>
+                                    <button
+							            type="button"
+							            class="btn btn-outline-danger delete-experience-btn"
+							            data-experience-id="${experienceItem.experienceId}"
+							            data-url="${deleteEmployeeExperienceURL}" >
+							            <i class="icon-trash"></i>
+							        </button>
                                 </div>
+                                </c:if>
 
                             </div>
                         </div>

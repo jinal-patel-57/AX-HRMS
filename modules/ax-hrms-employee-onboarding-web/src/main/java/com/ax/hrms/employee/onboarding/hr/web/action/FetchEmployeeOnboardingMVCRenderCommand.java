@@ -115,7 +115,17 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+    	
+    	String eduCurrentIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX);
 
+        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX, eduCurrentIndex);
+        log.info("EdCurIndex --- " + eduCurrentIndex);
+        
+    	String experienceCurIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX);
+
+        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX, experienceCurIndex);
+        log.info("experienceCurIndex --- " + experienceCurIndex);
+    	
         EmployeeOnBoardingUtil employeeOnBoardingUtil = new EmployeeOnBoardingUtil(employeeDetailsLocalService, axHrmsCommonApi, employeeAddressLocalService, employeeBankAccountLocalService, addressLocalService, nomineeLocalService,mailTemplateConfiguration);
 
         Long employeeId = ParamUtil.getLong(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
@@ -250,7 +260,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         List<EducationLevelMaster> educationLevelMastersList = educationLevelMasterLocalService.getEducationLevelMasters(-1, -1);
         
         
-
+        
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST, educationLevelMastersList);
 

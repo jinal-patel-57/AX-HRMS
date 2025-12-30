@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.CountryLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.awt.print.Book;
@@ -84,6 +85,13 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 			long employeeId = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId();
+			String eduCurrentIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX);
+	        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDU_CURRENT_INDEX, eduCurrentIndex);
+	        log.info("before jsp -- " +eduCurrentIndex);
+	        
+	        String experienceCurIndex = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX);
+	        renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX, experienceCurIndex);
+	        log.info("before jsp -- " +experienceCurIndex);
 			boolean isOnBoarded = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getIsEmployeeOnboarded();
 			if (isOnBoarded){
 				renderRequest.setAttribute("isOnBoarded", Boolean.TRUE);
@@ -107,7 +115,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 			renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_EXPERIENCED, employeeDetails.getIsExperienced());
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST,educationLevelMastersList);
-
+			
 		} catch (NoSuchEmployeeDetailsException e1) {
 			e1.printStackTrace();
 		} catch (PortalException e) {

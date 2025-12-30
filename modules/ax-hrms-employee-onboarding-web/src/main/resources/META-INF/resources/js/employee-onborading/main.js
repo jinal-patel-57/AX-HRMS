@@ -85,7 +85,6 @@ function setConfigsForAddExperienceSection(config) {
             fresh.type = "file";
             fresh.className = input.className;
             fresh.name = input.name;
-            fresh.multiple=true;
             fresh.accept = input.accept;
             input.parentNode.replaceChild(fresh, input);
         } else {
@@ -311,7 +310,6 @@ function setConfigsForAddExperienceSection(config) {
             });
 
 		    $('.previous-button').on('click', function (event) {
-		    	debugger;
 		        event.preventDefault();
 		        const currentTab = $('.nav-link.active');
 		        const previousTabButton = currentTab.parent().prev().find('.nav-link');
@@ -494,6 +492,11 @@ function setConfigsForAddExperienceSection(config) {
             AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation = setConfigsForAddressValidation;
         });
     }
+    
+    function deleteEmployeeEducation(){
+    	console.log('function called');
+    	AxHrmsEmployeeOnboardingEmployeeWebPortlet.deleteEmployeeEducation = deleteEmployeeEducation;
+    }
 
 
   function setConfigsForEducationValidation(config) {
@@ -511,8 +514,10 @@ function setConfigsForAddExperienceSection(config) {
           }
       }, "End date must be after start date.");
 
-      config.educationIndex = educationIndex;
-
+      //config.educationIndex = educationIndex;
+		var educationIndex = config.educationIndex;
+        console.log('educationIndex -- ', educationIndex);
+		
       $(document).ready(function () {
 
           function teardownValidator(form) {
@@ -595,13 +600,28 @@ function setConfigsForAddExperienceSection(config) {
                   rules: rules,
                   messages: messages,
               });
+              
+              $('.delete-section').on('click', function (event) {
+          		console.log('this -- ', this);
+        		event.preventDefault();
+        		$(this).getAttribute('data-url');
+          	});
           }
 
           try {
-              var index_edu = parseInt(educationIndex);
-              for (var i = 1; i < index_edu; i++) {
-                  $('.nav-link.active').parent().next().find('.nav-link').click();
-              }
+			let url = new URL(window.location.href);
+            const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
+            if (url.searchParams.has(paramName)) {
+				var index_edu = url.searchParams.get(paramName);
+				for (var i = 1; i < index_edu; i++) {
+	                $('.nav-link.active').parent().next().find('.nav-link').click();
+	            }
+            } else {
+	            var index_edu = parseInt(educationIndex);
+	            for (var i = 1; i < index_edu; i++) {
+	                $('.nav-link.active').parent().next().find('.nav-link').click();
+	            }
+            }
           } catch (err) {
               console.log("error" + err);
           }
@@ -630,7 +650,9 @@ function setConfigsForAddExperienceSection(config) {
               const deleteButton = document.createElement('button');
               deleteButton.className = 'btn btn-outline-danger delete-section';
               deleteButton.type = 'button';
-              deleteButton.onclick = function () {
+              deleteButton.onclick = function (event) {
+              	  event.preventDefault();
+                  console.log('main clicked');
                   newSection.remove();
                   initializeValidation();
               };
@@ -657,8 +679,57 @@ function setConfigsForAddExperienceSection(config) {
 
               initializeValidation();
           }
+          
+        	
 
           $('#add-education-section').on('click', addEducationSection);
+          
+                      $(document).on('click', '.delete-education-btn', function () {
+                console.log('click called');
+                const educationId = $(this).data('education-id');
+                const deleteUrl = $(this).data('url');
+                console.log('deleteUrl -- ', deleteUrl);
+                const $btn = $(this);
+                const actionUrl = $btn.data("url");
+                const $section = $btn.closest(".education-section");
+                if (!educationId) {
+                   // newly added (not saved yet)
+                   $section.remove();
+                   return;
+                }
+                
+                if (!confirm('Are you sure you want to delete this education record? ' + educationId)) {
+                    return;
+                }
+                
+                let currentUrl = window.location.href;
+                console.log(currentUrl);
+                
+                $.ajax({
+                    url: deleteUrl,
+                    type: 'POST',
+                    data: {
+                        educationId: educationId
+                    },
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        console.log('response -- ',response);
+                        $section.remove();
+                        let url = new URL(window.location.href);
+
+                        const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
+                        if (!url.searchParams.has(paramName)) {
+                            window.location.href = currentUrl + '?_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex=3';
+                        }
+                    },
+                    error: function () {
+                        alert("Failed to delete education record.");
+                    }
+                });
+            
+                //window.location.href = deleteUrl + '&educationId=' + educationId;
+            });
 //
 //          $('.next-button-education-details').on('click', function (event) {
 //              initializeValidation();
@@ -724,7 +795,15 @@ function setConfigsForAddExperienceSection(config) {
                                 const nextTabContentId = nextTabButton.attr('data-bs-target');
                                 $(nextTabContentId).addClass('show active');
                                 $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            }
+                                
+								let url = new URL(window.location.href);
+	                            const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
+								if (url.searchParams.has(paramName)) {
+									url.searchParams.delete(paramName);
+                            
+	                                window.history.replaceState({}, document.title, url.toString());
+	                           }                            
+	                    	}
                         },
                         error: function () {
                             console.log("Error saving education details");
@@ -854,191 +933,275 @@ function setConfigsForAddExperienceSection(config) {
 //        });
 //        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
 //    }
-    function setConfigsForExperienceValidation(config) {
+function setConfigsForExperienceValidation(config) {
+	var experienceIndex = config.experienceIndex;
+    console.log('experienceIndex -- ', experienceIndex);
+    
+    const namespace = config.namespace;
 
-        const namespace = config.namespace;
+    $(document).ready(function () {
 
-        $(document).ready(function () {
+        /* =====================================================
+           VALIDATION
+           ===================================================== */
 
-            /* =====================================================
-               VALIDATION
-               ===================================================== */
+        $.validator.addMethod(
+            "afterJoiningDate",
+            function (value, element, joiningInputName) {
 
-            $.validator.addMethod(
-                "afterJoiningDate",
-                function (value, element, joiningInputName) {
+                if (!value) return true;
 
-                    if (!value) return true;
+                const joiningInput =
+                    document.getElementsByName(joiningInputName)[0];
 
-                    const joiningInput =
-                        document.getElementsByName(joiningInputName)[0];
+                if (!joiningInput || !joiningInput.value) return true;
 
-                    if (!joiningInput || !joiningInput.value) return true;
+                return new Date(value) > new Date(joiningInput.value);
+            },
+            "Relieving date must be after joining date."
+        );
+        
+        try {
+        	let url = new URL(window.location.href);
+            const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
+            
+            if (url.searchParams.has(paramName)) {
+				var index_exp = url.searchParams.get(paramName);
+				for (var i = 1; i < index_exp; i++) {
+	                $('.nav-link.active').parent().next().find('.nav-link').click();
+	            }
+            } else {
+	            const index_exp = parseInt(experienceIndex);
+	            for (let i = 1; i < index_exp; i++) {
+	                $('.nav-link.active').parent().next().find('.nav-link').click();
+	            }
+            }
+        } catch (err) {
+            console.log("error", err);
+        }
 
-                    return new Date(value) > new Date(joiningInput.value);
-                },
-                "Relieving date must be after joining date."
-            );
+        function initializeValidation() {
 
-            function initializeValidation() {
+            const form = $("#experienceStepperForm");
+            form.removeData("validator");
 
-                const form = $("#experienceStepperForm");
-                form.removeData("validator");
+            let rules = {};
+            let messages = {};
 
-                let rules = {};
-                let messages = {};
+            document
+                .querySelectorAll(".experience-section")
+                .forEach((section, index) => {
 
-                document
-                    .querySelectorAll(".experience-section")
-                    .forEach((section, index) => {
+                    const idx = index + 1;
 
-                        const idx = index + 1;
+                    const company = `${namespace}companyName${idx}`;
+                    const joining = `${namespace}joiningDate${idx}`;
+                    const relieving = `${namespace}relievingDate${idx}`;
 
-                        const company = `${namespace}companyName${idx}`;
-                        const joining = `${namespace}joiningDate${idx}`;
-                        const relieving = `${namespace}relievingDate${idx}`;
+                    rules[company] = { required: true };
+                    rules[joining] = { required: true, date: true };
+                    rules[relieving] = {
+                        required: true,
+                        date: true,
+                        afterJoiningDate: joining
+                    };
 
-                        rules[company] = { required: true };
-                        rules[joining] = { required: true, date: true };
-                        rules[relieving] = {
-                            required: true,
-                            date: true,
-                            afterJoiningDate: joining
-                        };
-
-                        messages[company] = {
-                            required: "Please enter company name."
-                        };
-                        messages[joining] = {
-                            required: "Please enter joining date."
-                        };
-                        messages[relieving] = {
-                            required: "Please enter relieving date.",
-                            afterJoiningDate:
-                                "Relieving date must be after joining date."
-                        };
-                    });
-
-                form.validate({
-                    errorClass: "is-invalid",
-                    validClass: "is-valid",
-                    errorElement: "div",
-                    errorPlacement: function (error, element) {
-                        error.addClass("invalid-feedback");
-                        element.after(error);
-                    },
-                    rules: rules,
-                    messages: messages
+                    messages[company] = {
+                        required: "Please enter company name."
+                    };
+                    messages[joining] = {
+                        required: "Please enter joining date."
+                    };
+                    messages[relieving] = {
+                        required: "Please enter relieving date.",
+                        afterJoiningDate:
+                            "Relieving date must be after joining date."
+                    };
                 });
+
+            form.validate({
+                errorClass: "is-invalid",
+                validClass: "is-valid",
+                errorElement: "div",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback");
+                    element.after(error);
+                },
+                rules: rules,
+                messages: messages
+            });
+        }
+
+
+			$(document).on('click', '.delete-experience-btn', function () {
+			    console.log('click called');
+			    const experienceId = $(this).data('experience-id');
+			    const deleteUrl = $(this).data('url');
+				console.log('deleteUrl -- ', deleteUrl);
+			    const $btn = $(this);
+			    const actionUrl = $btn.data("url");
+			    const $section = $btn.closest(".experience-section");
+			    if (!experienceId) {
+			       // newly added (not saved yet)
+			       $section.remove();
+			       return;
+			    }
+			    
+			    if (!confirm('Are you sure you want to delete this experience record? ' + experienceId)) {
+			        return;
+			    }
+			    
+			    let url = new URL(window.location.href);
+
+				const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
+				if (url.searchParams.has(paramName)) {
+				    url.searchParams.delete(paramName);
+				
+				    window.history.replaceState({}, document.title, url.toString());
+				}
+			    let currentUrl = window.location.href;
+			    			    
+			    $.ajax({
+					url: deleteUrl,
+					type: 'POST',
+					data: {
+			            experienceId: experienceId
+			        },
+					contentType: false,
+					processData: false,
+					success: function (response) {
+						console.log('response -- ',response);
+			            $section.remove();
+			            
+			            const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
+						if (!url.searchParams.has(paramName)) {
+				            window.location.href = currentUrl + '?_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex=4';
+						}
+			        },
+			        error: function () {
+			            alert("Failed to delete education record.");
+			        }
+				});
+			
+			    //window.location.href = deleteUrl + '&educationId=' + educationId;
+			});
+			
+			
+        /* =====================================================
+           ADD EXPERIENCE SECTION
+           ===================================================== */
+
+//        $("#add-experience-section").on("click", function () {
+//
+//            const original =
+//                document.getElementById("initial-experience-section");
+//
+//            const clone = original.cloneNode(true);
+//
+//            // remove attachment preview links
+//            clone.querySelectorAll("a").forEach(a => a.remove());
+//
+//            const index =
+//                document.querySelectorAll(".experience-section").length + 1;
+//
+//            clone.querySelectorAll("input").forEach(input => {
+//
+//                input.name =
+//                    input.name.replace(/\d+$/, "") + index;
+//
+//                if (input.type === "file") {
+//                    const fresh = document.createElement("input");
+//                    fresh.type = "file";
+//                    fresh.className = input.className;
+//                    fresh.name = input.name;
+//                    fresh.accept = input.accept;
+//                    input.parentNode.replaceChild(fresh, input);
+//                } else {
+//                    input.value = "";
+//                }
+//            });
+//
+//            document
+//                .getElementById("experience-section-container")
+//                .appendChild(clone);
+//
+//            document.getElementById("currentIndex").value = index;
+//
+//            initializeValidation();
+//        });
+
+        /* =====================================================
+           SUBMIT (AJAX)
+           ===================================================== */
+
+        $(".next-button-experience-details").on("click", function () {
+
+            initializeValidation();
+
+            const form = $("#experienceStepperForm");
+
+            if (!form.valid()) {
+                return false;
             }
 
-            /* =====================================================
-               ADD EXPERIENCE SECTION
-               ===================================================== */
+            const formData = new FormData(form[0]);
 
-    //        $("#add-experience-section").on("click", function () {
-    //
-    //            const original =
-    //                document.getElementById("initial-experience-section");
-    //
-    //            const clone = original.cloneNode(true);
-    //
-    //            // remove attachment preview links
-    //            clone.querySelectorAll("a").forEach(a => a.remove());
-    //
-    //            const index =
-    //                document.querySelectorAll(".experience-section").length + 1;
-    //
-    //            clone.querySelectorAll("input").forEach(input => {
-    //
-    //                input.name =
-    //                    input.name.replace(/\d+$/, "") + index;
-    //
-    //                if (input.type === "file") {
-    //                    const fresh = document.createElement("input");
-    //                    fresh.type = "file";
-    //                    fresh.className = input.className;
-    //                    fresh.name = input.name;
-    //                    fresh.accept = input.accept;
-    //                    input.parentNode.replaceChild(fresh, input);
-    //                } else {
-    //                    input.value = "";
-    //                }
-    //            });
-    //
-    //            document
-    //                .getElementById("experience-section-container")
-    //                .appendChild(clone);
-    //
-    //            document.getElementById("currentIndex").value = index;
-    //
-    //            initializeValidation();
-    //        });
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+               success: function () {
 
-            /* =====================================================
-               SUBMIT (AJAX)
-               ===================================================== */
+                   const currentTab = $('.nav-link.active');
+                   const nextTabButton = currentTab.parent().next().find('.nav-link');
 
-            $(".next-button-experience-details").on("click", function () {
+                   if (nextTabButton.length > 0) {
 
-                initializeValidation();
+                       nextTabButton.tab('show');
 
-                const form = $("#experienceStepperForm");
+                       const nextTabContentId = nextTabButton.attr('data-bs-target');
 
-                if (!form.valid()) {
-                    return false;
-                }
+                       $(nextTabContentId).addClass('show active');
+                       $(currentTab.attr('data-bs-target')).removeClass('show active');
 
-                const formData = new FormData(form[0]);
+                       $(nextTabContentId).find('input,select').first().focus();
+                        let url = new URL(window.location.href);
 
-                $.ajax({
-                    url: form.attr("action"),
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                   success: function () {
+						const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
+						if (url.searchParams.has(paramName)) {
+						    url.searchParams.delete(paramName);
+						
+						    window.history.replaceState({}, document.title, url.toString());
+						}
+                   }
 
-                       const currentTab = $('.nav-link.active');
-                       const nextTabButton = currentTab.parent().next().find('.nav-link');
+               },
 
-                       if (nextTabButton.length > 0) {
-
-                           nextTabButton.tab('show');
-
-                           const nextTabContentId = nextTabButton.attr('data-bs-target');
-
-                           $(nextTabContentId).addClass('show active');
-                           $(currentTab.attr('data-bs-target')).removeClass('show active');
-
-                           $(nextTabContentId).find('input,select').first().focus();
-                       }
-
-                   },
-
-                    error: function () {
-                        console.error("Error saving experience (Employee)");
-                    }
-                });
-            });
-
-            /* =====================================================
-               NO-ACTION BUTTON (INTERN / CONTRACTOR)
-               ===================================================== */
-
-            $("#noactionbtnExperience").on("click", function () {
-
-                const currentTab = $(".nav-link.active");
-                const nextTab =
-                    currentTab.parent().next().find(".nav-link");
-
-                if (nextTab.length > 0) {
-                    nextTab.tab("show");
+                error: function () {
+                    console.error("Error saving experience (Employee)");
                 }
             });
-
         });
-    }
+
+        /* =====================================================
+           NO-ACTION BUTTON (INTERN / CONTRACTOR)
+           ===================================================== */
+
+        $("#noactionbtnExperience").on("click", function () {
+
+            const currentTab = $(".nav-link.active");
+            const nextTab =
+                currentTab.parent().next().find(".nav-link");
+
+            if (nextTab.length > 0) {
+                nextTab.tab("show");
+            }
+        });
+
+    });
+}
 
 
 
@@ -1139,6 +1302,12 @@ function setConfigsForAddExperienceSection(config) {
 
         $('.next-button-bank-account-details').on('click', function (event) {
             event.preventDefault();
+            const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
+			if (url.searchParams.has(paramName)) {
+			    url.searchParams.delete(paramName);
+			
+			    window.history.replaceState({}, document.title, url.toString());
+			}
             const form5 = $('#bankAccountStepperForm');
 //            if (!form5.valid()) {
 //                return;
@@ -1384,6 +1553,7 @@ function setConfigsForAddExperienceSection(config) {
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForValidation = setConfigsForValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation = setConfigsForAddressValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForEducationValidation = setConfigsForEducationValidation;
+    AxHrmsEmployeeOnboardingEmployeeWebPortlet.deleteEmployeeEducation = deleteEmployeeEducation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation = setConfigsForBankAccountValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;

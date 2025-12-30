@@ -323,8 +323,6 @@ public class ImportEmployeesUtility extends MVCPortlet {
 					} 
 					employeeDetails.setMaritalStatus(isMarried);
 					
-			        
-					
 					//adding probation status
 		            employeeDetails.setProbationStatusId(probationStatusMasterLocalService.findByProbationStatusName("Completed").getProbationStatusMasterId());
 		            employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
@@ -410,7 +408,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
         body = body.replace("${EMPLOYEE_PASSWORD}", password);
         body = body.replace("${LOGIN_LINK}", themeDisplay.getURLPortal() + linksConfiguration.loginLink());
         body = body.replace("${ONBOARDING_LINK}", themeDisplay.getURLPortal() + linksConfiguration.employeeOnBoardingLink());
-        body = body.replace("${INSURANCE_LINK}", employeeDetails.getInsuranceLink());
+        body = body.replace("${INSURANCE_LINK}", "#");
 
         axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), PrefsPropsUtil.getString(themeDisplay.getCompanyId(), "admin.email.from.address"), PrefsPropsUtil.getString(themeDisplay.getCompanyId(), "admin.email.from.name"), subject, body);
 

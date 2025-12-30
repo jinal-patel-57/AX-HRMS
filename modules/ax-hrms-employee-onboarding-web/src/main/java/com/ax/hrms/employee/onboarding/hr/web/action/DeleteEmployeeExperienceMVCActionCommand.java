@@ -66,6 +66,7 @@ public class DeleteEmployeeExperienceMVCActionCommand extends BaseMVCActionComma
 			employeeExperienceLocalService.deleteEmployeeExperience(experienceId);
 			EmployeeOnBoardingUtil.deleteExperienceIds(experienceId);
 			actionRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.FOUR);
+			actionResponse.setRenderParameter(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.FOUR);
 		} catch (Exception e) {
 			log.error("error in delete experience " + e.getMessage());
 		}
