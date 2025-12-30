@@ -124,7 +124,7 @@ public class WFHStatusUtil {
     }
 
 
-    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap) {
+    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap,boolean isUpdated) {
         try {
             log.info("SENDING MAIL TO MANAGER");
             EmployeeDetails managerOrHr = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getEmployeeId());
@@ -149,10 +149,15 @@ public class WFHStatusUtil {
 
             String mailContent = mailTemplateConfiguration.mailWFHRequestManagerAndHrBody();
 
-
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", managerOrHr.getFirstName() + StringPool.SPACE + managerOrHr.getLastName());
 
             mailContent = mailContent.replace("${BODY}", body);
+            if(isUpdated)
+            {
+                mailContent = mailContent.replace("${STATUS}", "Updated");
+            }else{
+                mailContent = mailContent.replace("${STATUS}", "Submitted");
+            }
 //            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 //            mailContent =  mailContent.replace("${BODY}", body);
             log.info("SENDING MAIL TO MANAGER ...." + mailContent);

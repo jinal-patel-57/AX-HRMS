@@ -396,13 +396,32 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
-                                <div class="label-name">Experience Certificate</div>
+                                <div class="label-name">Experience Certificates</div>
                                 <div class="label-content">
-                                    <a href="${experience.experienceCertificatePreviewUrl}" target="_blank"
-                                       >Download
-                                        Experience Certificate</a>
+
+                                    <c:if test="${not empty experience.experienceCertificatePreviewUrls}">
+                                        <ul class="pl-3 mb-0">
+                                            <c:forEach var="docUrl"
+                                                       items="${experience.experienceCertificatePreviewUrls}"
+                                                       varStatus="status">
+
+                                                <li>
+                                                    <a href="${docUrl}" target="_blank">
+                                                        Download Experience Certificate ${status.index + 1}
+                                                    </a>
+                                                </li>
+
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+
+                                    <c:if test="${empty experience.experienceCertificatePreviewUrls}">
+                                        <span class="text-muted">No document uploaded</span>
+                                    </c:if>
+
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </c:forEach>

@@ -465,7 +465,7 @@ public interface MailTemplateConfiguration {
 
     @Meta.AD(
             deflt = "<p>Hello ${EMPLOYEE_NAME},</p>" +
-                    "<p>A new <b>Work From Home</b> request has been submitted.</p>" +
+                    "<p>A new <b>Work From Home</b> request has been ${STATUS}</p>" +
                     "<p>Employee details are given below:</p>" +
                     "${BODY}" +
                     "<p>Please review and take the necessary action.</p>" +

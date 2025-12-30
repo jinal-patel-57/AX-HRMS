@@ -368,7 +368,7 @@
         <column name="companyName" type="String"/>
         <column name="joiningDate" type="Date"/>
         <column name="relievingDate" type="Date"/>
-        <column name="experienceCertificateMediaId" type="long"/>
+        <column name="experienceCertificateMediaId" type="String"/>
         <column name="employeeId" type="long"/>
 
         <!-- finder method  -->

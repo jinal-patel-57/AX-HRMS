@@ -69,7 +69,7 @@ public class EmployeeExperienceModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"experienceId", Types.BIGINT},
 		{"companyName", Types.VARCHAR}, {"joiningDate", Types.TIMESTAMP},
 		{"relievingDate", Types.TIMESTAMP},
-		{"experienceCertificateMediaId", Types.BIGINT},
+		{"experienceCertificateMediaId", Types.VARCHAR},
 		{"employeeId", Types.BIGINT}
 	};
 
@@ -88,12 +88,12 @@ public class EmployeeExperienceModelImpl
 		TABLE_COLUMNS_MAP.put("companyName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("joiningDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("relievingDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("experienceCertificateMediaId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("experienceCertificateMediaId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("employeeId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeExperience (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,experienceId LONG not null primary key,companyName VARCHAR(75) null,joiningDate DATE null,relievingDate DATE null,experienceCertificateMediaId LONG,employeeId LONG)";
+		"create table ax_EmployeeExperience (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,experienceId LONG not null primary key,companyName VARCHAR(75) null,joiningDate DATE null,relievingDate DATE null,experienceCertificateMediaId VARCHAR(75) null,employeeId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_EmployeeExperience";
@@ -341,7 +341,7 @@ public class EmployeeExperienceModelImpl
 					EmployeeExperience::setRelievingDate);
 			attributeSetterBiConsumers.put(
 				"experienceCertificateMediaId",
-				(BiConsumer<EmployeeExperience, Long>)
+				(BiConsumer<EmployeeExperience, String>)
 					EmployeeExperience::setExperienceCertificateMediaId);
 			attributeSetterBiConsumers.put(
 				"employeeId",
@@ -565,13 +565,18 @@ public class EmployeeExperienceModelImpl
 
 	@JSON
 	@Override
-	public long getExperienceCertificateMediaId() {
-		return _experienceCertificateMediaId;
+	public String getExperienceCertificateMediaId() {
+		if (_experienceCertificateMediaId == null) {
+			return "";
+		}
+		else {
+			return _experienceCertificateMediaId;
+		}
 	}
 
 	@Override
 	public void setExperienceCertificateMediaId(
-		long experienceCertificateMediaId) {
+		String experienceCertificateMediaId) {
 
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
@@ -717,7 +722,8 @@ public class EmployeeExperienceModelImpl
 		employeeExperienceImpl.setRelievingDate(
 			this.<Date>getColumnOriginalValue("relievingDate"));
 		employeeExperienceImpl.setExperienceCertificateMediaId(
-			this.<Long>getColumnOriginalValue("experienceCertificateMediaId"));
+			this.<String>getColumnOriginalValue(
+				"experienceCertificateMediaId"));
 		employeeExperienceImpl.setEmployeeId(
 			this.<Long>getColumnOriginalValue("employeeId"));
 
@@ -864,6 +870,15 @@ public class EmployeeExperienceModelImpl
 		employeeExperienceCacheModel.experienceCertificateMediaId =
 			getExperienceCertificateMediaId();
 
+		String experienceCertificateMediaId =
+			employeeExperienceCacheModel.experienceCertificateMediaId;
+
+		if ((experienceCertificateMediaId != null) &&
+			(experienceCertificateMediaId.length() == 0)) {
+
+			employeeExperienceCacheModel.experienceCertificateMediaId = null;
+		}
+
 		employeeExperienceCacheModel.employeeId = getEmployeeId();
 
 		return employeeExperienceCacheModel;
@@ -940,7 +955,7 @@ public class EmployeeExperienceModelImpl
 	private String _companyName;
 	private Date _joiningDate;
 	private Date _relievingDate;
-	private long _experienceCertificateMediaId;
+	private String _experienceCertificateMediaId;
 	private long _employeeId;
 
 	public <T> T getColumnValue(String columnName) {

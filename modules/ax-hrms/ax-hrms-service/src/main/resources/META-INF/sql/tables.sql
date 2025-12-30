@@ -316,7 +316,7 @@ create table ax_EmployeeExperience (
 	companyName VARCHAR(75) null,
 	joiningDate DATE null,
 	relievingDate DATE null,
-	experienceCertificateMediaId LONG,
+	experienceCertificateMediaId VARCHAR(75) null,
 	employeeId LONG
 );
 

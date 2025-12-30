@@ -218,7 +218,8 @@ public interface EmployeeExperienceModel
 	 *
 	 * @return the experience certificate media ID of this employee experience
 	 */
-	public long getExperienceCertificateMediaId();
+	@AutoEscape
+	public String getExperienceCertificateMediaId();
 
 	/**
 	 * Sets the experience certificate media ID of this employee experience.
@@ -226,7 +227,7 @@ public interface EmployeeExperienceModel
 	 * @param experienceCertificateMediaId the experience certificate media ID of this employee experience
 	 */
 	public void setExperienceCertificateMediaId(
-		long experienceCertificateMediaId);
+		String experienceCertificateMediaId);
 
 	/**
 	 * Returns the employee ID of this employee experience.

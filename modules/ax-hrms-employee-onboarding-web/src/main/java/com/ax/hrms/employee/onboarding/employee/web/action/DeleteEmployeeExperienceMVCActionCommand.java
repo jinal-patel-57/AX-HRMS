@@ -41,11 +41,25 @@ public class DeleteEmployeeExperienceMVCActionCommand extends BaseMVCActionComma
 
 		try {
 			EmployeeExperience employeeExperience = employeeExperienceLocalService.getEmployeeExperience(experienceId);
-			long experienceCertificateMediaId = employeeExperience.getExperienceCertificateMediaId();
-			if (experienceCertificateMediaId > 0) {
-				DLAppLocalServiceUtil.deleteFileEntry(experienceCertificateMediaId);
-			}
-			employeeExperienceLocalService.deleteEmployeeExperience(experienceId);
+
+            String mediaIds  = employeeExperience.getExperienceCertificateMediaId();
+            if (mediaIds != null && !mediaIds.isEmpty()) {
+                String[] fileEntryIds = mediaIds.split(",");
+                for (String idStr : fileEntryIds) {
+                    try {
+                        long fileEntryId = Long.parseLong(idStr.trim());
+
+                        DLAppLocalServiceUtil.deleteFileEntry(fileEntryId);
+
+                        log.info("Deleted FileEntry ID=" + fileEntryId);
+
+                    } catch (Exception e) {
+                        log.error("Unable to delete FileEntry ID=" + idStr, e);
+                    }
+                }
+
+            }
+            employeeExperienceLocalService.deleteEmployeeExperience(experienceId);
 			EmployeeOnBoardingUtil.deleteExperienceIds(experienceId);
 			actionRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.FOUR);
 		} catch (Exception e) {

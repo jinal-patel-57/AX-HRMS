@@ -1,6 +1,7 @@
 package com.ax.hrms.employee.onboarding.employee.web.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class EmployeeDto {
 
@@ -91,6 +92,15 @@ public class EmployeeDto {
 
 	String experienceCertificatePreviewUrl;
 	String educationCertificatePreviewUrl;
+    private List<String> experienceCertificatePreviewUrls;
+
+    public List<String> getExperienceCertificatePreviewUrls() {
+        return experienceCertificatePreviewUrls;
+    }
+
+    public void setExperienceCertificatePreviewUrls(List<String> urls) {
+        this.experienceCertificatePreviewUrls = urls;
+    }
 
 	public String getExperienceCertificatePreviewUrl() {
 		return experienceCertificatePreviewUrl;

@@ -141,8 +141,14 @@ public class EmployeeExperienceCacheModel
 			employeeExperienceImpl.setRelievingDate(new Date(relievingDate));
 		}
 
-		employeeExperienceImpl.setExperienceCertificateMediaId(
-			experienceCertificateMediaId);
+		if (experienceCertificateMediaId == null) {
+			employeeExperienceImpl.setExperienceCertificateMediaId("");
+		}
+		else {
+			employeeExperienceImpl.setExperienceCertificateMediaId(
+				experienceCertificateMediaId);
+		}
+
 		employeeExperienceImpl.setEmployeeId(employeeId);
 
 		employeeExperienceImpl.resetOriginalValues();
@@ -168,8 +174,7 @@ public class EmployeeExperienceCacheModel
 		companyName = objectInput.readUTF();
 		joiningDate = objectInput.readLong();
 		relievingDate = objectInput.readLong();
-
-		experienceCertificateMediaId = objectInput.readLong();
+		experienceCertificateMediaId = objectInput.readUTF();
 
 		employeeId = objectInput.readLong();
 	}
@@ -205,7 +210,12 @@ public class EmployeeExperienceCacheModel
 		objectOutput.writeLong(joiningDate);
 		objectOutput.writeLong(relievingDate);
 
-		objectOutput.writeLong(experienceCertificateMediaId);
+		if (experienceCertificateMediaId == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(experienceCertificateMediaId);
+		}
 
 		objectOutput.writeLong(employeeId);
 	}
@@ -221,7 +231,7 @@ public class EmployeeExperienceCacheModel
 	public String companyName;
 	public long joiningDate;
 	public long relievingDate;
-	public long experienceCertificateMediaId;
+	public String experienceCertificateMediaId;
 	public long employeeId;
 
 }

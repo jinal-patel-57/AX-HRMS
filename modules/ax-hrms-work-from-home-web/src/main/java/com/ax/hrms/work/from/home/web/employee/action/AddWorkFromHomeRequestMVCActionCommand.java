@@ -159,6 +159,24 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         // SAVE DATA (ADD / EDIT)
         // -----------------------------
         log.info("befor the condition check");
+        Map<String, Object> serviceMap = new HashMap<>();
+        serviceMap.put("departmentMasterLocalService", departmentMasterLocalService);
+        serviceMap.put("designationMasterLocalService", designationMasterLocalService);
+        serviceMap.put("employeeDepartmentLocalService", employeeDepartmentLocalService);
+        serviceMap.put("employeeDesignationLocalService", employeeDesignationLocalService);
+        serviceMap.put("leaveStatusLocalService", leaveStatusLocalService);
+        serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
+
+        String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+        EmployeeDetails employeeDetails = null;
+        try {
+            employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+            log.info("employee details " + employeeDetails.toString());
+        } catch (Exception e) {
+            log.error("Error while fetching employee details for ID: " + wfhId+"     "+ e.getMessage());
+        }
         if (wfhId <= 0) {
 
             log.info("inside the ....................");
@@ -172,41 +190,26 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setCreateDate(new Date());
             wfh.setModifiedDate(new Date());
-            EmployeeDetails employeeDetails = null;
-            try {
-                employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-                log.info("employee details " + employeeDetails.toString());
-                wfh.setEmployeeId(employeeDetails.getEmployeeId());
-            } catch (Exception e) {
-                log.error("Error while fetching employee details for ID: " + wfhId+"     "+ e.getMessage());
-            }
+
             wfh.setTeamMailId(teamMailId);
             wfh.setReason(reason);
             wfh.setStatus(leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsWorkFromHomePortletKeys.PENDING).getLeaveCompensatoryStatusMasterId());
             wfh.setStartDate(startDate);
             wfh.setEndDate(endDate);
             wfh.setRequestDate(new Date());
+            wfh.setEmployeeId(employeeDetails.getEmployeeId());
+
             log.info("over here");
             workFromHomeRequestLocalService.addWorkFromHomeRequest(wfh);
             log.info("add successfullyt");
-            Map<String, Object> serviceMap = new HashMap<>();
-            serviceMap.put("departmentMasterLocalService", departmentMasterLocalService);
-            serviceMap.put("designationMasterLocalService", designationMasterLocalService);
-            serviceMap.put("employeeDepartmentLocalService", employeeDepartmentLocalService);
-            serviceMap.put("employeeDesignationLocalService", employeeDesignationLocalService);
-            serviceMap.put("leaveStatusLocalService", leaveStatusLocalService);
-            serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
 
-            String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-            String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
-                    PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
             //Sending notification to Manager
 
+            log.info("employeeDetails.getManagerId() ::   "+employeeDetails.getManagerId());
+            EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails.getManagerId());
+            log.info("manage info is the :: "+manager);
 
-            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails.getManagerId());
             String HrAndManagerNotification =notificationTemplateConfiguration.WFHRequestManagerAndHr();
-
-            WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, manager);
 
 
             //Sending notification to the HR Admin
@@ -219,14 +222,17 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
                 StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false);
             }
 
             //send mail to Manager
+            if(Validator.isNotNull(manager)){
+                StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
 
-            StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false);
+                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, manager);
 
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap);
+            }
 
 
             SessionMessages.add(actionRequest, "wfh-added");
@@ -243,6 +249,32 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedDate(new Date());
 
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
+
+            //Send Notification and Mail
+            EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails.getManagerId());
+            String HrAndManagerNotification =notificationTemplateConfiguration.WFHRequestManagerAndHr();
+
+
+            //Sending notification to the HR Admin
+            String roleName="HR Admin";
+            Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
+            List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
+            for (User user : users) {
+                log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                log.info("Employee Id: " + HremployeeDetails.toString());
+                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
+                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true);
+            }
+
+            //send mail to Manager
+
+            StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+            if(Validator.isNotNull(manager)){
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,managerMailBody,wfh,manager,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true);
+                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, manager);
+            }
 
             SessionMessages.add(actionRequest, "wfh-updated");
         }

@@ -83,7 +83,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
 		log.info("viewEmployeeOnBoardingMVCRenderCommand >>> render ::: Render Called ::: ");
-		
+
 		long employeeId;
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -93,7 +93,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 		employeeId = Long.parseLong(viewEmployeeId);
 
-		if (viewEmployeeId != null && !viewEmployeeId.isEmpty()) {		
+		if (viewEmployeeId != null && !viewEmployeeId.isEmpty()) {
 				employeeId = Long.parseLong(viewEmployeeId);
 		}
 
@@ -127,10 +127,10 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			} else {
 				employeeDto.setReportingManager("");
 			}
-			
+
 			if(Validator.isNotNull(employeeDto.getProfilePicId()) && employeeDto.getProfilePicId()>0) {
 				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(employeeDto.getProfilePicId());
-				
+
 				if (Validator.isNotNull(fileEntry)) {
 					String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
 					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PIC, previewURL);
@@ -198,18 +198,49 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				experienceDto.setCompanyName(experience.getCompanyName());
 				experienceDto.setExperienceJoiningDate(experience.getJoiningDate());
 				experienceDto.setRelievingDate(experience.getRelievingDate());
-				experienceDto.setExperienceCertificateMediaId(experience.getExperienceCertificateMediaId());
-				
-				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(experienceDto.getExperienceCertificateMediaId());
+//				experienceDto.setExperienceCertificateMediaId(experience.getExperienceCertificateMediaId());
 
-				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
+                List<String> previewUrls = new ArrayList<>();
 
-				experienceDto.setExperienceCertificatePreviewUrl(previewURL);
+                String mediaIds = experience.getExperienceCertificateMediaId();
+
+                if (Validator.isNotNull(mediaIds)) {
+
+                    String[] fileEntryIds = mediaIds.split(StringPool.COMMA);
+
+                    for (String fileEntryIdStr : fileEntryIds) {
+                        try {
+                            long fileEntryId = Long.parseLong(fileEntryIdStr.trim());
+
+                            FileEntry fileEntry =
+                                    DLAppServiceUtil.getFileEntry(fileEntryId);
+
+                            String previewURL =
+                                    DLUtil.getPreviewURL(
+                                            fileEntry,
+                                            fileEntry.getFileVersion(),
+                                            themeDisplay,
+                                            StringPool.BLANK);
+
+                            previewUrls.add(previewURL);
+
+                        } catch (Exception e) {
+                            log.error(
+                                    "Unable to load experience certificate fileEntryId = "
+                                            + fileEntryIdStr,
+                                    e
+                            );
+                        }
+                    }
+                }
+
+                experienceDto.setExperienceCertificatePreviewUrls(previewUrls);
+
 //				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EXPERIENCE_CERTIFICATE, previewURL);
-				
+
 				experienceDtoList.add(experienceDto);
 			}
-			
+
 			log.info("viewEmployeeOnBoardingMVCRenderCommand >>> render ::: experienceList" + experienceDtoList.toString());
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_LIST, experienceDtoList);
 		} catch (Exception e) {
@@ -261,8 +292,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setState(address.getState());
 			employeeDto.setPincode(address.getPincode());
 			employeeDto.setRelationshipWithNominee(nominee.getRelationshipWithNominee());
-			employeeDto.setNomineeDob(nominee.getNomineeDob());		
-			
+			employeeDto.setNomineeDob(nominee.getNomineeDob());
+
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.NOMINEE, employeeDto);
 		} catch (Exception e) {
 			log.error(e.getMessage());

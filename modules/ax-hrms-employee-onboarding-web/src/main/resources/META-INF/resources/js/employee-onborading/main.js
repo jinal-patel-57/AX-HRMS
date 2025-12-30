@@ -85,6 +85,7 @@ function setConfigsForAddExperienceSection(config) {
             fresh.type = "file";
             fresh.className = input.className;
             fresh.name = input.name;
+            fresh.multiple=true;
             fresh.accept = input.accept;
             input.parentNode.replaceChild(fresh, input);
         } else {
@@ -853,191 +854,191 @@ function setConfigsForAddExperienceSection(config) {
 //        });
 //        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
 //    }
-function setConfigsForExperienceValidation(config) {
+    function setConfigsForExperienceValidation(config) {
 
-    const namespace = config.namespace;
+        const namespace = config.namespace;
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        /* =====================================================
-           VALIDATION
-           ===================================================== */
+            /* =====================================================
+               VALIDATION
+               ===================================================== */
 
-        $.validator.addMethod(
-            "afterJoiningDate",
-            function (value, element, joiningInputName) {
+            $.validator.addMethod(
+                "afterJoiningDate",
+                function (value, element, joiningInputName) {
 
-                if (!value) return true;
+                    if (!value) return true;
 
-                const joiningInput =
-                    document.getElementsByName(joiningInputName)[0];
+                    const joiningInput =
+                        document.getElementsByName(joiningInputName)[0];
 
-                if (!joiningInput || !joiningInput.value) return true;
+                    if (!joiningInput || !joiningInput.value) return true;
 
-                return new Date(value) > new Date(joiningInput.value);
-            },
-            "Relieving date must be after joining date."
-        );
-
-        function initializeValidation() {
-
-            const form = $("#experienceStepperForm");
-            form.removeData("validator");
-
-            let rules = {};
-            let messages = {};
-
-            document
-                .querySelectorAll(".experience-section")
-                .forEach((section, index) => {
-
-                    const idx = index + 1;
-
-                    const company = `${namespace}companyName${idx}`;
-                    const joining = `${namespace}joiningDate${idx}`;
-                    const relieving = `${namespace}relievingDate${idx}`;
-
-                    rules[company] = { required: true };
-                    rules[joining] = { required: true, date: true };
-                    rules[relieving] = {
-                        required: true,
-                        date: true,
-                        afterJoiningDate: joining
-                    };
-
-                    messages[company] = {
-                        required: "Please enter company name."
-                    };
-                    messages[joining] = {
-                        required: "Please enter joining date."
-                    };
-                    messages[relieving] = {
-                        required: "Please enter relieving date.",
-                        afterJoiningDate:
-                            "Relieving date must be after joining date."
-                    };
-                });
-
-            form.validate({
-                errorClass: "is-invalid",
-                validClass: "is-valid",
-                errorElement: "div",
-                errorPlacement: function (error, element) {
-                    error.addClass("invalid-feedback");
-                    element.after(error);
+                    return new Date(value) > new Date(joiningInput.value);
                 },
-                rules: rules,
-                messages: messages
-            });
-        }
+                "Relieving date must be after joining date."
+            );
 
-        /* =====================================================
-           ADD EXPERIENCE SECTION
-           ===================================================== */
+            function initializeValidation() {
 
-//        $("#add-experience-section").on("click", function () {
-//
-//            const original =
-//                document.getElementById("initial-experience-section");
-//
-//            const clone = original.cloneNode(true);
-//
-//            // remove attachment preview links
-//            clone.querySelectorAll("a").forEach(a => a.remove());
-//
-//            const index =
-//                document.querySelectorAll(".experience-section").length + 1;
-//
-//            clone.querySelectorAll("input").forEach(input => {
-//
-//                input.name =
-//                    input.name.replace(/\d+$/, "") + index;
-//
-//                if (input.type === "file") {
-//                    const fresh = document.createElement("input");
-//                    fresh.type = "file";
-//                    fresh.className = input.className;
-//                    fresh.name = input.name;
-//                    fresh.accept = input.accept;
-//                    input.parentNode.replaceChild(fresh, input);
-//                } else {
-//                    input.value = "";
-//                }
-//            });
-//
-//            document
-//                .getElementById("experience-section-container")
-//                .appendChild(clone);
-//
-//            document.getElementById("currentIndex").value = index;
-//
-//            initializeValidation();
-//        });
+                const form = $("#experienceStepperForm");
+                form.removeData("validator");
 
-        /* =====================================================
-           SUBMIT (AJAX)
-           ===================================================== */
+                let rules = {};
+                let messages = {};
 
-        $(".next-button-experience-details").on("click", function () {
+                document
+                    .querySelectorAll(".experience-section")
+                    .forEach((section, index) => {
 
-            initializeValidation();
+                        const idx = index + 1;
 
-            const form = $("#experienceStepperForm");
+                        const company = `${namespace}companyName${idx}`;
+                        const joining = `${namespace}joiningDate${idx}`;
+                        const relieving = `${namespace}relievingDate${idx}`;
 
-            if (!form.valid()) {
-                return false;
+                        rules[company] = { required: true };
+                        rules[joining] = { required: true, date: true };
+                        rules[relieving] = {
+                            required: true,
+                            date: true,
+                            afterJoiningDate: joining
+                        };
+
+                        messages[company] = {
+                            required: "Please enter company name."
+                        };
+                        messages[joining] = {
+                            required: "Please enter joining date."
+                        };
+                        messages[relieving] = {
+                            required: "Please enter relieving date.",
+                            afterJoiningDate:
+                                "Relieving date must be after joining date."
+                        };
+                    });
+
+                form.validate({
+                    errorClass: "is-invalid",
+                    validClass: "is-valid",
+                    errorElement: "div",
+                    errorPlacement: function (error, element) {
+                        error.addClass("invalid-feedback");
+                        element.after(error);
+                    },
+                    rules: rules,
+                    messages: messages
+                });
             }
 
-            const formData = new FormData(form[0]);
+            /* =====================================================
+               ADD EXPERIENCE SECTION
+               ===================================================== */
 
-            $.ajax({
-                url: form.attr("action"),
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-               success: function () {
+    //        $("#add-experience-section").on("click", function () {
+    //
+    //            const original =
+    //                document.getElementById("initial-experience-section");
+    //
+    //            const clone = original.cloneNode(true);
+    //
+    //            // remove attachment preview links
+    //            clone.querySelectorAll("a").forEach(a => a.remove());
+    //
+    //            const index =
+    //                document.querySelectorAll(".experience-section").length + 1;
+    //
+    //            clone.querySelectorAll("input").forEach(input => {
+    //
+    //                input.name =
+    //                    input.name.replace(/\d+$/, "") + index;
+    //
+    //                if (input.type === "file") {
+    //                    const fresh = document.createElement("input");
+    //                    fresh.type = "file";
+    //                    fresh.className = input.className;
+    //                    fresh.name = input.name;
+    //                    fresh.accept = input.accept;
+    //                    input.parentNode.replaceChild(fresh, input);
+    //                } else {
+    //                    input.value = "";
+    //                }
+    //            });
+    //
+    //            document
+    //                .getElementById("experience-section-container")
+    //                .appendChild(clone);
+    //
+    //            document.getElementById("currentIndex").value = index;
+    //
+    //            initializeValidation();
+    //        });
 
-                   const currentTab = $('.nav-link.active');
-                   const nextTabButton = currentTab.parent().next().find('.nav-link');
+            /* =====================================================
+               SUBMIT (AJAX)
+               ===================================================== */
 
-                   if (nextTabButton.length > 0) {
+            $(".next-button-experience-details").on("click", function () {
 
-                       nextTabButton.tab('show');
+                initializeValidation();
 
-                       const nextTabContentId = nextTabButton.attr('data-bs-target');
+                const form = $("#experienceStepperForm");
 
-                       $(nextTabContentId).addClass('show active');
-                       $(currentTab.attr('data-bs-target')).removeClass('show active');
+                if (!form.valid()) {
+                    return false;
+                }
 
-                       $(nextTabContentId).find('input,select').first().focus();
-                   }
+                const formData = new FormData(form[0]);
 
-               },
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                   success: function () {
 
-                error: function () {
-                    console.error("Error saving experience (Employee)");
+                       const currentTab = $('.nav-link.active');
+                       const nextTabButton = currentTab.parent().next().find('.nav-link');
+
+                       if (nextTabButton.length > 0) {
+
+                           nextTabButton.tab('show');
+
+                           const nextTabContentId = nextTabButton.attr('data-bs-target');
+
+                           $(nextTabContentId).addClass('show active');
+                           $(currentTab.attr('data-bs-target')).removeClass('show active');
+
+                           $(nextTabContentId).find('input,select').first().focus();
+                       }
+
+                   },
+
+                    error: function () {
+                        console.error("Error saving experience (Employee)");
+                    }
+                });
+            });
+
+            /* =====================================================
+               NO-ACTION BUTTON (INTERN / CONTRACTOR)
+               ===================================================== */
+
+            $("#noactionbtnExperience").on("click", function () {
+
+                const currentTab = $(".nav-link.active");
+                const nextTab =
+                    currentTab.parent().next().find(".nav-link");
+
+                if (nextTab.length > 0) {
+                    nextTab.tab("show");
                 }
             });
+
         });
-
-        /* =====================================================
-           NO-ACTION BUTTON (INTERN / CONTRACTOR)
-           ===================================================== */
-
-        $("#noactionbtnExperience").on("click", function () {
-
-            const currentTab = $(".nav-link.active");
-            const nextTab =
-                currentTab.parent().next().find(".nav-link");
-
-            if (nextTab.length > 0) {
-                nextTab.tab("show");
-            }
-        });
-
-    });
-}
+    }
 
 
 

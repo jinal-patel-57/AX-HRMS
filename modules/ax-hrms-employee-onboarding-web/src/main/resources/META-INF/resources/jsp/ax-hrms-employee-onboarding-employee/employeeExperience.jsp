@@ -61,7 +61,8 @@
                                         <label><liferay-ui:message key="experience-certificate-attachment"/></label>
                                         <input type="file" class="form-control"
                                                name="<portlet:namespace/>experienceCertificateAttachment1"
-                                               accept="image/*,application/pdf"/>
+                                               accept="image/*,application/pdf"
+                                               multiple/>
                                     </div>
 
                                     <input type="hidden" id="currentIndex"
@@ -77,6 +78,15 @@
                 </c:if>
 
                 <!-- EXISTING RECORDS -->
+
+
+
+
+
+
+
+
+
                 <c:if test="${experienceListSize > 0}">
                     <c:forEach items="${experienceList}" var="experienceItem" varStatus="status">
 
@@ -113,35 +123,54 @@
 
                                             <input type="file" class="form-control"
                                                    name="<portlet:namespace/>experienceCertificateAttachment${status.index+1}"
-                                                   accept="image/*,application/pdf"/>
+                                                   accept="image/*,application/pdf"
+                                                   multiple
+                                                   />
 
-                                            <c:if test="${experienceItem.experienceCertificateMediaId > 0}">
+                                            <c:if test="${not empty experienceItem.experienceCertificateMediaId}">
                                                   <%
-                                                     com.ax.hrms.model.EmployeeExperience edu =
+                                                     com.ax.hrms.model.EmployeeExperience exp =
                                                          (com.ax.hrms.model.EmployeeExperience) pageContext.findAttribute("experienceItem");
+                                                                 String mediaIds = exp.getExperienceCertificateMediaId();
+                                                                  System.out.println("DEBUG: Media IDs from DB = " + mediaIds);
+                                                                  if (mediaIds != null && !mediaIds.isEmpty()) {
+                                                                     String[] fileEntryIds = mediaIds.split(",");
 
-                                                     long fileEntryId = edu.getExperienceCertificateMediaId();
-                                                     String previewURL = "";
+                                                     for (String idStr : fileEntryIds) {
+                                                    try {
+                                                            long fileEntryId = Long.parseLong(idStr.trim());
+                                                            FileEntry fileEntry =
+                                                                DLAppLocalServiceUtil.getFileEntry(fileEntryId);
 
-                                                     if (fileEntryId > 0) {
-                                                         try {
-                                                             FileEntry fe = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
-                                                             ThemeDisplay td = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+                                                            String previewURL = DLUtil.getPreviewURL(
+                                                                fileEntry,
+                                                                fileEntry.getFileVersion(),
+                                                                themeDisplay,
+                                                                ""
+                                                            );
 
-                                                             previewURL = DLUtil.getPreviewURL(
-                                                                     fe,
-                                                                     fe.getFileVersion(),
-                                                                     td,
-                                                                     ""
-                                                             );
-                                                         } catch (Exception e) {
-                                                             e.printStackTrace();
-                                                         }
-                                                     }
+                                                            System.out.println(
+                                                                "DEBUG: File found → ID=" + fileEntryId +
+                                                                ", Name=" + fileEntry.getFileName()
+                                                            );
+
                                                  %>
-                                                <a href="<%= previewURL %>" target="_blank">
-                                                    View Existing Attachment
-                                                </a>
+                                                <div>
+                                                    <a href="<%= previewURL %>" target="_blank">
+                                                          <%= fileEntry.getFileName() %>
+                                                    </a>
+                                                </div>
+
+                                                    <%
+                                                                } catch (Exception e) {
+                                                                    System.out.println(
+                                                                        "ERROR: Unable to load fileEntryId=" + idStr
+                                                                    );
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }
+                                                    %>
                                             </c:if>
                                         </div>
 
@@ -173,6 +202,32 @@
 
                 </c:if>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
 
             <button type="button" id="add-experience-section"
@@ -185,8 +240,8 @@
 
     </div>
     <input type="hidden"
-                                       name="<portlet:namespace/>employeeId"
-                                       value="${employeeDetail.employeeId}"/>
+         name="<portlet:namespace/>employeeId"
+         value="${employeeDetail.employeeId}"/>
 
     <div class="card-footer text-right">
         <button type="button" class="btn btn-outline-primary previous-button">Previous</button>

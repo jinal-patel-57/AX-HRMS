@@ -29,20 +29,40 @@ public class DeleteEmployeeExperienceMVCActionCommand extends BaseMVCActionComma
 
 	@Reference
 	EmployeeDetailsLocalService employeeDetailsLocalService;
-	
+
 	private Log log = LogFactoryUtil.getLog(DeleteEmployeeExperienceMVCActionCommand.class);
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
+
 		log.info("DeleteEmployeeExperienceMVCActionCommand >>> doProcessAction ::: ActionCalled ::: ");
 
 		long experienceId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_ID);
 		try {
 			EmployeeExperience employeeExperience = employeeExperienceLocalService.getEmployeeExperience(experienceId);
-			long experienceCertificateMediaId = employeeExperience.getExperienceCertificateMediaId();
-			if (experienceCertificateMediaId > 0) {
-				DLAppLocalServiceUtil.deleteFileEntry(experienceCertificateMediaId);
-			}
+
+            String mediaIds  = employeeExperience.getExperienceCertificateMediaId();
+            if (mediaIds != null && !mediaIds.isEmpty()) {
+                String[] fileEntryIds = mediaIds.split(",");
+                for (String idStr : fileEntryIds) {
+                    try {
+                        long fileEntryId = Long.parseLong(idStr.trim());
+
+                        DLAppLocalServiceUtil.deleteFileEntry(fileEntryId);
+
+                        log.info("Deleted FileEntry ID=" + fileEntryId);
+
+                    } catch (Exception e) {
+                        log.error("Unable to delete FileEntry ID=" + idStr, e);
+                    }
+                }
+
+//                DLAppLocalServiceUtil.deleteFileEntry(experienceCertificateMediaId);
+            }
+
+
+
+
+
 			employeeExperienceLocalService.deleteEmployeeExperience(experienceId);
 			EmployeeOnBoardingUtil.deleteExperienceIds(experienceId);
 			actionRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERINCE_CURRENT_INDEX,AxHrmsEmployeeOnBoardingEmployeeConstants.FOUR);

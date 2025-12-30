@@ -115,7 +115,7 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
-            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
+            EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails1.getManagerId());
             StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             String employeeRejectedNotification = notificationTemplateConfiguration.WFHRequestRejectedNotificationToEmployee();
 

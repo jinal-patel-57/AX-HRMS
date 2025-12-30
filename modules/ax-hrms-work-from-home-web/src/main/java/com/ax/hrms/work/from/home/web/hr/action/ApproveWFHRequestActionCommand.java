@@ -122,7 +122,7 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, employeeDetails1, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false);
             String employeeApprovedNotification = notificationTemplateConfiguration.WFHRequestApprovedNotificationToEmployee();
 
-            EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employeeDetails1.getManagerId());
+            EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails1.getManagerId());
             if (manager != null && manager.getEmployeeId() != approverEmployeeDetails.getEmployeeId()) {
                 StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false);

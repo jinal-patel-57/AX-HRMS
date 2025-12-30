@@ -312,7 +312,7 @@
 		<field name="companyName" type="String" />
 		<field name="joiningDate" type="Date" />
 		<field name="relievingDate" type="Date" />
-		<field name="experienceCertificateMediaId" type="long" />
+		<field name="experienceCertificateMediaId" type="String" />
 		<field name="employeeId" type="long" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeOffBoarding">

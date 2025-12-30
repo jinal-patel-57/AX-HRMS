@@ -132,8 +132,27 @@ try {
     /* ================= UPDATE EXISTING RECORDS ================= */
     log.info("current index :-" + currentIndex);
     log.info("size :-" + experienceIds.size());
-
+    int existingCount = experienceIds.size();
+     log.info("existingCount :-" + existingCount);
+     log.info("Updation phase of the employee ok.......");
     for (int i = 1; i <= experienceIds.size(); i++) {
+        EmployeeExperience experience =
+                employeeExperienceLocalService.getEmployeeExperience(
+                        experienceIds.get(i - 1));
+        log.info("experience id :-" + experienceIds.get(i - 1));
+        String inputName =
+                AxHrmsEmployeeOnBoardingEmployeeConstants
+                        .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i;
+
+        File[] files = uploadRequest.getFiles(inputName);
+        String[] fileNames = uploadRequest.getFileNames(inputName);
+
+
+        // Existing attachments
+        String existingMediaIds =
+                experience.getExperienceCertificateMediaId();
+        log.info("existingMediaIds :-" + existingMediaIds);
+
         log.info("In Update code");
         log.info("employee uid :-"+ employeeId);
         String joiningDateStr =
@@ -153,9 +172,7 @@ try {
             continue;
         }
 
-        EmployeeExperience experience =
-                employeeExperienceLocalService.getEmployeeExperience(
-                        experienceIds.get(i - 1));
+
 
         experience.setCompanyName(
                 ParamUtil.getString(
@@ -165,39 +182,58 @@ try {
         experience.setJoiningDate(formatter.parse(joiningDateStr));
         experience.setRelievingDate(formatter.parse(relievingDateStr));
 
-        File file =
-                uploadRequest.getFile(
-                        AxHrmsEmployeeOnBoardingEmployeeConstants
-                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
+        boolean hasNewFiles = hasValidUpload(files);
 
-        String fileName = generateFileName(
-                uploadRequest.getFileName(
-                        AxHrmsEmployeeOnBoardingEmployeeConstants
-                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i));
+        log.info("ExperienceId=" + experience.getExperienceId() +
+                ", hasNewFiles=" + hasNewFiles);
 
-        if (file != null && file.exists() && file.length() > 0) {
+        if (hasNewFiles) {
 
-            long oldFileEntryId =
-                    experience.getExperienceCertificateMediaId();
+            // delete ONLY this experience old files
+            String oldMediaIds = experience.getExperienceCertificateMediaId();
 
-            FileEntry newEntry =
-                    DLAppLocalServiceUtil.addFileEntry(
-                            themeDisplay.getUserId(),
-                            themeDisplay.getScopeGroupId(),
-                            experienceFolder.getFolderId(),
-                            fileName,
-                            MimeTypesUtil.getContentType(file),
-                            fileName,
-                            StringPool.BLANK,
-                            StringPool.BLANK,
-                            file,
-                            serviceContext);
+            if (Validator.isNotNull(oldMediaIds)) {
+                for (String id : oldMediaIds.split(StringPool.COMMA)) {
+                    DLAppLocalServiceUtil.deleteFileEntry(Long.parseLong(id));
+                }
+            }
 
+            StringBuilder mediaIdsBuilder = new StringBuilder();
+
+        if (files != null && files.length > 0) {
+
+            for (int f = 0; f < files.length; f++) {
+
+                File file = files[f];
+                String fileName = generateFileName(fileNames[f]);
+                log.info("fileName :-" + fileName);
+                if (file != null && file.exists() && file.length() > 0) {
+                    FileEntry entry =
+                            DLAppLocalServiceUtil.addFileEntry(
+                                    themeDisplay.getUserId(),
+                                    themeDisplay.getScopeGroupId(),
+                                    experienceFolder.getFolderId(),
+                                    fileName,
+                                    MimeTypesUtil.getContentType(file),
+                                    fileName,
+                                    StringPool.BLANK,
+                                    StringPool.BLANK,
+                                    file,
+                                    serviceContext);
+
+                    log.info(
+                            "UPDATE Experience >>> Uploaded FileEntryId = "
+                                    + entry.getFileEntryId());
+
+                    if (mediaIdsBuilder.length() > 0) {
+                        mediaIdsBuilder.append(StringPool.COMMA);
+                    }
+
+                    mediaIdsBuilder.append(entry.getFileEntryId());
+                }
+            }
             experience.setExperienceCertificateMediaId(
-                    newEntry.getFileEntryId());
-
-            if (oldFileEntryId > 0) {
-                DLAppLocalServiceUtil.deleteFileEntry(oldFileEntryId);
+                    mediaIdsBuilder.toString());
             }
         }
 
@@ -205,8 +241,9 @@ try {
     }
 
     /* ================= ADD NEW RECORDS ================= */
+    UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
-    for (int i = experienceIds.size() + 1; i <= currentIndex; i++) {
+    for (int i = existingCount+1; i <= currentIndex; i++) {
         log.info("In add section");
         log.info("Employee Id"+ employeeId);
         String joiningDateStr =
@@ -245,20 +282,29 @@ try {
         experience.setJoiningDate(formatter.parse(joiningDateStr));
         experience.setRelievingDate(formatter.parse(relievingDateStr));
 
-        File file =
-                uploadRequest.getFile(
-                        AxHrmsEmployeeOnBoardingEmployeeConstants
-                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i);
+        // Handle multiple attachments
+        String inputName = AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_CERTIFICATE_ATTACHEMENT + i;
+        File[] files = uploadPortletRequest.getFiles(inputName);
+        String[] fileNames = uploadPortletRequest.getFileNames(inputName);
 
-        String fileName = generateFileName(
-                uploadRequest.getFileName(
-                        AxHrmsEmployeeOnBoardingEmployeeConstants
-                                .EXPERIENCE_CERTIFICATE_ATTACHEMENT + i));
+        log.info("ADD Experience >>> File input name: " + inputName);
+        if (files != null) {
+            log.info("ADD Experience >>> Total files received: " + files.length);
+        } else {
+            log.info("ADD Experience >>> No files received (files array is null)");
+        }
+        StringBuilder mediaIdsBuilder = new StringBuilder();
 
-        if (file != null && file.exists() && file.length() > 0) {
+        if (files != null && files.length > 0) {
 
-            FileEntry entry =
-                    DLAppLocalServiceUtil.addFileEntry(
+            for (int f = 0; f < files.length; f++) {
+                File file = files[f];
+                String fileName = generateFileName(fileNames[f]);
+                log.info("ADD Experience >>> Processing file index: " + f);
+                log.info("ADD Experience >>> Original File Name: " + fileName);
+
+                if (file != null && file.exists() && fileName != null) {
+                    FileEntry entry = DLAppLocalServiceUtil.addFileEntry(
                             themeDisplay.getUserId(),
                             themeDisplay.getScopeGroupId(),
                             experienceFolder.getFolderId(),
@@ -268,10 +314,20 @@ try {
                             StringPool.BLANK,
                             StringPool.BLANK,
                             file,
-                            serviceContext);
+                            serviceContext
+                    );
+                    log.info("ADD Experience >>> File uploaded successfully, FileEntryId: "
+                            + entry.getFileEntryId());
+                    if (mediaIdsBuilder.length() > 0) {
+                        mediaIdsBuilder.append(StringPool.COMMA);
+                    }
+                    mediaIdsBuilder.append(entry.getFileEntryId());
+                }
+            }
+
 
             experience.setExperienceCertificateMediaId(
-                    entry.getFileEntryId());
+                    mediaIdsBuilder.toString());
         }
 
         employeeExperienceLocalService.addEmployeeExperience(experience);
@@ -297,6 +353,17 @@ try {
             return baos.toByteArray();
         }
     }
+
+    private boolean hasValidUpload(File[] files) {
+        if (files == null) return false;
+        for (File file : files) {
+            if (file != null && file.exists() && file.length() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String generateFileName(String original) {
         return System.currentTimeMillis() + "_" + original.replaceAll("\\s+", "_");
     }

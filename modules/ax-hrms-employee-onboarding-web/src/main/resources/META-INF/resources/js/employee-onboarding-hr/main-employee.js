@@ -68,6 +68,7 @@ function setConfigsForAddExperienceSection(config) {
     const namespace = config.namespace;
 
     const original = document.querySelector(".experience-section");
+    console.log("original :: ",original)
     const clone = original.cloneNode(true);
 
     clone.removeAttribute("data-experience-id");
@@ -85,6 +86,7 @@ function setConfigsForAddExperienceSection(config) {
             fresh.type = "file";
             fresh.className = input.className;
             fresh.name = input.name;
+            fresh.multiple=true;
             fresh.accept = input.accept;
             input.parentNode.replaceChild(fresh, input);
         } else {

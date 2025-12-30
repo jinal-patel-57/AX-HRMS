@@ -120,7 +120,7 @@ public class EmployeeExperienceWrapper
 			setRelievingDate(relievingDate);
 		}
 
-		Long experienceCertificateMediaId = (Long)attributes.get(
+		String experienceCertificateMediaId = (String)attributes.get(
 			"experienceCertificateMediaId");
 
 		if (experienceCertificateMediaId != null) {
@@ -195,7 +195,7 @@ public class EmployeeExperienceWrapper
 	 * @return the experience certificate media ID of this employee experience
 	 */
 	@Override
-	public long getExperienceCertificateMediaId() {
+	public String getExperienceCertificateMediaId() {
 		return model.getExperienceCertificateMediaId();
 	}
 
@@ -341,7 +341,7 @@ public class EmployeeExperienceWrapper
 	 */
 	@Override
 	public void setExperienceCertificateMediaId(
-		long experienceCertificateMediaId) {
+		String experienceCertificateMediaId) {
 
 		model.setExperienceCertificateMediaId(experienceCertificateMediaId);
 	}

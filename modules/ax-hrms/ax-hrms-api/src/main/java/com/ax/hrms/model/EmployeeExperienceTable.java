@@ -54,9 +54,9 @@ public class EmployeeExperienceTable
 	public final Column<EmployeeExperienceTable, Date> relievingDate =
 		createColumn(
 			"relievingDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<EmployeeExperienceTable, Long>
+	public final Column<EmployeeExperienceTable, String>
 		experienceCertificateMediaId = createColumn(
-			"experienceCertificateMediaId", Long.class, Types.BIGINT,
+			"experienceCertificateMediaId", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
 	public final Column<EmployeeExperienceTable, Long> employeeId =
 		createColumn(
