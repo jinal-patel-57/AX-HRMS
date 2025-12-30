@@ -101,18 +101,19 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
             try {
                 addLeaveRequestData(actionRequest, leaveRequest);
                 SessionMessages.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_INSERTED_MESSAGE_KEY);
-
-                EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
-                EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
-                String managerNotification = notificationTemplateConfiguration.leaveRequestedNotificationToManager();
-                LeaveRequestUtil.sendNotificationToManager(managerNotification, manager);
-                Role role = RoleLocalServiceUtil.fetchRole(companyId, roleName);
-                List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
                 String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
                 String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+                String managerNotification = notificationTemplateConfiguration.leaveRequestedNotificationToManager();
                 StringBuilder employeeMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
-                LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), manager.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                Role role = RoleLocalServiceUtil.fetchRole(companyId, roleName);
+                List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
 
+                EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
+                if(Validator.isNotNull(employee.getManagerId())) {
+                    EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
+                    LeaveRequestUtil.sendNotificationToManager(managerNotification, manager);
+                    LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), manager.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                }
                 for (User user : users) {
                     log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
                     EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
@@ -123,6 +124,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
             } catch (Exception e) {
                 log.info("exception raised ::::   " + e.getMessage());
+                e.printStackTrace();
                 SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY);
             }
         } else {

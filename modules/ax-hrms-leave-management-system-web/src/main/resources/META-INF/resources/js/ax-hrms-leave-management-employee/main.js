@@ -154,25 +154,38 @@
                 dateDiv.prop('readOnly',true);
 
                 //Create Input element for select Half-day or Full-day
-                const halfTypeDiv = $('<input>').attr('type','checkbox');
-                halfTypeDiv.attr('name',namespace+'day'+day+'IsHalf');
-                halfTypeDiv.attr('id',namespace+'day'+day+'IsHalf');
+               let dayTypeSelectContainerDiv = null;
 
-                const halfTypeLabel = $('<label>').html('Is Half leave');
-                halfTypeLabel.attr('class','my-0 ml-1')
-                halfTypeLabel.attr('for',namespace+'day'+day+'IsHalf');
+               if (!isApplicableForFloater) {
 
-                const dayTypeSelectContainerDiv = $('<div>').attr('id','dayTypeSelectContainer');
-                dayTypeSelectContainerDiv.attr('class','dayTypeSelectContainer d-flex align-items-center');
-                dayTypeSelectContainer = $('#dayTypeSelectContainer');
+                   const halfTypeDiv = $('<input>').attr('type','checkbox');
+                   halfTypeDiv.attr('name', namespace+'day'+day+'IsHalf');
+                   halfTypeDiv.attr('id', namespace+'day'+day+'IsHalf');
 
-                dayTypeSelectContainerDiv.append(halfTypeDiv);
-                dayTypeSelectContainerDiv.append(halfTypeLabel);
+                   const halfTypeLabel = $('<label>').text('Is Half leave');
+                   halfTypeLabel
+                       .addClass('my-0 ml-1')
+                       .attr('for', namespace+'day'+day+'IsHalf');
+
+                   dayTypeSelectContainerDiv = $('<div>')
+                       .addClass('dayTypeSelectContainer d-flex align-items-center')
+                       .append(halfTypeDiv)
+                       .append(halfTypeLabel);
+               }
+
 
                 if (date.getDay() !== 0 && date.getDay() !== 6) {
-                    dateContainer.append(dateDiv);
-                    dateContainer.append(dayTypeSelectContainerDiv);
-                    dateInputsContainer.append(dateContainer);
+//                    dateContainer.append(dateDiv);
+//                    dateContainer.append(dayTypeSelectContainerDiv);
+//                    dateInputsContainer.append(dateContainer);
+                        dateContainer.append(dateDiv);
+
+                        if (dayTypeSelectContainerDiv) {
+                            dateContainer.append(dayTypeSelectContainerDiv);
+                        }
+
+                        dateInputsContainer.append(dateContainer);
+
                     daysDiff++;
                 }
                 dayTypeSelectContainer = $('.dayTypeSelectContainer');

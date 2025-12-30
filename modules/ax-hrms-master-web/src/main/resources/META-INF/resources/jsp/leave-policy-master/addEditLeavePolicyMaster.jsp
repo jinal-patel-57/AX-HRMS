@@ -1,6 +1,4 @@
 <%@ include file="/init.jsp"%>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <portlet:actionURL name="/addEditLeavePolicy" var="addEditLeavePolicyURL" />
 
@@ -26,9 +24,9 @@
 		</div>
 
         <div class="form-group row">
-		    <label for="<portlet:namespace/>desciption" class="col-sm-3 col-form-label"><liferay-ui:message key="description" /></label>
+		    <label for="<portlet:namespace/>description" class="col-sm-3 col-form-label"><liferay-ui:message key="description" /></label>
 		    <div class="col-sm-9">
-		        <textarea id="<portlet:namespace/>desciption" name="<portlet:namespace/>desciption" class="form-control">${getLeavePolicyMaster.description}</textarea>
+		        <textarea id="<portlet:namespace/>description" name="<portlet:namespace/>description" class="form-control">${getLeavePolicyMaster.description}</textarea>
 		    </div>
 		</div>
 
@@ -83,7 +81,7 @@
         <div class="form-group row">
 		    <label class="col-sm-3 col-form-label" for="<portlet:namespace/>yearOfPolicy"><liferay-ui:message key="year-of-policy" /><span class="text-danger">*</span></label>
 		    <div class="col-sm-9">
-		        <input type="number" class="form-control" id="<portlet:namespace/>yearOfPolicy" name="<portlet:namespace/>yearOfPolicy" value="${getLeavePolicyMaster.yearOfPolicy}" min="1900" max="3000" step="1" >
+		        <input type="text" class="form-control" id="<portlet:namespace/>yearOfPolicy" name="<portlet:namespace/>yearOfPolicy" value="${getLeavePolicyMaster.yearOfPolicy}" step="1" maxlength="4">
 		    </div>
 		</div>
         
