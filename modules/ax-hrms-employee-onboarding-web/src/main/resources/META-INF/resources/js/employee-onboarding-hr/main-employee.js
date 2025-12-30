@@ -1040,51 +1040,62 @@ function setConfigsForExperienceValidation(config) {
             rules: {
                 [namespace + "accountNumber"]: {
                     required: true,
-                    maxlength: 75,
+                    maxlength: 20,
                     accountNumberValidation: true
                 },
 
-                [namespace + "beneficiaryName"]: {
-                    required: true,
-                    maxlength: 75
-                },
-                [namespace + "bankName"]: {
-                    required: true,
-                    maxlength: 75
-                },
+               [namespace + "beneficiaryName"]: {
+                   required: true,
+                   maxlength: 75,
+                   onlyLettersAndSpaces: true
+               },
+
+               [namespace + "bankName"]: {
+                   required: true,
+                   maxlength: 75,
+                   onlyLettersAndSpaces: true
+               },
+
+               [namespace + "bankBranch"]: {
+                   required: true,
+                   maxlength: 75,
+                   onlyLettersAndSpaces: true
+               },
                 [namespace + "ifscCode"]: {
                     required: true,
                     maxlength: 75,
                     ifscCodeValidation: true
-                },
-                [namespace + "bankBranch"]: {
-                    required: true,
-                    maxlength: 75
                 }
             },
             messages: {
                 [namespace + "accountNumber"]: {
                     required: "Please enter the account number.",
-                    maxlength: "Account number should not exceed 75 characters.",
+                    maxlength: "Account number should not exceed 20 characters.",
                     accountNumberValidation: "Account number should not contain alphabet characters, underscores, special characters, or whitespaces."
                 },
 
                 [namespace + "beneficiaryName"]: {
                     required: "Please enter the beneficiary name.",
-                    maxlength: "Beneficiary name should not exceed 75 characters."
+                    maxlength: "Beneficiary name should not exceed 75 characters.",
+                    onlyLettersAndSpaces: "Beneficiary name should contain only alphabets and spaces."
                 },
+
                 [namespace + "bankName"]: {
                     required: "Please enter the bank name.",
-                    maxlength: "Bank name should not exceed 75 characters."
+                    maxlength: "Bank name should not exceed 75 characters.",
+                    onlyLettersAndSpaces: "Bank name should contain only alphabets and spaces."
                 },
+
+                [namespace + "bankBranch"]: {
+                    required: "Please enter the bank branch.",
+                    maxlength: "Bank branch should not exceed 75 characters.",
+                    onlyLettersAndSpaces: "Bank branch should contain only alphabets and spaces."
+                },
+
                 [namespace + "ifscCode"]: {
                     required: "Please enter the IFSC code.",
                     maxlength: "IFSC code should not exceed 75 characters.",
                     ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
-                },
-                [namespace + "bankBranch"]: {
-                    required: "Please enter the bank branch.",
-                    maxlength: "Bank branch should not exceed 75 characters."
                 }
             }
         });
@@ -1096,6 +1107,17 @@ function setConfigsForExperienceValidation(config) {
 		$.validator.addMethod("ifscCodeValidation", function (value, element) {
       		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
     	}, "Please enter a valid IFSC code (Format: AAAA0BBBBBB)");
+    	 if (!$.validator.methods.onlyLettersAndSpaces) {
+             $.validator.addMethod(
+                 "onlyLettersAndSpaces",
+                 function (value, element) {
+                     value = value.trim().replace(/\s+/g, " ");
+                     return this.optional(element) || /^[A-Za-z ]+$/.test(value);
+                 },
+                 "Only alphabets and spaces are allowed"
+             );
+         }
+
 
         $('.next-button-bank-account-details').on('click', function (event) {
             event.preventDefault();

@@ -77,26 +77,31 @@
                             <div class="label-content">${employeeDetail.fatherName}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Maritial Status</div>
-                            <div class="label-content">${employeeDetail.maritalStatus}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Marriage Date</div>
-                            <div class="label-content">
-                                <fmt:formatDate value='${employeeDetail.marriageDate}' pattern='yyyy-MM-dd'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Spouse Name</div>
-                            <div class="label-content">${employeeDetail.spouseName}</div>
-                        </div>
-                    </div>
+                  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                      <div class="form-group-view">
+                          <div class="label-name">Marital Status</div>
+                          <div class="label-content">${employeeDetail.maritalStatus}</div>
+                      </div>
+                  </div>
+
+                  <c:if test="${employeeDetail.maritalStatus}">
+                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Marriage Date</div>
+                              <div class="label-content">
+                                  <fmt:formatDate value="${employeeDetail.marriageDate}" pattern="yyyy-MM-dd"/>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Spouse Name</div>
+                              <div class="label-content">${employeeDetail.spouseName}</div>
+                          </div>
+                      </div>
+                  </c:if>
+
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Official Email</div>

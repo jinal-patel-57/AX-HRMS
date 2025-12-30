@@ -14,7 +14,7 @@
                             <liferay-ui:message key="account-number"/>
                         </label>
                         <input type="text" class="form-control" id="<portlet:namespace />accountNumber"
-                               name="<portlet:namespace />accountNumber" maxlength="75"
+                               name="<portlet:namespace />accountNumber" maxlength="20"
                                value="${employeeBankAccount.accountNumber}"
                                required/>
                         <input type="hidden" class="form-control" id="<portlet:namespace />bankAccountId"
