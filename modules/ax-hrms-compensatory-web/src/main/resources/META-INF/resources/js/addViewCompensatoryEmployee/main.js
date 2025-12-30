@@ -11,10 +11,14 @@ var submit_compensatory_form;
         $(document).ready(function () {
 
             $.validator.addMethod("notAfterToday", function (value) {
+                if (!value) return true;
+
                 var today = new Date();
                 today.setHours(0, 0, 0, 0);
+
                 var inputDate = new Date(value);
                 inputDate.setHours(0, 0, 0, 0);
+
                 return inputDate <= today;
             });
 
@@ -23,22 +27,82 @@ var submit_compensatory_form;
             });
 
             $.validator.addMethod("maxCharThousand", function (value) {
-                return value.length <= 1000;
+                return value.length <= 70;
             });
 
+            $.validator.addMethod("notSameEmployeeAndManager", function (value) {
+                var employeeId = $('#' + namespace + 'employeeNames').val();
+                if (!employeeId || !value) return true;
+                return employeeId !== value;
+            }, "Employee and Manager cannot be the same.");
+
             $("#addCompensatoryDataForm").validate({
+
                 rules: {
                     [namespace + "employeeNames"]: { required: true },
-                    [namespace + "compensationDate"]: { required: true, notAfterToday: true },
-                    [namespace + "compensationHours"]: { required: true, positiveInteger: true },
-                    [namespace + "projectManager"]: { required: true },
-                    [namespace + "description"]: { required: true, maxCharThousand: true }
+                    [namespace + "compensationDate"]: {
+                        required: true,
+                        notAfterToday: true
+                    },
+                    [namespace + "compensationHours"]: {
+                        required: true,
+                        positiveInteger: true
+                    },
+                    [namespace + "projectManager"]: {
+                        required: true,
+                        notSameEmployeeAndManager: true
+                    },
+                    [namespace + "description"]: {
+                        required: true,
+                        maxCharThousand: true
+                    }
                 },
+
                 messages: {
-                    [namespace + "employeeNames"]: { required: "Please select an employee." },
-                    [namespace + "compensationDate"]: { required: "Please enter date." },
-                    [namespace + "compensationHours"]: { required: "Please enter hours." },
-                    [namespace + "projectManager"]: { required: "Please select manager." }
+                    [namespace + "employeeNames"]: {
+                        required: "Please select an employee."
+                    },
+                    [namespace + "compensationDate"]: {
+                        required: "Please enter compensation date.",
+                        notAfterToday: "Compensation date cannot be in the future."
+                    },
+                    [namespace + "compensationHours"]: {
+                        required: "Please enter hours.",
+                        positiveInteger: "Hours must be a positive number."
+                    },
+                    [namespace + "projectManager"]: {
+                        required: "Please select manager.",
+                        notSameEmployeeAndManager: "Employee and Manager cannot be the same."
+                    },
+                    [namespace + "description"]: {
+                        required: "Please enter description.",
+                        maxCharThousand: "Description cannot exceed 70 characters."
+                    }
+                },
+
+                errorPlacement: function (error, element) {
+                    error.addClass("text-danger");
+                    error.insertAfter(element);
+                },
+
+                highlight: function (element) {
+                    $(element).addClass("is-invalid");
+                },
+
+                unhighlight: function (element) {
+                    $(element).removeClass("is-invalid");
+                },
+
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+
+                onkeyup: function (element) {
+                    $(element).valid();
+                },
+
+                submitHandler: function (form) {
+                    form.submit();
                 }
             });
         });
@@ -57,7 +121,7 @@ var submit_compensatory_form;
             var form = $('#addCompensatoryDataForm');
             form[0].reset();
             form.validate().resetForm();
-            form.find('.error').removeClass('error');
+            form.find('.is-invalid').removeClass('is-invalid');
         });
     }
 

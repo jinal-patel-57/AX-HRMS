@@ -105,9 +105,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
     }
     public void sendMailtoManagerAndHr(String fromName, String fromEmailAddress, Long compensatoryRequestId,
                                        StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, ThemeDisplay themeDisplay,List<User>userList) {
-        log.info("sendMailtoManagerAndHr...............");
-        log.info("userList "+ userList);
-        log.info("compensatoryRequestId "+ compensatoryRequestId);
+
         try {
             CompensatoryData compensatoryRequest = compensatoryDataLocalService.fetchCompensatoryData(compensatoryRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryRequest.getEmployeeId());
@@ -116,14 +114,15 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             body = getBody(compensatoryRequest, employee, body);
             log.info("body "+ body);
 
-                mailContent = mailTemplateConfiguration.mailCompensatoryLeaveRequestManagerAndHrBody();
                 subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestManagerAndHrSubject();
 
 
-                 mailContent = mailContent.replace("${BODY}", body);
 
             for(User user : userList) {
+                mailContent = mailTemplateConfiguration.mailCompensatoryLeaveRequestManagerAndHrBody();
+                mailContent = mailContent.replace("${BODY}", body);
                 EmployeeDetails managerOrHr = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+
                 mailContent = mailContent.replace("${EMPLOYEE_NAME}", managerOrHr.getFirstName() + StringPool.SPACE + managerOrHr.getLastName());
                 axHrmsCommonApi.sendMail(managerOrHr.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
 
