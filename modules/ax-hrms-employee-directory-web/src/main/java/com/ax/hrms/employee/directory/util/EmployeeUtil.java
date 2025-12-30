@@ -76,9 +76,14 @@ public class EmployeeUtil {
 		employeeDto.setJoiningDate(employeeDetails.getJoiningDate());
 		
 		try {
-			long designationId = employeeDesignationLocalService.findByEmployeeId(employeeId).getDesignationMasterId();
-			employeeDto.setDesignationName(designationMasterLocalService.getDesignationMaster(designationId).getDesignationName());
-			employeeDto.setDesignationId(designationId);
+			try {
+				long designationId = employeeDesignationLocalService.findByEmployeeId(employeeId).getDesignationMasterId();
+				employeeDto.setDesignationName(designationMasterLocalService.getDesignationMaster(designationId).getDesignationName());
+				employeeDto.setDesignationId(designationId);
+			} catch(Exception e) {
+				employeeDto.setDesignationName("-");
+				employeeDto.setDesignationId(0l);
+			}
 			
 			List<Long> departmentIds = new ArrayList<>();
 			List<String> departmentNames = new ArrayList<>();
@@ -112,12 +117,15 @@ public class EmployeeUtil {
 			employeeDto.setSamePresentAddress(isSamePresentAddress);
 			employeeDto.setAddressList(addressList);
 
-			FileEntry profileImageFileEntry = DLAppServiceUtil.getFileEntry(employeeDetails.getProfilePicId());
-			if (Validator.isNotNull(profileImageFileEntry)) {
-				String previewURL = DLUtil.getPreviewURL(profileImageFileEntry, profileImageFileEntry.getFileVersion(), themeDisplay, StringPool.BLANK);
-				employeeDto.setPreviewUrl(previewURL);
+			try {
+				FileEntry profileImageFileEntry = DLAppServiceUtil.getFileEntry(employeeDetails.getProfilePicId());
+				if (Validator.isNotNull(profileImageFileEntry)) {
+					String previewURL = DLUtil.getPreviewURL(profileImageFileEntry, profileImageFileEntry.getFileVersion(), themeDisplay, StringPool.BLANK);
+					employeeDto.setPreviewUrl(previewURL);
+				}
+			}catch(Exception e) {
+				log.error("Error while fetching profile picture - " + e.getMessage());
 			}
-
 		} catch (PortalException e) {
 			log.error("EmployeeProfileUtil >>> setEmployeeBasicDetail ::: Exception is: "+e.getMessage());
 		}
