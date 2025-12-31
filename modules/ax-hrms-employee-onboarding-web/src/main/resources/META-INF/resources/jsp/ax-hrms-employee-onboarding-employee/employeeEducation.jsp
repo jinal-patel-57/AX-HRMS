@@ -128,7 +128,8 @@
                                                class="form-control"
                                                id="<portlet:namespace/>passingYear1"
                                                name="<portlet:namespace/>passingYear1"
-                                               maxlength="4"/>
+                                               maxlength="4"
+                                               readonly/>
                                     </div>
 
                                     <input type="hidden"
@@ -277,7 +278,8 @@
                                                    id="<portlet:namespace/>passingYear${status.index+1}"
                                                    name="<portlet:namespace/>passingYear${status.index+1}"
                                                    value="${educationItem.passingYear}"
-                                                   maxlength="4"/>
+                                                   maxlength="4"
+                                                   readonly/>
                                         </div>
 
                                         <input type="hidden"

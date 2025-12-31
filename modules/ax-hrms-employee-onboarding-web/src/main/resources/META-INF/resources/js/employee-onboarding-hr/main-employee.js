@@ -538,6 +538,71 @@ function setConfigsForAddExperienceSection(config) {
             let rules = {};
             let messages = {};
 
+            // ======================
+                  // VALIDATORS
+                  // ======================
+
+             $.validator.addMethod(
+                 "endAfterStart",
+                 function (value, element, startSelector) {
+
+                     const startVal = $(startSelector).val();
+
+                     if (!startVal || !value) {
+                         return true;
+                     }
+
+                     return new Date(value) >= new Date(startVal);
+                 },
+                 "End date must be after or equal to start date."
+             );
+
+
+                  $.validator.addMethod("notFutureDate", function (value) {
+                      if (!value) return true;
+
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+
+                      const selected = new Date(value);
+                      selected.setHours(0, 0, 0, 0);
+
+                      return selected <= today;
+                  }, "Future dates are not allowed.");
+
+                  $.validator.addMethod("validFourDigitYear", function (value) {
+                      if (!value) return true;
+                      const year = value.split("-")[0];
+                      return /^\d{4}$/.test(year);
+                  }, "Year must be exactly 4 digits.");
+
+            // based on end date auto populate passing year
+          function bindPassingYearAutoFill() {
+
+              $(document).on('change', 'input[type="date"][name*="endDate"]', function () {
+
+                  const endDateVal = $(this).val();
+                  if (!endDateVal) return;
+
+                  const year = new Date(endDateVal).getFullYear();
+
+                  // Find index from name: endDate1, endDate2, ...
+                  const name = $(this).attr('name');
+                  const indexMatch = name.match(/endDate(\d+)$/);
+
+                  if (!indexMatch) return;
+
+                  const idx = indexMatch[1];
+
+                  const passingYearField = $(
+                      'input[name="' + name.replace('endDate' + idx, 'passingYear' + idx) + '"]'
+                  );
+
+                  if (passingYearField.length) {
+                      passingYearField.val(year);
+                  }
+              });
+          }
             // ======================================================
             // VALIDATION INITIALIZER
             // ======================================================
@@ -561,8 +626,23 @@ function setConfigsForAddExperienceSection(config) {
                     rules[levelNameKey] = {required: true};
                     rules[institutionKey] = {required: true, maxlength: 250};
                     rules[degreeKey] = {required: true, maxlength: 75};
-                    rules[startDateKey] = {required: true, date: true};
-                    rules[endDateKey] = {required: true, date: true};
+                   rules[startDateKey] = {
+                         required: true,
+                         date: true,
+                         notFutureDate: true,
+                         validFourDigitYear: true
+                     };
+
+                 const startSelector = `[name="${startDateKey}"]`;
+
+                 rules[endDateKey] = {
+                     required: true,
+                     date: true,
+                     notFutureDate: true,
+                     validFourDigitYear: true,
+                     endAfterStart: startSelector
+                 };
+
                     rules[passingYearKey] = {
                         required: true,
                         digits: true,
@@ -581,20 +661,26 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please enter degree.",
                         maxlength: "Degree must not exceed 75 characters."
                     };
-                    messages[startDateKey] = {
-                        required: "Please enter start date.",
-                        date: "Enter a valid date."
-                    };
-                    messages[endDateKey] = {
-                        required: "Please enter end date.",
-                        date: "Enter a valid date."
-                    };
-                    messages[passingYearKey] = {
-                        required: "Please enter passing year.",
-                        digits: "Only digits allowed.",
-                        minlength: "Year must be 4 digits.",
-                        maxlength: "Year must be 4 digits."
-                    };
+                     messages[startDateKey] = {
+                         required: "Please enter the start date.",
+                         date: "Please enter a valid date.",
+                         notFutureDate: "Start date cannot be a future date.",
+                         validFourDigitYear: "Start date year must be 4 digits."
+                     };
+
+                     messages[endDateKey] = {
+                         required: "Please enter the end date.",
+                         date: "Please enter a valid date.",
+                         notFutureDate: "End date cannot be a future date.",
+                         endAfterStart: "End date must be after or equal to start date.",
+                         validFourDigitYear: "End date year must be 4 digits."
+                     };
+                   messages[passingYearKey] = {
+                         required: "Please enter the passing year.",
+                         digits: "Passing year should contain only digits.",
+                         minlength: "Passing year should be 4 digits long.",
+                         maxlength: "Passing year should be 4 digits long."
+                     };
                 });
 
                 form3.validate({
@@ -698,6 +784,7 @@ function setConfigsForAddExperienceSection(config) {
                 document.getElementById("educationCurrentIndex").value = index;
 
                 initializeValidation();
+                bindPassingYearAutoFill();
             }
 
 
@@ -805,6 +892,11 @@ function setConfigsForAddExperienceSection(config) {
                         console.log("Error saving data. Please try again.");
                     }
                 });
+            });
+            initializeValidation();
+            bindPassingYearAutoFill();
+            $(document).on('change', 'input[type="date"]', function () {
+                $(this).valid();
             });
 
         });
