@@ -113,7 +113,8 @@
             </div>
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">
-                <div class="form-check">
+                <label class="form-label"></label>
+                <div class="form-check mt-3">
                     <input type="checkbox" class="form-check-input"
                            id="<portlet:namespace />maritalStatus"
                            name="<portlet:namespace />maritalStatus" value="true"

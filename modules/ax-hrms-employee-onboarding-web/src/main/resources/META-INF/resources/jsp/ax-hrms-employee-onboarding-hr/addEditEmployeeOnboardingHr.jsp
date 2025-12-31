@@ -235,10 +235,12 @@
 
 				<div class="col-sm-12 col-md-4 col-lg-4">
 					<div class="form-group">
-
-						<liferay-ui:message key="manager" />
-						<span class="text-danger">*</span> <select id="managerSelectBox"
-							name="<portlet:namespace/>manager" class="custom-select mr-sm-2">
+                        <label for="managerSelectBox"> 
+							<liferay-ui:message key="manager" />
+							<span class="text-danger">*</span> 
+						</label>
+						<select id="managerSelectBox"
+							name="<portlet:namespace/>manager" class="form-control custom-select mr-sm-2">
 
 							<option value="">
 								<liferay-ui:message key="select-manager" />
