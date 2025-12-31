@@ -222,8 +222,6 @@ function setConfigsForAddExperienceSection(config) {
         
         $(document).ready(function () {
 
-      
-
             var $form1 = $("#stepperForm");
             $form1.validate({
                 errorClass: 'is-invalid',
@@ -344,7 +342,9 @@ function setConfigsForAddExperienceSection(config) {
                 }
 
                 var formData = new FormData(form1[0]);
-				console.log($.ajaxSettings.global);
+
+                $("#overlay").fadeIn(300);
+
                 $.ajax({
                     url: form1.attr('action'),
                     method: 'POST',
@@ -364,6 +364,9 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     error: function () {
                         console.log('There was an error saving the data. Please try again.');
+                    },
+                    complete: function () {
+                        $("#overlay").fadeOut(300);
                     }
                 });
             });
@@ -529,6 +532,7 @@ function setConfigsForAddExperienceSection(config) {
                 if (!form2.valid()) {
                     return;
                 }
+                $("#overlay").fadeIn(300);
                 $.ajax({
                     url: form2.attr('action'),
                     method: 'POST',
@@ -547,6 +551,9 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     error: function () {
                         console.log('There was an error saving the data. Please try again.');
+                    },
+                    complete: function () {
+                        $("#overlay").fadeOut(300);
                     }
                 });
             });
@@ -801,6 +808,7 @@ function setConfigsForAddExperienceSection(config) {
                 // Use FormData to support file upload
                 const formData = new FormData(form3[0]);
 
+                $("#overlay").fadeIn(300);
                 $.ajax({
                     url: form3.attr("action"),
                     method: "POST",
@@ -836,6 +844,9 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     error: function () {
                         console.log("Error saving data. Please try again.");
+                    },
+                    complete: function () {
+                        $("#overlay").fadeOut(300);
                     }
                 });
             });
@@ -1155,6 +1166,7 @@ function setConfigsForExperienceValidation(config) {
 
             const formData = new FormData(form[0]);
 
+            $("#overlay").fadeIn(300);
             $.ajax({
                 url: form.attr("action"),
                 type: "POST",
@@ -1190,6 +1202,9 @@ function setConfigsForExperienceValidation(config) {
                 },
                 error: function () {
                     console.error("Error saving experience (HR)");
+                },
+                complete: function () {
+                    $("#overlay").fadeOut(300);
                 }
             });
         });
@@ -1304,6 +1319,7 @@ function setConfigsForExperienceValidation(config) {
 //            if (!form5.valid()) {
 //                return;
 //            }
+            $("#overlay").fadeIn(300);
             $.ajax({
                 url: form5.attr('action'),
                 method: 'POST',
@@ -1322,6 +1338,9 @@ function setConfigsForExperienceValidation(config) {
                 },
                 error: function () {
                     console.log('There was an error saving the data. Please try again.');
+                },
+                complete: function () {
+                    $("#overlay").fadeOut(300);
                 }
             });
         });
@@ -1377,6 +1396,7 @@ function setConfigsForExperienceValidation(config) {
             if (!form6.valid()) {
                 return;
             }
+            $("#overlay").fadeIn(300);
             $.ajax({
                 url: form6.attr('action'),
                 method: 'POST',
@@ -1395,6 +1415,9 @@ function setConfigsForExperienceValidation(config) {
                 },
                 error: function () {
                     console.log('There was an error saving the data. Please try again.');
+                },
+                complete: function () {
+                    $("#overlay").fadeOut(300);
                 }
             });
         });
@@ -1522,6 +1545,7 @@ function setConfigsForExperienceValidation(config) {
             if (!form7.valid()) {
                 return;
             }
+            $("#overlay").fadeIn(300);
             $.ajax({
                 url: form7.attr('action'),
                 method: 'POST',
@@ -1538,6 +1562,9 @@ function setConfigsForExperienceValidation(config) {
                 },
                 error: function () {
                     console.log('There was an error saving the data. Please try again.');
+                },
+                complete: function () {
+                    $("#overlay").fadeOut(300);
                 }
             });
         });

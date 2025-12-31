@@ -114,7 +114,7 @@
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <label class="form-label"></label>
-                <div class="form-check mt-3">
+                <div class="form-check mt-2">
                     <input type="checkbox" class="form-check-input"
                            id="<portlet:namespace />maritalStatus"
                            name="<portlet:namespace />maritalStatus" value="true"
@@ -333,12 +333,12 @@
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
 
-                        <liferay-ui:message key="manager" />
-                        <span class="text-danger">*</span>
-
+                        <label for="managerSelectBox">
+                            <liferay-ui:message key="manager" /><span class="text-danger">*</span>
+                        </label>
                         <select id="managerSelectBox"
                                 name="<portlet:namespace/>manager"
-                                class="custom-select mr-sm-2">
+                                class="form-control custom-select mr-sm-2">
 
                             <option value="">
                                 <liferay-ui:message key="select-manager"/>
