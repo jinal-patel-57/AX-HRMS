@@ -72,7 +72,6 @@ var setFileInputValues;
                         numericality: true
                     },
                     [namespace + "insuranceLink"]: {
-                        required: true,
                         linkUrlValidation: true
                     }
                 },
@@ -127,7 +126,6 @@ var setFileInputValues;
                         numericality: "Plese enter a valid Salary"
                     },
                     [namespace + "insuranceLink"]: {
-                        required: "Please Enter a valid Insurance Link",
                         linkUrlValidation: "Please enter a valid URL"
                     }
                 },

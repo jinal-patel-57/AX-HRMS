@@ -1393,6 +1393,7 @@ function setConfigsForExperienceValidation(config) {
 
         $('.next-button-bank-account-details').on('click', function (event) {
             event.preventDefault();
+            var url = new URL(window.location.href);
             const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
 			if (url.searchParams.has(paramName)) {
 			    url.searchParams.delete(paramName);
