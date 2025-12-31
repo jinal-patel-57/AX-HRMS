@@ -121,6 +121,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setLeavingDate(employeeDetails.getLeavingDate());
 			employeeDto.setGender(employeeDetails.getGender());
 			employeeDto.setExperienced(employeeDetails.getIsExperienced());
+			employeeDto.setEmployeeType(employeeDetails.getEmployeeType());
+
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
 				employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());

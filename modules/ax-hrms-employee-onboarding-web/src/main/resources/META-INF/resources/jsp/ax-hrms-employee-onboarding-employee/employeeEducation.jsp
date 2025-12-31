@@ -64,11 +64,11 @@
                                     <!-- Institution -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="institution"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="Institution"/> <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                                class="form-control"
-                                               id="<portlet:namespace/>institution1"
+                                               id="<portlet:namespace/>nstitution1"
                                                name="<portlet:namespace/>institution1"
                                                maxlength="70"/>
                                     </div>
@@ -76,7 +76,7 @@
                                     <!-- Degree -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="degree"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="Degree"/> <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                                class="form-control"
@@ -184,7 +184,7 @@
                                         <!-- Institution -->
                                         <div class="col-md-4 col-sm-12 mb-3">
                                             <label class="form-label">
-                                                <liferay-ui:message key="institution"/> <span class="text-danger">*</span>
+                                                <liferay-ui:message key="Institution"/> <span class="text-danger">*</span>
                                             </label>
                                             <input type="text"
                                                    class="form-control"
@@ -197,7 +197,7 @@
                                         <!-- Degree -->
                                         <div class="col-md-4 col-sm-12 mb-3">
                                             <label class="form-label">
-                                                <liferay-ui:message key="degree"/> <span class="text-danger">*</span>
+                                                <liferay-ui:message key="Degree"/> <span class="text-danger">*</span>
                                             </label>
                                             <input type="text"
                                                    class="form-control"

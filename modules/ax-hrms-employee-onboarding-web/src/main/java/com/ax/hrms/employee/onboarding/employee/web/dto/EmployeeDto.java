@@ -36,6 +36,7 @@ public class EmployeeDto {
 	public long educationCertificateMediaId;
 	public String insuranceLink;
 	public String reportingManager;
+	public String employeeType;
 
 	//address
 	public String line1;
@@ -101,6 +102,14 @@ public class EmployeeDto {
     public void setExperienceCertificatePreviewUrls(List<String> urls) {
         this.experienceCertificatePreviewUrls = urls;
     }
+
+	public String getEmployeeType() {
+		return employeeType;
+	}
+
+	public void setEmployeeType(String employeeType) {
+		this.employeeType = employeeType;
+	}
 
 	public String getExperienceCertificatePreviewUrl() {
 		return experienceCertificatePreviewUrl;

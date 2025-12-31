@@ -114,6 +114,12 @@
                             <div class="label-content">${employeeDetail.gender}</div>
                         </div>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">EmployeeType</div>
+                            <div class="label-content">${employeeDetail.employeeType}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,6 +130,11 @@
                 <strong>Address Details</strong>
             </div>
             <div class="card-body">
+
+                    <div >
+                        <strong> Present Address Details</strong>
+                    </div>
+
                 <div class="row">
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
@@ -185,9 +196,15 @@
                             <div class="label-content">${presentaddresss.pincode}</div>
                         </div>
                     </div>
+                    </div>
                     <hr>
 
                     <c:if test="${employeeAddress.presentPermanentSame}">
+
+                     <div >
+                        <strong> Permanent Address Details</strong>
+                    </div>
+                    <div class="row">
 
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
@@ -248,8 +265,13 @@
                                 <div class="label-content">${presentaddresss.pincode}</div>
                             </div>
                         </div>
+                       </div>
                     </c:if>
                     <c:if test="${not employeeAddress.presentPermanentSame}">
+                     <div >
+                        <strong> Permanent Address Details</strong>
+                    </div>
+                    <div class="row">
 
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
@@ -292,8 +314,8 @@
                                 <div class="label-content">${permanentaddresss.pincode}</div>
                             </div>
                         </div>
-                    </c:if>
                 </div>
+                </c:if>
             </div>
         </div>
 
