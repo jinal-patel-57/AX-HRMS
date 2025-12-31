@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$("table").addClass("table table-bordered")
+	$("table").addClass("table")
 });
 
 (function($, AxPriorityMasterWebPortlet) {

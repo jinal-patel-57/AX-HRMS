@@ -47,10 +47,10 @@
 
                 <liferay-ui:search-container-column-text name="Status">
                     <c:if test="${leaveRequest.getLeaveRequestStatus() == 'Cancelled'}">
-                        <p class="text-danger">Cancelled</p>
+                        <p class="text-danger m-0">Cancelled</p>
                     </c:if>
                     <c:if test="${leaveRequest.getLeaveRequestStatus() != 'Cancelled'}">
-                        <p class="text-secondary">${leaveRequest.getLeaveRequestStatus()}</p>
+                        <p class="text-secondary m-0">${leaveRequest.getLeaveRequestStatus()}</p>
                     </c:if>
                 </liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Action">

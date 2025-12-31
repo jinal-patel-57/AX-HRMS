@@ -27,11 +27,11 @@
 						<div class="profilePic">
 							<img src="${employeeProfileDetail.previewUrl}" class="cover">
 						</div>
-						<div class="col-6 align-center">
-							<div class="row">
+						<div class="row">
+							<div class="col-12">
 								<h3>${employeeProfileDetail.getFullName()}</h3>
 							</div>
-							<div class="row">
+							<div class="col-12">
 								<p>${employeeProfileDetail.officialEmailId}</p>
 							</div>
 						</div>
