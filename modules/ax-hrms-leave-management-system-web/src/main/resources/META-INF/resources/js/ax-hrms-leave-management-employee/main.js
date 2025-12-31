@@ -507,7 +507,7 @@
 
                     // Create a new <select> element
                     const floaterSelectElement = $('<select>').attr('id', namespace+'floaterDays');
-                    floaterSelectElement.attr('class','custom-select mr-sm-2');
+                    floaterSelectElement.attr('class','form-control custom-select mr-sm-2');
 
                     // Add options to the <select> element
                     floaterSelectElement.append('<option value="">--Select Floater Day--</option>');
@@ -522,7 +522,7 @@
 
                     // Add the new <select> element to the page
                     if(remainingLeave != 0.0)
-                        floaterDaysContainer.empty().append('Date').append(floaterSelectElement);
+                        floaterDaysContainer.empty().append('<label>Date</label>').append(floaterSelectElement);
 
                     hideEndDateContainer();
                     hideStartDateContainer();

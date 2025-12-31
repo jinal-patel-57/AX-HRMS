@@ -55,9 +55,9 @@
                     </c:if>
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <div class="form-group" id="leaveTypeContainer">
-                            <liferay-ui:message key="leave-type"/><span class="text-danger">*</span>
+                            <label><liferay-ui:message key="leave-type"/><span class="text-danger">*</span></label>
                             <select id="<portlet:namespace />leaveType" name="<portlet:namespace />leaveType"
-                                    class="custom-select mr-sm-2">
+                                    class="form-control custom-select mr-sm-2">
                                 <option value="">-- <liferay-ui:message key="select-leave-type"/> --</option>
                                 <c:forEach var="leaveTypeList" items="${leaveTypeMasterList}">
                                     <option value="${leaveTypeList.leaveTypeId}"
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-sm-12 col-md-4 col-lg-4" id="endDateContainer">
                         <div class="form-group">
-                            <liferay-ui:message key="end-date"/><span class="text-danger">*</span>
+                            <label><liferay-ui:message key="end-date"/><span class="text-danger">*</span></label>
                             <input type="date" id="<portlet:namespace />endDate" name="<portlet:namespace />endDate"
                                    class="form-control"/>
                         </div>
@@ -91,9 +91,9 @@
 
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <div class="form-group">
-                            <liferay-ui:message key="team"/>
+                            <label><liferay-ui:message key="team"/></label>
                             <select id="mySelect" name="<portlet:namespace />teamIdSelectBox"
-                                    class="custom-select mr-sm-2">
+                                    class="form-control custom-select mr-sm-2">
                                 <option value="">Select an option</option>
                                 <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
                                     <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.employeeCode} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
@@ -116,7 +116,7 @@
 
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <liferay-ui:message key="reason"/><span class="text-danger">*</span>
+                            <label><liferay-ui:message key="reason"/><span class="text-danger">*</span></label>
                             <textarea id="<portlet:namespace />reason" name="<portlet:namespace />reason" rows="4"
                                       cols="30"
                                       class="form-control"></textarea>

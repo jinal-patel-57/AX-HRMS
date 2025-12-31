@@ -120,52 +120,82 @@ function setConfigsForAddExperienceSection(config) {
 
 
     function setConfigsForToggleAddress(config) {
-        namespace = config.namespace;
-        var sameAsPermanentCheckbox = document.getElementById(namespace + "sameAsPermanent");
+	    const namespace = config.namespace;
+	
+	    const sameAsPermanentCheckbox =
+	        document.getElementById(namespace + "sameAsPermanent");
+	
+	    const permanentFields = {
+	        line1: document.getElementById(namespace + "permanentAddressLine1"),
+	        line2: document.getElementById(namespace + "permanentAddressLine2"),
+	        line3: document.getElementById(namespace + "permanentAddressLine3"),
+	        state: document.getElementById(namespace + "permanentState"),
+	        country: document.getElementById(namespace + "permanentCountry"),
+	        pincode: document.getElementById(namespace + "permanentPincode")
+	    };
+	
+	    const presentFields = {
+	        line1: document.getElementById(namespace + "presentaddressLine1"),
+	        line2: document.getElementById(namespace + "presentaddressLine2"),
+	        line3: document.getElementById(namespace + "presentaddressLine3"),
+	        state: document.getElementById(namespace + "presentstate"),
+	        country: document.getElementById(namespace + "presentCountry"),
+	        pincode: document.getElementById(namespace + "presentpinCode")
+	    };
+	
+	    // -------------------------
+	    // Sync handler
+	    // -------------------------
+	    function syncIfChecked() {
+	        if (sameAsPermanentCheckbox.checked) {
+	            copyPermanentToPresent(permanentFields, presentFields);
+	        }
+	    }
+	
+	    // -------------------------
+	    // Checkbox toggle
+	    // -------------------------
+	    sameAsPermanentCheckbox.addEventListener("change", function () {
+	        if (this.checked) {
+	            copyPermanentToPresent(permanentFields, presentFields);
+	            togglePresentFields(presentFields, true);
+	        } else {
+	            togglePresentFields(presentFields, false);
+	        }
+	    });
+	
+	    // -------------------------
+	    // Listen to permanent field changes
+	    // -------------------------
+	    Object.values(permanentFields).forEach(field => {
+	        field.addEventListener("input", syncIfChecked);
+	        field.addEventListener("change", syncIfChecked);
+	    });
+	
+	    // -------------------------
+	    // UPDATE CASE (page load)
+	    // -------------------------
+	    if (sameAsPermanentCheckbox.checked) {
+	        copyPermanentToPresent(permanentFields, presentFields);
+	        togglePresentFields(presentFields, true);
+	    }
+	}
+	
+	    function copyPermanentToPresent(permanentFields, presentFields) {
+		    presentFields.line1.value = permanentFields.line1.value;
+		    presentFields.line2.value = permanentFields.line2.value;
+		    presentFields.line3.value = permanentFields.line3.value;
+		    presentFields.state.value = permanentFields.state.value;
+		    presentFields.country.value = permanentFields.country.value;
+		    presentFields.pincode.value = permanentFields.pincode.value;
+		}
+		
+		function togglePresentFields(presentFields, disabled) {
+		    Object.values(presentFields).forEach(field => {
+		        field.disabled = disabled;
+		    });
+		}
 
-        var permanentFields = {
-            line1: document.getElementById(namespace + "permanentAddressLine1"),
-            line2: document.getElementById(namespace + "permanentAddressLine2"),
-            line3: document.getElementById(namespace + "permanentAddressLine3"),
-            state: document.getElementById(namespace + "permanentState"),
-            country: document.getElementById(namespace + "permanentCountry"),
-            pincode: document.getElementById(namespace + "permanentPincode")
-        };
-
-        var presentFields = {
-            line1: document.getElementById(namespace + "presentaddressLine1"),
-            line2: document.getElementById(namespace + "presentaddressLine2"),
-            line3: document.getElementById(namespace + "presentaddressLine3"),
-            state: document.getElementById(namespace + "presentstate"),
-            country: document.getElementById(namespace + "presentCountry"),
-            pincode: document.getElementById(namespace + "presentpinCode")
-        };
-
-        if (sameAsPermanentCheckbox.checked) {
-            presentFields.line1.value = permanentFields.line1.value;
-            presentFields.line2.value = permanentFields.line2.value;
-            presentFields.line3.value = permanentFields.line3.value;
-            presentFields.state.value = permanentFields.state.value;
-            presentFields.country.value = permanentFields.country.value;
-
-            presentFields.pincode.value = permanentFields.pincode.value;
-
-            Object.values(presentFields).forEach(function (field) {
-                field.disabled = true;
-            });
-        } else {
-            Object.values(presentFields).forEach(function (field) {
-                field.disabled = false;
-            });
-
-            presentFields.line1.value = "";
-            presentFields.line2.value = "";
-            presentFields.line3.value = "";
-            presentFields.state.value = "";
-            presentFields.country.value = "";
-            presentFields.pincode.value = "";
-        }
-    }
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
@@ -1288,62 +1318,53 @@ function setConfigsForExperienceValidation(config) {
             },
             rules: {
                 [namespace + "accountNumber"]: {
-                    required: true,
                     maxlength: 20,
                     accountNumberValidation: true
                 },
 
                [namespace + "beneficiaryName"]: {
-                   required: true,
                    maxlength: 75,
                    onlyLettersAndSpaces: true
                },
 
                [namespace + "bankName"]: {
-                   required: true,
                    maxlength: 75,
                    onlyLettersAndSpaces: true
                },
 
                [namespace + "bankBranch"]: {
-                   required: true,
                    maxlength: 75,
                    onlyLettersAndSpaces: true
                },
                 [namespace + "ifscCode"]: {
-                    required: true,
                     maxlength: 75,
                     ifscCodeValidation: true
                 }
             },
             messages: {
                 [namespace + "accountNumber"]: {
-                    required: "Please enter the account number.",
                     maxlength: "Account number should not exceed 20 characters.",
                     accountNumberValidation: "Account number should not contain alphabet characters, underscores, special characters, or whitespaces."
                 },
 
                [namespace + "beneficiaryName"]: {
-                   required: "Please enter the beneficiary name.",
                    maxlength: "Beneficiary name should not exceed 75 characters.",
                    onlyLettersAndSpaces: "Beneficiary name should contain only alphabets and spaces."
                },
 
                [namespace + "bankName"]: {
-                   required: "Please enter the bank name.",
                    maxlength: "Bank name should not exceed 75 characters.",
                    onlyLettersAndSpaces: "Bank name should contain only alphabets and spaces."
                },
 
                [namespace + "bankBranch"]: {
-                   required: "Please enter the bank branch.",
                    maxlength: "Bank branch should not exceed 75 characters.",
                    onlyLettersAndSpaces: "Bank branch should contain only alphabets and spaces."
                },
 
                 [namespace + "ifscCode"]: {
-                    required: "Please enter the IFSC code.",
-                    maxlength: "IFSC code should not exceed 75 characters."
+                    maxlength: "IFSC code should not exceed 75 characters.",
+                    ifscCodeValidation: "Please enter a valid IFSC code."
                 }
             }
         });

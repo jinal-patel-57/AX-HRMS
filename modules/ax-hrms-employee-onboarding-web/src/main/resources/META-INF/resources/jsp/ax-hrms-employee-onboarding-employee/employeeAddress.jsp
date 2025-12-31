@@ -222,16 +222,17 @@
     </div>
 
     <div class="card-footer text-right align-items-center">
-        <button class="btn btn-outline-primary previous-button" type="submit">
+        <button class="btn btn-outline-primary previous-button" type="button">
             <liferay-ui:message key="previous"/>
         </button>
-        <button class="btn btn-outline-primary next-button next-button-adress-details" type="submit">
+        <button class="btn btn-outline-primary next-button next-button-adress-details" type="button">
             <liferay-ui:message key="next"/>
         </button>
     </div>
 </form>
 
 <script>
+	
     function togglePresentAddress() {
         var config = new Object({}),
             namespace = '<portlet:namespace />';
@@ -239,4 +240,5 @@
 
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForToggleAddress(config);
     }
+    togglePresentAddress();
 </script>
