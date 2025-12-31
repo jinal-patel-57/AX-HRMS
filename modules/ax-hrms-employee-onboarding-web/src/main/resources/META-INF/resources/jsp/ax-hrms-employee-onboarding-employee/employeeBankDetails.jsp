@@ -68,7 +68,7 @@
                         <label for="ifscCode" class="form-label">
                             <liferay-ui:message key="ifsc-code"/>
                         </label>
-                        <input type="text" class="form-control" id="<portlet:namespace />ifscCode"
+                        <input type="text" class="form-control text-uppercase" id="<portlet:namespace />ifscCode"
                                name="<portlet:namespace />ifscCode" maxlength="75"
                                value="${employeeBankAccount.ifscCode}"
                                required/>
