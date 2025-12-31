@@ -73,7 +73,26 @@ function childNavigation() {
     }
   })
 }
+
+ // Show loader when any AJAX starts
+  $(document).ajaxStart(function () {
+    $("#overlay").fadeIn(300);
+  });
+
+  // Hide loader when all AJAX requests complete
+  $(document).ajaxStop(function () {
+    setTimeout(function () {
+      $("#overlay").fadeOut(300);
+    }, 500);
+  });
+
 });
+
+ // Hide loader after full page load
+  $(window).on("load", function () {
+    $("body").removeClass("page-loading");
+    $("#overlay").fadeOut(300);
+  });
 
 /*
  * This function gets loaded after each and every portlet on the page.

@@ -22,7 +22,7 @@
 		page=top_head_include />
 </head>
 
-<body class="${css_class} collapsedMenu">
+<body class="${css_class} collapsedMenu page-loading">
 	<@liferay_ui["quick-access"]
 		contentId="#main-content" />
 	<@liferay_util["include"]
@@ -132,6 +132,11 @@
 							</div>
 						</div>
 					</footer>
+					<div id="overlay">
+						<div class="cv-spinner">
+							<span class="spinner"></span>
+						</div>
+					</div>
 				</div>
 			</div>
 	</div>
