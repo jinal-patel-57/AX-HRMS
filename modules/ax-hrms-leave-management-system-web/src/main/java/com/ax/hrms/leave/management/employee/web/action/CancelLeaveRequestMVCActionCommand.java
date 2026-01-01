@@ -18,10 +18,12 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.util.List;
 
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -61,13 +63,14 @@ public class CancelLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 		
 		log.info("CancelLeaveRequestMVCActionCommand >>> doProcessAction ::: Delete process called");
 		long leaveRequestId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR,AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		LeaveRequest leaveRequest = null;
 		
 		try {
 			leaveRequest = leaveRequestLocalService.getLeaveRequest(leaveRequestId);
 			if(leaveRequestId > 0) {
 				leaveRequest.setLeaveCompensatoryStatusMasterId(leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsLeaveManagementWebPortletConstants.CANCELLED).getLeaveCompensatoryStatusMasterId());
+				leaveRequest.setModifiedBy(themeDisplay.getUserId());
 				boolean isBalanceUpdated = updateLeaveBalance(leaveRequestId, leaveRequest.getEmployeeId(), leaveRequest.getLeaveTypeMasterId());
 				if(isBalanceUpdated) {
 					leaveRequestLocalService.updateLeaveRequest(leaveRequest);

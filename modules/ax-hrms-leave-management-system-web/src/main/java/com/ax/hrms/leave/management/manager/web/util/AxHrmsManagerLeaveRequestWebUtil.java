@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -163,6 +164,13 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             leaveRequestDto.setStartDateOfLeaveRequest(startDateOfLeave);
             leaveRequestDto.setEndDateOfLeaveRequest(endDateOfLeave);
             leaveRequestDto.setDateOfRequestedLeave(dateOfRequestDate);
+            if (Validator.isNotNull(leaveRequest.getModifiedBy())){
+                EmployeeDetails modifiedUser = employeeDetailsLocalService.findByLrUserId(leaveRequest.getModifiedBy());
+
+                leaveRequestDto.setModifiedUser(modifiedUser.getFirstName() + " " + modifiedUser.getLastName());
+            }else{
+                leaveRequestDto.setModifiedUser("");
+            }
             log.info("leaveRequest.getLeaveCompensatoryStatusMasterId()   :: " + leaveRequest.getLeaveCompensatoryStatusMasterId());
             LeaveCompensatoryStatusMaster leaveStatusMaster = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId());
 

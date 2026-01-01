@@ -34,6 +34,10 @@
 
                         <liferay-ui:search-container-column-text name="End Date of Leave"
                                                                  value="${leaveRequest.endDateOfLeaveRequest}"/>
+               <liferay-ui:search-container-column-text name="Modified by"
+                                                                      value="${ leaveRequest.getModifiedUser() }"></liferay-ui:search-container-column-text>
+
+
                          <liferay-ui:search-container-column-text name="Status" value="${leaveRequest.status}"/>
 
                 <liferay-ui:search-container-column-text name="Action">

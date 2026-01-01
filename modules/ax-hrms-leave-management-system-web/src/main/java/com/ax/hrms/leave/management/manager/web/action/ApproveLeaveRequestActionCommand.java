@@ -6,6 +6,7 @@ import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWeb
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.EmployeeEducation;
 import com.ax.hrms.model.LeaveRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -77,6 +78,9 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             leaveRequest.setLeaveCompensatoryStatusMasterId(approvedStatusId);
             leaveRequest.setHrApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
             leaveRequest.setManagerApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
+            leaveRequest.setModifiedBy(themeDisplay.getUserId());
+
+
 
             leaveRequestLocalService.updateLeaveRequest(leaveRequest);
 

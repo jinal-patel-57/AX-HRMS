@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Reference;
 
 import java.text.SimpleDateFormat;
@@ -160,7 +161,7 @@ public class LeaveRequestUtil {
 		else
 			return null;
 	}
-	public static List<LeaveRequestDto> getListOfLeaveRequest(EmployeeDetails employeeDetails, List<LeaveRequest> leaveRequestList, List<LeaveTypeMaster> leaveTypeMasterList, List<LeaveDayType> leaveDayTypeList, List<LeaveCompensatoryStatusMaster> leaveCompensatoryStatusMasterList) {
+	public static List<LeaveRequestDto> getListOfLeaveRequest(EmployeeDetails employeeDetails, List<LeaveRequest> leaveRequestList, List<LeaveTypeMaster> leaveTypeMasterList, List<LeaveDayType> leaveDayTypeList, List<LeaveCompensatoryStatusMaster> leaveCompensatoryStatusMasterList,EmployeeDetailsLocalService employeeDetailsLocalService) {
 		List<LeaveRequestDto> listOfLeaveRequestOfEmployee = new ArrayList<>();
 		List<LeaveTypeMaster> listOfLeaveTypeMaster = leaveTypeMasterList;
 		List<LeaveDayType> listOfLeaveDayType = leaveDayTypeList;
@@ -174,6 +175,14 @@ public class LeaveRequestUtil {
 				setEmployeeDetailsInLeaveRequest(leaveRequestDetails, employeeDetails);
 
 				leaveRequestDetails.setLeaveRequestId(leaveRequest.getLeaveRequestId());
+
+				if (Validator.isNotNull(leaveRequest.getModifiedBy())){
+					EmployeeDetails modifiedUser = employeeDetailsLocalService.findByLrUserId(leaveRequest.getModifiedBy());
+
+					leaveRequestDetails.setModifiedUser(modifiedUser.getFirstName() + " " + modifiedUser.getLastName());
+				}else{
+					leaveRequestDetails.setModifiedUser("");
+				}
 
 				// Set LeaveTypeMaster details
 				Optional<LeaveTypeMaster> result = listOfLeaveTypeMaster.stream()
@@ -214,6 +223,7 @@ public class LeaveRequestUtil {
 		leaveRequestDetails.setUserId(employeeDetails.getLrUserId());
 		leaveRequestDetails.setEmployeeId(employeeDetails.getEmployeeId());
 		leaveRequestDetails.setEmployeeName(employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
+
 	}
 
 	private static void setLeaveTypeDetailsInLeaveRequest(LeaveRequestDto leaveRequestDetails, LeaveTypeMaster leaveTypeMaster) {

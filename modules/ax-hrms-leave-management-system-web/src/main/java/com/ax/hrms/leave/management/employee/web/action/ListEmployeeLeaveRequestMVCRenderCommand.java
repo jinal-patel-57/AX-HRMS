@@ -108,7 +108,8 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
                 List<LeaveDayType> listOfLeaveDayType = leaveDayTypeLocalService.getLeaveDayTypes(-1, -1);
                 List<LeaveCompensatoryStatusMaster> listOfLeaveCompensatoryStatusMasters = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
-                listOfEmployeesLeaveRequest = LeaveRequestUtil.getListOfLeaveRequest(employeeDetails,listOfLeaveRequest,listOfLeaveTypeMaster,listOfLeaveDayType,listOfLeaveCompensatoryStatusMasters);
+
+                listOfEmployeesLeaveRequest = LeaveRequestUtil.getListOfLeaveRequest(employeeDetails,listOfLeaveRequest,listOfLeaveTypeMaster,listOfLeaveDayType,listOfLeaveCompensatoryStatusMasters,employeeDetailsLocalService);
             }
 
 		} catch (NoSuchEmployeeDetailsException exception) {

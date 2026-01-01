@@ -107,6 +107,7 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 			leaveRequest.setLeaveCompensatoryStatusMasterId(approvedStatusId);
 			leaveRequest.setHrApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
 			leaveRequest.setManagerApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
+			leaveRequest.setModifiedBy(themeDisplay.getUserId());
 
 			leaveRequestLocalService.updateLeaveRequest(leaveRequest);
 

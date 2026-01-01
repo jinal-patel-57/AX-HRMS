@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -153,8 +154,8 @@ public class AxHrmsHrLeaveRequestWebUtil {
 			LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
 
 
-			EmployeeDetails	employeeDetails = employeeDetailsLocalService.findByEmployeeId(leaveRequest.getEmployeeId());
-			
+			EmployeeDetails employeeDetails = employeeDetailsLocalService.findByEmployeeId(leaveRequest.getEmployeeId());
+
 			leaveRequestDto.setLeaveRequestId(leaveRequestId);
 
 			leaveRequestDto.setEmployeeName(employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
@@ -179,6 +180,15 @@ public class AxHrmsHrLeaveRequestWebUtil {
 			leaveRequestDto.setStartDateOfLeaveRequest(startDateOfLeave);
 			leaveRequestDto.setEndDateOfLeaveRequest(endDateOfLeave);
 			leaveRequestDto.setDateOfRequestedLeave(dateOfRequestDate);
+
+			if (Validator.isNotNull(leaveRequest.getModifiedBy())){
+				EmployeeDetails modifiedUser = employeeDetailsLocalService.findByLrUserId(leaveRequest.getModifiedBy());
+
+			leaveRequestDto.setModifiedUser(modifiedUser.getFirstName() + " " + modifiedUser.getLastName());
+		}else{
+				leaveRequestDto.setModifiedUser("");
+
+			}
 
 			LeaveCompensatoryStatusMaster leaveStatusMaster = leaveCompensatoryStatusMasterLocalService
 					.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId());

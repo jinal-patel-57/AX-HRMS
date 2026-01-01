@@ -37,6 +37,21 @@ public class LeaveRequestDto {
 	
 	String leaveDate;
 
+	String modifiedUser;
+
+
+	public void setApplicableFloater(boolean applicableFloater) {
+		isApplicableFloater = applicableFloater;
+	}
+
+	public String getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public void setModifiedUser(String modifiedUser) {
+		this.modifiedUser = modifiedUser;
+	}
+
 	public boolean getIsContinuous() {
 		return isContinuous;
 	}

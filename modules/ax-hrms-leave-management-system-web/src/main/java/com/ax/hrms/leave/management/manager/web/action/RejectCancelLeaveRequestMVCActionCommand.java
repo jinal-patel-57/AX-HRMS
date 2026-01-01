@@ -129,6 +129,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 
             leaveRequest.setHrApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
             leaveRequest.setManagerApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
+            leaveRequest.setModifiedBy(themeDisplay.getUserId());
             leaveRequestLocalService.updateLeaveRequest(leaveRequest);
 
             LeaveCompensatoryStatusMaster leaveStatusMasterOfRejected = leaveCompensatoryStatusMasterLocalService
