@@ -54,6 +54,10 @@
         <column name="stipend" type="double"/>
         <column name="managerId" type="long"/>
 
+		<order by="asc">
+            <order-column name="firstName"/>
+        </order>
+
         <!-- finder method  -->
         <finder return-type="EmployeeDetails" name="EmployeeId">
             <finder-column name="employeeId"/>

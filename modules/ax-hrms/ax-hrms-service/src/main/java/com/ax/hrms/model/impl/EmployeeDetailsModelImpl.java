@@ -139,10 +139,10 @@ public class EmployeeDetailsModelImpl
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY employeeDetails.employeeId ASC";
+		" ORDER BY employeeDetails.firstName ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY ax_EmployeeDetails.employeeId ASC";
+		" ORDER BY ax_EmployeeDetails.firstName ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -1581,17 +1581,15 @@ public class EmployeeDetailsModelImpl
 
 	@Override
 	public int compareTo(EmployeeDetails employeeDetails) {
-		long primaryKey = employeeDetails.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = getFirstName().compareTo(employeeDetails.getFirstName());
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override

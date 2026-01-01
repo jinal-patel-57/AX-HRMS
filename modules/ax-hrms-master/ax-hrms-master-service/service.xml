@@ -26,6 +26,9 @@
 		
 		<!-- finder method  -->
 		
+		<order by="asc">
+            <order-column name="departmentName"/>
+        </order>
 
 		<finder name="DepartmentName" return-type="DepartmentMaster">
 			<finder-column case-sensitive="false" name="departmentName"/>
@@ -54,6 +57,10 @@
 		<!-- Other fields -->
 
 		<column name="designationName" type="String" />
+		
+		<order by="asc">
+            <order-column name="designationName"/>
+        </order>
 		
 		<!-- Finder Method -->
 		<finder name="DesignationName" return-type="DesignationMaster">

@@ -87,10 +87,10 @@ public class DepartmentMasterModelImpl
 		"drop table ax_master_DepartmentMaster";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY departmentMaster.departmentMasterId ASC";
+		" ORDER BY departmentMaster.departmentName ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY ax_master_DepartmentMaster.departmentMasterId ASC";
+		" ORDER BY ax_master_DepartmentMaster.departmentName ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -539,17 +539,16 @@ public class DepartmentMasterModelImpl
 
 	@Override
 	public int compareTo(DepartmentMaster departmentMaster) {
-		long primaryKey = departmentMaster.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = getDepartmentName().compareTo(
+			departmentMaster.getDepartmentName());
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override

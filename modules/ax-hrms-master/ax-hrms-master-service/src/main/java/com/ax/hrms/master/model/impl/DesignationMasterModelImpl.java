@@ -87,10 +87,10 @@ public class DesignationMasterModelImpl
 		"drop table ax_master_DesignationMaster";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY designationMaster.designationMasterId ASC";
+		" ORDER BY designationMaster.designationName ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY ax_master_DesignationMaster.designationMasterId ASC";
+		" ORDER BY ax_master_DesignationMaster.designationName ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -542,17 +542,16 @@ public class DesignationMasterModelImpl
 
 	@Override
 	public int compareTo(DesignationMaster designationMaster) {
-		long primaryKey = designationMaster.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = getDesignationName().compareTo(
+			designationMaster.getDesignationName());
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
