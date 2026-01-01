@@ -85,6 +85,7 @@ function setConfigsForAddExperienceSection(config) {
             fresh.type = "file";
             fresh.className = input.className;
             fresh.name = input.name;
+            fresh.multiple=true;
             fresh.accept = input.accept;
             input.parentNode.replaceChild(fresh, input);
         } else {
