@@ -87,7 +87,7 @@
   </div>
   <div class="col-md-12 col-sm-12 ">
   <div class="form-group">
-   <label for="holidayDesc"><liferay-ui:message key="Holiday Description" /><span class="text-danger">*</span></label>
+   <label for="holidayDesc"><liferay-ui:message key="Holiday Description" /></label>
 <%--             <input value="${holidayData.getDescription()}" id="holidayDesc" placeholder="Enter Holiday Description" class="form-control" type="text" name="<portlet:namespace/>holidayDesc"> --%>
   <textarea
       rows="4"

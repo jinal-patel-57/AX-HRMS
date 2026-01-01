@@ -70,9 +70,9 @@
                     },
 
                     [namespace + "description"]: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 255,
+
+                        minlength: 2,
+                        maxlength: 75,
                         validLeavePolicyDescription: true
                     }
                 },
@@ -95,9 +95,9 @@
                     },
 
                     [namespace + "description"]: {
-                        required: "Please enter description",
-                        minlength: "Description must be at least 5 characters",
-                        maxlength: "Description cannot exceed 255 characters",
+
+                        minlength: "Description must be at least 2 characters",
+                        maxlength: "Description cannot exceed 75 characters",
                         validLeavePolicyDescription:
                             "Only letters, numbers, spaces and . , & ( ) - are allowed"
                     }

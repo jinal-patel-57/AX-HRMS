@@ -14,7 +14,7 @@
 <div class="card">
     <div class="card-header">
         <strong>
-            List Leave Requests
+          Leave Request List
         </strong>
     </div>
     <div class="card-body">

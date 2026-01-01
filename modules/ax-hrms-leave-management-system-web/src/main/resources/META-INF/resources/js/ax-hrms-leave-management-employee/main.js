@@ -271,10 +271,11 @@
                 [namespace + "leaveType"]: {
                     required: true
                 },
-                [namespace + "reason"]: {
-                    required: true,
-                    validLetters: true
-                },
+              [namespace + "reason"]: {
+                  required: true,
+                  validLetters: true,
+                  maxlength: 70
+              },
                 [namespace + "startDate"]: {
                     required: true,
                     validDate: true
@@ -282,6 +283,7 @@
                 [namespace + "endDate"]: {
                     required: true,
                     validDate: true
+
                 },
             },
             messages: {
@@ -289,18 +291,22 @@
                     required: "Select Leave type"
                 },
                 [namespace + "reason"]: {
-                    required: "Enter Reason For leave",
-                    validLetters: "Enter Valid Letters"
-                }
+                       required: "Please enter reason for leave",
+                       validLetters: "Only letters, numbers, space and . , - are allowed",
+                       maxlength: "Reason cannot exceed 70 characters"
+                   }
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element);
             }
         });
 
-        $.validator.addMethod("validLetters", function (value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9.\s]+$/.test(value);
-        }, "Please enter letters only");
+     $.validator.addMethod("validLetters", function (value, element) {
+         value = value.trim();
+         return this.optional(element) ||
+             /^[A-Za-z0-9\s.,-]+$/.test(value);
+     }, "Only letters, numbers, space and . , - are allowed");
+
 
         jQuery.validator.addMethod("validDate", function (value, element) {
             let now = new Date();
@@ -409,7 +415,9 @@
             }
         });
 
-        endDate.on('change',function(){
+
+
+        endDate.on('blur',function(){
             startDateValue = startDate.val();
             endDateValue = endDate.val();
             startDate.val(startDateValue);

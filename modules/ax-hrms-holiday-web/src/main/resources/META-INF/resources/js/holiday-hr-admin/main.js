@@ -107,9 +107,9 @@
                     noWeekend: true
                 },
                 [namespace + "holidayDesc"]: {
-                    required: true,
-                    minlength: 5,
-                    maxlength: 250,
+
+                    minlength: 0,
+                    maxlength: 70,
                     validHolidayDesc: true
                 },
                 [namespace + "isFloater"]: {
