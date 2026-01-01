@@ -190,7 +190,6 @@ function setConfigsForAddExperienceSection(config) {
 		    presentFields.country.value = permanentFields.country.value;
 		    presentFields.pincode.value = permanentFields.pincode.value;
 		}
-		
 		function togglePresentFields(presentFields, disabled) {
 		    Object.values(presentFields).forEach(field => {
 		        field.disabled = disabled;
@@ -200,6 +199,19 @@ function setConfigsForAddExperienceSection(config) {
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+        function allowOnlyTenDigitMobile(input) {
+		
+		    // Format pre-filled value (update case)
+		    input.value = input.value.replace(/\D/g, "").substring(0, 10);
+		
+		    input.addEventListener("input", function () {
+		        this.value = this.value.replace(/\D/g, "").substring(0, 10);
+		    });
+		}
+        const mobileInput = document.getElementById(namespace + "mobileNo");
+		if (mobileInput) {
+		    allowOnlyTenDigitMobile(mobileInput);
+		}
         const esicInput = document.getElementById(namespace + "esicNo");
 		if (esicInput) {
 		    if (esicInput.value) {
@@ -261,7 +273,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: true,
                         digits: true,
                         minlength: 10,
-                        maxlength: 15
+                        maxlength: 15,
+                        validMobile10: true
                     },
 
                     [namespace + "fatherName"]: {
@@ -293,7 +306,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please enter your mobile number.",
                         digits: "Mobile number should contain only digits.",
                         minlength: "Mobile number must be at least 10 digits long.",
-                        maxlength: "Mobile number must not exceed 15 digits."
+                        maxlength: "Mobile number must not exceed 15 digits.",
+                        validMobile10: "Enter a valid 10-digit mobile number"
                     },
 
                     [namespace + "fatherName"]: {
@@ -308,6 +322,9 @@ function setConfigsForAddExperienceSection(config) {
                     }
                 }
             });
+            $.validator.addMethod("validMobile10", function (value) {
+				return /^\d{10}$/.test(value);
+			}, "Enter a valid 10-digit mobile number");
 
             $.validator.addMethod("lettersOnly", function (value, element) {
                 return this.optional(element) || /^[A-Za-z\s]+$/i.test(value);

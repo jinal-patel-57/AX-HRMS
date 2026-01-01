@@ -44,7 +44,7 @@
                 </label>
                 <input type="tel" class="form-control"
                        id="<portlet:namespace />mobileNo"
-                       name="<portlet:namespace />mobileNo"
+                       name="<portlet:namespace />mobileNo" maxlength="10" inputmode="numeric" pattern="[0-9]{10}"
                        value="${employeeDetail.mobileNo}"/>
             </div>
 
