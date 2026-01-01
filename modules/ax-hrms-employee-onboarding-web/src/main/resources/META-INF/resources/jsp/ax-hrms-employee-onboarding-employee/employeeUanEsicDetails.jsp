@@ -33,7 +33,7 @@
                     </label>
                     <input type="text" class="form-control"
                            id="<portlet:namespace />esicNo" name="<portlet:namespace />esicNo"
-                           maxlength="17" value="${employeeUanEsic.esicNo}"/>
+                           maxlength="21" placeholder="XX-XX-XXXXXX-XXX-XXXX" value="${employeeUanEsic.esicNo}"/>
                 </div>
             </div>
 

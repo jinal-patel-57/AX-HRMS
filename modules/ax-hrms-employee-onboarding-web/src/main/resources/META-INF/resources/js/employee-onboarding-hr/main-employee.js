@@ -202,6 +202,26 @@ function setConfigsForAddExperienceSection(config) {
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+        const esicInput = document.getElementById(namespace + "esicNo");
+		if (esicInput) {
+		    if (esicInput.value) {
+		        esicInput.value = formatEsicNo(esicInput.value);
+		    }
+		
+		    esicInput.addEventListener("input", function () {
+		
+		        const cursorPos = this.selectionStart;
+		        const oldValueLength = this.value.length;
+		
+		        this.value = formatEsicNo(this.value);
+		
+		        const newValueLength = this.value.length;
+		        const diff = newValueLength - oldValueLength;
+		
+		        // Maintain cursor position
+		        this.setSelectionRange(cursorPos + diff, cursorPos + diff);
+		    });
+		}
         config.profilePicName = profilePicName;
           // Custom age validation
         $.validator.addMethod("ageRange", function (value, element) {
@@ -1534,7 +1554,7 @@ function setConfigsForExperienceValidation(config) {
                 },
                 [namespace + "esicNo"]: {
                     maxlength: "ESIC No. should not exceed 75 characters.",
-                    esicValidation: "ESIC number must be exactly 17 digits (numbers only, no spaces or special characters)"
+                    esicValidation: "ESIC number must be in format XX-XX-XXXXXX-XXX-XXXX"
                 }
             }
         });
@@ -1543,9 +1563,9 @@ function setConfigsForExperienceValidation(config) {
         	return this.optional(element) || /^[0-9]{12}$/.test(value); 
         }, "UAN must be exactly 12 digits (numbers only, no spaces or special characters)");
 
-		$.validator.addMethod("esicValidation", function (value, element) {
-	        return this.optional(element) || /^[0-9]{17}$/.test(value); 
-	    }, "ESIC number must be exactly 17 digits (numbers only, no spaces or special characters)");
+		$.validator.addMethod("esicValidation", function (value) {
+        	return /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);
+    	}, "ESIC number must be in format XX-XX-XXXXXX-XXX-XXXX");
     	
 		
         $('.next-button-uan-esic-details').on('click', function (event) {
@@ -1581,6 +1601,21 @@ function setConfigsForExperienceValidation(config) {
 
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;
     }
+    
+    function formatEsicNo(value) {
+	    // Remove non-digits
+	    const digits = value.replace(/\D/g, "").substring(0, 17);
+	
+	    let formatted = "";
+	
+	    if (digits.length > 0) formatted += digits.substring(0, 2);
+	    if (digits.length >= 3) formatted += "-" + digits.substring(2, 4);
+	    if (digits.length >= 5) formatted += "-" + digits.substring(4, 10);
+	    if (digits.length >= 11) formatted += "-" + digits.substring(10, 13);
+	    if (digits.length >= 14) formatted += "-" + digits.substring(13, 17);
+	
+	    return formatted;
+	}
 
     // Nominee Details
     function setConfigsForNomineeValidation(config) {
