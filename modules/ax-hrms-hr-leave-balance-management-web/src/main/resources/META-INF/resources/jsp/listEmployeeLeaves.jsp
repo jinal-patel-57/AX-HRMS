@@ -42,7 +42,7 @@
                     <th scope="col">Sr No</th>
                     <th scope="col">Leave Type Name</th>
                     <th scope="col">Leave Balance</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">New Balance</th>
                 </tr>
                 </thead>
                <tbody>
@@ -73,7 +73,7 @@
                                               value="${CustomEmployeeLeave.leaveTypeMasterId}">
 
                                        <button type="submit" class="btn btn-primary">
-                                           Update
+                                           Update Balance
                                        </button>
                                    </div>
 
