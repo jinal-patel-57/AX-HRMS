@@ -1,8 +1,6 @@
 package com.ax.hrms.holiday.employee.web.action;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
@@ -55,8 +53,11 @@ public class ListHolidayEmployeeMVCRenderCommand implements MVCRenderCommand {
 	        	selectedYear = currentYear;
 	        	holiday = holidayLocalService.findByYear(currentYear);
 	        }
-	        
-	        PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+		holiday = new ArrayList<>(holidayLocalService.findByYear(selectedYear));
+		holiday.sort(Comparator.comparing(Holiday::getDate));
+
+
+		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 			SearchContainer<Holiday> holidaySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
 					StringPool.BLANK);
 			holidaySearchContainer.setResultsAndTotal(holiday);

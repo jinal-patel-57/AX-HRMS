@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -54,9 +55,16 @@ public class ListUpcomingHolidayMVCRenderCommand implements MVCRenderCommand {
         for(Holiday holiday: holidayList){
             Date holidayDate = holiday.getDate();
             LocalDate holidayLocalDate = holidayDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if(holidayLocalDate.isAfter(currentDate) && holidayLocalDate.isBefore(lastDateOfYear))
+            if(holidayLocalDate.isAfter(currentDate))
                 upcomingHolidayList.add(holiday);
         }
+        upcomingHolidayList.sort(Comparator.comparing(Holiday::getDate));
+
+        renderRequest.setAttribute(
+                AxHrmsUpcomingHolidayWebConstants.UPCOMING_HOLIDAY_LIST,
+                upcomingHolidayList
+        );
+
         renderRequest.setAttribute(AxHrmsUpcomingHolidayWebConstants.UPCOMING_HOLIDAY_LIST,upcomingHolidayList);
         return AxHrmsUpcomingHolidayWebConstants.VIEW_UPCOMING_HOLIDAY_JSP_PATH;
     }

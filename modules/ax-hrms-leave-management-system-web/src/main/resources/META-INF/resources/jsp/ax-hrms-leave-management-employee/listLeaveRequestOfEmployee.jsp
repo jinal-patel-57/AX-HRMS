@@ -44,6 +44,8 @@
                                                          value="${ leaveRequest.getLeavePeriod() }"></liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="No of days"
                                                          value="${ leaveRequest.getNoOfDays() }"></liferay-ui:search-container-column-text>
+                <liferay-ui:search-container-column-text name="Modified by"
+                                                         value="${ leaveRequest.getNoOfDays() }"></liferay-ui:search-container-column-text>
 
                 <liferay-ui:search-container-column-text name="Status">
                     <c:if test="${leaveRequest.getLeaveRequestStatus() == 'Cancelled'}">
