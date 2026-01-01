@@ -921,6 +921,11 @@ function setConfigsForAddExperienceSection(config) {
 
           initializeValidation();
           bindPassingYearAutoFill();
+          // Enable real-time validation for date fields
+          $(document).on('change', 'input[type="date"]', function () {
+              $(this).valid();
+          });
+
 
       });
   }
@@ -1041,6 +1046,50 @@ function setConfigsForExperienceValidation(config) {
 
     $(document).ready(function () {
 
+
+                /* =====================================================
+                   DATE VALIDATIONS (COMMON)
+                   ===================================================== */
+
+                /* ---- No Future Date ---- */
+                $.validator.addMethod(
+                    "notFutureDate",
+                    function (value) {
+                        if (!value) return true;
+
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+
+                        const inputDate = new Date(value);
+                        inputDate.setHours(0, 0, 0, 0);
+
+                        return inputDate <= today;
+                    },
+                    "Future date is not allowed."
+                );
+
+                /* ---- Year must be exactly 4 digits ---- */
+                $.validator.addMethod(
+                    "validYearLength",
+                    function (value) {
+                        if (!value) return true;
+
+                        // Expected format: yyyy-mm-dd
+                        const parts = value.split("-");
+                        if (parts.length !== 3) return false;
+
+                        return parts[0].length === 4;
+                    },
+                    "Year must contain exactly 4 digits."
+                );
+
+                /* ---- Prevent typing more than valid date length ---- */
+                $(document).on("input", "input[type='date']", function () {
+                    if (this.value.length > 10) {
+                        this.value = this.value.substring(0, 10);
+                    }
+                });
+
         /* =====================================================
            VALIDATION
            ===================================================== */
@@ -1099,24 +1148,36 @@ function setConfigsForExperienceValidation(config) {
                     const relieving = `${namespace}relievingDate${idx}`;
 
                     rules[company] = { required: true };
-                    rules[joining] = { required: true, date: true };
-                    rules[relieving] = {
-                        required: true,
-                        date: true,
-                        afterJoiningDate: joining
-                    };
+                   rules[joining] = {
+                       required: true,
+                       date: true,
+                       notFutureDate: true,
+                       validYearLength: true
+                   };
+
+                   rules[relieving] = {
+                       required: true,
+                       date: true,
+                       afterJoiningDate: joining,
+                       notFutureDate: true,
+                       validYearLength: true
+                   };
 
                     messages[company] = {
                         required: "Please enter company name."
                     };
-                    messages[joining] = {
-                        required: "Please enter joining date."
-                    };
-                    messages[relieving] = {
-                        required: "Please enter relieving date.",
-                        afterJoiningDate:
-                            "Relieving date must be after joining date."
-                    };
+                   messages[joining] = {
+                       required: "Please enter joining date.",
+                       notFutureDate: "Joining date cannot be in the future.",
+                       validYearLength: "Year must be exactly 4 digits."
+                   };
+
+                   messages[relieving] = {
+                       required: "Please enter relieving date.",
+                       afterJoiningDate: "Relieving date must be after joining date.",
+                       notFutureDate: "Relieving date cannot be in the future.",
+                       validYearLength: "Year must be exactly 4 digits."
+                   };
                 });
 
             form.validate({
@@ -1131,6 +1192,22 @@ function setConfigsForExperienceValidation(config) {
                 messages: messages
             });
         }
+       $(document).on(
+                   "keyup change input",
+                   "#experienceStepperForm input, #experienceStepperForm select",
+                   function () {
+
+                       const form = $("#experienceStepperForm");
+
+                       // ensure validator exists
+                       if (!form.data("validator")) {
+                           initializeValidation();
+                       }
+
+                       // validate only current field (same as education)
+                       form.validate().element(this);
+                   }
+               );
 
 
 			$(document).on('click', '.delete-experience-btn', function () {
@@ -1506,6 +1583,39 @@ function setConfigsForExperienceValidation(config) {
     function setConfigsForNomineeValidation(config) {
         let getEmployeeUrl = config.getEmployeeUrl;
         var $form7 = $("#nomineeStepperForm");
+
+
+
+        $.validator.addMethod(
+            "notFutureDate",
+            function (value) {
+                if (!value) return true;
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const inputDate = new Date(value);
+                inputDate.setHours(0, 0, 0, 0);
+
+                return inputDate <= today;
+            },
+            "Future date is not allowed."
+        );
+
+        $.validator.addMethod(
+            "validYearLength",
+            function (value) {
+                if (!value) return true;
+
+                // Expected format: yyyy-mm-dd
+                const parts = value.split("-");
+                if (parts.length !== 3) return false;
+
+                return parts[0].length === 4;
+            },
+            "Year must be exactly 4 digits."
+        );
+
         $form7.validate({
             errorClass: 'is-invalid',
             validClass: 'is-valid',
@@ -1557,10 +1667,18 @@ function setConfigsForExperienceValidation(config) {
                     required: true,
                     maxlength: 75
                 },
-                [namespace + "nomineeDob"]: {
-                    required: true,
-                    date: true
-                }
+               [namespace + "nomineeDob"]: {
+                   required: {
+                       depends: function () {
+                           return this.value === "";
+                       }
+                   },
+                   date: true,
+                   notFutureDate: true,
+                   validYearLength: true
+               }
+
+
             },
             messages: {
                 [namespace + "nomineeFirstName"]: {
@@ -1609,12 +1727,37 @@ function setConfigsForExperienceValidation(config) {
                     required: "Please enter the relationship with the nominee.",
                     maxlength: "Relationship should not exceed 75 characters."
                 },
-                [namespace + "nomineeDob"]: {
-                    required: "Please enter the nominee's date of birth.",
-                    date: "Please enter a valid date."
-                }
+              [namespace + "nomineeDob"]: {
+                  required: "Please enter the nominee's date of birth.",
+                  date: "Please enter a valid date.",
+                  notFutureDate: "Date of birth cannot be in the future.",
+                  validYearLength: "Year must be exactly 4 digits."
+              }
+
             }
         });
+        /* =====================================================
+           REAL-TIME VALIDATION (NOMINEE – SAME AS EDUCATION)
+           ===================================================== */
+
+        $(document).on(
+            "keyup change input",
+            "#nomineeStepperForm input, #nomineeStepperForm select",
+            function () {
+                $form7.validate().element(this);
+            }
+        );
+        $(document).on(
+            "input",
+            "#nomineeStepperForm input[type='date']",
+            function () {
+                if (this.value.length > 10) {
+                    this.value = this.value.substring(0, 10);
+                }
+            }
+        );
+
+
 
         $('.next-button-nominee-details').on('click', function (event) {
             event.preventDefault();
