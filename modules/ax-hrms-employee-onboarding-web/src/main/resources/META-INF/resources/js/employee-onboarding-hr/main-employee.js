@@ -215,6 +215,11 @@ function setConfigsForAddExperienceSection(config) {
 		if (mobileInput) {
 		    allowOnlyTenDigitMobile(mobileInput);
 		}
+		const nomineeContactInput = document.getElementById(namespace + "nomineeContact");
+		
+		if (nomineeContactInput) {
+		    allowOnlyTenDigitMobile(nomineeContactInput);
+		}
         const esicInput = document.getElementById(namespace + "esicNo");
 		if (esicInput) {
 		    if (esicInput.value) {
@@ -1690,7 +1695,8 @@ function setConfigsForExperienceValidation(config) {
                 [namespace + "nomineeContact"]: {
                     required: true,
                     maxlength: 30,
-                    digits: true // If the contact number should contain only digits
+                    digits: true,
+                    validMobile10: true
                 },
                 [namespace + "presentaddressLine1"]: {
                     required: true,
@@ -1746,7 +1752,8 @@ function setConfigsForExperienceValidation(config) {
                 [namespace + "nomineeContact"]: {
                     required: "Please enter the nominee's contact number.",
                     maxlength: "Contact number should not exceed 30 characters.",
-                    digits: "Contact number should contain only digits."
+                    digits: "Contact number should contain only digits.",
+                    validMobile10: "Enter a valid 10-digit mobile number."
                 },
                 [namespace + "nomineeAddress"]: {
                     required: "Please enter the nominee's address ID.",

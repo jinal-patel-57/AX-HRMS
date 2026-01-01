@@ -48,8 +48,8 @@
                     <label for="nomineeContact" class="form-label">
                         <liferay-ui:message key="nominee-contact"/><span class="text-danger">*</span>
                     </label>
-                    <input type="text" class="form-control" id="<portlet:namespace />nomineeContact"
-                           name="<portlet:namespace />nomineeContact" maxlength="15" value="${nominee.nomineeContact}"
+                    <input type="tel" class="form-control" id="<portlet:namespace />nomineeContact" inputmode="numeric"
+                           name="<portlet:namespace />nomineeContact" maxlength="10" value="${nominee.nomineeContact}"
                            required/>
                 </div>
             </div>
