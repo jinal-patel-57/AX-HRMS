@@ -1583,8 +1583,8 @@ function setConfigsForExperienceValidation(config) {
         	return this.optional(element) || /^[0-9]{12}$/.test(value); 
         }, "UAN must be exactly 12 digits (numbers only, no spaces or special characters)");
 
-		$.validator.addMethod("esicValidation", function (value) {
-        	return /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);
+		$.validator.addMethod("esicValidation", function (value, element) {
+        	return this.optional(element) || /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);
     	}, "ESIC number must be in format XX-XX-XXXXXX-XXX-XXXX");
 
         $('.next-button-uan-esic-details').on('click', function (event) {

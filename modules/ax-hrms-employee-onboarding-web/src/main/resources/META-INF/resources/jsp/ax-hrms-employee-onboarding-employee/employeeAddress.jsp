@@ -111,7 +111,7 @@
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="<portlet:namespace />sameAsPermanent"
                            name="<portlet:namespace />sameAsPermanent"
-                           onclick="togglePresentAddress()" ${employeeAddress.presentPermanentSame ? 'checked' : ''} />
+                           ${employeeAddress.presentPermanentSame ? 'checked' : ''} />
                     <label class="form-check-label" for="sameAsPermanent"> <liferay-ui:message
                             key="same-as-permanent-address"/>
                     </label>
@@ -231,14 +231,11 @@
     </div>
 </form>
 
-<script>
-	
-    function togglePresentAddress() {
-        var config = new Object({}),
-            namespace = '<portlet:namespace />';
-        config.namespace = namespace;
-
-        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForToggleAddress(config);
-    }
-    togglePresentAddress();
-</script>
+<aui:script>
+    Liferay.on('allPortletsReady', function () {
+        AxHrmsEmployeeOnboardingEmployeeWebPortlet
+            .setConfigsForToggleAddress({
+                namespace: '<portlet:namespace />'
+            });
+    });
+</aui:script>
