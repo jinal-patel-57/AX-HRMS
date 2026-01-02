@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.roles.admin.role.type.contributor.RoleTypeContributor;
 import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
 import org.osgi.service.component.annotations.Component;
@@ -198,7 +199,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
 
         //creating new user in the database of Liferay and sending the message also.
-        Map<User, String> userPassMap = axHrmsCommonApi.createNewEmployeeUser(firstName, middleName, lastName, officialEmailId, themeDisplay, roles);
+        Map<User, String> userPassMap = createNewEmployeeUser(firstName, middleName, lastName, officialEmailId, themeDisplay, roles, employeeCode);
 
         User user = null;
         String password = AxHrmsEmployeeOnboardingHrWebPortletConstants.BALNK_STRING;
@@ -299,6 +300,41 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
             sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
         }
         //Send OnBoarding Mail :
+    }
+    
+    public Map<User, String> createNewEmployeeUser(String firstName, String middleName, String lastName, String email, ThemeDisplay themeDisplay, long[] roles, String employeeCode) {
+        String password = generatePassword(8);
+        User user = null;
+        Map<User, String> retMp = new HashMap<>();
+        try {
+            user = userLocalService.addUser(themeDisplay.getUserId(), themeDisplay.getCompanyId(), false, password, password, false,
+            		employeeCode, email, themeDisplay.getLocale(), firstName, middleName, lastName, 0L, 0L,
+                    false, 1, 1, 2000, "jobTitle", 1, new long[]{themeDisplay.getScopeGroupId()}, null, roles, null, false, new ServiceContext());
+            user.setStatus(WorkflowConstants.STATUS_APPROVED);
+            user.setPasswordReset(true);
+            user.setEmailAddressVerified(true);
+            userLocalService.updateUser(user);
+            //sending mail for new user on-boarding
+            retMp.put(user, password);
+            return retMp;
+        } catch (Exception e) {
+        	log.error("ERROR CREATING THE NEW EMPLOYEE USER -- " + e.getMessage());
+        	e.printStackTrace();
+        }
+        retMp.put(user, password);
+        return retMp;
+    }
+    
+    public String generatePassword(int length) {
+    	final Random random = new Random();
+        StringBuilder password = new StringBuilder();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$";
+
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return password.toString();
     }
 
 
