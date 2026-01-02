@@ -24,7 +24,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Employee Leave Balance</h5>
         <form class="form-inline" action="${fetchLeaves}" method="post">
-            <select data-live-search="true" class="form-control mr-2 selectpicker" id="employeeSelect" name="<portlet:namespace/>employeeId">
+            <select data-live-search="true" class="form-control mr-2 custom-select" id="employeeSelect" name="<portlet:namespace/>employeeId">
                 <option value="">Select Employee</option>
                 <c:forEach var="employee" items="${employeeList}">
                     <option value="${employee.employeeId}">${employee.firstName} ${employee.lastName}</option>

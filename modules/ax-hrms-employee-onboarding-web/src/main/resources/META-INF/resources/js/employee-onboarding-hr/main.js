@@ -247,10 +247,12 @@ var setFileInputValues;
                 if (selectedType === 'intern') {
                     $('#designation').val('Intern');
                     $('#stipend').prop('disabled', false);
+                    $('#stipend').attr('placeholder', 'Stipend');
                     $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', true); // Disable CTC fields
                 } else {
                     $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', false); // Enable CTC fields
                     $('#stipend').prop('disabled', true);
+                    $('#stipend').attr('placeholder', 'NA');
                 }
                 if (selectedType === 'intern' || selectedType === 'contractor') {
                     $('#enabled, #disabled').prop('disabled', true); // Disable probation radio buttons
