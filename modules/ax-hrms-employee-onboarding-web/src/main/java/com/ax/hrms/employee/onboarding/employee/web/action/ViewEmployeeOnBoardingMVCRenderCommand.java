@@ -122,6 +122,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setGender(employeeDetails.getGender());
 			employeeDto.setExperienced(employeeDetails.getIsExperienced());
 			employeeDto.setEmployeeType(employeeDetails.getEmployeeType());
+			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
+			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
@@ -136,6 +138,22 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				if (Validator.isNotNull(fileEntry)) {
 					String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
 					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PIC, previewURL);
+				}
+			}
+			if(Validator.isNotNull(employeeDto.getAadhaarCardFileId()) && employeeDto.getAadhaarCardFileId()>0) {
+				FileEntry aadhaarCardFile = DLAppServiceUtil.getFileEntry(employeeDto.getAadhaarCardFileId());
+
+				if (Validator.isNotNull(aadhaarCardFile)) {
+					String previewURL = DLUtil.getPreviewURL(aadhaarCardFile, aadhaarCardFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD_FILE, previewURL);
+				}
+			}
+			if(Validator.isNotNull(employeeDto.getPanCardFileId()) && employeeDto.getPanCardFileId()>0) {
+				FileEntry panCardFile = DLAppServiceUtil.getFileEntry(employeeDto.getPanCardFileId());
+
+				if (Validator.isNotNull(panCardFile)) {
+					String previewURL = DLUtil.getPreviewURL(panCardFile, panCardFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD_FILE, previewURL);
 				}
 			}
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDto);

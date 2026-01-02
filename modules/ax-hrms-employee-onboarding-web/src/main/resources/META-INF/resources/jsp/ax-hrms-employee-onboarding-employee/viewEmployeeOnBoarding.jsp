@@ -55,7 +55,7 @@
                         <div class="form-group-view">
                             <div class="label-name">Date of Birth</div>
                             <div class="label-content">
-                                <fmt:formatDate value='${employeeDetail.dateOfBirth}' pattern='yyyy-MM-dd'/>
+                                <fmt:formatDate value='${employeeDetail.dateOfBirth}' pattern='dd-MM-yyyy'/>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                           <div class="form-group-view">
                               <div class="label-name">Marriage Date</div>
                               <div class="label-content">
-                                  <fmt:formatDate value="${employeeDetail.marriageDate}" pattern="yyyy-MM-dd"/>
+                                  <fmt:formatDate value="${employeeDetail.marriageDate}" pattern="dd-MM-yyyy"/>
                               </div>
                           </div>
                       </div>
@@ -118,6 +118,24 @@
                         <div class="form-group-view">
                             <div class="label-name">EmployeeType</div>
                             <div class="label-content">${employeeDetail.employeeType}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Aadhaar Card File</div>
+                            <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Pan Card File</div>
+                            <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
+                        </div>
+                    </div>
+                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Profile Pic</div>
+                            <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
                         </div>
                     </div>
                 </div>
