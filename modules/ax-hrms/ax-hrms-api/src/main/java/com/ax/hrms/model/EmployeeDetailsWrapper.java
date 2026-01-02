@@ -67,6 +67,8 @@ public class EmployeeDetailsWrapper
 		attributes.put("isExperienced", isIsExperienced());
 		attributes.put("isProbationEnabled", isIsProbationEnabled());
 		attributes.put("profilePicId", getProfilePicId());
+		attributes.put("aadhaarCardFileId", getAadhaarCardFileId());
+		attributes.put("panCardFileId", getPanCardFileId());
 		attributes.put("insuranceLink", getInsuranceLink());
 		attributes.put("isTerminated", isIsTerminated());
 		attributes.put("appraisalDate", getAppraisalDate());
@@ -279,6 +281,18 @@ public class EmployeeDetailsWrapper
 			setProfilePicId(profilePicId);
 		}
 
+		Long aadhaarCardFileId = (Long)attributes.get("aadhaarCardFileId");
+
+		if (aadhaarCardFileId != null) {
+			setAadhaarCardFileId(aadhaarCardFileId);
+		}
+
+		Long panCardFileId = (Long)attributes.get("panCardFileId");
+
+		if (panCardFileId != null) {
+			setPanCardFileId(panCardFileId);
+		}
+
 		String insuranceLink = (String)attributes.get("insuranceLink");
 
 		if (insuranceLink != null) {
@@ -319,6 +333,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public EmployeeDetails cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
+	}
+
+	/**
+	 * Returns the aadhaar card file ID of this employee details.
+	 *
+	 * @return the aadhaar card file ID of this employee details
+	 */
+	@Override
+	public long getAadhaarCardFileId() {
+		return model.getAadhaarCardFileId();
 	}
 
 	/**
@@ -642,6 +666,16 @@ public class EmployeeDetailsWrapper
 	}
 
 	/**
+	 * Returns the pan card file ID of this employee details.
+	 *
+	 * @return the pan card file ID of this employee details
+	 */
+	@Override
+	public long getPanCardFileId() {
+		return model.getPanCardFileId();
+	}
+
+	/**
 	 * Returns the personal email of this employee details.
 	 *
 	 * @return the personal email of this employee details
@@ -784,6 +818,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void persist() {
 		model.persist();
+	}
+
+	/**
+	 * Sets the aadhaar card file ID of this employee details.
+	 *
+	 * @param aadhaarCardFileId the aadhaar card file ID of this employee details
+	 */
+	@Override
+	public void setAadhaarCardFileId(long aadhaarCardFileId) {
+		model.setAadhaarCardFileId(aadhaarCardFileId);
 	}
 
 	/**
@@ -1104,6 +1148,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setOfficialEmail(String officialEmail) {
 		model.setOfficialEmail(officialEmail);
+	}
+
+	/**
+	 * Sets the pan card file ID of this employee details.
+	 *
+	 * @param panCardFileId the pan card file ID of this employee details
+	 */
+	@Override
+	public void setPanCardFileId(long panCardFileId) {
+		model.setPanCardFileId(panCardFileId);
 	}
 
 	/**

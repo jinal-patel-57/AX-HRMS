@@ -241,6 +241,11 @@ function setConfigsForAddExperienceSection(config) {
 		    });
 		}
         config.profilePicName = profilePicName;
+      config.aadhaarCardId = aadhaarCardId;
+      config.panCardId = panCardId;
+
+
+
           // Custom age validation
         $.validator.addMethod("ageRange", function (value, element) {
             if (!value) return false;
@@ -257,6 +262,22 @@ function setConfigsForAddExperienceSection(config) {
 
             return age >= 18 && age <= 60;
         }, "Age must be between 18 and 60 years.");
+
+        /* ================= Aadhaar & PAN FILE VALIDATION ================= */
+
+      $.validator.addMethod(
+          "documentRequired",
+          function (value, element, existingFileId) {
+              // UPDATE case → already uploaded
+              if (existingFileId && existingFileId > 0) {
+                  return true;
+              }
+              // ADD case → must upload
+              return element.files && element.files.length > 0;
+          }
+      );
+
+
         
         $(document).ready(function () {
 
@@ -307,7 +328,15 @@ function setConfigsForAddExperienceSection(config) {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
                         }
-                    }
+                    },
+                    [namespace + "aadhaarCard"]: {
+                           documentRequired: aadhaarCardId
+                       },
+
+                       [namespace + "panCard"]: {
+                           documentRequired: panCardId
+                       }
+
                 },
                 messages: {
                     [namespace + "personalEmail"]: {
@@ -327,7 +356,7 @@ function setConfigsForAddExperienceSection(config) {
                         validMobile10: "Enter a valid 10-digit mobile number"
                     },
                     [namespace + "employeeProfilePicture"]: {
-                        profilePicRequired: "Please select a profile picture jinal"
+                        profilePicRequired: "Please select a profile picture"
                     },
 
                     [namespace + "fatherName"]: {
@@ -343,7 +372,15 @@ function setConfigsForAddExperienceSection(config) {
 
                     [namespace + "spouseName"]: {
                         required: "Please enter your spouse's name."
-                    }
+                    },
+                      [namespace + "aadhaarCard"]: {
+                           documentRequired: "Please upload Aadhaar card."
+                       },
+
+                       [namespace + "panCard"]: {
+                           documentRequired: "Please upload PAN card."
+                       }
+
                 }
             });
             $.validator.addMethod("validMobile10", function (value) {
@@ -362,7 +399,7 @@ function setConfigsForAddExperienceSection(config) {
 		        	return true; // already uploaded earlier
 		    	}
 		    	return element.files && element.files.length > 0; }, 
-		    "Please select a profile picture jinal");
+		    "Please select a profile picture");
 
 //            var fileInput = document.getElementById(namespace + 'employeeProfilePicture');
 //
@@ -450,6 +487,9 @@ function setConfigsForAddExperienceSection(config) {
 
             toggleMaritalStatusFields();
             $("#" + namespace + "maritalStatus").on("change", toggleMaritalStatusFields);
+
+
+
             AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForValidation = setConfigsForValidation;
         });
     }

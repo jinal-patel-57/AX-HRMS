@@ -111,6 +111,100 @@
 
 
             </div>
+            <!-- adding aadhaar card and pan card filed here -->
+            <!-- Aadhaar Card -->
+            <div class="col-md-4 col-sm-12 mb-3">
+                <label class="form-label">
+                    Aadhaar Card <span class="text-danger">*</span>
+                </label>
+
+                <input type="file"
+                       class="form-control"
+                       id="<portlet:namespace />aadhaarCard"
+                       name="<portlet:namespace />aadhaarCard"
+                       accept=".pdf,image/*"
+                       value="${aadhaarCardName}"/>
+
+                <c:if test="${employeeDetail.aadhaarCardFileId > 0}">
+                    <%
+                        com.ax.hrms.model.EmployeeDetails edu =
+                            (com.ax.hrms.model.EmployeeDetails) request.getAttribute("employeeDetail");
+
+                        long fileEntryId = edu.getAadhaarCardFileId();
+                        String previewURL = "";
+
+                        if (fileEntryId > 0) {
+                            try {
+                                FileEntry fe = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+                                ThemeDisplay td =
+                                    (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+                                previewURL = DLUtil.getPreviewURL(
+                                        fe,
+                                        fe.getFileVersion(),
+                                        td,
+                                        ""
+                                );
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    %>
+
+                    <a target="_blank" href="<%= previewURL %>">View Aadhaar Card</a>
+                </c:if>
+
+            </div>
+
+
+            <!-- PAN Card -->
+           <div class="col-md-4 col-sm-12 mb-3">
+               <label class="form-label">
+                   PAN Card <span class="text-danger">*</span>
+               </label>
+
+               <input type="file"
+                      class="form-control"
+                      id="<portlet:namespace />panCard"
+                      name="<portlet:namespace />panCard"
+                      accept=".pdf,image/*"
+                      value="panCardName"/>
+
+             <c:if test="${employeeDetail.panCardFileId > 0}">
+                 <%
+                     com.ax.hrms.model.EmployeeDetails edu =
+                         (com.ax.hrms.model.EmployeeDetails) request.getAttribute("employeeDetail");
+
+                     long fileEntryId = edu.getPanCardFileId();
+                     String previewURL = "";
+
+                     if (fileEntryId > 0) {
+                         try {
+                             FileEntry fe = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+                             ThemeDisplay td =
+                                 (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+                             previewURL = DLUtil.getPreviewURL(
+                                     fe,
+                                     fe.getFileVersion(),
+                                     td,
+                                     ""
+                             );
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                         }
+                     }
+                 %>
+
+                 <a target="_blank" href="<%= previewURL %>">View PAN Card</a>
+             </c:if>
+
+           </div>
+
+
+
+
+            <!-- end here that field -->
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <label class="form-label"></label>
@@ -371,6 +465,9 @@
     values.push('${i.departmentMasterId}');
     </c:forEach>
     $('#department').val(values).trigger('change');
+
+   var aadhaarCardId = ${employeeDetail.aadhaarCardFileId};
+   var panCardId = ${employeeDetail.panCardFileId};
 
 </script>
 

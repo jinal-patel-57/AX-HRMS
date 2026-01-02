@@ -101,10 +101,13 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
         private Log log = LogFactoryUtil.getLog(AddEditEmployeeOnBoardingMVCActionCommmand.class);
 
+
         @Override
         protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
             log.info("AddEditEmployeeOnBoardingMVCActionCommmand >>> doProcessAction ::: Action Called ::: ");
+
+
 
             long employeeId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 
@@ -113,13 +116,31 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
             serviceContext.setAddGroupPermissions(true);
             serviceContext.setAddGuestPermissions(false);
             long oldManagerId = 0l;
+
+            EmployeeDetails employeeUser = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+            User employeeLrUser = userLocalService.getUser(employeeUser.getLrUserId());
+
             Folder folder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT, 0,themeDisplay, serviceContext);
-            Folder parentFolder = axHrmsCommonApi.createFolder(String.format("%s%d", themeDisplay.getUser().getScreenName(), themeDisplay.getUserId()),folder.getFolderId(), themeDisplay, serviceContext);
+            Folder parentFolder = axHrmsCommonApi.createFolder(String.format("%s%d", employeeLrUser.getScreenName(), employeeLrUser.getUserId()),folder.getFolderId(), themeDisplay, serviceContext);
             Folder profilePictureFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PICTURE, parentFolder.getFolderId(), themeDisplay,serviceContext);
+            Folder aadhaarCardFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD_FOLDER, parentFolder.getFolderId(), themeDisplay,serviceContext);
+            Folder panCardFolder = axHrmsCommonApi.createFolder(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD_FOLDER, parentFolder.getFolderId(), themeDisplay,serviceContext);
 
             UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
             File file = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_PROFILE_PICTURE);
-            String fileName = uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_PROFILE_PICTURE);
+            String fileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_PROFILE_PICTURE));
+
+            File aadhaarFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD);
+            String aadhaarFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD));
+
+            File panFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD);
+            String panFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD));
+
+            log.info("aadhaar card :-"+ aadhaarFile);
+            log.info("aadhaar card Name:-"+ aadhaarFileName);
+
+            log.info("Pan card :-"+ panFile);
+            log.info("Pan card Name :-"+ panFileName);
 
 		EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(ParamUtil.getLong(actionRequest, "employeeId"));
 		employeeDetails.setPersonalEmail(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PERSONAL_EMAIL));
@@ -128,6 +149,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 		employeeDetails.setFatherName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.FATHER_NAME));
 		employeeDetails.setMaritalStatus(ParamUtil.getBoolean(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.MARTIAL_STATUS));
 		employeeDetails.setSpouseName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SPOUSE_NAME));
+        employeeDetails.getPanCardFileId();
+        employeeDetails.getAadhaarCardFileId();
+
 
 
             try {
@@ -321,7 +345,13 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 
             }
             EmployeeBasicDetailsUtil employeeBasicDetailsUtil = new EmployeeBasicDetailsUtil();
-            employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
+//            employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
+//            employeeBasicDetailsUtil.addEditFileEntry(aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, aadhaarCardFolder,serviceContext);
+//            employeeBasicDetailsUtil.addEditFileEntry(panFile, panFileName, actionRequest, employeeDetails, panCardFolder,serviceContext);
+            employeeBasicDetailsUtil.addEditFileEntry( file,  fileName, actionRequest, employeeDetails,employeeDetails.getProfilePicId(),"PROFILE", profilePictureFolder, serviceContext);
+            employeeBasicDetailsUtil.addEditFileEntry( aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, employeeDetails.getAadhaarCardFileId(),"AADHAAR", aadhaarCardFolder, serviceContext);
+            employeeBasicDetailsUtil.addEditFileEntry( panFile, panFileName, actionRequest,  employeeDetails, employeeDetails.getPanCardFileId(), "PAN", panCardFolder, serviceContext);
+
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
             updateEmployeeWithManager(themeDisplay.getCompanyId(), employeeDetails, employeeDetails.getManagerId(),oldManagerId);
@@ -364,6 +394,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
         		}
         	
         	
+        }
+        private String generateFileName(String original) {
+            return System.currentTimeMillis() + "_" + original.replaceAll("\\s+", "_");
         }
         
 //        public void updateEmployeeWithManager(

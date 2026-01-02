@@ -573,6 +573,34 @@ public interface EmployeeDetailsModel
 	public void setProfilePicId(long profilePicId);
 
 	/**
+	 * Returns the aadhaar card file ID of this employee details.
+	 *
+	 * @return the aadhaar card file ID of this employee details
+	 */
+	public long getAadhaarCardFileId();
+
+	/**
+	 * Sets the aadhaar card file ID of this employee details.
+	 *
+	 * @param aadhaarCardFileId the aadhaar card file ID of this employee details
+	 */
+	public void setAadhaarCardFileId(long aadhaarCardFileId);
+
+	/**
+	 * Returns the pan card file ID of this employee details.
+	 *
+	 * @return the pan card file ID of this employee details
+	 */
+	public long getPanCardFileId();
+
+	/**
+	 * Sets the pan card file ID of this employee details.
+	 *
+	 * @param panCardFileId the pan card file ID of this employee details
+	 */
+	public void setPanCardFileId(long panCardFileId);
+
+	/**
 	 * Returns the insurance link of this employee details.
 	 *
 	 * @return the insurance link of this employee details

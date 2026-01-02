@@ -260,6 +260,8 @@ create table ax_EmployeeDetails (
 	isExperienced BOOLEAN,
 	isProbationEnabled BOOLEAN,
 	profilePicId LONG,
+	aadhaarCardFileId LONG,
+	panCardFileId LONG,
 	insuranceLink VARCHAR(1000) null,
 	isTerminated BOOLEAN,
 	appraisalDate DATE null,

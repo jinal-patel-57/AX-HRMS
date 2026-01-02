@@ -257,6 +257,8 @@
 		<field name="isExperienced" type="boolean" />
 		<field name="isProbationEnabled" type="boolean" />
 		<field name="profilePicId" type="long" />
+		<field name="aadhaarCardFileId" type="long" />
+		<field name="panCardFileId" type="long" />
 		<field name="insuranceLink" type="String">
 			<hint name="max-length">1000</hint>
 		</field>

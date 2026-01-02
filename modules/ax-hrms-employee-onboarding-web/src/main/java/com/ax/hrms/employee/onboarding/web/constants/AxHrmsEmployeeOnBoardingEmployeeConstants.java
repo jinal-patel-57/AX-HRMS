@@ -56,8 +56,12 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	
 	public static final String HRMS_DOCUMENT="HRMS Document";
 	public static final String PROFILE_PICTURE="Profile Picture";
+	public static final String AADHAAR_CARD_FOLDER="Aadhaar Card";
+	public static final String PAN_CARD_FOLDER="Pan Card";
 	public static final String EMPLOYEE_PROFILE_PICTURE="employeeProfilePicture";
-	
+	public static final String PAN_CARD="panCard";
+	public static final String AADHAAR_CARD="aadhaarCard";
+
 	//AddEmployeeBankAccountMVCActionCommand
 	public static final String ACCOUNT_NUMBER ="accountNumber";
 	public static final String ACCOUNT_TYPE ="accountType";

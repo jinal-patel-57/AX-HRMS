@@ -102,6 +102,12 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Long> profilePicId = createColumn(
 		"profilePicId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> aadhaarCardFileId =
+		createColumn(
+			"aadhaarCardFileId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> panCardFileId =
+		createColumn(
+			"panCardFileId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, String> insuranceLink =
 		createColumn(
 			"insuranceLink", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);

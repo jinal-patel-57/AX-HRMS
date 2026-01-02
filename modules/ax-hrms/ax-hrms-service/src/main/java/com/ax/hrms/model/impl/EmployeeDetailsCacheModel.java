@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(83);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -122,6 +122,10 @@ public class EmployeeDetailsCacheModel
 		sb.append(isProbationEnabled);
 		sb.append(", profilePicId=");
 		sb.append(profilePicId);
+		sb.append(", aadhaarCardFileId=");
+		sb.append(aadhaarCardFileId);
+		sb.append(", panCardFileId=");
+		sb.append(panCardFileId);
 		sb.append(", insuranceLink=");
 		sb.append(insuranceLink);
 		sb.append(", isTerminated=");
@@ -283,6 +287,8 @@ public class EmployeeDetailsCacheModel
 		employeeDetailsImpl.setIsExperienced(isExperienced);
 		employeeDetailsImpl.setIsProbationEnabled(isProbationEnabled);
 		employeeDetailsImpl.setProfilePicId(profilePicId);
+		employeeDetailsImpl.setAadhaarCardFileId(aadhaarCardFileId);
+		employeeDetailsImpl.setPanCardFileId(panCardFileId);
 
 		if (insuranceLink == null) {
 			employeeDetailsImpl.setInsuranceLink("");
@@ -366,6 +372,10 @@ public class EmployeeDetailsCacheModel
 		isProbationEnabled = objectInput.readBoolean();
 
 		profilePicId = objectInput.readLong();
+
+		aadhaarCardFileId = objectInput.readLong();
+
+		panCardFileId = objectInput.readLong();
 		insuranceLink = objectInput.readUTF();
 
 		isTerminated = objectInput.readBoolean();
@@ -496,6 +506,10 @@ public class EmployeeDetailsCacheModel
 
 		objectOutput.writeLong(profilePicId);
 
+		objectOutput.writeLong(aadhaarCardFileId);
+
+		objectOutput.writeLong(panCardFileId);
+
 		if (insuranceLink == null) {
 			objectOutput.writeUTF("");
 		}
@@ -551,6 +565,8 @@ public class EmployeeDetailsCacheModel
 	public boolean isExperienced;
 	public boolean isProbationEnabled;
 	public long profilePicId;
+	public long aadhaarCardFileId;
+	public long panCardFileId;
 	public String insuranceLink;
 	public boolean isTerminated;
 	public long appraisalDate;

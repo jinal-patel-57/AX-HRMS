@@ -33,6 +33,8 @@ public class EmployeeDto {
 	public boolean isExperienced;
 	public boolean isProbationEnabled;
 	public long profilePicId;
+	public long aadhaarCardFileId;
+	public long panCardFileId;
 	public long educationCertificateMediaId;
 	public String insuranceLink;
 	public String reportingManager;
@@ -95,7 +97,23 @@ public class EmployeeDto {
 	String educationCertificatePreviewUrl;
     private List<String> experienceCertificatePreviewUrls;
 
-    public List<String> getExperienceCertificatePreviewUrls() {
+	public long getAadhaarCardFileId() {
+		return aadhaarCardFileId;
+	}
+
+	public void setAadhaarCardFileId(long aadhaarCardFileId) {
+		this.aadhaarCardFileId = aadhaarCardFileId;
+	}
+
+	public long getPanCardFileId() {
+		return panCardFileId;
+	}
+
+	public void setPanCardFileId(long panCardFileId) {
+		this.panCardFileId = panCardFileId;
+	}
+
+	public List<String> getExperienceCertificatePreviewUrls() {
         return experienceCertificatePreviewUrls;
     }
 

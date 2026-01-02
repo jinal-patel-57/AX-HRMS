@@ -82,7 +82,8 @@ public class EmployeeDetailsModelImpl
 		{"probationStatusId", Types.BIGINT},
 		{"isEmployeeOnboarded", Types.BOOLEAN},
 		{"isExperienced", Types.BOOLEAN}, {"isProbationEnabled", Types.BOOLEAN},
-		{"profilePicId", Types.BIGINT}, {"insuranceLink", Types.VARCHAR},
+		{"profilePicId", Types.BIGINT}, {"aadhaarCardFileId", Types.BIGINT},
+		{"panCardFileId", Types.BIGINT}, {"insuranceLink", Types.VARCHAR},
 		{"isTerminated", Types.BOOLEAN}, {"appraisalDate", Types.TIMESTAMP},
 		{"employeeType", Types.VARCHAR}, {"stipend", Types.DOUBLE},
 		{"managerId", Types.BIGINT}
@@ -125,6 +126,8 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("isExperienced", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("isProbationEnabled", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("profilePicId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("aadhaarCardFileId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("panCardFileId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("insuranceLink", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("isTerminated", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("appraisalDate", Types.TIMESTAMP);
@@ -134,7 +137,7 @@ public class EmployeeDetailsModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -391,6 +394,10 @@ public class EmployeeDetailsModelImpl
 			attributeGetterFunctions.put(
 				"profilePicId", EmployeeDetails::getProfilePicId);
 			attributeGetterFunctions.put(
+				"aadhaarCardFileId", EmployeeDetails::getAadhaarCardFileId);
+			attributeGetterFunctions.put(
+				"panCardFileId", EmployeeDetails::getPanCardFileId);
+			attributeGetterFunctions.put(
 				"insuranceLink", EmployeeDetails::getInsuranceLink);
 			attributeGetterFunctions.put(
 				"isTerminated", EmployeeDetails::getIsTerminated);
@@ -549,6 +556,14 @@ public class EmployeeDetailsModelImpl
 				"profilePicId",
 				(BiConsumer<EmployeeDetails, Long>)
 					EmployeeDetails::setProfilePicId);
+			attributeSetterBiConsumers.put(
+				"aadhaarCardFileId",
+				(BiConsumer<EmployeeDetails, Long>)
+					EmployeeDetails::setAadhaarCardFileId);
+			attributeSetterBiConsumers.put(
+				"panCardFileId",
+				(BiConsumer<EmployeeDetails, Long>)
+					EmployeeDetails::setPanCardFileId);
 			attributeSetterBiConsumers.put(
 				"insuranceLink",
 				(BiConsumer<EmployeeDetails, String>)
@@ -1262,6 +1277,36 @@ public class EmployeeDetailsModelImpl
 
 	@JSON
 	@Override
+	public long getAadhaarCardFileId() {
+		return _aadhaarCardFileId;
+	}
+
+	@Override
+	public void setAadhaarCardFileId(long aadhaarCardFileId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_aadhaarCardFileId = aadhaarCardFileId;
+	}
+
+	@JSON
+	@Override
+	public long getPanCardFileId() {
+		return _panCardFileId;
+	}
+
+	@Override
+	public void setPanCardFileId(long panCardFileId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_panCardFileId = panCardFileId;
+	}
+
+	@JSON
+	@Override
 	public String getInsuranceLink() {
 		if (_insuranceLink == null) {
 			return "";
@@ -1481,6 +1526,8 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setIsExperienced(isIsExperienced());
 		employeeDetailsImpl.setIsProbationEnabled(isIsProbationEnabled());
 		employeeDetailsImpl.setProfilePicId(getProfilePicId());
+		employeeDetailsImpl.setAadhaarCardFileId(getAadhaarCardFileId());
+		employeeDetailsImpl.setPanCardFileId(getPanCardFileId());
 		employeeDetailsImpl.setInsuranceLink(getInsuranceLink());
 		employeeDetailsImpl.setIsTerminated(isIsTerminated());
 		employeeDetailsImpl.setAppraisalDate(getAppraisalDate());
@@ -1563,6 +1610,10 @@ public class EmployeeDetailsModelImpl
 			this.<Boolean>getColumnOriginalValue("isProbationEnabled"));
 		employeeDetailsImpl.setProfilePicId(
 			this.<Long>getColumnOriginalValue("profilePicId"));
+		employeeDetailsImpl.setAadhaarCardFileId(
+			this.<Long>getColumnOriginalValue("aadhaarCardFileId"));
+		employeeDetailsImpl.setPanCardFileId(
+			this.<Long>getColumnOriginalValue("panCardFileId"));
 		employeeDetailsImpl.setInsuranceLink(
 			this.<String>getColumnOriginalValue("insuranceLink"));
 		employeeDetailsImpl.setIsTerminated(
@@ -1825,6 +1876,10 @@ public class EmployeeDetailsModelImpl
 
 		employeeDetailsCacheModel.profilePicId = getProfilePicId();
 
+		employeeDetailsCacheModel.aadhaarCardFileId = getAadhaarCardFileId();
+
+		employeeDetailsCacheModel.panCardFileId = getPanCardFileId();
+
 		employeeDetailsCacheModel.insuranceLink = getInsuranceLink();
 
 		String insuranceLink = employeeDetailsCacheModel.insuranceLink;
@@ -1951,6 +2006,8 @@ public class EmployeeDetailsModelImpl
 	private boolean _isExperienced;
 	private boolean _isProbationEnabled;
 	private long _profilePicId;
+	private long _aadhaarCardFileId;
+	private long _panCardFileId;
 	private String _insuranceLink;
 	private boolean _isTerminated;
 	private Date _appraisalDate;
@@ -2021,6 +2078,8 @@ public class EmployeeDetailsModelImpl
 		_columnOriginalValues.put("isExperienced", _isExperienced);
 		_columnOriginalValues.put("isProbationEnabled", _isProbationEnabled);
 		_columnOriginalValues.put("profilePicId", _profilePicId);
+		_columnOriginalValues.put("aadhaarCardFileId", _aadhaarCardFileId);
+		_columnOriginalValues.put("panCardFileId", _panCardFileId);
 		_columnOriginalValues.put("insuranceLink", _insuranceLink);
 		_columnOriginalValues.put("isTerminated", _isTerminated);
 		_columnOriginalValues.put("appraisalDate", _appraisalDate);
@@ -2116,17 +2175,21 @@ public class EmployeeDetailsModelImpl
 
 		columnBitmasks.put("profilePicId", 4294967296L);
 
-		columnBitmasks.put("insuranceLink", 8589934592L);
+		columnBitmasks.put("aadhaarCardFileId", 8589934592L);
 
-		columnBitmasks.put("isTerminated", 17179869184L);
+		columnBitmasks.put("panCardFileId", 17179869184L);
 
-		columnBitmasks.put("appraisalDate", 34359738368L);
+		columnBitmasks.put("insuranceLink", 34359738368L);
 
-		columnBitmasks.put("employeeType", 68719476736L);
+		columnBitmasks.put("isTerminated", 68719476736L);
 
-		columnBitmasks.put("stipend", 137438953472L);
+		columnBitmasks.put("appraisalDate", 137438953472L);
 
-		columnBitmasks.put("managerId", 274877906944L);
+		columnBitmasks.put("employeeType", 274877906944L);
+
+		columnBitmasks.put("stipend", 549755813888L);
+
+		columnBitmasks.put("managerId", 1099511627776L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

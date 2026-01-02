@@ -27,38 +27,99 @@ public class EmployeeBasicDetailsUtil {
 
 	private Log log = LogFactoryUtil.getLog(EmployeeBasicDetailsUtil.class);
 	
-	public void addEditFileEntry(File file,String fileName,ActionRequest actionRequest,EmployeeDetails employeeDetails
-			,Folder profilePictureFolder,ServiceContext serviceContext) {
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		if (file != null && file.exists() && fileName != null) {
-			long userId = themeDisplay.getUserId();
-			long profilePicId = employeeDetails.getProfilePicId();
-			try {	
-				if (profilePicId == 0) {
-							FileEntry entry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),
-									themeDisplay.getScopeGroupId(), profilePictureFolder.getFolderId(), fileName,
-									MimeTypesUtil.getContentType(file), fileName, StringPool.BLANK, StringPool.BLANK, file,
-									serviceContext);
-							log.info("AddEditEmployeeOnBoardingMVCActionCommmand >>> doProcessAction >>> ::: entry =" + entry.getFileEntryId());
-							employeeDetails.setProfilePicId(entry.getFileEntryId());
-		        }else {
-		            FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(profilePicId);
-		            String mimeType = MimeTypesUtil.getContentType(file);
-		            byte[] fileContent = Files.readAllBytes(file.toPath());
-		            FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(userId,profilePicId,fileName,mimeType,fileName,null,existingFileEntry.getDescription(),StringPool.BLANK,DLVersionNumberIncrease.MAJOR,fileContent,null,null, null, serviceContext);
-		            User user = themeDisplay.getUser();
-		            user.setPortraitId(updatedFileEntry.getFileEntryId());
-		            String  profilePicName =updatedFileEntry.getFileName();
-					log.info("AddEditEmployeeOnBoardingMVCActionCommmand >>> doProcessAction >>> ::: proilePicName ==>" + profilePicName);
-		            user.setAgreedToTermsOfUse(true);
-		            UserLocalServiceUtil.updateUser(user);   
-		        }
-		    } catch (PortalException | SystemException | java.io.IOException e) {
-		        log.error("Error updating file entry for user ID " + userId + ": ", e);
-		    }
+//	public void addEditFileEntry(File file,String fileName,ActionRequest actionRequest,EmployeeDetails employeeDetails
+//			,Folder profilePictureFolder,ServiceContext serviceContext) {
+//		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+//
+//		if (file != null && file.exists() && fileName != null) {
+//			long userId = themeDisplay.getUserId();
+//			long profilePicId = employeeDetails.getProfilePicId();
+//			try {
+//				if (profilePicId == 0) {
+//							FileEntry entry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),
+//									themeDisplay.getScopeGroupId(), profilePictureFolder.getFolderId(), fileName,
+//									MimeTypesUtil.getContentType(file), fileName, StringPool.BLANK, StringPool.BLANK, file,
+//									serviceContext);
+//							log.info("AddEditEmployeeOnBoardingMVCActionCommmand >>> doProcessAction >>> ::: entry =" + entry.getFileEntryId());
+//							employeeDetails.setProfilePicId(entry.getFileEntryId());
+//		        }else {
+//		            FileEntry existingFileEntry = DLAppLocalServiceUtil.getFileEntry(profilePicId);
+//		            String mimeType = MimeTypesUtil.getContentType(file);
+//		            byte[] fileContent = Files.readAllBytes(file.toPath());
+//		            FileEntry updatedFileEntry = DLAppLocalServiceUtil.updateFileEntry(userId,profilePicId,fileName,mimeType,fileName,null,existingFileEntry.getDescription(),StringPool.BLANK,DLVersionNumberIncrease.MAJOR,fileContent,null,null, null, serviceContext);
+//		            User user = themeDisplay.getUser();
+//		            user.setPortraitId(updatedFileEntry.getFileEntryId());
+//		            String  profilePicName =updatedFileEntry.getFileName();
+//					log.info("AddEditEmployeeOnBoardingMVCActionCommmand >>> doProcessAction >>> ::: proilePicName ==>" + profilePicName);
+//		            user.setAgreedToTermsOfUse(true);
+//		            UserLocalServiceUtil.updateUser(user);
+//		        }
+//		    } catch (PortalException | SystemException | java.io.IOException e) {
+//		        log.error("Error updating file entry for user ID " + userId + ": ", e);
+//		    }
+//		} else {
+//			log.error("File does not exist or file name is null");
+//		}
+//	}
+public void addEditFileEntry(	File file,String fileName,ActionRequest actionRequest,EmployeeDetails employeeDetails,	long existingFileEntryId, String documentType, Folder folder, ServiceContext serviceContext) {
+
+	ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+	if (file == null || !file.exists() || fileName == null) {
+		return;
+	}
+
+	long userId = themeDisplay.getUserId();
+
+	try {
+		FileEntry fileEntry;
+
+		if (existingFileEntryId == 0) {
+			fileEntry = DLAppLocalServiceUtil.addFileEntry(
+					userId,
+					themeDisplay.getScopeGroupId(),
+					folder.getFolderId(),
+					fileName,
+					MimeTypesUtil.getContentType(file),
+					fileName,
+					StringPool.BLANK,
+					StringPool.BLANK,
+					file,
+					serviceContext
+			);
 		} else {
-			log.error("File does not exist or file name is null");
+			FileEntry existing = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
+
+			fileEntry = DLAppLocalServiceUtil.updateFileEntry(
+					userId,
+					existingFileEntryId,
+					fileName,
+					MimeTypesUtil.getContentType(file),
+					fileName,
+					null,
+					existing.getDescription(),
+					StringPool.BLANK,
+					DLVersionNumberIncrease.MAJOR,
+					Files.readAllBytes(file.toPath()),
+					null,
+					null,
+					null,
+					serviceContext
+			);
 		}
-	}	
+
+		if ("PROFILE".equals(documentType)) {
+			employeeDetails.setProfilePicId(fileEntry.getFileEntryId());
+		} else if ("AADHAAR".equals(documentType)) {
+			employeeDetails.setAadhaarCardFileId(fileEntry.getFileEntryId());
+		} else if ("PAN".equals(documentType)) {
+			employeeDetails.setPanCardFileId(fileEntry.getFileEntryId());
+		}
+
+	} catch (Exception e) {
+		log.error("File upload failed", e);
+	}
+}
+
 }

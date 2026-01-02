@@ -47,6 +47,8 @@
         <column name="isExperienced" type="boolean"/>
         <column name="isProbationEnabled" type="boolean"/>
         <column name="profilePicId" type="long"/>
+        <column name="aadhaarCardFileId" type="long"/>
+        <column name="panCardFileId" type="long"/>
         <column name="insuranceLink" type="String"/>
         <column name="isTerminated" type="boolean"/>
         <column name="appraisalDate" type="Date"/>
