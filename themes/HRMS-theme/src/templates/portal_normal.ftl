@@ -120,7 +120,7 @@
 						<div class="copyrights">
 							<div class="container-grid">
 								<div class="copyright-box">
-									<p><span>&COPY; 2024 Aixtor.com, All rights reserved</span> <a
+									<p><span>&COPY; <span id="copyright-year"></span> <a href="${site_default_url}" class="ax-link">Aixtor.com</a>, All rights reserved</span> <a
 											href="https://aixtor.com/privacy-policy/" class="ani-1">
 											Privacy Policy
 										</a>

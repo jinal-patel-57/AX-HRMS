@@ -88,6 +88,7 @@ function childNavigation() {
 
   $('.custom-select').select2();
 
+  document.getElementById("copyright-year").textContent = new Date().getFullYear();
 });
 
  // Hide loader after full page load
