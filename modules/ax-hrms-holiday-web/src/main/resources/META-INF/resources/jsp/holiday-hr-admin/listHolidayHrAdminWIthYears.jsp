@@ -37,7 +37,7 @@
 <div class="card">
   <div class="card-header d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center c-gap-2">
-    <strong>Holiday Management</strong>
+    <strong class="text-nowrap">Holiday Management</strong>
 	<select class="form-control " id="selectedYear" onchange="updateURLAndFetchDataHR(this.id)">
         <c:forEach items="${fullList}" var="year">
             <c:if test="${year ne null and year ne ''}">

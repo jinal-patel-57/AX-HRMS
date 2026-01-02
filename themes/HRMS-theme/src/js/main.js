@@ -86,6 +86,8 @@ function childNavigation() {
     }, 500);
   });
 
+  $('.custom-select').select2();
+
 });
 
  // Hide loader after full page load

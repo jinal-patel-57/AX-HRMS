@@ -68,7 +68,7 @@
 
 <c:if test="${!isOnBoarded}">
     <div id="employeeOnBorading">
-        <div class="container mt-3">
+        <div>
             <!-- Navigation tabs -->
             <ul class="nav nav-pills" id="stepperNav" role="tablist">
                 <li class="nav-item" role="presentation">

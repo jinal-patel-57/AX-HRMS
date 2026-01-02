@@ -17,7 +17,7 @@
 <#--		  rel="stylesheet">-->
 <#--	-->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 	<@liferay_util["include"]
 		page=top_head_include />
 </head>
@@ -145,6 +145,7 @@
 	<script src="${javascript_folder}/slick.js"></script>
 <#--	<script src="${javascript_folder}/summernote.min.js"></script>-->
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 	<@liferay_util["include"]
 		page=body_bottom_include />
 	<@liferay_util["include"]
