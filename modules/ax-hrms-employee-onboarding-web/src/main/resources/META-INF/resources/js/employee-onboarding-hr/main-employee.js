@@ -1791,11 +1791,9 @@ function setConfigsForExperienceValidation(config) {
                     maxlength: 250
                 },
                 [namespace + "presentaddressLine2"]: {
-                    required: true,
                     maxlength: 250
                 },
                 [namespace + "presentaddressLine3"]: {
-                    required: true,
                     maxlength: 250
                 },
                 [namespace + "presentstate"]: {
@@ -1852,11 +1850,9 @@ function setConfigsForExperienceValidation(config) {
                     maxlength: "Address line 1 cannot exceed 250 characters."
                 },
                 [namespace + "presentaddressLine2"]: {
-                    required: "Please enter the present address line 2.",
                     maxlength: "Address line 2 cannot exceed 250 characters."
                 },
                 [namespace + "presentaddressLine3"]: {
-                    required: "Please enter the present address line 3.",
                     maxlength: "Address line 3 cannot exceed 250 characters."
                 },
                 [namespace + "presentstate"]: {

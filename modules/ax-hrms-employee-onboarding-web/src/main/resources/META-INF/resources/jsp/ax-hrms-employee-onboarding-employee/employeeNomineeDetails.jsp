@@ -70,7 +70,7 @@
             <div class="col-md-4 col-sm-12 mb-3">
                 <div class="form-group">
                     <label for="<portlet:namespace />presentaddressLine2" class="form-label">
-                        <liferay-ui:message key="present-address-line2"/><span class="text-danger">*</span>
+                        <liferay-ui:message key="present-address-line2"/>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentaddressLine2"
                                     name="<portlet:namespace />presentaddressLine2" maxlength="250"
@@ -82,7 +82,7 @@
             <div class="col-md-4 col-sm-12 mb-3">
                 <div class="form-group">
                     <label for="<portlet:namespace />presentaddressLine3" class="form-label">
-                        <liferay-ui:message key="present-address-line3"/><span class="text-danger">*</span>
+                        <liferay-ui:message key="present-address-line3"/>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentaddressLine3"
                                     name="<portlet:namespace />presentaddressLine3" maxlength="250"
@@ -90,7 +90,17 @@
                 </div>
             </div>
 
-
+			<!-- City -->
+			<div class="col-md-4 col-sm-12 mb-3">
+                <div class="form-group">
+                    <label for="<portlet:namespace />presentcity" class="form-label"> <liferay-ui:message
+                            key="city"/><span class="text-danger">*</span>
+                    </label> <input type="text" class="form-control"
+                                    id="<portlet:namespace />presentcity" name="<portlet:namespace />presentcity"
+                                    maxlength="100" value="${address.city}"/>
+                </div>
+            </div>
+			
             <!-- State -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <div class="form-group">

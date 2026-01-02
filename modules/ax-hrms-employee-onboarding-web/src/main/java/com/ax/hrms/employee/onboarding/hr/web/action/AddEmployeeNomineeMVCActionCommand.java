@@ -69,6 +69,7 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 		String presentAddressLine1 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE1);
 		String presentAddressLine2 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE2);
 		String presentAddressLine3 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE3);
+		String presentCity = ParamUtil.getString(actionRequest,"presentcity");
 		String presentState = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_STATE);
 		long presentCountry = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_COUNTRY);
 		String presentPincode = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_PINCODE);
@@ -100,6 +101,7 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 				address.setLine2(presentAddressLine2);
 				address.setLine3(presentAddressLine3);
 				address.setState(presentState);
+				address.setCity(presentCity);
 
 				addressId = address.getAddressId();
 				nomineeId = nominee.getNomineeId();
@@ -140,6 +142,7 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 			address.setLine1(presentAddressLine1);
 			address.setLine2(presentAddressLine2);
 			address.setLine3(presentAddressLine3);
+			address.setCity(presentCity);
 			address.setState(presentState);
 			address.setCountry(presentCountry);
 			address.setPincode(presentPincode);
