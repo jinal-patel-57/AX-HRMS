@@ -1,5 +1,6 @@
 package com.ax.hrms.employee.onboarding.employee.web.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.onboarding.employee.web.dto.EmployeeDto;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
@@ -78,6 +79,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 	@Reference
 	EmployeeEducationLocalService employeeEducationLocalService;
+	@Reference
+	private AxHrmsCommonApi axHrmsCommonApi;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -90,6 +93,10 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 		String viewEmployeeId = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 		String cmd = ParamUtil.getString(renderRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.CMD);
+
+		boolean isHRAdmin = axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+
+
 
 		employeeId = Long.parseLong(viewEmployeeId);
 
@@ -324,6 +331,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 		if(cmd.equalsIgnoreCase("view")){
 			return AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EMPLOYEE_DETAILS_JSP;
 		}else {
+			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.IS_HR_ADMIN, isHRAdmin);
 			return AxHrmsEmployeeOnBoardingEmployeeConstants.VIEW_EMPLOYEE_ONBOARDING_JSP;
 		}
 	}

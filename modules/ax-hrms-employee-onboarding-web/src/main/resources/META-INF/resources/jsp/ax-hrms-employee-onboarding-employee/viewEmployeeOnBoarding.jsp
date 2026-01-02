@@ -12,7 +12,11 @@
     <portlet:param name="review" value="REVIEW"/>
 </portlet:actionURL>
 
-
+<c:if test="${!isHRAdmin}">
+    <div class="alert alert-warning">You are not authorized to Access this page!
+    </div>
+</c:if>
+<c:if test="${isHRAdmin}">
 <div class="card">
     <div class="card-header">
         <strong>
@@ -711,6 +715,7 @@
 
     </div>
 </div>
+</c:if>
 
 <script>
     const namespace = '<portlet:namespace />';

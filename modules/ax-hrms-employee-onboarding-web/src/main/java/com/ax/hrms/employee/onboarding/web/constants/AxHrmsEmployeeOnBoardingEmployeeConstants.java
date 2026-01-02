@@ -179,6 +179,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	
 	//viewEmployeeOnBoardingMVCRenderCommand
 	public static final String PROFILE_PIC="profilePic";
+	public static final String IS_HR_ADMIN="isHRAdmin";
 	public static final String AADHAAR_CARD_FILE="aadharCardFile";
 	public static final String PAN_CARD_FILE="panCardFile";
 

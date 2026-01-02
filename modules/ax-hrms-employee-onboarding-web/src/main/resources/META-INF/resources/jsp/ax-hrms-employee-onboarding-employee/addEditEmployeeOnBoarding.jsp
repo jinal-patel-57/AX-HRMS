@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
 
 <c:if test="${isOnBoarded}">
-    <div class="alert alert-warning">You are not authorized to Access this page anymore!
+    <div class="alert alert-warning">This form is submitted for the review.
     </div>
 </c:if>
 
