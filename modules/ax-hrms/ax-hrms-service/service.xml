@@ -110,6 +110,7 @@
         <column name="line1" type="String"/>
         <column name="line2" type="String"/>
         <column name="line3" type="String"/>
+        <column name="city" type="String"/>
         <column name="state" type="String"/>
         <column name="country" type="long"/>
         <column name="pincode" type="String"/>

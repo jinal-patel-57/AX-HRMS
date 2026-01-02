@@ -216,6 +216,21 @@ public interface AddressModel
 	public void setLine3(String line3);
 
 	/**
+	 * Returns the city of this address.
+	 *
+	 * @return the city of this address
+	 */
+	@AutoEscape
+	public String getCity();
+
+	/**
+	 * Sets the city of this address.
+	 *
+	 * @param city the city of this address
+	 */
+	public void setCity(String city);
+
+	/**
 	 * Returns the state of this address.
 	 *
 	 * @return the state of this address

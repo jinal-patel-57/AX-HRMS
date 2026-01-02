@@ -45,6 +45,8 @@ public class AddressTable extends BaseTable<AddressTable> {
 		"line2", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AddressTable, String> line3 = createColumn(
 		"line3", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<AddressTable, String> city = createColumn(
+		"city", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AddressTable, String> state = createColumn(
 		"state_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AddressTable, Long> country = createColumn(

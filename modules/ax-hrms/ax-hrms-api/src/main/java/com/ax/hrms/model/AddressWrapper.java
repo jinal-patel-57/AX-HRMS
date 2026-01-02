@@ -45,6 +45,7 @@ public class AddressWrapper
 		attributes.put("line1", getLine1());
 		attributes.put("line2", getLine2());
 		attributes.put("line3", getLine3());
+		attributes.put("city", getCity());
 		attributes.put("state", getState());
 		attributes.put("country", getCountry());
 		attributes.put("pincode", getPincode());
@@ -120,6 +121,12 @@ public class AddressWrapper
 			setLine3(line3);
 		}
 
+		String city = (String)attributes.get("city");
+
+		if (city != null) {
+			setCity(city);
+		}
+
 		String state = (String)attributes.get("state");
 
 		if (state != null) {
@@ -152,6 +159,16 @@ public class AddressWrapper
 	@Override
 	public long getAddressId() {
 		return model.getAddressId();
+	}
+
+	/**
+	 * Returns the city of this address.
+	 *
+	 * @return the city of this address
+	 */
+	@Override
+	public String getCity() {
+		return model.getCity();
 	}
 
 	/**
@@ -307,6 +324,16 @@ public class AddressWrapper
 	@Override
 	public void setAddressId(long addressId) {
 		model.setAddressId(addressId);
+	}
+
+	/**
+	 * Sets the city of this address.
+	 *
+	 * @param city the city of this address
+	 */
+	@Override
+	public void setCity(String city) {
+		model.setCity(city);
 	}
 
 	/**

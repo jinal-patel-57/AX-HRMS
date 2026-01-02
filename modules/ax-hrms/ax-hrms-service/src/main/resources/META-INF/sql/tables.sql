@@ -10,6 +10,7 @@ create table ax_Address (
 	line1 VARCHAR(500) null,
 	line2 VARCHAR(500) null,
 	line3 VARCHAR(500) null,
+	city VARCHAR(75) null,
 	state_ VARCHAR(75) null,
 	country LONG,
 	pincode VARCHAR(75) null

@@ -67,8 +67,9 @@ public class AddressModelImpl
 		{"groupId", Types.BIGINT}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"addressId", Types.BIGINT},
 		{"line1", Types.VARCHAR}, {"line2", Types.VARCHAR},
-		{"line3", Types.VARCHAR}, {"state_", Types.VARCHAR},
-		{"country", Types.BIGINT}, {"pincode", Types.VARCHAR}
+		{"line3", Types.VARCHAR}, {"city", Types.VARCHAR},
+		{"state_", Types.VARCHAR}, {"country", Types.BIGINT},
+		{"pincode", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -86,13 +87,14 @@ public class AddressModelImpl
 		TABLE_COLUMNS_MAP.put("line1", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("line2", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("line3", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("city", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("state_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("country", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("pincode", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_Address (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,addressId LONG not null primary key,line1 VARCHAR(500) null,line2 VARCHAR(500) null,line3 VARCHAR(500) null,state_ VARCHAR(75) null,country LONG,pincode VARCHAR(75) null)";
+		"create table ax_Address (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,addressId LONG not null primary key,line1 VARCHAR(500) null,line2 VARCHAR(500) null,line3 VARCHAR(500) null,city VARCHAR(75) null,state_ VARCHAR(75) null,country LONG,pincode VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_Address";
 
@@ -252,6 +254,7 @@ public class AddressModelImpl
 			attributeGetterFunctions.put("line1", Address::getLine1);
 			attributeGetterFunctions.put("line2", Address::getLine2);
 			attributeGetterFunctions.put("line3", Address::getLine3);
+			attributeGetterFunctions.put("city", Address::getCity);
 			attributeGetterFunctions.put("state", Address::getState);
 			attributeGetterFunctions.put("country", Address::getCountry);
 			attributeGetterFunctions.put("pincode", Address::getPincode);
@@ -296,6 +299,8 @@ public class AddressModelImpl
 				"line2", (BiConsumer<Address, String>)Address::setLine2);
 			attributeSetterBiConsumers.put(
 				"line3", (BiConsumer<Address, String>)Address::setLine3);
+			attributeSetterBiConsumers.put(
+				"city", (BiConsumer<Address, String>)Address::setCity);
 			attributeSetterBiConsumers.put(
 				"state", (BiConsumer<Address, String>)Address::setState);
 			attributeSetterBiConsumers.put(
@@ -530,6 +535,26 @@ public class AddressModelImpl
 
 	@JSON
 	@Override
+	public String getCity() {
+		if (_city == null) {
+			return "";
+		}
+		else {
+			return _city;
+		}
+	}
+
+	@Override
+	public void setCity(String city) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_city = city;
+	}
+
+	@JSON
+	@Override
 	public String getState() {
 		if (_state == null) {
 			return "";
@@ -656,6 +681,7 @@ public class AddressModelImpl
 		addressImpl.setLine1(getLine1());
 		addressImpl.setLine2(getLine2());
 		addressImpl.setLine3(getLine3());
+		addressImpl.setCity(getCity());
 		addressImpl.setState(getState());
 		addressImpl.setCountry(getCountry());
 		addressImpl.setPincode(getPincode());
@@ -686,6 +712,7 @@ public class AddressModelImpl
 		addressImpl.setLine1(this.<String>getColumnOriginalValue("line1"));
 		addressImpl.setLine2(this.<String>getColumnOriginalValue("line2"));
 		addressImpl.setLine3(this.<String>getColumnOriginalValue("line3"));
+		addressImpl.setCity(this.<String>getColumnOriginalValue("city"));
 		addressImpl.setState(this.<String>getColumnOriginalValue("state_"));
 		addressImpl.setCountry(this.<Long>getColumnOriginalValue("country"));
 		addressImpl.setPincode(this.<String>getColumnOriginalValue("pincode"));
@@ -826,6 +853,14 @@ public class AddressModelImpl
 			addressCacheModel.line3 = null;
 		}
 
+		addressCacheModel.city = getCity();
+
+		String city = addressCacheModel.city;
+
+		if ((city != null) && (city.length() == 0)) {
+			addressCacheModel.city = null;
+		}
+
 		addressCacheModel.state = getState();
 
 		String state = addressCacheModel.state;
@@ -917,6 +952,7 @@ public class AddressModelImpl
 	private String _line1;
 	private String _line2;
 	private String _line3;
+	private String _city;
 	private String _state;
 	private long _country;
 	private String _pincode;
@@ -962,6 +998,7 @@ public class AddressModelImpl
 		_columnOriginalValues.put("line1", _line1);
 		_columnOriginalValues.put("line2", _line2);
 		_columnOriginalValues.put("line3", _line3);
+		_columnOriginalValues.put("city", _city);
 		_columnOriginalValues.put("state_", _state);
 		_columnOriginalValues.put("country", _country);
 		_columnOriginalValues.put("pincode", _pincode);
@@ -1011,11 +1048,13 @@ public class AddressModelImpl
 
 		columnBitmasks.put("line3", 1024L);
 
-		columnBitmasks.put("state_", 2048L);
+		columnBitmasks.put("city", 2048L);
 
-		columnBitmasks.put("country", 4096L);
+		columnBitmasks.put("state_", 4096L);
 
-		columnBitmasks.put("pincode", 8192L);
+		columnBitmasks.put("country", 8192L);
+
+		columnBitmasks.put("pincode", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

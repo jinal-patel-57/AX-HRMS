@@ -52,7 +52,7 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -76,6 +76,8 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 		sb.append(line2);
 		sb.append(", line3=");
 		sb.append(line3);
+		sb.append(", city=");
+		sb.append(city);
 		sb.append(", state=");
 		sb.append(state);
 		sb.append(", country=");
@@ -140,6 +142,13 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 			addressImpl.setLine3(line3);
 		}
 
+		if (city == null) {
+			addressImpl.setCity("");
+		}
+		else {
+			addressImpl.setCity(city);
+		}
+
 		if (state == null) {
 			addressImpl.setState("");
 		}
@@ -179,6 +188,7 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 		line1 = objectInput.readUTF();
 		line2 = objectInput.readUTF();
 		line3 = objectInput.readUTF();
+		city = objectInput.readUTF();
 		state = objectInput.readUTF();
 
 		country = objectInput.readLong();
@@ -227,6 +237,13 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 			objectOutput.writeUTF(line3);
 		}
 
+		if (city == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(city);
+		}
+
 		if (state == null) {
 			objectOutput.writeUTF("");
 		}
@@ -255,6 +272,7 @@ public class AddressCacheModel implements CacheModel<Address>, Externalizable {
 	public String line1;
 	public String line2;
 	public String line3;
+	public String city;
 	public String state;
 	public long country;
 	public String pincode;
