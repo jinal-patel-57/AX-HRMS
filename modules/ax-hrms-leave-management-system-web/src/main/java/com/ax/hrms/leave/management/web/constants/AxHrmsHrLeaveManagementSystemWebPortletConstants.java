@@ -74,14 +74,17 @@ public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 
 			+ "                </tr>\n" + "            </thead>\n" + "            <tbody>\n";
 
-	public static final String LEAVE_REQUEST_MAIL_STYLE = "</td>\n  <td style=\"border: 1px solid #ddd; padding: 10px;\">";
-	public static final String LEAVE_REQUEST_MAIL_STYLE_CLOSING = "</td>\n </tr>\n";
+//	public static final String LEAVE_REQUEST_MAIL_STYLE = "</td>\n  <td style=\"border: 1px solid #ddd; padding: 10px;\">";
+public static final String LEAVE_REQUEST_MAIL_STYLE = "<td style=\"border: 1px solid #ddd; padding: 10px;\">";
 
+
+//    public static final String LEAVE_REQUEST_MAIL_STYLE_CLOSING = "</td>\n </tr>\n";
+public static final String LEAVE_REQUEST_MAIL_STYLE_CLOSING = "</td>";
 	public static final String YOUR_LEAVE_REQUEST_IS_APPROVED = "Your Leave Request is Approved";
 	public static final String YOUR_TEAM_MEMBER_IS_ON_LEAVE ="Your Team Member is on Leave";
-	
+
 	public static final String YOUR_LEAVE_REQUEST_IS_REJECTED = "Your Leave request is Rejected";
 	public static final String YOUR_LEAVE_REQUEST_IS_CANCELLED = "Your Leave request is Cancelled";
 
-	
+
 }

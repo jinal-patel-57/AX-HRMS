@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -177,6 +178,18 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             try {
                 EmployeeSalary employeeSalary;
                 employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
+
+                BigDecimal ctcPa = BigDecimal.valueOf(employeeSalary.getGrossSalaryCtcPa());
+                BigDecimal ctcPm = BigDecimal.valueOf(employeeSalary.getGrossSalaryCtcPm());
+
+                String ctcPaPlain = ctcPa.stripTrailingZeros().toPlainString();
+                String ctcPmPlain = ctcPm.stripTrailingZeros().toPlainString();
+                log.info("employeeSalary PA --- " + ctcPaPlain);
+                log.info("employeeSalary PM --- " + ctcPmPlain);
+                log.info("employeeSalary --- " + employeeSalary.getGrossSalaryCtcPa());
+                log.info("employeeSalary --- " + employeeSalary.getGrossSalaryCtcPm());
+                renderRequest.setAttribute("ctcPa", ctcPaPlain);
+                renderRequest.setAttribute("ctcPm", ctcPmPlain);
                 renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_SALARY, employeeSalary);
             }catch(Exception e){
                 log.info("No salary exist with this employeeId :-"+ employeeId);

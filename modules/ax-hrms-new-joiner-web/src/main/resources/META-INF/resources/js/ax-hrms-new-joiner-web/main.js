@@ -82,9 +82,9 @@
             }
         });
 
-        var hideNoteModalSummernote = function() {
-            $('.note-modal').css('display','none');
-        };
+//        var hideNoteModalSummernote = function() {
+//            $('.note-modal').css('display','none');
+//        };
 
         function initializeSummernote(newJoinerWishNote){
             debugger;
@@ -93,8 +93,15 @@
                 codemirror: {
                     theme: 'monokai'
                 },
+                dialogsInBody: true, // IMPORTANT for Bootstrap modal
+                   callbacks: {
+                        onInit: function () {
+                          console.log("Summernote initialized properly");
+                   }
+                   }
             });
-            hideNoteModalSummernote();
+//            hideNoteModalSummernote();
+
         };
         initializeSummernote('newJoinerWishNote');
         console.log("summerNote initialize");

@@ -153,7 +153,7 @@
 								key="gross-salary-ctc-pa" /> </label> <input id="grossSalaryCTCPA"
 							placeholder="<liferay-ui:message key='gross-salary-ctc-pa'/>"
 							class="form-control" type="text"
-							name="<portlet:namespace/>grossSalaryCTCPA" /> <label
+							name="<portlet:namespace/>grossSalaryCTCPA"  readonly /> <label
 							id="grossSalaryCTCPA-error" class="error text-danger"
 							for="grossSalaryCTCPA"></label>
 					</div>
@@ -262,7 +262,7 @@
 						<label class="" for="department"><liferay-ui:message
 								key="department" /><span class="text-danger">*</span></label> <select
 							class="form-control" id="department"
-							name="<portlet:namespace/>department" multiple>
+							name="<portlet:namespace/>department">
 							<option value="" disabled selected>
 								<liferay-ui:message key="select-department" />
 							</option>
@@ -279,7 +279,7 @@
 						<label class="" for="designation"><liferay-ui:message
 								key="designation" /><span class="text-danger">*</span></label> <select
 							class="form-control" id="designation"
-							name="<portlet:namespace/>designation" multiple>
+							name="<portlet:namespace/>designation" >
 							<option value="" disabled selected>
 								<liferay-ui:message key="select-designation" />
 							</option>
@@ -367,6 +367,17 @@
                this.setSelectionRange(domainIndex, domainIndex);
            }
        });
+
+
+         $("#grossSalaryCTCPM").on("input keyup", function () {
+               let ctcPm = parseFloat($(this).val());
+
+               if (!isNaN(ctcPm)) {
+                   $("#grossSalaryCTCPA").val(ctcPm * 12);
+               } else {
+                   $("#grossSalaryCTCPA").val("");
+               }
+           });
 
    });
 

@@ -40,9 +40,9 @@ public class NewJoinerRetrieverUtil {
     private static List<EmployeeDetails> getNewJoinerEmployeeDetails(List<EmployeeDetails> employeeDetailsList){
         try {
             List<EmployeeDetails> newJoinerList = employeeDetailsList.stream()
-                    .filter(employeeDetailsObj -> isWithinLastFifteenDays(employeeDetailsObj.getJoiningDate()))
+                    .filter(employeeDetailsObj -> isWithinLastFifteenDays(employeeDetailsObj.getJoiningDate()) && "permanent".equalsIgnoreCase(employeeDetailsObj.getEmployeeType()))
                     .collect(Collectors.toList());
-
+            log.info("employeeDetailsList :: "+newJoinerList.toString());
             if(!newJoinerList.isEmpty())
                 return newJoinerList;
         }catch(Exception e) {

@@ -112,6 +112,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                 if(Validator.isNotNull(employee.getManagerId())) {
                     EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
                     LeaveRequestUtil.sendNotificationToManager(managerNotification, manager);
+
                     LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), manager.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
                 }
                 for (User user : users) {
@@ -119,7 +120,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                     EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
                     log.info("Employee Id: " + employeeDetails.toString());
                     LeaveRequestUtil.sendNotificationToManager(managerNotification, employeeDetails);
-                    LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), employeeDetails.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                    StringBuilder hrMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
+                    LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, leaveRequest.getLeaveRequestId(), employeeDetails.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
                 }
 
             } catch (Exception e) {

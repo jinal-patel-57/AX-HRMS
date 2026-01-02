@@ -287,15 +287,16 @@ public class LeaveRequestUtil {
                                     MailTemplateConfiguration mailTemplateConfiguration,EmployeeDetailsLocalService employeeDetailsLocalService,LeaveRequestLocalService leaveRequestLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService, DepartmentMasterLocalService departmentMasterLocalService,EmployeeDesignationLocalService employeeDesignationLocalService,DesignationMasterLocalService designationMasterLocalService,LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService,AxHrmsCommonApi axHrmsCommonApi) {
         try {
             log.info("SENDING MAIL TO MANAGER");
+            log.info("body :: "+body.toString());
             LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
             EmployeeDetails employee1 = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
 
             body = getBody(leaveRequest, employee1, body,employeeDepartmentLocalService,departmentMasterLocalService,employeeDesignationLocalService,designationMasterLocalService,leaveCompensatoryStatusMasterLocalService);
-
+            log.info("body after calling getboody   function  ----> :: "+body.toString());
             // SEND MAIL TO EMPLOYE
 
-            String mailContent = mailTemplateConfiguration.mailLeaveApproveEmployeeBody();
+            String mailContent = mailTemplateConfiguration.mailLeaveRequestManagerBody();
             mailContent =  mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName()+ StringPool.SPACE+employee.getLastName());
             mailContent =  mailContent.replace("${BODY}", body);
                 log.info("SENDING MAIL TO MANAGER ...." + mailContent);

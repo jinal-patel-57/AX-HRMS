@@ -220,13 +220,13 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 				}
                 
 
-
+               log.info("after update ");
                 User user = userLocalService.getUser(employeeDetails.getLrUserId());
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setMiddleName(middleName);
                 userLocalService.updateUser(user);
-
+                log.info("user information updated"+user.toString());
 
                 List<DesignationMaster> oldDesignationMasterList=axHrmsCommonApi.getDesignationMastersFromEmployeeId(employeeId);
               
@@ -234,7 +234,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                     try {
                     	Role role = roleService.getRole(themeDisplay.getCompanyId(), old.getDesignationName());
                         RoleLocalServiceUtil.deleteUserRole(employeeDetails.getLrUserId(), role.getRoleId());
+                        log.info("role information updated"+role);
                         EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeDesignationStatusAndEmployeeId(old.getDesignationMasterId(),true,employeeDetails.getEmployeeId());
+                        log.info("employee designation -- " + employeeDesignation);
                         employeeDesignation.setStatus(false);
                         employeeDesignation.setEndDate(new Date());
                         employeeDesignationLocalService.updateEmployeeDesignation(employeeDesignation);
@@ -245,7 +247,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
                 }
                 
-
+                log.info("employee details updated"+employeeDetails.toString());
                 DesignationMaster designationMaster;
                 try {
 
@@ -275,6 +277,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                     RoleLocalServiceUtil.addUserRole(employeeDetails.getLrUserId(), newDesignationsRole);
 
                 } catch (Exception e) {
+                    log.info("Error while creating employee designation");
                     log.error(e.getMessage());
                 }
 

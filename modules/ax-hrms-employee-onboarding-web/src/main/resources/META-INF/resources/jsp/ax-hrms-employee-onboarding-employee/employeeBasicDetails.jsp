@@ -349,14 +349,14 @@
                            value="<fmt:formatDate value='${employeeDetail.joiningDate}' pattern='yyyy-MM-dd'/>"/>
                     <label id="joiningDate-error" class="error text-danger" for="joiningDate"></label>
                 </div>
-
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Gross Salary CTC PM -->
                     <label class="" for="grossSalaryCTCPM"><liferay-ui:message key="gross-salary-ctc-pm"/><span class="text-danger">*</span></label>
                     <input id="grossSalaryCTCPM" placeholder="<liferay-ui:message key='gross-salary-ctc-pm'/>"
                            class="form-control" type="text"
                            name="<portlet:namespace/>grossSalaryCTCPM"
-                           value="${employeeSalary.grossSalaryCtcPm}"/>
+                           value="${ctcPm}"
+                           />
                     <label id="grossSalaryCTCPM-error" class="error text-danger" for="grossSalaryCTCPM"></label>
                 </div>
 
@@ -366,14 +366,14 @@
                     <input id="grossSalaryCTCPA" placeholder="<liferay-ui:message key='gross-salary-ctc-pa'/>"
                            class="form-control" type="text"
                            name="<portlet:namespace/>grossSalaryCTCPA"
-                           value="${employeeSalary.grossSalaryCtcPa}"/>
+                           value="${ctcPa}" readonly />
                     <label id="grossSalaryCTCPA-error" class="error text-danger" for="grossSalaryCTCPA"></label>
                 </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Department -->
                     <label class="" for="department"><liferay-ui:message key="department"/><span class="text-danger">*</span></label>
-                    <select class="form-control" id="department" name="<portlet:namespace/>department" multiple>
+                    <select class="form-control" id="department" name="<portlet:namespace/>department">
                         <option value="" disabled selected><liferay-ui:message key="select-department"/></option>
                         <c:forEach items="${departmentMasterList}" var="department">
                             <option value="${department.departmentMasterId}"
@@ -468,6 +468,22 @@
 
    var aadhaarCardId = ${employeeDetail.aadhaarCardFileId};
    var panCardId = ${employeeDetail.panCardFileId};
+
+
+    $(document).ready(function () {
+
+        $("#grossSalaryCTCPM").on("input keyup", function () {
+            let ctcPm = parseFloat($(this).val());
+
+            if (!isNaN(ctcPm)) {
+                $("#grossSalaryCTCPA").val(ctcPm * 12);
+            } else {
+                $("#grossSalaryCTCPA").val("");
+            }
+        });
+
+    });
+
 
 </script>
 
