@@ -68,7 +68,7 @@
                                         </label>
                                         <input type="text"
                                                class="form-control"
-                                               id="<portlet:namespace/>nstitution1"
+                                               id="<portlet:namespace/>institution1"
                                                name="<portlet:namespace/>institution1"
                                                maxlength="70"/>
                                     </div>
@@ -116,6 +116,7 @@
                                         <input type="file"
                                                class="form-control"
                                                id="<portlet:namespace/>educationCertificateAttachment1"
+                                               data-existing-file-id="0"
                                                name="<portlet:namespace/>educationCertificateAttachment1" accept="image/*,application/pdf"/>
                                     </div>
 
@@ -237,6 +238,7 @@
                                             <input type="file"
                                                    class="form-control"
                                                    id="<portlet:namespace/>educationCertificateAttachment${status.index+1}"
+                                                   data-existing-file-id="${educationItem.educationCertificateMediaId}"
                                                    name="<portlet:namespace/>educationCertificateAttachment${status.index+1}" accept="image/*,application/pdf"/>
 
                                            <c:if test="${educationItem.educationCertificateMediaId > 0}">

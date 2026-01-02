@@ -61,6 +61,7 @@
                                         <label><liferay-ui:message key="experience-certificate-attachment"/></label>
                                         <input type="file" class="form-control"
                                                name="<portlet:namespace/>experienceCertificateAttachment1"
+                                               data-existing-file-id="0"
                                                accept="image/*,application/pdf"
                                                multiple/>
                                     </div>
@@ -124,6 +125,7 @@
                                             <input type="file" class="form-control"
                                                    name="<portlet:namespace/>experienceCertificateAttachment${status.index+1}"
                                                    accept="image/*,application/pdf"
+                                                   data-existing-file-id="${experienceItem.experienceCertificateMediaId}"
                                                    multiple
                                                    />
 

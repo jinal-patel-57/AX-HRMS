@@ -297,6 +297,24 @@ function setConfigsForAddExperienceSection(config) {
           }
       );
 
+      $.validator.addMethod(
+          "fileRequiredIfNoExisting",
+          function (value, element) {
+
+              const existingFileId = $(element).data("existing-file-id");
+
+              // UPDATE case → file already exists
+              if (existingFileId && existingFileId !== "0" && existingFileId !== 0) {
+                  return true;
+              }
+
+              // ADD case → file must be selected
+              return element.files && element.files.length > 0;
+          },
+          "Please upload the certificate."
+      );
+
+
 
         
         $(document).ready(function () {
@@ -783,6 +801,8 @@ function setConfigsForAddExperienceSection(config) {
             function initializeValidation() {
 
                 const form3 = $("#educationStepperForm");
+
+                    form3.removeData("validator");
                 rules = {};
                 messages = {};
 
@@ -796,6 +816,7 @@ function setConfigsForAddExperienceSection(config) {
                     const startDateKey = `${namespace}startDate${idx}`;
                     const endDateKey = `${namespace}endDate${idx}`;
                     const passingYearKey = `${namespace}passingYear${idx}`;
+                    const eduCertKey = `${namespace}educationCertificateAttachment${idx}`;
 
                     rules[levelNameKey] = {required: true};
                     rules[institutionKey] = {required: true, maxlength: 250};
@@ -822,6 +843,10 @@ function setConfigsForAddExperienceSection(config) {
                         digits: true,
                         minlength: 4,
                         maxlength: 4
+                    };
+
+                    rules[eduCertKey] = {
+                        fileRequiredIfNoExisting: true
                     };
 
                     messages[levelNameKey] = {
@@ -854,6 +879,9 @@ function setConfigsForAddExperienceSection(config) {
                          digits: "Passing year should contain only digits.",
                          minlength: "Passing year should be 4 digits long.",
                          maxlength: "Passing year should be 4 digits long."
+                     };
+                     messages[eduCertKey] = {
+                         fileRequiredIfNoExisting: "Please upload education certificate."
                      };
                 });
 
@@ -913,6 +941,8 @@ function setConfigsForAddExperienceSection(config) {
                         freshFile.className = input.className;
                         freshFile.id = input.id;
                         freshFile.name = input.name;
+                         // required for validation
+                        freshFile.setAttribute("data-existing-file-id", "0");
                         input.parentNode.replaceChild(freshFile, input);
                     }
                     // Reset select
@@ -1317,6 +1347,7 @@ function setConfigsForExperienceValidation(config) {
                     const company = `${namespace}companyName${idx}`;
                     const joining = `${namespace}joiningDate${idx}`;
                     const relieving = `${namespace}relievingDate${idx}`;
+                    const expCertKey = `${namespace}experienceCertificateAttachment${idx}`;
 
                     rules[company] = { required: true };
                     rules[joining] = {
@@ -1333,6 +1364,9 @@ function setConfigsForExperienceValidation(config) {
                         notFutureDate: true,
                         validYearLength: true
                     };
+                    rules[expCertKey] = {
+                        fileRequiredIfNoExisting: true
+                    };
 
                     messages[company] = {
                         required: "Please enter company name."
@@ -1348,6 +1382,9 @@ function setConfigsForExperienceValidation(config) {
                       afterJoiningDate: "Relieving date must be after joining date.",
                       notFutureDate: "Relieving date cannot be in the future.",
                       validYearLength: "Year must be exactly 4 digits."
+                  };
+                  messages[expCertKey] = {
+                      fileRequiredIfNoExisting: "Please upload experience certificate."
                   };
                 });
 
