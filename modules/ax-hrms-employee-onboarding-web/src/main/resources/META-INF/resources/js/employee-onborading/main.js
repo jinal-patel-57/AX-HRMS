@@ -199,6 +199,23 @@ function setConfigsForAddExperienceSection(config) {
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+        function allowOnlySixDigitMobile(input) {
+		
+		    // Format pre-filled value (update case)
+		    input.value = input.value.replace(/\D/g, "").substring(0, 6);
+		
+		    input.addEventListener("input", function () {
+		        this.value = this.value.replace(/\D/g, "").substring(0, 6);
+		    });
+		}
+		const presentpinCodeInput = document.getElementById(namespace + "presentpinCode");
+		const permanentPincodeInput = document.getElementById(namespace + "permanentPincode");
+		if(presentpinCodeInput){
+			allowOnlySixDigitMobile(presentpinCodeInput);
+		}
+		if(permanentPincodeInput){
+			allowOnlySixDigitMobile(permanentPincodeInput);
+		}
         function allowOnlyTenDigitMobile(input) {
 		
 		    // Format pre-filled value (update case)
@@ -492,7 +509,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: true,
                         digits: true,
                         minlength: 5,
-                        maxlength: 10
+                        maxlength: 6,
+                        validPincode06: true
                     },
                     [namespace + "presentaddressLine1"]: {
                         required: true,
@@ -515,7 +533,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: true,
                         digits: true,
                         minlength: 5,
-                        maxlength: 10
+                        maxlength: 6,
+                        validPincode06: true
                     }
                 },
                 messages: {
@@ -540,7 +559,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please enter the pincode for the permanent address.",
                         digits: "Pincode should contain only digits.",
                         minlength: "Pincode must be at least 5 digits long.",
-                        maxlength: "Pincode cannot exceed 10 digits."
+                        maxlength: "Pincode cannot exceed 6 digits.",
+                        validPincode06: "Enter a valid Pincode."
                     },
                     [namespace + "presentaddressLine1"]: {
                         required: "Please enter the present address line 1.",
@@ -563,10 +583,15 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please enter the pincode for the present address.",
                         digits: "Pincode should contain only digits.",
                         minlength: "Pincode must be at least 5 digits long.",
-                        maxlength: "Pincode cannot exceed 10 digits."
+                        maxlength: "Pincode cannot exceed 6 digits.",
+                        validPincode06: "Enter a valid Pincode."
                     }
                 }
             });
+            
+            $.validator.addMethod("validPincode06", function (value) {
+				return /^\d{6}$/.test(value);
+			}, "Enter a valid Pincode.");
 
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();

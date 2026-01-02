@@ -98,7 +98,7 @@
                             key="permanent-pincode"/><span class="text-danger">*</span>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />permanentPincode"
-                                    name="<portlet:namespace />permanentPincode" maxlength="10"
+                                    name="<portlet:namespace />permanentPincode" maxlength="6"
                                     value="${permanentaddresss.pincode}"/>
                 </div>
             </div>
@@ -208,7 +208,7 @@
                         <liferay-ui:message key="pincode"/><span class="text-danger">*</span>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentpinCode"
-                                    name="<portlet:namespace />presentpinCode" maxlength="10"
+                                    name="<portlet:namespace />presentpinCode" maxlength="6"
                                     value="${permanentaddresss.pincode}"/>
                 </div>
             </div>
