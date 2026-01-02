@@ -9,9 +9,14 @@
             return;
         }
 
-        $.validator.addMethod("validProbationStatusName", function (value, element) {
-            return this.optional(element) || /^[A-Za-z][A-Za-z\s-]*$/.test(value);
-        });
+       $.validator.addMethod("startsWithLetter", function (value, element) {
+           return this.optional(element) || /^[A-Za-z]/.test(value);
+       });
+
+       $.validator.addMethod("validCharacters", function (value, element) {
+           return this.optional(element) || /^[A-Za-z\s-]+$/.test(value);
+       });
+
 
         $("#" + namespace + "probationStatus").attr({
             minlength: 2,
@@ -20,20 +25,22 @@
 
         $("#addEditProbationStatusMaster").validate({
             rules: {
-                [namespace + "probationStatus"]: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 70,
-                    validProbationStatusName: true
-                }
+               [namespace + "probationStatus"]: {
+                       required: true,
+                       minlength: 2,
+                       maxlength: 70,
+                       startsWithLetter: true,
+                       validCharacters: true
+                   }
             },
             messages: {
-                [namespace + "probationStatus"]: {
-                    required: "Enter Probation Status name",
-                    minlength: "Probation Status must be at least 2 characters",
-                    maxlength: "Probation Status cannot exceed 70 characters",
-                    validProbationStatusName: "Only letters, spaces and hyphen (-) are allowed"
-                }
+                 [namespace + "probationStatus"]: {
+                        required: "Enter Probation Status name",
+                        minlength: "Probation Status must be at least 2 characters",
+                        maxlength: "Probation Status cannot exceed 70 characters",
+                        startsWithLetter: "Probation Status must start with a letter",
+                        validCharacters: "Only letters, spaces, and hyphens (-) are allowed"
+                    }
             },
             errorPlacement: function (error, element) {
                 error.addClass("text-danger");
