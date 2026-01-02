@@ -174,11 +174,13 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				educationDto.setStartDate(education.getStartDate());
 				educationDto.setPassingYear(education.getPassingYear());
 				educationDto.setEndDate(education.getEndDate());
-				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(education.getEducationCertificateMediaId());
-
-				String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
-
-				educationDto.setEducationCertificatePreviewUrl(previewURL);
+				try {
+					FileEntry fileEntry = DLAppServiceUtil.getFileEntry(education.getEducationCertificateMediaId());
+					String previewURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay,StringPool.BLANK);
+					educationDto.setEducationCertificatePreviewUrl(previewURL);
+				} catch(Exception e) {
+					log.error("Error while fetching education certificate -- " + e.getMessage());
+				}
 				educationDtoList.add(educationDto);
 			}
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LIST, educationDtoList);
@@ -305,10 +307,11 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setLine1(address.getLine1());
 			employeeDto.setLine2(address.getLine2());
 			employeeDto.setLine3(address.getLine3());
+			employeeDto.setNomineeCity(address.getCity());
 			employeeDto.setCountry(address.getCountry());
 			String countryName = CountryLocalServiceUtil.getCountry(employeeDto.getCountry()).getName();
 			employeeDto.setCountryName(countryName);
-
+			
 			employeeDto.setState(address.getState());
 			employeeDto.setPincode(address.getPincode());
 			employeeDto.setRelationshipWithNominee(nominee.getRelationshipWithNominee());

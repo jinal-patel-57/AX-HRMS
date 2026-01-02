@@ -560,7 +560,7 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "permanentCity"]: {
                         required: true,
-                        maxlength: 100,
+                        maxlength: 75,
                         validCity:true
                     },
                     [namespace + "permanentState"]: {
@@ -589,7 +589,7 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "presentCity"]: {
                         required: true,
-                        maxlength: 100,
+                        maxlength: 75,
                         validCity:true
                     },
                     [namespace + "presentstate"]: {
@@ -620,7 +620,7 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "permanentCity"]: {
                         required: "Please enter the city for the permanent address.",
-                        maxlength: "City name cannot exceed 100 characters.",
+                        maxlength: "City name cannot exceed 75 characters.",
                         validCity: "Enter a valid City."
                     },
                     [namespace + "permanentState"]: {
@@ -649,7 +649,7 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "presentCity"]: {
                         required: "Please enter the city for the present address.",
-                        maxlength: "City name cannot exceed 100 characters.",
+                        maxlength: "City name cannot exceed 75 characters.",
                         validCity: "Enter a valid City."
                     },
                     [namespace + "presentstate"]: {
@@ -1796,7 +1796,9 @@ function setConfigsForExperienceValidation(config) {
         let getEmployeeUrl = config.getEmployeeUrl;
         var $form7 = $("#nomineeStepperForm");
 
-
+		$.validator.addMethod("validCity", function (value) {
+				 return /^[A-Za-z]+$/.test(value);
+			}, "Enter a valid City.");
         $.validator.addMethod(
             "notFutureDate",
             function (value) {
@@ -1854,6 +1856,11 @@ function setConfigsForExperienceValidation(config) {
                 [namespace + "presentaddressLine1"]: {
                     required: true,
                     maxlength: 250
+                },
+                [namespace + "nomineeCity"]: {
+                    required: true,
+                    maxlength: 75,
+                    validCity:true
                 },
                 [namespace + "presentaddressLine2"]: {
                     maxlength: 250
@@ -1914,12 +1921,18 @@ function setConfigsForExperienceValidation(config) {
                     required: "Please enter the present address line 1.",
                     maxlength: "Address line 1 cannot exceed 250 characters."
                 },
+                [namespace + "nomineeCity"]: {
+                    required: "Please enter the city.",
+                    maxlength: "City name cannot exceed 75 characters.",
+                    validCity: "Enter a valid City."
+                },
                 [namespace + "presentaddressLine2"]: {
                     maxlength: "Address line 2 cannot exceed 250 characters."
                 },
                 [namespace + "presentaddressLine3"]: {
                     maxlength: "Address line 3 cannot exceed 250 characters."
                 },
+                
                 [namespace + "presentstate"]: {
                     required: "Please enter the state for the present address.",
                     maxlength: "State name cannot exceed 100 characters."

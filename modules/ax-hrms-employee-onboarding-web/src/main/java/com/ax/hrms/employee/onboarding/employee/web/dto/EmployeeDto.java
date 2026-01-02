@@ -90,6 +90,7 @@ public class EmployeeDto {
 	public String nomineeLastName;
 	public String nomineeContact;
 	public long nomineeAddress;
+	public String nomineeCity;
 	public String relationshipWithNominee;
 	public Date nomineeDob;
 
@@ -97,6 +98,14 @@ public class EmployeeDto {
 	String educationCertificatePreviewUrl;
     private List<String> experienceCertificatePreviewUrls;
 
+    
+    public String getNomineeCity() {
+		return nomineeCity;
+	}
+
+	public void setNomineeCity(String nomineeCity) {
+		this.nomineeCity = nomineeCity;
+	}
 	public long getAadhaarCardFileId() {
 		return aadhaarCardFileId;
 	}

@@ -374,7 +374,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
-                                <div class="label-name">Level Name</div>
+                                <div class="label-name">Education Level</div>
                                 <div class="label-content">${education.levelName}</div>
                             </div>
                         </div>
@@ -418,9 +418,14 @@
                                                     <div class="form-group-view">
                                                         <div class="label-name">Education Certificate</div>
                                                         <div class="label-content">
-                                                            <a href="${education.educationCertificatePreviewUrl}" target="_blank"
-                                                               >Download
-                                                                Education Certificate</a>
+                                                            
+                                                            <c:if test="${not empty education.educationCertificatePreviewUrl}">
+                                                            	<a href="${education.educationCertificatePreviewUrl}" target="_blank">Download Education Certificate</a>
+                                                            </c:if>
+
+                                                            <c:if test="${empty education.educationCertificatePreviewUrl}">
+                                                                <span class="text-muted">No document uploaded</span>
+                                                            </c:if>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -629,6 +634,13 @@
                         <div class="form-group-view">
                             <div class="label-name">Address Line 3</div>
                             <div class="label-content">${nominee.line3}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">City</div>
+                            <div class="label-content">${nominee.nomineeCity}</div>
                         </div>
                     </div>
 

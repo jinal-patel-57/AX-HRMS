@@ -69,7 +69,7 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 		String presentAddressLine1 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE1);
 		String presentAddressLine2 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE2);
 		String presentAddressLine3 = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE3);
-		String presentCity = ParamUtil.getString(actionRequest,"presentcity");
+		String presentCity = ParamUtil.getString(actionRequest,"nomineeCity");
 		String presentState = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_STATE);
 		long presentCountry = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_COUNTRY);
 		String presentPincode = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_PINCODE);

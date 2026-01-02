@@ -1809,7 +1809,9 @@ function setConfigsForExperienceValidation(config) {
         var $form7 = $("#nomineeStepperForm");
 
 
-
+		$.validator.addMethod("validCity", function (value) {
+			 return /^[A-Za-z]+$/.test(value);
+		}, "Enter a valid City.");
         $.validator.addMethod(
             "notFutureDate",
             function (value) {
@@ -1866,6 +1868,11 @@ function setConfigsForExperienceValidation(config) {
                 [namespace + "presentaddressLine1"]: {
                     required: true,
                     maxlength: 250
+                },
+                [namespace + "nomineeCity"]: {
+                    required: true,
+                    maxlength: 75,
+                    validCity:true
                 },
                 [namespace + "presentaddressLine2"]: {
                     maxlength: 250
@@ -1931,6 +1938,11 @@ function setConfigsForExperienceValidation(config) {
                 },
                 [namespace + "presentaddressLine3"]: {
                     maxlength: "Address line 3 cannot exceed 250 characters."
+                },
+                [namespace + "nomineeCity"]: {
+                    required: "Please enter the city.",
+                    maxlength: "City name cannot exceed 75 characters.",
+                    validCity: "Enter a valid City."
                 },
                 [namespace + "presentstate"]: {
                     required: "Please enter the state for the present address.",

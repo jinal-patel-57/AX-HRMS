@@ -93,11 +93,11 @@
 			<!-- City -->
 			<div class="col-md-4 col-sm-12 mb-3">
                 <div class="form-group">
-                    <label for="<portlet:namespace />presentcity" class="form-label"> <liferay-ui:message
+                    <label for="<portlet:namespace />nomineeCity" class="form-label"> <liferay-ui:message
                             key="city"/><span class="text-danger">*</span>
                     </label> <input type="text" class="form-control"
-                                    id="<portlet:namespace />presentcity" name="<portlet:namespace />presentcity"
-                                    maxlength="100" value="${address.city}"/>
+                                    id="<portlet:namespace />nomineeCity" name="<portlet:namespace />nomineeCity"
+                                    maxlength="75" value="${address.city}"/>
                 </div>
             </div>
 			
@@ -108,7 +108,7 @@
                             key="state"/><span class="text-danger">*</span>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentstate" name="<portlet:namespace />presentstate"
-                                    maxlength="100" value="${address.state}"/>
+                                    maxlength="75" value="${address.state}"/>
                 </div>
             </div>
             <!-- Country -->
@@ -137,7 +137,7 @@
                         <liferay-ui:message key="pincode"/><span class="text-danger">*</span>
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentpinCode"
-                                    name="<portlet:namespace />presentpinCode" maxlength="10"
+                                    name="<portlet:namespace />presentpinCode" maxlength="6"
                                     value="${address.pincode}"/>
                 </div>
             </div>
