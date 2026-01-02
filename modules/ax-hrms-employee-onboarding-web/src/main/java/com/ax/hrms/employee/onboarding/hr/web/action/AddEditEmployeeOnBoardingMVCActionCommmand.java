@@ -136,11 +136,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
             File panFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD);
             String panFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD));
 
-            log.info("aadhaar card :-"+ aadhaarFile);
-            log.info("aadhaar card Name:-"+ aadhaarFileName);
 
-            log.info("Pan card :-"+ panFile);
-            log.info("Pan card Name :-"+ panFileName);
 
 		EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(ParamUtil.getLong(actionRequest, "employeeId"));
 		employeeDetails.setPersonalEmail(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PERSONAL_EMAIL));

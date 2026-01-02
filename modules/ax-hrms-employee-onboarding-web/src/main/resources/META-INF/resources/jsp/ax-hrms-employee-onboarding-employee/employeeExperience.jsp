@@ -279,5 +279,9 @@
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddExperienceSection(config);
     }
 
-    document.getElementById('add-experience-section').addEventListener('click', addExperienceSection);
+    const addExpBtn = document.getElementById('add-experience-section');
+    if (addExpBtn) {
+        addExpBtn.addEventListener('click', addExperienceSection);
+    }
+
 </script>

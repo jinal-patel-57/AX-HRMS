@@ -347,7 +347,7 @@
         </c:if>
 
         <c:if test="${employeeDetail.employeeType == 'contractor'}">
-            <button type="button" class="btn btn-outline-primary previous-button">Previous</button>
+            <button type="button" class="btn btn-outline-primary previous-button ">Previous</button>
             <button type="button" class="btn btn-outline-primary" id="noactionbtnEducation">Next</button>
         </c:if>
 

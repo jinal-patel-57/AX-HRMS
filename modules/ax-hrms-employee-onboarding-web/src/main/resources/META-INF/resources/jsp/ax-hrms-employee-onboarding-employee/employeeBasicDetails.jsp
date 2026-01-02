@@ -73,7 +73,7 @@
                     <liferay-ui:message key="employee-profile-picture"/><span class="text-danger">*</span>
                 </label>
                 <input id="<portlet:namespace />employeeProfilePicture" type="file"
-                       value="${profilePicName}" readonly
+                       value="${profilePicName}"
                        name="<portlet:namespace />employeeProfilePicture"
 
                        class="form-control"
@@ -123,7 +123,7 @@
                        id="<portlet:namespace />aadhaarCard"
                        name="<portlet:namespace />aadhaarCard"
                        accept=".pdf,image/*"
-                       value="${aadhaarCardName}"/>
+                       value="${aadhaarCardFileName}"/>
 
                 <c:if test="${employeeDetail.aadhaarCardFileId > 0}">
                     <%
@@ -168,7 +168,7 @@
                       id="<portlet:namespace />panCard"
                       name="<portlet:namespace />panCard"
                       accept=".pdf,image/*"
-                      value="panCardName"/>
+                      value="panCardFileName"/>
 
              <c:if test="${employeeDetail.panCardFileId > 0}">
                  <%

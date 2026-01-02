@@ -237,7 +237,23 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
                     renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.PROFILE_PIC_NAME, profilePicPathName.getFileName());
                 }
             } catch (Exception e) {
-                log.error("ERROR gettig Profile PIC.");
+                log.error("ERROR getting Profile PIC.");
+            }
+            try {
+                FileEntry aadhaarCardFile = DLAppLocalServiceUtil.getFileEntry(employeeDetails.getAadhaarCardFileId());
+                if (aadhaarCardFile.getFileName() != null) {
+                    renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.AADHAAR_CARD_FILE_NAME, aadhaarCardFile.getFileName());
+                }
+            } catch (Exception e) {
+                log.error("ERROR getting aadharCard File.");
+            }
+            try {
+                FileEntry panCardFile = DLAppLocalServiceUtil.getFileEntry(employeeDetails.getPanCardFileId());
+                if (panCardFile.getFileName() != null) {
+                    renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.PAN_CARD_FILE_NAME, panCardFile.getFileName());
+                }
+            } catch (Exception e) {
+                log.error("ERROR getting pan card file.");
             }
 
             

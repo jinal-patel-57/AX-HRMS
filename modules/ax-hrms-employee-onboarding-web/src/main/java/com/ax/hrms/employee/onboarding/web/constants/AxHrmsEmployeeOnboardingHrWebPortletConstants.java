@@ -73,6 +73,8 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String IS_HR_STATUS="isHrStatus";
     public static final String EMPLOYEE_USER="employeeUser";
     public static final String EMPLOYEE_DETAIL ="employeeDetail";
+    public static final String AADHAAR_CARD_FILE_NAME="aadhaarCardFileName";
+    public static final String PAN_CARD_FILE_NAME="panCardFileName";
 
 
 }

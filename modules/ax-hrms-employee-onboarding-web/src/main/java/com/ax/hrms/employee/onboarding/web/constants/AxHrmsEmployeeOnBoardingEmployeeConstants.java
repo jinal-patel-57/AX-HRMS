@@ -210,7 +210,9 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	
 	//EmployeeOnBoardingUtil >>>setEmployeeDetails
 	public static final String PROFILE_PIC_NAME="profilePicName";
-	
+	public static final String AADHAAR_CARD_FILE_NAME="aadhaarCardFileName";
+	public static final String PAN_CARD_FILE_NAME="panCardFileName";
+
 	public static final String ADDRESS="address";
 	
 	public static final String EDUCATION_LIST_SIZE="educationListSize";

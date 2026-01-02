@@ -191,12 +191,26 @@ public class EmployeeOnBoardingUtil {
             EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
             long profilePicId = employeeDetails.getProfilePicId();
+            long aadhaarCardId = employeeDetails.getAadhaarCardFileId();
+            long panCardId = employeeDetails.getPanCardFileId();
 
             if (profilePicId > 0) {
                 FileEntry profilePicPathName = DLAppLocalServiceUtil.getFileEntry(profilePicId);
                 String profilePicName = profilePicPathName.getFileName();
                 renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PROFILE_PIC_NAME, profilePicName);
             }
+            if (aadhaarCardId > 0) {
+                FileEntry aadhaarCardFile = DLAppLocalServiceUtil.getFileEntry(aadhaarCardId);
+                String aadhaarCardFileName = aadhaarCardFile.getFileName();
+                renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD_FILE_NAME, aadhaarCardFileName);
+            }
+            if (panCardId > 0) {
+                FileEntry panCardFile = DLAppLocalServiceUtil.getFileEntry(panCardId);
+                String panCardFileName = panCardFile.getFileName();
+                renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD_FILE_NAME, panCardFileName);
+            }
+
+
             log.info("EmployeeOnBoardingUtil >>> setEmployeeDetails ::: Retrieved employeeDetails: " + employeeDetails);
             renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDetails);
         } catch (PortalException e) {

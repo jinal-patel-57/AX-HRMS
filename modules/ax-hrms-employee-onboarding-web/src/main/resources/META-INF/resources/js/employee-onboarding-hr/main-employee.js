@@ -982,8 +982,11 @@ function setConfigsForAddExperienceSection(config) {
 			});
 			
             // Add section button
-            document.getElementById("add-education-section")
-                .addEventListener("click", addEducationSection);
+
+            const addEduBtn = document.getElementById('add-education-section');
+            if (addEduBtn) {
+                addEduBtn.addEventListener('click', addEducationSection);
+            }
 
 
             // ======================================================
@@ -1043,6 +1046,26 @@ function setConfigsForAddExperienceSection(config) {
                     }
                 });
             });
+            $('#noactionbtnEducation').on('click', function (e) {
+                e.preventDefault();
+
+                const currentTab = $('.nav-link.active');
+                const nextTabButton = currentTab.parent().next().find('.nav-link');
+
+                if (nextTabButton.length === 0) return;
+
+                const currentContentId = currentTab.attr('data-bs-target');
+                const nextContentId = nextTabButton.attr('data-bs-target');
+
+                // Activate tab header
+                nextTabButton.tab('show');
+
+                $(currentContentId).removeClass('show active');
+                $(nextContentId).addClass('show active');
+
+                $(nextContentId).find('input,select').first().focus();
+            });
+
             initializeValidation();
             bindPassingYearAutoFill();
             $(document).on('change', 'input[type="date"]', function () {
