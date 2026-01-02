@@ -28,16 +28,18 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String PERMANENT_STATE="permanentState";
 	public static final String PERMANENT_COUNTRY="permanentCountry";
 	public static final String PERMANENT_PINCODE="permanentPincode";
-	
-	//2)PRESENTADDRESS
+    public static final String PERMANENT_CITY="permanentCity";
+
+    //2)PRESENTADDRESS
 	public static final String PRESENT_ADDRESS_LINE1="presentaddressLine1";
 	public static final String PRESENT_ADDRESS_LINE2="presentaddressLine2";
 	public static final String PRESENT_ADDRESS_LINE3="presentaddressLine3";
 	public static final String PRESENT_STATE="presentstate";
 	public static final String PRESENT_COUNTRY="presentCountry";
 	public static final String PRESENT_PINCODE="presentpinCode";
-	
-	//id
+    public static final String PRESENT_CITY="presentCity";
+
+    //id
 	public static final String PERMANENT_ADDRESS_ID="permanentAddressId";
 	public static final String PRESENT_ADDRESS_ID="presentAddressId";
 	public static final String EMPLOYEE_ADDRESS_ID="employeeAddressId";

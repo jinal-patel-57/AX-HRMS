@@ -130,6 +130,7 @@ function setConfigsForAddExperienceSection(config) {
 	        line1: document.getElementById(namespace + "permanentAddressLine1"),
 	        line2: document.getElementById(namespace + "permanentAddressLine2"),
 	        line3: document.getElementById(namespace + "permanentAddressLine3"),
+	        city: document.getElementById(namespace + "permanentCity"),
 	        state: document.getElementById(namespace + "permanentState"),
 	        country: document.getElementById(namespace + "permanentCountry"),
 	        pincode: document.getElementById(namespace + "permanentPincode")
@@ -139,6 +140,7 @@ function setConfigsForAddExperienceSection(config) {
 	        line1: document.getElementById(namespace + "presentaddressLine1"),
 	        line2: document.getElementById(namespace + "presentaddressLine2"),
 	        line3: document.getElementById(namespace + "presentaddressLine3"),
+	        city: document.getElementById(namespace + "presentCity"),
 	        state: document.getElementById(namespace + "presentstate"),
 	        country: document.getElementById(namespace + "presentCountry"),
 	        pincode: document.getElementById(namespace + "presentpinCode")
@@ -183,14 +185,18 @@ function setConfigsForAddExperienceSection(config) {
 	}
 	
 	    function copyPermanentToPresent(permanentFields, presentFields) {
+	    console.log("permanentFields :: ",permanentFields.city)
+	    console.log("presentFields ::: ",presentFields.city)
 		    presentFields.line1.value = permanentFields.line1.value;
 		    presentFields.line2.value = permanentFields.line2.value;
 		    presentFields.line3.value = permanentFields.line3.value;
+		    presentFields.city.value = permanentFields.city.value;
 		    presentFields.state.value = permanentFields.state.value;
 		    presentFields.country.value = permanentFields.country.value;
 		    presentFields.pincode.value = permanentFields.pincode.value;
 		}
 		function togglePresentFields(presentFields, disabled) {
+		    console.log("presentFields :: ",presentFields)
 		    Object.values(presentFields).forEach(field => {
 		        field.disabled = disabled;
 		    });
@@ -498,6 +504,11 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "permanentAddressLine3"]: {
                         maxlength: 250
                     },
+                    [namespace + "permanentCity"]: {
+                        required: true,
+                        maxlength: 100,
+                        validCity:true
+                    },
                     [namespace + "permanentState"]: {
                         required: true,
                         maxlength: 100
@@ -521,6 +532,11 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "presentaddressLine3"]: {
                         maxlength: 250
+                    },
+                    [namespace + "presentCity"]: {
+                        required: true,
+                        maxlength: 100,
+                        validCity:true
                     },
                     [namespace + "presentstate"]: {
                         required: true,
@@ -548,6 +564,11 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "permanentAddressLine3"]: {
                         maxlength: "Address line 3 cannot exceed 250 characters."
                     },
+                    [namespace + "permanentCity"]: {
+                        required: "Please enter the city for the permanent address.",
+                        maxlength: "City name cannot exceed 100 characters.",
+                        validCity: "Enter a valid City."
+                    },
                     [namespace + "permanentState"]: {
                         required: "Please enter the state for the permanent address.",
                         maxlength: "State name cannot exceed 100 characters."
@@ -572,6 +593,11 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "presentaddressLine3"]: {
                         maxlength: "Address line 3 cannot exceed 250 characters."
                     },
+                    [namespace + "presentCity"]: {
+                        required: "Please enter the city for the present address.",
+                        maxlength: "City name cannot exceed 100 characters.",
+                        validCity: "Enter a valid City."
+                    },
                     [namespace + "presentstate"]: {
                         required: "Please enter the state for the present address.",
                         maxlength: "State name cannot exceed 100 characters."
@@ -592,6 +618,10 @@ function setConfigsForAddExperienceSection(config) {
             $.validator.addMethod("validPincode06", function (value) {
 				return /^\d{6}$/.test(value);
 			}, "Enter a valid Pincode.");
+
+            $.validator.addMethod("validCity", function (value) {
+				 return /^[A-Za-z]+$/.test(value);
+			}, "Enter a valid City.");
 
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();

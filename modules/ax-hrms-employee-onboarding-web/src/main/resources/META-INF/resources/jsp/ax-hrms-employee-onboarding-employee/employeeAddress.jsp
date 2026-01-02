@@ -60,6 +60,23 @@
                                     value="${permanentaddresss.line3}"/>
                 </div>
             </div>
+
+
+
+            <!-- City -->
+            <div class="col-md-4 col-sm-12 mb-3">
+
+                <div class="form-group">
+                    <label for="permanentCity" class="form-label"> <liferay-ui:message
+                            key="permanent-city"/><span class="text-danger">*</span>
+                    </label> <input type="text" class="form-control"
+                                    id="<portlet:namespace />permanentCity"
+                                    name="<portlet:namespace />permanentCity" maxlength="100"
+                                    value="${permanentaddresss.city}"/>
+                </div>
+            </div>
+
+
             <!-- State -->
             <div class="col-md-4 col-sm-12 mb-3">
 
@@ -72,6 +89,9 @@
                                     value="${permanentaddresss.state}"/>
                 </div>
             </div>
+
+
+
             <!-- Country -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <div class="form-group">
@@ -166,6 +186,20 @@
                                     value="${presentaddresss.line3}"/>
                 </div>
             </div>
+
+            <!-- City -->
+            <div class="col-md-4 col-sm-12 mb-3">
+
+                <div class="form-group">
+                    <label for="<portlet:namespace />presentCity" class="form-label"> <liferay-ui:message
+                            key="city"/><span class="text-danger">*</span>
+                    </label> <input type="text" class="form-control"
+                                    id="<portlet:namespace />presentCity" name="<portlet:namespace />presentCity"
+                                    maxlength="100" value="${presentaddresss.city}"/>
+                </div>
+            </div>
+
+
             <!-- State -->
             <div class="col-md-4 col-sm-12 mb-3">
 

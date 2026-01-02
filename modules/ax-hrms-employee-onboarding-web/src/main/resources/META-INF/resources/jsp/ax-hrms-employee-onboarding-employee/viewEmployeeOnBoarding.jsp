@@ -178,6 +178,14 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
+                            <div class="label-name">City</div>
+                            <div class="label-content">${presentaddresss.city}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
                             <div class="label-name">State</div>
                             <div class="label-content">${presentaddresss.state}</div>
                         </div>
@@ -245,6 +253,15 @@
                             </div>
                         </div>
 
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">City</div>
+                                <div class="label-content">${presentaddresss.city}</div>
+                            </div>
+                        </div>
+
+
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">State</div>
@@ -311,6 +328,15 @@
                                 <div class="label-content">${permanentaddresss.line3}</div>
                             </div>
                         </div>
+
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">City</div>
+                                <div class="label-content">${permanentaddresss.city}</div>
+                            </div>
+                        </div>
+
 
                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">

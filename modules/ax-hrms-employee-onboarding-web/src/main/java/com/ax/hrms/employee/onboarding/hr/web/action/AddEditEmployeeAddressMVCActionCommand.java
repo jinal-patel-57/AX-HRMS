@@ -127,7 +127,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		String state = ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_STATE : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_STATE);
 		long country = ParamUtil.getLong(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_COUNTRY : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_COUNTRY);
 		String pincode = ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_PINCODE : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_PINCODE);
-
+        String city= ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_CITY : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_CITY);
 		address.setCompanyId(themeDisplay.getCompanyId());
 		address.setGroupId(themeDisplay.getScopeGroupId());
 		address.setCreatedBy(themeDisplay.getUserId());
@@ -138,7 +138,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		address.setState(state);
 		address.setCountry(country);
 		address.setPincode(pincode);
-
+        address.setCity(city);
 		if (isUpdate) {
 			EmployeeAddress employeeAddress=employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
 			if(!employeeAddress.getPresentPermanentSame() && sameAsPermanent) {
