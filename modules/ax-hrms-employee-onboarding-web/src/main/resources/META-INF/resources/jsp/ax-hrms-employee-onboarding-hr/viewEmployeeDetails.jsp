@@ -43,7 +43,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Personal Email</div>
-                            <div class="label-content">${employeeDetail.personalEmail}</div>
+                            <div class="label-content email">${employeeDetail.personalEmail}</div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
@@ -92,7 +92,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Official Email</div>
-                            <div class="label-content">${employeeDetail.officialEmail}</div>
+                            <div class="label-content email">${employeeDetail.officialEmail}</div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
