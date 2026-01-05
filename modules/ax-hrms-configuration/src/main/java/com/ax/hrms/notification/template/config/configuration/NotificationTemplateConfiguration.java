@@ -135,6 +135,17 @@ public String notificationAnniversary();
             required = false)
     public String compensatoryLeaveRequestNotificationToManagerAndHr();
 
+    @Meta.AD(
+            deflt =
+                    "The compensatory leave request submitted by ${EMPLOYEE_NAME} has been cancelled.",
+            name = "Compensatory Leave Request Cancelled Notification to Approver",
+            description =
+                    "Notification sent to the approver when an employee cancels a compensatory leave request. " +
+                            "Available placeholders: ${APPROVER_NAME}, ${EMPLOYEE_NAME}, ${LEAVE_DATE}.",
+            required = false
+    )
+    public String compensatoryLeaveRequestCancelledNotificationToApprover();
+
 
     @Meta.AD(deflt = "<h1>Leave is Requested.</h1>",
             name="Leave Rejected Notification to Manager.",

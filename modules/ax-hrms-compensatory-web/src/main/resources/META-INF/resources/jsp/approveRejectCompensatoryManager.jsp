@@ -54,13 +54,17 @@
                                                          value="${ compensatoryDataDto.getDescription() }"/>
 
                 <liferay-ui:search-container-column-text name="action" cssClass="text-center">
+                        <portlet:actionURL name="/cancelCompensatoryData"
+                                           var="cancelCompensatoryDataURL">
+                            <portlet:param name="compensatoryDataId"
+                                           value="${compensatoryDataDto.compensatoryDataId}"/>
+                        </portlet:actionURL>
                     <c:if test="${ compensatoryDataDto.getStatus() =='Pending' }">
                         <portlet:actionURL name="/approveRejectCompensatoryData"
                                            var="rejectCompensatoryDataURL">
                             <portlet:param name="compensatoryDataId"
                                            value="${compensatoryDataDto.compensatoryDataId}"/>
                         </portlet:actionURL>
-
 
                         <div class="dropdown">
                             <button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"
@@ -81,10 +85,27 @@
                                             class="icon-ban-circle"></i> <liferay-ui:message
                                             key="reject"/></a>
                                 </li>
+
                             </ul>
                         </div>
-
                     </c:if>
+                    <c:if test="${ compensatoryDataDto.getStatus() =='Approved' }">
+                        <div class="dropdown">
+                            <button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <a href="${cancelCompensatoryDataURL }" class="dropdown-item "><i
+                                            class="icon-ban-circle"></i> <liferay-ui:message
+                                            key="cancel"/></a>
+                                </li>
+
+                            </ul>
+                    </c:if>
+
                 </liferay-ui:search-container-column-text>
 
             </liferay-ui:search-container-row>

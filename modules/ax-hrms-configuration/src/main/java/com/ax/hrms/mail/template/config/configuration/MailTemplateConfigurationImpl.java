@@ -305,6 +305,16 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
     }
 
     @Override
+    public String mailCompensatoryLeaveRequestCancelApproverSubject() {
+        return _configuration.mailCompensatoryLeaveRequestCancelApproverSubject();
+    }
+
+    @Override
+    public String mailCompensatoryLeaveRequestCancelApproverBody() {
+        return _configuration.mailCompensatoryLeaveRequestCancelApproverBody();
+    }
+
+    @Override
     public String mailCompensatoryLeaveRequestManagerAndHrBody() {
         return _configuration.mailCompensatoryLeaveRequestManagerAndHrBody();
     }

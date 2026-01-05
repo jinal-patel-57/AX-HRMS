@@ -5,6 +5,7 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryDataConstants;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryWebPortletKeys;
 import com.ax.hrms.compensatory.web.util.AxHrmsCompensatoryLeaveRequestWebUtil;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.model.LeaveTypeMaster;
 import com.ax.hrms.master.service.*;
@@ -14,6 +15,7 @@ import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.*;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -127,6 +129,13 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                     leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsCompensatoryDataConstants.APPROVED)
                             .getLeaveCompensatoryStatusMasterId()
             );
+            try {
+                EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+                compensatoryData.setModifiedBy(employeeDetails.getEmployeeId());
+            }catch ( NoSuchEmployeeDetailsException portalException){
+                log.info("Exception Raised Due to :: "+portalException.getMessage());
+            }
+            log.info("Compensatory ModifiedBy : "+compensatoryData.getModifiedBy());
             compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
 
             LeaveTypeMaster leaveTypeMaster = leaveTypeMasterLocalService.findByLeaveTypeName(AxHrmsCompensatoryDataConstants.COMPENSATORY_OFF);
@@ -169,9 +178,6 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
 
                 leaveBalance = leaveBalanceLocalService.findByEmployeeIdAndLeaveTypeMasterId(compensatoryData.getEmployeeId(), leaveTypeMaster.getLeaveTypeMasterId());
 
-
-
-
                 double hoursToDays = (double) approvedHours / 8;
 
 // apply custom rounding
@@ -186,11 +192,9 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                 log.info("Compensatory Leave Balance :- "+ leaveBalance);
                 log.info("Compensatory leave added successfully..!!!");
 
-
             }
             // Approved Notification and mail to the Employee
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveBalance.getEmployeeId());
-
 
             String employeeMailSubject =notificationTemplateConfiguration.compensatoryLeaveRequestApprovedNotificationToEmployee();
             StringBuilder employeeMailBody = new StringBuilder(
@@ -210,6 +214,12 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                     leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsCompensatoryDataConstants.REJECTED)
                             .getLeaveCompensatoryStatusMasterId()
             );
+            try {
+                EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+                compensatoryData.setModifiedBy(employeeDetails.getEmployeeId());
+            }catch (PortalException portalException){
+                log.info("Exception Raised Due to :: "+portalException.getMessage());
+            }
             compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
 
             // Rejected Notification and mail to the Employee
@@ -223,9 +233,17 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                     employeeMailBody,mailTemplateConfiguration,false,false);
             axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
 
+
+
+
+
+
             SessionMessages.add(actionRequest,"compensation-request-rejected");
 
         }
+
+
+
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
     }
     private double roundToNearestQuarter(double value) {

@@ -9,6 +9,7 @@ public class AxHrmsCompensatoryDataConstants {
     public static final String PROJECT_MANAGER = "projectManager";
     public static final String PENDING = "Pending";
     public static final String APPROVED = "Approved";
+    public static final String CANCELLED = "Cancelled";
     public static final String MANAGER = "Manager";
     public static final String EMPLOYEE = "Employee";
     public static final String MANAGER_LIST = "managerList";

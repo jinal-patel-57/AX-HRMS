@@ -80,30 +80,59 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
         try {
             CompensatoryData compensatoryRequest = CompensatoryDataLocalServiceUtil.getCompensatoryData(compensatoryRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryRequest.getEmployeeId());
+            log.info("get Official Email :: "+employee.toString());
+
             String subject;
             String mailContent;
             body = getBody(compensatoryRequest, employee, body);
             log.info("body "+ body);
 
-                // SEND MAIL TO EMPLOYEE
-
-
-                 mailContent = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeBody() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeBody();
+            // SEND MAIL TO EMPLOYEE
+            mailContent = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeBody() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
 
                  subject = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeSubject() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeSubject();
 
-
-
             axHrmsCommonApi.sendMail(employee.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
-
+            log.info("Mail sent successfully");
         } catch (Exception e) {
             log.error("AxHrmsCompensatoryLeaveRequestWebUtil >>>sendMailtoEmployee >>>  " + e.getMessage());
         }
 
     }
-    public void sendMailtoManagerAndHr(String fromName, String fromEmailAddress, Long compensatoryRequestId,
+
+    public void sendMailtoApprovePerson(String fromName, String fromEmailAddress, Long compensatoryRequestId, Long approverId,
+                                   StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, boolean isApprove, boolean isCancelled) {
+        try {
+            EmployeeDetails approver = employeeDetailsLocalService.getEmployeeDetails(approverId);
+            CompensatoryData compensatoryRequest = CompensatoryDataLocalServiceUtil.getCompensatoryData(compensatoryRequestId);
+            EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryRequest.getEmployeeId());
+
+            log.info("get Official Email :: "+employee.toString());
+            String subject;
+            String mailContent;
+            body = getBody(compensatoryRequest, employee, body);
+            log.info("body "+ body);
+
+            // SEND MAIL TO EMPLOYEE
+            mailContent = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverBody();
+            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
+            mailContent = mailContent.replace("${BODY}", body);
+            mailContent=mailContent.replace("${APPROVER_NAME}", approver.getFirstName() + StringPool.SPACE + approver.getLastName());
+            subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeSubject();
+            axHrmsCommonApi.sendMail(approver.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
+            log.info("Mail sent successfully");
+        } catch (PortalException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
+        public void sendMailtoManagerAndHr(String fromName, String fromEmailAddress, Long compensatoryRequestId,
                                        StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, ThemeDisplay themeDisplay,List<User>userList) {
 
         try {
@@ -138,7 +167,6 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
 
         try {
             JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
-
             notificationJSON.put("body", body);
 
             // Notification........
@@ -161,6 +189,39 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
         }
 
     }
+
+    public void sendNotificationToApprover(String body, EmployeeDetails employee,Long approverId)  {
+        EmployeeDetails approver=null;
+
+            try {
+                approver = employeeDetailsLocalService.getEmployeeDetails(approverId);
+
+                JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
+                body = body.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
+
+            notificationJSON.put("body", body);
+
+            // Notification........
+            UserNotificationEvent userNotification = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
+                    approver.getLrUserId(),
+                    AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_MANAGER_WEB_PORTLET,
+                    UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
+
+
+
+            ServiceContext serviceContext = new ServiceContext();
+            SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
+            sendNotificationToUserHandler.callGetBody(userNotification, serviceContext);
+
+            log.info("SENDING NOTIFICATION IN LEAVE REQUEST PORTLET ...." + userNotification.getPayload());
+
+
+        } catch (Exception e) {
+            log.error("Error in notification employee");
+        }
+
+    }
+
     public void sendNotificationToManagerAndHr(String body, List<User> employeeList)  {
         log.info("sendNotificationToManagerAndHr...............");
         log.info("employeeList "+ employeeList);

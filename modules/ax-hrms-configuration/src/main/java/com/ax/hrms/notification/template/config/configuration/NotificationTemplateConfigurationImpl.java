@@ -92,6 +92,11 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
 	}
 
     @Override
+    public String compensatoryLeaveRequestCancelledNotificationToApprover() {
+        return _configuration.compensatoryLeaveRequestCancelledNotificationToApprover();
+    }
+
+    @Override
     public String leaveRequestedNotificationToManager() {
         return _configuration.leaveRequestedNotificationToManager();
     }

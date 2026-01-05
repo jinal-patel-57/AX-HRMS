@@ -389,6 +389,33 @@ public interface MailTemplateConfiguration {
             required = false)
     public String mailCompensatoryLeaveRequestManagerAndHrSubject();
 
+
+
+    @Meta.AD(
+            deflt = "Compensatory Leave Request Cancelled",
+            name = "Compensatory Leave Request Cancel Mail to Approver (SUBJECT)",
+            description = "Email subject sent to the approver when an employee cancels a compensatory leave request.",
+            required = false
+    )
+    public String mailCompensatoryLeaveRequestCancelApproverSubject();
+
+    @Meta.AD(
+            deflt =
+                    "<p>Dear ${APPROVER_NAME},</p>" +
+                            "<p>The compensatory leave request submitted by ${EMPLOYEE_NAME} has been cancelled.</p>"+
+                            "${BODY}"+
+                            "<p>Regards,<br/>HR Team</p>",
+            name = "Compensatory Leave Request Cancel Mail to Approver (BODY)",
+            description =
+                    "Email body sent to the approver when an employee cancels a compensatory leave request. " +
+                            "Available placeholders: ${APPROVER_NAME}, ${EMPLOYEE_NAME}, ${CANCEL_REASON}.",
+            required = false
+    )
+    public String mailCompensatoryLeaveRequestCancelApproverBody();
+
+
+
+
     @Meta.AD(deflt = "<h1>HELLO</h1>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Compensatory Leave Request Manager And HR (BODY)",
