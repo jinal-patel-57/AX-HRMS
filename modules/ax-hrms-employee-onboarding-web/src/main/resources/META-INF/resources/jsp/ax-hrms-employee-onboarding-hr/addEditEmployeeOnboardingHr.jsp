@@ -4,6 +4,8 @@
 	<portlet:param name="mvcCommand" value="/" />
 </portlet:renderURL>
 
+
+<portlet:resourceURL id="/checkEmailExists" var="checkEmailExistsURL"/>
 <portlet:actionURL name="/addEmployeeOnboardingHr"
 	var="addEmployeeOnboardingHr" />
 
@@ -101,10 +103,13 @@
 								key="official-email-id" /> <span class="text-danger">*</span>
 						</label> <input id="officialEmailId" class="form-control" type="text"
 							name="<portlet:namespace/>officialEmailId" autocomplete="off"
-							value="" data-domain="${domain}" /> <small class="text-muted">
-							email will automatically end with ${domain} </small> <label
+							value="" data-domain="${domain}" /> <label
 							id="officialEmailId-error" class="error text-danger"
 							for="officialEmailId"></label>
+							<small id="email-exists-msg" class="text-danger d-none">
+                                Email already exists.
+                            </small>
+
 					</div>
 
 				</div>
@@ -329,9 +334,14 @@
 
 
    $(document).ready(function () {
+    var checkEmailExistsURL = '${checkEmailExistsURL}';
+    console.log("chackEmailURL",checkEmailExistsURL);
+  window.isOfficialEmailExists = false;
+
 
        const emailInput = $("#officialEmailId");
        const domain = emailInput.data("domain");
+       var namespace = '<portlet:namespace />';
 
        let isDeleting = false;
 
@@ -379,7 +389,61 @@
                }
            });
 
+
+           function checkEmailExists(email) {
+
+console.log("email  above ajex",email);
+               if (!email || email.indexOf("@") === -1) return;
+console.log("chackEmailURL above ajex",checkEmailExistsURL);
+
+               $.ajax({
+                   url: checkEmailExistsURL,
+                   type: "GET",
+                   data: {
+                       [namespace + 'email']: email
+                   },
+                   success: function (response) {
+                       window.isOfficialEmailExists = response.exists;
+                          $("#officialEmailId").valid();
+                   },
+                   error: function () {
+                       console.error("Email validation failed");
+                   }
+               });
+           }
+
+            const firstNameInput = $("#firstName");
+                const lastNameInput = $("#lastName");
+
+                if (!emailInput.val()) {
+                    emailInput.val(domain);
+                }
+
+                function generateEmail() {
+                    const firstName = firstNameInput.val().trim().toLowerCase();
+                    const lastName = lastNameInput.val().trim().toLowerCase();
+
+                    if (firstName && lastName) {
+                        emailInput.val(firstName + "." + lastName + domain);
+                        checkEmailExists(emailInput.val());
+                    }
+                }
+
+                firstNameInput.on("blur", generateEmail);
+                lastNameInput.on("blur", generateEmail);
+
+                emailInput.on("blur", function () {
+                    checkEmailExists($(this).val());
+                });
+
+
+
+
+
    });
+
+
+
 
 
 

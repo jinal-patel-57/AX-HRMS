@@ -1,6 +1,8 @@
 var setFileInputValues;
 (function ($, AxHrmsEmployeeOnboardingHrWebPortlet) {
     let namespace;
+    window.isOfficialEmailExists = window.isOfficialEmailExists || false;
+
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
@@ -18,7 +20,22 @@ var setFileInputValues;
             return regex.test(username);
         }, "Please enter a valid email.");
 
+       $.validator.addMethod(
+           "emailNotExists",
+           function () {
+               return !window.isOfficialEmailExists;
+           },
+           "Email already exists."
+       );
+
+
+
         $(document).ready(function () {
+
+
+
+
+
             $("#EmployeeOnBoardingHrForm").validate({
                 rules: {
                     [namespace + "employeeCode"]: {
@@ -52,7 +69,8 @@ var setFileInputValues;
                     },
                  [namespace + "officialEmailId"]: {
                      required: true,
-                     validUsernameEmail: true
+                     validUsernameEmail: true,
+                     emailNotExists: true
                  },
 
                     [namespace + "joiningDate"]: {
