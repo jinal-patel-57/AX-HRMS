@@ -233,7 +233,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
                 String mediaIds = experience.getExperienceCertificateMediaId();
 
-                if (Validator.isNotNull(mediaIds)) {
+                if (Validator.isNotNull(mediaIds) && !mediaIds.isBlank() && !"0".equalsIgnoreCase(mediaIds)) {
 
                     String[] fileEntryIds = mediaIds.split(StringPool.COMMA);
 

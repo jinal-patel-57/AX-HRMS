@@ -125,7 +125,7 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
                     // delete ONLY this experience old files
                     String oldMediaIds = experience.getExperienceCertificateMediaId();
 
-                    if (Validator.isNotNull(oldMediaIds)) {
+                    if (Validator.isNotNull(oldMediaIds) && !oldMediaIds.isEmpty() && !"0".equalsIgnoreCase(oldMediaIds)) {
                         for (String id : oldMediaIds.split(StringPool.COMMA)) {
                             DLAppLocalServiceUtil.deleteFileEntry(Long.parseLong(id));
                         }

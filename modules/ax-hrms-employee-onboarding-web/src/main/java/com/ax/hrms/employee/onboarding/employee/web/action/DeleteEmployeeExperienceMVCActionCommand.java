@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -43,7 +44,7 @@ public class DeleteEmployeeExperienceMVCActionCommand extends BaseMVCActionComma
 			EmployeeExperience employeeExperience = employeeExperienceLocalService.getEmployeeExperience(experienceId);
 
             String mediaIds  = employeeExperience.getExperienceCertificateMediaId();
-            if (mediaIds != null && !mediaIds.isEmpty()) {
+            if (Validator.isNotNull(mediaIds) && !mediaIds.isEmpty() && !"0".equalsIgnoreCase(mediaIds)) {
                 String[] fileEntryIds = mediaIds.split(",");
                 for (String idStr : fileEntryIds) {
                     try {
