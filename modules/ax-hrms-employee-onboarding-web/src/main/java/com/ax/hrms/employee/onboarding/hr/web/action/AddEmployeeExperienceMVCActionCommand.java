@@ -108,11 +108,9 @@ public class AddEmployeeExperienceMVCActionCommand extends BaseMVCActionCommand 
                 File[] files = uploadRequest.getFiles(inputName);
                 String[] fileNames = uploadRequest.getFileNames(inputName);
 
-
                 // Existing attachments
                 String existingMediaIds = experience.getExperienceCertificateMediaId();
                 log.info("existingMediaIds :-" + existingMediaIds);
-
 
                 experience.setCompanyName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.COMPANY_NAME + i));
 

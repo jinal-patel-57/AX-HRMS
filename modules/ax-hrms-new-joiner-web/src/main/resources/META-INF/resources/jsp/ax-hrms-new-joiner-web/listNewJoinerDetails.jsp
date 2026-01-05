@@ -35,7 +35,9 @@
                         <td>${newJoiner.departmentName}</td>
                         <td>${newJoiner.designationName}</td>
                         <td>
-                            <a href="javascript:void(0)" data-senna-off="true" class="btn btn-primary btn-sm sendNewJoineeWish" data-toggle="modal" data-employee-id='${newJoiner.employeeId}' data-employee-name='${newJoiner.employeeName}'> <liferay-ui:message key="send-wishes" /></a>
+                            <c:if test="${currentUserId ne newJoiner.lrUserId}">
+	                            <a href="javascript:void(0)" data-senna-off="true" class="btn btn-primary btn-sm sendNewJoineeWish" data-toggle="modal" data-employee-id='${newJoiner.employeeId}' data-employee-name='${newJoiner.employeeName}'> <liferay-ui:message key="send-wishes" /></a>
+    						</c:if>                        
                         </td>
                     </tr>
                 </c:forEach>

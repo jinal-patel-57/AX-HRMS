@@ -58,6 +58,7 @@ public class NewJoinerRetrieverUtil {
             for(EmployeeDetails employeeDetails : employeeDetailsList){
                 NewJoinerDto newJoinerDto = new NewJoinerDto();
                 newJoinerDto.setEmployeeId(employeeDetails.getEmployeeId());
+                newJoinerDto.setLrUserId(employeeDetails.getLrUserId());
                 newJoinerDto.setEmployeeName(employeeDetails.getFirstName()+AxHrmsNewJoinerWebPortletConstants.ONE_SPACE+employeeDetails.getLastName());
                 try{
                     newJoinerDto.setDepartmentName(departmentMasterLocalService.getDepartmentMaster(employeeDepartmentLocalService.findByEmployeeId(employeeDetails.getEmployeeId()).getDepartmentMasterId()).getDepartmentName());

@@ -122,7 +122,7 @@
                        class="form-control"
                        id="<portlet:namespace />aadhaarCard"
                        name="<portlet:namespace />aadhaarCard"
-                       accept=".pdf,image/*"
+                       accept="application/pdf,image/*"
                        value="${aadhaarCardFileName}"/>
 
                 <c:if test="${employeeDetail.aadhaarCardFileId > 0}">
@@ -167,7 +167,7 @@
                       class="form-control"
                       id="<portlet:namespace />panCard"
                       name="<portlet:namespace />panCard"
-                      accept=".pdf,image/*"
+                      accept="application/pdf,image/*"
                       value="panCardFileName"/>
 
              <c:if test="${employeeDetail.panCardFileId > 0}">

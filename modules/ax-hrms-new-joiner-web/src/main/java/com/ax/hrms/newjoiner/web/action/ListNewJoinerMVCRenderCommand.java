@@ -16,6 +16,9 @@ import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -56,6 +59,8 @@ public class ListNewJoinerMVCRenderCommand implements MVCRenderCommand{
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
+    	ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+    	
         List<WishTypeMaster> wishTypeMasterList = wishTypeMasterLocalService.getWishTypeMasters(-1,-1);
 
         long newJoinerWishMasterId = 0L;
@@ -69,6 +74,7 @@ public class ListNewJoinerMVCRenderCommand implements MVCRenderCommand{
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.WISH_TYPE_MASTER_LIST,wishTypeMasterList);
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.WISH_TYPE_MASTER_ID,newJoinerWishMasterId);
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.NEW_JOINER_WISH_TYPE_MASTER_ID,newJoinerWishMasterId);
+        renderRequest.setAttribute("currentUserId", themeDisplay.getUserId());
         return AxHrmsNewJoinerWebPortletConstants.LIST_OF_NEW_JOINER_JSP_PATH;
     }
 }
