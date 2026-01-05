@@ -392,9 +392,13 @@
 
            function checkEmailExists(email) {
 
-console.log("email  above ajex",email);
-               if (!email || email.indexOf("@") === -1) return;
-console.log("chackEmailURL above ajex",checkEmailExistsURL);
+             const emailInput = $("#officialEmailId");
+
+                 if (!email || email.indexOf("@") === -1) return;
+
+                 if (!emailInput.valid()) {
+                     return;
+                 }
 
                $.ajax({
                    url: checkEmailExistsURL,
