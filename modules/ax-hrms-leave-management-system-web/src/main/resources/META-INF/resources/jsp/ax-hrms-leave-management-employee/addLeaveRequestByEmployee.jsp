@@ -37,7 +37,7 @@
                                 <input type="hidden" id="<portlet:namespace />hrStatus"
                                        name="<portlet:namespace />hrStatus"
                                        value="${isHrStatus}" style="display:none;"/>
-                                <liferay-ui:message key="employee-detail"/><span class="text-danger">*</span>
+                                <label><liferay-ui:message key="employee-detail"/><span class="text-danger">*</span></label>
                                 <select id="<portlet:namespace />employeeNames"
                                         name="<portlet:namespace />employeeNames"
                                         class="custom-select mr-sm-2">
