@@ -23,6 +23,10 @@
                 <liferay-ui:search-container-column-text
                         name="Status"
                         value="${wfh.status}" />
+                <liferay-ui:search-container-column-text
+                        name="Modified By"
+                        value="${wfh.modifiedBy}" />
+
                         <liferay-ui:search-container-column-text
                         name="Employee Name"
                         value="${wfh.employeeName}" />

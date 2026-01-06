@@ -8,8 +8,16 @@ public class CompensatoryDataDto {
     int approvedHours;
     int requestedHours;
     String managerName;
-
+    String ModifiedBy;
     String employeeName;
+
+    public String getModifiedBy() {
+        return ModifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        ModifiedBy = modifiedBy;
+    }
 
     public String getEmployeeName() {
         return employeeName;

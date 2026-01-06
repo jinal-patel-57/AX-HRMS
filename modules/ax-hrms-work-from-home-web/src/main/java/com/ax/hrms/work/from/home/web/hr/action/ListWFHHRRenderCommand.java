@@ -1,6 +1,7 @@
 package com.ax.hrms.work.from.home.web.hr.action;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
@@ -153,7 +154,12 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
-
+                try {
+                    EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(wfh.getModifiedBy());
+                    dto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
+                }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
+                    log.info("noSuchEmployeeDetailsException :: "+noSuchEmployeeDetailsException.getMessage());
+                }
                 dtoList.add(dto);
             }
 

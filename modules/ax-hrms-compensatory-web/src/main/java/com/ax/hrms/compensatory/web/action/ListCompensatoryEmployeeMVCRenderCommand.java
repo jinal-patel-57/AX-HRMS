@@ -4,6 +4,7 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryDataConstants;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryWebPortletKeys;
 import com.ax.hrms.compensatory.web.dto.CompensatoryDataDto;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.CompensatoryData;
@@ -85,91 +86,104 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
     private static final Log log = LogFactoryUtil.getLog(ListCompensatoryEmployeeMVCRenderCommand.class);
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        int compensatoryDatasCount = 0;
-        List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
-        List<CompensatoryDataDto> compensatoryDataDtoList = new ArrayList<>();
-        List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
-
         try {
-            EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-            List<User> managerUserList = axHrmsCommonApi.fetchRolePersonList(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER,-1,-1);
-            List<EmployeeDetails> managerList = new ArrayList<>();
-            for(User manager : managerUserList){
-                managerList.add(employeeDetailsLocalService.findByLrUserId(manager.getUserId()));
-            }
-            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.MANAGER_LIST, managerList);
-
-            List<CompensatoryData> compensatoryDataList = compensatoryDataLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
-            for (CompensatoryData compensatoryData : compensatoryDataList) {
-                CompensatoryDataDto compensatoryDataDto = new CompensatoryDataDto();
-                compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
-                compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
-                compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
-                compensatoryDataDto.setDescription(compensatoryData.getDescription());
-                SimpleDateFormat dateFormat = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER_DD_MM_YYYY);
-
-                EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getEmployeeId());
-                String formattedDate = dateFormat.format(compensatoryData.getDateOfCompensation());
-                compensatoryDataDto.setDateOfCompensation(formattedDate);
-                compensatoryDataDto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(compensatoryData.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
-                EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
-                compensatoryDataDto.setManagerName(managerDetails.getFirstName() + StringPool.SPACE + managerDetails.getLastName());
-                compensatoryDataDto.setEmployeeName(employee.getFirstName()+ StringPool.SPACE + employee.getLastName());
-
-                compensatoryDataDtoList.add(compensatoryDataDto);
-                compensatoryDatasCount+=1;
-            }
-
-
-            long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
-            long[] hrRoles = themeDisplay.getUser().getRoleIds();
-            boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
-
-            if(isHr) {
-                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_HR, isHr);
-            }
-            long managerId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER).getRoleId();
-            long[] managerRoles = themeDisplay.getUser().getRoleIds();
-            boolean isManager = Arrays.stream(managerRoles).anyMatch(id -> id == managerId);
-
-            if(isManager) {
-                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_MANAGER, isManager);
-            }
-            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
-        } catch (PortalException e) {
-            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
-        }
-
-        for(EmployeeDetails employeeDetails : listOfEmployeeDetails) {
-
+            log.info("inside the rwnder");
+            ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+            int compensatoryDatasCount = 0;
+            List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1, -1);
+            List<CompensatoryDataDto> compensatoryDataDtoList = new ArrayList<>();
+            List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
+            log.info("listOfEmployeeDetails = " + listOfEmployeeDetails.toString());
             try {
-                long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.EMPLOYEE).getRoleId();
-                long[] userRoles = userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
-                for(long userRole : userRoles) {
-                    if(userRole == employeeRoleId)
-                        listOfFilteredEmployeeDetails.add(employeeDetails);
+                EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+                log.info("employee Dtains :: "+employeeDetails.toString());
+                List<User> managerUserList = axHrmsCommonApi.fetchRolePersonList(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER, -1, -1);
+                log.info("managerUserList = " + managerUserList.toString());
+                List<EmployeeDetails> managerList = new ArrayList<>();
+                for (User manager : managerUserList) {
+                    managerList.add(employeeDetailsLocalService.findByLrUserId(manager.getUserId()));
                 }
+                log.info("managerList = " + managerList.toString());
+                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.MANAGER_LIST, managerList);
+
+                List<CompensatoryData> compensatoryDataList = compensatoryDataLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
+                for (CompensatoryData compensatoryData : compensatoryDataList) {
+                    CompensatoryDataDto compensatoryDataDto = new CompensatoryDataDto();
+                    compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
+                    compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
+                    compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
+                    compensatoryDataDto.setDescription(compensatoryData.getDescription());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER_DD_MM_YYYY);
+                    try {
+                        EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(compensatoryData.getModifiedBy());
+                        compensatoryDataDto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
+                    }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
+                        log.error("noSuchEmployeeDetailsException "+noSuchEmployeeDetailsException.getMessage());
+                    }
+                    EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getEmployeeId());
+                    String formattedDate = dateFormat.format(compensatoryData.getDateOfCompensation());
+                    compensatoryDataDto.setDateOfCompensation(formattedDate);
+                    compensatoryDataDto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(compensatoryData.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
+                    EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
+                    compensatoryDataDto.setManagerName(managerDetails.getFirstName() + StringPool.SPACE + managerDetails.getLastName());
+                    compensatoryDataDto.setEmployeeName(employee.getFirstName() + StringPool.SPACE + employee.getLastName());
+
+                    compensatoryDataDtoList.add(compensatoryDataDto);
+                    compensatoryDatasCount += 1;
+                }
+
+
+                long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
+                long[] hrRoles = themeDisplay.getUser().getRoleIds();
+                boolean isHr = Arrays.stream(hrRoles).anyMatch(id -> id == hrRoleId);
+
+                if (isHr) {
+                    renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_HR, isHr);
+                }
+                long managerId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER).getRoleId();
+                long[] managerRoles = themeDisplay.getUser().getRoleIds();
+                boolean isManager = Arrays.stream(managerRoles).anyMatch(id -> id == managerId);
+
+                if (isManager) {
+                    renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_MANAGER, isManager);
+                }
+                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
             } catch (PortalException e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "+e.getMessage());
-            }catch (NullPointerException e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "+e.getMessage());
-            }catch(Exception e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
+                renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
             }
 
+            for (EmployeeDetails employeeDetails : listOfEmployeeDetails) {
+
+                try {
+                    long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.EMPLOYEE).getRoleId();
+                    long[] userRoles = userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
+                    for (long userRole : userRoles) {
+                        if (userRole == employeeRoleId)
+                            listOfFilteredEmployeeDetails.add(employeeDetails);
+                    }
+                } catch (PortalException e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: " + e.getMessage());
+                } catch (NullPointerException e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: " + e.getMessage());
+                } catch (Exception e) {
+                    log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: " + e.getMessage());
+                }
+
+            }
+
+            // adding the managers list to
+
+            PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+            SearchContainer<CompensatoryDataDto> projectSearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
+                    StringPool.BLANK);
+            projectSearchContainer.setResultsAndTotal(compensatoryDataDtoList);
+            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.EMPLOYEE_DETAILS_LIST, listOfFilteredEmployeeDetails);
+            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_COUNT, compensatoryDatasCount);
+            renderRequest.setAttribute("projectSearchContainer", projectSearchContainer);
+            renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.ITERATOR_URL, renderResponse.createRenderURL());
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        // adding the managers list to
-
-        PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
-        SearchContainer<CompensatoryDataDto> projectSearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
-                StringPool.BLANK);
-        projectSearchContainer.setResultsAndTotal(compensatoryDataDtoList);
-        renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.EMPLOYEE_DETAILS_LIST,listOfFilteredEmployeeDetails);
-        renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_COUNT, compensatoryDatasCount);
-        renderRequest.setAttribute("projectSearchContainer", projectSearchContainer);
-        renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.ITERATOR_URL, renderResponse.createRenderURL());
 
         return AxHrmsCompensatoryDataConstants.EMPLOYEE_JSP;
 

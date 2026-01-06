@@ -29,6 +29,7 @@
                     modelVar="wfh"
                     keyProperty="workFromHomeRequestId">
                 <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" />
+                <liferay-ui:search-container-column-text name="Modified By" value="${wfh.modifiedBy}" />
                 <liferay-ui:search-container-column-text name="Employee Name" value="${wfh.employeeName}" />
                                 <liferay-ui:search-container-column-text name="Start Date">
                                     <fmt:formatDate value="${wfh.startDate}" pattern="dd-MM-yyyy" />

@@ -278,9 +278,13 @@ Log log = LogFactoryUtil.getLog(ListWorkFromHomeRequestMVCRenderCommand.class.ge
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
-
                 dto.setStatus(WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList));
-
+                try {
+                    EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(wfh.getModifiedBy());
+                    dto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
+                }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
+                    log.error("noSuchEmployeeDetailsException "+noSuchEmployeeDetailsException.getMessage());
+                }
                 dtoList.add(dto);
             }
 

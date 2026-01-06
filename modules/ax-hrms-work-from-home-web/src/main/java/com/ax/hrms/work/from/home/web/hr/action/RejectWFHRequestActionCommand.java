@@ -110,8 +110,8 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             wfh.setReviewerId(employeeDetails.getEmployeeId());
-
-
+            wfh.setEmployeeId(currentUserId);
+            wfh.setModifiedBy(themeDisplay.getUserId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());

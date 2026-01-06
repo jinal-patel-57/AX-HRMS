@@ -105,7 +105,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
     public void sendMailtoApprovePerson(String fromName, String fromEmailAddress, Long compensatoryRequestId, Long approverId,
                                    StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, boolean isApprove, boolean isCancelled) {
         try {
-            EmployeeDetails approver = employeeDetailsLocalService.getEmployeeDetails(approverId);
+            EmployeeDetails approver = employeeDetailsLocalService.findByLrUserId(approverId);
             CompensatoryData compensatoryRequest = CompensatoryDataLocalServiceUtil.getCompensatoryData(compensatoryRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryRequest.getEmployeeId());
 
@@ -124,7 +124,9 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             axHrmsCommonApi.sendMail(approver.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
             log.info("Mail sent successfully");
         } catch (PortalException e) {
-            throw new RuntimeException(e);
+            log.info("Exception Raised Due to :: "+e.getMessage());
+        } catch (Exception exception){
+            log.error("Exception Raised Due to :: "+exception.getMessage());
         }
 
 
@@ -194,7 +196,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
         EmployeeDetails approver=null;
 
             try {
-                approver = employeeDetailsLocalService.getEmployeeDetails(approverId);
+                approver = employeeDetailsLocalService.findByLrUserId(approverId);
 
                 JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
                 body = body.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
@@ -217,7 +219,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
 
 
         } catch (Exception e) {
-            log.error("Error in notification employee");
+            log.error("Error in notification employee :: "+e.getMessage());
         }
 
     }

@@ -3,6 +3,7 @@ package com.ax.hrms.compensatory.web.action;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryDataConstants;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryWebPortletKeys;
 import com.ax.hrms.compensatory.web.dto.CompensatoryDataDto;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.CompensatoryData;
@@ -105,6 +106,12 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
                 compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
                 compensatoryDataDto.setDescription(compensatoryData.getDescription());
+                try {
+                    EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(compensatoryData.getModifiedBy());
+                    compensatoryDataDto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
+                }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
+                    log.error("noSuchEmployeeDetailsException "+noSuchEmployeeDetailsException.getMessage());
+                }
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String formattedDate = dateFormat.format(compensatoryData.getDateOfCompensation());
                 compensatoryDataDto.setDateOfCompensation(formattedDate);
@@ -119,7 +126,6 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
             renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
         } catch (PortalException e) {
             renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
-
         }
 
         // adding the managers list to

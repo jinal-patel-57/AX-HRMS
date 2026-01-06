@@ -45,6 +45,11 @@
                     <liferay-ui:search-container-column-text name="Employee Name"
                                                              value="${ compensatoryDataDto.getEmployeeName() }"/>
 
+                    <liferay-ui:search-container-column-text name="Modified By"
+                                                             value="${ compensatoryDataDto.getModifiedBy() }"/>
+
+
+
                     <liferay-ui:search-container-column-text name="Requested Hours"
                                                              value="${ compensatoryDataDto.getRequestedHours() }"/>
 

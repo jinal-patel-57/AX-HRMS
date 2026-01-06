@@ -167,6 +167,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
         try {
             if (cancelledStatusId > 0) {
                 compensatoryData.setLeaveCompensatoryStatusMasterId(cancelledStatusId);
+                compensatoryData.setModifiedBy(themeDisplay.getUserId());
                 compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
                 log.info("Compensatory request cancelled successfully");
             }

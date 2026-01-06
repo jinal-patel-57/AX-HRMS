@@ -116,6 +116,7 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             StringBuilder employeeMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             wfh.setReviewerId(employeeDetails.getEmployeeId());
+            wfh.setModifiedBy(currentUserId);
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());

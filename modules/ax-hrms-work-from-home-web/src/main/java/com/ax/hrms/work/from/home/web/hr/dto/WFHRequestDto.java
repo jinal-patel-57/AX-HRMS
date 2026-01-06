@@ -12,6 +12,15 @@ public class WFHRequestDto {
     private Date requestDate;
     private Date startDate;
     private Date endDate;
+    private String modifiedBy;
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
 
     public long getWorkFromHomeRequestId() {
         return workFromHomeRequestId;

@@ -143,7 +143,7 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
                 compensatoryData.setGroupId(themeDisplay.getCompanyGroupId());
                 compensatoryData.setCreateDate(new Date());
                 compensatoryData.setModifiedDate(new Date());
-
+                compensatoryData.setModifiedBy(themeDisplay.getUserId());
                 CompensatoryData compensatoryData1 =  compensatoryDataLocalService.addCompensatoryData(compensatoryData);
 
 
@@ -164,9 +164,6 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
             }catch (Exception e){
                 e.printStackTrace();
             }
-
-
-
 
             SessionMessages.add(actionRequest, "compensation-request-submitted");
                 actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));

@@ -131,7 +131,7 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             );
             try {
                 EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-                compensatoryData.setModifiedBy(employeeDetails.getEmployeeId());
+                compensatoryData.setModifiedBy(themeDisplay.getUserId());
             }catch ( NoSuchEmployeeDetailsException portalException){
                 log.info("Exception Raised Due to :: "+portalException.getMessage());
             }
@@ -216,7 +216,7 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             );
             try {
                 EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-                compensatoryData.setModifiedBy(employeeDetails.getEmployeeId());
+                compensatoryData.setModifiedBy(themeDisplay.getUserId());
             }catch (PortalException portalException){
                 log.info("Exception Raised Due to :: "+portalException.getMessage());
             }
