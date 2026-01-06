@@ -1127,6 +1127,23 @@ function setConfigsForAddExperienceSection(config) {
                 form.validate().element(this);
             }
         );
+        $(document).on(
+            "keyup change input",
+            "#educationStepperForm input, #educationStepperForm select",
+            function () {
+
+                const form = $("#educationStepperForm");
+
+                // ensure validator exists
+                if (!form.data("validator")) {
+                    initializeValidation(); // ✅ correct function
+                }
+
+                // validate only current field
+                form.validate().element(this);
+            }
+        );
+
 
 
       });
