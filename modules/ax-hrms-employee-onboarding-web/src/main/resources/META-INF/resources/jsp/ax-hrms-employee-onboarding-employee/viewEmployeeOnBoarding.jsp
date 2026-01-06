@@ -51,6 +51,18 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
+                            <div class="label-name">Designation</div>
+                            <div class="label-content">${employeeDetail.designationName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Depatment</div>
+                            <div class="label-content">${employeeDetail.departmentName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none">
+                        <div class="form-group-view">
                             <div class="label-name">Lr User Id</div>
                             <div class="label-content">${employeeDetail.lrUserId}</div>
                         </div>
@@ -85,7 +97,19 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Insurance Link</div>
-                            <div class="label-content">${employeeDetail.insuranceLink}</div>
+                            <div class="label-content email">${employeeDetail.insuranceLink}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Month</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPm}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Annum</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPa}</div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
@@ -96,127 +120,8 @@
                     </div>
                     
                     
-                </div>
-            </div>
-        </div>
-		
-		<div class="card">
-            <div class="card-header">
-                <strong>Overview</strong>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Employee ID</div>
-                            <div class="label-content">${employeeDetail.employeeId}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">First Name</div>
-                            <div class="label-content">${employeeDetail.firstName}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Last Name</div>
-                            <div class="label-content">${employeeDetail.lastName}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Personal Email</div>
-                            <div class="label-content email">${employeeDetail.personalEmail}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Date of Birth</div>
-                            <div class="label-content">
-                                <fmt:formatDate value='${employeeDetail.dateOfBirth}' pattern='dd-MM-yyyy'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Mobile No.</div>
-                            <div class="label-content">${employeeDetail.mobileNo}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Reporting Manager</div>
-                            <div class="label-content">${employeeDetail.reportingManager}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Father Name</div>
-                            <div class="label-content">${employeeDetail.fatherName}</div>
-                        </div>
-                    </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                      <div class="form-group-view">
-                          <div class="label-name">Marital Status</div>
-                          <div class="label-content">${employeeDetail.maritalStatus}</div>
-                      </div>
-                  </div>
-
-                  <c:if test="${employeeDetail.maritalStatus}">
-                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                          <div class="form-group-view">
-                              <div class="label-name">Marriage Date</div>
-                              <div class="label-content">
-                                  <fmt:formatDate value="${employeeDetail.marriageDate}" pattern="dd-MM-yyyy"/>
-                              </div>
-                          </div>
-                      </div>
-
-                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                          <div class="form-group-view">
-                              <div class="label-name">Spouse Name</div>
-                              <div class="label-content">${employeeDetail.spouseName}</div>
-                          </div>
-                      </div>
-                  </c:if>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Official Email</div>
-                            <div class="label-content email">${employeeDetail.officialEmail}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Gender</div>
-                            <div class="label-content">${employeeDetail.gender}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">EmployeeType</div>
-                            <div class="label-content">${employeeDetail.employeeType}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Aadhaar Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Pan Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
-                        </div>
-                    </div>
-                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Profile Pic</div>
-                            <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
-                        </div>
-                    </div>
+                    
+                    
                 </div>
             </div>
         </div>
