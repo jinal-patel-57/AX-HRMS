@@ -16,37 +16,134 @@
     </div>
     <div class="card-body">
 
+		<div class="card">
+            <div class="card-header">
+                <strong>Overview</strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Type of Employee</div>
+                            <div class="label-content">${employeeDetail.employeeType}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Employee Code</div>
+                            <div class="label-content">${employeeDetail.employeeCode}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Employee ID</div>
+                            <div class="label-content">${employeeDetail.employeeId}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Designation</div>
+                            <div class="label-content">${employeeDetail.designationName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Depatment</div>
+                            <div class="label-content">${employeeDetail.departmentName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none">
+                        <div class="form-group-view">
+                            <div class="label-name">Lr User Id</div>
+                            <div class="label-content">${employeeDetail.lrUserId}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Official Email</div>
+                            <div class="label-content email">${employeeDetail.officialEmail}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gender</div>
+                            <div class="label-content">${employeeDetail.gender}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Manager</div>
+                            <div class="label-content">${employeeDetail.reportingManager}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Joining Date</div>
+                            <div class="label-content">
+                                <fmt:formatDate value='${employeeDetail.joiningDate}' pattern='dd-MM-yyyy'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Insurance Link</div>
+                            <div class="label-content email">${employeeDetail.insuranceLink}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Month</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPm}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Annum</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPa}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Stipend</div>
+                            <div class="label-content">${employeeDetail.stipend}</div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+		
+
         <div class="card">
             <div class="card-header">
                 <strong>Basic Details</strong>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Employee ID</div>
-                            <div class="label-content">${employeeDetail.employeeId}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">First Name</div>
                             <div class="label-content">${employeeDetail.firstName}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Last Name</div>
                             <div class="label-content">${employeeDetail.lastName}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Personal Email</div>
                             <div class="label-content email">${employeeDetail.personalEmail}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Date of Birth</div>
                             <div class="label-content">
@@ -54,26 +151,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Mobile No.</div>
                             <div class="label-content">${employeeDetail.mobileNo}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Father Name</div>
                             <div class="label-content">${employeeDetail.fatherName}</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Maritial Status</div>
                             <div class="label-content">${employeeDetail.maritalStatus}</div>
                         </div>
                     </div>
                     <c:if test="${employeeDetail.maritalStatus}">
-                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                              <div class="form-group-view">
                                  <div class="label-name">Marriage Date</div>
                                  <div class="label-content">
@@ -82,44 +179,26 @@
                              </div>
                          </div>
 
-                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                              <div class="form-group-view">
                                  <div class="label-name">Spouse Name</div>
                                  <div class="label-content">${employeeDetail.spouseName}</div>
                              </div>
                          </div>
                      </c:if>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Official Email</div>
-                            <div class="label-content email">${employeeDetail.officialEmail}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Gender</div>
-                            <div class="label-content">${employeeDetail.gender}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Manager</div>
-                            <div class="label-content">${employeeDetail.reportingManager}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Aadhar Card File</div>
                             <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Pan Card File</div>
                             <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Profile Pic</div>
                             <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
@@ -142,42 +221,42 @@
 
                        <div class="row">
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">Address Line 1</div>
                                    <div class="label-content">${presentaddresss.line1}</div>
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">Address Line 2</div>
                                    <div class="label-content">${presentaddresss.line2}</div>
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">Address Line 3</div>
                                    <div class="label-content">${presentaddresss.line3}</div>
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">City</div>
                                    <div class="label-content">${presentaddresss.city}</div>
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">State</div>
                                    <div class="label-content">${presentaddresss.state}</div>
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">Country</div>
                                    <div class="label-content">
@@ -202,7 +281,7 @@
                                </div>
                            </div>
 
-                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                <div class="form-group-view">
                                    <div class="label-name">Pin code</div>
                                    <div class="label-content">${presentaddresss.pincode}</div>
@@ -218,21 +297,21 @@
                            </div>
                            <div class="row">
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 1</div>
                                        <div class="label-content">${presentaddresss.line1}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 2</div>
                                        <div class="label-content">${presentaddresss.line2}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 3</div>
                                        <div class="label-content">${presentaddresss.line3}</div>
@@ -240,7 +319,7 @@
                                </div>
 
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">City</div>
                                        <div class="label-content">${presentaddresss.city}</div>
@@ -248,14 +327,14 @@
                                </div>
 
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">State</div>
                                        <div class="label-content">${presentaddresss.state}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Country</div>
                                        <div class="label-content">
@@ -280,7 +359,7 @@
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Pin Code</div>
                                        <div class="label-content">${presentaddresss.pincode}</div>
@@ -294,28 +373,28 @@
                            </div>
                            <div class="row">
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 1</div>
                                        <div class="label-content">${permanentaddresss.line1}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 2</div>
                                        <div class="label-content">${permanentaddresss.line2}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Address Line 3</div>
                                        <div class="label-content">${permanentaddresss.line3}</div>
                                    </div>
                                </div>
 
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">City</div>
                                 <div class="label-content">${permanentaddresss.city}</div>
@@ -323,21 +402,21 @@
                         </div>
 
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">State</div>
                                        <div class="label-content">${permanentaddresss.state}</div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Country</div>
                                        <div class="label-content"><%= permanentCountryName %></div>
                                    </div>
                                </div>
 
-                               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
                                        <div class="label-name">Pin Code</div>
                                        <div class="label-content">${permanentaddresss.pincode}</div>
@@ -358,28 +437,28 @@
             <c:forEach var="education" items="${educationList}" varStatus="status">
 
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Education Level</div>
                             <div class="label-content">${education.levelName}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Institute</div>
                             <div class="label-content">${education.institution}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Degree</div>
                             <div class="label-content">${education.degree}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Start Date</div>
                             <div class="label-content">
@@ -388,7 +467,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">End Date</div>
                             <div class="label-content">
@@ -397,14 +476,14 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Passing Year</div>
                             <div class="label-content">${education.passingYear}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Education Certificate</div>
                             <div class="label-content">
@@ -440,7 +519,7 @@
             <div class="card-body">
                 <c:forEach var="experience" items="${experienceList}" varStatus="status">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Company Name</div>
                                 <div class="label-content">
@@ -448,7 +527,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Joining Date</div>
                                 <div class="label-content">
@@ -456,7 +535,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Reliving Date</div>
                                 <div class="label-content">
@@ -464,7 +543,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">Experience Certificates</div>
                                 <div class="label-content">
@@ -508,49 +587,49 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Account Number</div>
                             <div class="label-content">${employeeBankAccount.accountNumber}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Account Type</div>
                             <div class="label-content">${employeeBankAccount.accountType}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Beneficiary Name</div>
                             <div class="label-content">${employeeBankAccount.beneficiaryName}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Bank Name</div>
                             <div class="label-content">${employeeBankAccount.bankName}</div>
                         </div>
                     </div>
 
-                    <%--                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">--%>
+                    <%--                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">--%>
                     <%--                        <div class="form-group-view">--%>
                     <%--                            <div class="label-name">Status</div>--%>
                     <%--                            <div class="label-content">${employeeBankAccount.status}</div>--%>
                     <%--                        </div>--%>
                     <%--                    </div>--%>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">IFSC Code</div>
                             <div class="label-content">${employeeBankAccount.ifscCode}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Bank Branch</div>
                             <div class="label-content">${employeeBankAccount.bankBranch}</div>
@@ -568,14 +647,14 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">UAN</div>
                             <div class="label-content">${employeeUanEsic.uan}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">ESIC No</div>
                             <div class="label-content">${employeeUanEsic.esicNo}</div>
@@ -594,84 +673,84 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">First Name</div>
                             <div class="label-content">${nominee.nomineeFirstName}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Last Name</div>
                             <div class="label-content">${nominee.nomineeLastName}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Contact</div>
                             <div class="label-content">${nominee.nomineeContact}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Address Line 1</div>
                             <div class="label-content">${nominee.line1}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Address Line 2</div>
                             <div class="label-content">${nominee.line2}</div>
                         </div>
                     </div>
                     
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Address Line 3</div>
                             <div class="label-content">${nominee.line3}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">City</div>
                             <div class="label-content">${nominee.nomineeCity}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">State</div>
                             <div class="label-content">${nominee.state}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Country</div>
                             <div class="label-content">${nominee.countryName}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Pincode</div>
                             <div class="label-content">${nominee.pincode}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Relationship</div>
                             <div class="label-content">${nominee.relationshipWithNominee}</div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Date of Birth</div>
                             <div class="label-content"><fmt:formatDate value='${nominee.nomineeDob}' pattern='yyyy-MM-dd'/></div>

@@ -39,6 +39,13 @@ public class EmployeeDto {
 	public String insuranceLink;
 	public String reportingManager;
 	public String employeeType;
+	public double stipend;
+	public String designationName;
+	public long designationMasterId;
+	public String departmentName;
+	public long departmentMasterId;
+	public double grossSalaryCtcPa;
+	public double grossSalaryCtcPm;
 
 	//address
 	public String line1;
@@ -99,7 +106,49 @@ public class EmployeeDto {
     private List<String> experienceCertificatePreviewUrls;
 
     
-    public String getNomineeCity() {
+    public double getGrossSalaryCtcPa() {
+		return grossSalaryCtcPa;
+	}
+	public void setGrossSalaryCtcPa(double grossSalaryCtcPa) {
+		this.grossSalaryCtcPa = grossSalaryCtcPa;
+	}
+	public double getGrossSalaryCtcPm() {
+		return grossSalaryCtcPm;
+	}
+	public void setGrossSalaryCtcPm(double grossSalaryCtcPm) {
+		this.grossSalaryCtcPm = grossSalaryCtcPm;
+	}
+	public String getDesignationName() {
+		return designationName;
+	}
+	public void setDesignationName(String designationName) {
+		this.designationName = designationName;
+	}
+	public long getDesignationMasterId() {
+		return designationMasterId;
+	}
+	public void setDesignationMasterId(long designationMasterId) {
+		this.designationMasterId = designationMasterId;
+	}
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+	public long getDepartmentMasterId() {
+		return departmentMasterId;
+	}
+	public void setDepartmentMasterId(long departmentMasterId) {
+		this.departmentMasterId = departmentMasterId;
+	}
+	public double getStipend() {
+		return stipend;
+	}
+	public void setStipend(double stipend) {
+		this.stipend = stipend;
+	}
+	public String getNomineeCity() {
 		return nomineeCity;
 	}
 

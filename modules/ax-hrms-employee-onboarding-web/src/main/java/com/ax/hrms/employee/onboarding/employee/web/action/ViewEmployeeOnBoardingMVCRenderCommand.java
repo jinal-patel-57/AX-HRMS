@@ -4,21 +4,31 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.onboarding.employee.web.dto.EmployeeDto;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
+import com.ax.hrms.master.model.DepartmentMaster;
+import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.service.DepartmentMasterLocalService;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeBankAccount;
+import com.ax.hrms.model.EmployeeDepartment;
+import com.ax.hrms.model.EmployeeDesignation;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.EmployeeEducation;
 import com.ax.hrms.model.EmployeeExperience;
+import com.ax.hrms.model.EmployeeSalary;
 import com.ax.hrms.model.EmployeeUanEsic;
 import com.ax.hrms.model.Nominee;
 import com.ax.hrms.service.AddressLocalService;
 import com.ax.hrms.service.EmployeeAddressLocalService;
 import com.ax.hrms.service.EmployeeBankAccountLocalService;
+import com.ax.hrms.service.EmployeeDepartmentLocalService;
+import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.EmployeeEducationLocalService;
 import com.ax.hrms.service.EmployeeExperienceLocalService;
+import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
@@ -55,7 +65,22 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 	@Reference
 	EducationLevelMasterLocalService educationLevelMasterLocalService;
+	
+	@Reference
+	EmployeeDesignationLocalService employeeDesignationLocalService;
+	
+	@Reference
+	DesignationMasterLocalService designationMasterLocalService;
+	
+	@Reference
+	EmployeeDepartmentLocalService employeeDepartmentLocalService;
+	
+	@Reference
+	DepartmentMasterLocalService departmentMasterLocalService;
 
+	@Reference
+	EmployeeSalaryLocalService employeeSalaryLocalService;
+	
 	@Reference
 	EmployeeUanEsicLocalService employeeUanEsicLocalService;
 
@@ -129,8 +154,14 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setGender(employeeDetails.getGender());
 			employeeDto.setExperienced(employeeDetails.getIsExperienced());
 			employeeDto.setEmployeeType(employeeDetails.getEmployeeType());
+			log.info("employee code -- " + employeeDetails.getEmployeeCode());
+			employeeDto.setEmployeeCode(employeeDetails.getEmployeeCode());
+			employeeDto.setLrUserId(employeeDetails.getLrUserId());
+			employeeDto.setInsuranceLink(employeeDetails.getInsuranceLink());
 			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
 			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
+			employeeDto.setStipend(employeeDetails.getStipend());
+			
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
@@ -163,6 +194,37 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD_FILE, previewURL);
 				}
 			}
+			
+			try {
+				EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeId);
+				if(Validator.isNotNull(employeeDesignation) && employeeDesignation.getEmployeeDesignationId()>0 && employeeDesignation.getDesignationMasterId()>0) {
+					DesignationMaster designationMaster = designationMasterLocalService.getDesignationMaster(employeeDesignation.getDesignationMasterId());
+					employeeDto.setDesignationMasterId(designationMaster.getDesignationMasterId());
+					employeeDto.setDesignationName(designationMaster.getDesignationName());
+				}
+			} catch(Exception e) {
+				log.error("Error while fetching employee's designation - " + e.getMessage());
+			}
+			try {
+				EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employeeId);
+				if(Validator.isNotNull(employeeDepartment) && employeeDepartment.getEmployeeDepartmentId()>0 && employeeDepartment.getDepartmentMasterId()>0) {
+					DepartmentMaster departmentMaster = departmentMasterLocalService.getDepartmentMaster(employeeDepartment.getDepartmentMasterId());
+					employeeDto.setDepartmentMasterId(departmentMaster.getDepartmentMasterId());
+					employeeDto.setDepartmentName(departmentMaster.getDepartmentName());
+				}
+			} catch(Exception e) {
+				log.error("Error while fetching employee's designation - " + e.getMessage());
+			}
+			try {
+				EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
+				if(Validator.isNotNull(employeeSalary) && employeeSalary.getSalaryId()>0) {
+					employeeDto.setGrossSalaryCtcPa(employeeSalary.getGrossSalaryCtcPa());
+					employeeDto.setGrossSalaryCtcPm(employeeSalary.getGrossSalaryCtcPm());
+				}
+			} catch(Exception e) {
+				log.error("Error while fetching employee's designation - " + e.getMessage());
+			}
+			
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDto);
 		} catch (PortalException e) {
 			e.printStackTrace();
