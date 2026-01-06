@@ -16,7 +16,6 @@
 </liferay-portlet:resourceURL>
 <!-- Different URL End -->
 
-
 <div class="card">
     <div class="card-header">
         <strong>
@@ -138,16 +137,68 @@
 </div>
 
 
+
+
+
+
+<!-- Custom Message Modal -->
+<div id="customMessageModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <div class="custom-modal-header">
+            <span id="customModalTitle">Message</span>
+            <button type="button" class="custom-modal-close" onclick="closeCustomModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="custom-modal-body" id="customModalBody">
+        </div>
+
+        <div class="custom-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" onclick="closeCustomModal()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 <script>
-    function showMessage(newMessage) {
-        Liferay.Util.openToast({
-            title: 'Info',
-            message: newMessage,
-            type: 'info',
-            autoClose: 10000
-        });
+
+
+function showMessage(message, type = 'warning') {
+
+    let title = 'Message';
+    let bodyClass = 'modal-info';
+
+    if (type === 'error') {
+        title = 'Error';
+        bodyClass = 'modal-error';
+    } else if (type === 'success') {
+        title = 'Success';
+        bodyClass = 'modal-success';
+    } else if (type === 'warning') {
+        title = 'Warning Message';
+        bodyClass = 'modal-warning';
     }
 
+    document.getElementById('customModalTitle').innerText = title;
+    document.getElementById('customModalBody').innerHTML =
+        '<div class="' + bodyClass + '">' + message + '</div>';
+
+    document.getElementById('customMessageModal').style.display = 'flex';
+}
+
+function closeCustomModal() {
+    document.getElementById('customMessageModal').style.display = 'none';
+}
 
     $(document).ready(function () {
 
@@ -163,4 +214,24 @@
 
         AxEmployeeLeaveManagement.setConfigs(config);
     });
+
+
+
+$(document).ready(function () {
+
+    $('.liferay-alert-danger').each(function () {
+        showMessage($(this).text().trim(), 'error');
+    });
+
+    $('.liferay-alert-success').each(function () {
+        showMessage($(this).text().trim(), 'success');
+    });
+
+    $('.liferay-alert-info').each(function () {
+        showMessage($(this).text().trim(), 'info');
+    });
+
+});
+
+
 </script>

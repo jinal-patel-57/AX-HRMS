@@ -48,6 +48,9 @@
         employeeNames = $('#'+namespace+'employeeNames');
         employeeId = $('#'+namespace+'employeeId');
 
+
+
+
         function showStartDateContainer(){
             startDateContainer.show();
         }
@@ -87,6 +90,16 @@
         function setEditableEndDate(){
             endDate.prop('readOnly',false);
         }
+        function hideReasonContainer() {
+            reason.val('');
+            reason.prop('readOnly', true);
+            reason.closest('.form-group').hide(); // hides label + input
+        }
+
+        function showReasonContainer() {
+            reason.prop('readOnly', false);
+            reason.closest('.form-group').show();
+        }
         function setDisabledSubmitBtn(){
             submitBtn.prop('disabled',true);
         }
@@ -107,14 +120,38 @@
         function showDayTypeSelectContainer(){
             dayTypeSelectContainer.show();
         }
-        function showMessage(newMessage) {
-            Liferay.Util.openToast({
-                title: 'Info',
-                message: newMessage,
-                type: 'info',
-                autoClose: 10000
-            });
-        }
+
+function showMessage(message, type = 'warning') {
+
+    let title = 'Message';
+    let bodyClass = 'modal-info';
+
+    if (type === 'error') {
+        title = 'Error';
+        bodyClass = 'modal-error';
+    } else if (type === 'success') {
+        title = 'Success';
+        bodyClass = 'modal-success';
+    } else if (type === 'warning') {
+        title = 'Warning Message';
+        bodyClass = 'modal-warning';
+    }
+
+    document.getElementById('customModalTitle').innerText = title;
+    document.getElementById('customModalBody').innerHTML =
+        '<div class="' + bodyClass + '">' + message + '</div>';
+
+    document.getElementById('customMessageModal').style.display = 'flex';
+}
+
+
+
+
+function closeCustomModal() {
+    document.getElementById('customMessageModal').style.display = 'none';
+}
+
+
         function formatDateForInput(date) {
             date = new Date(date);
             const year = date.getFullYear();
@@ -240,7 +277,7 @@
                 }
             }
             else{
-                showMessage("Please enter date");
+//                showMessage("Please enter date");
             }
         }
 
@@ -253,12 +290,12 @@
             if(endDate.val() != "" && startDate.val() != ""){
                 if(new Date(endDateValue).getTime() < new Date(startDateValue).getTime()){
                     setDisabledSubmitBtn();
-                    showMessage("Start date must be before End date");
+//                    showMessage("Start date must be before End date");
                     setBlankEndDate();
                 }
             }else{
                 setDisabledSubmitBtn();
-                showMessage("Enter both dates...");
+//                showMessage("Enter both dates...");
             }
         }
 
@@ -282,8 +319,7 @@
                 },
                 [namespace + "endDate"]: {
                     required: true,
-                    validDate: true
-
+                    validEndDate: true
                 },
             },
             messages: {
@@ -306,6 +342,47 @@
          return this.optional(element) ||
              /^[A-Za-z0-9\s.,-]+$/.test(value);
      }, "Only letters, numbers, space and . , - are allowed");
+
+jQuery.validator.addMethod("validEndDate", function (value, element) {
+
+    let now = new Date();
+    let endDate = new Date(value);
+    let firstDateOfMonth;
+
+    endDate.setHours(0, 0, 0, 0);
+
+    // Same month logic
+    if ($('#' + namespace + 'hrStatus').val())
+        firstDateOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    else
+        firstDateOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    /* Month validation */
+    if (endDate < firstDateOfMonth) {
+        return false;
+    }
+
+    /* Start date comparison */
+    let startDateVal = $('#' + namespace + 'startDate').val();
+    if (startDateVal) {
+        let startDate = new Date(startDateVal);
+        startDate.setHours(0, 0, 0, 0);
+
+        if (endDate < startDate) {
+            $.validator.messages.validEndDate =
+                "End date should not be earlier than start date.";
+            return false;
+        }
+    }
+
+    $.validator.messages.validEndDate =
+        "Enter a valid date (on or after the first day of the month).";
+
+    return true;
+
+}, "Enter a valid date (on or after the first day of the month).");
+
+
 
 
         jQuery.validator.addMethod("validDate", function (value, element) {
@@ -360,7 +437,7 @@
             }
             else{
                 if(leaveType.val() !== "")
-                    showMessage("Not enough leave balance");
+                    showMessage("You do not have enough leave balance for this leave type.");
                 setDisabledSubmitBtn();
                 setReadOnlyStartDate();
                 setReadOnlyEndDate();
@@ -373,7 +450,8 @@
                 hideStartDateContainer();
                 hideEndDateContainer();
                 setReadOnlyReason();
-                setBlankStartDate();
+//                setBlankStartDate();
+  hideReasonContainer();
                 setBlankEndDate();
                 ajaxForFloaterHolidayList();
             }
@@ -384,7 +462,8 @@
                 setBlankEndDate();
                 showStartDateContainer();
                 showEndDateContainer();
-                setEditableReason();
+//                setEditableReason();
+                    showReasonContainer();
             }
 
             // After change Leave Type if leave type is Continuous then run this if...else...
@@ -402,11 +481,11 @@
             }
         });
 
-
-
         startDate.on('change',function(){
             setBlankEndDate();
             console.log("on change : start")
+
+
             if(isContinuous){
                 startDateValue = startDate.val();
                 startDate.val(startDateValue);
@@ -438,7 +517,7 @@
                             console.log("daysDiff is: "+daysDiff +" at: "+new Date().getTime())
                             debugger;
                             if(remainingLeave/0.5 == daysDiff){
-                                showMessage("You can select all half days for the given range.");
+                                showMessage("You can mark all days as half-days for the selected range.","success");
                                 setDisabledSubmitBtn();
                                 dateInputsContainer.on('change', 'input[type="checkbox"]', function() {
                                     if(checkSelectedCheckboxNumbers() == daysDiff) {
@@ -465,16 +544,16 @@
                                 setEnabledSubmitBtn();
                             }
                         }else{
-                            showMassege("Not enough leave balance")
+                            showMassege("You do not have enough leave balance for this leave type.")
                         }
                     }
                 }else {
-                    showMessage("your selected days is higher than your leave balance")
+                    showMessage("Selected leave duration exceeds your remaining leave balance.")
                     setDisabledSubmitBtn();
                     dateInputsContainer.empty();
                 }
             }else{
-                showMessage("Please select require Dates");
+                showMessage("Please select the required leave dates.");
             }
 
         });
