@@ -134,12 +134,6 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
-                            <div class="label-name">Employee ID</div>
-                            <div class="label-content">${employeeDetail.employeeId}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
                             <div class="label-name">First Name</div>
                             <div class="label-content">${employeeDetail.firstName}</div>
                         </div>
@@ -168,12 +162,6 @@
                         <div class="form-group-view">
                             <div class="label-name">Mobile No.</div>
                             <div class="label-content">${employeeDetail.mobileNo}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Reporting Manager</div>
-                            <div class="label-content">${employeeDetail.reportingManager}</div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
@@ -207,24 +195,6 @@
                       </div>
                   </c:if>
 
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Official Email</div>
-                            <div class="label-content email">${employeeDetail.officialEmail}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">Gender</div>
-                            <div class="label-content">${employeeDetail.gender}</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                        <div class="form-group-view">
-                            <div class="label-name">EmployeeType</div>
-                            <div class="label-content">${employeeDetail.employeeType}</div>
-                        </div>
-                    </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Aadhaar Card File</div>
