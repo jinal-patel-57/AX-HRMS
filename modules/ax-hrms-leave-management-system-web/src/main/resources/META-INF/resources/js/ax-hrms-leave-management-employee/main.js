@@ -349,6 +349,8 @@
                 remainingLeavesPar.text('')
 
             dateInputsContainer.empty();
+            $('#floaterDateLabel').remove();
+ 
 
             if(remainingLeave != 0 && leaveType.val() !== ""){
                 setEnabledSubmitBtn();
@@ -530,21 +532,29 @@
 
                     // Add the new <select> element to the page
                     if(remainingLeave != 0.0)
-                        floaterDaysContainer.empty().append('<label>Date</label>').append(floaterSelectElement);
+                        floaterDaysContainer.empty().append('<label>Restricted Holiday</label>').append(floaterSelectElement);
 
                     hideEndDateContainer();
                     hideStartDateContainer();
                     hideDateInputContainer();
-
+                    
                     // Attach an event handler to the dynamic select element
                     floaterSelectElement.on('change', function() {
+                    	
                         let floaterDate = $('#'+namespace+'floaterDays').val();
 
                         if(floaterDate != ""){
+                        	if (!$('#floaterDateLabel').length) {
+                                $('<label>', {
+                                    id: 'floaterDateLabel',
+                                    text: 'Date'
+                                }).insertBefore(dateInputsContainer);
+                            }
                             startDate.val(formatDateForInput(new Date(floaterDate)));
                             endDate.val(formatDateForInput(new Date(floaterDate)));
                             showDateInputContainer();
                         }else{
+ 	                       
                             setBlankStartDate();
                             setBlankEndDate();
                         }
