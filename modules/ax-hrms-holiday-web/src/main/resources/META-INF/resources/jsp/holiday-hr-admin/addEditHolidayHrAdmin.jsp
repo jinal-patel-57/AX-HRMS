@@ -60,7 +60,12 @@
   <div class="form-group">
 
    <label for="holidayDate"><liferay-ui:message key="holidayDate" /><span class="text-danger">*</span></label>
-            <input value="<fmt:formatDate pattern='yyyy-MM-dd' value='${holidayData.getDate()}'/>" id="holidayDate" placeholder="Enter Holiday Date" class="form-control datepicker" name="<portlet:namespace/>holidayDate">
+<input
+    type="date"
+    value="<fmt:formatDate pattern='yyyy-MM-dd' value='${holidayData.getDate()}'/>"
+    id="holidayDate"
+    class="form-control"
+    name="<portlet:namespace/>holidayDate">
 
   </div>
 
@@ -126,14 +131,7 @@
 <script>
 $(document).ready(function () {
 
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        container: 'body',
-        daysOfWeekDisabled: [0, 6]
-    }).on('changeDate clearDate', function () {
-          $(this).val($(this).val()).valid();
-      });
+
 
     var config = {};
     config.namespace = '<portlet:namespace />';

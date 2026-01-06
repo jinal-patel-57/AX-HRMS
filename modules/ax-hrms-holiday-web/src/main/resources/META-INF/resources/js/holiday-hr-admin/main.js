@@ -25,51 +25,34 @@
                     /^[A-Za-z0-9\s.,()-]+$/.test(value.trim());
             }, "Invalid characters in description");
         }
-        $.validator.addMethod("noWeekend", function (value, element) {
+      $.validator.addMethod("noWeekend", function (value) {
+          if (!value) return true;
 
-            if (!value) return true;
+          var date = new Date(value);
+          var day = date.getDay();
 
-            var parts = value.split("-");
-            if (parts.length !== 3) return true;
+          return day !== 0 && day !== 6;
+      }, "Saturday and Sunday are not allowed");
 
-            var date = new Date(
-                parseInt(parts[0], 10),
-                parseInt(parts[1], 10) - 1,
-                parseInt(parts[2], 10)
-            );
 
-            if (isNaN(date.getTime())) return true;
-
-            var day = date.getDay();
-            return day !== 0 && day !== 6;
-
-        }, "Saturday and Sunday are not allowed");
 
 
 
       if (!$.validator.methods.validHolidayDate) {
-          $.validator.addMethod(
-              "validHolidayDate",
-              function (value, element) {
-                  if (!value) return true;
+       $.validator.addMethod("validHolidayDate", function (value) {
+           if (!value) return true;
 
-                  let selectedYear = new Date(value).getFullYear();
-                  let currentYear = new Date().getFullYear();
+           var selectedYear = new Date(value).getFullYear();
+           var currentYear = new Date().getFullYear();
 
-                  return selectedYear >= currentYear - 2 &&
-                         selectedYear <= currentYear + 1;
-              },
-              function () {
-                  let currentYear = new Date().getFullYear();
-                  return (
-                      "Please select a date between " +
-                      (currentYear - 2) +
-                      " and " +
-                      (currentYear + 1) +
-                      "."
-                  );
-              }
-          );
+           return selectedYear >= currentYear - 2 &&
+                  selectedYear <= currentYear + 1;
+       }, function () {
+           var y = new Date().getFullYear();
+           return "Please select a date between " + (y - 2) + " and " + (y + 1);
+       });
+
+
       }
 
 

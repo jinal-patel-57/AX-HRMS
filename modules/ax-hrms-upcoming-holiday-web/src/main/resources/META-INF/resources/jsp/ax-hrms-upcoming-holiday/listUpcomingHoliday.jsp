@@ -29,14 +29,19 @@
             <thead>
             <th><liferay-ui:message key="holiday-name-text"/></th>
             <th><liferay-ui:message key="holiday-date-text"/></th>
+            <th><liferay-ui:message key="holiday-day-text"/></th>
             </thead>
 
             <c:forEach var="upcomingHoliday" items="${upcomingHolidayList}">
 
                 <fmt:formatDate
                     value="${upcomingHoliday.date}"
-                    pattern="dd-MMM-yyyy, EEEE"
+                    pattern="dd-MM-yyyy"
                     var="formattedHolidayDate"/>
+                <fmt:formatDate
+                    value="${upcomingHoliday.date}"
+                    pattern="EEEE"
+                    var="formattedHolidayDay"/>
 
                 <tr>
                     <td>
@@ -48,6 +53,10 @@
 
                     <td>
                         ${formattedHolidayDate}
+                    </td>
+
+                    <td>
+                        ${formattedHolidayDay}
                     </td>
                 </tr>
 

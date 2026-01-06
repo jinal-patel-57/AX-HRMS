@@ -64,5 +64,5 @@ public class AxHrmsCompensatoryDataConstants {
 
     public static final String COMPENSATORY_REQUEST_MAIL_STYLE = "</td>\n  <td style=\"border: 1px solid #ddd; padding: 10px;\">";
     public static final String COMPENSATORY_REQUEST_MAIL_STYLE_CLOSING = "</td>\n </tr>\n";
-    public static final String DATE_FORMAT = "dd-MMM-yyyy";
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
 }
