@@ -18,7 +18,7 @@ public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 	public static final String REJECTED_ID = "rejectedId";
 	public static final String CANCELLED_ID = "cancelId";
 	public static final String ITERATOR_URL = "iteratorURL";
-	public static final String DATE_FORMAT = "dd-MMM-yyyy";
+	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	public static final String TO = " to ";
 	public static final String DD_MM_YYYY = "dd-MM-yyyy";
 

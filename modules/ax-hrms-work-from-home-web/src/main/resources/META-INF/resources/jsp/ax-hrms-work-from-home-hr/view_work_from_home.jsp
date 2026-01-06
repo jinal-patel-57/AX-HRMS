@@ -37,21 +37,21 @@
             <tr>
                 <th>Request Date</th>
                 <td>
-                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd/MM/yyyy" />
+                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MM-yyyy" />
                 </td>
             </tr>
 
             <tr>
                 <th>Start Date</th>
                 <td>
-                    <fmt:formatDate value="${wfh.startDate}" pattern="dd/MM/yyyy" />
+                    <fmt:formatDate value="${wfh.startDate}" pattern="dd-MM-yyyy" />
                 </td>
             </tr>
 
             <tr>
                 <th>End Date</th>
                 <td>
-                    <fmt:formatDate value="${wfh.endDate}" pattern="dd/MM/yyyy" />
+                    <fmt:formatDate value="${wfh.endDate}" pattern="dd-MM-yyyy" />
                 </td>
             </tr>
 

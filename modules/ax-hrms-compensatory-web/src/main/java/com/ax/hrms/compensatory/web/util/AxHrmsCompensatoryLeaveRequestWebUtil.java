@@ -120,7 +120,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
             mailContent=mailContent.replace("${APPROVER_NAME}", approver.getFirstName() + StringPool.SPACE + approver.getLastName());
-            subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeSubject();
+            subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverSubject();
             axHrmsCommonApi.sendMail(approver.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
             log.info("Mail sent successfully");
         } catch (PortalException e) {

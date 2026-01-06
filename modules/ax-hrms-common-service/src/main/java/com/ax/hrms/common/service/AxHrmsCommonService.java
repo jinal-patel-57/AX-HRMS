@@ -267,7 +267,7 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
     }
 
     public String setDateFormat(Date inputDate) {
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String dateStr = null;
         try {
 
