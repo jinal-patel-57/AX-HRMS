@@ -548,24 +548,31 @@ function setConfigsForAddExperienceSection(config) {
                     element.after(error);
                 },
                 rules: {
+
+                    /* ================= PERMANENT ADDRESS ================= */
+
                     [namespace + "permanentAddressLine1"]: {
                         required: true,
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "permanentAddressLine2"]: {
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "permanentAddressLine3"]: {
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "permanentCity"]: {
                         required: true,
                         maxlength: 75,
-                        validCity:true
+                        validCity: true
                     },
                     [namespace + "permanentState"]: {
                         required: true,
-                        maxlength: 100
+                        maxlength: 100,
+                        validState: true
                     },
                     [namespace + "permanentCountry"]: {
                         required: true
@@ -573,28 +580,33 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "permanentPincode"]: {
                         required: true,
                         digits: true,
-                        minlength: 5,
-                        maxlength: 6,
-                        validPincode06: true
+                        validPincode: true
                     },
+
+                    /* ================= PRESENT ADDRESS ================= */
+
                     [namespace + "presentaddressLine1"]: {
                         required: true,
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "presentaddressLine2"]: {
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "presentaddressLine3"]: {
-                        maxlength: 250
+                        maxlength: 250,
+                        validAddress: true
                     },
                     [namespace + "presentCity"]: {
                         required: true,
                         maxlength: 75,
-                        validCity:true
+                        validCity: true
                     },
                     [namespace + "presentstate"]: {
                         required: true,
-                        maxlength: 100
+                        maxlength: 100,
+                        validState: true
                     },
                     [namespace + "presentCountry"]: {
                         required: true
@@ -602,80 +614,103 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "presentpinCode"]: {
                         required: true,
                         digits: true,
-                        minlength: 5,
-                        maxlength: 6,
-                        validPincode06: true
+                        validPincode: true
                     }
                 },
+
                 messages: {
+
+                    /* ================= PERMANENT ADDRESS ================= */
+
                     [namespace + "permanentAddressLine1"]: {
-                        required: "Please enter the permanent address line 1.",
-                        maxlength: "Address line 1 cannot exceed 250 characters."
+                        required: "Please enter permanent address line 1.",
+                        maxlength: "Address line 1 cannot exceed 250 characters.",
+                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
                     },
                     [namespace + "permanentAddressLine2"]: {
-                        maxlength: "Address line 2 cannot exceed 250 characters."
+                        maxlength: "Address line 2 cannot exceed 250 characters.",
+                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
                     },
                     [namespace + "permanentAddressLine3"]: {
-                        maxlength: "Address line 3 cannot exceed 250 characters."
+                        maxlength: "Address line 3 cannot exceed 250 characters.",
+                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
                     },
+
                     [namespace + "permanentCity"]: {
-                        required: "Please enter the city for the permanent address.",
+                        required: "Please enter the permanent city.",
                         maxlength: "City name cannot exceed 75 characters.",
-                        validCity: "Enter a valid City."
+                        validCity: "City should contain only letters and spaces."
                     },
                     [namespace + "permanentState"]: {
-                        required: "Please enter the state for the permanent address.",
-                        maxlength: "State name cannot exceed 100 characters."
+                        required: "Please enter the permanent state.",
+                        maxlength: "State name cannot exceed 100 characters.",
+                        validState: "State should contain only letters and spaces."
                     },
                     [namespace + "permanentCountry"]: {
-                        required: "Please select a country for the permanent address."
+                        required: "Please select the permanent country."
                     },
                     [namespace + "permanentPincode"]: {
-                        required: "Please enter the pincode for the permanent address.",
+                        required: "Please enter the permanent pincode.",
                         digits: "Pincode should contain only digits.",
-                        minlength: "Pincode must be at least 5 digits long.",
-                        maxlength: "Pincode cannot exceed 6 digits.",
-                        validPincode06: "Enter a valid Pincode."
+                        validPincode: "Pincode must be exactly 6 digits."
                     },
+
+                    /* ================= PRESENT ADDRESS ================= */
+
                     [namespace + "presentaddressLine1"]: {
-                        required: "Please enter the present address line 1.",
-                        maxlength: "Address line 1 cannot exceed 250 characters."
+                        required: "Please enter present address line 1.",
+                        maxlength: "Address line 1 cannot exceed 250 characters.",
+                        validAddress: "Enter a valid address."
                     },
                     [namespace + "presentaddressLine2"]: {
-                        maxlength: "Address line 2 cannot exceed 250 characters."
+                        maxlength: "Address line 2 cannot exceed 250 characters.",
+                        validAddress: "Enter a valid address."
                     },
                     [namespace + "presentaddressLine3"]: {
-                        maxlength: "Address line 3 cannot exceed 250 characters."
+                        maxlength: "Address line 3 cannot exceed 250 characters.",
+                        validAddress: "Enter a valid address."
                     },
                     [namespace + "presentCity"]: {
-                        required: "Please enter the city for the present address.",
+                        required: "Please enter the present city.",
                         maxlength: "City name cannot exceed 75 characters.",
-                        validCity: "Enter a valid City."
+                        validCity: "City should contain only letters and spaces."
                     },
                     [namespace + "presentstate"]: {
-                        required: "Please enter the state for the present address.",
-                        maxlength: "State name cannot exceed 100 characters."
+                        required: "Please enter the present state.",
+                        maxlength: "State name cannot exceed 100 characters.",
+                        validState: "State should contain only letters and spaces."
                     },
                     [namespace + "presentCountry"]: {
-                        required: "Please select a country for the present address."
+                        required: "Please select the present country."
                     },
                     [namespace + "presentpinCode"]: {
-                        required: "Please enter the pincode for the present address.",
+                        required: "Please enter the present pincode.",
                         digits: "Pincode should contain only digits.",
-                        minlength: "Pincode must be at least 5 digits long.",
-                        maxlength: "Pincode cannot exceed 6 digits.",
-                        validPincode06: "Enter a valid Pincode."
+                        validPincode: "Pincode must be exactly 6 digits."
                     }
                 }
+
             });
             
-            $.validator.addMethod("validPincode06", function (value) {
-				return /^\d{6}$/.test(value);
-			}, "Enter a valid Pincode.");
+
+
+			$.validator.addMethod("validAddress", function (value) {
+                return /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
+            });
 
             $.validator.addMethod("validCity", function (value) {
-				 return /^[A-Za-z]+$/.test(value);
-			}, "Enter a valid City.");
+                return /^[A-Za-z ]+$/.test(value.trim());
+            });
+
+            $.validator.addMethod("validState", function (value) {
+                return /^[A-Za-z ]+$/.test(value.trim());
+            });
+
+            $.validator.addMethod("validPincode", function (value) {
+                return /^\d{6}$/.test(value);
+            });
+
+
 
 
             $('.next-button-adress-details').on('click', function (event) {
@@ -1813,9 +1848,10 @@ function setConfigsForExperienceValidation(config) {
         let getEmployeeUrl = config.getEmployeeUrl;
         var $form7 = $("#nomineeStepperForm");
 
-		$.validator.addMethod("validCity", function (value) {
-				 return /^[A-Za-z]+$/.test(value);
-			}, "Enter a valid City.");
+	$.validator.addMethod("validCity", function (value) {
+        return /^[A-Za-z ]+$/.test(value.trim());
+    }, "Enter a valid city name.");
+
         $.validator.addMethod(
             "notFutureDate",
             function (value) {

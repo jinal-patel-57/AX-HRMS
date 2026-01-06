@@ -10,7 +10,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String EDUCATION_LEVEL_MASTERS_LIST="educationLevelMastersList";
 	
 	//COMMON USED
-	public static final String DATE_FORMAT ="dd-MM-yyyy";
+	public static final String DATE_FORMAT ="yyyy-MM-dd";
 	public static final String FALSE ="false";
 	
 	//AddEditEmployeeAddressMVCActionCommand

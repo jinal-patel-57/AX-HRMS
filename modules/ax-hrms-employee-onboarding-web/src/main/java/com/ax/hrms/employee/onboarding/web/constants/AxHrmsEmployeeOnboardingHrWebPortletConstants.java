@@ -33,7 +33,7 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String SENDER_NAME= "Aixtor HRMS";
     public static final String SUBJECT= "New Joining HRMS Credentials";
     public static final String INTERN_CONVERSION_SUBJECT= "New Joining Process for Interns";
-    public static final String DATE_FORMAT= "dd-MM-yyyy";
+    public static final String DATE_FORMAT= "yyyy-MM-dd";
     public static final String YES= "Yes";
     public static final String IN_PROBATION= "In Probation";
     public static final String COMPLETED= "Completed";
