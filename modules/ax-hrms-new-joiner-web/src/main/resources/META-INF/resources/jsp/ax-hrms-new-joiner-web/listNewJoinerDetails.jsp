@@ -16,7 +16,7 @@
                 <div class="ax-conatiner">
                     <div class="icon-new-joiners"></div>
                     <div><strong> No New Joiners Today</strong></div>
-                    <div class="wish-message">No new joiners today. We’ll be back to welcome our next team member very soon.</div>
+                    <div class="wish-message">No new joiners today. We will be back to welcome our next team member very soon.</div>
                 </div>
             </div>
         </div>
