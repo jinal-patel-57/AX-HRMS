@@ -11,14 +11,22 @@
 <%--SESSION_MESSAGES End Here--%>
 <h1></h1>
     <c:if test="${empty newJoinerList}">
-        <div class="alert alert-info">No New Joiners Today!</div>
+        <div class="ax-card">
+            <div class="ax-body d-flex align-items-center">
+                <div class="ax-conatiner">
+                    <div class="icon-new-joiners"></div>
+                    <div><strong> No New Joiners Today</strong></div>
+                    <div class="wish-message">No new joiners today. We’ll be back to welcome our next team member very soon.</div>
+                </div>
+            </div>
+        </div>
     </c:if>
         <c:if test="${not empty newJoinerList}">
         
         
         <div class="card">
   <div class="card-header"><strong><liferay-ui:message key="list-of-new-joiner-list-heading" /></strong></div>
-  <div class="card-body">
+  <div class="card-body ax-body">
   <table class="table ">
             <thead>
                 <tr>

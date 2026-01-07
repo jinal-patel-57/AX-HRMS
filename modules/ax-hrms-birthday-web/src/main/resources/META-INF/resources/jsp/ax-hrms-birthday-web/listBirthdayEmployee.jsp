@@ -17,7 +17,7 @@
             <div class="ax-conatiner">
                 <div class="icon-cake"></div>
                 <div><strong> No Birthdays Today</strong></div>
-                <div>Looks like there are no team birthdays scheduled for today.</div>
+                <div class="wish-message">No team birthdays today. We’ll be back to celebrate as soon as the next special day arrives.</div>
             </div>
         </div>
     </div>

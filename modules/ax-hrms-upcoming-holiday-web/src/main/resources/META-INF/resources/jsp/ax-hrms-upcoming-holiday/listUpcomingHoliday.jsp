@@ -14,7 +14,15 @@
 
 
 <c:if test="${empty upcomingHolidayList}">
-    <div class="alert alert-info">No Upcoming Holidays!</div>
+    <div class="ax-card">
+        <div class="ax-body d-flex align-items-center">
+            <div class="ax-conatiner">
+                <div class="icon-holidays"></div>
+                <div><strong> No Upcoming Holidays</strong></div>
+                <div class="wish-message">No upcoming holidays at the moment. Details about the next break will appear here once available.</div>
+            </div>
+        </div>
+    </div>
 </c:if>
 
 <c:if test="${not empty upcomingHolidayList}">
@@ -25,47 +33,49 @@
 
     <div class="card">
         <div class="card-header"><strong><liferay-ui:message key="upcoming-holiday-text"/></strong></div>
-        <table class="table">
-            <thead>
-            <th><liferay-ui:message key="holiday-name-text"/></th>
-            <th><liferay-ui:message key="holiday-date-text"/></th>
-            <th><liferay-ui:message key="holiday-day-text"/></th>
-            </thead>
+        <div class="card-body ax-body">
+            <table class="table">
+                <thead>
+                <th><liferay-ui:message key="holiday-name-text"/></th>
+                <th><liferay-ui:message key="holiday-date-text"/></th>
+                <th><liferay-ui:message key="holiday-day-text"/></th>
+                </thead>
 
-            <c:forEach var="upcomingHoliday" items="${upcomingHolidayList}">
+                <c:forEach var="upcomingHoliday" items="${upcomingHolidayList}">
 
-                <fmt:formatDate
-                    value="${upcomingHoliday.date}"
-                    pattern="dd-MM-yyyy"
-                    var="formattedHolidayDate"/>
-                <fmt:formatDate
-                    value="${upcomingHoliday.date}"
-                    pattern="EEEE"
-                    var="formattedHolidayDay"/>
+                    <fmt:formatDate
+                        value="${upcomingHoliday.date}"
+                        pattern="dd-MM-yyyy"
+                        var="formattedHolidayDate"/>
+                    <fmt:formatDate
+                        value="${upcomingHoliday.date}"
+                        pattern="EEEE"
+                        var="formattedHolidayDay"/>
 
-                <tr>
-                    <td>
-                        ${upcomingHoliday.holidayName}
-                        <c:if test="${upcomingHoliday.isFloater}">
-                            (Restricted Holiday)
-                        </c:if>
-                    </td>
+                    <tr>
+                        <td>
+                            ${upcomingHoliday.holidayName}
+                            <c:if test="${upcomingHoliday.isFloater}">
+                                (Restricted Holiday)
+                            </c:if>
+                        </td>
 
-                    <td>
-                        ${formattedHolidayDate}
-                    </td>
+                        <td>
+                            ${formattedHolidayDate}
+                        </td>
 
-                    <td>
-                        ${formattedHolidayDay}
-                    </td>
-                </tr>
+                        <td>
+                            ${formattedHolidayDay}
+                        </td>
+                    </tr>
 
-            </c:forEach>
-
-
+                </c:forEach>
 
 
-        </table>
+
+
+            </table>
+        </div>
     </div>
 
 
