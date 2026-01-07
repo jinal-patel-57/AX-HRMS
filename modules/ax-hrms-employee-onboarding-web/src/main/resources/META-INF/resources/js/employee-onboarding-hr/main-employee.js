@@ -632,7 +632,7 @@ function setConfigsForAddExperienceSection(config) {
             });
             
 			$.validator.addMethod("validAddress", function (value) {
-                return (value == '') || /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
+                return /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
             });
 
             $.validator.addMethod("validCity", function (value) {
