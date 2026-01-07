@@ -9,60 +9,7 @@
         window.location.href = rejectUrl;
     }
 
-//    function setConfigsForAddExperienceSection(config) {
-//        namespace = config.namespace;
-//
-//        var originalSection = document.querySelector('.experience-section');
-//        var newSection = originalSection.cloneNode(true);
-//
-//        var anchors = newSection.getElementsByTagName('a');
-//        while (anchors.length > 0) {
-//            var parent = anchors[0].parentNode;
-//            while (anchors[0].firstChild) {
-//                parent.insertBefore(anchors[0].firstChild, anchors[0]);
-//            }
-//            parent.removeChild(anchors[0]);
-//        }
-//
-//        var inputs = newSection.querySelectorAll('input,select');
-//        var index = document.querySelectorAll('.experience-section').length + 1;
-//
-//        var previous = document.getElementById("currentIndex").value
-//        document.getElementById("currentIndex").value = 1 + parseInt(previous);
-//
-//        inputs.forEach(function (input) {
-//
-//            input.id = input.id.replace(/[0-9]+$/, '') + index;
-//            input.name = input.name.replace(/\d+$/, '') + index;
-//
-//            input.value = '';
-//        });
-//
-//        document.getElementById('experience-section-container').appendChild(newSection);
-//        const redundantFooter = newSection.getElementsByClassName("card-footer");
-//        if(redundantFooter.length >0){
-//            redundantFooter[0].remove();
-//        }
-//
-//        var deleteButton = document.createElement('button');
-//        deleteButton.className = 'btn btn-outline-danger delete-section';
-//        // deleteButton.textContent = 'Delete';
-//        deleteButton.type = 'button';
-//        const icon = document.createElement("i");
-//        icon.className= "icon-trash";
-//        deleteButton.appendChild(icon);
-//
-//        const footerExpDel = document.createElement("div");
-//        footerExpDel.className="card-footer text-right";
-//        footerExpDel.appendChild(deleteButton);
-//        const card = newSection.getElementsByClassName("card")[0];
-//        card.appendChild(footerExpDel);
-//
-//
-//        deleteButton.addEventListener('click', function () {
-//            newSection.remove();
-//        });
-//    }
+
 function setConfigsForAddExperienceSection(config) {
 
     const namespace = config.namespace;
@@ -945,7 +892,6 @@ function setConfigsForAddExperienceSection(config) {
                     input.id = input.id.replace(/[0-9]+$/, '') + index;
                     input.name = input.name.replace(/[0-9]+$/, '') + index;
 
-                    // 🔥 SAME AS HR (IMPORTANT)
                     if (input.type === "file") {
                         const freshFile = document.createElement("input");
                         freshFile.type = "file";
@@ -1051,40 +997,7 @@ function setConfigsForAddExperienceSection(config) {
             
                 //window.location.href = deleteUrl + '&educationId=' + educationId;
             });
-//
-//          $('.next-button-education-details').on('click', function (event) {
-//              initializeValidation();
-//
-//              const form3 = $('#educationStepperForm');
-//
-//              if (!form3.valid()) {
-//                  event.preventDefault();
-//                  return false;
-//              }
-//
-//              $.ajax({
-//                  url: form3.attr('action'),
-//                  method: 'POST',
-//                  data: form3.serialize(),
-//                  success: function (response) {
-//                      const currentTab = $('.nav-link.active');
-//                      document.getElementById("firstVisitEducation").value = "false";
-//                      const nextTabButton = currentTab.parent().next().find('.nav-link');
-//                      if (nextTabButton.length > 0) {
-//                          nextTabButton.tab('show');
-//                          const nextTabContentId = nextTabButton.attr('data-bs-target');
-//                          $(nextTabContentId).addClass('show active');
-//                          $(currentTab.attr('data-bs-target')).removeClass('show active');
-//                          $(nextTabContentId).find('input').first().focus();
-//                      }
-//                  },
-//                  error: function () {
-//                      console.log('There was an error saving the data. Please try again.');
-//                  }
-//              });
-//
-//
-//          });
+
                 $('.next-button-education-details').on('click', function (event) {
 
                     event.preventDefault();
@@ -1185,113 +1098,6 @@ function setConfigsForAddExperienceSection(config) {
   }
 
 
-
-//    function setConfigsForExperienceValidation(config) {
-//
-//        config.experienceIndex = experienceIndex;
-//
-//        $(document).ready(function () {
-//            let rules = {};
-//            let messages = {};
-//
-//            function initializeValidationForExperience() {
-//                const form4 = $("#experienceStepperForm");
-//
-//                document.querySelectorAll('.experience-section').forEach((section, index) => {
-//                    const idx = index + 1;
-//                    const companyNameKey = `${namespace}companyName${idx}`;
-//                    const joiningDateKey = `${namespace}joiningDate${idx}`;
-//                    const relievingDateKey = `${namespace}relievingDate${idx}`;
-//                    rules[companyNameKey] = {required: true};
-//                    rules[joiningDateKey] = {required: true, date: true};
-//                    rules[relievingDateKey] = {required: true, date: true};
-//
-//                    messages[companyNameKey] = {
-//                        required: "Please select Company Name."
-//                    };
-//
-//                    messages[joiningDateKey] = {
-//                        required: "Please enter the start date.",
-//                        date: "Please enter a valid date."
-//                    };
-//                    messages[relievingDateKey] = {
-//                        required: "Please enter the end date.",
-//                        date: "Please enter a valid date."
-//                    };
-//                });
-//
-//
-//                form4.validate({
-//                    errorClass: 'is-invalid',
-//                    validClass: 'is-valid',
-//                    errorElement: 'div',
-//                    errorPlacement: function (error, element) {
-//                        error.addClass('invalid-feedback');
-//                        element.after(error);
-//                    },
-//                    rules: rules,
-//                    messages: messages
-//                });
-//
-//            }
-//
-//            try {
-//                var index_experience = parseInt(experienceIndex);
-//                for (var i = 1; i < index_experience; i++) {
-//                    $('.nav-link.active').parent().next().find('.nav-link').click();
-//                }
-//            } catch (err) {
-//                console.log(err);
-//            }
-//
-//            $('.next-button-experience-details').on('click', function (event) {
-//                initializeValidationForExperience();
-//                event.preventDefault();
-//                const form4 = $('#experienceStepperForm');
-//                if (!form4.valid()) {
-//                    return false;
-//                }
-//
-//                var formData = new FormData(form4[0]);
-//
-//                $.ajax({
-//                    url: form4.attr('action'),
-//                    data: formData,
-//                    method: 'POST',
-//                    contentType: false,
-//                    processData: false,
-//                    success: function (response) {
-//                        const currentTab = $('.nav-link.active');
-//                        document.getElementById("firstVisit").value = "false";
-//                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-//                        if (nextTabButton.length > 0) {
-//                            nextTabButton.tab('show');
-//                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-//                            $(nextTabContentId).addClass('show active');
-//                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-//                            $(nextTabContentId).find('input').first().focus();
-//                        }
-//                    },
-//                    error: function () {
-//                        console.log('There was an error saving the data. Please try again.');
-//                    }
-//                });
-//            });
-//
-//
-//            $('#noactionbtnExperience').on('click', function (event) {
-//                const currentTab = $('.nav-link.active');
-//                const nextTabButton = currentTab.parent().next().find('.nav-link');
-//                if (nextTabButton.length > 0) {
-//                    nextTabButton.tab('show');
-//                    const nextTabContentId = nextTabButton.attr('data-bs-target');
-//                    $(nextTabContentId).find('input').first().focus();
-//                }
-//            });
-//
-//        });
-//        AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForExperienceValidation = setConfigsForExperienceValidation;
-//    }
 function setConfigsForExperienceValidation(config) {
 	var experienceIndex = config.experienceIndex;
     console.log('experienceIndex -- ', experienceIndex);
@@ -1524,53 +1330,7 @@ function setConfigsForExperienceValidation(config) {
 			    //window.location.href = deleteUrl + '&educationId=' + educationId;
 			});
 			
-			
-        /* =====================================================
-           ADD EXPERIENCE SECTION
-           ===================================================== */
 
-//        $("#add-experience-section").on("click", function () {
-//
-//            const original =
-//                document.getElementById("initial-experience-section");
-//
-//            const clone = original.cloneNode(true);
-//
-//            // remove attachment preview links
-//            clone.querySelectorAll("a").forEach(a => a.remove());
-//
-//            const index =
-//                document.querySelectorAll(".experience-section").length + 1;
-//
-//            clone.querySelectorAll("input").forEach(input => {
-//
-//                input.name =
-//                    input.name.replace(/\d+$/, "") + index;
-//
-//                if (input.type === "file") {
-//                    const fresh = document.createElement("input");
-//                    fresh.type = "file";
-//                    fresh.className = input.className;
-//                    fresh.name = input.name;
-//                    fresh.accept = input.accept;
-//                    input.parentNode.replaceChild(fresh, input);
-//                } else {
-//                    input.value = "";
-//                }
-//            });
-//
-//            document
-//                .getElementById("experience-section-container")
-//                .appendChild(clone);
-//
-//            document.getElementById("currentIndex").value = index;
-//
-//            initializeValidation();
-//        });
-
-        /* =====================================================
-           SUBMIT (AJAX)
-           ===================================================== */
 
         $(".next-button-experience-details").on("click", function () {
 
@@ -1893,6 +1653,20 @@ function setConfigsForExperienceValidation(config) {
             },
             "Year must be exactly 4 digits."
         );
+         if (!$.validator.methods.validPersonName) {
+                    $.validator.addMethod(
+                        "validPersonName",
+                        function (value, element) {
+                            value = value.trim().replace(/\s+/g, " "); // normalize spaces
+                            return this.optional(element) || /^[A-Za-z]+( [A-Za-z]+)*$/.test(value);
+                        },
+                        "Only alphabets are allowed. No numbers or special characters."
+                    );
+                }
+                $.validator.addMethod("validAddress", function (value) {
+                                               return /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
+                                           });
+
 
         $form7.validate({
             errorClass: 'is-invalid',
@@ -1903,128 +1677,143 @@ function setConfigsForExperienceValidation(config) {
                 element.after(error);
             },
             rules: {
-                [namespace + "nomineeFirstName"]: {
-                    required: true,
-                    maxlength: 75
-                },
-                [namespace + "nomineeLastName"]: {
-                    required: true,
-                    maxlength: 75
-                },
-                [namespace + "nomineeContact"]: {
-                    required: true,
-                    maxlength: 30,
-                    digits: true,
-                    validMobile10: true
-                },
-                [namespace + "presentaddressLine1"]: {
-                    required: true,
-                    maxlength: 250
-                },
-                [namespace + "nomineeCity"]: {
-                    required: true,
-                    maxlength: 75,
-                    validCity:true
-                },
-                [namespace + "presentaddressLine2"]: {
-                    maxlength: 250
-                },
-                [namespace + "presentaddressLine3"]: {
-                    maxlength: 250
-                },
-                [namespace + "presentstate"]: {
-                    required: true,
-                    maxlength: 100
-                },
-                [namespace + "presentCountry"]: {
-                    required: true
-                },
-                [namespace + "presentpinCode"]: {
-                    required: true,
-                    digits: true,
-                    minlength: 5,
-                    maxlength: 10
-                },
-                [namespace + "relationshipWithNominee"]: {
-                    required: true,
-                    maxlength: 75
-                },
-               [namespace + "nomineeDob"]: {
-                   required: {
-                       depends: function () {
-                           return this.value === "";
-                       }
-                   },
-                   date: true,
-                   notFutureDate: true,
-                   validYearLength: true
-               }
+                            [namespace + "nomineeFirstName"]: {
+                                required: true,
+                                maxlength: 75,
+                                validPersonName: true
+                            },
+                            [namespace + "nomineeLastName"]: {
+                                required: true,
+                                maxlength: 75,
+                                validPersonName: true
+                            },
+                            [namespace + "nomineeContact"]: {
+                                required: true,
+                                maxlength: 30,
+                                digits: true,
+                                validMobile10: true
+                            },
+                            [namespace + "presentaddressLine1"]: {
+                                required: true,
+                                maxlength: 250,
+                                validAddress: true
+
+                            },
+                            [namespace + "nomineeCity"]: {
+                                required: true,
+                                maxlength: 75,
+                                validPersonName:true
+                            },
+                            [namespace + "presentaddressLine2"]: {
+                                maxlength: 250,
+                                validAddress: true
+                            },
+                            [namespace + "presentaddressLine3"]: {
+                                maxlength: 250,
+                                validAddress: true
+                            },
+                            [namespace + "presentstate"]: {
+                                required: true,
+                                maxlength: 100,
+                                validPersonName: true
+                            },
+                            [namespace + "presentCountry"]: {
+                                required: true
+                            },
+                            [namespace + "presentpinCode"]: {
+                                required: true,
+                                digits: true,
+                                minlength: 5,
+                                maxlength: 10
+                            },
+                            [namespace + "relationshipWithNominee"]: {
+                                required: true,
+                                maxlength: 75,
+                                validPersonName: true
+                            },
+                          [namespace + "nomineeDob"]: {
+                              required: {
+                                  depends: function () {
+                                      return this.value === "";
+                                  }
+                              },
+                              date: true,
+                              notFutureDate: true,
+                              validYearLength: true
+                          }
 
 
-            },
-            messages: {
-                [namespace + "nomineeFirstName"]: {
-                    required: "Please enter the nominee's first name.",
-                    maxlength: "First name should not exceed 75 characters."
-                },
-                [namespace + "nomineeLastName"]: {
-                    required: "Please enter the nominee's last name.",
-                    maxlength: "Last name should not exceed 75 characters."
-                },
-                [namespace + "nomineeContact"]: {
-                    required: "Please enter the nominee's contact number.",
-                    maxlength: "Contact number should not exceed 30 characters.",
-                    digits: "Contact number should contain only digits.",
-                    validMobile10: "Enter a valid 10-digit mobile number."
-                },
-                [namespace + "nomineeAddress"]: {
-                    required: "Please enter the nominee's address ID.",
-                    digits: "Address ID should contain only digits."
-                },
-                [namespace + "presentaddressLine1"]: {
-                    required: "Please enter the present address line 1.",
-                    maxlength: "Address line 1 cannot exceed 250 characters."
-                },
-                [namespace + "presentaddressLine2"]: {
-                    maxlength: "Address line 2 cannot exceed 250 characters."
-                },
-                [namespace + "presentaddressLine3"]: {
-                    maxlength: "Address line 3 cannot exceed 250 characters."
-                },
-                [namespace + "nomineeCity"]: {
-                    required: "Please enter the city.",
-                    maxlength: "City name cannot exceed 75 characters.",
-                    validCity: "Enter a valid City."
-                },
-                [namespace + "presentstate"]: {
-                    required: "Please enter the state for the present address.",
-                    maxlength: "State name cannot exceed 100 characters."
-                },
-                [namespace + "presentCountry"]: {
-                    required: "Please select a country for the present address."
-                },
-                [namespace + "presentpinCode"]: {
-                    required: "Please enter the pincode for the present address.",
-                    digits: "Pincode should contain only digits.",
-                    minlength: "Pincode must be at least 5 digits long.",
-                    maxlength: "Pincode cannot exceed 10 digits."
-                },
-                [namespace + "relationshipWithNominee"]: {
-                    required: "Please enter the relationship with the nominee.",
-                    maxlength: "Relationship should not exceed 75 characters."
-                },
-              [namespace + "nomineeDob"]: {
-                  required: "Please enter the nominee's date of birth.",
-                  date: "Please enter a valid date.",
-                  notFutureDate: "Date of birth cannot be in the future.",
-                  validYearLength: "Year must be exactly 4 digits."
-              }
+                        },
+                        messages: {
+                            [namespace + "nomineeFirstName"]: {
+                                required: "Please enter the nominee's first name.",
+                                maxlength: "First name should not exceed 75 characters.",
+                                validPersonName: "First name can contain only alphabets and space."
+                            },
+                            [namespace + "nomineeLastName"]: {
+                                required: "Please enter the nominee's last name.",
+                                maxlength: "Last name should not exceed 75 characters.",
+                                validPersonName: "Last name can contain only alphabets and space."
+                            },
+                            [namespace + "nomineeContact"]: {
+                                required: "Please enter the nominee's contact number.",
+                                maxlength: "Contact number should not exceed 30 characters.",
+                                digits: "Contact number should contain only digits.",
+                                validMobile10: "Enter a valid 10-digit mobile number."
+                            },
+                            [namespace + "nomineeAddress"]: {
+                                required: "Please enter the nominee's address ID.",
+                                digits: "Address ID should contain only digits."
+                            },
+                            [namespace + "presentaddressLine1"]: {
+                                required: "Please enter the present address line 1.",
+                                maxlength: "Address line 1 cannot exceed 250 characters.",
+                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                            },
+                            [namespace + "nomineeCity"]: {
+                                required: "Please enter the city.",
+                                maxlength: "City name cannot exceed 75 characters.",
+                                validNameOnly: "City name should contain only alphabets and space."
 
-            }
+                            },
+                            [namespace + "presentaddressLine2"]: {
+                                maxlength: "Address line 2 cannot exceed 250 characters.",
+                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                            },
+                            [namespace + "presentaddressLine3"]: {
+                                maxlength: "Address line 3 cannot exceed 250 characters.",
+                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                            },
+
+                            [namespace + "presentstate"]: {
+                                required: "Please enter the state for the present address.",
+                                maxlength: "State name cannot exceed 100 characters.",
+                                validNameOnly: "State name should contain only alphabets and space."
+                            },
+                            [namespace + "presentCountry"]: {
+                                required: "Please select a country for the present address."
+                            },
+                            [namespace + "presentpinCode"]: {
+                                required: "Please enter the pincode for the present address.",
+                                digits: "Pincode should contain only digits.",
+                                minlength: "Pincode must be at least 5 digits long.",
+                                maxlength: "Pincode cannot exceed 10 digits."
+                            },
+                            [namespace + "relationshipWithNominee"]: {
+                                required: "Please enter the relationship with the nominee.",
+                                maxlength: "Relationship should not exceed 75 characters.",
+                                validPersonName: "Relationship must contain only alphabets."
+                            },
+                            [namespace + "nomineeDob"]: {
+                              required: "Please enter the nominee's date of birth.",
+                              date: "Please enter a valid date.",
+                              notFutureDate: "Date of birth cannot be in the future.",
+                              validYearLength: "Year must be exactly 4 digits."
+                             }
+
+                        }
         });
-        /* =====================================================
-           REAL-TIME VALIDATION (NOMINEE – SAME AS EDUCATION)
-           ===================================================== */
+
 
         $(document).on(
             "keyup change input",
