@@ -309,8 +309,17 @@ body.page-loading #overlay { display: block;}
 .table-responsive{min-height: 250px;}
 
 /*=== Select2 overwrite styling ===*/
-.select2-container {margin-right: 10px;}
+.select2-container {margin-right: 10px; display: block;}
 .select2-container .select2-selection--single {height: 38px; border: 1px solid #dee2e6; border-radius: 10px;}
 .select2-container .select2-selection--single .select2-selection__rendered{line-height: 38px;}
 .select2-container .select2-selection--single .select2-selection__arrow {height: 36px;}
 .select2-container .select2-results__option--highlighted[aria-selected] {background: #1967D2}
+
+.ax-body {max-height: 270px;min-height: 270px;overflow-y: auto;}
+.ax-conatiner{height: 100%;width: 100%;display: flex;align-items: center;flex-direction: column;justify-content: center;margin-top: -2rem;}
+.icon-cake{background-image: url("../images/birthday-cake.png");background-size: contain;width: 80px;height: 80px;display: block;}
+.icon-anniversary-calendar{background-image: url("../images/anniversary-calendar.png");background-size: contain;width: 80px;height: 80px;display: block;}
+.icon-new-joiners{background-image: url("../images/new-employee.png");background-size: contain;width: 80px;height: 80px;display: block;}
+.icon-holidays{background-image: url("../images/holidays.png"); background-size: contain; width: 80px; height: 80px; display: block;}
+.icon-leave-request{background-image: url("../images/leave-request.png"); background-size: contain; width: 80px; height: 80px; display: block;}
+.wish-message{max-width: 400px; text-align: center;}

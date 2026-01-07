@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp" %>
 <c:if test="${empty leaveReportDtoList}">
-    <div class="ax-card">
+    <div class="ax-card card border-0">
+        <div class="card-header invisible">No Leave Request</div>
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-leave-request"></div>

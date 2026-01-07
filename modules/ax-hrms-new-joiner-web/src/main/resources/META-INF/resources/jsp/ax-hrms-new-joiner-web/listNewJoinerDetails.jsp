@@ -11,7 +11,8 @@
 <%--SESSION_MESSAGES End Here--%>
 <h1></h1>
     <c:if test="${empty newJoinerList}">
-        <div class="ax-card">
+        <div class="ax-card card border-0">
+            <div class="card-header invisible">No New Joiners</div>
             <div class="ax-body d-flex align-items-center">
                 <div class="ax-conatiner">
                     <div class="icon-new-joiners"></div>

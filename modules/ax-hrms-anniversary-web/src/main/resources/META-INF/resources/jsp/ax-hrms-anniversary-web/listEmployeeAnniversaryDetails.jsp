@@ -10,7 +10,8 @@
 <liferay-ui:success key="sent-wishes-successfully" message="SuccessFully sent Wish"/>
 <%--SESSION_MESSAGES End Here--%>
 <c:if test="${empty anniversaryEmployeeList}">
-    <div class="ax-card">
+    <div class="ax-card card border-0">
+        <div class="card-header invisible">No Anniversaries</div>
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-anniversary-calendar"></div>

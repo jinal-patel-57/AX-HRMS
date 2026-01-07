@@ -168,7 +168,7 @@
                                for="projectManagerSelect"></label>
                     </div>
                     <div class="form-group">
-                        <label for="description"><liferay-ui:message key="description"/><span class="text-danger">*</span></label>
+                        <label for="description"><liferay-ui:message key="description"/></label>
                         <textarea id="description" class="form-control"
                                   name="<portlet:namespace />description"></textarea>
                         <label id="description-error" class="error text-danger" for="description"></label>

@@ -12,7 +12,8 @@
 
 
 <c:if test="${isListEmpty}">
-    <div class="ax-card">
+    <div class="ax-card card border-0">
+        <div class="card-header invisible">No Birthdays</div>
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-cake"></div>

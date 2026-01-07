@@ -14,7 +14,8 @@
 
 
 <c:if test="${empty upcomingHolidayList}">
-    <div class="ax-card">
+    <div class="ax-card card border-0">
+        <div class="card-header invisible">No Upcoming Holidays</div>
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-holidays"></div>
