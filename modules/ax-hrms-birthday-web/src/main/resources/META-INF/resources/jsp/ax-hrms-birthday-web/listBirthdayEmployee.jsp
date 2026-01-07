@@ -12,8 +12,14 @@
 
 
 <c:if test="${isListEmpty}">
-    <div class="alert alert-info">
-        No Birthdays Today!
+    <div class="ax-card">
+        <div class="ax-body d-flex align-items-center">
+            <div class="ax-conatiner">
+                <div class="icon-cake"></div>
+                <div><strong> Birthdays Today</strong></div>
+                <div>Looks like there are no team birthdays scheduled for today.</div>
+            </div>
+        </div>
     </div>
 </c:if>
 
