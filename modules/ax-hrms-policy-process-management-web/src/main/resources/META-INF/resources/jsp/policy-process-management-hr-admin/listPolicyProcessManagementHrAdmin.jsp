@@ -1,4 +1,5 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
+
 <%@ include file="/init.jsp" %>
 <portlet:renderURL var="homeUrl">
     <portlet:param name="selectedYear" value="${selectYear}"/>
@@ -61,7 +62,7 @@
 <liferay-ui:search-container total="${policySearchContainer.total}" delta="20" searchContainer="${policySearchContainer}" emptyResultsMessage="No-Policy-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${policySearchContainer.results}" />
 
-	 <liferay-ui:search-container-row className="com.ax.hrms.policy.process.management.hr.admin.web.dto" modelVar="policy" keyProperty="policyId">
+	 <liferay-ui:search-container-row className="com.ax.hrms.policy.process.management.hr.admin.web.dto.PolicyDto" modelVar="policy" keyProperty="policyId">
     
       <liferay-ui:search-container-column-text name="Policy Name" value="${policy.policyName}" />
         <liferay-ui:search-container-column-text name="Policy Description" value="${policy.description}"/>

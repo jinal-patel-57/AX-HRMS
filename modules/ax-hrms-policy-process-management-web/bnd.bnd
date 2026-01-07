@@ -1,9 +1,9 @@
 Bundle-Name: ax-hrms-policy-process-management-web
 Bundle-SymbolicName: com.ax.hrms.policy.process.management.web
 Bundle-Version: 1.0.0
-Export-Package: com.ax.hrms.policy.process.management.web.constants
+Export-Package: com.ax.hrms.policy.process.management.web.*
 
-Import-Package: *;resolution:=
+Import-Package: *;resolution:=optional
 Provide-Capability:\
 liferay.language.resources;\
 resource.bundle.base.name="content.Language"
