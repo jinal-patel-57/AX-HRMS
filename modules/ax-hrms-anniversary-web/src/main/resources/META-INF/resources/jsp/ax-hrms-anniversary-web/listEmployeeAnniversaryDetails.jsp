@@ -10,7 +10,15 @@
 <liferay-ui:success key="sent-wishes-successfully" message="SuccessFully sent Wish"/>
 <%--SESSION_MESSAGES End Here--%>
 <c:if test="${empty anniversaryEmployeeList}">
-    <div class="alert alert-info">No anniversaries Today!</div>
+    <div class="ax-card">
+        <div class="ax-body d-flex align-items-center">
+            <div class="ax-conatiner">
+                <div class="icon-anniversary-calendar"></div>
+                <div><strong> No anniversaries Today</strong></div>
+                <div>Looks like there are no team birthdays scheduled for today.</div>
+            </div>
+        </div>
+    </div>    
 </c:if>
 <c:if test="${not empty anniversaryEmployeeList}">
 
@@ -18,7 +26,7 @@
     <div class="card">
         <div class="card-header"><strong><liferay-ui:message key="list-of-anniversary-employees-heading"/></strong>
         </div>
-        <div class="card-body">
+        <div class="card-body ax-body">
             <table class="table ">
                 <thead>
                 <tr>

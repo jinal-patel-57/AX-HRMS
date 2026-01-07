@@ -16,7 +16,7 @@
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-cake"></div>
-                <div><strong> Birthdays Today</strong></div>
+                <div><strong> No Birthdays Today</strong></div>
                 <div>Looks like there are no team birthdays scheduled for today.</div>
             </div>
         </div>
@@ -31,7 +31,7 @@
     
     <div class="card">
   <div class="card-header"><strong><liferay-ui:message key="list-of-birthday-employee"/></strong></div>
-  <div class="card-body">
+  <div class="card-body ax-body">
  <table class="table ">
                 <thead>
                 <tr>
