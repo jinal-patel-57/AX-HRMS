@@ -72,7 +72,7 @@
 					<div class="col-md-4 col-sm-12 ">
 						<div class="form-group">
 							<label for="policytypes">Choose Policy Type:<span class="text-danger">*</span></label> <select
-								class="btn-secondary" id="selectedType"
+								class="form-control" id="selectedType"
 								name="<portlet:namespace />selectedPolicyType">
 								<option value="" selected disabled><liferay-ui:message
 										key="PolicyTypes" /></option>
@@ -90,20 +90,16 @@
 
 					<div class="col-md-4 col-sm-12 ">
 						<div class="form-group">
-							
-										<label for="uploadDocument"><liferay-ui:message
-												key="uploadDocument" /><span class="text-danger">*</span></label> <input type="file"
-											id="uploadDocument" value="${URL}" title="${fileName}"
-											name="<portlet:namespace/>uploadDocument"
-											class="form-control" />
+							<label for="uploadDocument"><liferay-ui:message
+									key="uploadDocument" /><span class="text-danger">*</span></label> 
+							<input type="file" class="form-control"
+								id="uploadDocument" value="${URL}" title="${fileName}"
+								name="<portlet:namespace/>uploadDocument"/>
 
-
-										<c:if test="${not empty fileName}">
-											<a href="${URL}" target="_blank"><liferay-ui:message
-													key="viewDocument" /></a>
-										</c:if>
-
-									
+							<c:if test="${not empty fileName}">
+								<a href="${URL}" target="_blank"><liferay-ui:message
+										key="viewDocument" /></a>
+							</c:if>
 						</div>
 
 					</div>
@@ -167,24 +163,26 @@
 
 							<label for="status"><liferay-ui:message
 									key="policyStatus" /><span class="text-danger">*</span></label>
-							<div>
+							<div class="d-flex c-gap-3 align-items-center">
+								<div class="form-check d-flex align-items-center c-gap-1">
 
-								<input value="Active" type="radio" class="form-check-input ml-2"
-									id="statusActive"
-									${policy.getStatus() eq true ? 'checked' : ''}
-									name="<portlet:namespace/>status" value="Active"> <label
-									class="form-check-label ml-4"
-									for="statusActive"><liferay-ui:message key="active" /></label>
+									<input value="Active" type="radio" class="form-check-input"
+										id="statusActive"
+										${policy.getStatus() eq true ? 'checked' : ''}
+										name="<portlet:namespace/>status" value="Active"> <label
+										class="form-check-label"
+										for="statusActive"><liferay-ui:message key="active" /></label>
+								</div>
+								<div class="form-check d-flex align-items-center c-gap-1">
+									<input value="InActive" type="radio" class="form-check-input"
+										id="statusInActive"
+										${policy.getStatus() eq false ? 'checked' : ''}
+										name="<portlet:namespace/>status" value="InActive"> <label
+										class="form-check-label" 
+										for="statusInActive"><liferay-ui:message
+											key="in-active" /></label>
+								</div>
 							</div>
-							<div>
-								<input value="InActive" type="radio" class="form-check-input ml-2"
-									id="statusInActive"
-									${policy.getStatus() eq false ? 'checked' : ''}
-									name="<portlet:namespace/>status" value="InActive"> <label
-									class="form-check-label ml-4" 
-									for="statusInActive"><liferay-ui:message
-										key="in-active" /></label>
-						</div>
 						</div>
 
 					</div>
