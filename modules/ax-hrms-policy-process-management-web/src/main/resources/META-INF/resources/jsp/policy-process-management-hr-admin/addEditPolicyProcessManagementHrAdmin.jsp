@@ -17,7 +17,7 @@
 
 <head>
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
@@ -112,7 +112,7 @@
 									<option value="${role.getRoleId()}">${role.getName()}</option>
 								</c:forEach>
 							</select>
-							<div id="selectedOptionsContainer"></div>
+							<div id="selectedOptionsContainer" class="selected-options"></div>
 							<input  type="hidden" value="" name="<portlet:namespace/>selectedRoles" id="roleHidden" />
 
 						</div>

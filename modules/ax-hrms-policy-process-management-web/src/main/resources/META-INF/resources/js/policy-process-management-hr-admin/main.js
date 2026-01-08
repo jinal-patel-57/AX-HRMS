@@ -129,11 +129,12 @@
 
           // Create dismissible badges for each selected option
           selectedValuesManager.forEach(function (value) {
-              const badge = $('<span>').addClass('selected-option btn btn-sm btn-outline-secondary mr-2 mt-1');
-              badge.text($('#role option[value="' + value + '"]').text());
+              const badge = $('<div>').addClass('selected-option');
+
+              const textSpan = $('<span>').text($('#role option[value="' + value + '"]').text());
 
               // Dismiss button
-              const dismissBtn = $('<span>').addClass('badge badge-secondary ml-2').text('X');
+              const dismissBtn = $('<button>').text('X');
 
               dismissBtn.click(function () {
                   selectedValuesManager = selectedValuesManager.filter(function (val) {
@@ -142,6 +143,7 @@
                   renderSelectedOptions();
               });
 
+              badge.append(textSpan);
               badge.append(dismissBtn);
               selectedOptionsContainerManager.append(badge);
           });
