@@ -75,7 +75,7 @@
 
                       <liferay-ui:search-container-results results="${policySearchContainer.results}" />
 
-	 <liferay-ui:search-container-row className="com.ax.hrms.policy.process.management.hr.admin.web.dto" modelVar="policy" keyProperty="policyId">
+	 <liferay-ui:search-container-row className="com.ax.hrms.policy.process.management.hr.admin.web.dto.PolicyDto" modelVar="policy" keyProperty="policyId">
     
       <liferay-ui:search-container-column-text name="Policy Name" value="${policy.policyName}" />
         <liferay-ui:search-container-column-text name="Policy Description" value="${policy.description}"/>

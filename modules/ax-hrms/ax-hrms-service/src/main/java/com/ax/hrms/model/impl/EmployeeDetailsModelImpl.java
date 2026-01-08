@@ -86,7 +86,8 @@ public class EmployeeDetailsModelImpl
 		{"panCardFileId", Types.BIGINT}, {"insuranceLink", Types.VARCHAR},
 		{"isTerminated", Types.BOOLEAN}, {"appraisalDate", Types.TIMESTAMP},
 		{"employeeType", Types.VARCHAR}, {"stipend", Types.DOUBLE},
-		{"managerId", Types.BIGINT}
+		{"managerId", Types.BIGINT}, {"experienceYears", Types.DOUBLE},
+		{"panCardNumber", Types.BIGINT}, {"aadhaarCardNumber", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -134,10 +135,13 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("employeeType", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stipend", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("managerId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("experienceYears", Types.DOUBLE);
+		TABLE_COLUMNS_MAP.put("panCardNumber", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("aadhaarCardNumber", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG,experienceYears DOUBLE,panCardNumber LONG,aadhaarCardNumber LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -409,6 +413,12 @@ public class EmployeeDetailsModelImpl
 				"stipend", EmployeeDetails::getStipend);
 			attributeGetterFunctions.put(
 				"managerId", EmployeeDetails::getManagerId);
+			attributeGetterFunctions.put(
+				"experienceYears", EmployeeDetails::getExperienceYears);
+			attributeGetterFunctions.put(
+				"panCardNumber", EmployeeDetails::getPanCardNumber);
+			attributeGetterFunctions.put(
+				"aadhaarCardNumber", EmployeeDetails::getAadhaarCardNumber);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -588,6 +598,18 @@ public class EmployeeDetailsModelImpl
 				"managerId",
 				(BiConsumer<EmployeeDetails, Long>)
 					EmployeeDetails::setManagerId);
+			attributeSetterBiConsumers.put(
+				"experienceYears",
+				(BiConsumer<EmployeeDetails, Double>)
+					EmployeeDetails::setExperienceYears);
+			attributeSetterBiConsumers.put(
+				"panCardNumber",
+				(BiConsumer<EmployeeDetails, Long>)
+					EmployeeDetails::setPanCardNumber);
+			attributeSetterBiConsumers.put(
+				"aadhaarCardNumber",
+				(BiConsumer<EmployeeDetails, Long>)
+					EmployeeDetails::setAadhaarCardNumber);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -1431,6 +1453,51 @@ public class EmployeeDetailsModelImpl
 			this.<Long>getColumnOriginalValue("managerId"));
 	}
 
+	@JSON
+	@Override
+	public double getExperienceYears() {
+		return _experienceYears;
+	}
+
+	@Override
+	public void setExperienceYears(double experienceYears) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_experienceYears = experienceYears;
+	}
+
+	@JSON
+	@Override
+	public long getPanCardNumber() {
+		return _panCardNumber;
+	}
+
+	@Override
+	public void setPanCardNumber(long panCardNumber) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_panCardNumber = panCardNumber;
+	}
+
+	@JSON
+	@Override
+	public long getAadhaarCardNumber() {
+		return _aadhaarCardNumber;
+	}
+
+	@Override
+	public void setAadhaarCardNumber(long aadhaarCardNumber) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_aadhaarCardNumber = aadhaarCardNumber;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1534,6 +1601,9 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setEmployeeType(getEmployeeType());
 		employeeDetailsImpl.setStipend(getStipend());
 		employeeDetailsImpl.setManagerId(getManagerId());
+		employeeDetailsImpl.setExperienceYears(getExperienceYears());
+		employeeDetailsImpl.setPanCardNumber(getPanCardNumber());
+		employeeDetailsImpl.setAadhaarCardNumber(getAadhaarCardNumber());
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -1626,6 +1696,12 @@ public class EmployeeDetailsModelImpl
 			this.<Double>getColumnOriginalValue("stipend"));
 		employeeDetailsImpl.setManagerId(
 			this.<Long>getColumnOriginalValue("managerId"));
+		employeeDetailsImpl.setExperienceYears(
+			this.<Double>getColumnOriginalValue("experienceYears"));
+		employeeDetailsImpl.setPanCardNumber(
+			this.<Long>getColumnOriginalValue("panCardNumber"));
+		employeeDetailsImpl.setAadhaarCardNumber(
+			this.<Long>getColumnOriginalValue("aadhaarCardNumber"));
 
 		return employeeDetailsImpl;
 	}
@@ -1911,6 +1987,12 @@ public class EmployeeDetailsModelImpl
 
 		employeeDetailsCacheModel.managerId = getManagerId();
 
+		employeeDetailsCacheModel.experienceYears = getExperienceYears();
+
+		employeeDetailsCacheModel.panCardNumber = getPanCardNumber();
+
+		employeeDetailsCacheModel.aadhaarCardNumber = getAadhaarCardNumber();
+
 		return employeeDetailsCacheModel;
 	}
 
@@ -2014,6 +2096,9 @@ public class EmployeeDetailsModelImpl
 	private String _employeeType;
 	private double _stipend;
 	private long _managerId;
+	private double _experienceYears;
+	private long _panCardNumber;
+	private long _aadhaarCardNumber;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -2086,6 +2171,9 @@ public class EmployeeDetailsModelImpl
 		_columnOriginalValues.put("employeeType", _employeeType);
 		_columnOriginalValues.put("stipend", _stipend);
 		_columnOriginalValues.put("managerId", _managerId);
+		_columnOriginalValues.put("experienceYears", _experienceYears);
+		_columnOriginalValues.put("panCardNumber", _panCardNumber);
+		_columnOriginalValues.put("aadhaarCardNumber", _aadhaarCardNumber);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -2190,6 +2278,12 @@ public class EmployeeDetailsModelImpl
 		columnBitmasks.put("stipend", 549755813888L);
 
 		columnBitmasks.put("managerId", 1099511627776L);
+
+		columnBitmasks.put("experienceYears", 2199023255552L);
+
+		columnBitmasks.put("panCardNumber", 4398046511104L);
+
+		columnBitmasks.put("aadhaarCardNumber", 8796093022208L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

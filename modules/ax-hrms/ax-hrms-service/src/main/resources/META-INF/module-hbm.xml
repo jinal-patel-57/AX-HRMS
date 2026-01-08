@@ -332,6 +332,9 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="stipend" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="managerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="experienceYears" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="panCardNumber" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="aadhaarCardNumber" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeDocumentImpl" table="ax_EmployeeDocument">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentId" type="long">

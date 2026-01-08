@@ -268,7 +268,10 @@ create table ax_EmployeeDetails (
 	appraisalDate DATE null,
 	employeeType VARCHAR(75) null,
 	stipend DOUBLE,
-	managerId LONG
+	managerId LONG,
+	experienceYears DOUBLE,
+	panCardNumber LONG,
+	aadhaarCardNumber LONG
 );
 
 create table ax_EmployeeDocument (

@@ -124,6 +124,15 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 		"stipend", Double.class, Types.DOUBLE, Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Long> managerId = createColumn(
 		"managerId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Double> experienceYears =
+		createColumn(
+			"experienceYears", Double.class, Types.DOUBLE, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> panCardNumber =
+		createColumn(
+			"panCardNumber", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> aadhaarCardNumber =
+		createColumn(
+			"aadhaarCardNumber", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

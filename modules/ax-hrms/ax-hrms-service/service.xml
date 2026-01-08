@@ -55,8 +55,13 @@
         <column name="employeeType" type="String"/>
         <column name="stipend" type="double"/>
         <column name="managerId" type="long"/>
+        <column name="experienceYears" type="double"/>
+        <column name="panCardNumber" type="long"/>
+        <column name="aadhaarCardNumber" type="long"/>
 
-		<order by="asc">
+
+
+        <order by="asc">
             <order-column name="firstName"/>
         </order>
 

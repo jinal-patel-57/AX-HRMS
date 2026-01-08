@@ -693,6 +693,48 @@ public interface EmployeeDetailsModel
 	 */
 	public void setManagerId(long managerId);
 
+	/**
+	 * Returns the experience years of this employee details.
+	 *
+	 * @return the experience years of this employee details
+	 */
+	public double getExperienceYears();
+
+	/**
+	 * Sets the experience years of this employee details.
+	 *
+	 * @param experienceYears the experience years of this employee details
+	 */
+	public void setExperienceYears(double experienceYears);
+
+	/**
+	 * Returns the pan card number of this employee details.
+	 *
+	 * @return the pan card number of this employee details
+	 */
+	public long getPanCardNumber();
+
+	/**
+	 * Sets the pan card number of this employee details.
+	 *
+	 * @param panCardNumber the pan card number of this employee details
+	 */
+	public void setPanCardNumber(long panCardNumber);
+
+	/**
+	 * Returns the aadhaar card number of this employee details.
+	 *
+	 * @return the aadhaar card number of this employee details
+	 */
+	public long getAadhaarCardNumber();
+
+	/**
+	 * Sets the aadhaar card number of this employee details.
+	 *
+	 * @param aadhaarCardNumber the aadhaar card number of this employee details
+	 */
+	public void setAadhaarCardNumber(long aadhaarCardNumber);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

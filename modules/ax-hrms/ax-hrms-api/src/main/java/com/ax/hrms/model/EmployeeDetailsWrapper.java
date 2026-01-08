@@ -75,6 +75,9 @@ public class EmployeeDetailsWrapper
 		attributes.put("employeeType", getEmployeeType());
 		attributes.put("stipend", getStipend());
 		attributes.put("managerId", getManagerId());
+		attributes.put("experienceYears", getExperienceYears());
+		attributes.put("panCardNumber", getPanCardNumber());
+		attributes.put("aadhaarCardNumber", getAadhaarCardNumber());
 
 		return attributes;
 	}
@@ -328,6 +331,24 @@ public class EmployeeDetailsWrapper
 		if (managerId != null) {
 			setManagerId(managerId);
 		}
+
+		Double experienceYears = (Double)attributes.get("experienceYears");
+
+		if (experienceYears != null) {
+			setExperienceYears(experienceYears);
+		}
+
+		Long panCardNumber = (Long)attributes.get("panCardNumber");
+
+		if (panCardNumber != null) {
+			setPanCardNumber(panCardNumber);
+		}
+
+		Long aadhaarCardNumber = (Long)attributes.get("aadhaarCardNumber");
+
+		if (aadhaarCardNumber != null) {
+			setAadhaarCardNumber(aadhaarCardNumber);
+		}
 	}
 
 	@Override
@@ -343,6 +364,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public long getAadhaarCardFileId() {
 		return model.getAadhaarCardFileId();
+	}
+
+	/**
+	 * Returns the aadhaar card number of this employee details.
+	 *
+	 * @return the aadhaar card number of this employee details
+	 */
+	@Override
+	public long getAadhaarCardNumber() {
+		return model.getAadhaarCardNumber();
 	}
 
 	/**
@@ -443,6 +474,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public String getEmployeeType() {
 		return model.getEmployeeType();
+	}
+
+	/**
+	 * Returns the experience years of this employee details.
+	 *
+	 * @return the experience years of this employee details
+	 */
+	@Override
+	public double getExperienceYears() {
+		return model.getExperienceYears();
 	}
 
 	/**
@@ -676,6 +717,16 @@ public class EmployeeDetailsWrapper
 	}
 
 	/**
+	 * Returns the pan card number of this employee details.
+	 *
+	 * @return the pan card number of this employee details
+	 */
+	@Override
+	public long getPanCardNumber() {
+		return model.getPanCardNumber();
+	}
+
+	/**
 	 * Returns the personal email of this employee details.
 	 *
 	 * @return the personal email of this employee details
@@ -831,6 +882,16 @@ public class EmployeeDetailsWrapper
 	}
 
 	/**
+	 * Sets the aadhaar card number of this employee details.
+	 *
+	 * @param aadhaarCardNumber the aadhaar card number of this employee details
+	 */
+	@Override
+	public void setAadhaarCardNumber(long aadhaarCardNumber) {
+		model.setAadhaarCardNumber(aadhaarCardNumber);
+	}
+
+	/**
 	 * Sets the appraisal date of this employee details.
 	 *
 	 * @param appraisalDate the appraisal date of this employee details
@@ -928,6 +989,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setEmployeeType(String employeeType) {
 		model.setEmployeeType(employeeType);
+	}
+
+	/**
+	 * Sets the experience years of this employee details.
+	 *
+	 * @param experienceYears the experience years of this employee details
+	 */
+	@Override
+	public void setExperienceYears(double experienceYears) {
+		model.setExperienceYears(experienceYears);
 	}
 
 	/**
@@ -1158,6 +1229,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setPanCardFileId(long panCardFileId) {
 		model.setPanCardFileId(panCardFileId);
+	}
+
+	/**
+	 * Sets the pan card number of this employee details.
+	 *
+	 * @param panCardNumber the pan card number of this employee details
+	 */
+	@Override
+	public void setPanCardNumber(long panCardNumber) {
+		model.setPanCardNumber(panCardNumber);
 	}
 
 	/**

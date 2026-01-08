@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(83);
+		StringBundler sb = new StringBundler(89);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -138,6 +138,12 @@ public class EmployeeDetailsCacheModel
 		sb.append(stipend);
 		sb.append(", managerId=");
 		sb.append(managerId);
+		sb.append(", experienceYears=");
+		sb.append(experienceYears);
+		sb.append(", panCardNumber=");
+		sb.append(panCardNumber);
+		sb.append(", aadhaarCardNumber=");
+		sb.append(aadhaarCardNumber);
 		sb.append("}");
 
 		return sb.toString();
@@ -315,6 +321,9 @@ public class EmployeeDetailsCacheModel
 
 		employeeDetailsImpl.setStipend(stipend);
 		employeeDetailsImpl.setManagerId(managerId);
+		employeeDetailsImpl.setExperienceYears(experienceYears);
+		employeeDetailsImpl.setPanCardNumber(panCardNumber);
+		employeeDetailsImpl.setAadhaarCardNumber(aadhaarCardNumber);
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -385,6 +394,12 @@ public class EmployeeDetailsCacheModel
 		stipend = objectInput.readDouble();
 
 		managerId = objectInput.readLong();
+
+		experienceYears = objectInput.readDouble();
+
+		panCardNumber = objectInput.readLong();
+
+		aadhaarCardNumber = objectInput.readLong();
 	}
 
 	@Override
@@ -530,6 +545,12 @@ public class EmployeeDetailsCacheModel
 		objectOutput.writeDouble(stipend);
 
 		objectOutput.writeLong(managerId);
+
+		objectOutput.writeDouble(experienceYears);
+
+		objectOutput.writeLong(panCardNumber);
+
+		objectOutput.writeLong(aadhaarCardNumber);
 	}
 
 	public String uuid;
@@ -573,5 +594,8 @@ public class EmployeeDetailsCacheModel
 	public String employeeType;
 	public double stipend;
 	public long managerId;
+	public double experienceYears;
+	public long panCardNumber;
+	public long aadhaarCardNumber;
 
 }
