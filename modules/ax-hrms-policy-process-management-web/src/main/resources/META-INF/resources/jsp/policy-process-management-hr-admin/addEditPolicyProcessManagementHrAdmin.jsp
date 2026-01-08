@@ -164,7 +164,7 @@
 							<label for="status"><liferay-ui:message
 									key="policyStatus" /><span class="text-danger">*</span></label>
 							<div class="d-flex c-gap-3 align-items-center">
-								<div class="form-check d-flex align-items-center c-gap-1">
+								<div class="form-check">
 
 									<input value="Active" type="radio" class="form-check-input"
 										id="statusActive"
@@ -173,7 +173,7 @@
 										class="form-check-label"
 										for="statusActive"><liferay-ui:message key="active" /></label>
 								</div>
-								<div class="form-check d-flex align-items-center c-gap-1">
+								<div class="form-check">
 									<input value="InActive" type="radio" class="form-check-input"
 										id="statusInActive"
 										${policy.getStatus() eq false ? 'checked' : ''}

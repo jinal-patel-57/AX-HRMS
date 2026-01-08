@@ -134,7 +134,7 @@
               const textSpan = $('<span>').text($('#role option[value="' + value + '"]').text());
 
               // Dismiss button
-              const dismissBtn = $('<button>').text('X');
+              const dismissBtn = $('<button>').text('x');
 
               dismissBtn.click(function () {
                   selectedValuesManager = selectedValuesManager.filter(function (val) {
