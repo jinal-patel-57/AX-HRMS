@@ -56,8 +56,8 @@
         <column name="stipend" type="double"/>
         <column name="managerId" type="long"/>
         <column name="experienceYears" type="double"/>
-        <column name="panCardNumber" type="long"/>
-        <column name="aadhaarCardNumber" type="long"/>
+        <column name="panCardNumber" type="String"/>
+        <column name="aadhaarCardNumber" type="String"/>
 
 
 

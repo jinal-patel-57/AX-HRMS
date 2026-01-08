@@ -87,7 +87,7 @@ public class EmployeeDetailsModelImpl
 		{"isTerminated", Types.BOOLEAN}, {"appraisalDate", Types.TIMESTAMP},
 		{"employeeType", Types.VARCHAR}, {"stipend", Types.DOUBLE},
 		{"managerId", Types.BIGINT}, {"experienceYears", Types.DOUBLE},
-		{"panCardNumber", Types.BIGINT}, {"aadhaarCardNumber", Types.BIGINT}
+		{"panCardNumber", Types.VARCHAR}, {"aadhaarCardNumber", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -136,12 +136,12 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("stipend", Types.DOUBLE);
 		TABLE_COLUMNS_MAP.put("managerId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("experienceYears", Types.DOUBLE);
-		TABLE_COLUMNS_MAP.put("panCardNumber", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("aadhaarCardNumber", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("panCardNumber", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("aadhaarCardNumber", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG,experienceYears DOUBLE,panCardNumber LONG,aadhaarCardNumber LONG)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG,experienceYears DOUBLE,panCardNumber VARCHAR(75) null,aadhaarCardNumber VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -604,11 +604,11 @@ public class EmployeeDetailsModelImpl
 					EmployeeDetails::setExperienceYears);
 			attributeSetterBiConsumers.put(
 				"panCardNumber",
-				(BiConsumer<EmployeeDetails, Long>)
+				(BiConsumer<EmployeeDetails, String>)
 					EmployeeDetails::setPanCardNumber);
 			attributeSetterBiConsumers.put(
 				"aadhaarCardNumber",
-				(BiConsumer<EmployeeDetails, Long>)
+				(BiConsumer<EmployeeDetails, String>)
 					EmployeeDetails::setAadhaarCardNumber);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
@@ -1470,12 +1470,17 @@ public class EmployeeDetailsModelImpl
 
 	@JSON
 	@Override
-	public long getPanCardNumber() {
-		return _panCardNumber;
+	public String getPanCardNumber() {
+		if (_panCardNumber == null) {
+			return "";
+		}
+		else {
+			return _panCardNumber;
+		}
 	}
 
 	@Override
-	public void setPanCardNumber(long panCardNumber) {
+	public void setPanCardNumber(String panCardNumber) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -1485,12 +1490,17 @@ public class EmployeeDetailsModelImpl
 
 	@JSON
 	@Override
-	public long getAadhaarCardNumber() {
-		return _aadhaarCardNumber;
+	public String getAadhaarCardNumber() {
+		if (_aadhaarCardNumber == null) {
+			return "";
+		}
+		else {
+			return _aadhaarCardNumber;
+		}
 	}
 
 	@Override
-	public void setAadhaarCardNumber(long aadhaarCardNumber) {
+	public void setAadhaarCardNumber(String aadhaarCardNumber) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -1699,9 +1709,9 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setExperienceYears(
 			this.<Double>getColumnOriginalValue("experienceYears"));
 		employeeDetailsImpl.setPanCardNumber(
-			this.<Long>getColumnOriginalValue("panCardNumber"));
+			this.<String>getColumnOriginalValue("panCardNumber"));
 		employeeDetailsImpl.setAadhaarCardNumber(
-			this.<Long>getColumnOriginalValue("aadhaarCardNumber"));
+			this.<String>getColumnOriginalValue("aadhaarCardNumber"));
 
 		return employeeDetailsImpl;
 	}
@@ -1991,7 +2001,19 @@ public class EmployeeDetailsModelImpl
 
 		employeeDetailsCacheModel.panCardNumber = getPanCardNumber();
 
+		String panCardNumber = employeeDetailsCacheModel.panCardNumber;
+
+		if ((panCardNumber != null) && (panCardNumber.length() == 0)) {
+			employeeDetailsCacheModel.panCardNumber = null;
+		}
+
 		employeeDetailsCacheModel.aadhaarCardNumber = getAadhaarCardNumber();
+
+		String aadhaarCardNumber = employeeDetailsCacheModel.aadhaarCardNumber;
+
+		if ((aadhaarCardNumber != null) && (aadhaarCardNumber.length() == 0)) {
+			employeeDetailsCacheModel.aadhaarCardNumber = null;
+		}
 
 		return employeeDetailsCacheModel;
 	}
@@ -2097,8 +2119,8 @@ public class EmployeeDetailsModelImpl
 	private double _stipend;
 	private long _managerId;
 	private double _experienceYears;
-	private long _panCardNumber;
-	private long _aadhaarCardNumber;
+	private String _panCardNumber;
+	private String _aadhaarCardNumber;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);

@@ -270,8 +270,8 @@ create table ax_EmployeeDetails (
 	stipend DOUBLE,
 	managerId LONG,
 	experienceYears DOUBLE,
-	panCardNumber LONG,
-	aadhaarCardNumber LONG
+	panCardNumber VARCHAR(75) null,
+	aadhaarCardNumber VARCHAR(75) null
 );
 
 create table ax_EmployeeDocument (

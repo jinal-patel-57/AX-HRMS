@@ -269,8 +269,8 @@
 		<field name="stipend" type="double" />
 		<field name="managerId" type="long" />
 		<field name="experienceYears" type="double" />
-		<field name="panCardNumber" type="long" />
-		<field name="aadhaarCardNumber" type="long" />
+		<field name="panCardNumber" type="String" />
+		<field name="aadhaarCardNumber" type="String" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeDocument">
 		<field name="uuid" type="String" />

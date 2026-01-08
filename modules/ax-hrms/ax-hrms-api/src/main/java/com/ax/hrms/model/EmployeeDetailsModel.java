@@ -712,28 +712,30 @@ public interface EmployeeDetailsModel
 	 *
 	 * @return the pan card number of this employee details
 	 */
-	public long getPanCardNumber();
+	@AutoEscape
+	public String getPanCardNumber();
 
 	/**
 	 * Sets the pan card number of this employee details.
 	 *
 	 * @param panCardNumber the pan card number of this employee details
 	 */
-	public void setPanCardNumber(long panCardNumber);
+	public void setPanCardNumber(String panCardNumber);
 
 	/**
 	 * Returns the aadhaar card number of this employee details.
 	 *
 	 * @return the aadhaar card number of this employee details
 	 */
-	public long getAadhaarCardNumber();
+	@AutoEscape
+	public String getAadhaarCardNumber();
 
 	/**
 	 * Sets the aadhaar card number of this employee details.
 	 *
 	 * @param aadhaarCardNumber the aadhaar card number of this employee details
 	 */
-	public void setAadhaarCardNumber(long aadhaarCardNumber);
+	public void setAadhaarCardNumber(String aadhaarCardNumber);
 
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();

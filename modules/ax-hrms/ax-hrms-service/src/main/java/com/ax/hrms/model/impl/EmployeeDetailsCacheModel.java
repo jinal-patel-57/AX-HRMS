@@ -322,8 +322,20 @@ public class EmployeeDetailsCacheModel
 		employeeDetailsImpl.setStipend(stipend);
 		employeeDetailsImpl.setManagerId(managerId);
 		employeeDetailsImpl.setExperienceYears(experienceYears);
-		employeeDetailsImpl.setPanCardNumber(panCardNumber);
-		employeeDetailsImpl.setAadhaarCardNumber(aadhaarCardNumber);
+
+		if (panCardNumber == null) {
+			employeeDetailsImpl.setPanCardNumber("");
+		}
+		else {
+			employeeDetailsImpl.setPanCardNumber(panCardNumber);
+		}
+
+		if (aadhaarCardNumber == null) {
+			employeeDetailsImpl.setAadhaarCardNumber("");
+		}
+		else {
+			employeeDetailsImpl.setAadhaarCardNumber(aadhaarCardNumber);
+		}
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -396,10 +408,8 @@ public class EmployeeDetailsCacheModel
 		managerId = objectInput.readLong();
 
 		experienceYears = objectInput.readDouble();
-
-		panCardNumber = objectInput.readLong();
-
-		aadhaarCardNumber = objectInput.readLong();
+		panCardNumber = objectInput.readUTF();
+		aadhaarCardNumber = objectInput.readUTF();
 	}
 
 	@Override
@@ -548,9 +558,19 @@ public class EmployeeDetailsCacheModel
 
 		objectOutput.writeDouble(experienceYears);
 
-		objectOutput.writeLong(panCardNumber);
+		if (panCardNumber == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(panCardNumber);
+		}
 
-		objectOutput.writeLong(aadhaarCardNumber);
+		if (aadhaarCardNumber == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(aadhaarCardNumber);
+		}
 	}
 
 	public String uuid;
@@ -595,7 +615,7 @@ public class EmployeeDetailsCacheModel
 	public double stipend;
 	public long managerId;
 	public double experienceYears;
-	public long panCardNumber;
-	public long aadhaarCardNumber;
+	public String panCardNumber;
+	public String aadhaarCardNumber;
 
 }

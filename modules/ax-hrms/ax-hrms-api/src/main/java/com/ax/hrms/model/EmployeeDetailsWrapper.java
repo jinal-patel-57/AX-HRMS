@@ -338,13 +338,13 @@ public class EmployeeDetailsWrapper
 			setExperienceYears(experienceYears);
 		}
 
-		Long panCardNumber = (Long)attributes.get("panCardNumber");
+		String panCardNumber = (String)attributes.get("panCardNumber");
 
 		if (panCardNumber != null) {
 			setPanCardNumber(panCardNumber);
 		}
 
-		Long aadhaarCardNumber = (Long)attributes.get("aadhaarCardNumber");
+		String aadhaarCardNumber = (String)attributes.get("aadhaarCardNumber");
 
 		if (aadhaarCardNumber != null) {
 			setAadhaarCardNumber(aadhaarCardNumber);
@@ -372,7 +372,7 @@ public class EmployeeDetailsWrapper
 	 * @return the aadhaar card number of this employee details
 	 */
 	@Override
-	public long getAadhaarCardNumber() {
+	public String getAadhaarCardNumber() {
 		return model.getAadhaarCardNumber();
 	}
 
@@ -722,7 +722,7 @@ public class EmployeeDetailsWrapper
 	 * @return the pan card number of this employee details
 	 */
 	@Override
-	public long getPanCardNumber() {
+	public String getPanCardNumber() {
 		return model.getPanCardNumber();
 	}
 
@@ -887,7 +887,7 @@ public class EmployeeDetailsWrapper
 	 * @param aadhaarCardNumber the aadhaar card number of this employee details
 	 */
 	@Override
-	public void setAadhaarCardNumber(long aadhaarCardNumber) {
+	public void setAadhaarCardNumber(String aadhaarCardNumber) {
 		model.setAadhaarCardNumber(aadhaarCardNumber);
 	}
 
@@ -1237,7 +1237,7 @@ public class EmployeeDetailsWrapper
 	 * @param panCardNumber the pan card number of this employee details
 	 */
 	@Override
-	public void setPanCardNumber(long panCardNumber) {
+	public void setPanCardNumber(String panCardNumber) {
 		model.setPanCardNumber(panCardNumber);
 	}
 
