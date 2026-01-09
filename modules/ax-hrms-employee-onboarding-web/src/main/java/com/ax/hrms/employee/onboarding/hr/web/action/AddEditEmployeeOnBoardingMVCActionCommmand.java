@@ -148,7 +148,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
         employeeDetails.getPanCardFileId();
         employeeDetails.getAadhaarCardFileId();
 
-
+        employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
+        employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
 
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,Locale.ENGLISH);

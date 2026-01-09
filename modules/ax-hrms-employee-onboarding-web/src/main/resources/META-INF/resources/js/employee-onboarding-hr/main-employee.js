@@ -266,6 +266,30 @@ function setConfigsForAddExperienceSection(config) {
         
         $(document).ready(function () {
 
+        function formatAadhaar(value) {
+            if (!value) return "";
+
+            // remove non-digits
+            value = value.replace(/\D/g, "");
+
+            // limit to 12 digits
+            if (value.length > 12) {
+                value = value.substring(0, 12);
+            }
+
+            // add hyphens after every 4 digits
+            return value.replace(/(\d{4})(\d{0,4})(\d{0,4})/, function (_, a, b, c) {
+                return [a, b, c].filter(Boolean).join("-");
+            });
+        }
+
+
+        var aadhaarField = $("#" + namespace + "aadharNumber");
+
+        if (aadhaarField.val()) {
+            aadhaarField.val(formatAadhaar(aadhaarField.val()));
+        }
+
             var $form1 = $("#stepperForm");
             $form1.validate({
                 errorClass: 'is-invalid',
@@ -320,7 +344,18 @@ function setConfigsForAddExperienceSection(config) {
 
                        [namespace + "panCard"]: {
                            documentRequired: panCardId
-                       }
+                       },
+                        [namespace + "aadharNumber"]: {
+                            required: true,
+                            validAadhaar: true
+                        },
+
+                        [namespace + "panNumber"]: {
+                            required: true,
+                            minlength: 10,
+                            maxlength: 10,
+                            validPAN: true
+                        }
 
                 },
                 messages: {
@@ -364,13 +399,42 @@ function setConfigsForAddExperienceSection(config) {
 
                        [namespace + "panCard"]: {
                            documentRequired: "Please upload PAN card."
-                       }
+                       },
+
+                        [namespace + "aadharNumber"]: {
+                            required: "Please enter Aadhaar number.",
+                              validAadhaar: "Aadhaar must be in format 1234-1234-1234."
+
+                        },
+
+                        [namespace + "panNumber"]: {
+                            required: "Please enter PAN number.",
+                            minlength: "PAN number must be exactly 10 characters.",
+                            maxlength: "PAN number must be exactly 10 characters.",
+                            validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
+                        }
 
                 }
             });
             $.validator.addMethod("validMobile10", function (value) {
 				return /^\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");
+
+            /* ================= Aadhaar Validation ================= */
+            $.validator.addMethod("validAadhaar", function (value, element) {
+                if (this.optional(element)) {
+                    return true;
+                }
+                return /^\d{4}-\d{4}-\d{4}$/.test(value);
+            }, "Please enter Aadhaar in format 1234-1234-1234");
+            /* ================= PAN Validation ================= */
+            $.validator.addMethod("validPAN", function (value, element) {
+                if (this.optional(element)) {
+                    return true;
+                }
+                return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value.toUpperCase());
+            }, "Please enter a valid PAN number (e.g., ABCDE1234F).");
+
 
             $.validator.addMethod("lettersOnly", function (value, element) {
                 return this.optional(element) || /^[A-Za-z\s]+$/i.test(value);
@@ -389,11 +453,37 @@ function setConfigsForAddExperienceSection(config) {
 
 
 
+            $("#" + namespace + "panNumber").on("keyup", function () {
+                this.value = this.value.toUpperCase();
+            });
+
+const aadhaarSelector = "#" + namespace + "aadharNumber";
+
+$(document).on("input", aadhaarSelector, function () {
+    this.value = formatAadhaar(this.value);
+});
+
+
+$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+
+    const $aadhaar = $("#" + namespace + "aadharNumber");
+
+    if ($aadhaar.length && $aadhaar.val()) {
+        $aadhaar.val(formatAadhaar($aadhaar.val()));
+    }
+});
+
+
             $('.next-button-basic-details').on('click', function (event) {
                 event.preventDefault();
                 var form1 = $('#stepperForm');
                 if (!form1.valid()) {
                     return;
+                }
+
+                var aadhaarField = $("#" + namespace + "aadharNumber");
+                if (aadhaarField.length) {
+                    aadhaarField.val(aadhaarField.val().replace(/-/g, ""));
                 }
 
                 var formData = new FormData(form1[0]);
@@ -435,6 +525,13 @@ function setConfigsForAddExperienceSection(config) {
 		            const previousTabContentId = previousTabButton.attr('data-bs-target');
 		            $(previousTabContentId).addClass('show active');
 		            $(currentTab.attr('data-bs-target')).removeClass('show active');
+		                    setTimeout(function () {
+                                const $aadhaar = $("#" + namespace + "aadharNumber");
+                                if ($aadhaar.length && $aadhaar.val()) {
+                                    $aadhaar.val(formatAadhaar($aadhaar.val()));
+                                }
+                            }, 0);
+
 		            $(previousTabContentId).find('input').first().focus();
 		        }
 		    });
@@ -1841,7 +1938,15 @@ function setConfigsForExperienceValidation(config) {
             }
         );
 
-
+        function showMessage(newMessage) {
+        console.log("showwing the message ok ne")
+            Liferay.Util.openToast({
+                title: 'Info',
+                message: newMessage,
+                type: 'info',
+                autoClose: 10000
+            });
+        }
 
         $('.next-button-nominee-details').on('click', function (event) {
             event.preventDefault();
@@ -1854,16 +1959,32 @@ function setConfigsForExperienceValidation(config) {
                 url: form7.attr('action'),
                 method: 'POST',
                 data: form7.serialize(),
-                success: function (response) {
-                    form7.hide();
-//                    window.location.href = getEmployeeUrl;
+//                success: function (response) {
+//                    form7.hide();
+////                    window.location.href = getEmployeeUrl;
+//                    const questionMarkIndex = window.location.href.indexOf('?');
+//					if (questionMarkIndex !== -1) {
+//					    const cleanURL = window.location.href.substring(0, questionMarkIndex);
+//					    window.location.href = cleanURL;
+//					}
+//					showMessage("Done")
+//                    document.getElementById("employeeOnBorading").style.display = "none";
+//                },
+            success: function () {
+                Liferay.Util.openToast({
+                    title: 'Success',
+                    message: 'Employee Updated Successfully',
+                    type: 'success',
+                    autoClose: 3000
+                });
+
+                setTimeout(function () {
                     const questionMarkIndex = window.location.href.indexOf('?');
-					if (questionMarkIndex !== -1) {
-					    const cleanURL = window.location.href.substring(0, questionMarkIndex);
-					    window.location.href = cleanURL;
-					}
-                    document.getElementById("employeeOnBorading").style.display = "none";
-                },
+                    if (questionMarkIndex !== -1) {
+                        window.location.href = window.location.href.substring(0, questionMarkIndex);
+                    }
+                }, 1500);
+            },
                 error: function () {
                     console.log('There was an error saving the data. Please try again.');
                 },

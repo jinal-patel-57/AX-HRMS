@@ -20,6 +20,12 @@
 		
         $(document).ready(function () {
 
+
+
+
+$('#wishesIdDiv').next('.note-editor')
+    .find('.note-btn[data-original-title="Video"]').remove();
+
             function validateForm() {
                 var wishes = $('#wishesIdDiv').summernote('code').trim();
 
@@ -32,8 +38,38 @@
                 return true;
             }
 
+            /* ---------------- Validation ---------------- */
+            function isSummernoteValid() {
+                let html = $('#wishesIdDiv').summernote('code');
+                let $content = $('<div>').html(html);
+
+                let text = $content.text().trim();
+                let hasImage = $content.find('img').length > 0;
+                let hasVideo = $content.find('iframe, video').length > 0;
+
+                return text.length > 0 || hasImage || hasVideo;
+            }
+            function showError() {
+                $('#wishesError').show();
+            }
+
+            function hideError() {
+                $('#wishesError').hide();
+            }
+
+
+
+
+
             // Event handler for form submission
             $(document).on('click', '#send', function () {
+
+
+                if (!isSummernoteValid()) {
+                    $('#wishesError').show();
+                    return false;
+                }
+
 
                 // Perform form validation
                 if (validateForm()) {
@@ -51,12 +87,41 @@
             };
 
 
+            $(document).on('focusout', '.note-editable', function () {
+                if (!isSummernoteValid()) {
+                    showError();
+                }
+                else{
+                  hideError();
+                }
+            });
+
             $('#wishesIdDiv').summernote({
                 height: 150,
                 codemirror: {
                     theme: 'monokai'
                 },
+    callbacks: {
+
+        // 🔥 REAL-TIME change (typing, image add)
+        onChange: function () {
+            if (isSummernoteValid()) {
+                hideError();
+            }
+        },
+
+        // 🔥 BLUR EVENT (THIS is the key)
+        onBlur: function () {
+            if (!isSummernoteValid()) {
+                showError();
+            }
+        }
+    }
+
             });
+
+
+
             hideNoteModalSummernote();
 
 
@@ -76,6 +141,8 @@
 
                 // Show the modal
                 $('#birthdayWishesModal').modal('show');
+                                hideError();
+
             });
 
             // Cleanup Editor instance when modal is closed

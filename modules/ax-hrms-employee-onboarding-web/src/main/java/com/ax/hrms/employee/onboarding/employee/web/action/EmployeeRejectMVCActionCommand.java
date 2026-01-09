@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -66,5 +67,7 @@ public class EmployeeRejectMVCActionCommand extends BaseMVCActionCommand {
 			.append(reVerifyDetails);
 		
 		employeeUtil.sendMailToEmployee(employeeId, themeDisplay, actionRequest,  AxHrmsEmployeeOnBoardingEmployeeConstants.SLASH, reVerifyDetails);
-	}
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay).replace("/employee-on-boarding", "/employee-onboarding-hr"));
+
+    }
 }

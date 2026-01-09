@@ -93,6 +93,9 @@
                             </label>
                             <div id="<portlet:namespace />anniversaryWishNote" class="summernote-container"
                                  name="<portlet:namespace />anniversaryWishNote"></div>
+                                <!-- Error message container -->
+                                <div id="<portlet:namespace />wishError" class="text-danger mt-1" style="display:none;">Please enter wishes.</div>
+
                         </div>
                         <input type="hidden" id="<portlet:namespace/>wishesData"
                                name="<portlet:namespace />wishesData"> </input>

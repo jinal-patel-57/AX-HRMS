@@ -2,6 +2,7 @@
 <%@page import="com.liferay.portal.kernel.service.CountryLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:actionURL var="employeeApprovalUrl" name="/employeeApprovalUrl">
     <portlet:param name="employeeId" value="${employeeDetail.employeeId}"/>
@@ -194,6 +195,24 @@
                           </div>
                       </div>
                   </c:if>
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Aadhar Card Number</div>
+                            <div class="label-content">
+                                ${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-
+                                ${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-
+                                ${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Pan Card Number</div>
+                            <div class="label-content">${employeeDetail.panCardNumber}</div>
+                          </div>
+                      </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">

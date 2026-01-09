@@ -161,7 +161,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
 			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
 			employeeDto.setStipend(employeeDetails.getStipend());
-			
+			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
+            employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());

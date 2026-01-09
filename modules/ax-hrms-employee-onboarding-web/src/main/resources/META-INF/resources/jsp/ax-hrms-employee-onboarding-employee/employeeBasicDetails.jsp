@@ -67,6 +67,35 @@
                        name="<portlet:namespace />fatherName"
                        value="${employeeDetail.fatherName}" maxlength="50"/>
             </div>
+
+
+
+
+
+            <div class="col-md-4 col-sm-12 mb-3">
+                <label for="<portlet:namespace />aadharNumber" class="form-label">
+                    <liferay-ui:message key="aadhar-number"/><span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control"
+                       id="<portlet:namespace />aadharNumber"
+                       name="<portlet:namespace />aadharNumber"
+                       value="${employeeDetail.aadhaarCardNumber}" maxlength="50"/>
+            </div>
+
+
+
+            <div class="col-md-4 col-sm-12 mb-3">
+                <label for="<portlet:namespace />panNumber" class="form-label">
+                    <liferay-ui:message key="pan-number"/><span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control"
+                       id="<portlet:namespace />panNumber"
+                       name="<portlet:namespace />panNumber"
+                       value="${employeeDetail.panCardNumber}" maxlength="50"/>
+            </div>
+
+
+
             <!-- Fourth Row: Employee Profile Picture -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <label for="employeeProfilePicture" class="form-label">

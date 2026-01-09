@@ -1,13 +1,10 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="../../init.jsp" %>
+<liferay-ui:success key="updatedSuccessfully" message="Your request has been completed successfully."/>
 
+<liferay-ui:success key="off-boarded" message="off-boarded"/>
 <portlet:renderURL var="startEmployeeOnboarding">
     <portlet:param name="mvcRenderCommandName" value="/onboardingFormHr"/>
 </portlet:renderURL>
-
-<liferay-ui:success key="off-boarded" message="off-boarded"
-/>
-
-
 
 
 <div class="card">

@@ -2,6 +2,8 @@
 <%@page import="com.liferay.portal.kernel.service.CountryLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <portlet:renderURL var="backURL">
     <portlet:param name="mvcCommand" value="/"/>
 </portlet:renderURL>
@@ -76,7 +78,7 @@
                             <div class="label-content">${employeeDetail.reportingManager}</div>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Joining Date</div>
@@ -109,15 +111,15 @@
                             <div class="label-content">${employeeDetail.stipend}</div>
                         </div>
                     </div>
-                    
-                    
-                    
-                    
+
+
+
+
                 </div>
             </div>
         </div>
 
-		
+
 
         <div class="card">
             <div class="card-header">
@@ -186,6 +188,25 @@
                              </div>
                          </div>
                      </c:if>
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Aadhar Card Number</div>
+                            <div class="label-content">
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Pan Card Number</div>
+                            <div class="label-content">${employeeDetail.panCardNumber}</div>
+                          </div>
+                      </div>
+
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Aadhar Card File</div>
@@ -707,7 +728,7 @@
                             <div class="label-content">${nominee.line2}</div>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Address Line 3</div>

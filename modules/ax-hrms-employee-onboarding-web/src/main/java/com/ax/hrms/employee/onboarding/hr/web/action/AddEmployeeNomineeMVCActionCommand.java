@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -156,10 +157,17 @@ public class AddEmployeeNomineeMVCActionCommand extends BaseMVCActionCommand {
 
 			log.info("AddEmployeeNomineeMVCActionCommand >>> doProcessAction ::: update called :::");
 		}
+
+        log.info("Here I am reached for printing message");
 		actionRequest.setAttribute("employeeId", ParamUtil.getLong(actionRequest,"employeeId"));
-		log.info("before command --" + PortalUtil.getLayoutFullURL(themeDisplay));
+        SessionMessages.add(actionRequest, "updatedSuccessfully");
+
+        log.info("before command --" + PortalUtil.getLayoutFullURL(themeDisplay));
 		//actionResponse.setRenderParameter("mvcRenderCommandName", "/");
-		//actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+        log.info("SessionMessages keys = " +
+                SessionMessages.keySet(actionRequest));
+
+//        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 	}
 }
 

@@ -54,9 +54,11 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String MARTIAL_STATUS ="maritalStatus";
 	public static final String MARRIAGE_DATE ="marriageDate";
 	public static final String SPOUSE_NAME ="spouseName";
-	
-	
-	public static final String HRMS_DOCUMENT="HRMS Document";
+    public static final String AADHAR_NUMBER ="aadharNumber";
+    public static final String PAN_NUMBER ="panNumber";
+
+
+    public static final String HRMS_DOCUMENT="HRMS Document";
 	public static final String PROFILE_PICTURE="Profile Picture";
 	public static final String AADHAAR_CARD_FOLDER="Aadhaar Card";
 	public static final String PAN_CARD_FOLDER="Pan Card";

@@ -97,7 +97,9 @@
                                 </label>
 
                                 <div id="wishesIdDiv" class="summernote-container"></div>
-
+<small id="wishesError" class="text-danger" style="display:none;">
+    Please enter wishes.
+</small>
                             </div>
 
                             <input type="hidden" id="wishesData" name="<portlet:namespace />wishes"> </input>

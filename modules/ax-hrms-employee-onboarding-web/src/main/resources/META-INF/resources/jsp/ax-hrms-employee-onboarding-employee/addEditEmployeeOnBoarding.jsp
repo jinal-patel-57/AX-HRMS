@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+<liferay-ui:success key="updatedSuccessfully" message="Your request has been completed successfully."/>
 
 <c:if test="${isOnBoarded}">
     <div class="alert alert-warning">This form is submitted for the review.

@@ -69,10 +69,17 @@
             var modal = $(this)
             modal.find('.modal-title').text('New message to ' + employeeName)
             modal.find('#'+namespace+'employeeName').val(employeeName)
+                            hideError();
+
         });
 
         $('#'+namespace+'sendWish').on('click', function(){
             debugger;
+            if (!isSummernoteValid()) {
+                    showError();
+                    return false; // prevent submission
+            }else{
+            hideError();
             validateFormStatus = validateForm();
             wishHtmlData = $('#'+namespace+'newJoinerWishNote').summernote('code');
             if(validateFormStatus){
@@ -80,6 +87,8 @@
                 $('#anniversaryWishModal').modal('hide');
                 $('#'+namespace+'newJoinerWishForm').submit();
             }
+            }
+
         });
 
 //        var hideNoteModalSummernote = function() {
@@ -97,12 +106,44 @@
                    callbacks: {
                         onInit: function () {
                           console.log("Summernote initialized properly");
+                            $('.summernote-container').next('.note-editor')
+                                              .find('.note-btn[data-original-title="Video"]').remove();
                    }
                    }
             });
 //            hideNoteModalSummernote();
 
+
+
+
         };
+
+    $(document).on('focusout', '.note-editable', function () {
+        if (!isSummernoteValid()) {
+            showError();
+        } else {
+            hideError();
+        }
+    });
+        function isSummernoteValid() {
+                let html = $('#'+namespace+'newJoinerWishNote').summernote('code');
+                let $content = $('<div>').html(html);
+
+                let text = $content.text().trim();
+                let hasImage = $content.find('img').length > 0;
+                let hasVideo = $content.find('iframe, video').length > 0;
+
+                return text.length > 0 || hasImage || hasVideo;
+        }
+            function showError() {
+                $('#'+namespace+'wishError').show();
+            }
+
+            function hideError() {
+                $('#'+namespace+'wishError').hide();
+            }
+
+
         initializeSummernote('newJoinerWishNote');
         console.log("summerNote initialize");
 

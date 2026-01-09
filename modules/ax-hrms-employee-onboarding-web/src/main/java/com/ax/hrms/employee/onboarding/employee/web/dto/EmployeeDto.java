@@ -41,12 +41,30 @@ public class EmployeeDto {
 	public String employeeType;
 	public double stipend;
 	public String designationName;
-	public long designationMasterId;
+
+    public String getAadhaarCardNumber() {
+        return aadhaarCardNumber;
+    }
+
+    public void setAadhaarCardNumber(String aadhaarCardNumber) {
+        this.aadhaarCardNumber = aadhaarCardNumber;
+    }
+
+    public String getPanCardNumber() {
+        return panCardNumber;
+    }
+
+    public void setPanCardNumber(String panCardNumber) {
+        this.panCardNumber = panCardNumber;
+    }
+
+    public long designationMasterId;
 	public String departmentName;
 	public long departmentMasterId;
 	public double grossSalaryCtcPa;
 	public double grossSalaryCtcPm;
-
+    public String aadhaarCardNumber;
+    public String panCardNumber;
 	//address
 	public String line1;
 	public String line2;

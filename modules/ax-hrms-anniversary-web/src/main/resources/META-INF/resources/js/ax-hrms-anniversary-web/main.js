@@ -65,9 +65,19 @@
             var modal = $(this)
             // modal.find('.modal-title').text('New message to ')
             modal.find('#employeeNameAni').val(recipient)
+                hideError();
+
         });
 
         $('#'+namespace+'sendWish').on('click', function(){
+
+                    if (!isSummernoteValid()) {
+                            showError();
+                            return false; // prevent submission
+                    }else{
+
+        hideError();
+
             validateFormStatus = validateForm();
             wishHtmlData = $('#'+namespace+'anniversaryWishNote').summernote('code');
             if(validateFormStatus){
@@ -75,11 +85,45 @@
                 $('#anniversaryWishModal').modal('hide');
                 $('#'+namespace+'anniversaryWishForm').submit();
             }
+            }
         });
+
+$(document).on(
+    'focusout',
+    '#'+namespace+'anniversaryWishNote + .note-editor .note-editable',
+    function () {
+        if (!isSummernoteValid()) {
+            showError();
+        } else {
+            hideError();
+        }
+    }
+);
+
+
 
         var hideNoteModalSummernote = function() {
             $('.note-modal').css('display','none');
         };
+
+            function isSummernoteValid() {
+                let html = $('#'+namespace+'anniversaryWishNote').summernote('code');
+                let $content = $('<div>').html(html);
+
+                let text = $content.text().trim();
+                let hasImage = $content.find('img').length > 0;
+
+                return text.length > 0 || hasImage;
+            }
+
+            function showError() {
+                $('#'+namespace+'wishError').show();
+            }
+
+            function hideError() {
+                $('#'+namespace+'wishError').hide();
+            }
+
 
         const initializeSummernote = function(anniversaryWishNote){
             $('#'+namespace+'anniversaryWishNote').summernote({
@@ -92,6 +136,12 @@
         };
         initializeSummernote();
         // Function to empty CKEditor
+        $('#'+namespace+'anniversaryWishNote')
+            .next('.note-editor')
+            .find('.note-btn[data-original-title="Video"]')
+            .remove();
+
+
         function emptyEditor(){
             $('#'+namespace+'anniversaryWishNote').summernote('code','');
         }
