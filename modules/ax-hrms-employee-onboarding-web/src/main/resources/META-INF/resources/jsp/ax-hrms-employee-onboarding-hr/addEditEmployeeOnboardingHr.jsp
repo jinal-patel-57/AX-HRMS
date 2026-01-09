@@ -139,6 +139,7 @@
 							for="joiningDate"></label>
 					</div>
 				</div>
+
 				<div class="col-md-4 col-sm-12">
 
 					<div class="form-group">
@@ -216,6 +217,27 @@
 							for="isExperienced"></label>
 					</div>
 				</div>
+				<div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label class="" for="experienceYear">
+                            <liferay-ui:message key="experience-year" />
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input
+                            id="experienceYear"
+                            placeholder="Experience in years"
+                            class="form-control"
+                            type="text"
+                            name="<portlet:namespace/>experienceYear"
+
+                            readonly />
+                        <label id="experienceYear-error"
+                               class="error text-danger"
+                               for="experienceYear"></label>
+                    </div>
+                </div>
+
+
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="gender"><liferay-ui:message

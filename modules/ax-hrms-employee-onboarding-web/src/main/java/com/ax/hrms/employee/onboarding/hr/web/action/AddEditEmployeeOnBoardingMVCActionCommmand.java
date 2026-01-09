@@ -145,8 +145,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 		employeeDetails.setFatherName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.FATHER_NAME));
 		employeeDetails.setMaritalStatus(ParamUtil.getBoolean(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.MARTIAL_STATUS));
 		employeeDetails.setSpouseName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SPOUSE_NAME));
-        employeeDetails.getPanCardFileId();
-        employeeDetails.getAadhaarCardFileId();
+
 
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
@@ -197,6 +196,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 employeeDetails.setCreatedBy(themeDisplay.getUserId());
                 employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
                 employeeDetails.setIsProbationEnabled(isProbationEnabled.equalsIgnoreCase("Enabled"));
+                employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
 
                 log.info("Manager id in the employee side: " + ParamUtil.getLong(actionRequest, "manager"));
                 oldManagerId = employeeDetails.getManagerId();

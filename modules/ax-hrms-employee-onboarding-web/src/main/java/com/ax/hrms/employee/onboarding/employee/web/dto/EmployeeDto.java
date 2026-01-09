@@ -30,7 +30,10 @@ public class EmployeeDto {
 	public long uanEsicId;
 	public long probationStatusId;
 	public boolean isEmployeeOnboarded;
+
 	public boolean isExperienced;
+
+
 	public boolean isProbationEnabled;
 	public long profilePicId;
 	public long aadhaarCardFileId;
@@ -63,8 +66,13 @@ public class EmployeeDto {
 	public long departmentMasterId;
 	public double grossSalaryCtcPa;
 	public double grossSalaryCtcPm;
+
     public String aadhaarCardNumber;
     public String panCardNumber;
+
+	public double experienceYears;
+
+
 	//address
 	public String line1;
 	public String line2;
@@ -123,8 +131,15 @@ public class EmployeeDto {
 	String educationCertificatePreviewUrl;
     private List<String> experienceCertificatePreviewUrls;
 
-    
-    public double getGrossSalaryCtcPa() {
+	public double getExperienceYears() {
+		return experienceYears;
+	}
+
+	public void setExperienceYears(double experienceYears) {
+		this.experienceYears = experienceYears;
+	}
+
+	public double getGrossSalaryCtcPa() {
 		return grossSalaryCtcPa;
 	}
 	public void setGrossSalaryCtcPa(double grossSalaryCtcPa) {

@@ -213,6 +213,7 @@ public class EmployeeOnBoardingUtil {
 
             log.info("EmployeeOnBoardingUtil >>> setEmployeeDetails ::: Retrieved employeeDetails: " + employeeDetails);
             renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDetails);
+
         } catch (PortalException e) {
             e.printStackTrace();
         }

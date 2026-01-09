@@ -152,6 +152,57 @@ function setConfigsForAddExperienceSection(config) {
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+        let storedExperienceYears = null;
+/* ================= HR COMMON LOGIC ================= */
+
+        // Salary PM → PA auto calculation
+        $("#grossSalaryCTCPM").on("input keyup", function () {
+            let ctcPm = parseFloat($(this).val());
+
+            if (!isNaN(ctcPm)) {
+                $("#grossSalaryCTCPA").val(ctcPm * 12);
+            } else {
+                $("#grossSalaryCTCPA").val("");
+            }
+        });
+
+
+        // ===== Validators reused from HR =====
+        if (!$.validator.methods.decimalExperience) {
+            $.validator.addMethod(
+                "decimalExperience",
+                function (value, element) {
+                    return this.optional(element) || /^(?:\d+|\d+\.\d{1,2})$/.test(value);
+                },
+                "Please enter a valid experience (e.g. 2, 2.5, 10.75)."
+            );
+        }
+
+
+
+        if (!$.validator.methods.lettersAndNumbersOnly) {
+            $.validator.addMethod("lettersAndNumbersOnly", function (value) {
+                return /^[a-zA-Z0-9]+$/.test(value);
+            });
+        }
+
+        if (!$.validator.methods.numericality) {
+            $.validator.addMethod("numericality", function (value) {
+                return /^\d*\.?\d+$/.test(value);
+            });
+        }
+
+        if (!$.validator.methods.linkUrlValidation) {
+            $.validator.addMethod("linkUrlValidation", function (value) {
+                return value === "" ||
+                    /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(value);
+            });
+        }
+
+
+
+
+
         function allowOnlySixDigitMobile(input) {
 		
 		    // Format pre-filled value (update case)
@@ -414,8 +465,124 @@ function setConfigsForAddExperienceSection(config) {
                             validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
                         }
 
+
                 }
             });
+            /* ===== HR ONLY FIELD RULES + MESSAGES ===== */
+          if (typeof isHrStatus !== "undefined" && isHrStatus === true) {
+
+              $('[name="' + namespace + 'employeeCode"]').rules("add", {
+                  required: true,
+                  lettersAndNumbersOnly: true,
+                  maxlength: 50,
+                  messages: {
+                      required: "Please enter employee code.",
+                      lettersAndNumbersOnly: "Employee code can contain only letters and numbers.",
+                      maxlength: "Employee code cannot exceed 50 characters."
+                  }
+              });
+
+              $('[name="' + namespace + 'firstName"]').rules("add", {
+                  required: true,
+                  lettersOnly: true,
+                  maxlength: 50,
+                  messages: {
+                      required: "Please enter first name.",
+                      lettersOnly: "First name should contain only alphabets.",
+                      maxlength: "First name cannot exceed 50 characters."
+                  }
+              });
+
+              $('[name="' + namespace + 'middleName"]').rules("add", {
+                  required: true,
+                  lettersOnly: true,
+                  maxlength: 50,
+                  messages: {
+                      required: "Please enter middle name."
+                  }
+              });
+
+              $('[name="' + namespace + 'lastName"]').rules("add", {
+                  required: true,
+                  lettersOnly: true,
+                  maxlength: 50,
+                  messages: {
+                      required: "Please enter last name."
+                  }
+              });
+
+              $('[name="' + namespace + 'joiningDate"]').rules("add", {
+                  required: true,
+                  date: true,
+                  messages: {
+                      required: "Please select joining date."
+                  }
+              });
+
+              $('[name="' + namespace + 'grossSalaryCTCPM"]').rules("add", {
+                  required: true,
+                  numericality: true,
+                  messages: {
+                      required: "Please enter gross salary per month.",
+                      numericality: "Please enter a valid salary amount."
+                  }
+              });
+          }
+             /* ================= EXPERIENCE TOGGLE ================= */
+
+         $('input[name="' + namespace + 'isExperienced"]').on('change', function () {
+
+             const isExperiencedYes = this.value === 'Yes';
+             const $experienceField = $('[name="' + namespace + 'experienceYear"]');
+
+             if (isExperiencedYes) {
+
+                 // ENABLE field
+                 $experienceField.prop('disabled', false);
+
+                 // RESTORE value if exists
+                 if (storedExperienceYears !== null) {
+                     $experienceField.val(storedExperienceYears);
+                 }
+
+                 // ADD validation
+                 $experienceField.rules("add", {
+                     required: true,
+                    decimalExperience: true,
+                     min: 0,
+                     max: 50,
+                      messages: {
+                             required: "Please enter experience in years.",
+                             decimalExperience: "Enter a valid experience (e.g. 2, 2.5, 10.75).",
+                             min: "Experience must be at least 0.",
+                             max: "Experience cannot exceed 50 years."
+                         }
+                 });
+
+             } else {
+
+                 // STORE value before clearing
+                 storedExperienceYears = $experienceField.val();
+
+                 // DISABLE + CLEAR
+                 $experienceField
+                     .prop('disabled', true)
+                     .val('');
+
+                 // REMOVE validation
+                 $experienceField.rules("remove");
+                 $experienceField.removeClass("is-invalid is-valid");
+                 $experienceField.next(".invalid-feedback").remove();
+             }
+         });
+
+
+             // handle update case (page load)
+            $('input[name="' + namespace + 'isExperienced"]:checked').trigger('change');
+
+
+
+
             $.validator.addMethod("validMobile10", function (value) {
 				return /^\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");
@@ -561,6 +728,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
             toggleMaritalStatusFields();
             $("#" + namespace + "maritalStatus").on("change", toggleMaritalStatusFields);
+
+
+
 
 
 

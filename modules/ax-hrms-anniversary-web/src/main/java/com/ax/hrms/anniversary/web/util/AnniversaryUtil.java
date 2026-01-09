@@ -282,4 +282,23 @@ public class AnniversaryUtil {
 
 
 	}
+	public void updateExperience(List<EmployeeDetails> employeeDetailsList){
+		try{
+
+			for(EmployeeDetails employeeDetails: employeeDetailsList){
+
+					double experienceYears = employeeDetails.getExperienceYears();
+					employeeDetails.setExperienceYears(experienceYears + 1);
+					employeeDetails.setModifiedDate(new Date());
+					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+
+
+
+			}
+		}catch (Exception e){
+			log.error("AnniversaryEmployeeRetrieverUtil >>> Update Experience year :::  error coming...");
+		}
+
+
+	}
 }

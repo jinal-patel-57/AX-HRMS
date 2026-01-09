@@ -136,6 +136,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         
         EmployeeDetails employeeDetails;
+
         try {
         	long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.HR_ADMIN).getRoleId();
             long[] hrRoles = themeDisplay.getUser().getRoleIds();

@@ -136,6 +136,8 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 			log.info("viewEmployeeOnBoardingMVCRenderCommand >>> render ::: Retrieved employeeDetails : " + employeeDetails);
 
+			log.info("employee experinec :-" + employeeDetails.getIsExperienced());
+
 			employeeDto.setEmployeeId(employeeDetails.getEmployeeId());
 			employeeDto.setPersonalEmail(employeeDetails.getPersonalEmail());
 			employeeDto.setDateOfBirth(employeeDetails.getDateOfBirth());
@@ -161,8 +163,14 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
 			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
 			employeeDto.setStipend(employeeDetails.getStipend());
+
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
             employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
+
+			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
+
+
+			
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());

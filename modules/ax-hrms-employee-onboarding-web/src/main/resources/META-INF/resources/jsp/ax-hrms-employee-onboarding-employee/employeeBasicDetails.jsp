@@ -356,18 +356,39 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isExperienced" id="yes" value="Yes"
-                                ${employeeDetail.isExperienced == 'true' ? 'checked' : '' }>
+                               ${employeeDetail.isExperienced ? 'checked' : ''}
                             <label class="form-check-label" for="yes"><liferay-ui:message key="yes"/></label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
                                 name="<portlet:namespace />isExperienced" id="no" value="No"
-                                ${employeeDetail.isExperienced == 'false' ? 'checked' : '' }>
+                                ${!employeeDetail.isExperienced ? 'checked' : ''}>
                             <label class="form-check-label" for="no"><liferay-ui:message key="no"/></label>
                         </div>
                     </div>
                     <label id="isExperienced-error" class="error text-danger" for="isExperienced"></label>
                 </div>
+                <div class="col-md-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="" for="experienceYear">
+                                            <liferay-ui:message key="experience-year" />
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input
+                                            id="experienceYear"
+                                            placeholder="Experience in years"
+                                            class="form-control"
+                                            type="text"
+                                            name="<portlet:namespace/>experienceYear"
+                                            value="${employeeDetail.getExperienceYears()}"
+
+
+                                             />
+                                        <label id="experienceYear-error"
+                                               class="error text-danger"
+                                               for="experienceYear"></label>
+                                    </div>
+                                </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Joining Date -->
@@ -497,21 +518,8 @@
 
    var aadhaarCardId = ${employeeDetail.aadhaarCardFileId};
    var panCardId = ${employeeDetail.panCardFileId};
+    var isHrStatus = ${isHrStatus ? 'true' : 'false'};
 
-
-    $(document).ready(function () {
-
-        $("#grossSalaryCTCPM").on("input keyup", function () {
-            let ctcPm = parseFloat($(this).val());
-
-            if (!isNaN(ctcPm)) {
-                $("#grossSalaryCTCPA").val(ctcPm * 12);
-            } else {
-                $("#grossSalaryCTCPA").val("");
-            }
-        });
-
-    });
 
 
 </script>

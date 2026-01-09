@@ -189,6 +189,7 @@
                          </div>
                      </c:if>
 
+
                       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                           <div class="form-group-view">
                               <div class="label-name">Aadhar Card Number</div>
@@ -206,6 +207,23 @@
                             <div class="label-content">${employeeDetail.panCardNumber}</div>
                           </div>
                       </div>
+
+
+                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                         <div class="form-group-view">
+                             <div class="label-name">Is Experience</div>
+                             <div class="label-content">${employeeDetail.experienced ? 'Yes' : 'No'}</div>
+                         </div>
+                     </div>
+                      <c:if test="${employeeDetail.experienced}">
+                       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Experience Year</div>
+                              <div class="label-content">${employeeDetail.experienceYears}</div>
+                          </div>
+                      </div>
+
+                      </c:if>
 
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">

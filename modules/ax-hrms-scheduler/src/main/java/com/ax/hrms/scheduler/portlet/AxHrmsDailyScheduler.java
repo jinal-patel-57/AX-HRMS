@@ -320,6 +320,7 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
 
 		anniversaryEmployeeRetrieverUtil.sendMailAndNotificationToHr(group,body,employeeDepartmentLocalService,employeeDesignationLocalService,mailTemplateConfiguration,notificationTemplateConfiguration);
 		anniversaryEmployeeRetrieverUtil.addLoyaltyLeave(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1,-1)),groupId,userId,companyId);
+		anniversaryEmployeeRetrieverUtil.updateExperience(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1,-1)));
 	}
 
 }
