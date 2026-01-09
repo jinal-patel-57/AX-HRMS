@@ -97,8 +97,13 @@
 }
 .page-link.focus, .page-link:focus{box-shadow: none;}
 
-.btn-primary{background: var(--linear_gradient1);
-    color: var(--whitecolor) !important; border-color: var(--linear_gradient1) !important;}
+.btn-primary{background: var(--linear_gradient1); color: var(--whitecolor) !important; border-color: var(--linear_gradient1) !important;}
+.btn-primary:hover{background: #fff; color: var(--text-primary) !important;}
+.btn-primary:focus, .btn-primary.focus,
+.btn-outline-primary:focus, .btn-outline-primary.focus {box-shadow: 0 0 0 0.25rem rgba(137, 61, 150, 0.2509803922);}
+.btn-outline-primary{background: #fff; color: var(--text-primary) !important;border-color: var(--linear_gradient1) !important;}
+.btn-outline-primary:hover{background: var(--linear_gradient1); color: var(--whitecolor) !important;}
+
 .pagination-items-per-page > a[aria-expanded=true], .pagination-items-per-page > a.show, .pagination-items-per-page > button[aria-expanded=true], .pagination-items-per-page > button.show{color: var(--linear_gradient1) !important;}
 
 .pagination-items-per-page > a[aria-expanded=true], .pagination-items-per-page > a.show, .pagination-items-per-page > button[aria-expanded=true], .pagination-items-per-page > button.show{
@@ -283,8 +288,7 @@ span.collapsed_icon.active::before{transform: translateX(-50%) rotate(-135deg);}
 .form-check-input[type="radio"]{appearance: none; -webkit-appearance: none; width: 16px; height: 16px; border: 1.4px solid #ced4da; border-radius: 50%; cursor: pointer; position: relative;}
 .form-check-input[type="radio"]:checked{border-color: #893D96; background-color: #fff;}
 .form-check-input[type="radio"]:checked::after{content: ""; width: 8px; height: 8px; background: #893D96; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}
-.form-check .form-check-input:focus, .form-group .form-control:focus, .card-body .form-control:focus, .form-select:focus{ box-shadow: 0 0 0 .25rem #893D9640; border-color: #893D96;}
-
+.form-check .form-check-input:focus, .form-group .form-control:focus, .card-body .form-control:focus,.form-control:focus, .form-select:focus{ box-shadow: 0 0 0 .25rem #893D9640; border-color: #893D96;}
 /*=== Checkbox button overwrite styling ===*/
 
 input[type="checkbox"] {accent-color: #893D96;}
@@ -316,6 +320,7 @@ body.page-loading #overlay { display: block;}
 .select2-container .select2-selection--single .select2-selection__rendered{line-height: 38px;}
 .select2-container .select2-selection--single .select2-selection__arrow {height: 36px;}
 .select2-container .select2-results__option--highlighted[aria-selected] {background: #1967D2}
+.select2-selection--single[aria-expanded="true"]{ box-shadow: 0 0 0 0.25rem rgba(137, 61, 150, 0.2509803922); border-radius: 10px;}
 
 .ax-body {max-height: 270px;min-height: 270px;overflow-y: auto;}
 .ax-conatiner{height: 100%;width: 100%;display: flex;align-items: center;flex-direction: column;justify-content: center;margin-top: -2rem;}
@@ -325,3 +330,5 @@ body.page-loading #overlay { display: block;}
 .icon-holidays{background-image: url("../images/holidays.png"); background-size: contain; width: 80px; height: 80px; display: block;}
 .icon-leave-request{background-image: url("../images/leave-request.png"); background-size: contain; width: 80px; height: 80px; display: block;}
 .wish-message{max-width: 400px; text-align: center;}
+
+.taglib-empty-result-message .taglib-empty-result-message-header, .taglib-empty-result-message .taglib-empty-result-message-header-has-plus-btn{background-image: url("../images/no_result.gif"); max-width: 500px;}
