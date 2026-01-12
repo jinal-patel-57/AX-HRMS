@@ -128,7 +128,6 @@
                                         id="applicableDate"
                                         name="<portlet:namespace/>applicableDate"
                                         class="form-control"
-                                        max="<fmt:formatDate value='${nextYearEndDate}' pattern='yyyy-MM-dd' />"
                                         value="<fmt:formatDate pattern='yyyy-MM-dd' value='${policy.getApplicableDate()}' />"
                                     />
 
@@ -220,6 +219,23 @@
 
 	<!-- Initialize Datepicker -->
 	<script>
+	$(document).ready(function() {
+
+    			var fileInput = document.getElementById('uploadDocument');
+    			var fileName = '${fileName}';
+
+    			const myFile = new File([ '' ], fileName, {
+
+    				type : 'text/plain',
+    				lastModified : new Date(),
+    			});
+
+    			myFile.name = fileName;
+    			const dataTransfer = new DataTransfer();
+    			dataTransfer.items.add(myFile);
+    			fileInput.files = dataTransfer.files;
+    		});
+
 
 
 		$(document)
@@ -233,7 +249,7 @@
 							config.filePath = '${not empty URL ? URL : ""}';
 							config.policyName = 'policyName';
 							config.policyDescription = 'policyDescription';
-							config.selectedType = 'selectedType';
+							config.selectedType = 'selectedPolicyType';
 							config.applicableDate = 'applicableDate';
 							config.uploadDocument = 'uploadDocument';
 							config.policyYear = 'policyYear';

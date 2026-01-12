@@ -10,6 +10,9 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.ax.hrms.exception.NoSuchRolePoliciesException;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -48,15 +51,15 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCRenderCommand {
 	 private static final Log log = LogFactoryUtil.getLog(ListPolicyProcessManagementEmployeeMVCRenderCommand.class);
-	
+
 	@Reference
 	PolicyTypeMasterLocalService policyTypeMasterLocalService;
-	
+
 	@Reference
 	PolicyLocalService policyLocalService;
 	@Reference
 	private RolePoliciesLocalService rolePoliciesLocalService;
-	
+
 	@Reference
 	private AxHrmsCommonApi axHrmsCommonApi;
 
@@ -67,44 +70,80 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 		try {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int selectedYear = ParamUtil.getInteger(renderRequest, AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Year_Policy_Process_Management);
-        
+
         if(selectedYear != 0) {
         	currentYear = selectedYear;
         }
         else {
         	selectedYear = currentYear;
         }
-		
-		
+
+
 		List<Policy> policyList;
-		
+		List<Policy> employeePolicyList = new ArrayList<>();
+		List<RolePolicies> employeeRolePolicyList = new ArrayList<>();
+
 		if(isHrPerson&&selectedYear==0) {
-			
+
 		policyList = policyLocalService.getPolicies(-1, -1);
 		}
 		else if(isHrPerson&&selectedYear!=0) {
 			policyList = policyLocalService.findByYear(selectedYear);
-			
-		}
-		else {
-			policyList = policyLocalService.findByYear(currentYear);
+
 		}
 
-	
-		
-        List<Integer> policyYears = policyLocalService.getAllYear();
+		else {
+
+			policyList = policyLocalService.findByYear(currentYear);
+
+			User user = themeDisplay.getUser();
+			List<Role> userRoleList = user.getRoles();
+			log.info("userRoleList" + userRoleList);
+			RolePolicies rolePolicies;
+
+			List<Long> addedPolicyIds = new ArrayList<>();
+
+			for (Policy policy : policyList) {
+
+				for (Role userRole : userRoleList) {
+
+					try {
+						 rolePolicies =
+								rolePoliciesLocalService.findByPolicyIdAndRoleId(
+										policy.getPolicyId(), userRole.getRoleId()
+								);
+					}catch (NoSuchRolePoliciesException e1){
+						rolePolicies = null;
+
+					}
+
+					if (rolePolicies != null && !addedPolicyIds.contains(policy.getPolicyId())) {
+						employeePolicyList.add(policy);
+						addedPolicyIds.add(policy.getPolicyId());
+						break; 
+					}
+				}
+			}
+
+			policyList = employeePolicyList;
+		}
+
+
+
+
+			List<Integer> policyYears = policyLocalService.getAllYear();
         Collections.sort(policyYears);
 
 		List<PolicyDto> policyDtoList = getPolicyDtoList(policyList,themeDisplay);
-		
+
 
 		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 		SearchContainer<PolicyDto> policySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null, StringPool.BLANK);
-		
+
 		policySearchContainer.setResultsAndTotal(policyDtoList);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Search_Container_Policy_Process_Management, policySearchContainer);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.IS_HR_ADMIN, isHrPerson);
-		
+
         renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Years_List_Policy_Process_Management, policyYears);
 
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Current_Year_Policy_Process_Management, currentYear);
@@ -115,10 +154,10 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 		}
 		return AxHrmsPolicyProcessManagementWebPortletConstants.List_Policy_Process_Management_Employee;
 	}
-	
+
 	public List<PolicyDto> getPolicyDtoList(List<Policy> policyList,ThemeDisplay themeDisplay) throws PortalException {
 		List<PolicyDto> policyDtoList = new ArrayList<>();
-		
+
 		for(Policy policy : policyList) {
 			PolicyDto policyDto = new PolicyDto();
 			policyDto.setDate(axHrmsCommonApi.setDateFormat(policy.getApplicableDate()));
@@ -138,9 +177,9 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 			policyDto.setFile(DLAppLocalServiceUtil.getFileEntry(policy.getPolicyDocumentId()));
 			policyDto.setPreviewURL(DLUtil.getPreviewURL(policyDto.getFile(), policyDto.getFile().getFileVersion(), themeDisplay, StringPool.BLANK));
 			policyDtoList.add(policyDto);
-			
+
 		}
 		return policyDtoList;
 	}
-	
+
 }

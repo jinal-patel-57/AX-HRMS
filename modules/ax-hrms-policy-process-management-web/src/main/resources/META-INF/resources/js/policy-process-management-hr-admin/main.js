@@ -11,6 +11,14 @@
     let policyYear;
     let role;
 
+    function formatDateDDMMYYYY(date) {
+        const dd = String(date.getDate()).padStart(2, '0');
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const yyyy = date.getFullYear();
+        return dd + "-" + mm + "-" + yyyy;
+    }
+
+
     function setConfigs(config){
         namespace = config.namespace;
         
@@ -35,28 +43,39 @@
         }, "Special characters are not allowed");
 
         // ================= DATE VALIDATION (UP TO NEXT YEAR END) =================
-        $.validator.addMethod("validApplicableDate", function (value, element) {
-            if (!value) return true;
+      $.validator.addMethod(
+          "validApplicableDate",
+          function (value, element) {
+              if (!value) return true;
 
-            const selectedDate = new Date(value);
+              const selectedDate = new Date(value);
 
-            const maxDate = new Date();
-            maxDate.setFullYear(maxDate.getFullYear() + 1);
-            maxDate.setMonth(11); // December
-            maxDate.setDate(31);
-            maxDate.setHours(0,0,0,0);
+              const maxDate = new Date();
+              maxDate.setFullYear(maxDate.getFullYear() + 1);
+              maxDate.setMonth(11);
+              maxDate.setDate(31);
+              maxDate.setHours(0,0,0,0);
 
-            selectedDate.setHours(0,0,0,0);
+              selectedDate.setHours(0,0,0,0);
 
-            return selectedDate <= maxDate;
-        }, "Please enter a valid applicable date");
+              return selectedDate <= maxDate;
+          },
+          function () {
+              const maxDate = new Date();
+              maxDate.setFullYear(maxDate.getFullYear() + 1);
+              maxDate.setMonth(11);
+              maxDate.setDate(31);
+
+              return "Please enter a date on or before " + formatDateDDMMYYYY(maxDate);
+          }
+      );
 
 
 
 
 
       $("#addEditPolicyHrAdminForm").validate({
-          errorClass: "text-danger",
+
           rules: {
 
               // Policy Name
@@ -120,7 +139,7 @@
               [namespace + policyDescription]: {
                   required: "Please enter policy description",
                   minlength: "Policy description must be at least 5 characters",
-                  minlength: "Policy description must be at less than or equal to 70 characters",
+                  maxlength: "Policy description must be at less than or equal to 70 characters",
                   noSpecialChars: "Special characters are not allowed"
               },
 
@@ -129,8 +148,8 @@
               },
 
               [namespace + applicableDate]: {
-                  required: "Please select applicable date",
-                  validApplicableDate: "Please enter a valid applicable date"
+                  required: "Please select applicable date"
+
               },
 
               [namespace + uploadDocument]: {
@@ -152,8 +171,10 @@
           },
 
           errorPlacement: function (error, element) {
-              error.insertAfter(element);
-          }
+                          error.addClass('text-danger');
+                          element.after(error);
+                      }
+
       });
 
       $("#" + namespace + "addEditPolicyHrAdminForm")
