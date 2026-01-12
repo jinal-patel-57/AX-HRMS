@@ -122,11 +122,19 @@
 					<div class="col-md-4 col-sm-12 ">
 						<div class="form-group">
 							<label for="applicableDate"><liferay-ui:message
-									key="applicableDate" /><span class="text-danger">*</span></label> <input
-								value="<fmt:formatDate pattern = "yyyy-MM-dd"  value = '${policy.getApplicableDate()}'/>"
-								id="applicableDate" placeholder="Enter Policy Applicable Date"
-								class="form-control datepicker"
-								name="<portlet:namespace/>applicableDate" value="">
+									key="applicableDate" /><span class="text-danger">*</span></label>
+									<input
+                                        type="date"
+                                        id="applicableDate"
+                                        name="<portlet:namespace/>applicableDate"
+                                        class="form-control"
+                                        max="<fmt:formatDate value='${nextYearEndDate}' pattern='yyyy-MM-dd' />"
+                                        value="<fmt:formatDate pattern='yyyy-MM-dd' value='${policy.getApplicableDate()}' />"
+                                    />
+
+
+
+
 
 						</div>
 
@@ -212,32 +220,7 @@
 
 	<!-- Initialize Datepicker -->
 	<script>
-		$(document).ready(function() {
-			var currentYear = new Date().getFullYear();
-			var startDate = new Date(currentYear - 2, 0, 1); // January 1st of previous year
-			var endDate = new Date(currentYear + 1, 11, 31); // December 31st of next year
 
-			$('.datepicker').datepicker({
-				format : 'yyyy-mm-dd',
-				autoclose : true,
-				startDate : startDate,
-				endDate : endDate
-			});
-
-			var fileInput = document.getElementById('uploadDocument');
-			var fileName = '${fileName}';
-
-			const myFile = new File([ '' ], fileName, {
-
-				type : 'text/plain',
-				lastModified : new Date(),
-			});
-
-			myFile.name = fileName;
-			const dataTransfer = new DataTransfer();
-			dataTransfer.items.add(myFile);
-			fileInput.files = dataTransfer.files;
-		});
 
 		$(document)
 				.ready(

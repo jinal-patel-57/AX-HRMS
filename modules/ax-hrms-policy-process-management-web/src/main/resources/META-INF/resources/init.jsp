@@ -29,13 +29,18 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.ax.hrms.master.service.PolicyTypeMasterLocalServiceUtil"%>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+        integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<!-- Bootstrap Datepicker JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 
-<script type="text/javascript"><%@include file="/js/policy-process-management-hr-admin/main.js" %></script>
-<script type="text/javascript"><%@include file="/js/policy-process-management-employee/main.js" %></script>
+<!-- <script type="text/javascript"><%@include file="/js/policy-process-management-hr-admin/main.js" %></script>
+<script type="text/javascript"><%@include file="/js/policy-process-management-employee/main.js" %></script> -->
+
+
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -64,10 +69,8 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@page import="javax.portlet.PortletURL"%>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
-<!-- Bootstrap Datepicker JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 
 <liferay-theme:defineObjects />
 

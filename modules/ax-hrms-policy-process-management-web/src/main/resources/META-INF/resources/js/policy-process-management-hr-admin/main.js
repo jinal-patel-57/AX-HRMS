@@ -28,64 +28,140 @@
         addEditPolicyHrAdminForm = $('#'+namespace+'addEditPolicyHrAdminForm');
         yearSelectElement = document.getElementById('policyYear');
 
-        $("#addEditPolicyHrAdminForm").validate({
-            rules: {
-                [namespace + policyName]:{
-                    required: true
-//                    validLetters:true
-                },
 
-                [namespace + policyDescription]:{
-                    required:true,
-//                    validLetters:true
-                },
-                [namespace + selectedType]:{
-                    required:true,
-                },
+        // ================= NO SPECIAL CHARACTERS =================
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9\s]+$/.test(value);
+        }, "Special characters are not allowed");
 
-                [namespace + applicableDate]:{
-                    required:true,
-//                    validDate:true
-                },
-                [namespace + uploadDocument]: {
-                    required: true
-                },
-                [namespace + policyYear]: {
-                    required: true
-                },
-                [namespace + role]: {
-                	required: true
-                }
-            },
-            messages: {
-                [namespace + policyName]:{
-                    required: "Please enter policy name..."
-                },
+        // ================= DATE VALIDATION (UP TO NEXT YEAR END) =================
+        $.validator.addMethod("validApplicableDate", function (value, element) {
+            if (!value) return true;
 
-                [namespace + policyDescription]:{
-                    required: "Please enter policy Description name..."
-                },
+            const selectedDate = new Date(value);
 
-                [namespace + applicableDate]:{
-                    required: "Please enter Applicable Date name..."
-                },
-                [namespace + selectedType]: {
-                    required: "Please select Policy Type"
-                },
-                [namespace + uploadDocument]: {
-                    required: "Please upload document"
-                },
-                [namespace + policyYear]: {
-                    required: "Please select year"
-                },
-                [namespace + role]: {
-                	required: "Please select role"
-                }
-            },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-            }
-        });
+            const maxDate = new Date();
+            maxDate.setFullYear(maxDate.getFullYear() + 1);
+            maxDate.setMonth(11); // December
+            maxDate.setDate(31);
+            maxDate.setHours(0,0,0,0);
+
+            selectedDate.setHours(0,0,0,0);
+
+            return selectedDate <= maxDate;
+        }, "Please enter a valid applicable date");
+
+
+
+
+
+      $("#addEditPolicyHrAdminForm").validate({
+          errorClass: "text-danger",
+          rules: {
+
+              // Policy Name
+              [namespace + policyName]: {
+                  required: true,
+                  minlength: 3,
+                  maxlength: 70,
+                  noSpecialChars: true
+              },
+
+              // Policy Description
+              [namespace + policyDescription]: {
+                  required: true,
+                  minlength: 5,
+                  maxlength:70,
+                  noSpecialChars: true
+              },
+
+              // Policy Type
+              [namespace + selectedType]: {
+                  required: true
+              },
+
+              // Applicable Date
+              [namespace + applicableDate]: {
+                  required: true,
+                  validApplicableDate: true
+              },
+
+              // Upload Document
+              [namespace + uploadDocument]: {
+                  required: true
+              },
+
+              // Policy Year
+              [namespace + policyYear]: {
+                  required: true,
+                  digits: true
+              },
+
+              // Role
+              [namespace + role]: {
+                  required: true
+              },
+
+              // Status (radio)
+              [namespace + "status"]: {
+                  required: true
+              }
+          },
+
+          messages: {
+
+              [namespace + policyName]: {
+                  required: "Please enter policy name",
+                  minlength: "Policy name must be at least 3 characters",
+                  maxlength: "Policy name must be at less then 70 characters",
+                  noSpecialChars: "Special characters are not allowed"
+              },
+
+              [namespace + policyDescription]: {
+                  required: "Please enter policy description",
+                  minlength: "Policy description must be at least 5 characters",
+                  minlength: "Policy description must be at less than or equal to 70 characters",
+                  noSpecialChars: "Special characters are not allowed"
+              },
+
+              [namespace + selectedType]: {
+                  required: "Please select policy type"
+              },
+
+              [namespace + applicableDate]: {
+                  required: "Please select applicable date",
+                  validApplicableDate: "Please enter a valid applicable date"
+              },
+
+              [namespace + uploadDocument]: {
+                  required: "Please upload document"
+              },
+
+              [namespace + policyYear]: {
+                  required: "Please select year",
+                  digits: "Invalid year"
+              },
+
+              [namespace + role]: {
+                  required: "Please select role"
+              },
+
+              [namespace + "status"]: {
+                  required: "Please select status"
+              }
+          },
+
+          errorPlacement: function (error, element) {
+              error.insertAfter(element);
+          }
+      });
+
+      $("#" + namespace + "addEditPolicyHrAdminForm")
+          .find("input, select")
+          .on("change blur keyup", function () {
+              $(this).valid();
+          });
+
 
 
         addEditPolicyHrAdminForm.ready(function(){
@@ -160,31 +236,51 @@
 
     }
 
-    function setFileData(config){
-//        debugger;
+//    function setFileData(config){
+////        debugger;
+//
+//        namespace = config.namespace;
+//        console.log(config);
+//        fileName = config.fileName;
+//        filePath = config.filePath;
+//
+//        // Get a reference to our file input
+//        const fileInput = document.querySelector("#"+namespace+"uploadDocument");
+//        // Create a File object with content "Hello World!", name "myFile.txt", and type "text/plain"
+//        const myFile = new File(['Hello World!'], fileName,{});
+//
+//        // Set custom file name and path (if needed)
+//        myFile.name = fileName; // Set custom file name
+//        myFile.webkitRelativePath = filePath; // Set custom file path
+//
+//        // Create a DataTransfer object
+//        const dataTransfer = new DataTransfer();
+//        // Add the custom file to the DataTransfer object
+//        dataTransfer.items.add(myFile);
+//
+//        // Set the files property of the file input element to the files contained in the DataTransfer object
+//        fileInput.files = dataTransfer.files;
+//    }
 
-        namespace = config.namespace;
-        console.log(config);
-        fileName = config.fileName;
-        filePath = config.filePath;
+function setFileData(config) {
 
-        // Get a reference to our file input
-        const fileInput = document.querySelector("#"+namespace+"uploadDocument");
-        // Create a File object with content "Hello World!", name "myFile.txt", and type "text/plain"
-        const myFile = new File(['Hello World!'], fileName,{});
+    namespace = config.namespace;
+    fileName = config.fileName;
 
-        // Set custom file name and path (if needed)
-        myFile.name = fileName; // Set custom file name
-        myFile.webkitRelativePath = filePath; // Set custom file path
+    const fileInput = document.querySelector("#" + namespace + "uploadDocument");
 
-        // Create a DataTransfer object
-        const dataTransfer = new DataTransfer();
-        // Add the custom file to the DataTransfer object
-        dataTransfer.items.add(myFile);
-
-        // Set the files property of the file input element to the files contained in the DataTransfer object
-        fileInput.files = dataTransfer.files;
+    // ✅ VERY IMPORTANT CHECK
+    if (!fileInput || !fileName) {
+        return;
     }
+
+    const myFile = new File([''], fileName);
+
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(myFile);
+
+    fileInput.files = dataTransfer.files;
+}
 
     function setConfigsForDeletePolicy(config){
         namespace = config.namespace;

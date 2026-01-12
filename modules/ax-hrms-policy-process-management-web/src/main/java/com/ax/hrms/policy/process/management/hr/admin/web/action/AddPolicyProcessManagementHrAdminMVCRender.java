@@ -1,5 +1,7 @@
 package com.ax.hrms.policy.process.management.hr.admin.web.action;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -51,10 +53,23 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 		List<Integer> policyYear = policyLocalService.getAllYear();
 
 		List<Role> roles = RoleLocalServiceUtil.getRoles(-1, -1);
-        
-        
-        
-        renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, roles);
+
+		// ------------------ Calculate next year end date ------------------
+		Calendar cal = Calendar.getInstance();
+
+		cal.add(Calendar.YEAR, 1); // next year
+		cal.set(Calendar.MONTH, Calendar.DECEMBER);
+		cal.set(Calendar.DAY_OF_MONTH, 31);
+
+		Date nextYearEndDate = cal.getTime();
+
+		// Set attribute for JSP
+		renderRequest.setAttribute("nextYearEndDate", nextYearEndDate);
+
+
+
+
+		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, roles);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Types_Policy_Process_Management, policyTypes);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Year_Policy_Process_Management, policyYear);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Year_Policy_Process_Management, ParamUtil.getInteger(renderRequest,AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Year_Policy_Process_Management));
