@@ -16,6 +16,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=AkHrmsLeaveBalanceReportWeb",
+		"com.liferay.portlet.footer-portlet-javascript=/js/main.js",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/jsp/leavebalance/view.jsp",
 		"javax.portlet.name=" + AkHrmsLeaveBalanceReportWebPortletKeys.AKHRMSLEAVEBALANCEREPORTWEB,
