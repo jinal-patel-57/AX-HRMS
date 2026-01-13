@@ -120,7 +120,7 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 					if (rolePolicies != null && !addedPolicyIds.contains(policy.getPolicyId())) {
 						employeePolicyList.add(policy);
 						addedPolicyIds.add(policy.getPolicyId());
-						break; 
+						break;
 					}
 				}
 			}
