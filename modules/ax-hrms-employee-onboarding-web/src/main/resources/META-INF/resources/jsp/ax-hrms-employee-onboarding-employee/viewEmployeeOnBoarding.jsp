@@ -503,7 +503,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Start Date</div>
                                 <div class="label-content">
-                                    <fmt:formatDate value='${education.startDate}' pattern='yyyy-MM-dd'/>
+                                    <fmt:formatDate value='${education.startDate}' pattern='dd-MM-yyyy'/>
                                 </div>
                             </div>
                         </div>
@@ -511,7 +511,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">End Date</div>
                                 <div class="label-content">
-                                    <fmt:formatDate value='${education.endDate}' pattern='yyyy-MM-dd'/>
+                                    <fmt:formatDate value='${education.endDate}' pattern='dd-MM-yyyy'/>
                                 </div>
                             </div>
                         </div>
@@ -565,7 +565,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Joining Date</div>
                                 <div class="label-content">
-                                    <fmt:formatDate value='${experience.experienceJoiningDate}' pattern='yyyy-MM-dd'/>
+                                    <fmt:formatDate value='${experience.experienceJoiningDate}' pattern='dd-MM-yyyy'/>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +573,7 @@
                             <div class="form-group-view">
                                 <div class="label-name">Reliving Date</div>
                                 <div class="label-content">
-                                    <fmt:formatDate value='${experience.relievingDate}' pattern='yyyy-MM-dd'/>
+                                    <fmt:formatDate value='${experience.relievingDate}' pattern='dd-MM-yyyy'/>
                                 </div>
                             </div>
                         </div>
@@ -784,7 +784,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
                             <div class="label-name">Date of Birth</div>
-                            <div class="label-content"><fmt:formatDate value='${nominee.nomineeDob}' pattern='yyyy-MM-dd'/></div>
+                            <div class="label-content"><fmt:formatDate value='${nominee.nomineeDob}' pattern='dd-MM-yyyy'/></div>
                         </div>
                     </div>
                 </div>

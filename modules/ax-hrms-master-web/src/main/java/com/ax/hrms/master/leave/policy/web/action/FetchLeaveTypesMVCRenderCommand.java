@@ -8,6 +8,8 @@ import com.ax.hrms.master.web.constants.AxLeavePolicyMasterWebPortletKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
@@ -31,7 +33,8 @@ public class FetchLeaveTypesMVCRenderCommand implements MVCRenderCommand {
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-
+		
+		String cmd = ParamUtil.getString(renderRequest, "cmd");
 		try {
 			List<LeaveTypeMaster> leaveTypeMasterList = leaveTypeMasterLocalService.getLeaveTypeMasters(-1, -1);
 			renderRequest.setAttribute(AxLeavePolicyMasterWebPortletConstants.LEAVE_TYPE_MASTER_LIST,
@@ -39,6 +42,12 @@ public class FetchLeaveTypesMVCRenderCommand implements MVCRenderCommand {
 		} catch (Exception e) {
 			log.error("FetchLeaveTypeMasterListMVCRenderCommand >>> render >>> error in catch " + e.getMessage());
 		}
-		return AxLeavePolicyMasterWebPortletConstants.ADD_LEAVE_POLICY_MASTER_JSP;
+		if(Validator.isNotNull(cmd) && "cloneLeavePolicy".equalsIgnoreCase(cmd)) {
+			log.info("clone leave policy called");
+			return "/jsp/leave-policy-master/cloneLeavePolicy.jsp"; 
+		} else {
+			return AxLeavePolicyMasterWebPortletConstants.ADD_LEAVE_POLICY_MASTER_JSP;
+		}
+		
 	}
 }
