@@ -5,7 +5,7 @@ import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.model.LeaveBalanceHistory;
-import com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
+import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys.*;
 import com.ax.hrms.report.web.util.ExcelExportUtil;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.LeaveBalanceHistoryLocalService;
@@ -29,46 +29,51 @@ import java.util.*;
 
 @Component(
         property = {
-                "javax.portlet.name=" + AkHrmsLeaveBalanceReportWebPortletKeys.AKHRMSLEAVEBALANCEREPORTWEB,
+                "javax.portlet.name=" + AKHRMSLEAVEBALANCEREPORTWEB,
                 "mvc.command.name=/leave_balance/export"
         },
         service = MVCResourceCommand.class
 )
 public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
 
-    @Override
+    public static final String EMPLOYEE_IDS = "employeeIds";
+
+	public static final String YEAR = "year";
+
+	public static final String EMPLOYEE_TYPE = "employeeType";
+	
+	@Override
     public boolean serveResource(ResourceRequest request, ResourceResponse response) {
 
         try {
-            String employeeType = ParamUtil.getString(request, "employeeType");
-            int year = ParamUtil.getInteger(request, "year");
+            String employeeType = ParamUtil.getString(request, EMPLOYEE_TYPE);
+            int year = ParamUtil.getInteger(request, YEAR);
             log.info("year -- " + year);
             List<LeaveTypeMaster> leaveTypes = leaveTypeMasterLocalService.getLeaveTypeMasters(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
             Map<String, Map<String, Double>> leaveBalanceData = new LinkedHashMap<>();
 
             long[] employeeIds;
-            if (AkHrmsLeaveBalanceReportWebPortletKeys.ALL.equalsIgnoreCase(employeeType)) {
+            if (ALL.equalsIgnoreCase(employeeType)) {
                 List<EmployeeDetails> allEmployees = employeeDetailsLocalService.findByIsTerminated(false);
                 employeeIds = allEmployees.stream().mapToLong(EmployeeDetails::getEmployeeId).toArray();
             } else {
-                employeeIds = ParamUtil.getLongValues(request, "employeeIds");
+                employeeIds = ParamUtil.getLongValues(request, EMPLOYEE_IDS);
             }
             for (long employeeId : employeeIds) {
 
                 EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
                 JSONObject employeeDetailsJson = JSONFactoryUtil.createJSONObject();
-                employeeDetailsJson.put(AkHrmsLeaveBalanceReportWebPortletKeys.EMPLOYEE_ID, employeeDetails.getEmployeeCode());
-                employeeDetailsJson.put(AkHrmsLeaveBalanceReportWebPortletKeys.EMPLOYEE_NAME, employeeDetails.getFirstName() + StringPool.SPACE + employeeDetails.getLastName());
-                employeeDetailsJson.put(AkHrmsLeaveBalanceReportWebPortletKeys.EMPLOYEE_EMAIL, employeeDetails.getOfficialEmail());
+                employeeDetailsJson.put(EMPLOYEE_ID, employeeDetails.getEmployeeCode());
+                employeeDetailsJson.put(EMPLOYEE_NAME, employeeDetails.getFirstName() + StringPool.SPACE + employeeDetails.getLastName());
+                employeeDetailsJson.put(EMPLOYEE_EMAIL, employeeDetails.getOfficialEmail());
 
                 Map<String, Double> leaveTypeBalanceMap = new LinkedHashMap<>();
 
                 for (LeaveTypeMaster leaveType : leaveTypes) {
 
                     long leaveTypeMasterId = leaveType.getLeaveTypeMasterId();
-
                     
                     log.info("cur year -- " + Year.now().getValue()); 
                     if(Year.now().getValue() == year) {
@@ -96,7 +101,7 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                 log.info("leaveTypeBalanceMap -- " + leaveTypeBalanceMap);
                 leaveBalanceData.put(employeeDetailsJson.toString(), leaveTypeBalanceMap);
             }
-            ExcelExportUtil.exportLeaveBalance(leaveBalanceData, response, AkHrmsLeaveBalanceReportWebPortletKeys.LEAVE_BALANCE_EXPORT_FILE_NAME);
+            ExcelExportUtil.exportLeaveBalance(leaveBalanceData, response, LEAVE_BALANCE_EXPORT_FILE_NAME);
         } catch (Exception e) {
             log.error("Exception occurred in LeaveBalanceExportResourceCommand", e);
         }
