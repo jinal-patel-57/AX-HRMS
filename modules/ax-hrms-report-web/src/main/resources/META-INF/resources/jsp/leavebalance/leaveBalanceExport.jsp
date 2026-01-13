@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-md-5 col-sm-12">
                     <div class="form-group">
-                        <select class="form-control mt-3 custom-multi-select"
+                        <select class="form-control mt-3 custom-select"
                             id="employeeIds" data-live-search="true"
                             name="<portlet:namespace/>employeeIds"
                             multiple placeholder="Select Employee(s)"
@@ -71,10 +71,8 @@
                                 </option>
                             </c:forEach>
                         </select>
-
-                        <small class="form-text text-muted">
-                            Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) to select multiple employees
-                        </small>
+                        <input type="hidden" id="<portlet:namespace />employeeIds" name="<portlet:namespace />employeeIds"/>
+                        <div id="selectedOptionsContainer" class="selected-options"></div>
                     </div>
                 </div>
             </div>
