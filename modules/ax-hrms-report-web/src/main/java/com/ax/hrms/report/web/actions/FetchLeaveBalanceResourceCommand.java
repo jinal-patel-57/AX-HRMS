@@ -37,10 +37,9 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
 
         try {
             String employeeType = ParamUtil.getString(request, "employeeType");
-            String periodType = ParamUtil.getString(request, "periodType");
+            int year = ParamUtil.getInteger(request, "year");
 
-            List<LeaveTypeMaster> leaveTypes =
-                    leaveTypeMasterLocalService.getLeaveTypeMasters(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+            List<LeaveTypeMaster> leaveTypes = leaveTypeMasterLocalService.getLeaveTypeMasters(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
             Map<String, Map<String, Double>> leaveBalanceData = new LinkedHashMap<>();
 
@@ -69,7 +68,7 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                     LeaveBalance leaveBalance = null;
 
                     try {
-                        leaveBalance = leaveBalanceLocalService.findByEmployeeIdAndLeaveTypeMasterId(employeeId, leaveTypeMasterId);
+                        leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
                     } catch (Exception e) {
                         _log.warn("LeaveBalance not found for employeeId=" + employeeId +
                                 ", leaveTypeId=" + leaveTypeMasterId);
