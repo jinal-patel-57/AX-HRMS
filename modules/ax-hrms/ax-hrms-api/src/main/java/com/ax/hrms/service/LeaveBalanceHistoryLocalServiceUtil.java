@@ -235,6 +235,14 @@ public class LeaveBalanceHistoryLocalServiceUtil {
 		return getService().findByEmployeeIdAndYear(employeeId, year);
 	}
 
+	public static LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(
+			long employeeId, long leaveTypeMasterId, int year)
+		throws com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException {
+
+		return getService().findByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year);
+	}
+
 	public static List<LeaveBalanceHistory> findByYear(int year) {
 		return getService().findByYear(year);
 	}

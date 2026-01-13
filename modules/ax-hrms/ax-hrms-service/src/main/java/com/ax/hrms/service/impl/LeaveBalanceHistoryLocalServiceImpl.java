@@ -14,6 +14,7 @@
 
 package com.ax.hrms.service.impl;
 
+import com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException;
 import com.ax.hrms.model.LeaveBalanceHistory;
 import com.ax.hrms.service.base.LeaveBalanceHistoryLocalServiceBaseImpl;
 
@@ -53,5 +54,8 @@ public class LeaveBalanceHistoryLocalServiceImpl
 	}
 	public List<LeaveBalanceHistory> findByEmployeeId(long employeeId) {
 		return leaveBalanceHistoryPersistence.findByEmployeeId(employeeId);
+	}
+	public LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(long employeeId, long leaveTypeMasterId, int year) throws NoSuchLeaveBalanceHistoryException {
+		return leaveBalanceHistoryPersistence.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
 	}
 }

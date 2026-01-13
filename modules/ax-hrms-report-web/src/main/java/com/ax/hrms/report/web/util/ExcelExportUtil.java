@@ -3,6 +3,8 @@ package com.ax.hrms.report.web.util;
 import com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.Validator;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -80,53 +82,58 @@ public class ExcelExportUtil {
 
             // Paid Leaves
             int paidStartCol = colIndex;
-            for (String leave : paidLeaves) {
-                Cell cell = headerRow2.createCell(colIndex++);
-                cell.setCellValue(leave);
-                cell.setCellStyle(headerStyle);
+            if(Validator.isNotNull(paidLeaves) && !paidLeaves.isEmpty() && paidLeaves.size()>0) {
+            	for (String leave : paidLeaves) {
+            		Cell cell = headerRow2.createCell(colIndex++);
+            		cell.setCellValue(leave);
+            		cell.setCellStyle(headerStyle);
+            	}
+            	Cell paidTotalCell = headerRow2.createCell(colIndex++);
+            	paidTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
+            	paidTotalCell.setCellStyle(headerStyle);
+            	
+            	sheet.addMergedRegion(new CellRangeAddress(0, 0, paidStartCol, colIndex - 1));
+            	Cell paidHeader = headerRow1.createCell(paidStartCol);
+            	paidHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_PAID);
+            	paidHeader.setCellStyle(headerStyle);
             }
-            Cell paidTotalCell = headerRow2.createCell(colIndex++);
-            paidTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
-            paidTotalCell.setCellStyle(headerStyle);
-
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, paidStartCol, colIndex - 1));
-            Cell paidHeader = headerRow1.createCell(paidStartCol);
-            paidHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_PAID);
-            paidHeader.setCellStyle(headerStyle);
 
             // Unpaid Leaves
             int unpaidStartCol = colIndex;
-            for (String leave : unpaidLeaves) {
-                Cell cell = headerRow2.createCell(colIndex++);
-                cell.setCellValue(leave);
-                cell.setCellStyle(headerStyle);
+            if(Validator.isNotNull(unpaidLeaves) && !unpaidLeaves.isEmpty() && unpaidLeaves.size()>0) {
+            	for (String leave : unpaidLeaves) {
+            		Cell cell = headerRow2.createCell(colIndex++);
+            		cell.setCellValue(leave);
+            		cell.setCellStyle(headerStyle);
+            	}
+            	Cell unpaidTotalCell = headerRow2.createCell(colIndex++);
+            	unpaidTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
+            	unpaidTotalCell.setCellStyle(headerStyle);
+            	
+            	sheet.addMergedRegion(new CellRangeAddress(0, 0, unpaidStartCol, colIndex - 1));
+            	Cell unpaidHeader = headerRow1.createCell(unpaidStartCol);
+            	unpaidHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_UNPAID);
+            	unpaidHeader.setCellStyle(headerStyle);
             }
-            Cell unpaidTotalCell = headerRow2.createCell(colIndex++);
-            unpaidTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
-            unpaidTotalCell.setCellStyle(headerStyle);
-
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, unpaidStartCol, colIndex - 1));
-            Cell unpaidHeader = headerRow1.createCell(unpaidStartCol);
-            unpaidHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_UNPAID);
-            unpaidHeader.setCellStyle(headerStyle);
 
             // Compensatory Off
             int compOffStartCol = colIndex;
-            for (String leave : compOffLeaves) {
-                Cell cell = headerRow2.createCell(colIndex++);
-                cell.setCellValue(leave);
-                cell.setCellStyle(headerStyle);
+            if(Validator.isNotNull(compOffLeaves) && !compOffLeaves.isEmpty() && compOffLeaves.size()>0) {
+            	for (String leave : compOffLeaves) {
+            		Cell cell = headerRow2.createCell(colIndex++);
+            		cell.setCellValue(leave);
+            		cell.setCellStyle(headerStyle);
+            	}
+            	Cell compTotalCell = headerRow2.createCell(colIndex++);
+            	compTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
+            	compTotalCell.setCellStyle(headerStyle);
+            	
+            	sheet.addMergedRegion(new CellRangeAddress(0, 0, compOffStartCol, colIndex - 1));
+            	Cell compHeader = headerRow1.createCell(compOffStartCol);
+            	compHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.COMP_OFF);
+            	compHeader.setCellStyle(headerStyle);
             }
-            Cell compTotalCell = headerRow2.createCell(colIndex++);
-            compTotalCell.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.TOTAL);
-            compTotalCell.setCellStyle(headerStyle);
-
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, compOffStartCol, colIndex - 1));
-            Cell compHeader = headerRow1.createCell(compOffStartCol);
-            compHeader.setCellValue(AkHrmsLeaveBalanceReportWebPortletKeys.COMP_OFF);
-            compHeader.setCellStyle(headerStyle);
-
-
+            
             int rowIndex = 2;
             for (Map.Entry<String, Map<String, Double>> empEntry : leaveBalanceData.entrySet()) {
                 Row row = sheet.createRow(rowIndex++);
@@ -142,34 +149,39 @@ public class ExcelExportUtil {
                 // Paid Leaves
                 double paidSum = 0.0;
                 int paidCol = paidStartCol;
-                for (String leave : paidLeaves) {
-                    double val = balances.getOrDefault(leave, 0.0);
-                    row.createCell(paidCol++).setCellValue(val);
-                    paidSum += val;
+                if(Validator.isNotNull(paidLeaves) && !paidLeaves.isEmpty() && paidLeaves.size()>0) {
+                	for (String leave : paidLeaves) {
+                		double val = balances.getOrDefault(leave, 0.0);
+                		row.createCell(paidCol++).setCellValue(val);
+                		paidSum += val;
+                	}
+                	row.createCell(paidCol).setCellValue(paidSum);
                 }
-                row.createCell(paidCol).setCellValue(paidSum);
+                
+                if(Validator.isNotNull(unpaidLeaves) && !unpaidLeaves.isEmpty() && unpaidLeaves.size()>0) {
+                	// Unpaid Leaves
+                	double unpaidSum = 0.0;
+                	int unpaidCol = unpaidStartCol;
+                	for (String leave : unpaidLeaves) {
+                		double val = balances.getOrDefault(leave, 0.0);
+                		row.createCell(unpaidCol++).setCellValue(val);
+                		unpaidSum += val;
+                	}
+                	row.createCell(unpaidCol).setCellValue(unpaidSum);
+                }
 
-                // Unpaid Leaves
-                double unpaidSum = 0.0;
-                int unpaidCol = unpaidStartCol;
-                for (String leave : unpaidLeaves) {
-                    double val = balances.getOrDefault(leave, 0.0);
-                    row.createCell(unpaidCol++).setCellValue(val);
-                    unpaidSum += val;
-                }
-                row.createCell(unpaidCol).setCellValue(unpaidSum);
-
-                // Compensatory Off
-                double compSum = 0.0;
-                int compCol = compOffStartCol;
-                for (String leave : compOffLeaves) {
-                    double val = balances.getOrDefault(leave, 0.0);
-                    row.createCell(compCol++).setCellValue(val);
-                    compSum += val;
-                }
-                row.createCell(compCol).setCellValue(compSum);
+                if(Validator.isNotNull(compOffLeaves) && !compOffLeaves.isEmpty() && compOffLeaves.size()>0) {
+                	// Compensatory Off
+	                double compSum = 0.0;
+	                int compCol = compOffStartCol;
+	                for (String leave : compOffLeaves) {
+	                    double val = balances.getOrDefault(leave, 0.0);
+	                    row.createCell(compCol++).setCellValue(val);
+	                    compSum += val;
+	                }
+	                row.createCell(compCol).setCellValue(compSum);
+	            }
             }
-
             for (int i = 0; i < colIndex; i++) {
                 sheet.autoSizeColumn(i);
             }
@@ -182,7 +194,6 @@ public class ExcelExportUtil {
             try (OutputStream os = response.getPortletOutputStream()) {
                 workbook.write(os);
             }
-
         } catch (Exception e) {
             throw e;
         }

@@ -60,11 +60,12 @@
                 </div>
                 <div class="col-md-5 col-sm-12">
                     <div class="form-group">
-                        <select class="form-control mt-3"
-                            id="employeeIds"
+                        <select class="form-control mt-3 custom-select"
+                            id="employeeIds" data-live-search="true"
                             name="<portlet:namespace/>employeeIds"
                             multiple
                             disabled>
+                            <option value="">Select Employees</option>
                             <c:forEach var="employee" items="${employeeList}">
                                 <option value="${employee.getEmployeeId()}">
                                     ${employee.getEmployeeCode() }: ${employee.getFirstName()} ${employee.getLastName() }

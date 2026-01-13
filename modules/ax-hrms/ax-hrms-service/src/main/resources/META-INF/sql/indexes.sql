@@ -80,7 +80,7 @@ create index IX_C9D3B07D on ax_LeaveBalance (employeeId, year, leaveTypeMasterId
 create unique index IX_ECDFE349 on ax_LeaveBalance (uuid_[$COLUMN_LENGTH:75$], groupId);
 create index IX_909ED9FA on ax_LeaveBalance (year, leaveTypeMasterId);
 
-create index IX_334E291B on ax_LeaveBalanceHistory (employeeId, year);
+create index IX_8F94A603 on ax_LeaveBalanceHistory (employeeId, year, leaveTypeMasterId);
 create unique index IX_9AA9C603 on ax_LeaveBalanceHistory (uuid_[$COLUMN_LENGTH:75$], groupId);
 create index IX_C9D65BE on ax_LeaveBalanceHistory (year);
 

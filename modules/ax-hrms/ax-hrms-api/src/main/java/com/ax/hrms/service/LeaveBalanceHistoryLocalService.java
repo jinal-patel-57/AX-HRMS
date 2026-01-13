@@ -5,6 +5,7 @@
 
 package com.ax.hrms.service;
 
+import com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException;
 import com.ax.hrms.model.LeaveBalanceHistory;
 
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -214,6 +215,10 @@ public interface LeaveBalanceHistoryLocalService
 
 	public List<LeaveBalanceHistory> findByEmployeeIdAndYear(
 		long employeeId, int year);
+
+	public LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(
+			long employeeId, long leaveTypeMasterId, int year)
+		throws NoSuchLeaveBalanceHistoryException;
 
 	public List<LeaveBalanceHistory> findByYear(int year);
 

@@ -265,6 +265,17 @@ public class LeaveBalanceHistoryLocalServiceWrapper
 	}
 
 	@Override
+	public com.ax.hrms.model.LeaveBalanceHistory
+			findByEmployeeIdLeaveTypeMasterIdAndYear(
+				long employeeId, long leaveTypeMasterId, int year)
+		throws com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException {
+
+		return _leaveBalanceHistoryLocalService.
+			findByEmployeeIdLeaveTypeMasterIdAndYear(
+				employeeId, leaveTypeMasterId, year);
+	}
+
+	@Override
 	public java.util.List<com.ax.hrms.model.LeaveBalanceHistory> findByYear(
 		int year) {
 

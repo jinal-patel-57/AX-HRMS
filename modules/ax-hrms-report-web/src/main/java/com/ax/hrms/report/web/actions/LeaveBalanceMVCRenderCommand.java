@@ -43,7 +43,7 @@ public class LeaveBalanceMVCRenderCommand implements MVCRenderCommand {
         List<EmployeeDetails> employeeList = employeeDetailsLocalService.findByIsTerminated(false);
         renderRequest.setAttribute("employeeList", employeeList);
         renderRequest.setAttribute("yearList", getDistinctYearsDesc());
-        return "/leaveBalanceExport.jsp";
+        return "/jsp/leavebalance/leaveBalanceExport.jsp";
     }
 
     public List<Integer> getDistinctYearsDesc() {

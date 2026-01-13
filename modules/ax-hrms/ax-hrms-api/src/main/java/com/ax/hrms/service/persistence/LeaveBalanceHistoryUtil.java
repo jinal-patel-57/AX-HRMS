@@ -1054,6 +1054,87 @@ public class LeaveBalanceHistoryUtil {
 	}
 
 	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or throws a <code>NoSuchLeaveBalanceHistoryException</code> if it could not be found.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the matching leave balance history
+	 * @throws NoSuchLeaveBalanceHistoryException if a matching leave balance history could not be found
+	 */
+	public static LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(
+			long employeeId, long leaveTypeMasterId, int year)
+		throws com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException {
+
+		return getPersistence().findByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year);
+	}
+
+	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the matching leave balance history, or <code>null</code> if a matching leave balance history could not be found
+	 */
+	public static LeaveBalanceHistory fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year) {
+
+		return getPersistence().fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year);
+	}
+
+	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching leave balance history, or <code>null</code> if a matching leave balance history could not be found
+	 */
+	public static LeaveBalanceHistory fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year,
+		boolean useFinderCache) {
+
+		return getPersistence().fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year, useFinderCache);
+	}
+
+	/**
+	 * Removes the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; from the database.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the leave balance history that was removed
+	 */
+	public static LeaveBalanceHistory
+			removeByEmployeeIdLeaveTypeMasterIdAndYear(
+				long employeeId, long leaveTypeMasterId, int year)
+		throws com.ax.hrms.exception.NoSuchLeaveBalanceHistoryException {
+
+		return getPersistence().removeByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year);
+	}
+
+	/**
+	 * Returns the number of leave balance histories where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the number of matching leave balance histories
+	 */
+	public static int countByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year) {
+
+		return getPersistence().countByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year);
+	}
+
+	/**
 	 * Caches the leave balance history in the entity cache if it is enabled.
 	 *
 	 * @param leaveBalanceHistory the leave balance history

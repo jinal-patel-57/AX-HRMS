@@ -4,9 +4,11 @@ import com.ax.hrms.master.model.LeaveTypeMaster;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveBalance;
+import com.ax.hrms.model.LeaveBalanceHistory;
 import com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
 import com.ax.hrms.report.web.util.ExcelExportUtil;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.LeaveBalanceHistoryLocalService;
 import com.ax.hrms.service.LeaveBalanceLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -20,6 +22,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+
+import java.time.Year;
 import java.util.*;
 
 
@@ -38,7 +42,7 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
         try {
             String employeeType = ParamUtil.getString(request, "employeeType");
             int year = ParamUtil.getInteger(request, "year");
-
+            log.info("year -- " + year);
             List<LeaveTypeMaster> leaveTypes = leaveTypeMasterLocalService.getLeaveTypeMasters(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
             Map<String, Map<String, Double>> leaveBalanceData = new LinkedHashMap<>();
@@ -65,37 +69,47 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
 
                     long leaveTypeMasterId = leaveType.getLeaveTypeMasterId();
 
-                    LeaveBalance leaveBalance = null;
-
-                    try {
-                        leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
-                    } catch (Exception e) {
-                        _log.warn("LeaveBalance not found for employeeId=" + employeeId +
-                                ", leaveTypeId=" + leaveTypeMasterId);
+                    
+                    log.info("cur year -- " + Year.now().getValue()); 
+                    if(Year.now().getValue() == year) {
+                    	LeaveBalance leaveBalance = null;
+                    	try {
+                    		leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
+                    	} catch (Exception e) {
+                    		log.warn("LeaveBalance not found for employeeId=" + employeeId +
+                    				", leaveTypeId=" + leaveTypeMasterId);
+                    	}
+                    	double remainingLeaves = (leaveBalance != null) ? leaveBalance.getNoOfRemainingLeaves() : 0.0;
+                    	leaveTypeBalanceMap.put(leaveType.getLeaveTypeName(), remainingLeaves);
+                    } else {
+                    	LeaveBalanceHistory leaveBalanceHistory = null;
+                    	try {
+                    		leaveBalanceHistory = leaveBalanceHistoryLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
+                    	} catch (Exception e) {
+                    		log.warn("LeaveBalance not found for employeeId=" + employeeId +
+                    				", leaveTypeId=" + leaveTypeMasterId);
+                    	}
+                    	double remainingLeaves = (leaveBalanceHistory != null) ? leaveBalanceHistory.getNoOfRemainingLeaves() : 0.0;
+                    	leaveTypeBalanceMap.put(leaveType.getLeaveTypeName(), remainingLeaves);
                     }
-
-                    double remainingLeaves = (leaveBalance != null) ? leaveBalance.getNoOfRemainingLeaves() : 0.0;
-
-                    leaveTypeBalanceMap.put(leaveType.getLeaveTypeName(), remainingLeaves);
                 }
-
+                log.info("leaveTypeBalanceMap -- " + leaveTypeBalanceMap);
                 leaveBalanceData.put(employeeDetailsJson.toString(), leaveTypeBalanceMap);
-
             }
-
             ExcelExportUtil.exportLeaveBalance(leaveBalanceData, response, AkHrmsLeaveBalanceReportWebPortletKeys.LEAVE_BALANCE_EXPORT_FILE_NAME);
-
         } catch (Exception e) {
-            _log.error("Exception occurred in LeaveBalanceExportResourceCommand", e);
+            log.error("Exception occurred in LeaveBalanceExportResourceCommand", e);
         }
 
         return false;
     }
 
-    private static final Log _log = LogFactoryUtil.getLog(FetchLeaveBalanceResourceCommand.class);
+    private static final Log log = LogFactoryUtil.getLog(FetchLeaveBalanceResourceCommand.class);
 
     @Reference
     private LeaveTypeMasterLocalService leaveTypeMasterLocalService;
+    @Reference
+    private LeaveBalanceHistoryLocalService leaveBalanceHistoryLocalService;
     @Reference
     private LeaveBalanceLocalService leaveBalanceLocalService;
     @Reference

@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -43,6 +44,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -3006,6 +3008,288 @@ public class LeaveBalanceHistoryPersistenceImpl
 	private static final String _FINDER_COLUMN_EMPLOYEEIDANDYEAR_YEAR_2 =
 		"leaveBalanceHistory.year = ?";
 
+	private FinderPath _finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear;
+	private FinderPath _finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear;
+
+	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or throws a <code>NoSuchLeaveBalanceHistoryException</code> if it could not be found.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the matching leave balance history
+	 * @throws NoSuchLeaveBalanceHistoryException if a matching leave balance history could not be found
+	 */
+	@Override
+	public LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(
+			long employeeId, long leaveTypeMasterId, int year)
+		throws NoSuchLeaveBalanceHistoryException {
+
+		LeaveBalanceHistory leaveBalanceHistory =
+			fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+				employeeId, leaveTypeMasterId, year);
+
+		if (leaveBalanceHistory == null) {
+			StringBundler sb = new StringBundler(8);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("employeeId=");
+			sb.append(employeeId);
+
+			sb.append(", leaveTypeMasterId=");
+			sb.append(leaveTypeMasterId);
+
+			sb.append(", year=");
+			sb.append(year);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchLeaveBalanceHistoryException(sb.toString());
+		}
+
+		return leaveBalanceHistory;
+	}
+
+	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the matching leave balance history, or <code>null</code> if a matching leave balance history could not be found
+	 */
+	@Override
+	public LeaveBalanceHistory fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year) {
+
+		return fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+			employeeId, leaveTypeMasterId, year, true);
+	}
+
+	/**
+	 * Returns the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching leave balance history, or <code>null</code> if a matching leave balance history could not be found
+	 */
+	@Override
+	public LeaveBalanceHistory fetchByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year,
+		boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {employeeId, leaveTypeMasterId, year};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear,
+				finderArgs, this);
+		}
+
+		if (result instanceof LeaveBalanceHistory) {
+			LeaveBalanceHistory leaveBalanceHistory =
+				(LeaveBalanceHistory)result;
+
+			if ((employeeId != leaveBalanceHistory.getEmployeeId()) ||
+				(leaveTypeMasterId !=
+					leaveBalanceHistory.getLeaveTypeMasterId()) ||
+				(year != leaveBalanceHistory.getYear())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_SELECT_LEAVEBALANCEHISTORY_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_LEAVETYPEMASTERID_2);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_YEAR_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				queryPos.add(year);
+
+				List<LeaveBalanceHistory> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									employeeId, leaveTypeMasterId, year
+								};
+							}
+
+							_log.warn(
+								"LeaveBalanceHistoryPersistenceImpl.fetchByEmployeeIdLeaveTypeMasterIdAndYear(long, long, int, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					LeaveBalanceHistory leaveBalanceHistory = list.get(0);
+
+					result = leaveBalanceHistory;
+
+					cacheResult(leaveBalanceHistory);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (LeaveBalanceHistory)result;
+		}
+	}
+
+	/**
+	 * Removes the leave balance history where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63; from the database.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the leave balance history that was removed
+	 */
+	@Override
+	public LeaveBalanceHistory removeByEmployeeIdLeaveTypeMasterIdAndYear(
+			long employeeId, long leaveTypeMasterId, int year)
+		throws NoSuchLeaveBalanceHistoryException {
+
+		LeaveBalanceHistory leaveBalanceHistory =
+			findByEmployeeIdLeaveTypeMasterIdAndYear(
+				employeeId, leaveTypeMasterId, year);
+
+		return remove(leaveBalanceHistory);
+	}
+
+	/**
+	 * Returns the number of leave balance histories where employeeId = &#63; and leaveTypeMasterId = &#63; and year = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param year the year
+	 * @return the number of matching leave balance histories
+	 */
+	@Override
+	public int countByEmployeeIdLeaveTypeMasterIdAndYear(
+		long employeeId, long leaveTypeMasterId, int year) {
+
+		FinderPath finderPath =
+			_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear;
+
+		Object[] finderArgs = new Object[] {
+			employeeId, leaveTypeMasterId, year
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_LEAVEBALANCEHISTORY_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_LEAVETYPEMASTERID_2);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_YEAR_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				queryPos.add(year);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_EMPLOYEEID_2 =
+			"leaveBalanceHistory.employeeId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_LEAVETYPEMASTERID_2 =
+			"leaveBalanceHistory.leaveTypeMasterId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEIDLEAVETYPEMASTERIDANDYEAR_YEAR_2 =
+			"leaveBalanceHistory.year = ?";
+
 	public LeaveBalanceHistoryPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -3036,6 +3320,15 @@ public class LeaveBalanceHistoryPersistenceImpl
 			_finderPathFetchByUUID_G,
 			new Object[] {
 				leaveBalanceHistory.getUuid(), leaveBalanceHistory.getGroupId()
+			},
+			leaveBalanceHistory);
+
+		finderCache.putResult(
+			_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear,
+			new Object[] {
+				leaveBalanceHistory.getEmployeeId(),
+				leaveBalanceHistory.getLeaveTypeMasterId(),
+				leaveBalanceHistory.getYear()
 			},
 			leaveBalanceHistory);
 	}
@@ -3122,6 +3415,19 @@ public class LeaveBalanceHistoryPersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, leaveBalanceHistoryModelImpl);
+
+		args = new Object[] {
+			leaveBalanceHistoryModelImpl.getEmployeeId(),
+			leaveBalanceHistoryModelImpl.getLeaveTypeMasterId(),
+			leaveBalanceHistoryModelImpl.getYear()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear, args,
+			Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear, args,
+			leaveBalanceHistoryModelImpl);
 	}
 
 	/**
@@ -3707,6 +4013,24 @@ public class LeaveBalanceHistoryPersistenceImpl
 			"countByEmployeeIdAndYear",
 			new String[] {Long.class.getName(), Integer.class.getName()},
 			new String[] {"employeeId", "year"}, false);
+
+		_finderPathFetchByEmployeeIdLeaveTypeMasterIdAndYear = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY,
+			"fetchByEmployeeIdLeaveTypeMasterIdAndYear",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			new String[] {"employeeId", "leaveTypeMasterId", "year"}, true);
+
+		_finderPathCountByEmployeeIdLeaveTypeMasterIdAndYear = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByEmployeeIdLeaveTypeMasterIdAndYear",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			new String[] {"employeeId", "leaveTypeMasterId", "year"}, false);
 
 		LeaveBalanceHistoryUtil.setPersistence(this);
 	}
