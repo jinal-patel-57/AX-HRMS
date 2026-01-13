@@ -2,7 +2,7 @@ package com.ax.hrms.report.web.actions;
 
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveBalanceHistoryTable;
-import com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
+import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys.*;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.LeaveBalanceHistoryLocalService;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 
+import java.time.Year;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -22,7 +23,7 @@ import org.osgi.service.component.annotations.Reference;
 
 @Component(
         property = {
-                "javax.portlet.name=" + AkHrmsLeaveBalanceReportWebPortletKeys.AKHRMSLEAVEBALANCEREPORTWEB,
+                "javax.portlet.name=" + AKHRMSLEAVEBALANCEREPORTWEB,
                 "mvc.command.name=/"
         },
         service = MVCRenderCommand.class
@@ -42,6 +43,12 @@ public class LeaveBalanceMVCRenderCommand implements MVCRenderCommand {
 
         List<EmployeeDetails> employeeList = employeeDetailsLocalService.findByIsTerminated(false);
         renderRequest.setAttribute("employeeList", employeeList);
+        List<Integer> yearList = getDistinctYearsDesc();
+        int currentYear = Year.now().getValue();
+        boolean containsCurrentYear = yearList.contains(currentYear);
+        if(!containsCurrentYear) {
+        	yearList.add(currentYear);
+        }
         renderRequest.setAttribute("yearList", getDistinctYearsDesc());
         return "/jsp/leavebalance/leaveBalanceExport.jsp";
     }
