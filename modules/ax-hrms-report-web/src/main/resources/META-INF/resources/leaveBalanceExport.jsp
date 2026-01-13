@@ -26,75 +26,74 @@
             <form method="post" action="${downloadURL}">
 
                 <!-- Employee Selection -->
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label">
-                        Employee
-                    </label>
-                    <div class="col-md-9">
-
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="allEmployees"
-                                   name="<portlet:namespace/>employeeType"
-                                   value="ALL"
-                                   class="custom-control-input"
-                                   checked
-                                   onclick="toggleEmployeeSelect(false)">
-                            <label class="custom-control-label" for="allEmployees">
-                                All Employees
-                            </label>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="<portlet:namespace/>year">Year</label>
+                            <select class="form-control"
+                                    id="year"
+                                    name="<portlet:namespace/>year">
+                                <c:forEach var="year" items="${yearList}">
+                                    <option value="${year}">
+                                        ${year}
+                                    </option>
+                                </c:forEach>
+                            </select>
                         </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label>Employee</label>
+                            <div class="radio-group">
+                                <div class="form-check d-flex align-items-center c-gap-1">
+                                    <input type="radio"
+                                        id="allEmployees"
+                                        name="<portlet:namespace/>employeeType"
+                                        value="ALL"
+                                        class="form-check-input"
+                                        checked
+                                        onclick="toggleEmployeeSelect(false)">
+                                    <label class="form-check-label" for="allEmployees">
+                                        All Employees
+                                    </label>
+                                </div>
 
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="specificEmployees"
-                                   name="<portlet:namespace/>employeeType"
-                                   value="SPECIFIC"
-                                   class="custom-control-input"
-                                   onclick="toggleEmployeeSelect(true)">
-                            <label class="custom-control-label" for="specificEmployees">
-                                Specific Employee(s)
-                            </label>
+                                <div class="form-check d-flex align-items-center c-gap-1">
+                                    <input type="radio"
+                                        id="specificEmployees"
+                                        name="<portlet:namespace/>employeeType"
+                                        value="SPECIFIC"
+                                        class="form-check-input"
+                                        onclick="toggleEmployeeSelect(true)">
+                                    <label class="form-check-label" for="specificEmployees">
+                                        Specific Employee(s)
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-
-                        <select class="form-control mt-3"
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <div class="form-group">
+                            <select class="form-control mt-3"
                                 id="employeeIds"
                                 name="<portlet:namespace/>employeeIds"
                                 multiple
                                 disabled>
-                            <c:forEach var="employee" items="${employeeList}">
-                                <option value="${employee.getEmployeeId()}">
-                                       ${employee.getEmployeeCode() }: ${employee.getFirstName()} ${employee.getLastName() }
-                                </option>
-                            </c:forEach>
-                        </select>
+                                <c:forEach var="employee" items="${employeeList}">
+                                    <option value="${employee.getEmployeeId()}">
+                                        ${employee.getEmployeeCode() }: ${employee.getFirstName()} ${employee.getLastName() }
+                                    </option>
+                                </c:forEach>
+                            </select>
 
-                        <small class="form-text text-muted">
-                            Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) to select multiple employees
-                        </small>
-
+                            <small class="form-text text-muted">
+                                Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) to select multiple employees
+                            </small>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label">
-                        Year
-                    </label>
-                    <div class="col-md-9">
-						<select class="form-control mt-3"
-                                id="year"
-                                name="<portlet:namespace/>year">
-                            <c:forEach var="year" items="${yearList}">
-                                <option value="${year}">
-                                       ${year}
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-0">
-                    <div class="col-md-9 offset-md-3">
+                <div class="row">
+                    <div class="col-12 text-right">
                         <button type="submit" class="btn btn-primary">
                             Download Excel
                         </button>
