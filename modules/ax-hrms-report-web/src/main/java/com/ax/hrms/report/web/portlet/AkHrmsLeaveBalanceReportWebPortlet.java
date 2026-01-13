@@ -1,7 +1,6 @@
-package com.ax.hrms.leave.balance.report.web.portlet;
+package com.ax.hrms.report.web.portlet;
 
-import com.ax.hrms.leave.balance.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
-
+import com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;

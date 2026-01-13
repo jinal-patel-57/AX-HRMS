@@ -1,4 +1,4 @@
-package com.ax.hrms.leave.balance.report.web.constants;
+package com.ax.hrms.report.web.constants;
 
 /**
  * @author ankit.hadiyal
