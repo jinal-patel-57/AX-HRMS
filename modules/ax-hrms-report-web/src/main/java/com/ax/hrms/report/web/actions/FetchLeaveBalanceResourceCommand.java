@@ -30,7 +30,7 @@ import java.util.*;
         },
         service = MVCResourceCommand.class
 )
-public class LeaveBalanceExportResourceCommand implements MVCResourceCommand {
+public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
 
     @Override
     public boolean serveResource(ResourceRequest request, ResourceResponse response) {
@@ -93,7 +93,7 @@ public class LeaveBalanceExportResourceCommand implements MVCResourceCommand {
         return false;
     }
 
-    private static final Log _log = LogFactoryUtil.getLog(LeaveBalanceExportResourceCommand.class);
+    private static final Log _log = LogFactoryUtil.getLog(FetchLeaveBalanceResourceCommand.class);
 
     @Reference
     private LeaveTypeMasterLocalService leaveTypeMasterLocalService;

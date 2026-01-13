@@ -23,7 +23,7 @@
     <div class="card">
         <div class="card-body">
 
-            <form method="post" action="<%= downloadURL %>">
+            <form method="post" action="${downloadURL}">
 
                 <!-- Employee Selection -->
                 <div class="form-group row">
@@ -78,33 +78,18 @@
 
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">
-                        Period
+                        Year
                     </label>
                     <div class="col-md-9">
-
-                        <div class="custom-control custom-radio">
-                            <input type="radio"
-                                   id="yearly"
-                                   name="<portlet:namespace/>periodType"
-                                   value="YEARLY"
-                                   class="custom-control-input"
-                                   checked>
-                            <label class="custom-control-label" for="yearly">
-                                Yearly
-                            </label>
-                        </div>
-
-                        <div class="custom-control custom-radio mt-2">
-                            <input type="radio"
-                                   id="halfYearly"
-                                   name="<portlet:namespace/>periodType"
-                                   value="HALF_YEAR"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="halfYearly">
-                                Last 6 Months
-                            </label>
-                        </div>
-
+						<select class="form-control mt-3"
+                                id="year"
+                                name="<portlet:namespace/>year">
+                            <c:forEach var="year" items="${yearList}">
+                                <option value="${year}">
+                                       ${year}
+                                </option>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
 

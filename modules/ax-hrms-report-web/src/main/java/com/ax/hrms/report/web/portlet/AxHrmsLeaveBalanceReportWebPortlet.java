@@ -24,5 +24,5 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = Portlet.class
 )
-public class AkHrmsLeaveBalanceReportWebPortlet extends MVCPortlet {
+public class AxHrmsLeaveBalanceReportWebPortlet extends MVCPortlet {
 }
