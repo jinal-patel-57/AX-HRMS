@@ -170,10 +170,15 @@
               }
           },
 
-          errorPlacement: function (error, element) {
-                          error.addClass('text-danger');
-                          element.after(error);
-                      }
+         errorPlacement: function (error, element) {
+                         error.addClass('text-danger');
+                         if(element.attr("type") == "radio"){
+                             error.appendTo(element.closest(".form-group"));
+                         } else {
+                             element.after(error);
+                         }
+                     }
+
 
       });
 
@@ -233,12 +238,35 @@
               // Dismiss button
               const dismissBtn = $('<button>').text('x');
 
-              dismissBtn.click(function () {
-                  selectedValuesManager = selectedValuesManager.filter(function (val) {
-                      return val !== value;
-                  });
-                  renderSelectedOptions();
-              });
+//              dismissBtn.click(function () {
+//                  selectedValuesManager = selectedValuesManager.filter(function (val) {
+//                      return val !== value;
+//                  });
+//                  renderSelectedOptions();
+//              });
+
+                dismissBtn.click(function () {
+
+                    // 1️⃣ Remove from selected values array
+                    selectedValuesManager = selectedValuesManager.filter(function (val) {
+                        return val !== value;
+                    });
+
+                    // 2️⃣ Unselect from dropdown
+                    $('#role option[value="' + value + '"]').prop('selected', false);
+
+                    // 3️⃣ If no roles left → reset dropdown
+                    if (selectedValuesManager.length === 0) {
+                        $('#role').val('');
+                    }
+
+                    // 4️⃣ Re-render badges & update hidden field
+                    renderSelectedOptions();
+
+                    // 5️⃣ Trigger validation again
+                    $('#role').valid();
+                });
+
 
               badge.append(textSpan);
               badge.append(dismissBtn);
