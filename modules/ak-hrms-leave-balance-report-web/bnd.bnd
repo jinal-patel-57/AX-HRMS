@@ -1,0 +1,7 @@
+Bundle-Name: ak-hrms-leave-balance-report-web
+Bundle-SymbolicName: com.ax.hrms.leave.balance.report.web
+Bundle-Version: 1.0.0
+Export-Package: com.ax.hrms.leave.balance.report.web.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"
