@@ -5,10 +5,18 @@ function teamIdMultiSelect() {
     const selectedOptionsContainer = $('#selectedOptionsContainer');
 
     function getSelectedValues() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return [];
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
     }
 
     function setSelectedValues(values) {
+        if (!Array.isArray(values)) values = [];
         localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
     }
 
