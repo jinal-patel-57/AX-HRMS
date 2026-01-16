@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-md-5 col-sm-12">
                     <div class="form-group">
-                        <select class="form-control mt-3 custom-select"
+                        <select class="form-control mt-3 custom-multi-select"
                             id="employeeIds" data-live-search="true"
                             name="<portlet:namespace/>employeeIds"
                             multiple placeholder="Select Employee(s)"

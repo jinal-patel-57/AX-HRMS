@@ -87,6 +87,9 @@ function childNavigation() {
   });
 
   $('.custom-select').select2();
+  $('.custom-multi-select').select2({
+    placeholder: $(this).attr('placeholder') || 'Select option(s)'
+  });
 
   document.getElementById("copyright-year").textContent = new Date().getFullYear();
 });
