@@ -146,8 +146,6 @@
         </div>
     </div>
 </div>
-</c:if>
-
 <!-- SAME AS PERMANENT -->
 <div class="form-check mt-3">
     <input type="checkbox"
@@ -160,6 +158,8 @@
         Same as permanent address
     </label>
 </div>
+</c:if>
+
 
 <!-- ========================================================= -->
 <!-- PRESENT ADDRESS -->

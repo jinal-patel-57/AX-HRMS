@@ -60,6 +60,8 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
             } else {
                 employeeIds = ParamUtil.getLongValues(request, EMPLOYEE_IDS);
             }
+
+            log.info("employeeIds :-"+ employeeIds);
             for (long employeeId : employeeIds) {
 
                 EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);

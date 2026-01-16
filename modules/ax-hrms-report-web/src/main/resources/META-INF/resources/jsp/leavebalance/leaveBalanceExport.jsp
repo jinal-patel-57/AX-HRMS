@@ -71,7 +71,7 @@
                                 </option>
                             </c:forEach>
                         </select>
-                        <input type="hidden" id="<portlet:namespace />employeeIds" name="<portlet:namespace />employeeIds"/>
+
                         <div id="selectedOptionsContainer" class="selected-options"></div>
                     </div>
                 </div>
