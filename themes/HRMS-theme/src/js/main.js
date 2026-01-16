@@ -91,6 +91,57 @@ function childNavigation() {
     placeholder: $(this).attr('placeholder') || 'Select option(s)'
   });
 
+  // On select
+  $('.custom-multi-select').on('select2:select', function (e) {
+    const data = e.params.data;
+    const $container = $('.selected-options');
+
+    if ($container.find(`[data-id="${data.id}"]`).length === 0) {
+      $container.append(`
+        <span class="selected-option" data-id="${data.id}">
+          ${data.text}
+          <span class="remove">&times;</span>
+        </span>
+      `);
+    }
+  });
+
+  $('.custom-multi-select').on('change', function () {
+    const data = $(this).select2('data');
+    const $container = $('.selected-options');
+
+    // Clear and re-render outside options
+    $container.empty();
+
+    data.forEach(item => {
+      $container.append(`
+        <div class="selected-option" data-id="${item.id}">
+          <span>${item.text}</span>
+          <button class="remove">x</button>
+        </div>
+      `);
+    });
+
+    // Show only last selected item in input
+    const last = data[data.length - 1];
+    const $rendered = $(this)
+      .next('.select2-container')
+      .find('.select2-selection__rendered');
+
+    $rendered.text(last ? last.text : '');
+  });
+
+
+  // Remove from outside container
+  $(document).on('click', '.selected-option .remove', function () {
+    const id = $(this).parent().data('id');
+    const select = $('.custom-multi-select');
+
+    const values = select.val().filter(val => val !== id.toString());
+    select.val(values).trigger('change');
+  });
+
+
   document.getElementById("copyright-year").textContent = new Date().getFullYear();
 });
 

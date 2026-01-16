@@ -86,7 +86,7 @@
 													</span>
 												</a>
 												<div class="dropdown-menu">
-													<a class="dropdown-item" href="${themeDisplay.getPortalURL()}/group/hrms/my-profile">My Profile</a>
+													<a class="dropdown-item" href="${themeDisplay.getPortalURL()}/web/ax-hrms/my-profile">My Profile</a>
 													<a class="dropdown-item" href="/c/portal/logout">Logout</a>
 												</div>
 											</div>
