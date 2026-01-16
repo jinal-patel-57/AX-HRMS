@@ -48,5 +48,59 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String DESIGNATION_MASTER_LOCAL_SERVICE = "designationMasterLocalService";
 	public static final String DEPARTMENT_MASTER_LOCAL_SERVICE = "departmentMasterLocalService";
 	public static final String COUNTRY_LOCAL_SERVICE = "countryLocalService";
+	public static final String NOMINEE_LOCAL_SERVICE = "nomineeLocalService";
+	public static final String EMPLOYEE_EDUCATION_LOCAL_SERVICE = "employeeEducationLocalService";
+	public static final String EMPLOYEE_EXPERIENCE_LOCAL_SERVICE = "employeeExperienceLocalService";
+
+
+	public static final String PROFILE_PIC="profilePic";
+	public static final String IS_HR_ADMIN="isHRAdmin";
+	public static final String AADHAAR_CARD_FILE="aadharCardFile";
+	public static final String PAN_CARD_FILE="panCardFile";
+
+	public static final String EDUCATION_LIST="educationList";
+
+	public static final String EMPLOYEE_ADDRESS="employeeAddress";
+
+	public static final String PRESENT_ADDRESS="presentaddresss";
+
+	public static final String PERMANENT_ADDRESS="permanentaddresss";
+
+	public static final String EXPERIENCE_LIST="experienceList";
+
+	public static final String EMPLOYEE_BANK_ACCOUNT="employeeBankAccount";
+	public static final String EMPLOYEE_DETAIL="employeeDetail";
+
+	public static final String EMPLOYEE_UAN_ESIC="employeeUanEsic";
+
+	public static final String NOMINEE="nominee";
+
+	public static final String PROFILE_PIC_NAME="profilePicName";
+	public static final String AADHAAR_CARD_FILE_NAME="aadhaarCardFileName";
+	public static final String PAN_CARD_FILE_NAME="panCardFileName";
+
+	public static final String VIEW_EXPERIENCE_CERTIFICATE="experienceCertificate";
+	public static final String FLAG_STATUS="flagStatus";
+
+	public static final String FLAG_STATUSS="flagStatuss";
+	public static final String ADDRESS="address";
+	public static final String TRUE="true";
+
+
+	public static final String ADDRESS_FLAG_STATUS="addressFlagStatus";
+	public static final String NOMINEE_FIRST_NAME = "nomineeFirstName";
+	public static final String NOMINEE_LAST_NAME = "nomineeLastName";
+	public static final String NOMINEE_CONTACT = "nomineeContact";
+	public static final String NOMINEE_DOB = "nomineeDob";
+	public static final String RELATIONSHIP_WITH_NOMINEE = "relationshipWithNominee";
+
+	public static final String NOMINEE_LINE1 = "nomineeLine1";
+	public static final String NOMINEE_LINE2 = "nomineeLine2";
+	public static final String NOMINEE_LINE3 = "nomineeLine3";
+	public static final String NOMINEE_CITY = "nomineeCity";
+	public static final String NOMINEE_STATE = "nomineeState";
+	public static final String NOMINEE_COUNTRY = "nomineeCountry";
+	public static final String NOMINEE_PINCODE = "nomineePincode";
+
 
 }

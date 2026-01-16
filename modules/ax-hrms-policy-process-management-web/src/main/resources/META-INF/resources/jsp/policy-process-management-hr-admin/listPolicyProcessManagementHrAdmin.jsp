@@ -85,7 +85,7 @@
 		            </portlet:renderURL>
 		            
 		              <portlet:actionURL var="deletePolicyURL" name="/deletePolicy">
-                        <portlet:param name="policyId" value="${policy.policyId}" />
+                        <portlet:param name="policyId" value="POLICY_ID" />
                         <portlet:param name="backURL" value="${homeUrl}" />
                     </portlet:actionURL>
                       

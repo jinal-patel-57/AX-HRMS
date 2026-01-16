@@ -1,331 +1,811 @@
 <%@ include file="/init.jsp" %>
+<%@page import="com.ax.hrms.model.Address"%>
+<%@page import="com.liferay.portal.kernel.service.CountryLocalServiceUtil"%>
 
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:renderURL var="editEmployeeProfilePageUrl">
-	<portlet:param name="mvcRenderCommandName" value="/jsp/profile-management/editEmployeeProfile.jsp" />
+    <portlet:param name="mvcRenderCommandName"
+        value="/jsp/profile-management/editEmployeeProfile.jsp" />
 </portlet:renderURL>
 
-<liferay-ui:success key="detail-update-success-message" message="Profile detail updated..."></liferay-ui:success>
+<liferay-ui:success
+    key="detail-update-success-message"
+    message="Profile detail updated successfully" />
+
+<portlet:renderURL var="backURL">
+    <portlet:param name="mvcCommand" value="/"/>
+</portlet:renderURL>
+
 
 
 <div class="card">
-<div class="card-body">
-	<div class="card">
-		<div class="card-header">
-			<strong> <liferay-ui:message key="employee-profile"></liferay-ui:message>
-			</strong>
-		</div>
-		<div class="card-body">
-
-
-			<div class="row">
-
-
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="profilePic">
-							<img src="${employeeProfileDetail.previewUrl}" class="cover">
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<h3>${employeeProfileDetail.getFullName()}</h3>
-							</div>
-							<div class="col-12">
-								<p>${employeeProfileDetail.officialEmailId}</p>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="first-name" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.firstName}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="middle-name" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.middleName}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="last-name" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.lastName}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="gender" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.gender}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="phone-number" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.mobileNumber}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="personal-email" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.personalEmailId}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="official-email-id" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.officialEmailId}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="joining-date" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.joiningDate}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="designation" />
-						</div>
-						<div class="label-content">${employeeProfileDetail.designationName}</div>
-					</div>
-
-				</div>
-
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-					<div class="form-group-view">
-						<div class="label-name">
-							<liferay-ui:message key="department" />
-						</div>
-						<c:forEach var="departmentName"
-							items="${employeeProfileDetail.departmentNames}">
-							<div class="label-content">${departmentName}</div>
-						</c:forEach>
-
-
-					</div>
-
-				</div>
-
-
-			</div>
-		</div>
-	</div>
-
-
-	<c:if test="${not empty employeeProfileDetail.addressList}">
-		<div class="card mb-0">
-
-			<div class="card-header">
-				<strong> <liferay-ui:message key="address"></liferay-ui:message>
-				</strong>
-			</div>
-
-			<div class="card-body">
-				<div class="row">
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-						<div class="form-group-view">
-							<h4>
-								<liferay-ui:message key="permanant-address-detail" />
-							</h4>
-						</div>
-
-					</div>
-
-						<c:set var="permanantAddress"
-							value="${employeeProfileDetail.addressList.get(0)}"></c:set>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="line-1" />
-								</div>
-								<div class="label-content">${permanantAddress.line1}</div>
-							</div>
-
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="line-2" />
-								</div>
-								<div class="label-content">${permanantAddress.line2}</div>
-							</div>
-
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="line-3" />
-								</div>
-								<div class="label-content">${permanantAddress.line3}</div>
-							</div>
-
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="state" />
-								</div>
-								<div class="label-content">${permanantAddress.state}</div>
-							</div>
-
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="pincode" />
-								</div>
-								<div class="label-content">${permanantAddress.pincode}</div>
-							</div>
-
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-							<div class="form-group-view">
-								<div class="label-name">
-									<liferay-ui:message key="country" />
-								</div>
-								<div class="label-content">${employeeProfileDetail.permanantCountry}</div>
-							</div>
-
-						</div>
-
-				</div>
-				
-
-
-				<c:if test="${not employeeProfileDetail.isSamePresentAddress()}">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-							<div class="form-group-view">
-								<h4>
-									<liferay-ui:message key="present-address-detail" />
-								</h4>
-							</div>
-
-						</div>
-
-						<c:catch var="exception">
-							<c:set var="permanantAddress"
-								value="${employeeProfileDetail.addressList.get(1)}"></c:set>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="line-1" />
-									</div>
-									<div class="label-content">${permanantAddress.line1}</div>
-								</div>
-
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="line-2" />
-									</div>
-									<div class="label-content">${permanantAddress.line2}</div>
-								</div>
-
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="line-3" />
-									</div>
-									<div class="label-content">${permanantAddress.line3}</div>
-								</div>
-
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="state" />
-									</div>
-									<div class="label-content">${permanantAddress.state}</div>
-								</div>
-
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="pincode" />
-									</div>
-									<div class="label-content">${permanantAddress.pincode}</div>
-								</div>
-
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
-								<div class="form-group-view">
-									<div class="label-name">
-										<liferay-ui:message key="country" />
-									</div>
-									<div class="label-content">${employeeProfileDetail.presentCountry}</div>
-								</div>
-
-							</div>
-
-
-						</c:catch>
-					</div>
-				</c:if>
-			</div>
-		</div>
-	</c:if>
+    <div class="card-header">
+        <strong>
+            Employee OnBoarding Details
+        </strong>
+    </div>
+    <div class="card-body">
+
+		<div class="card">
+            <div class="card-header">
+                <strong>Overview</strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none ">
+                        <div class="form-group-view">
+                            <div class="label-name">Type of Employee</div>
+                            <div class="label-content">${employeeDetail.employeeType}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Employee Code</div>
+                            <div class="label-content">${employeeDetail.employeeCode}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Designation</div>
+                            <div class="label-content">${employeeDetail.designationName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Depatment</div>
+                            <div class="label-content">${employeeDetail.departmentName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Official Email</div>
+                            <div class="label-content email">${employeeDetail.officialEmail}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Gender</div>
+                            <div class="label-content">${employeeDetail.gender}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Manager</div>
+                            <div class="label-content">${employeeDetail.reportingManager}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Joining Date</div>
+                            <div class="label-content">
+                                <fmt:formatDate value='${employeeDetail.joiningDate}' pattern='dd-MM-yyyy'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none ">
+                        <div class="form-group-view">
+                            <div class="label-name">Insurance Link</div>
+                            <div class="label-content email">${employeeDetail.insuranceLink}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Month</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPm}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none">
+                        <div class="form-group-view">
+                            <div class="label-name">Gross Salary Per Annum</div>
+                            <div class="label-content">${employeeDetail.grossSalaryCtcPa}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none">
+                        <div class="form-group-view">
+                            <div class="label-name">Stipend</div>
+                            <div class="label-content">${employeeDetail.stipend}</div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Basic Details</strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">First Name</div>
+                            <div class="label-content">${employeeDetail.firstName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Last Name</div>
+                            <div class="label-content">${employeeDetail.lastName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Personal Email</div>
+                            <div class="label-content email">${employeeDetail.personalEmail}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Date of Birth</div>
+                            <div class="label-content">
+                                <fmt:formatDate value='${employeeDetail.dateOfBirth}' pattern='dd-MM-yyyy'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Mobile No.</div>
+                            <div class="label-content">${employeeDetail.mobileNo}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Father Name</div>
+                            <div class="label-content">${employeeDetail.fatherName}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Maritial Status</div>
+                            <div class="label-content">${employeeDetail.maritalStatus}</div>
+                        </div>
+                    </div>
+                    <c:if test="${employeeDetail.maritalStatus}">
+                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                             <div class="form-group-view">
+                                 <div class="label-name">Marriage Date</div>
+                                 <div class="label-content">
+                                     <fmt:formatDate value="${employeeDetail.marriageDate}" pattern="dd-MM-yyyy"/>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                             <div class="form-group-view">
+                                 <div class="label-name">Spouse Name</div>
+                                 <div class="label-content">${employeeDetail.spouseName}</div>
+                             </div>
+                         </div>
+                     </c:if>
+
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Aadhar Card Number</div>
+                            <div class="label-content">
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-
+                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Pan Card Number</div>
+                            <div class="label-content">${employeeDetail.panCardNumber}</div>
+                          </div>
+                      </div>
+
+
+                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                         <div class="form-group-view">
+                             <div class="label-name">Is Experience</div>
+                             <div class="label-content">${employeeDetail.experienced ? 'Yes' : 'No'}</div>
+                         </div>
+                     </div>
+                      <c:if test="${employeeDetail.experienced}">
+                       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Experience Year</div>
+                              <div class="label-content">${employeeDetail.experienceYears}</div>
+                          </div>
+                      </div>
+
+                      </c:if>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Aadhar Card File</div>
+                            <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Pan Card File</div>
+                            <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
+                            <div class="label-name">Profile Pic</div>
+                            <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+       <div class="card">
+                   <div class="card-header">
+                       <strong>Address Details</strong>
+                   </div>
+                   <div class="card-body">
+
+                           <div >
+                               <strong> Present Address Details</strong>
+                           </div>
+
+                       <div class="row">
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">Address Line 1</div>
+                                   <div class="label-content">${presentaddresss.line1}</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">Address Line 2</div>
+                                   <div class="label-content">${presentaddresss.line2}</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">Address Line 3</div>
+                                   <div class="label-content">${presentaddresss.line3}</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">City</div>
+                                   <div class="label-content">${presentaddresss.city}</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">State</div>
+                                   <div class="label-content">${presentaddresss.state}</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">Country</div>
+                                   <div class="label-content">
+                                   	<%
+       								Address permanentaddresss = (Address) request.getAttribute("permanentaddresss");
+       								String permanentCountryName = "";
+       								%>
+
+       								<%
+       								if (permanentaddresss != null && permanentaddresss.getCountry() > 0) {
+       								    try {
+       								        permanentCountryName =
+       								            CountryLocalServiceUtil
+       								                .getCountry(permanentaddresss.getCountry())
+       								                .getName();
+       								    } catch (Exception ignored) {}
+       								}
+       								%>
+
+       								<%= permanentCountryName %>
+       							</div>
+                               </div>
+                           </div>
+
+                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                               <div class="form-group-view">
+                                   <div class="label-name">Pin code</div>
+                                   <div class="label-content">${presentaddresss.pincode}</div>
+                               </div>
+                           </div>
+                           </div>
+                           <hr>
+
+                           <c:if test="${employeeAddress.presentPermanentSame}">
+
+                            <div >
+                               <strong> Permanent Address Details</strong>
+                           </div>
+                           <div class="row">
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 1</div>
+                                       <div class="label-content">${presentaddresss.line1}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 2</div>
+                                       <div class="label-content">${presentaddresss.line2}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 3</div>
+                                       <div class="label-content">${presentaddresss.line3}</div>
+                                   </div>
+                               </div>
+
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">City</div>
+                                       <div class="label-content">${presentaddresss.city}</div>
+                                   </div>
+                               </div>
+
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">State</div>
+                                       <div class="label-content">${presentaddresss.state}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Country</div>
+                                       <div class="label-content">
+                                       <%
+       								Address presentaddresss = (Address) request.getAttribute("presentaddresss");
+       								String presentCountryName = "";
+       								%>
+
+       								<%
+       								if (presentaddresss != null && presentaddresss.getCountry() > 0) {
+       								    try {
+       								        presentCountryName =
+       								            CountryLocalServiceUtil
+       								                .getCountry(presentaddresss.getCountry())
+       								                .getName();
+       								    } catch (Exception ignored) {}
+       								}
+       								%>
+
+       								<%= presentCountryName %>
+       								</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Pin Code</div>
+                                       <div class="label-content">${presentaddresss.pincode}</div>
+                                   </div>
+                               </div>
+                              </div>
+                           </c:if>
+                           <c:if test="${not employeeAddress.presentPermanentSame}">
+                            <div >
+                               <strong> Permanent Address Details</strong>
+                           </div>
+                           <div class="row">
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 1</div>
+                                       <div class="label-content">${permanentaddresss.line1}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 2</div>
+                                       <div class="label-content">${permanentaddresss.line2}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Address Line 3</div>
+                                       <div class="label-content">${permanentaddresss.line3}</div>
+                                   </div>
+                               </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">City</div>
+                                <div class="label-content">${permanentaddresss.city}</div>
+                            </div>
+                        </div>
+
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">State</div>
+                                       <div class="label-content">${permanentaddresss.state}</div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Country</div>
+                                       <div class="label-content"><%= permanentCountryName %></div>
+                                   </div>
+                               </div>
+
+                               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                   <div class="form-group-view">
+                                       <div class="label-name">Pin Code</div>
+                                       <div class="label-content">${permanentaddresss.pincode}</div>
+                                   </div>
+                               </div>
+                       </div>
+                       </c:if>
+                   </div>
+               </div>
+
+<c:if test="${not empty educationList }">
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Education Details</strong>
+        </div>
+        <div class="card-body">
+            <c:forEach var="education" items="${educationList}" varStatus="status">
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Education Level</div>
+                            <div class="label-content">${education.levelName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Institute</div>
+                            <div class="label-content">${education.institution}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Degree</div>
+                            <div class="label-content">${education.degree}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Start Date</div>
+                            <div class="label-content">
+                                <fmt:formatDate value="${education.startDate}" pattern="dd-MM-yyyy"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">End Date</div>
+                            <div class="label-content">
+                                <fmt:formatDate value="${education.endDate}" pattern="dd-MM-yyyy"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Passing Year</div>
+                            <div class="label-content">${education.passingYear}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Education Certificate</div>
+                            <div class="label-content">
+                                <c:if test="${not empty education.educationCertificatePreviewUrl}">
+                                	<a href="${education.educationCertificatePreviewUrl}" target="_blank">Download Education Certificate</a>
+                                </c:if>
+
+                                <c:if test="${empty education.educationCertificatePreviewUrl}">
+                                    <span class="text-muted">No document uploaded</span>
+                                </c:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <c:if test="${!status.last}">
+                    <hr/>
+                </c:if>
+
+            </c:forEach>
+        </div>
+    </div>
+
+</c:if>
+
+
+<c:if test="${not empty experienceList }">
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Experience Details</strong>
+            </div>
+            <div class="card-body">
+                <c:forEach var="experience" items="${experienceList}" varStatus="status">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">Company Name</div>
+                                <div class="label-content">
+                                        ${experience.companyName}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">Joining Date</div>
+                                <div class="label-content">
+                                    <fmt:formatDate value='${experience.experienceJoiningDate}' pattern='dd-MM-yyyy'/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">Reliving Date</div>
+                                <div class="label-content">
+                                    <fmt:formatDate value='${experience.relievingDate}' pattern='dd-MM-yyyy'/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                            <div class="form-group-view">
+                                <div class="label-name">Experience Certificates</div>
+                                <div class="label-content">
+
+                                    <c:if test="${not empty experience.experienceCertificatePreviewUrls}">
+                                        <ul class="pl-3 mb-0">
+                                            <c:forEach var="docUrl"
+                                                       items="${experience.experienceCertificatePreviewUrls}"
+                                                       varStatus="status">
+
+                                                <li>
+                                                    <a href="${docUrl}" target="_blank">
+                                                        Download Experience Certificate ${status.index + 1}
+                                                    </a>
+                                                </li>
+
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+
+                                    <c:if test="${empty experience.experienceCertificatePreviewUrls}">
+                                        <span class="text-muted">No document uploaded</span>
+                                    </c:if>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                       <c:if test="${!status.last}">
+                                        <hr/>
+                                    </c:if>
+                </c:forEach>
+            </div>
+        </div>
+        </c:if>
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Bank Account Details</strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Account Number</div>
+                            <div class="label-content">${employeeBankAccount.accountNumber}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Account Type</div>
+                            <div class="label-content">${employeeBankAccount.accountType}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Beneficiary Name</div>
+                            <div class="label-content">${employeeBankAccount.beneficiaryName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Bank Name</div>
+                            <div class="label-content">${employeeBankAccount.bankName}</div>
+                        </div>
+                    </div>
+
+                    <%--                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">--%>
+                    <%--                        <div class="form-group-view">--%>
+                    <%--                            <div class="label-name">Status</div>--%>
+                    <%--                            <div class="label-content">${employeeBankAccount.status}</div>--%>
+                    <%--                        </div>--%>
+                    <%--                    </div>--%>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">IFSC Code</div>
+                            <div class="label-content">${employeeBankAccount.ifscCode}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Bank Branch</div>
+                            <div class="label-content">${employeeBankAccount.bankBranch}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <strong>
+                    UAN ESIC Details
+                </strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">UAN</div>
+                            <div class="label-content">${employeeUanEsic.uan}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">ESIC No</div>
+                            <div class="label-content">${employeeUanEsic.esicNo}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-header">
+                <strong>
+                    Nominee Details
+                </strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">First Name</div>
+                            <div class="label-content">${nominee.nomineeFirstName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Last Name</div>
+                            <div class="label-content">${nominee.nomineeLastName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Contact</div>
+                            <div class="label-content">${nominee.nomineeContact}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Address Line 1</div>
+                            <div class="label-content">${nominee.line1}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Address Line 2</div>
+                            <div class="label-content">${nominee.line2}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Address Line 3</div>
+                            <div class="label-content">${nominee.line3}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">City</div>
+                            <div class="label-content">${nominee.nomineeCity}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">State</div>
+                            <div class="label-content">${nominee.state}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Country</div>
+                            <div class="label-content">${nominee.countryName}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Pincode</div>
+                            <div class="label-content">${nominee.pincode}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Relationship</div>
+                            <div class="label-content">${nominee.relationshipWithNominee}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Date of Birth</div>
+                            <div class="label-content"><fmt:formatDate value='${nominee.nomineeDob}' pattern='dd-MM-yyyy'/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-	<div class="card-footer text-right mb-0">
-		<a href="${editEmployeeProfilePageUrl}" class="btn  btn-outline-success"> <liferay-ui:message
-				key="edit" />
-		</a>
-	</div>
-</div>
+ <div class="card-footer text-right align-items-center">
+            <a href="${backURL}" class="btn btn-outline-danger mr-1  "><i
+                    class="fa-solid fa-angle-left"></i> <liferay-ui:message key="back"/></a>
+                      <a href="${editEmployeeProfilePageUrl}" class="btn btn-outline-success">Edit</a>
 
-
+        </div>
 
 

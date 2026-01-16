@@ -5,6 +5,7 @@ import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.Nominee;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebPortletKeys;
 import com.ax.hrms.service.*;
@@ -27,6 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,9 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
     DepartmentMasterLocalService departmentMasterLocalService;
     @Reference
     CountryLocalService countryLocalService;
+
+    @Reference
+    NomineeLocalService nomineeLocalService;
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         log.info("EditEmployeeProfileMVCActionCommand >>> doProcessAction ::: Edit employee profile Action called...");
@@ -71,6 +76,8 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
 
 
             editEmployeeDetails(oldEmployeeDetailsObj,oldUserObj,actionRequest);
+            updateNominee(actionRequest, themeDisplay);
+
 
             boolean isSamePresentAddress = ParamUtil.getBoolean(actionRequest,AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,GetterUtil.DEFAULT_BOOLEAN);
             if(isSamePresentAddress){
@@ -197,4 +204,43 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
     public void deletePresentAddress(long presentAddressId) throws PortalException {
         addressLocalService.deleteAddress(presentAddressId);
     }
+    private void updateNominee(ActionRequest actionRequest, ThemeDisplay themeDisplay) {
+
+        try {
+            EmployeeDetails employeeDetails =
+                    employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+
+            long nomineeId = employeeDetails.getNominneeId();
+            Nominee nominee = nomineeLocalService.getNominee(nomineeId);
+            Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
+
+            nominee.setNomineeFirstName(
+                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_FIRST_NAME));
+            nominee.setNomineeLastName(
+                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LAST_NAME));
+            nominee.setNomineeContact(
+                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CONTACT));
+            nominee.setRelationshipWithNominee(
+                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.RELATIONSHIP_WITH_NOMINEE));
+
+            String dob = ParamUtil.getString(actionRequest,
+                    AxHrmsProfileManagementWebConstants.NOMINEE_DOB);
+            nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+
+            address.setLine1(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE1));
+            address.setLine2(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE2));
+            address.setLine3(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE3));
+            address.setCity(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CITY));
+            address.setState(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_STATE));
+            address.setCountry(ParamUtil.getLong(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_COUNTRY));
+            address.setPincode(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_PINCODE));
+
+            addressLocalService.updateAddress(address);
+            nomineeLocalService.updateNominee(nominee);
+
+        } catch (Exception e) {
+            log.error("Error updating nominee", e);
+        }
+    }
+
 }

@@ -1,34 +1,21 @@
 package com.ax.hrms.profile.management.util;
 
-import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
-import com.ax.hrms.model.EmployeeDepartment;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.Nominee;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
-import com.ax.hrms.profile.management.dto.EmployeeDto;
-import com.ax.hrms.service.AddressLocalService;
-import com.ax.hrms.service.EmployeeAddressLocalService;
-import com.ax.hrms.service.EmployeeDepartmentLocalService;
-import com.ax.hrms.service.EmployeeDesignationLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.liferay.document.library.kernel.service.DLAppServiceUtil;
-import com.liferay.document.library.kernel.util.DLUtil;
-import com.liferay.petra.string.StringPool;
+import com.ax.hrms.service.*;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.CountryLocalService;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.portlet.RenderRequest;
 import java.util.Map;
 
 public class EmployeeProfileUtil {
@@ -43,7 +30,10 @@ public class EmployeeProfileUtil {
 	private DesignationMasterLocalService designationMasterLocalService;
 	private DepartmentMasterLocalService departmentMasterLocalService;
 	private CountryLocalService countryLocalService;
-	
+	private EmployeeEducationLocalService employeeEducationLocalService;
+	private EmployeeExperienceLocalService employeeExperienceLocalService;
+	private NomineeLocalService nomineeLocalService;
+
 	private EmployeeProfileUtil() {}
 	
 	public EmployeeProfileUtil(Map<String,Object> localServiceProviderMap) {
@@ -56,77 +46,96 @@ public class EmployeeProfileUtil {
 			this.designationMasterLocalService = (DesignationMasterLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.DESIGNATION_MASTER_LOCAL_SERVICE);
 			this.departmentMasterLocalService = (DepartmentMasterLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.DEPARTMENT_MASTER_LOCAL_SERVICE);
 			this.countryLocalService = (CountryLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.COUNTRY_LOCAL_SERVICE);
+			this.employeeEducationLocalService = (EmployeeEducationLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.EMPLOYEE_EDUCATION_LOCAL_SERVICE);
+			this.employeeExperienceLocalService = (EmployeeExperienceLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.EMPLOYEE_EXPERIENCE_LOCAL_SERVICE);
+			this.nomineeLocalService = (NomineeLocalService) localServiceProviderMap.get(AxHrmsProfileManagementWebConstants.NOMINEE_LOCAL_SERVICE);
 		}catch (Exception e){
 			log.error("EmployeeProfileUtil >>> EmployeeProfileUtil (Constructor) ::: Exception occur when set Local Services in Util class");
 		}
 	}
-	
-	public EmployeeDto setEmployeeBasicDetail(long employeeId, ThemeDisplay themeDisplay) {
-		EmployeeDetails employeeDetails = employeeDetailsLocalService.fetchEmployeeDetails(employeeId);
-		User user = UserLocalServiceUtil.fetchUserById(employeeDetails.getLrUserId());
-		EmployeeAddress employeeAddress = employeeAddressLocalService.fetchEmployeeAddress(employeeDetails.getEmployeeAddressId());
-		List<Address> addressList = new ArrayList<>();
 
-		EmployeeDto employeeDto = new EmployeeDto(employeeAddress);
-		employeeDto.setEmployeeId(employeeDetails.getEmployeeId());
-		employeeDto.setFirstName(employeeDetails.getFirstName());
-		employeeDto.setMiddleName(user.getMiddleName());
-		employeeDto.setLastName(employeeDetails.getLastName());
-		employeeDto.setGender(employeeDetails.getGender());
-		employeeDto.setMobileNumber(employeeDetails.getMobileNo());
-		employeeDto.setPersonalEmailId(employeeDetails.getPersonalEmail());
-		employeeDto.setOfficialEmailId(employeeDetails.getOfficialEmail());
-		employeeDto.setJoiningDate(employeeDetails.getJoiningDate());
-		
+	public void setEmployeeDetails(RenderRequest renderRequest, Long employeeId) {
 		try {
-			long designationId = employeeDesignationLocalService.findByEmployeeId(employeeId).getDesignationMasterId();
-			employeeDto.setDesignationName(designationMasterLocalService.getDesignationMaster(designationId).getDesignationName());
-			employeeDto.setDesignationId(designationId);
-			
-			List<Long> departmentIds = new ArrayList<>();
-			List<String> departmentNames = new ArrayList<>();
-			for(EmployeeDepartment employeeDepartment : employeeDepartmentLocalService.findByEmployeeIdGetDepartments(employeeId)) {
-				DepartmentMaster departmentMaster = departmentMasterLocalService.fetchDepartmentMaster(employeeDepartment.getDepartmentMasterId());
-				departmentIds.add(departmentMaster.getDepartmentMasterId());
-				departmentNames.add(departmentMaster.getDepartmentName());
+			log.info("EmployeeOnBoardingUtil >>> setEmployeeDetails ::: employee details called In Util");
+			EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+
+			long profilePicId = employeeDetails.getProfilePicId();
+			long aadhaarCardId = employeeDetails.getAadhaarCardFileId();
+			long panCardId = employeeDetails.getPanCardFileId();
+
+			if (profilePicId > 0) {
+				FileEntry profilePicPathName = DLAppLocalServiceUtil.getFileEntry(profilePicId);
+				String profilePicName = profilePicPathName.getFileName();
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PROFILE_PIC_NAME, profilePicName);
 			}
-			employeeDto.setDepartmentId(departmentIds);
-			employeeDto.setDepartmentNames(departmentNames);
-
-			boolean isSamePresentAddress = false;
-			if(employeeAddress != null){
-				isSamePresentAddress = employeeAddress.getPresentPermanentSame();
-				addressList.add(addressLocalService.fetchAddress(employeeAddress.getPermanentAddress()));
-				employeeDto.setPermanantCountry(countryLocalService.getCountry(addressList.get(0).getCountry()).getName());
-				employeeDto.setPermanantCountryId(addressList.get(0).getCountry());
-
-				if(!isSamePresentAddress) {
-					addressList.add(addressLocalService.fetchAddress(employeeAddress.getPresentAddress()));
-					employeeDto.setPresentCountry(countryLocalService.getCountry(addressList.get(1).getCountry()).getName());
-					employeeDto.setPresentCountryId(addressList.get(1).getCountry());
-				}
-			}else{
-				employeeDto.setPermanantCountry(AxHrmsProfileManagementWebConstants.NA);
-				employeeDto.setPermanantCountryId(0);
-				employeeDto.setPresentCountry(AxHrmsProfileManagementWebConstants.NA);
-				employeeDto.setPresentCountryId(0);
+			if (aadhaarCardId > 0) {
+				FileEntry aadhaarCardFile = DLAppLocalServiceUtil.getFileEntry(aadhaarCardId);
+				String aadhaarCardFileName = aadhaarCardFile.getFileName();
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.AADHAAR_CARD_FILE_NAME, aadhaarCardFileName);
+			}
+			if (panCardId > 0) {
+				FileEntry panCardFile = DLAppLocalServiceUtil.getFileEntry(panCardId);
+				String panCardFileName = panCardFile.getFileName();
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PAN_CARD_FILE_NAME, panCardFileName);
 			}
 
-			employeeDto.setSamePresentAddress(isSamePresentAddress);
-			employeeDto.setAddressList(addressList);
 
-			FileEntry profileImageFileEntry = DLAppServiceUtil.getFileEntry(employeeDetails.getProfilePicId());
-			if (Validator.isNotNull(profileImageFileEntry)) {
-				String previewURL = DLUtil.getPreviewURL(profileImageFileEntry, profileImageFileEntry.getFileVersion(), themeDisplay, StringPool.BLANK);
-				employeeDto.setPreviewUrl(previewURL);
-			}
+			log.info("EmployeeOnBoardingUtil >>> setEmployeeDetails ::: Retrieved employeeDetails: " + employeeDetails);
+			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_DETAIL, employeeDetails);
 
 		} catch (PortalException e) {
-			log.error("EmployeeProfileUtil >>> setEmployeeBasicDetail ::: Exception is: "+e.getMessage());
+			e.printStackTrace();
 		}
+	}
+	public void setAddress(RenderRequest renderRequest, Long employeeId) {
+		try {
+			long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
+			log.info("EmployeeOnBoardingUtil >>> setAddress ::: employeeAddressId ======>>>>>" + employeeAddressId);
+			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
+			log.info("EmployeeOnBoardingUtil >>> setAddress :::employeeAddressss >>>>>>>>>>>>. " + employeeAddress);
+			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_ADDRESS, employeeAddress);
+			if (employeeAddressId > 0) {
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.ADDRESS_FLAG_STATUS, AxHrmsProfileManagementWebConstants.TRUE);
+			}
+			if (employeeAddress.getPresentPermanentSame()) {
+				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());
+				Address permanentaddresss = addressLocalService.getAddress(employeeAddress.getPermanentAddress());
+				log.info("presentaddresss ===>" + presentaddresss);
+				log.info("permanentaddresss ===>" + permanentaddresss);
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PRESENT_ADDRESS, presentaddresss);
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PERMANENT_ADDRESS, permanentaddresss);
+			} else {
+				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());
+				Address permanentaddresss = addressLocalService.getAddress(employeeAddress.getPermanentAddress());
 
-        return employeeDto;
-    }
+				log.info("presentaddresss ===>" + presentaddresss);
+				log.info("permanentaddresss ===>" + permanentaddresss);
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PERMANENT_ADDRESS, permanentaddresss);
+				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PRESENT_ADDRESS, presentaddresss);
+			}
+			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,employeeAddress.getPresentPermanentSame());
+
+
+
+		} catch (PortalException e) {
+			log.error("Error retrieving employeeAddress: " + e.getMessage());
+		}
+	}
+
+	public void setNominee(RenderRequest renderRequest, Long employeeId) {
+		try {
+			log.info("EmployeeOnBoardingUtil >> setNominee ::: nominee details called");
+			long nomineeId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getNominneeId();
+			Nominee nominee = nomineeLocalService.getNominee(nomineeId);
+			Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
+			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.ADDRESS, address);
+			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.NOMINEE, nominee);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+	}
+	
+
 	
 	
 }

@@ -318,7 +318,6 @@ function setFileData(config) {
 
     const fileInput = document.querySelector("#" + namespace + "uploadDocument");
 
-    // ✅ VERY IMPORTANT CHECK
     if (!fileInput || !fileName) {
         return;
     }

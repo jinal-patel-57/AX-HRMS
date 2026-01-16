@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -43,13 +44,14 @@ public class LeaveBalanceMVCRenderCommand implements MVCRenderCommand {
 
         List<EmployeeDetails> employeeList = employeeDetailsLocalService.findByIsTerminated(false);
         renderRequest.setAttribute("employeeList", employeeList);
-        List<Integer> yearList = getDistinctYearsDesc();
+        List<Integer> yearList = new ArrayList<>(getDistinctYearsDesc());
+
         int currentYear = Year.now().getValue();
         boolean containsCurrentYear = yearList.contains(currentYear);
         if(!containsCurrentYear) {
         	yearList.add(currentYear);
         }
-        renderRequest.setAttribute("yearList", getDistinctYearsDesc());
+        renderRequest.setAttribute("yearList",yearList);
         return "/jsp/leavebalance/leaveBalanceExport.jsp";
     }
 

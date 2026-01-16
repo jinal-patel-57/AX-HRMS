@@ -49,6 +49,8 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
     DepartmentMasterLocalService departmentMasterLocalService;
     @Reference
     CountryLocalService countryLocalService;
+    @Reference
+    NomineeLocalService nomineeLocalService;
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
         log.info("EditEmployeeProfileMVCRenderCommand >>> Render ::: Edit Employee Profile JSP File Render...");
@@ -64,17 +66,24 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
         localServiceProvider.put(AxHrmsProfileManagementWebConstants.DESIGNATION_MASTER_LOCAL_SERVICE,designationMasterLocalService);
         localServiceProvider.put(AxHrmsProfileManagementWebConstants.DEPARTMENT_MASTER_LOCAL_SERVICE,departmentMasterLocalService);
         localServiceProvider.put(AxHrmsProfileManagementWebConstants.COUNTRY_LOCAL_SERVICE,countryLocalService);
+        localServiceProvider.put(AxHrmsProfileManagementWebConstants.NOMINEE_LOCAL_SERVICE,nomineeLocalService);
 
         EmployeeProfileUtil employeeProfileUtil = new EmployeeProfileUtil(localServiceProvider);
 
+        long employeeId = 0;
         try {
-            EmployeeDto employeeDetail = employeeProfileUtil.setEmployeeBasicDetail(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId(),themeDisplay);
-            renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_PROFILE_DETAIL,employeeDetail);
-            renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,employeeDetail.isSamePresentAddress());
+            employeeId = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId();
+            employeeProfileUtil.setEmployeeDetails(renderRequest, employeeId);
+            employeeProfileUtil.setAddress(renderRequest, employeeId);
+            employeeProfileUtil.setNominee(renderRequest, employeeId);
             renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.COUNTRY_LIST,countryLocalService.getCountries(-1,-1));
         } catch (NoSuchEmployeeDetailsException e) {
-            log.error("EditEmployeeProfileMVCRenderCommand >>> render ::: Exception is: "+e.getMessage());
+            throw new RuntimeException(e);
         }
+
+
+
+
         return AxHrmsProfileManagementWebConstants.EDIT_EMPLOYEE_PROFILE_JSP_FILE;
     }
 }
