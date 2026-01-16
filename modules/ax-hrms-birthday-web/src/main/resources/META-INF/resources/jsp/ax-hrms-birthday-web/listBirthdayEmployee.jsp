@@ -51,9 +51,11 @@
                         <td>${birthdayEmployee.departmentName}</td>
                         <td>${birthdayEmployee.designationName}</td>
                         <td>
+                         <c:if test="${currentUserId ne birthdayEmployee.lrUserId}">
                             <a href="javascript:void(0)" data-senna-off="true" class="btn btn-sm btn-primary sendBirthdayWish"
                                data-id='${birthdayEmployee.employeeId}' data-name='${birthdayEmployee.employeeName}'>
                                 <liferay-ui:message key="send-wishes"/></a>
+                          </c:if>
                         </td>
                     </tr>
                 </c:forEach>

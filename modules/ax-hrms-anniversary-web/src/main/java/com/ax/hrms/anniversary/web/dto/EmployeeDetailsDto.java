@@ -6,6 +6,15 @@ public class EmployeeDetailsDto {
     String departmentName;
     String designationName;
     String employeeCode;
+    long lrUserId;
+
+    public long getLrUserId() {
+        return lrUserId;
+    }
+
+    public void setLrUserId(long lrUserId) {
+        this.lrUserId = lrUserId;
+    }
 
     public long getEmployeeId() {
         return employeeId;

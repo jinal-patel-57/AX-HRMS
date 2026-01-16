@@ -64,7 +64,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><liferay-ui:message key="new-message" /></h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><liferay-ui:message key="send-wishes"/></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"><liferay-ui:message key="close" /></button>
-                    <button type="button" class="btn btn-outline-success btn-sm" id="<portlet:namespace />sendWish"><liferay-ui:message key="send-message" /></button>
+                    <button type="button" class="btn btn-outline-success btn-sm" id="<portlet:namespace />sendWish"><liferay-ui:message key="send"/></button></button>
                 </div>
             </div>
         </div>

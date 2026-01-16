@@ -118,6 +118,7 @@ public class AnniversaryUtil {
 			for(EmployeeDetails employeeDetails : employeeDetailsList){
 				EmployeeDetailsDto employeeDetailsDto = new EmployeeDetailsDto();
 				employeeDetailsDto.setEmployeeId(employeeDetails.getEmployeeId());
+				employeeDetailsDto.setLrUserId(employeeDetails.getLrUserId());
 				employeeDetailsDto.setEmployeeName(employeeDetails.getFirstName()+AxHrmsAnniversaryWebPortletConstants.ONE_SPACE+employeeDetails.getLastName());
 				try{
 				

@@ -7,6 +7,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -58,7 +60,7 @@ public class ListBirthdayEmployeeMVCRenderCommand implements MVCRenderCommand {
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
 		BirthdayWebUtil birthdayWebUtil = new BirthdayWebUtil(employeeDetailsLocalService, employeeDepartmentLocalService, employeeDesignationLocalService, departmentMasterLocalService, designationMasterLocalService, wishTypeMasterLocalService);
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 				
 		List<EmployeeDetails> birthdayListOfEmployee = birthdayWebUtil.getBirthdayEmployee();
 
@@ -77,6 +79,7 @@ public class ListBirthdayEmployeeMVCRenderCommand implements MVCRenderCommand {
 		renderRequest.setAttribute(AxHrmsBirthdayWebPortletConstants.IS_LIST_EMPTY, true);
 		}
 		renderRequest.setAttribute(AxHrmsBirthdayWebPortletConstants.BIRTHDAY_LIST_OF_EMPLOYEE, birthdayEmployeeDtoList);
+		renderRequest.setAttribute("currentUserId", themeDisplay.getUserId());
 
 		return AxHrmsBirthdayWebPortletConstants.VIEW_BIRTHDAY_EMPLOYEE_JSP;
 	}

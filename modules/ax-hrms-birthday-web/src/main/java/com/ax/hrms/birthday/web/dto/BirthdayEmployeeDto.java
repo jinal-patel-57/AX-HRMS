@@ -10,7 +10,17 @@ public class BirthdayEmployeeDto {
 	long wishId;
 	String departmentName;
 	String designationName;
-	
+
+	long lrUserId;
+
+	public long getLrUserId() {
+		return lrUserId;
+	}
+
+	public void setLrUserId(long lrUserId) {
+		this.lrUserId = lrUserId;
+	}
+
 	public String getDepartmentName() {
 		return departmentName;
 	}

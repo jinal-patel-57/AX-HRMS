@@ -105,6 +105,7 @@ public class BirthdayWebUtil {
 			BirthdayEmployeeDto birthdayEmployeeDto = new BirthdayEmployeeDto();
 
 			birthdayEmployeeDto.setEmployeeId(employee.getEmployeeId());
+			birthdayEmployeeDto.setLrUserId(employee.getLrUserId());
 			birthdayEmployeeDto.setEmployeeName(employee.getFirstName() + " " + employee.getLastName());
 			birthdayEmployeeDto.setWishtypeName(AxHrmsBirthdayWebPortletConstants.BIRTHDAY);
 			EmployeeDepartment employeeDepartment = employeeDepartmentLocalService

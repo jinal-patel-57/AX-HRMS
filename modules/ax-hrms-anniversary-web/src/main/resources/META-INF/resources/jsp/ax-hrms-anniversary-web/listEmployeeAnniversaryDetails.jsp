@@ -45,11 +45,14 @@
                         <td>${anniversaryEmployees.departmentName}</td>
                         <td>${anniversaryEmployees.designationName}</td>
                         <td>
+                         <c:if test="${currentUserId ne anniversaryEmployees.lrUserId}">
                             <a href="javascript:void(0)" data-senna-off="true"
                                class="btn btn-primary btn-sm sendAnniversaryWish" data-toggle="modal"
                                data-employee-id='${anniversaryEmployees.employeeId}'
                                data-employee-name='${anniversaryEmployees.employeeName}'> <liferay-ui:message
                                     key="send-wishes"/></a>
+
+                              </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -65,7 +68,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><liferay-ui:message key="new-message"/></h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><liferay-ui:message key="send-wishes"/></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -106,7 +109,7 @@
                     <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"><liferay-ui:message
                             key="close"/></button>
                     <button type="button" class="btn btn-outline-success btn-sm" id="<portlet:namespace />sendWish">
-                        <liferay-ui:message key="send-message"/></button>
+                       <liferay-ui:message key="send"/></button></button>
                 </div>
             </div>
         </div>
