@@ -18,8 +18,15 @@
             <input value= "${policyTypeMasterData.getPolicyTypeMasterID()}" type="hidden" name = "<portlet:namespace />policyTypeMasterId">
                 <label class="" for="policyTypeName"><liferay-ui:message key="policyTypeName" /><span class="text-danger">*</span></label>
               					
-                <input  value= "${policyTypeMasterData.getPolicyType()}" id="policyType" placeholder="Enter Policy Type Name" class="form-control" type="text"
-                    name="<portlet:namespace/>policyType" value="">
+               <input
+                   value="${policyTypeMasterData.getPolicyType()}"
+                   id="policyType"
+                   class="form-control"
+                   type="text"
+                   placeholder="Enter Policy Type Name"
+                   name="<portlet:namespace/>policyType"
+               />
+
             </div>
 </div>
   <div class="card-footer text-right mb-0">

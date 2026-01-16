@@ -47,7 +47,7 @@ public class ListPolicyTypeMasterMVCRenderCommand implements MVCRenderCommand {
 		List<PolicyTypeMaster> policyTypeMasters = null;
 		
 		int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 		
 		int totalOfPolicyType = policyTypeMasterLocalService.getPolicyTypeMastersCount();
 	    int totalPageContainer = (totalOfPolicyType + deltaValue - 1) / deltaValue;

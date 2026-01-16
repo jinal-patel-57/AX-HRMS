@@ -24,7 +24,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 
-<liferay-ui:search-container total="${totalPolicyType}" delta= "3" emptyResultsMessage="No-Policy Type-found" iteratorURL="${iteratorURL}">
+<liferay-ui:search-container total="${totalPolicyType}" delta= "20" emptyResultsMessage="No-Policy Type-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${getPolicyType}" />
 
     <liferay-ui:search-container-row className="com.ax.hrms.master.model.PolicyTypeMaster" modelVar="policyTypeMaster" keyProperty="policyTypeMasterID">
