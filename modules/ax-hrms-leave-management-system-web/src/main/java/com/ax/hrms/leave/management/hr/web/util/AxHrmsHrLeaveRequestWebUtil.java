@@ -160,18 +160,25 @@ public class AxHrmsHrLeaveRequestWebUtil {
 
 			leaveRequestDto.setEmployeeName(employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
 
-			EmployeeDepartment emplyeeDepartment = employeeDepartmentLocalService
-					.findByEmployeeId(leaveRequest.getEmployeeId());
+			try {
+				EmployeeDepartment emplyeeDepartment = employeeDepartmentLocalService
+						.findByEmployeeId(leaveRequest.getEmployeeId());
+				DepartmentMaster departmentMaster = departmentMasterLocalService
+						.getDepartmentMaster(emplyeeDepartment.getDepartmentMasterId());
+				leaveRequestDto.setDepartmentName(departmentMaster.getDepartmentName());
+			} catch(Exception e) {
+				leaveRequestDto.setDepartmentName("-");
+			}
 
-			DepartmentMaster departmentMaster = departmentMasterLocalService
-					.getDepartmentMaster(emplyeeDepartment.getDepartmentMasterId());
-			leaveRequestDto.setDepartmentName(departmentMaster.getDepartmentName());
-
-			EmployeeDesignation employeeDesiganation = employeeDesignationLocalService
-					.findByEmployeeId(leaveRequest.getEmployeeId());
-			DesignationMaster desiganationMaster = designationMasterLocalService
-					.getDesignationMaster(employeeDesiganation.getDesignationMasterId());
-			leaveRequestDto.setDesignationName(desiganationMaster.getDesignationName());
+			try {
+				EmployeeDesignation employeeDesiganation = employeeDesignationLocalService
+						.findByEmployeeId(leaveRequest.getEmployeeId());
+				DesignationMaster desiganationMaster = designationMasterLocalService
+						.getDesignationMaster(employeeDesiganation.getDesignationMasterId());
+				leaveRequestDto.setDesignationName(desiganationMaster.getDesignationName());
+			} catch(Exception e) {
+				leaveRequestDto.setDesignationName("-");
+			}
 
 			String startDateOfLeave = setDateFormat((leaveRequest.getStartDateTime()));
 			String endDateOfLeave = setDateFormat((leaveRequest.getEndDateTime()));
