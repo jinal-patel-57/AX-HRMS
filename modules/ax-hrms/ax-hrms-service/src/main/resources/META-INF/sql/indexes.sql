@@ -84,6 +84,7 @@ create index IX_8F94A603 on ax_LeaveBalanceHistory (employeeId, year, leaveTypeM
 create unique index IX_9AA9C603 on ax_LeaveBalanceHistory (uuid_[$COLUMN_LENGTH:75$], groupId);
 create index IX_C9D65BE on ax_LeaveBalanceHistory (year);
 
+create index IX_BFFC3E8 on ax_LeaveDayType (leaveDate);
 create index IX_6B3E1134 on ax_LeaveDayType (leaveRequestId);
 create unique index IX_32C53AE3 on ax_LeaveDayType (uuid_[$COLUMN_LENGTH:75$], groupId);
 

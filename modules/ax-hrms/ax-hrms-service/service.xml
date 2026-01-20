@@ -637,6 +637,9 @@
         <finder return-type="Collection" name="LeaveRequestId">
             <finder-column name="leaveRequestId"/>
         </finder>
+        <finder return-type="Collection" name="LeaveDate">
+            <finder-column name="leaveDate"/>
+        </finder>
 
     </entity>
     <entity local-service="true" name="LeaveTypeViewPermit" remote-service="true" uuid="true">

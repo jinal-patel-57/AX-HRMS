@@ -242,6 +242,13 @@ public class LeaveDayTypeLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.LeaveDayType> findByLeaveDate(
+		java.util.Date leaveDate) {
+
+		return _leaveDayTypeLocalService.findByLeaveDate(leaveDate);
+	}
+
+	@Override
 	public java.util.List<com.ax.hrms.model.LeaveDayType> findByLeaveRequestId(
 		long leaveRequestId) {
 

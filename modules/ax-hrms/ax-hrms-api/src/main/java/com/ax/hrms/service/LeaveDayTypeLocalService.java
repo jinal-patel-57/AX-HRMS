@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -204,6 +205,8 @@ public interface LeaveDayTypeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public LeaveDayType fetchLeaveDayTypeByUuidAndGroupId(
 		String uuid, long groupId);
+
+	public List<LeaveDayType> findByLeaveDate(Date leaveDate);
 
 	public List<LeaveDayType> findByLeaveRequestId(long leaveRequestId);
 

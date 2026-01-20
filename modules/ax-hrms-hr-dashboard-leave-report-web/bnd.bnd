@@ -1,0 +1,7 @@
+Bundle-Name: ax-hrms-hr-dashboard-leave-report-web
+Bundle-SymbolicName: ax.hrms.hr.dashboard.leave.report.web
+Bundle-Version: 1.0.0
+Export-Package: ax.hrms.hr.dashboard.leave.report.web.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

@@ -215,6 +215,10 @@ public class LeaveDayTypeLocalServiceUtil {
 		return getService().fetchLeaveDayTypeByUuidAndGroupId(uuid, groupId);
 	}
 
+	public static List<LeaveDayType> findByLeaveDate(java.util.Date leaveDate) {
+		return getService().findByLeaveDate(leaveDate);
+	}
+
 	public static List<LeaveDayType> findByLeaveRequestId(long leaveRequestId) {
 		return getService().findByLeaveRequestId(leaveRequestId);
 	}

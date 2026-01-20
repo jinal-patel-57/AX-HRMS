@@ -19,6 +19,7 @@ import com.ax.hrms.service.base.LeaveDayTypeLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -34,5 +35,9 @@ public class LeaveDayTypeLocalServiceImpl
 	extends LeaveDayTypeLocalServiceBaseImpl {
 	public List<LeaveDayType> findByLeaveRequestId(long leaveRequestId) {
 		return leaveDayTypePersistence.findByLeaveRequestId(leaveRequestId);
+	}
+	
+	public List<LeaveDayType> findByLeaveDate(Date leaveDate) {
+		return leaveDayTypePersistence.findByLeaveDate(leaveDate);
 	}
 }
