@@ -47,6 +47,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 		String bankName = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_NAME);
 		String ifscCode = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.IFSC_CODE);
 		String bankBranch = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_BRANCH);
+		String nameAsPerPanCard = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_PAN_CARD);
 		long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 		String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_BANK);
 
@@ -68,6 +69,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setBankName(bankName);
 					employeeBankAccount.setIfscCode(ifscCode);
 					employeeBankAccount.setBankBranch(bankBranch);
+					employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 					employeeBankAccount.setStatus(true);
 
 					employeeBankAccountId = employeeBankAccount.getBankAccountId();
@@ -105,6 +107,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setBankName(bankName);
 					employeeBankAccount.setIfscCode(ifscCode);
 					employeeBankAccount.setBankBranch(bankBranch);
+					employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 					employeeBankAccount.setStatus(true);
 					//EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());

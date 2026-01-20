@@ -54,7 +54,7 @@ public class EmployeeBankAccountCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,6 +88,8 @@ public class EmployeeBankAccountCacheModel
 		sb.append(bankBranch);
 		sb.append(", employeeId=");
 		sb.append(employeeId);
+		sb.append(", nameAsPerPanCard=");
+		sb.append(nameAsPerPanCard);
 		sb.append("}");
 
 		return sb.toString();
@@ -172,6 +174,13 @@ public class EmployeeBankAccountCacheModel
 
 		employeeBankAccountImpl.setEmployeeId(employeeId);
 
+		if (nameAsPerPanCard == null) {
+			employeeBankAccountImpl.setNameAsPerPanCard("");
+		}
+		else {
+			employeeBankAccountImpl.setNameAsPerPanCard(nameAsPerPanCard);
+		}
+
 		employeeBankAccountImpl.resetOriginalValues();
 
 		return employeeBankAccountImpl;
@@ -202,6 +211,7 @@ public class EmployeeBankAccountCacheModel
 		bankBranch = objectInput.readUTF();
 
 		employeeId = objectInput.readLong();
+		nameAsPerPanCard = objectInput.readUTF();
 	}
 
 	@Override
@@ -270,6 +280,13 @@ public class EmployeeBankAccountCacheModel
 		}
 
 		objectOutput.writeLong(employeeId);
+
+		if (nameAsPerPanCard == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(nameAsPerPanCard);
+		}
 	}
 
 	public String uuid;
@@ -288,5 +305,6 @@ public class EmployeeBankAccountCacheModel
 	public String ifscCode;
 	public String bankBranch;
 	public long employeeId;
+	public String nameAsPerPanCard;
 
 }

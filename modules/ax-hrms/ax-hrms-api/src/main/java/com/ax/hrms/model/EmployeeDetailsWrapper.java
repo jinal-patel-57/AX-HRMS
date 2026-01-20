@@ -78,6 +78,7 @@ public class EmployeeDetailsWrapper
 		attributes.put("experienceYears", getExperienceYears());
 		attributes.put("panCardNumber", getPanCardNumber());
 		attributes.put("aadhaarCardNumber", getAadhaarCardNumber());
+		attributes.put("nameAsPerAadhaarCard", getNameAsPerAadhaarCard());
 
 		return attributes;
 	}
@@ -348,6 +349,13 @@ public class EmployeeDetailsWrapper
 
 		if (aadhaarCardNumber != null) {
 			setAadhaarCardNumber(aadhaarCardNumber);
+		}
+
+		String nameAsPerAadhaarCard = (String)attributes.get(
+			"nameAsPerAadhaarCard");
+
+		if (nameAsPerAadhaarCard != null) {
+			setNameAsPerAadhaarCard(nameAsPerAadhaarCard);
 		}
 	}
 
@@ -684,6 +692,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public Date getModifiedDate() {
 		return model.getModifiedDate();
+	}
+
+	/**
+	 * Returns the name as per aadhaar card of this employee details.
+	 *
+	 * @return the name as per aadhaar card of this employee details
+	 */
+	@Override
+	public String getNameAsPerAadhaarCard() {
+		return model.getNameAsPerAadhaarCard();
 	}
 
 	/**
@@ -1199,6 +1217,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
+	}
+
+	/**
+	 * Sets the name as per aadhaar card of this employee details.
+	 *
+	 * @param nameAsPerAadhaarCard the name as per aadhaar card of this employee details
+	 */
+	@Override
+	public void setNameAsPerAadhaarCard(String nameAsPerAadhaarCard) {
+		model.setNameAsPerAadhaarCard(nameAsPerAadhaarCard);
 	}
 
 	/**

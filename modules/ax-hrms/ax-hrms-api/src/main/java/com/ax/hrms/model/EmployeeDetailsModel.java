@@ -737,6 +737,21 @@ public interface EmployeeDetailsModel
 	 */
 	public void setAadhaarCardNumber(String aadhaarCardNumber);
 
+	/**
+	 * Returns the name as per aadhaar card of this employee details.
+	 *
+	 * @return the name as per aadhaar card of this employee details
+	 */
+	@AutoEscape
+	public String getNameAsPerAadhaarCard();
+
+	/**
+	 * Sets the name as per aadhaar card of this employee details.
+	 *
+	 * @param nameAsPerAadhaarCard the name as per aadhaar card of this employee details
+	 */
+	public void setNameAsPerAadhaarCard(String nameAsPerAadhaarCard);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

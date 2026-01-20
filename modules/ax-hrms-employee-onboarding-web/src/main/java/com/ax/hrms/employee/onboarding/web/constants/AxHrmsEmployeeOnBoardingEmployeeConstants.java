@@ -56,6 +56,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String SPOUSE_NAME ="spouseName";
 
     public static final String AADHAR_NUMBER ="aadharNumber";
+    public static final String NAME_AS_PER_AADHAAR_CARD ="nameAsPerAadhaarCard";
     public static final String PAN_NUMBER ="panNumber";
 
 
@@ -73,6 +74,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 
 	//AddEmployeeBankAccountMVCActionCommand
 	public static final String ACCOUNT_NUMBER ="accountNumber";
+	public static final String NAME_AS_PER_PAN_CARD ="nameAsPerPanCard";
 	public static final String ACCOUNT_TYPE ="accountType";
 	public static final String BENEFICIARY_NAME ="beneficiaryName";
 	public static final String BANK_NAME ="bankName";

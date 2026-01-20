@@ -145,7 +145,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 		employeeDetails.setFatherName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.FATHER_NAME));
 		employeeDetails.setMaritalStatus(ParamUtil.getBoolean(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.MARTIAL_STATUS));
 		employeeDetails.setSpouseName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SPOUSE_NAME));
-
+        employeeDetails.setNameAsPerAadhaarCard(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_AADHAAR_CARD));
 
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));

@@ -72,6 +72,10 @@ public class EmployeeBankAccountTable
 	public final Column<EmployeeBankAccountTable, Long> employeeId =
 		createColumn(
 			"employeeId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeBankAccountTable, String> nameAsPerPanCard =
+		createColumn(
+			"nameAsPerPanCard", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 
 	private EmployeeBankAccountTable() {
 		super("ax_EmployeeBankAccount", EmployeeBankAccountTable::new);

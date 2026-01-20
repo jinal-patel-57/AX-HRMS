@@ -193,7 +193,8 @@ create table ax_EmployeeBankAccount (
 	status BOOLEAN,
 	ifscCode VARCHAR(75) null,
 	bankBranch VARCHAR(75) null,
-	employeeId LONG
+	employeeId LONG,
+	nameAsPerPanCard VARCHAR(75) null
 );
 
 create table ax_EmployeeDepartment (
@@ -271,7 +272,8 @@ create table ax_EmployeeDetails (
 	managerId LONG,
 	experienceYears DOUBLE,
 	panCardNumber VARCHAR(75) null,
-	aadhaarCardNumber VARCHAR(75) null
+	aadhaarCardNumber VARCHAR(75) null,
+	nameAsPerAadhaarCard VARCHAR(75) null
 );
 
 create table ax_EmployeeDocument (

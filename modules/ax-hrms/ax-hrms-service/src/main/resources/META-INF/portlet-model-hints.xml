@@ -194,6 +194,7 @@
 		<field name="ifscCode" type="String" />
 		<field name="bankBranch" type="String" />
 		<field name="employeeId" type="long" />
+		<field name="nameAsPerPanCard" type="String" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeDepartment">
 		<field name="uuid" type="String" />
@@ -271,6 +272,7 @@
 		<field name="experienceYears" type="double" />
 		<field name="panCardNumber" type="String" />
 		<field name="aadhaarCardNumber" type="String" />
+		<field name="nameAsPerAadhaarCard" type="String" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeDocument">
 		<field name="uuid" type="String" />

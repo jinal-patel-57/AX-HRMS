@@ -228,6 +228,12 @@
                             <div class="label-content">${employeeDetail.panCardNumber}</div>
                           </div>
                       </div>
+                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Name as per Aadhaar Card</div>
+                            <div class="label-content email">${employeeDetail.nameAsPerAadhaarCard}</div>
+                          </div>
+                      </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
@@ -666,6 +672,12 @@
                             <div class="label-content">${employeeBankAccount.bankBranch}</div>
                         </div>
                     </div>
+                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                          <div class="form-group-view">
+                              <div class="label-name">Name as per Pan Card</div>
+                            <div class="label-content email">${employeeBankAccount.nameAsPerPanCard}</div>
+                          </div>
+                     </div>
                 </div>
             </div>
         </div>

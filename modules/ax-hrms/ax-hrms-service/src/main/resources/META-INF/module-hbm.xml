@@ -254,6 +254,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="ifscCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="bankBranch" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="nameAsPerPanCard" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeDepartmentImpl" table="ax_EmployeeDepartment">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeDepartmentId" type="long">
@@ -335,6 +336,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="experienceYears" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="panCardNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="aadhaarCardNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="nameAsPerAadhaarCard" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeDocumentImpl" table="ax_EmployeeDocument">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentId" type="long">

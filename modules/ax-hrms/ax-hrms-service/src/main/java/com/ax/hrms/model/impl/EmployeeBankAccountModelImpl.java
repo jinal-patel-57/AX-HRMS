@@ -70,7 +70,8 @@ public class EmployeeBankAccountModelImpl
 		{"accountNumber", Types.VARCHAR}, {"accountType", Types.VARCHAR},
 		{"beneficiaryName", Types.VARCHAR}, {"bankName", Types.VARCHAR},
 		{"status", Types.BOOLEAN}, {"ifscCode", Types.VARCHAR},
-		{"bankBranch", Types.VARCHAR}, {"employeeId", Types.BIGINT}
+		{"bankBranch", Types.VARCHAR}, {"employeeId", Types.BIGINT},
+		{"nameAsPerPanCard", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -93,10 +94,11 @@ public class EmployeeBankAccountModelImpl
 		TABLE_COLUMNS_MAP.put("ifscCode", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("bankBranch", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("employeeId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("nameAsPerPanCard", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeBankAccount (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,bankAccountId LONG not null primary key,accountNumber VARCHAR(75) null,accountType VARCHAR(75) null,beneficiaryName VARCHAR(75) null,bankName VARCHAR(75) null,status BOOLEAN,ifscCode VARCHAR(75) null,bankBranch VARCHAR(75) null,employeeId LONG)";
+		"create table ax_EmployeeBankAccount (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,bankAccountId LONG not null primary key,accountNumber VARCHAR(75) null,accountType VARCHAR(75) null,beneficiaryName VARCHAR(75) null,bankName VARCHAR(75) null,status BOOLEAN,ifscCode VARCHAR(75) null,bankBranch VARCHAR(75) null,employeeId LONG,nameAsPerPanCard VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_EmployeeBankAccount";
@@ -279,6 +281,8 @@ public class EmployeeBankAccountModelImpl
 				"bankBranch", EmployeeBankAccount::getBankBranch);
 			attributeGetterFunctions.put(
 				"employeeId", EmployeeBankAccount::getEmployeeId);
+			attributeGetterFunctions.put(
+				"nameAsPerPanCard", EmployeeBankAccount::getNameAsPerPanCard);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -362,6 +366,10 @@ public class EmployeeBankAccountModelImpl
 				"employeeId",
 				(BiConsumer<EmployeeBankAccount, Long>)
 					EmployeeBankAccount::setEmployeeId);
+			attributeSetterBiConsumers.put(
+				"nameAsPerPanCard",
+				(BiConsumer<EmployeeBankAccount, String>)
+					EmployeeBankAccount::setNameAsPerPanCard);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -684,6 +692,26 @@ public class EmployeeBankAccountModelImpl
 		_employeeId = employeeId;
 	}
 
+	@JSON
+	@Override
+	public String getNameAsPerPanCard() {
+		if (_nameAsPerPanCard == null) {
+			return "";
+		}
+		else {
+			return _nameAsPerPanCard;
+		}
+	}
+
+	@Override
+	public void setNameAsPerPanCard(String nameAsPerPanCard) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_nameAsPerPanCard = nameAsPerPanCard;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -764,6 +792,7 @@ public class EmployeeBankAccountModelImpl
 		employeeBankAccountImpl.setIfscCode(getIfscCode());
 		employeeBankAccountImpl.setBankBranch(getBankBranch());
 		employeeBankAccountImpl.setEmployeeId(getEmployeeId());
+		employeeBankAccountImpl.setNameAsPerPanCard(getNameAsPerPanCard());
 
 		employeeBankAccountImpl.resetOriginalValues();
 
@@ -807,6 +836,8 @@ public class EmployeeBankAccountModelImpl
 			this.<String>getColumnOriginalValue("bankBranch"));
 		employeeBankAccountImpl.setEmployeeId(
 			this.<Long>getColumnOriginalValue("employeeId"));
+		employeeBankAccountImpl.setNameAsPerPanCard(
+			this.<String>getColumnOriginalValue("nameAsPerPanCard"));
 
 		return employeeBankAccountImpl;
 	}
@@ -973,6 +1004,15 @@ public class EmployeeBankAccountModelImpl
 
 		employeeBankAccountCacheModel.employeeId = getEmployeeId();
 
+		employeeBankAccountCacheModel.nameAsPerPanCard = getNameAsPerPanCard();
+
+		String nameAsPerPanCard =
+			employeeBankAccountCacheModel.nameAsPerPanCard;
+
+		if ((nameAsPerPanCard != null) && (nameAsPerPanCard.length() == 0)) {
+			employeeBankAccountCacheModel.nameAsPerPanCard = null;
+		}
+
 		return employeeBankAccountCacheModel;
 	}
 
@@ -1052,6 +1092,7 @@ public class EmployeeBankAccountModelImpl
 	private String _ifscCode;
 	private String _bankBranch;
 	private long _employeeId;
+	private String _nameAsPerPanCard;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1099,6 +1140,7 @@ public class EmployeeBankAccountModelImpl
 		_columnOriginalValues.put("ifscCode", _ifscCode);
 		_columnOriginalValues.put("bankBranch", _bankBranch);
 		_columnOriginalValues.put("employeeId", _employeeId);
+		_columnOriginalValues.put("nameAsPerPanCard", _nameAsPerPanCard);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1153,6 +1195,8 @@ public class EmployeeBankAccountModelImpl
 		columnBitmasks.put("bankBranch", 16384L);
 
 		columnBitmasks.put("employeeId", 32768L);
+
+		columnBitmasks.put("nameAsPerPanCard", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -21,7 +21,7 @@
                                name="<portlet:namespace />bankAccountId" maxlength="75"
                                value="${employeeBankAccount.bankAccountId}"
 
-                               required/>
+                               />
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-12 mb-3">
@@ -46,7 +46,7 @@
                         </label>
                         <input type="text" class="form-control" id="<portlet:namespace />beneficiaryName"
                                name="<portlet:namespace />beneficiaryName" maxlength="75"
-                               value="${employeeBankAccount.beneficiaryName}" required/>
+                               value="${employeeBankAccount.beneficiaryName}" />
                     </div>
                 </div>
                 <!-- Bank Name -->
@@ -58,7 +58,7 @@
                         <input type="text" class="form-control" id="<portlet:namespace />bankName"
                                name="<portlet:namespace />bankName" maxlength="75"
                                value="${employeeBankAccount.bankName}"
-                               required/>
+                               />
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                         <input type="text" class="form-control text-uppercase" id="<portlet:namespace />ifscCode"
                                name="<portlet:namespace />ifscCode" maxlength="75"
                                value="${employeeBankAccount.ifscCode}"
-                               required/>
+                               />
                     </div>
                 </div>
                 <!-- Bank Branch -->
@@ -83,9 +83,18 @@
                         <input type="text" class="form-control" id="<portlet:namespace />bankBranch"
                                name="<portlet:namespace />bankBranch" maxlength="75"
                                value="${employeeBankAccount.bankBranch}"
-                               required/>
+                               />
                     </div>
                 </div>
+                 <div class="col-md-4 col-sm-12 mb-3">
+                                <label for="<portlet:namespace />nameAsPerPanCard" class="form-label">
+                                    <liferay-ui:message key="nameAsPerPanCard"/><span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control"
+                                       id="<portlet:namespace />nameAsPerPanCard"
+                                       name="<portlet:namespace />nameAsPerPanCard"
+                                       value="${employeeBankAccount.nameAsPerPanCard}" maxlength="50"/>
+                            </div>
                 <input type="hidden" id="updateFlagBank" name="<portlet:namespace/>updateFlagBank"
                        value="${not empty flagStatuss? flagStatuss : 'false' }"/>
 

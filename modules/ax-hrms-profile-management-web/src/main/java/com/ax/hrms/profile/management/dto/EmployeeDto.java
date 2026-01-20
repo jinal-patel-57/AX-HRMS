@@ -44,6 +44,24 @@ public class EmployeeDto {
 	public String employeeType;
 	public double stipend;
 	public String designationName;
+	public String nameAsPerPanCard;
+	public String nameAsPerAadhaarCard;
+
+	public String getNameAsPerPanCard() {
+		return nameAsPerPanCard;
+	}
+
+	public void setNameAsPerPanCard(String nameAsPerPanCard) {
+		this.nameAsPerPanCard = nameAsPerPanCard;
+	}
+
+	public String getNameAsPerAadhaarCard() {
+		return nameAsPerAadhaarCard;
+	}
+
+	public void setNameAsPerAadhaarCard(String nameAsPerAadhaarCard) {
+		this.nameAsPerAadhaarCard = nameAsPerAadhaarCard;
+	}
 
 	public String getAadhaarCardNumber() {
 		return aadhaarCardNumber;

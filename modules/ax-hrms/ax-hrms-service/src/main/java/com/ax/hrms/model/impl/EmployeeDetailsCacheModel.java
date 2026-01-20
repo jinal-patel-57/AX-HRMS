@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(89);
+		StringBundler sb = new StringBundler(91);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -144,6 +144,8 @@ public class EmployeeDetailsCacheModel
 		sb.append(panCardNumber);
 		sb.append(", aadhaarCardNumber=");
 		sb.append(aadhaarCardNumber);
+		sb.append(", nameAsPerAadhaarCard=");
+		sb.append(nameAsPerAadhaarCard);
 		sb.append("}");
 
 		return sb.toString();
@@ -337,6 +339,13 @@ public class EmployeeDetailsCacheModel
 			employeeDetailsImpl.setAadhaarCardNumber(aadhaarCardNumber);
 		}
 
+		if (nameAsPerAadhaarCard == null) {
+			employeeDetailsImpl.setNameAsPerAadhaarCard("");
+		}
+		else {
+			employeeDetailsImpl.setNameAsPerAadhaarCard(nameAsPerAadhaarCard);
+		}
+
 		employeeDetailsImpl.resetOriginalValues();
 
 		return employeeDetailsImpl;
@@ -410,6 +419,7 @@ public class EmployeeDetailsCacheModel
 		experienceYears = objectInput.readDouble();
 		panCardNumber = objectInput.readUTF();
 		aadhaarCardNumber = objectInput.readUTF();
+		nameAsPerAadhaarCard = objectInput.readUTF();
 	}
 
 	@Override
@@ -571,6 +581,13 @@ public class EmployeeDetailsCacheModel
 		else {
 			objectOutput.writeUTF(aadhaarCardNumber);
 		}
+
+		if (nameAsPerAadhaarCard == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(nameAsPerAadhaarCard);
+		}
 	}
 
 	public String uuid;
@@ -617,5 +634,6 @@ public class EmployeeDetailsCacheModel
 	public double experienceYears;
 	public String panCardNumber;
 	public String aadhaarCardNumber;
+	public String nameAsPerAadhaarCard;
 
 }

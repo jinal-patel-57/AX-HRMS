@@ -94,6 +94,15 @@
                        value="${employeeDetail.panCardNumber}" maxlength="50"/>
             </div>
 
+        <div class="col-md-4 col-sm-12 mb-3">
+                <label for="<portlet:namespace />nameAsPerAadhaarCard" class="form-label">
+                    <liferay-ui:message key="nameAsPerAadhaarCard"/><span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control"
+                       id="<portlet:namespace />nameAsPerAadhaarCard"
+                       name="<portlet:namespace />nameAsPerAadhaarCard"
+                       value="${employeeDetail.nameAsPerAadhaarCard}" maxlength="50"/>
+            </div>
 
 
             <!-- Fourth Row: Employee Profile Picture -->

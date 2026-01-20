@@ -166,7 +166,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
             employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
-
+			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
 
 
@@ -357,6 +357,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setIfscCode(employeeBankAccount.getIfscCode());
 			employeeDto.setBankName(employeeBankAccount.getBankName());
 			employeeDto.setBankBranch(employeeBankAccount.getBankBranch());
+			employeeDto.setNameAsPerPanCard(employeeBankAccount.getNameAsPerPanCard());
 
 			log.info(" viewEmployeeOnBoardingMVCRenderCommand >>> render ::: Retrieved employeeBankAccount: " + employeeBankAccount);
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_BANK_ACCOUNT, employeeDto);

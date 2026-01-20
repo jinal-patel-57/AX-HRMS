@@ -137,6 +137,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
 			employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
+			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
 
@@ -326,6 +327,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setIfscCode(employeeBankAccount.getIfscCode());
 			employeeDto.setBankName(employeeBankAccount.getBankName());
 			employeeDto.setBankBranch(employeeBankAccount.getBankBranch());
+			employeeDto.setNameAsPerPanCard(employeeBankAccount.getNameAsPerPanCard());
 
 			log.info(" viewEmployeeOnBoardingMVCRenderCommand >>> render ::: Retrieved employeeBankAccount: " + employeeBankAccount);
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_BANK_ACCOUNT, employeeDto);

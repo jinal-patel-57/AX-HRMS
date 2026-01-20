@@ -45,7 +45,9 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 		String ifscCode = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.IFSC_CODE);
 		String bankBranch = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_BRANCH);
 		long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
-		
+		String nameAsPerPanCard = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_PAN_CARD);
+
+
 		String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_BANK);
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -68,6 +70,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setBankName(bankName);
 				employeeBankAccount.setIfscCode(ifscCode);
 				employeeBankAccount.setBankBranch(bankBranch);
+				employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 				employeeBankAccount.setStatus(true);
 				
 				employeeBankAccountId=employeeBankAccount.getBankAccountId();
@@ -104,6 +107,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setBankName(bankName);
 				employeeBankAccount.setIfscCode(ifscCode);
 				employeeBankAccount.setBankBranch(bankBranch);
+				employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 				employeeBankAccount.setStatus(true);
 				
 				employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());

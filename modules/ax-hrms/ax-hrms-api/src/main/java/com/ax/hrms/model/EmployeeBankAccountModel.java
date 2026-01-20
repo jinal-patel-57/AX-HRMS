@@ -295,6 +295,21 @@ public interface EmployeeBankAccountModel
 	 */
 	public void setEmployeeId(long employeeId);
 
+	/**
+	 * Returns the name as per pan card of this employee bank account.
+	 *
+	 * @return the name as per pan card of this employee bank account
+	 */
+	@AutoEscape
+	public String getNameAsPerPanCard();
+
+	/**
+	 * Sets the name as per pan card of this employee bank account.
+	 *
+	 * @param nameAsPerPanCard the name as per pan card of this employee bank account
+	 */
+	public void setNameAsPerPanCard(String nameAsPerPanCard);
+
 	@Override
 	public EmployeeBankAccount cloneWithOriginalValues();
 

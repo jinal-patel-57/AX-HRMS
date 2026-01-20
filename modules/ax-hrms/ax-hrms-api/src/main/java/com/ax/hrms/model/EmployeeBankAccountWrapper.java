@@ -50,6 +50,7 @@ public class EmployeeBankAccountWrapper
 		attributes.put("ifscCode", getIfscCode());
 		attributes.put("bankBranch", getBankBranch());
 		attributes.put("employeeId", getEmployeeId());
+		attributes.put("nameAsPerPanCard", getNameAsPerPanCard());
 
 		return attributes;
 	}
@@ -150,6 +151,12 @@ public class EmployeeBankAccountWrapper
 
 		if (employeeId != null) {
 			setEmployeeId(employeeId);
+		}
+
+		String nameAsPerPanCard = (String)attributes.get("nameAsPerPanCard");
+
+		if (nameAsPerPanCard != null) {
+			setNameAsPerPanCard(nameAsPerPanCard);
 		}
 	}
 
@@ -296,6 +303,16 @@ public class EmployeeBankAccountWrapper
 	@Override
 	public Date getModifiedDate() {
 		return model.getModifiedDate();
+	}
+
+	/**
+	 * Returns the name as per pan card of this employee bank account.
+	 *
+	 * @return the name as per pan card of this employee bank account
+	 */
+	@Override
+	public String getNameAsPerPanCard() {
+		return model.getNameAsPerPanCard();
 	}
 
 	/**
@@ -481,6 +498,16 @@ public class EmployeeBankAccountWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
+	}
+
+	/**
+	 * Sets the name as per pan card of this employee bank account.
+	 *
+	 * @param nameAsPerPanCard the name as per pan card of this employee bank account
+	 */
+	@Override
+	public void setNameAsPerPanCard(String nameAsPerPanCard) {
+		model.setNameAsPerPanCard(nameAsPerPanCard);
 	}
 
 	/**

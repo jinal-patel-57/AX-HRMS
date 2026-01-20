@@ -330,6 +330,10 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "fatherName"]: {
                         required: true
                     },
+                   [namespace + "nameAsPerAadhaarCard"]: {
+                        required: true,
+                        lettersOnly: true
+                    },
                     [namespace + "marriageDate"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
@@ -369,6 +373,11 @@ function setConfigsForAddExperienceSection(config) {
 
                     [namespace + "fatherName"]: {
                         required: "Please Enter FatherName."
+                    },
+                     [namespace + "nameAsPerAadhaarCard"]: {
+                        required: "Please Enter Name.",
+                        lettersOnly: "Only letters are allowed for Name."
+
                     },
                     [namespace + "marriageDate"]: {
                         required: "Please enter your marriage date.",
@@ -446,7 +455,7 @@ function setConfigsForAddExperienceSection(config) {
 
             $.validator.addMethod("lettersOnly", function (value, element) {
                 return this.optional(element) || /^[A-Za-z\s]+$/i.test(value);
-            }, "Only letters are allowed for Father's Name.");
+            }, "Only letters are allowed for Name.");
 
             $("#" + namespace + "fatherName").rules("add", {
                 lettersOnly: true
@@ -1524,6 +1533,11 @@ function setConfigsForExperienceValidation(config) {
                    maxlength: 75,
                    onlyLettersAndSpaces: true
                },
+               [namespace + "nameAsPerPanCard"]: {
+                    required: true,
+                   maxlength: 75,
+                   onlyLettersAndSpaces: true
+               },
 
                [namespace + "bankName"]: {
                    maxlength: 75,
@@ -1548,6 +1562,11 @@ function setConfigsForExperienceValidation(config) {
                [namespace + "beneficiaryName"]: {
                    maxlength: "Beneficiary name should not exceed 75 characters.",
                    onlyLettersAndSpaces: "Beneficiary name should contain only alphabets and spaces."
+               },
+               [namespace + "nameAsPerPanCard"]: {
+                   required: "Please enter the Name.",
+                   maxlength: "Name should not exceed 75 characters.",
+                   onlyLettersAndSpaces: "Name should contain only alphabets and spaces."
                },
 
                [namespace + "bankName"]: {
@@ -1599,9 +1618,9 @@ function setConfigsForExperienceValidation(config) {
 			    window.history.replaceState({}, document.title, url.toString());
 			}
             const form5 = $('#bankAccountStepperForm');
-//            if (!form5.valid()) {
-//                return;
-//            }
+            if (!form5.valid()) {
+                return;
+            }
             $.ajax({
                 url: form5.attr('action'),
                 method: 'POST',

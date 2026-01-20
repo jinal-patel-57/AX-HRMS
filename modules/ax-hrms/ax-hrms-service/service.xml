@@ -58,6 +58,7 @@
         <column name="experienceYears" type="double"/>
         <column name="panCardNumber" type="String"/>
         <column name="aadhaarCardNumber" type="String"/>
+        <column name="nameAsPerAadhaarCard" type="String"/>
 
 
 
@@ -243,6 +244,7 @@
         <column name="ifscCode" type="String"/>
         <column name="bankBranch" type="String"/>
         <column name="employeeId" type="long"/>
+        <column name="nameAsPerPanCard" type="String"/>
         <!-- finder method  -->
 
     </entity>

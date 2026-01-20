@@ -134,6 +134,10 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 		createColumn(
 			"aadhaarCardNumber", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, String> nameAsPerAadhaarCard =
+		createColumn(
+			"nameAsPerAadhaarCard", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

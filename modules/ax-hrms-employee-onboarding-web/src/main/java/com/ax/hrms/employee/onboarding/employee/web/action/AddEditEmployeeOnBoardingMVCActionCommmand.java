@@ -78,7 +78,9 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 		employeeDetails.setSpouseName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SPOUSE_NAME));
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
-        log.info("Employee details created successfully.... :: "+employeeDetails.toString());
+		employeeDetails.setNameAsPerAadhaarCard(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_AADHAAR_CARD));
+
+		log.info("Employee details created successfully.... :: "+employeeDetails.toString());
         try {
 			SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT, Locale.ENGLISH);
 			employeeDetails.setDateOfBirth(formatter.parse(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_OF_BIRTH)));

@@ -131,6 +131,26 @@ public class EmployeeDto {
 	String educationCertificatePreviewUrl;
     private List<String> experienceCertificatePreviewUrls;
 
+	public String nameAsPerPanCard;
+	public String nameAsPerAadhaarCard;
+
+	public String getNameAsPerPanCard() {
+		return nameAsPerPanCard;
+	}
+
+	public void setNameAsPerPanCard(String nameAsPerPanCard) {
+		this.nameAsPerPanCard = nameAsPerPanCard;
+	}
+
+	public String getNameAsPerAadhaarCard() {
+		return nameAsPerAadhaarCard;
+	}
+
+	public void setNameAsPerAadhaarCard(String nameAsPerAadhaarCard) {
+		this.nameAsPerAadhaarCard = nameAsPerAadhaarCard;
+	}
+
+
 	public double getExperienceYears() {
 		return experienceYears;
 	}
