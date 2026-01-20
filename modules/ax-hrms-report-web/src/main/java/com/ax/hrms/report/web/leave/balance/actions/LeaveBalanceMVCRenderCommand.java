@@ -1,4 +1,4 @@
-package com.ax.hrms.report.web.actions;
+package com.ax.hrms.report.web.leave.balance.actions;
 
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveBalanceHistoryTable;
