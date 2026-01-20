@@ -12,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.portlet.ResourceResponse;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ExcelExportUtil {
@@ -68,7 +67,7 @@ public class ExcelExportUtil {
             Row headerRow2 = sheet.createRow(1);
 
             // Fixed Employee Columns
-            String[] empHeaders = {AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_ID, AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_NAME, AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_EMAIL};
+            String[] empHeaders = {AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_CODE, AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_NAME, AkHrmsLeaveBalanceReportWebPortletKeys.HEADER_EMPLOYEE_EMAIL};
             int colIndex = 0;
 
             for (int i = 0; i < empHeaders.length; i++) {

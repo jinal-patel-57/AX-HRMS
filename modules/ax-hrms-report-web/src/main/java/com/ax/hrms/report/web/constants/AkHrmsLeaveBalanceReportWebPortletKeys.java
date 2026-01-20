@@ -14,6 +14,7 @@ public class AkHrmsLeaveBalanceReportWebPortletKeys {
 
 	public static final String HEADER_EMPLOYEE = "Employee";
 	public static final String HEADER_EMPLOYEE_ID = "Employee ID";
+	public static final String HEADER_EMPLOYEE_CODE = "Employee Code";
 	public static final String HEADER_EMPLOYEE_NAME = "Employee Name";
 	public static final String HEADER_EMPLOYEE_EMAIL = "Employee Email";
 
