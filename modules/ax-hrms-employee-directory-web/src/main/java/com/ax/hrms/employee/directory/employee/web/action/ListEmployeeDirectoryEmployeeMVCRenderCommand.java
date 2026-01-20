@@ -23,7 +23,9 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
@@ -69,12 +71,18 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
+
 
 		long designationId = ParamUtil.getLong(renderRequest, AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_SELECTEDDESIGNATION, GetterUtil.DEFAULT_LONG);
 
+
+
+
+
+
 		long departmentId = ParamUtil.getLong(renderRequest, AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_SELECTEDDEPARTMENT, GetterUtil.DEFAULT_LONG);
+
+
 
 		List<CustomEmployeeDetailsDTO> employeeDetailsList = new ArrayList<>();
 
@@ -114,20 +122,9 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_SEARCHEDVALUE, name);
 		if(!employeeDetailsList.isEmpty()) {
 
-			int totalOfHoliday = employeeDetailsList.size();
-			int totalPageContainer = (totalOfHoliday + deltaValue - 1) / deltaValue;
 
-			if (curValue > totalPageContainer) {
-				curValue = totalPageContainer;
-			}
-
-			int start = (curValue - 1) * deltaValue;
-			int end = Math.min(start + deltaValue, totalOfHoliday);
-
-			employeeDetailsList = employeeDetailsList.subList(start, end);
 
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_EMPLOYEEDETAILS, employeeDetailsList);
-			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_TOTAL, totalOfHoliday);
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_GET, employeeDetailsList);
 
 			return AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.LIST_EMPLOYEE_DIRECTORY;
@@ -138,21 +135,41 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 
 	}
 
-	private List<Long> getEmployeeIdsList(long departmentId,long designationId){
-		List<Long> employeeIds = new ArrayList<>();
-		if (departmentId != 0) {
-			if (designationId == 0)
-				employeeIds = employeeDetailsLocalService.getEmployeeIdByDepartmentId(departmentId);
-			else
-				employeeIds = employeeDetailsLocalService.getEmployeeIdByDesignationIdAndDepartmentId(designationId, departmentId);
-		} else if (designationId != 0)
-			employeeIds = employeeDetailsLocalService.getEmployeeIdByDesignationId(designationId);
-		else {
-			for (EmployeeDetails employeeDetails : employeeDetailsLocalService.getEmployeeDetailses(-1, -1)){
-				if(!employeeDetails.isIsTerminated())
-					employeeIds.add(employeeDetails.getEmployeeId());
+
+private List<Long> getEmployeeIdsList(long departmentId, long designationId) {
+
+	// Use Set to avoid duplicates
+	Set<Long> employeeIdSet = new HashSet<>();
+
+	if (departmentId != 0) {
+		if (designationId == 0) {
+			employeeIdSet.addAll(
+					employeeDetailsLocalService.getEmployeeIdByDepartmentId(departmentId)
+			);
+		} else {
+			employeeIdSet.addAll(
+					employeeDetailsLocalService.getEmployeeIdByDesignationIdAndDepartmentId(
+							designationId, departmentId
+					)
+			);
+		}
+	}
+	else if (designationId != 0) {
+		employeeIdSet.addAll(
+				employeeDetailsLocalService.getEmployeeIdByDesignationId(designationId)
+		);
+	}
+	else {
+		for (EmployeeDetails employeeDetails :
+				employeeDetailsLocalService.getEmployeeDetailses(-1, -1)) {
+
+			if (!employeeDetails.isIsTerminated()) {
+				employeeIdSet.add(employeeDetails.getEmployeeId());
 			}
 		}
-		return employeeIds;
 	}
+
+	return new ArrayList<>(employeeIdSet);
+}
+
 }

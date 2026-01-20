@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 	    immediate = true,
 	    property = {
 	        "javax.portlet.name=" + AxHrmsEmployeeDirectoryEmployeeWebPortletKeys.AXHRMSEMPLOYEEDIRECTORYEMPLOYEEWEB,
-	        "mvc.command.name=/serachData"
+	        "mvc.command.name=/searchData"
 	    },
 	    service = MVCRenderCommand.class
 	)
@@ -62,8 +62,6 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
-		int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
-        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 3);
 
         String name = ParamUtil.getString(renderRequest, AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.SEARCH_QUERY, GetterUtil.DEFAULT_STRING);
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_SEARCHEDVALUE, name);
@@ -97,20 +95,9 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DEPARTMENTLIST, departmentMasterLocalService.getDepartmentMasters(-1, -1));
 			if(!employeeDetailsList.isEmpty()) {
 
-				int totalOfHoliday = employeeDetailsList.size();
-				int totalPageContainer = (totalOfHoliday + deltaValue - 1) / deltaValue;
 
-				if (curValue > totalPageContainer) {
-					curValue = totalPageContainer;
-				}
-
-				int start = (curValue - 1) * deltaValue;
-				int end = Math.min(start + deltaValue, totalOfHoliday);
-
-				employeeDetailsList = employeeDetailsList.subList(start, end);
 
 				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_EMPLOYEEDETAILS, employeeDetailsList);
-				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_TOTAL, totalOfHoliday);
 				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_GET, employeeDetailsList);
 
 				return AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.LIST_EMPLOYEE_DIRECTORY;

@@ -21,7 +21,7 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
 
     public List<Long> getAllontinuedEmployeeIds(){
         List<Long> employeeIds = new ArrayList<>();
-        System.out.println("Inside custom sql");
+
         Session session=null;
         try{
             session=openSession();
@@ -44,7 +44,7 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
     }
     public List<Long> getEmployeeIdByNameString(String nameStr){
         List<Long> employeeIds = new ArrayList<>();
-        System.out.println("Inside custom sql");
+
         Session session=null;
         try{
             session=openSession();
@@ -69,12 +69,12 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
     }
     public List<Long> getEmployeeIdByDepartmentId(long departmentId){
         List<Long> employeeIds = new ArrayList<>();
-        System.out.println("Inside custom sql");
+
         Session session=null;
         try{
             session=openSession();
             String sql=_customSQL.get(getClass(),"findEmployeeByDepartmentId");
-            System.out.println("Query==> "+sql);
+
             SQLQuery sqlQuery = session.createSQLQuery(sql);
             sqlQuery.setCacheable(false);
             QueryPos qPos = QueryPos.getInstance(sqlQuery);
@@ -93,12 +93,12 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
     }
     public List<Long> getEmployeeIdByDesignationId(long designationId){
         List<Long> employeeIds = new ArrayList<>();
-        System.out.println("Inside custom sql");
+
         Session session=null;
         try{
             session=openSession();
             String sql=_customSQL.get(getClass(),"findEmployeeByDesignationId");
-            System.out.println("Query==> "+sql);
+
             SQLQuery sqlQuery = session.createSQLQuery(sql);
             sqlQuery.setCacheable(false);
             QueryPos qPos = QueryPos.getInstance(sqlQuery);
@@ -117,12 +117,12 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
     }
     public List<Long> getEmployeeIdByDesignationIdAndDepartmentId(long designationId,long departmentId){
         List<Long> employeeIds = new ArrayList<>();
-        System.out.println("Inside custom sql");
+
         Session session=null;
         try{
             session=openSession();
             String sql=_customSQL.get(getClass(),"findEmployeeByDesignationIdAndDepartmentId");
-            System.out.println("Query==> "+sql);
+
             SQLQuery sqlQuery = session.createSQLQuery(sql);
             sqlQuery.setCacheable(false);
             QueryPos qPos = QueryPos.getInstance(sqlQuery);

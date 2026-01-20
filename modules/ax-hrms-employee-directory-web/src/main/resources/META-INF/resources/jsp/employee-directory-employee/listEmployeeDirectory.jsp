@@ -1,14 +1,15 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <portlet:renderURL var="searchDataURL">
-    <portlet:param name="mvcRenderCommandName" value="/serachData"/>
+    <portlet:param name="mvcRenderCommandName" value="/searchData"/>
     <portlet:param name="searchQuery" value="SEARCHQUERY"/>
 </portlet:renderURL>
 
 <portlet:renderURL var="filterDataURL">
     <portlet:param name="mvcRenderCommandName" value="/filterData"/>
-    <portlet:param name="selectedDesig" value="SELECTEDVALUE"/>
-    <portlet:param name="selectedDepart" value="SELECTEDVALUE"/>
+    <portlet:param name="selectedDesig" value="SELECTEDDESIG"/>
+    <portlet:param name="selectedDepart" value="SELECTEDDEPART"/>
     <portlet:param name="searchQuery" value="SEARCHQUERY"/>
 </portlet:renderURL>
 
@@ -29,12 +30,13 @@
         </div>
 
         <div class="d-flex align-items-center">
-            <form class="form-inline mr-2" action="${searchDataURL}" method="post">
-                <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" onchange="SearchValue()">
+            <form class="form-inline mr-2" onsubmit="searchValue(); return false;">
+                <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" onchange="searchValue()">
                 <button type="submit" class="btn btn-outline-dark btn-sm"><liferay-ui:message key="search" /></button>
             </form>
 
-            <form class="form-inline" action="${filterDataURL}" method="post">
+          <form class="form-inline" onsubmit="updateURLAndFetchData(); return false;">
+
                 <select class="custom-select custom-select-sm mr-1" id="selectedDesig" name="<portlet:namespace />selectedDesig">
                     <option value="0" selected><liferay-ui:message key="desig" /></option>
                     <c:forEach items="${designationList}" var="designation">
@@ -65,14 +67,17 @@
         <liferay-ui:search-container-column-text name="Employee Name" value="${employee.getFirstName()} ${employee.getLastName()}" />
         <liferay-ui:search-container-column-text name="Official Email" value="${employee.getOfficialEmail()}" />
         <liferay-ui:search-container-column-text name="Mobile Number" value="${employee.getMobileNo()}" />
-        <liferay-ui:search-container-column-text name="Date Of Birth" value="${employee.getDateOfBirth()}" />
+       <liferay-ui:search-container-column-text name="Date Of Birth">
+           <fmt:formatDate value="${employee.dateOfBirth}" pattern="dd-MM-yyyy" />
+       </liferay-ui:search-container-column-text>
+
         <liferay-ui:search-container-column-text name="Designation" value="${employee.getDesignationName()}"/>
                 <liferay-ui:search-container-column-text name="Department">
                     <c:forEach var="departmentName" items="${employee.departmentList}">
                         <span style="display: block;">${departmentName}</span>
                     </c:forEach>
                 </liferay-ui:search-container-column-text>
-        <liferay-ui:search-container-column-text name="Skype Id" value="${employee.getSkypeId()}" />
+
             <c:if test="${isHR}">
                 <liferay-portlet:renderURL var="viewEmployeeFullDirectory">
                     <liferay-portlet:param name="mvcRenderCommandName" value="/viewEmployeeFullDirectory"/>
@@ -81,17 +86,23 @@
                 <liferay-ui:search-container-column-text name="Action" cssClass="text-right">
                 
                 
-                <div class="dropdown ">
-					<button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-						<i class="icon-ellipsis-vertical"></i>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-						<a href="${viewEmployeeFullDirectory }" class="dropdown-item "><i class="icon-eye-open"></i> <liferay-ui:message
-						key="view" /></a>
-						</li>
-					</ul>
-				</div>
+              <div class="dropdown">
+                  <button
+                      class="btn dropdown-toggle"
+                      type="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false">
+                      <i class="icon-ellipsis-vertical"></i>
+                  </button>
+
+                  <div class="dropdown-menu">
+                      <a class="dropdown-item" href="${viewEmployeeFullDirectory}">
+                          <i class="icon-eye-open"></i> <liferay-ui:message key="view" />
+                      </a>
+                  </div>
+              </div>
+
 				
                 
                 
@@ -113,7 +124,7 @@
 
 <script>
 
-function SearchValue() {
+function searchValue() {
 	
     var ele = document.getElementById('search').value;
     console.log(ele);
@@ -126,9 +137,11 @@ function SearchValue() {
 }
 
 function updateURLAndFetchData() {
+
+    console.log("hiiii");
     var eleDesig = document.getElementById('selectedDesig');
     var eleDepart = document.getElementById('selectedDepart');
-    var eleSearch = document.getElementById('searchQuery');
+    var eleSearch = document.getElementById('search');
 
     var selectedDesig = eleDesig.value;
     var selectedDepart = eleDepart.value;
@@ -146,6 +159,6 @@ function updateURLAndFetchData() {
         selectedDepart: selectedDepart,
         searchedValue: selectedValue
     };
-    AxHrmsEmployeeDirectoryHrAdminWebPortlet.setConfigsForRenderFetchData(config);	
+    AxHrmsEmployeeDirectoryHrAdminWebPortlet.setConfigsForRenderFetchData(config);
 }
 </script>
