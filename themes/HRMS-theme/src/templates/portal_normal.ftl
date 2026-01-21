@@ -37,69 +37,76 @@
 			</#if>
 			<div class="d-flex flex-column flex-fill position-relative" id="wrapper">
 				<div class="innerWrapper">
-					<header id="banner" role="banner" class="header">
-						<div class="inner_header">
-							<div class="header_left">
-								<div class="header_logo">
-									<a class="${logo_css_class}" href="${site_default_url}"
-										title="<@liferay.language_format arguments=" ${site_name}" key="go-to-x" />">
-									<img alt="${logo_description}" height="${site_logo_height}" class="collapsed"
-										src="${themeDisplay.getPathThemeImages()}/aixtor_branding_logo.svg" />
-									<img src="${themeDisplay.getPathThemeImages()}/aixtor-logo-cropped.svg" class="expanded"
-										alt="Aixtor" />
+					<#if is_signed_in>
+						<header id="banner" role="banner" class="header">
+							<div class="inner_header">
+								<div class="header_left">
+									<div class="header_logo">
+										<a class="${logo_css_class}" href="${site_default_url}"
+											title="<@liferay.language_format arguments=" ${site_name}" key="go-to-x" />">
+										<img alt="${logo_description}" height="${site_logo_height}" class="collapsed"
+											src="${themeDisplay.getPathThemeImages()}/aixtor_branding_logo.svg" />
+										<img src="${themeDisplay.getPathThemeImages()}/aixtor-logo-cropped.svg" class="expanded"
+											alt="Aixtor" />
+										</a>
+									</div>
+									<a id="toggle_btn" href="javascript:void(0);">
+										<img class="bar-icon" src="${themeDisplay.getPathThemeImages()}/sidebar_arrow.png"" />
 									</a>
 								</div>
-								<a id="toggle_btn" href="javascript:void(0);">
-									<img class="bar-icon" src="${themeDisplay.getPathThemeImages()}/sidebar_arrow.png"" />
-								</a>
-							</div>
-							<div class="header_right">
-								<ul class="user_links">
-									<li></li>
-									<#if is_signed_in>
-										<li class="notification">
-											<div class="dropdown">
-												<a class="dropdown-toggle" href="${themeDisplay.getPortalURL()}/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet">
-													<i class="icon-bell-alt"></i>
-												</a>
-											</div>
-										</li>
-									</#if>
-									<#if !is_signed_in && show_sign_in>
-										<li>
-											<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}"
-												id="sign-in" rel="nofollow" class="btn btn-primary">
-												${sign_in_text}
-											</a>
-										</li>
-									</#if>
-									<#if is_signed_in>
-										<li class="myprofile">
-											<div class="dropdown">
-												<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-													aria-expanded="false">
-													<span class="avtar">
-														<img src="${profile_image}" alt="" />
-													</span>
-													<span class="avtar_name">
-														${user_first_name + " " + user_last_name}
-													</span>
-												</a>
-												<div class="dropdown-menu">
-													<a class="dropdown-item" href="${themeDisplay.getPortalURL()}/web/ax-hrms/my-profile">My Profile</a>
-													<a class="dropdown-item" href="/c/portal/logout">Logout</a>
+								<div class="header_right">
+									<ul class="user_links">
+										<li></li>
+										<#if is_signed_in>
+											<li class="notification">
+												<div class="dropdown">
+													<a class="dropdown-toggle" href="${themeDisplay.getPortalURL()}/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet">
+														<i class="icon-bell-alt"></i>
+													</a>
 												</div>
-											</div>
-										</li>
-									</#if>
-								</ul>
+											</li>
+										</#if>
+										<#if !is_signed_in && show_sign_in>
+											<li>
+												<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}"
+													id="sign-in" rel="nofollow" class="btn btn-primary">
+													${sign_in_text}
+												</a>
+											</li>
+										</#if>
+										<#if is_signed_in>
+											<li class="myprofile">
+												<div class="dropdown">
+													<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+														aria-expanded="false">
+														<span class="avtar">
+															<img src="${profile_image}" alt="" />
+														</span>
+														<span class="avtar_name">
+															${user_first_name + " " + user_last_name}
+														</span>
+													</a>
+													<div class="dropdown-menu">
+														<a class="dropdown-item" href="${themeDisplay.getPortalURL()}/web/ax-hrms/my-profile">My Profile</a>
+														<a class="dropdown-item" href="/c/portal/logout">Logout</a>
+													</div>
+												</div>
+											</li>
+										</#if>
+									</ul>
+								</div>
 							</div>
-						</div>
-					</header>
-					<#if has_navigation && is_setup_complete>
-						<#include "${full_templates_path}/navigation.ftl" />
+						</header>
+						<#if has_navigation && is_setup_complete>
+							<#include "${full_templates_path}/navigation.ftl" />
+						</#if>
 					</#if>
-					<section class="main_content" id="content">
+					<#assign no_header_sidebar ="" />
+
+					<#if !is_signed_in && show_sign_in>
+						<#assign no_header_sidebar="no-header-sidebar" />
+					</#if>
+					<section class="main_content ${no_header_sidebar}" id="content">
 						<h2 class="hide-accessible sr-only" role="heading" aria-level="1">
 							${htmlUtil.escape(the_title)}
 						</h2>
