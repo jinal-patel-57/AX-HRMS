@@ -2,8 +2,10 @@ package com.ax.hrms.report.web.work.from.home.report.actions;
 
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDepartment;
 import com.ax.hrms.model.EmployeeDesignation;
 import com.ax.hrms.model.EmployeeDetails;
@@ -27,6 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -138,20 +141,53 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
 
                     String wfhStartDate = sdf.format(workFromHomeRequest.getStartDate());
                     String wfhEndDate = sdf.format(workFromHomeRequest.getEndDate());
-                    String actionOnDate = sdf.format( workFromHomeRequest.getModifiedDate());
 
                     row.put("Leave Period", wfhStartDate + " - " + wfhEndDate);
 
-                    long days = ChronoUnit.DAYS.between(
-                            workFromHomeRequest.getStartDate().toInstant(),
-                            workFromHomeRequest.getEndDate().toInstant()
-                    ) + 1;
+                    long days = 0;
+
+                    LocalDate start = workFromHomeRequest.getStartDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+                    LocalDate end = workFromHomeRequest.getEndDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+                    for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+                        DayOfWeek dayOfWeek = date.getDayOfWeek();
+                        if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
+                            days++;
+                        }
+                    }
 
                     row.put("No. Of Days", String.valueOf(days));
-                    row.put("Status", String.valueOf(workFromHomeRequest.getStatus()));
-                    row.put("Date of Request", String.valueOf(workFromHomeRequest.getRequestDate()));
-                    row.put("Action By", String.valueOf(workFromHomeRequest.getReviewerId()));
-                    row.put("Action On", actionOnDate);
+                    long statusId = workFromHomeRequest.getStatus();
+
+                    String status = "";
+                    if (statusId > 0) {
+                        LeaveCompensatoryStatusMaster leaveCompensatoryStatusMaster = leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(statusId);
+                        status = leaveCompensatoryStatusMaster.getLeaveCompensatoryStatus();
+                    }
+                    row.put("Status", status);
+                    SimpleDateFormat sdfWithTimestamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    String dateOfRequest = sdfWithTimestamp.format( workFromHomeRequest.getRequestDate());
+                    row.put("Date of Request", dateOfRequest);
+                    long actionBy = workFromHomeRequest.getReviewerId();
+
+                    String actionByName = "-";
+
+                    if (actionBy > 0) {
+                        EmployeeDetails actionByDetails = employeeDetailsLocalService.getEmployeeDetails(actionBy);
+
+                        if (actionByDetails != null) {
+                            actionByName = actionByDetails.getFirstName() + StringPool.SPACE + actionByDetails.getLastName();
+                        }
+                    }
+                    row.put("Action By", actionByName);
+                    String actionOn = sdfWithTimestamp.format( workFromHomeRequest.getModifiedDate());
+                    row.put("Action On", actionOn);
                     row.put("Reason", workFromHomeRequest.getReason());
 
                     reportData.add(row);
@@ -186,4 +222,7 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
 
     @Reference
     private DesignationMasterLocalService designationMasterLocalService;
+
+    @Reference
+    LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 }
