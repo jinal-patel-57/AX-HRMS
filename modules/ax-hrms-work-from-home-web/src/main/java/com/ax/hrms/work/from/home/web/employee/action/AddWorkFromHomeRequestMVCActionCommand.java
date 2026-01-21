@@ -199,6 +199,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setRequestDate(new Date());
             wfh.setEmployeeId(employeeDetails.getEmployeeId());
             wfh.setModifiedBy(themeDisplay.getUserId());
+            wfh.setReviewerId(employeeDetails.getEmployeeId());
             log.info("over here");
             workFromHomeRequestLocalService.addWorkFromHomeRequest(wfh);
             log.info("add successfullyt");
@@ -248,6 +249,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setModifiedDate(new Date());
             wfh.setModifiedBy(themeDisplay.getUserId());
+            wfh.setReviewerId(employeeDetails.getEmployeeId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
             //Send Notification and Mail
