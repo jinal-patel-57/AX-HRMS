@@ -88,10 +88,18 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long companyId = themeDisplay.getCompanyId();
         String roleName = "HR Admin";
-
-
+        long employeeId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE_ID_PARAM_NAME, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
         super.hideDefaultErrorMessage(actionRequest);
         super.hideDefaultSuccessMessage(actionRequest);
+        EmployeeDetails eligibleEmployee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+
+        if(eligibleEmployee.getIsProbationEnabled()){
+            SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION);
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            return;
+        }
+
+
 
         long leaveRequestId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
         log.info("leaveRequestId: " + leaveRequestId);

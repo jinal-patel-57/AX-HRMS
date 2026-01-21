@@ -27,6 +27,7 @@ public class AxHrmsLeaveManagementWebPortletConstants {
     public static final String LEAVE_REQUEST_ID_VAR = "leaveRequestId";
     public static final String LEAVE_REQUEST_INSERTED_MESSAGE_KEY = "leave-request-inserted";
     public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY = "leave-request-not-inserted";
+    public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION = "leave-request-not-inserted-because-of-probation";
     public static final String LEAVE_REQUEST_EDITED_MESSAGE_KEY = "leaveRequest-edited-message";
     public static final String LEAVE_REQUEST_DELETED_MESSAGE_KEY = "leaveRequest-deleted-message";
     public static final String LEAVE_REQUEST_CANCEL_MESSAGE_KEY = "leaveRequest-canceled-message";
