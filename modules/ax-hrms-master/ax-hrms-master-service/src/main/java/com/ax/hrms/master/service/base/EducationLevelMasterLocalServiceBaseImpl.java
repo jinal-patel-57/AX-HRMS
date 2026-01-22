@@ -8,6 +8,7 @@ package com.ax.hrms.master.service.base;
 import com.ax.hrms.master.model.EducationLevelMaster;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.master.service.persistence.AppraisalStatusMasterPersistence;
+import com.ax.hrms.master.service.persistence.BranchMasterPersistence;
 import com.ax.hrms.master.service.persistence.DepartmentMasterPersistence;
 import com.ax.hrms.master.service.persistence.DesignationMasterPersistence;
 import com.ax.hrms.master.service.persistence.DocumentTypeMasterPersistence;
@@ -475,6 +476,9 @@ public abstract class EducationLevelMasterLocalServiceBaseImpl
 
 	@Reference
 	protected AppraisalStatusMasterPersistence appraisalStatusMasterPersistence;
+
+	@Reference
+	protected BranchMasterPersistence branchMasterPersistence;
 
 	@Reference
 	protected DepartmentMasterPersistence departmentMasterPersistence;

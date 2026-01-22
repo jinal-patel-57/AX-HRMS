@@ -6,6 +6,8 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<h2 class="custom-class">
+forgot_password <h2/>
 
 <%
 User user2 = (User)request.getAttribute(WebKeys.FORGOT_PASSWORD_REMINDER_USER);

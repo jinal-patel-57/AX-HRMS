@@ -6,6 +6,8 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<h2 class="custom-class">
+login <h2/>
 
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">

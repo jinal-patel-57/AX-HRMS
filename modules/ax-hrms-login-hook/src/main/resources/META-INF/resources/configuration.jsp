@@ -26,6 +26,7 @@ if (Validator.isNotNull(emailPasswordSentSubject) || Validator.isNotNull(emailPa
 <liferay-portlet:actionURL portletConfiguration="<%= true %>" var="configurationActionURL" />
 
 <liferay-portlet:renderURL portletConfiguration="<%= true %>" var="configurationRenderURL" />
+<h2> configuration <h2/>
 
 <liferay-frontend:edit-form
 	action="<%= configurationActionURL %>"

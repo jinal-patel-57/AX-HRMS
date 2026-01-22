@@ -11,6 +11,17 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="status" type="String" />
 	</model>
+	<model name="com.ax.hrms.master.model.BranchMaster">
+		<field name="branchMasterId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="branchName" type="String" />
+		<field name="addressId" type="long" />
+	</model>
 	<model name="com.ax.hrms.master.model.DepartmentMaster">
 		<field name="departmentMasterId" type="long" />
 		<field name="companyId" type="long" />

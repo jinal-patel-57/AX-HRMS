@@ -6,6 +6,8 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<h2 class="custom-class">
+create_anonymous_account <h2/>
 
 <%
 renderResponse.setTitle(LanguageUtil.get(request, "anonymous-account"));

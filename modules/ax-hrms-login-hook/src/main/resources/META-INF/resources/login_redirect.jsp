@@ -6,6 +6,8 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<h2 class="custom-class">
+login_redirect <h2/>
 
 <%
 String emailAddress = ParamUtil.getString(request, "emailAddress");

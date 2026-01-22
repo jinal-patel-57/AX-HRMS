@@ -9,6 +9,18 @@ create table ax_master_AppraisalStatusMaster (
 	status VARCHAR(75) null
 );
 
+create table ax_master_BranchMaster (
+	branchMasterId LONG not null primary key,
+	companyId LONG,
+	createdBy LONG,
+	modifiedBy LONG,
+	groupId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	branchName VARCHAR(75) null,
+	addressId LONG
+);
+
 create table ax_master_DepartmentMaster (
 	departmentMasterId LONG not null primary key,
 	companyId LONG,

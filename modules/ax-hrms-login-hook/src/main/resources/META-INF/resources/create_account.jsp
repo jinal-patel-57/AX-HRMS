@@ -6,6 +6,8 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<h2 class="custom-class">
+ create_account <h2/>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");

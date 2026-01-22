@@ -28,6 +28,7 @@ ForgotPasswordConfigurationDisplayContext forgotPasswordConfigurationDisplayCont
 	method="post"
 	name="fm"
 >
+<h2>Forgot_password -> configuration <h2/>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
 

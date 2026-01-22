@@ -8,6 +8,7 @@ package com.ax.hrms.master.service.base;
 import com.ax.hrms.master.model.PolicyTypeMaster;
 import com.ax.hrms.master.service.PolicyTypeMasterService;
 import com.ax.hrms.master.service.persistence.AppraisalStatusMasterPersistence;
+import com.ax.hrms.master.service.persistence.BranchMasterPersistence;
 import com.ax.hrms.master.service.persistence.DepartmentMasterPersistence;
 import com.ax.hrms.master.service.persistence.DesignationMasterPersistence;
 import com.ax.hrms.master.service.persistence.DocumentTypeMasterPersistence;
@@ -119,6 +120,9 @@ public abstract class PolicyTypeMasterServiceBaseImpl
 
 	@Reference
 	protected AppraisalStatusMasterPersistence appraisalStatusMasterPersistence;
+
+	@Reference
+	protected BranchMasterPersistence branchMasterPersistence;
 
 	@Reference
 	protected DepartmentMasterPersistence departmentMasterPersistence;
