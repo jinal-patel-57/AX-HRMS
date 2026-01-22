@@ -482,7 +482,30 @@
                         </div>
                     </div>
                 </div>
+         <div class="col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <label for="branchSelectBox">
+                                    <liferay-ui:message key="branch" />
+                                    <span class="text-danger">*</span>
+                                </label>
 
+                                <select id="branchSelectBox"
+                                    name="<portlet:namespace/>branch"
+                                    class="form-control custom-select mr-sm-2">
+
+                                    <option value="">
+                                        <liferay-ui:message key="Select Branch" />
+                                    </option>
+
+                                    <c:forEach var="branch" items="${branchMasterList}">
+                                        <option value="${branch.branchMasterId}" ${branch.branchMasterId==employeeDetail.branchId? 'selected' : '' } >
+                                            ${branch.branchName}
+                                        </option>
+                                    </c:forEach>
+
+                                </select>
+                            </div>
+                        </div>
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
 

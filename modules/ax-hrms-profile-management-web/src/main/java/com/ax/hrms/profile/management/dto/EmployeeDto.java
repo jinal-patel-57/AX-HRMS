@@ -144,7 +144,25 @@ public class EmployeeDto {
 	public String nomineeCity;
 	public String relationshipWithNominee;
 	public Date nomineeDob;
+	public long branchId;
 
+	public String branchName;
+
+	public long getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(long branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
 	String experienceCertificatePreviewUrl;
 	String educationCertificatePreviewUrl;
 	private List<String> experienceCertificatePreviewUrls;

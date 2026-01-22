@@ -536,6 +536,14 @@ function setConfigsForAddExperienceSection(config) {
                       numericality: "Please enter a valid salary amount."
                   }
               });
+              $('[name="' + namespace + 'branch"]').rules("add", {
+                  required: true,
+
+                  messages: {
+                      required: "Please select Branch.",
+
+                  }
+              });
           }
              /* ================= EXPERIENCE TOGGLE ================= */
 

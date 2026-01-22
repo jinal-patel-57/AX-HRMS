@@ -79,6 +79,7 @@ public class EmployeeDetailsWrapper
 		attributes.put("panCardNumber", getPanCardNumber());
 		attributes.put("aadhaarCardNumber", getAadhaarCardNumber());
 		attributes.put("nameAsPerAadhaarCard", getNameAsPerAadhaarCard());
+		attributes.put("branchId", getBranchId());
 
 		return attributes;
 	}
@@ -357,6 +358,12 @@ public class EmployeeDetailsWrapper
 		if (nameAsPerAadhaarCard != null) {
 			setNameAsPerAadhaarCard(nameAsPerAadhaarCard);
 		}
+
+		Long branchId = (Long)attributes.get("branchId");
+
+		if (branchId != null) {
+			setBranchId(branchId);
+		}
 	}
 
 	@Override
@@ -402,6 +409,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public long getBankAccountId() {
 		return model.getBankAccountId();
+	}
+
+	/**
+	 * Returns the branch ID of this employee details.
+	 *
+	 * @return the branch ID of this employee details
+	 */
+	@Override
+	public long getBranchId() {
+		return model.getBranchId();
 	}
 
 	/**
@@ -927,6 +944,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setBankAccountId(long bankAccountId) {
 		model.setBankAccountId(bankAccountId);
+	}
+
+	/**
+	 * Sets the branch ID of this employee details.
+	 *
+	 * @param branchId the branch ID of this employee details
+	 */
+	@Override
+	public void setBranchId(long branchId) {
+		model.setBranchId(branchId);
 	}
 
 	/**

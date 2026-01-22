@@ -61,6 +61,9 @@ var setFileInputValues;
                         maxlength: 50,
                         lettersOnly: true,
                     },
+                    [namespace + "branch"]: {
+                        required: true,
+                    },
                     [namespace + "designation"]: {
                         required: true,
                     },
@@ -117,6 +120,10 @@ var setFileInputValues;
                         maxlength: "Middle Name exceeding maximum length!",
                         lettersOnly:
                             "Use only letters for Middle Name!",
+                    },
+                    [namespace + "branch"]: {
+                        required: "Please select a Branch!"
+
                     },
                     [namespace + "designation"]: {
                         required: "Please select a Designation!"

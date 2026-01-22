@@ -181,6 +181,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 String isExperienced = ParamUtil.getString(actionRequest,AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_EXPERIENCED);
                 double grossSalaryCTCPM = ParamUtil.getDouble(actionRequest,AxHrmsEmployeeOnboardingHrWebPortletConstants.GROSS_SALARY_CTC_PM);
                 double grossSalaryCTCPA = ParamUtil.getDouble(actionRequest,AxHrmsEmployeeOnboardingHrWebPortletConstants.GROSS_SALARY_CTC_PA);
+                long branchId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnboardingHrWebPortletConstants.BRANCH);
+
+                log.info("BranchId in update :-"+ branchId);
 
                 SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnboardingHrWebPortletConstants.DATE_FORMAT,Locale.ENGLISH);
                 Date joiningDateParsed = formatter.parse(joiningDate);
@@ -196,6 +199,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 employeeDetails.setCreatedBy(themeDisplay.getUserId());
                 employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
                 employeeDetails.setIsProbationEnabled(isProbationEnabled.equalsIgnoreCase("Enabled"));
+                employeeDetails.setBranchId(branchId);
                 employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
 
                 log.info("Manager id in the employee side: " + ParamUtil.getLong(actionRequest, "manager"));

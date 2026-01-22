@@ -45,7 +45,27 @@ public class EmployeeDto {
 	public double stipend;
 	public String designationName;
 
-    public String getAadhaarCardNumber() {
+	public long branchId;
+
+	public String branchName;
+
+	public long getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(long branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+
+	public String getAadhaarCardNumber() {
         return aadhaarCardNumber;
     }
 

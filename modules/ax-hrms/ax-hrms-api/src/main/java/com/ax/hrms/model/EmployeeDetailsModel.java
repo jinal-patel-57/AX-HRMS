@@ -752,6 +752,20 @@ public interface EmployeeDetailsModel
 	 */
 	public void setNameAsPerAadhaarCard(String nameAsPerAadhaarCard);
 
+	/**
+	 * Returns the branch ID of this employee details.
+	 *
+	 * @return the branch ID of this employee details
+	 */
+	public long getBranchId();
+
+	/**
+	 * Sets the branch ID of this employee details.
+	 *
+	 * @param branchId the branch ID of this employee details
+	 */
+	public void setBranchId(long branchId);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

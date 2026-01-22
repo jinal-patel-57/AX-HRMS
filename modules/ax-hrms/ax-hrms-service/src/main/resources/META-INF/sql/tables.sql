@@ -273,7 +273,8 @@ create table ax_EmployeeDetails (
 	experienceYears DOUBLE,
 	panCardNumber VARCHAR(75) null,
 	aadhaarCardNumber VARCHAR(75) null,
-	nameAsPerAadhaarCard VARCHAR(75) null
+	nameAsPerAadhaarCard VARCHAR(75) null,
+	branchId LONG
 );
 
 create table ax_EmployeeDocument (

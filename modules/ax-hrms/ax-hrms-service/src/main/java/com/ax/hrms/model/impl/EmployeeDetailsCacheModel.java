@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(91);
+		StringBundler sb = new StringBundler(93);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -146,6 +146,8 @@ public class EmployeeDetailsCacheModel
 		sb.append(aadhaarCardNumber);
 		sb.append(", nameAsPerAadhaarCard=");
 		sb.append(nameAsPerAadhaarCard);
+		sb.append(", branchId=");
+		sb.append(branchId);
 		sb.append("}");
 
 		return sb.toString();
@@ -346,6 +348,8 @@ public class EmployeeDetailsCacheModel
 			employeeDetailsImpl.setNameAsPerAadhaarCard(nameAsPerAadhaarCard);
 		}
 
+		employeeDetailsImpl.setBranchId(branchId);
+
 		employeeDetailsImpl.resetOriginalValues();
 
 		return employeeDetailsImpl;
@@ -420,6 +424,8 @@ public class EmployeeDetailsCacheModel
 		panCardNumber = objectInput.readUTF();
 		aadhaarCardNumber = objectInput.readUTF();
 		nameAsPerAadhaarCard = objectInput.readUTF();
+
+		branchId = objectInput.readLong();
 	}
 
 	@Override
@@ -588,6 +594,8 @@ public class EmployeeDetailsCacheModel
 		else {
 			objectOutput.writeUTF(nameAsPerAadhaarCard);
 		}
+
+		objectOutput.writeLong(branchId);
 	}
 
 	public String uuid;
@@ -635,5 +643,6 @@ public class EmployeeDetailsCacheModel
 	public String panCardNumber;
 	public String aadhaarCardNumber;
 	public String nameAsPerAadhaarCard;
+	public long branchId;
 
 }

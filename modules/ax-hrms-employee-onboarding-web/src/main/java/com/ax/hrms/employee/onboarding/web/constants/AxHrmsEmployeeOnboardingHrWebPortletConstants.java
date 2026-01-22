@@ -25,6 +25,7 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String MANAGER = "manager";
     public static final String GENDER = "gender";
     public static final String DESIGNATION = "designation";
+    public static final String BRANCH = "branch";
     public static final String DEPARTMENT = "department";
     public static final String IS_EXPERIENCED = "isExperienced";
     public static final String GROSS_SALARY_CTC_PM = "grossSalaryCTCPM";

@@ -6,9 +6,11 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmp
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.model.BranchMaster;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
 import com.ax.hrms.master.model.EducationLevelMaster;
+import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
@@ -113,6 +115,9 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
     @Reference
     EmployeeSalaryLocalService employeeSalaryLocalService;
+
+    @Reference
+    BranchMasterLocalService branchMasterLocalService;
 
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -288,9 +293,10 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
         List<Country> countryList = CountryLocalServiceUtil.getCountries(-1, -1);
         List<EducationLevelMaster> educationLevelMastersList = educationLevelMasterLocalService.getEducationLevelMasters(-1, -1);
-        
-        
-        
+
+
+        List<BranchMaster> branchMasterList = branchMasterLocalService.getBranchMasters(-1,-1);
+        renderRequest.setAttribute("branchMasterList", branchMasterList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
         renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST, educationLevelMastersList);
 

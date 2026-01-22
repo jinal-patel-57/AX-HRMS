@@ -6,6 +6,7 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmp
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
@@ -107,6 +108,9 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 	@Reference
 	private AxHrmsCommonApi axHrmsCommonApi;
 
+	@Reference
+	BranchMasterLocalService branchMasterLocalService;
+
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -168,6 +172,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
             employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
+			employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId())?branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName():"");
 
 
 			

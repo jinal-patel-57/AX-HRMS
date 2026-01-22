@@ -138,6 +138,8 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 		createColumn(
 			"nameAsPerAadhaarCard", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> branchId = createColumn(
+		"branchId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

@@ -59,6 +59,7 @@
         <column name="panCardNumber" type="String"/>
         <column name="aadhaarCardNumber" type="String"/>
         <column name="nameAsPerAadhaarCard" type="String"/>
+        <column name="branchId" type="long"/>
 
 
 

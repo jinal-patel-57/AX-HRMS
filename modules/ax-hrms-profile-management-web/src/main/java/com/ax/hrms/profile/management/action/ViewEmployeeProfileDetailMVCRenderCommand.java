@@ -3,6 +3,7 @@ package com.ax.hrms.profile.management.action;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
@@ -85,6 +86,9 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 	@Reference
 	EmployeeEducationLocalService employeeEducationLocalService;
 
+	@Reference
+	BranchMasterLocalService branchMasterLocalService;
+
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -140,6 +144,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
+			employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId())?branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName():"");
 
 
 			if (employeeDetails.getManagerId() > 0) {

@@ -2,8 +2,10 @@ package com.ax.hrms.employee.onboarding.hr.web.action;
 
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
+import com.ax.hrms.master.model.BranchMaster;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
@@ -70,6 +72,9 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
     @Reference
     private UserLocalService userLocalService;
 
+    @Reference
+    private BranchMasterLocalService branchMasterLocalService;
+
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -85,6 +90,8 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_CODE_PATTERN, generateEmployeeCode());
         renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.DOMAIN, moduleConfiguration.domainName());
 
+        List<BranchMaster> branchMasterList = branchMasterLocalService.getBranchMasters(-1,-1);
+        renderRequest.setAttribute("branchMasterList", branchMasterList);
         List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
 
 
