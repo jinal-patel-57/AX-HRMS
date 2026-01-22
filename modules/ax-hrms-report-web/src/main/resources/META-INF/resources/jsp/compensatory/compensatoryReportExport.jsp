@@ -2,7 +2,7 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<portlet:resourceURL var="downloadURL" id="" />
+<portlet:resourceURL var="downloadURL" id="/comp/off/report/export" />
 
 <div class="card">
     <div class="card-body">
