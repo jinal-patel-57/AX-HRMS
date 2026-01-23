@@ -74,23 +74,27 @@
         </div>
 
         <!-- Country -->
-        <div class="form-group">
-            <label>
-                Country <span class="text-danger">*</span>
-            </label>
-            <select
-                class="form-select"
-                id="<portlet:namespace />country"
-                name="<portlet:namespace />country">
-                <option value="">Select Country</option>
-                <c:forEach var="country" items="${countryList}">
-                    <option value="${country.countryId}"
-                        ${country.countryId == branchMaster.countryId ? 'selected' : ''}>
-                        ${country.name}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+
+
+                       <div class="form-group">
+                           <label for="<portlet:namespace/>country" class="form-label">
+                               Country <span class="text-danger">*</span>
+                           </label>
+
+                           <select class="form-control text-capitalize"
+                                   id="<portlet:namespace/>country"
+                                   name="<portlet:namespace/>country">
+                               <option value="">Select a country</option>
+                               <c:forEach items="${countryList}" var="country">
+                                   <option class="text-capitalize"
+                                           value="${country.countryId}"
+                                           ${country.countryId == branchMaster.countryId ? 'selected' : ''}>
+                                       ${country.name}
+                                   </option>
+                               </c:forEach>
+                           </select>
+                       </div>
+
 
         <!-- Pincode -->
         <div class="form-group">

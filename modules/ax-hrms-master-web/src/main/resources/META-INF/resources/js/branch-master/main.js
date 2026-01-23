@@ -145,9 +145,7 @@
                   $(element).removeClass("is-invalid");
               },
 
-              onkeyup: function (element) {
-                  $(element).valid();
-              },
+              onkeyup: false,
 
               onfocusout: function (element) {
                   $(element).valid();
