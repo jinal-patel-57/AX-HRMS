@@ -9,4 +9,6 @@ public class AxHrmsCompensatoryReportWebPortletKeys {
     public static final String FILE_NAME = "Comp_Off_Report";
 
     public static final String COMP_OFF = "Compensatory Off";
+
+    public static final String APPROVED = "APPROVED";
 }

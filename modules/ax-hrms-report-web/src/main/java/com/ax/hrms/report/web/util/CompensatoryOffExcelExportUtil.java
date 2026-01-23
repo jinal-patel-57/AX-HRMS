@@ -27,6 +27,7 @@ public class CompensatoryOffExcelExportUtil {
                 "Manager",
                 "Location",
                 "Employee Type",
+                "Balance",
                 "Start Date",
                 "End Date",
                 "Status",
