@@ -210,7 +210,7 @@
                                          <c:if test="${employeeDetail.experienced}">
                                           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                              <div class="form-group-view">
-                                                 <div class="label-name">Experience Year</div>
+                                                 <div class="label-name"><liferay-ui:message key="experience-year" /></div>
                                                  <div class="label-content">${employeeDetail.experienceYears}</div>
                                              </div>
                                          </div>
