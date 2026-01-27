@@ -152,7 +152,7 @@ function setConfigsForAddExperienceSection(config) {
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
-        function allowOnlySixDigitMobile(input) {
+        function allowOnlySixDigitPincode(input) {
 		
 		    // Format pre-filled value (update case)
 		    input.value = input.value.replace(/\D/g, "").substring(0, 6);
@@ -164,10 +164,10 @@ function setConfigsForAddExperienceSection(config) {
 		const presentpinCodeInput = document.getElementById(namespace + "presentpinCode");
 		const permanentPincodeInput = document.getElementById(namespace + "permanentPincode");
 		if(presentpinCodeInput){
-			allowOnlySixDigitMobile(presentpinCodeInput);
+			allowOnlySixDigitPincode(presentpinCodeInput);
 		}
 		if(permanentPincodeInput){
-			allowOnlySixDigitMobile(permanentPincodeInput);
+			allowOnlySixDigitPincode(permanentPincodeInput);
 		}
         function allowOnlyTenDigitMobile(input) {
 		
@@ -1767,6 +1767,22 @@ function setConfigsForExperienceValidation(config) {
     function setConfigsForNomineeValidation(config) {
         let getEmployeeUrl = config.getEmployeeUrl;
         var $form7 = $("#nomineeStepperForm");
+          function allowOnlySixDigitPincode(input) {
+
+                            // Format pre-filled value (update case)
+                            input.value = input.value.replace(/\D/g, "").substring(0, 6);
+
+                            input.addEventListener("input", function () {
+                                this.value = this.value.replace(/\D/g, "").substring(0, 6);
+                            });
+                        }
+                 const nomineePincodeInput =
+                        document.querySelector(
+                            '#nomineeStepperForm input[name="' + namespace + 'presentpinCode"]'
+                        );
+
+                    allowOnlySixDigitPincode(nomineePincodeInput);
+
 
 
 		$.validator.addMethod("validCity", function (value) {

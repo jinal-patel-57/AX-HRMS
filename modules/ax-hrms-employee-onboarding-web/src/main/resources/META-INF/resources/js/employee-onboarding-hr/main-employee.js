@@ -203,7 +203,7 @@ function setConfigsForAddExperienceSection(config) {
 
 
 
-        function allowOnlySixDigitMobile(input) {
+        function allowOnlySixDigitPincode(input) {
 		
 		    // Format pre-filled value (update case)
 		    input.value = input.value.replace(/\D/g, "").substring(0, 6);
@@ -215,10 +215,10 @@ function setConfigsForAddExperienceSection(config) {
 		const presentpinCodeInput = document.getElementById(namespace + "presentpinCode");
 		const permanentPincodeInput = document.getElementById(namespace + "permanentPincode");
 		if(presentpinCodeInput){
-			allowOnlySixDigitMobile(presentpinCodeInput);
+			allowOnlySixDigitPincode(presentpinCodeInput);
 		}
 		if(permanentPincodeInput){
-			allowOnlySixDigitMobile(permanentPincodeInput);
+			allowOnlySixDigitPincode(permanentPincodeInput);
 		}
         function allowOnlyTenDigitMobile(input) {
 		
@@ -238,6 +238,8 @@ function setConfigsForAddExperienceSection(config) {
 		if (nomineeContactInput) {
 		    allowOnlyTenDigitMobile(nomineeContactInput);
 		}
+
+
         const esicInput = document.getElementById(namespace + "esicNo");
 		if (esicInput) {
 		    if (esicInput.value) {
@@ -1957,10 +1959,24 @@ function setConfigsForExperienceValidation(config) {
 
     // Nominee Details
     function setConfigsForNomineeValidation(config) {
+     const namespace = config.namespace;
         let getEmployeeUrl = config.getEmployeeUrl;
         var $form7 = $("#nomineeStepperForm");
+         function allowOnlySixDigitPincode(input) {
 
+        		    // Format pre-filled value (update case)
+        		    input.value = input.value.replace(/\D/g, "").substring(0, 6);
 
+        		    input.addEventListener("input", function () {
+        		        this.value = this.value.replace(/\D/g, "").substring(0, 6);
+        		    });
+        		}
+         const nomineePincodeInput =
+                document.querySelector(
+                    '#nomineeStepperForm input[name="' + namespace + 'presentpinCode"]'
+                );
+
+            allowOnlySixDigitPincode(nomineePincodeInput);
 
 
         $.validator.addMethod(
@@ -2151,6 +2167,8 @@ function setConfigsForExperienceValidation(config) {
 
             }
         });
+
+
 
 
         $(document).on(
