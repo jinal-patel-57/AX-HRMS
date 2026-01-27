@@ -341,6 +341,7 @@ body.page-loading #overlay { display: block;}
 .select2-selection[aria-expanded="true"]{ box-shadow: 0 0 0 0.25rem rgba(137, 61, 150, 0.2509803922); border-radius: 10px;}
 .select2-container .select2-selection--multiple::after {  content: "";border-color: #888 transparent transparent transparent;border-style: solid;border-width: 5px 4px 0 4px;height: 0;right: 5px;margin-top: -2px;position: absolute;top: 50%;width: 0;}
 .select2-container .select2-selection--multiple[aria-expanded="true"]::after{transform: rotate(180deg);}
+.custom-select + .error {color: #dc3545;}
 
 .ax-body {max-height: 270px;min-height: 270px;overflow-y: auto;}
 .ax-conatiner{height: 100%;width: 100%;display: flex;align-items: center;flex-direction: column;justify-content: center;margin-top: -2rem;}

@@ -87,6 +87,19 @@ function childNavigation() {
   });
 
   $('.custom-select').select2();
+  $('.custom-select').each(function () {
+    const $select = $(this);
+    const $select2Span = $select.next('.select2');
+
+    if ($select2Span.length) {
+      $select2Span.insertBefore($select);
+    }
+  });
+  $('.custom-select').on('change', function () {
+    if ($(this).data('select2')) {
+      $(this).valid();
+    }
+  });
   $('.custom-multi-select').select2({
     placeholder: $(this).attr('placeholder') || 'Select option(s)'
   });
