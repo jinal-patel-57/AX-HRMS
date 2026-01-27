@@ -159,7 +159,7 @@ public class FetchPreviousMonthLeaveReportResourceCommand implements MVCResource
             ExcelExportUtil.exportLeaveBalance(
                     leaveBalanceData,
                     response,
-                    "Leave_Report"
+                    "AX_Leave_Report"
             );
 
         } catch (Exception e) {

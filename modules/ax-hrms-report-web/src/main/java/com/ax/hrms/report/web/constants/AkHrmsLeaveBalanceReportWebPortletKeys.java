@@ -11,7 +11,7 @@ public class AkHrmsLeaveBalanceReportWebPortletKeys {
 
 	public static final String ALL = "ALL";
 	public static final String SPECIFIC = "SPECIFIC";
-	public static final String LEAVE_BALANCE_EXPORT_FILE_NAME = "LeaveBalanceReport";
+	public static final String LEAVE_BALANCE_EXPORT_FILE_NAME = "AX_Leave_Balance_Report";
 
 	public static final String HEADER_EMPLOYEE = "Employee";
 	public static final String HEADER_EMPLOYEE_ID = "Employee ID";

@@ -241,7 +241,7 @@ public class EmployeeDetailsExcelExportUtil {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
         resourceResponse.setProperty(
-            "Content-Disposition", "attachment; filename=Employee_Details.xlsx");
+            "Content-Disposition", "attachment; filename=Employee_Details_Report.xlsx");
 
         OutputStream os = resourceResponse.getPortletOutputStream();
         workbook.write(os);

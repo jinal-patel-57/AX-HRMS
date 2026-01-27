@@ -101,7 +101,7 @@ function childNavigation() {
     }
   });
   $('.custom-multi-select').select2({
-    placeholder: $(this).attr('placeholder') || 'Select option(s)'
+    placeholder: $(this).attr('placeholder') || 'Select Employees(s)'
   });
 
   // On select

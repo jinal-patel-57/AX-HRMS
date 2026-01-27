@@ -21,5 +21,5 @@ public class AxHrmsWorkFromHomeReportWebPortletKeys {
     public static final String ACTION_ON = "Action On";
     public static final String REASON = "Reason";
 
-    public static final String SHEET_NAME = "WFH Report";
+    public static final String SHEET_NAME = "AX_WFH_Report";
 }

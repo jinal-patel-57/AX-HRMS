@@ -108,8 +108,7 @@
                                 id="employeeIds"
                                 data-live-search="true"
                                 name="<portlet:namespace/>employeeIds"
-                                multiple
-                                placeholder="Select Employee(s)"
+                                multiple placeholder="Select Employee(s)"
                                 disabled>
                             <c:forEach var="employee" items="${employeeList}">
                                 <option value="${employee.getEmployeeId()}">
