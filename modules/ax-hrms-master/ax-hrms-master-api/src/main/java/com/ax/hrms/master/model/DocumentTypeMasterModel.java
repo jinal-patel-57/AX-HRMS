@@ -163,6 +163,27 @@ public interface DocumentTypeMasterModel
 	 */
 	public void setDocumentTypeName(String documentTypeName);
 
+	/**
+	 * Returns the is document used for kyc of this document type master.
+	 *
+	 * @return the is document used for kyc of this document type master
+	 */
+	public boolean getIsDocumentUsedForKYC();
+
+	/**
+	 * Returns <code>true</code> if this document type master is is document used for kyc.
+	 *
+	 * @return <code>true</code> if this document type master is is document used for kyc; <code>false</code> otherwise
+	 */
+	public boolean isIsDocumentUsedForKYC();
+
+	/**
+	 * Sets whether this document type master is is document used for kyc.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc of this document type master
+	 */
+	public void setIsDocumentUsedForKYC(boolean isDocumentUsedForKYC);
+
 	@Override
 	public DocumentTypeMaster cloneWithOriginalValues();
 

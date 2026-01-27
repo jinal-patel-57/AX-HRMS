@@ -92,7 +92,8 @@
 		<!-- Other fields -->
 
 		<column name="documentTypeName" type="String" />
-		
+		<column name="isDocumentUsedForKYC" type="boolean" />
+
 		<!-- Finder Method -->
 		<finder name="DocumentTypeName" return-type="DocumentTypeMaster">
 			<finder-column name="documentTypeName" case-sensitive="false"/>

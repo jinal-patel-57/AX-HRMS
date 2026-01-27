@@ -63,7 +63,8 @@ public class DocumentTypeMasterModelImpl
 		{"documentTypeMasterId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"createdBy", Types.BIGINT}, {"modifiedBy", Types.BIGINT},
 		{"groupId", Types.BIGINT}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"documentTypeName", Types.VARCHAR}
+		{"modifiedDate", Types.TIMESTAMP}, {"documentTypeName", Types.VARCHAR},
+		{"isDocumentUsedForKYC", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -78,10 +79,11 @@ public class DocumentTypeMasterModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("documentTypeName", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("isDocumentUsedForKYC", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_master_DocumentTypeMaster (documentTypeMasterId LONG not null primary key,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,documentTypeName VARCHAR(75) null)";
+		"create table ax_master_DocumentTypeMaster (documentTypeMasterId LONG not null primary key,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,documentTypeName VARCHAR(75) null,isDocumentUsedForKYC BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_master_DocumentTypeMaster";
@@ -238,6 +240,9 @@ public class DocumentTypeMasterModelImpl
 				"modifiedDate", DocumentTypeMaster::getModifiedDate);
 			attributeGetterFunctions.put(
 				"documentTypeName", DocumentTypeMaster::getDocumentTypeName);
+			attributeGetterFunctions.put(
+				"isDocumentUsedForKYC",
+				DocumentTypeMaster::getIsDocumentUsedForKYC);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -288,6 +293,10 @@ public class DocumentTypeMasterModelImpl
 				"documentTypeName",
 				(BiConsumer<DocumentTypeMaster, String>)
 					DocumentTypeMaster::setDocumentTypeName);
+			attributeSetterBiConsumers.put(
+				"isDocumentUsedForKYC",
+				(BiConsumer<DocumentTypeMaster, Boolean>)
+					DocumentTypeMaster::setIsDocumentUsedForKYC);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -435,6 +444,27 @@ public class DocumentTypeMasterModelImpl
 		return getColumnOriginalValue("documentTypeName");
 	}
 
+	@JSON
+	@Override
+	public boolean getIsDocumentUsedForKYC() {
+		return _isDocumentUsedForKYC;
+	}
+
+	@JSON
+	@Override
+	public boolean isIsDocumentUsedForKYC() {
+		return _isDocumentUsedForKYC;
+	}
+
+	@Override
+	public void setIsDocumentUsedForKYC(boolean isDocumentUsedForKYC) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_isDocumentUsedForKYC = isDocumentUsedForKYC;
+	}
+
 	public long getColumnBitmask() {
 		if (_columnBitmask > 0) {
 			return _columnBitmask;
@@ -502,6 +532,8 @@ public class DocumentTypeMasterModelImpl
 		documentTypeMasterImpl.setCreateDate(getCreateDate());
 		documentTypeMasterImpl.setModifiedDate(getModifiedDate());
 		documentTypeMasterImpl.setDocumentTypeName(getDocumentTypeName());
+		documentTypeMasterImpl.setIsDocumentUsedForKYC(
+			isIsDocumentUsedForKYC());
 
 		documentTypeMasterImpl.resetOriginalValues();
 
@@ -529,6 +561,8 @@ public class DocumentTypeMasterModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		documentTypeMasterImpl.setDocumentTypeName(
 			this.<String>getColumnOriginalValue("documentTypeName"));
+		documentTypeMasterImpl.setIsDocumentUsedForKYC(
+			this.<Boolean>getColumnOriginalValue("isDocumentUsedForKYC"));
 
 		return documentTypeMasterImpl;
 	}
@@ -644,6 +678,9 @@ public class DocumentTypeMasterModelImpl
 			documentTypeMasterCacheModel.documentTypeName = null;
 		}
 
+		documentTypeMasterCacheModel.isDocumentUsedForKYC =
+			isIsDocumentUsedForKYC();
+
 		return documentTypeMasterCacheModel;
 	}
 
@@ -715,6 +752,7 @@ public class DocumentTypeMasterModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private String _documentTypeName;
+	private boolean _isDocumentUsedForKYC;
 
 	public <T> T getColumnValue(String columnName) {
 		Function<DocumentTypeMaster, Object> function =
@@ -753,6 +791,8 @@ public class DocumentTypeMasterModelImpl
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("documentTypeName", _documentTypeName);
+		_columnOriginalValues.put(
+			"isDocumentUsedForKYC", _isDocumentUsedForKYC);
 	}
 
 	private transient Map<String, Object> _columnOriginalValues;
@@ -781,6 +821,8 @@ public class DocumentTypeMasterModelImpl
 		columnBitmasks.put("modifiedDate", 64L);
 
 		columnBitmasks.put("documentTypeName", 128L);
+
+		columnBitmasks.put("isDocumentUsedForKYC", 256L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

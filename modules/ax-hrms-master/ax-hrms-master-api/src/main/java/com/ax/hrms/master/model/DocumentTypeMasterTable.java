@@ -48,6 +48,10 @@ public class DocumentTypeMasterTable
 		createColumn(
 			"documentTypeName", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<DocumentTypeMasterTable, Boolean> isDocumentUsedForKYC =
+		createColumn(
+			"isDocumentUsedForKYC", Boolean.class, Types.BOOLEAN,
+			Column.FLAG_DEFAULT);
 
 	private DocumentTypeMasterTable() {
 		super("ax_master_DocumentTypeMaster", DocumentTypeMasterTable::new);

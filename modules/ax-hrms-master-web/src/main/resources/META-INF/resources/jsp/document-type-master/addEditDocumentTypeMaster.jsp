@@ -16,32 +16,52 @@
 <liferay-ui:error key="something-went-wrong-message-key" message="something-went-wrong-message" />
 
 <%--SESSION_MESSAGES End Here--%>
-
 <div class="card">
-  <div class="card-header"><strong> <liferay-ui:message key="add-document-type"/>  </strong></div>
-  <form action="${addEditDocumentTypeURL}" method="post" id="documentTypeForm">
-  <div class="card-body mb-0">
-<input type="hidden" name="<portlet:namespace/>documentTypeMasterId" value="${not empty documentTypeMasterId ?documentTypeMasterId: documentTypeMasterData.getDocumentTypeMasterId() }"/>
-         
-         
-        
+    <div class="card-header">
+        <strong>
+            <liferay-ui:message key="add-document-type"/>
+        </strong>
+    </div>
+    <form action="${addEditDocumentTypeURL}" method="post" id="documentTypeForm">
+        <div class="card-body mb-0">
+            <input type="hidden" name="<portlet:namespace/>documentTypeMasterId" value="${not empty documentTypeMasterId ?documentTypeMasterId: documentTypeMasterData.getDocumentTypeMasterId() }"/>
             <div class="form-group">
-                <label class="" for="documentTypeName"><liferay-ui:message key="document-type-name"/><span class="text-danger">*</span></label>
+                <label class="" for="documentTypeName">
+                    <liferay-ui:message key="document-type-name"/>
+                    <span class="text-danger">*</span>
+                </label>
                 <input id="<portlet:namespace />documentTypeName" placeholder="Enter Document Type Name" class="form-control" type="text"
                     name="<portlet:namespace/>documentTypeName" value="${not empty existedDocumentTypeMaster ? existedDocumentTypeMaster.getDocumentTypeName() : (not empty documentTypeMasterData ? documentTypeMasterData.getDocumentTypeName() : '') }">
                 <label id="documentTypeName-error" class="error text-danger" for="documentTypeName"></label>
             </div>
-           
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="<portlet:namespace />isDocumentUsedForKyc"
+                        name="<portlet:namespace />isDocumentUsedForKyc"
+                        value="true"
+                        ${not empty existedDocumentTypeMaster && existedDocumentTypeMaster.isDocumentUsedForKyc() ? "checked" : ""}
+                    />
+                    <label
+                        class="custom-control-label"
+                        for="<portlet:namespace />isDocumentUsedForKyc">
+                        Is Document Used for KYC
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right mb-0">
+            <a href="${viewDocumentTypeURL}" class="btn  btn-outline-danger mr-1">
+                <liferay-ui:message key="back"/>
+            </a>
+            <button type="submit" class="btn  btn-outline-success" >
+                <liferay-ui:message key="submit"/>
+            </button>
+        </div>
+    </form>
 </div>
-  <div class="card-footer text-right mb-0">
-            <a href="${viewDocumentTypeURL}" class="btn  btn-outline-danger mr-1"> <liferay-ui:message key="back"/></a>
-  <button type="submit" class="btn  btn-outline-success" ><liferay-ui:message key="submit"/>  </button>
-  </div>
-        </form>
-</div>
-
-        
-         
             
    
    

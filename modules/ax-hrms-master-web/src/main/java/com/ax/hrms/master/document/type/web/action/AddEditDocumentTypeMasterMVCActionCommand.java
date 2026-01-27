@@ -118,7 +118,10 @@ private DocumentTypeMaster setDocumentTypeMasterData(ActionRequest actionRequest
 	DocumentTypeMaster documentTypeMaster = null;
 	String documentTypeName = ParamUtil.getString(actionRequest,
 			AxDocumentTypeMasterWebPortletConstants.DOCUMENT_TYPE_NAME);
-
+	boolean isDocumentUsedForKyc = ParamUtil.getBoolean(
+			actionRequest,
+			AxDocumentTypeMasterWebPortletConstants.IS_DOCUMENT_USED_FOR_KYC
+	);
 	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 	long companyId = themeDisplay.getCompanyId();
 	long groupId = themeDisplay.getScopeGroupId();
@@ -137,6 +140,7 @@ private DocumentTypeMaster setDocumentTypeMasterData(ActionRequest actionRequest
 
 		try{
 			documentTypeMaster.setDocumentTypeName(documentTypeName);
+			documentTypeMaster.setIsDocumentUsedForKYC(isDocumentUsedForKyc);
 			documentTypeMaster.setCompanyId(companyId);
 			documentTypeMaster.setCreateDate(currentDate);
 			documentTypeMaster.setDocumentTypeMasterId(documentTypeMaster.getDocumentTypeMasterId());

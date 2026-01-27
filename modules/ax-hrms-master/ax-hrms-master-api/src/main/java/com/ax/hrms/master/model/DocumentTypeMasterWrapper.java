@@ -41,6 +41,7 @@ public class DocumentTypeMasterWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("documentTypeName", getDocumentTypeName());
+		attributes.put("isDocumentUsedForKYC", isIsDocumentUsedForKYC());
 
 		return attributes;
 	}
@@ -94,6 +95,13 @@ public class DocumentTypeMasterWrapper
 
 		if (documentTypeName != null) {
 			setDocumentTypeName(documentTypeName);
+		}
+
+		Boolean isDocumentUsedForKYC = (Boolean)attributes.get(
+			"isDocumentUsedForKYC");
+
+		if (isDocumentUsedForKYC != null) {
+			setIsDocumentUsedForKYC(isDocumentUsedForKYC);
 		}
 	}
 
@@ -163,6 +171,16 @@ public class DocumentTypeMasterWrapper
 	}
 
 	/**
+	 * Returns the is document used for kyc of this document type master.
+	 *
+	 * @return the is document used for kyc of this document type master
+	 */
+	@Override
+	public boolean getIsDocumentUsedForKYC() {
+		return model.getIsDocumentUsedForKYC();
+	}
+
+	/**
 	 * Returns the modified by of this document type master.
 	 *
 	 * @return the modified by of this document type master
@@ -190,6 +208,16 @@ public class DocumentTypeMasterWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	/**
+	 * Returns <code>true</code> if this document type master is is document used for kyc.
+	 *
+	 * @return <code>true</code> if this document type master is is document used for kyc; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isIsDocumentUsedForKYC() {
+		return model.isIsDocumentUsedForKYC();
 	}
 
 	@Override
@@ -255,6 +283,16 @@ public class DocumentTypeMasterWrapper
 	@Override
 	public void setGroupId(long groupId) {
 		model.setGroupId(groupId);
+	}
+
+	/**
+	 * Sets whether this document type master is is document used for kyc.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc of this document type master
+	 */
+	@Override
+	public void setIsDocumentUsedForKYC(boolean isDocumentUsedForKYC) {
+		model.setIsDocumentUsedForKYC(isDocumentUsedForKYC);
 	}
 
 	/**

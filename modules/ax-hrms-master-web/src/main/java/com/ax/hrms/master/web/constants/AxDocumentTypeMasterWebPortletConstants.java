@@ -14,6 +14,8 @@ public class AxDocumentTypeMasterWebPortletConstants {
 	public static final String DELETE_DOCUMENT_TYPE = "/deleteDocumentType";
 
 	public static final String DOCUMENT_TYPE_NAME = "documentTypeName";
+	public static final String IS_DOCUMENT_USED_FOR_KYC = "isDocumentUsedForKyc";
+
 	public static final String DOCUMENT_TYPE_MASTER_DATA = "documentTypeMasterData";
 
 	public static final String DOCUMENT_TYPE_LIST = "documentTypeList";

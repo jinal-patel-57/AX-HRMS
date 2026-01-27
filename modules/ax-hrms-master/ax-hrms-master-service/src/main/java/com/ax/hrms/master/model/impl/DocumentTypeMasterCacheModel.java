@@ -56,7 +56,7 @@ public class DocumentTypeMasterCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("{documentTypeMasterId=");
 		sb.append(documentTypeMasterId);
@@ -74,6 +74,8 @@ public class DocumentTypeMasterCacheModel
 		sb.append(modifiedDate);
 		sb.append(", documentTypeName=");
 		sb.append(documentTypeName);
+		sb.append(", isDocumentUsedForKYC=");
+		sb.append(isDocumentUsedForKYC);
 		sb.append("}");
 
 		return sb.toString();
@@ -111,6 +113,8 @@ public class DocumentTypeMasterCacheModel
 			documentTypeMasterImpl.setDocumentTypeName(documentTypeName);
 		}
 
+		documentTypeMasterImpl.setIsDocumentUsedForKYC(isDocumentUsedForKYC);
+
 		documentTypeMasterImpl.resetOriginalValues();
 
 		return documentTypeMasterImpl;
@@ -130,6 +134,8 @@ public class DocumentTypeMasterCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 		documentTypeName = objectInput.readUTF();
+
+		isDocumentUsedForKYC = objectInput.readBoolean();
 	}
 
 	@Override
@@ -152,6 +158,8 @@ public class DocumentTypeMasterCacheModel
 		else {
 			objectOutput.writeUTF(documentTypeName);
 		}
+
+		objectOutput.writeBoolean(isDocumentUsedForKYC);
 	}
 
 	public long documentTypeMasterId;
@@ -162,5 +170,6 @@ public class DocumentTypeMasterCacheModel
 	public long createDate;
 	public long modifiedDate;
 	public String documentTypeName;
+	public boolean isDocumentUsedForKYC;
 
 }
