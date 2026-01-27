@@ -4,6 +4,21 @@
 
 <portlet:resourceURL var="downloadURL" id="/comp/off/report/export" />
 
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h3 class="mb-1 font-weight-bold">
+                 Compensatory Off
+            </h3>
+            <p class="text-muted mb-0">
+                Generate and download Compensatory Off reports for employees based on date range or previous month.
+            </p>
+        </div>
+
+    </div>
+    <hr>
+</div>
+
 <div class="card">
     <div class="card-body">
 

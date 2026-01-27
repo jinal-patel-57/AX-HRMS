@@ -19,7 +19,8 @@ public class WFHExcelExportUtil {
         Workbook workbook = new XSSFWorkbook();
 
         Sheet sheet = workbook.createSheet(AxHrmsWorkFromHomeReportWebPortletKeys.SHEET_NAME);
-
+        // Freeze first 3 columns and header row
+        sheet.createFreezePane(3, 1);
         String[] headers = {
                 AxHrmsWorkFromHomeReportWebPortletKeys.EMPLOYEE_CODE,
                 AxHrmsWorkFromHomeReportWebPortletKeys.EMPLOYEE_NAME,

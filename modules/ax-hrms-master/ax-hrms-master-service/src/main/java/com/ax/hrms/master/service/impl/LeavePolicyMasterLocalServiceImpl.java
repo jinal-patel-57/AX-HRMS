@@ -47,7 +47,7 @@ public class LeavePolicyMasterLocalServiceImpl
 	public LeavePolicyMaster findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(
 			long leaveTypeMasterId, int yearOfPolicy, int eligibleAfterMonths)
 			throws NoSuchLeavePolicyMasterException {
-		return leavePolicyMasterPersistence.findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(leaveTypeMasterId, yearOfPolicy,eligibleAfterMonths);
+		return leavePolicyMasterPersistence.fetchByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(leaveTypeMasterId, yearOfPolicy,eligibleAfterMonths);
 	}
 
 	public LeavePolicyMaster findByLeaveTypeMasterIdAndYear(

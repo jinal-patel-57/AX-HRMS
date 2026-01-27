@@ -1,23 +1,11 @@
 package com.ax.hrms.report.web.compensatory.report.actions;
 
-import com.ax.hrms.master.model.DepartmentMaster;
-import com.ax.hrms.master.model.DesignationMaster;
-import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
-import com.ax.hrms.master.model.LeaveTypeMaster;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDesignation;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.LeaveRequest;
+import com.ax.hrms.master.model.*;
+import com.ax.hrms.master.service.*;
+import com.ax.hrms.model.*;
 import com.ax.hrms.report.web.constants.AxHrmsCompensatoryReportWebPortletKeys;
 import com.ax.hrms.report.web.util.CompensatoryOffExcelExportUtil;
-import com.ax.hrms.service.EmployeeDepartmentLocalService;
-import com.ax.hrms.service.EmployeeDesignationLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.LeaveRequestLocalService;
+import com.ax.hrms.service.*;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -90,9 +78,16 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
 
             SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
+            LeaveTypeMaster compOffType =
+                    leaveTypeMasterLocalService.findByLeaveTypeName(
+                            AxHrmsCompensatoryReportWebPortletKeys.COMP_OFF);
+
+            long compOffLeaveTypeId = compOffType.getLeaveTypeMasterId();
+
             for (long employeeId : employeeIds) {
 
-                EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+                EmployeeDetails employeeDetails =
+                        employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
                 List<LeaveRequest> leaveRequests =
                         leaveRequestLocalService.findByEmployeeId(employeeId);
@@ -100,10 +95,28 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                 List<LeaveRequest> sortedLeaveRequests = new ArrayList<>(leaveRequests);
                 sortedLeaveRequests.sort(Comparator.comparing(LeaveRequest::getDateOfRequest));
 
-                // Running balance PER EMPLOYEE
-                int runningBalance = 0;
+                // POLICY-AWARE BALANCE SETUP
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(startDate);
+                int currentPolicyYear = cal.get(Calendar.YEAR);
 
-                for (LeaveRequest leaveRequest : leaveRequests) {
+                LeavePolicyMaster currentPolicy =
+                        leavePolicyMasterLocalService
+                                .findByLeaveTypeMasterIdAndYear(
+                                        compOffLeaveTypeId, currentPolicyYear);
+
+                double runningBalance = 0;
+
+                LeaveBalanceHistory history =
+                        leaveBalanceHistoryLocalService
+                                .findByEmployeeIdLeaveTypeMasterIdAndYear(
+                                        employeeId, compOffLeaveTypeId, currentPolicyYear);
+
+                if (history != null) {
+                    runningBalance = history.getNoOfRemainingLeaves();
+                }
+
+                for (LeaveRequest leaveRequest : sortedLeaveRequests) {
 
                     LeaveTypeMaster leaveTypeMaster =
                             leaveTypeMasterLocalService.fetchLeaveTypeMaster(
@@ -120,31 +133,63 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                         continue;
                     }
 
+                    // POLICY YEAR CHANGE CHECK
+                    cal.setTime(leaveRequest.getStartDateTime());
+                    int requestYear = cal.get(Calendar.YEAR);
+
+                    if (requestYear != currentPolicyYear) {
+
+                        LeavePolicyMaster newPolicy =
+                                leavePolicyMasterLocalService
+                                        .findByLeaveTypeMasterIdAndYear(
+                                                compOffLeaveTypeId, requestYear);
+
+                        if (newPolicy == null || !newPolicy.getIsCarryForward()) {
+                            runningBalance = 0;
+                        } else if (newPolicy.getIsCheckMax()) {
+                            runningBalance = Math.min(
+                                    runningBalance, newPolicy.getMaximumBalance());
+                        }
+
+                        currentPolicyYear = requestYear;
+                        currentPolicy = newPolicy;
+                    }
+
                     Map<String, String> row = new LinkedHashMap<>();
 
                     row.put("Employee Code", employeeDetails.getEmployeeCode());
-                    row.put("Employee Name", employeeDetails.getFirstName() + StringPool.SPACE + employeeDetails.getLastName());
+                    row.put("Employee Name",
+                            employeeDetails.getFirstName() + StringPool.SPACE +
+                                    employeeDetails.getLastName());
                     row.put("Employee Email", employeeDetails.getOfficialEmail());
 
                     EmployeeDepartment employeeDepartment =
-                            employeeDepartmentLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
+                            employeeDepartmentLocalService
+                                    .findByEmployeeId(employeeDetails.getEmployeeId());
 
                     DepartmentMaster departmentMaster = employeeDepartment != null
                             ? departmentMasterLocalService.fetchDepartmentMaster(
                             employeeDepartment.getDepartmentMasterId())
                             : null;
 
-                    row.put("Department", departmentMaster != null ? departmentMaster.getDepartmentName() : "-");
+                    row.put("Department",
+                            departmentMaster != null
+                                    ? departmentMaster.getDepartmentName()
+                                    : "-");
 
                     EmployeeDesignation employeeDesignation =
-                            employeeDesignationLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
+                            employeeDesignationLocalService
+                                    .findByEmployeeId(employeeDetails.getEmployeeId());
 
                     DesignationMaster designationMaster = employeeDesignation != null
                             ? designationMasterLocalService.fetchDesignationMaster(
                             employeeDesignation.getDesignationMasterId())
                             : null;
 
-                    row.put("Designation", designationMaster != null ? designationMaster.getDesignationName() : "-");
+                    row.put("Designation",
+                            designationMaster != null
+                                    ? designationMaster.getDesignationName()
+                                    : "-");
 
                     long managerId = employeeDetails.getManagerId();
                     EmployeeDetails manager = managerId > 0
@@ -152,14 +197,17 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                             : null;
 
                     row.put("Manager", manager != null
-                            ? manager.getFirstName() + StringPool.SPACE + manager.getLastName()
+                            ? manager.getFirstName() + StringPool.SPACE +
+                            manager.getLastName()
                             : "-");
 
                     row.put("Location", "Ahmedabad");
                     row.put("Employee Type", employeeDetails.getEmployeeType());
 
-                    row.put("Start Date", displayFormat.format(leaveRequest.getStartDateTime()));
-                    row.put("End Date", displayFormat.format(leaveRequest.getEndDateTime()));
+                    row.put("Start Date",
+                            displayFormat.format(leaveRequest.getStartDateTime()));
+                    row.put("End Date",
+                            displayFormat.format(leaveRequest.getEndDateTime()));
 
                     LeaveCompensatoryStatusMaster statusMaster =
                             leaveCompensatoryStatusMasterLocalService
@@ -172,39 +220,58 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
 
                     row.put("Status", statusName);
 
-                    // Balance logic
-                    if (AxHrmsCompensatoryReportWebPortletKeys.APPROVED.equalsIgnoreCase(statusName)) {
-                        runningBalance++;
+                    List<LeaveDayType> leaveDays =
+                            leaveDayTypeLocalService
+                                    .findByLeaveRequestId(
+                                            leaveRequest.getLeaveRequestId());
+
+                    double noOfDays = 0.0;
+                    for (LeaveDayType day : leaveDays) {
+                        noOfDays += day.isIsHalfDay() ? 0.5 : 1.0;
+                    }
+
+                    // CORRECT BALANCE LOGIC
+                    if (AxHrmsCompensatoryReportWebPortletKeys.APPROVED
+                            .equalsIgnoreCase(statusName)) {
+
+                        runningBalance += noOfDays;
+
+                        if (currentPolicy != null && currentPolicy.getIsCheckMax()) {
+                            runningBalance = Math.min(
+                                    runningBalance,
+                                    currentPolicy.getMaximumBalance());
+                        }
                     }
 
                     row.put("Balance", String.valueOf(runningBalance));
+                    row.put("No Of Days", String.valueOf(noOfDays));
 
-                    EmployeeDetails actionBy = leaveRequest.getManagerApprovalId() > 0
-                            ? employeeDetailsLocalService.fetchEmployeeDetails(
-                            leaveRequest.getManagerApprovalId())
-                            : null;
+                    EmployeeDetails actionBy =
+                            leaveRequest.getManagerApprovalId() > 0
+                                    ? employeeDetailsLocalService.fetchEmployeeDetails(
+                                    leaveRequest.getManagerApprovalId())
+                                    : null;
 
                     row.put("Action By", actionBy != null
-                            ? actionBy.getFirstName() + StringPool.SPACE + actionBy.getLastName()
+                            ? actionBy.getFirstName() + StringPool.SPACE +
+                            actionBy.getLastName()
                             : "-");
 
-                    String actionOn = leaveRequest.getModifiedDate() != null
-                            ? displayFormat.format(leaveRequest.getModifiedDate())
-                            : "-";
+                    row.put("Action On",
+                            leaveRequest.getModifiedDate() != null
+                                    ? displayFormat.format(leaveRequest.getModifiedDate())
+                                    : "-");
 
-                    row.put("Action On", actionOn);
                     row.put("Reason", leaveRequest.getReason());
 
                     reportData.add(row);
-
                 }
             }
 
             CompensatoryOffExcelExportUtil.exportCompOffReport(
                     reportData,
                     response,
-                    AxHrmsCompensatoryReportWebPortletKeys.FILE_NAME
-            );
+                    AxHrmsCompensatoryReportWebPortletKeys.FILE_NAME);
 
         } catch (Exception e) {
             log.error("Exception in Comp Off Export", e);
@@ -212,8 +279,6 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
 
         return false;
     }
-
-
 
     private static final Log log =
             LogFactoryUtil.getLog(FetchCompensatoryOffReportResourceCommand.class);
@@ -241,4 +306,13 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
 
     @Reference
     private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
+
+    @Reference
+    private LeaveDayTypeLocalService leaveDayTypeLocalService;
+
+    @Reference
+    private LeavePolicyMasterLocalService leavePolicyMasterLocalService;
+
+    @Reference
+    private LeaveBalanceHistoryLocalService leaveBalanceHistoryLocalService;
 }

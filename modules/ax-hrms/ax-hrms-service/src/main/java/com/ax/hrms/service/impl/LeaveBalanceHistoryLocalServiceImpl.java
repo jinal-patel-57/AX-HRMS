@@ -56,6 +56,6 @@ public class LeaveBalanceHistoryLocalServiceImpl
 		return leaveBalanceHistoryPersistence.findByEmployeeId(employeeId);
 	}
 	public LeaveBalanceHistory findByEmployeeIdLeaveTypeMasterIdAndYear(long employeeId, long leaveTypeMasterId, int year) throws NoSuchLeaveBalanceHistoryException {
-		return leaveBalanceHistoryPersistence.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
+		return leaveBalanceHistoryPersistence.fetchByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
 	}
 }

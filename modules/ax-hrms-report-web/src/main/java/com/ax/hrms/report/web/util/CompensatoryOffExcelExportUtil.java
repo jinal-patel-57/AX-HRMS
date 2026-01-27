@@ -18,6 +18,8 @@ public class CompensatoryOffExcelExportUtil {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Comp Off Report");
 
+        // Freeze first 3 columns and header row
+        sheet.createFreezePane(3, 1);
         String[] headers = {
                 "Employee Code",
                 "Employee Name",
@@ -28,6 +30,7 @@ public class CompensatoryOffExcelExportUtil {
                 "Location",
                 "Employee Type",
                 "Balance",
+                "No Of Days",
                 "Start Date",
                 "End Date",
                 "Status",
