@@ -11,6 +11,23 @@
 
         const namespace = config.namespace;
         const $form = $("#branchForm");
+
+  function allowOnlySixDigitPincode(input) {
+
+                    // Format pre-filled value (update case)
+                    input.value = input.value.replace(/\D/g, "").substring(0, 6);
+
+                    input.addEventListener("input", function () {
+                        this.value = this.value.replace(/\D/g, "").substring(0, 6);
+                    });
+                }
+         const nomineePincodeInput =
+                document.querySelector(
+                    '#branchForm input[name="' + namespace + 'pincode"]'
+                );
+
+            allowOnlySixDigitPincode(nomineePincodeInput);
+
  $.validator.addMethod("validBranchName", function (value, element) {
         return this.optional(element) ||
             /^[A-Za-z]+([A-Za-z\s&\/-]*[A-Za-z])?$/.test(value.trim());

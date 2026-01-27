@@ -5,6 +5,34 @@
         const ns = config.namespace;
         const form = $("#profileForm");
 
+     function allowOnlySixDigitPincode(input) {
+                if (!input) return;
+
+                // Clean pre-filled value (update case)
+                input.value = input.value.replace(/\D/g, "").substring(0, 6);
+
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/\D/g, "").substring(0, 6);
+                });
+            }
+        /* ================= PINCODE INPUT RESTRICTION ================= */
+
+        // Permanent
+        allowOnlySixDigitPincode(
+            document.getElementById(ns + "permanantPincode")
+        );
+
+        // Present
+        allowOnlySixDigitPincode(
+            document.getElementById(ns + "presentPincode")
+        );
+
+        // Nominee
+        allowOnlySixDigitPincode(
+            document.getElementById(ns + "nomineePincode")
+        );
+
+
         /* ================= SAME AS PERMANENT ================= */
         const sameCheckbox = $("#" + ns + "isSamePresentAddress");
 
@@ -23,6 +51,8 @@
             pincode: $("#" + ns + "presentPincode"),
             country: $("#" + ns + "presentCountry")
         };
+
+
 
         function copyPermanentToPresent() {
             Object.keys(present).forEach(k => present[k].val(permanent[k].val()));
