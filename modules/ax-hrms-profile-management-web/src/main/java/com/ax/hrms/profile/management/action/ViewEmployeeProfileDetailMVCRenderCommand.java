@@ -144,8 +144,11 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
-			employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId())?branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName():"");
-
+			try {
+				employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId()) ? branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName() : "");
+			}catch(Exception e){
+				log.info("Branch not found for :- "+ employeeDetails.getBranchId());
+			}
 
 			if (employeeDetails.getManagerId() > 0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());

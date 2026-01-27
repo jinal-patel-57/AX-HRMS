@@ -225,12 +225,12 @@
                         </label>
                         <input
                             id="experienceYear"
-                            placeholder="Experience in years"
+                            placeholder="Years in Experience"
                             class="form-control"
                             type="text"
                             name="<portlet:namespace/>experienceYear"
 
-                            readonly />
+                             />
                         <label id="experienceYear-error"
                                class="error text-danger"
                                for="experienceYear"></label>
@@ -397,23 +397,45 @@
                isDeleting = true;
            }
        });
-
-       emailInput.on("input", function () {
-           let value = emailInput.val() || "";
-
-           // Remove all duplicate domains
-           value = value.replace(new RegExp(domain.replace(".", "\\."), "g"), "");
-
-           // If deleting, do NOT auto-append domain
-           if (isDeleting) {
-               emailInput.val(value);
-               isDeleting = false;
-               return;
-           }
-
-           // Append domain only once
-           emailInput.val(value + domain);
+       emailInput.on("keydown", function () {
+           window.isOfficialEmailExists = false;
+          $("#officialEmailId-error").text("").hide();
        });
+
+
+
+    emailInput.on("input", function () {
+        let value = emailInput.val() || "";
+
+        // If empty, do nothing
+        if (!value) return;
+
+        if (isDeleting) {
+            isDeleting = false;
+            return;
+        }
+
+        // ===== Safe rebuild logic =====
+
+        let username = value;
+
+        // Remove full domain if present
+        if (value.includes(domain)) {
+            username = value.replace(domain, "");
+        }
+        // Handle partially deleted domain
+        else if (value.includes("@")) {
+            username = value.split("@")[0];
+        }
+
+        // Clean username
+        username = username.replace(/@/g, "").replace(/\s+/g, "");
+
+        // Re-attach domain ONCE
+        emailInput.val(username + domain);
+    });
+
+
 
        // Prevent cursor entering domain
        emailInput.on("click keyup", function () {
@@ -453,10 +475,17 @@
                    data: {
                        [namespace + 'email']: email
                    },
-                   success: function (response) {
-                       window.isOfficialEmailExists = response.exists;
-                          $("#officialEmailId").valid();
-                   },
+                  success: function (response) {
+                      window.isOfficialEmailExists = response.exists;
+
+                      if (!response.exists) {
+                          // REMOVE error if email is now valid
+                         $("#officialEmailId-error").text("").hide();
+                      }
+
+                      // Force revalidation
+                      $("#officialEmailId").valid();
+                  },
                    error: function () {
                        console.error("Email validation failed");
                    }
@@ -475,10 +504,16 @@
                     const lastName = lastNameInput.val().trim().toLowerCase();
 
                     if (firstName && lastName) {
+
+                        window.isOfficialEmailExists = false;
+                        $("#officialEmailId-error").text("").hide();
+
                         emailInput.val(firstName + "." + lastName + domain);
+
                         checkEmailExists(emailInput.val());
                     }
                 }
+
 
                 firstNameInput.on("blur", generateEmail);
                 lastNameInput.on("blur", generateEmail);

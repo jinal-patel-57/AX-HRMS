@@ -41,9 +41,9 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 
 		log.info("AddEmployeeUanEsicMVCActionCommand >>> doProcessAction ::: Action Called :::");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN);
-		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER);
+
+		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN).replace("-","");
+		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER).replace("-","");
         String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_UAN_ESIC);
 
 		if(flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)) {
@@ -55,8 +55,8 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 					employeeUanEsic.setModifiedBy(themeDisplay.getUserId());
 					
 					employeeUanEsicId=employeeUanEsic.getUanEsicId();
-					employeeUanEsic.setUan(uan);
-					employeeUanEsic.setEsicNo(esicNo);
+					employeeUanEsic.setUan(uan.replace("-",""));
+					employeeUanEsic.setEsicNo(esicNo.replace("-",""));
 					employeeUanEsic.setStatus(true);
 
 					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());

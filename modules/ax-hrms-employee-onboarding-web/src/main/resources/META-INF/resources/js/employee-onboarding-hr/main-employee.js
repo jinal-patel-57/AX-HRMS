@@ -1830,6 +1830,23 @@ function setConfigsForExperienceValidation(config) {
     // uanEsic Details
     function setConfigsForUanEsicValidation() {
 		var form6 = $('#uanEsicStepperForm');
+
+		$(document).ready(function () {
+
+            const uanInput = $('#' + namespace + 'uan');
+            const esicInput = $('#' + namespace + 'esicNo');
+
+            // Format UAN if value exists (update case)
+            if (uanInput.val()) {
+                uanInput.val(formatUan(uanInput.val()));
+            }
+
+            // Format ESIC if value exists (update case)
+            if (esicInput.val()) {
+                esicInput.val(formatEsicNo(esicInput.val()));
+            }
+        });
+
 		
 		form6.validate({
             errorClass: 'is-invalid',
@@ -1841,41 +1858,46 @@ function setConfigsForExperienceValidation(config) {
             },
             rules: {
                 [namespace + "uan"]: {
-                    maxlength: 75,
+                    maxlength: 15,
                     uanValidation: true
                 },
 
                 [namespace + "esicNo"]: {
-                    maxlength: 75,
+                    maxlength: 21,
                     esicValidation: true
                 }
             },
             messages: {
                 [namespace + "uan"]: {
-                    maxlength: "UAN should not exceed 75 characters.",
-                    uanValidation: "UAN must be exactly 12 digits (numbers only, no spaces or special characters)"
+                    maxlength: "UAN should not exceed 12 numbers.",
+                    uanValidation: "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)"
                 },
                 [namespace + "esicNo"]: {
-                    maxlength: "ESIC No. should not exceed 75 characters.",
-                    esicValidation: "ESIC number must be in format XX-XX-XXXXXX-XXX-XXXX"
+                    maxlength: "ESIC No. should not exceed 17 numbers.",
+                    esicValidation: "ESIC number must be exactly 17 digits (format XX-XX-XXXXXX-XXX-XXXX)"
                 }
             }
         });
 
-        $.validator.addMethod("uanValidation", function (value, element) {
-        	return this.optional(element) || /^[0-9]{12}$/.test(value); 
-        }, "UAN must be exactly 12 digits (numbers only, no spaces or special characters)");
+       $.validator.addMethod("uanValidation", function (value, element) {
+           return this.optional(element) || /^\d{4}-\d{4}-\d{4}$/.test(value);
+       }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)");
 
 		$.validator.addMethod("esicValidation", function (value, element) {
         	return this.optional(element) || /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);
-    	}, "ESIC number must be in format XX-XX-XXXXXX-XXX-XXXX");
-    	
+    	}, "ESIC number must be exactly 17 digits (format XX-XX-XXXXXX-XXX-XXXX)");
+
+    	$(document).on('input', '#' + namespace + 'uan', function () {
+            this.value = formatUan(this.value);
+        });
+
 		
         $('.next-button-uan-esic-details').on('click', function (event) {
             event.preventDefault();
             if (!form6.valid()) {
                 return;
             }
+
             $("#overlay").fadeIn(300);
             $.ajax({
                 url: form6.attr('action'),
@@ -1904,6 +1926,19 @@ function setConfigsForExperienceValidation(config) {
 
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;
     }
+    function formatUan(value) {
+        // Remove non-digits
+        const digits = value.replace(/\D/g, "").substring(0, 12);
+
+        let formatted = "";
+
+        if (digits.length > 0) formatted += digits.substring(0, 4);
+        if (digits.length >= 5) formatted += "-" + digits.substring(4, 8);
+        if (digits.length >= 9) formatted += "-" + digits.substring(8, 12);
+
+        return formatted;
+    }
+
     
     function formatEsicNo(value) {
 	    // Remove non-digits

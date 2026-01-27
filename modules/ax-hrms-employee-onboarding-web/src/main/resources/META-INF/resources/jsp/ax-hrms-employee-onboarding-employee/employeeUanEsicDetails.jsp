@@ -15,9 +15,15 @@
                 <div class="form-group">
                     <label for="uan" class="form-label"> <liferay-ui:message
                             key="uan"/>
-                    </label> <input type="text" class="form-control"
-                                    id="<portlet:namespace />uan" name="<portlet:namespace />uan"
-                                    maxlength="12" value="${employeeUanEsic.uan}"/>
+                    </label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="<portlet:namespace />uan"
+                                           name="<portlet:namespace />uan"
+                                           maxlength="14"
+                                           placeholder="XXXX-XXXX-XXXX"
+                                           value="${employeeUanEsic.uan}" />
+
 
                     <input type="hidden" class="form-control"
                            id="<portlet:namespace />uanEsicId" name="<portlet:namespace />uanEsicId"

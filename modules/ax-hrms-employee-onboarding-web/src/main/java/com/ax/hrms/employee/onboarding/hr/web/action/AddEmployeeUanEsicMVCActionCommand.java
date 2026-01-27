@@ -42,9 +42,10 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 		log.info("AddEmployeeUanEsicMVCActionCommand >>> doProcessAction ::: Action Called :::");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN);
-		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER);
+		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN).replace("-","");
+		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER).replace("-","");
         String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_UAN_ESIC);
+
         long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 
         log.info("uanEsic Flag ===> " + flag);

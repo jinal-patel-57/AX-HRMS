@@ -166,6 +166,74 @@ var setFileInputValues;
                 },
                 "Please enter only alphabetical characters and spaces"
             );
+             // ===== Validators reused from HR =====
+                    if (!$.validator.methods.decimalExperience) {
+                        $.validator.addMethod(
+                            "decimalExperience",
+                            function (value, element) {
+                                return this.optional(element) || /^(?:\d+|\d+\.\d{1,2})$/.test(value);
+                            },
+                            "Please enter a valid experience (e.g. 2, 2.5, 10.75)."
+                        );
+                    }
+
+
+              /* ================= EXPERIENCE TOGGLE ================= */
+
+                     $('input[name="' + namespace + 'isExperienced"]').on('change', function () {
+
+                         const isExperiencedYes = this.value === 'Yes';
+                         const $experienceField = $('[name="' + namespace + 'experienceYear"]');
+
+                         if (isExperiencedYes) {
+
+                             // ENABLE field
+                             $experienceField.prop('disabled', false);
+
+                             // RESTORE value if exists
+                             if (storedExperienceYears !== null) {
+                                 $experienceField.val(storedExperienceYears);
+                             }
+
+                             // ADD validation
+                             $experienceField.rules("add", {
+                                 required: true,
+                                decimalExperience: true,
+                                 min: 0,
+                                 max: 50,
+                                  messages: {
+                                         required: "Please enter experience in years.",
+                                         decimalExperience: "Enter a valid experience (e.g. 2, 2.5, 10.75).",
+                                         min: "Experience must be at least 0.",
+                                         max: "Experience cannot exceed 50 years."
+                                     }
+                             });
+
+                         } else {
+
+                             // STORE value before clearing
+                             storedExperienceYears = $experienceField.val();
+
+                             // DISABLE + CLEAR
+                             $experienceField
+                                 .prop('disabled', true)
+                                 .val('');
+
+                             // REMOVE validation
+                             $experienceField.rules("remove");
+                             $experienceField.removeClass("is-invalid is-valid");
+                             $experienceField.next(".invalid-feedback").remove();
+
+                              // Revalidate to sync form state
+                                 $experienceField.valid();
+                         }
+                     });
+
+
+                         // handle update case (page load)
+                        $('input[name="' + namespace + 'isExperienced"]:checked').trigger('change');
+
+
             
             $.validator.addMethod(
 			    "linkUrlValidation",

@@ -172,8 +172,11 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
             employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
-			employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId())?branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName():"");
-
+			try {
+				employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId()) ? branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName() : "");
+			}catch(Exception e){
+				log.info("Branch not found for :- "+ employeeDetails.getBranchId());
+			}
 
 			
 
