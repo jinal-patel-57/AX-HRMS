@@ -79,7 +79,7 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace />aadharNumber"
                        name="<portlet:namespace />aadharNumber"
-                       value="${employeeDetail.aadhaarCardNumber}" maxlength="50"/>
+                       value="${employeeDetail.aadhaarCardNumber}" maxlength="12"/>
             </div>
 
 
@@ -91,7 +91,7 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace />panNumber"
                        name="<portlet:namespace />panNumber"
-                       value="${employeeDetail.panCardNumber}" maxlength="50"/>
+                       value="${employeeDetail.panCardNumber}" maxlength="10"/>
             </div>
 
         <div class="col-md-4 col-sm-12 mb-3">
