@@ -540,7 +540,7 @@
 
     </div>
     <div class="card-footer text-right align-items-center">
-        <button type="submit" class="btn btn-outline-primary next-button next-button-basic-details">Next</button>
+            <button type="submit" class="btn btn-outline-primary next-button next-button-basic-details">Next</button>
     </div>
 </form>
 <script>

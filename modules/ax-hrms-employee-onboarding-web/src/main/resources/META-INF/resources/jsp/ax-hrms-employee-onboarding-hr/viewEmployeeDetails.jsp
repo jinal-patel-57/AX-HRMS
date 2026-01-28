@@ -413,12 +413,27 @@
 
                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
-                                       <div class="label-name">Pin Code</div>
+                                       <div class="label-name">Pin Code 456</div>
                                        <div class="label-content">${presentaddresss.pincode}</div>
                                    </div>
                                </div>
+
+
                               </div>
                            </c:if>
+                           <div>
+                                <strong> Address Proof Details </strong>
+                           </div>
+                               <div class="row">
+                                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                         <div class="form-group-view">
+                                             <div class="label-name">Address Proof File</div>
+                                                 <div class="label-content">
+                                                   <a target="_blank" href="${addressProofFile}">View Address Proof File</a>
+                                                 </div>
+                                         </div>
+                                   </div>
+                               </div>
                            <c:if test="${not employeeAddress.presentPermanentSame}">
                             <div >
                                <strong> Permanent Address Details</strong>
@@ -470,11 +485,12 @@
 
                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
-                                       <div class="label-name">Pin Code</div>
+                                       <div class="label-name">Pin Code Test</div>
                                        <div class="label-content">${permanentaddresss.pincode}</div>
                                    </div>
                                </div>
                        </div>
+                       <h1>test</h1>
                        </c:if>
                    </div>
                </div>

@@ -9,6 +9,29 @@
         window.location.href = rejectUrl;
     }
 
+     function setConfigsForAddressProofToggle(config) {
+            namespace = config.namespace;
+
+            let checkbox = $('#' + namespace + 'sameAsPermanent');
+            let addressProofSection = $('#addressProofSection');
+
+            function toggleAddressProof() {
+                if (checkbox.is(':checked')) {
+                    addressProofSection.hide();
+                } else {
+                    addressProofSection.show();
+                }
+            }
+
+            // Initial state
+            toggleAddressProof();
+
+            // Toggle on change
+            checkbox.on('change', function () {
+                toggleAddressProof();
+            });
+        }
+
 
 function setConfigsForAddExperienceSection(config) {
 
@@ -939,6 +962,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
+                var formData = new FormData(form2[0]);
                 if (!form2.valid()) {
                     return;
                 }
@@ -946,7 +970,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 $.ajax({
                     url: form2.attr('action'),
                     method: 'POST',
-                    data: form2.serialize(),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         const currentTab = $('.nav-link.active');
                         document.getElementById("updateFlagAddress").value = "true";
@@ -2257,5 +2283,6 @@ function setConfigsForExperienceValidation(config) {
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation = setConfigsForBankAccountValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForNomineeValidation = setConfigsForNomineeValidation;
+    AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressProofToggle = setConfigsForAddressProofToggle;
 
 })($, window.AxHrmsEmployeeOnboardingEmployeeWebPortlet || (window.AxHrmsEmployeeOnboardingEmployeeWebPortlet = {}));

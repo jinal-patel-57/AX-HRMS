@@ -62,6 +62,9 @@
             Object.values(present).forEach(el => el.prop("disabled", disabled));
         }
 
+
+
+
         sameCheckbox.on("change", function () {
             if (this.checked) {
                 copyPermanentToPresent();
@@ -75,6 +78,23 @@
             copyPermanentToPresent();
             togglePresent(true);
         }
+
+        const addressProofSection = $("#addressProofSection");
+
+        function toggleAddressProofSection() {
+            if (sameCheckbox.is(":checked")) {
+                addressProofSection.hide();
+            } else {
+                addressProofSection.show();
+            }
+        }
+
+        toggleAddressProofSection();
+
+        sameCheckbox.on("change", function () {
+            toggleAddressProofSection();
+        });
+
         /* ================= AUTO SYNC WHEN SAME AS PERMANENT ================= */
 
         // whenever permanent address changes AND checkbox is checked

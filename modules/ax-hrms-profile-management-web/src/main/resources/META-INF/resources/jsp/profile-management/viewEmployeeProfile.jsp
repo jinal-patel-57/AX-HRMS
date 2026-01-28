@@ -476,6 +476,19 @@
                                </div>
                        </div>
                        </c:if>
+                       <div>
+                           <strong> Address Proof Details </strong>
+                       </div>
+                              <div class="row">
+                                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                        <div class="form-group-view">
+                                            <div class="label-name">Address Proof File</div>
+                                                <div class="label-content">
+                                                  <a target="_blank" href="${addressProofFile}">View Address Proof File</a>
+                                            </div>
+                                  </div>
+                              </div>
+                          </div>
                    </div>
                </div>
 

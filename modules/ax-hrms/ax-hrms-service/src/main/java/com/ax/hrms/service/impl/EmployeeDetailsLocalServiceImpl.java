@@ -75,6 +75,9 @@ public class EmployeeDetailsLocalServiceImpl extends EmployeeDetailsLocalService
 	public List<Long> getEmployeeIdByDesignationIdAndDepartmentId(long designationId,long departmentId){
 		return employeeDetailsFinder.getEmployeeIdByDesignationIdAndDepartmentId(designationId,departmentId);
 	}
+	public EmployeeDetails fetchEmployeeDetailsByLRUserId(long lrUserId) {
+		return employeeDetailsPersistence.fetchByLrUserId(lrUserId);
+	}
 	@Override
 	public List<EmployeeDetails> findByEmployeeName(
 		String firstName, String lastName) {

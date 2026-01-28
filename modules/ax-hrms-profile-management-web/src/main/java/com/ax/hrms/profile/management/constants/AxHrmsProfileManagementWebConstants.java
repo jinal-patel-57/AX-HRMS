@@ -57,6 +57,7 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String IS_HR_ADMIN="isHRAdmin";
 	public static final String AADHAAR_CARD_FILE="aadharCardFile";
 	public static final String PAN_CARD_FILE="panCardFile";
+	public static final String ADDRESS_PROOF_FILE = "addressProofFile";
 
 	public static final String EDUCATION_LIST="educationList";
 

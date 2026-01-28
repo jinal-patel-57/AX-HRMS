@@ -68,7 +68,8 @@ public class EmployeeAddressModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"employeeAddressId", Types.BIGINT},
 		{"presentAddress", Types.BIGINT}, {"permanentAddress", Types.BIGINT},
 		{"presentPermanentSame", Types.BOOLEAN}, {"status", Types.BOOLEAN},
-		{"employeeId", Types.BIGINT}
+		{"employeeId", Types.BIGINT},
+		{"employeeAddressProofFileEntryId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -88,10 +89,11 @@ public class EmployeeAddressModelImpl
 		TABLE_COLUMNS_MAP.put("presentPermanentSame", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("status", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("employeeId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("employeeAddressProofFileEntryId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeAddress (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeAddressId LONG not null primary key,presentAddress LONG,permanentAddress LONG,presentPermanentSame BOOLEAN,status BOOLEAN,employeeId LONG)";
+		"create table ax_EmployeeAddress (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeAddressId LONG not null primary key,presentAddress LONG,permanentAddress LONG,presentPermanentSame BOOLEAN,status BOOLEAN,employeeId LONG,employeeAddressProofFileEntryId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeAddress";
 
@@ -273,6 +275,9 @@ public class EmployeeAddressModelImpl
 			attributeGetterFunctions.put("status", EmployeeAddress::getStatus);
 			attributeGetterFunctions.put(
 				"employeeId", EmployeeAddress::getEmployeeId);
+			attributeGetterFunctions.put(
+				"employeeAddressProofFileEntryId",
+				EmployeeAddress::getEmployeeAddressProofFileEntryId);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -340,6 +345,10 @@ public class EmployeeAddressModelImpl
 				"employeeId",
 				(BiConsumer<EmployeeAddress, Long>)
 					EmployeeAddress::setEmployeeId);
+			attributeSetterBiConsumers.put(
+				"employeeAddressProofFileEntryId",
+				(BiConsumer<EmployeeAddress, Long>)
+					EmployeeAddress::setEmployeeAddressProofFileEntryId);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -603,6 +612,23 @@ public class EmployeeAddressModelImpl
 			this.<Long>getColumnOriginalValue("employeeId"));
 	}
 
+	@JSON
+	@Override
+	public long getEmployeeAddressProofFileEntryId() {
+		return _employeeAddressProofFileEntryId;
+	}
+
+	@Override
+	public void setEmployeeAddressProofFileEntryId(
+		long employeeAddressProofFileEntryId) {
+
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_employeeAddressProofFileEntryId = employeeAddressProofFileEntryId;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -678,6 +704,8 @@ public class EmployeeAddressModelImpl
 		employeeAddressImpl.setPresentPermanentSame(isPresentPermanentSame());
 		employeeAddressImpl.setStatus(isStatus());
 		employeeAddressImpl.setEmployeeId(getEmployeeId());
+		employeeAddressImpl.setEmployeeAddressProofFileEntryId(
+			getEmployeeAddressProofFileEntryId());
 
 		employeeAddressImpl.resetOriginalValues();
 
@@ -714,6 +742,9 @@ public class EmployeeAddressModelImpl
 			this.<Boolean>getColumnOriginalValue("status"));
 		employeeAddressImpl.setEmployeeId(
 			this.<Long>getColumnOriginalValue("employeeId"));
+		employeeAddressImpl.setEmployeeAddressProofFileEntryId(
+			this.<Long>getColumnOriginalValue(
+				"employeeAddressProofFileEntryId"));
 
 		return employeeAddressImpl;
 	}
@@ -839,6 +870,9 @@ public class EmployeeAddressModelImpl
 
 		employeeAddressCacheModel.employeeId = getEmployeeId();
 
+		employeeAddressCacheModel.employeeAddressProofFileEntryId =
+			getEmployeeAddressProofFileEntryId();
+
 		return employeeAddressCacheModel;
 	}
 
@@ -914,6 +948,7 @@ public class EmployeeAddressModelImpl
 	private boolean _presentPermanentSame;
 	private boolean _status;
 	private long _employeeId;
+	private long _employeeAddressProofFileEntryId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -959,6 +994,9 @@ public class EmployeeAddressModelImpl
 			"presentPermanentSame", _presentPermanentSame);
 		_columnOriginalValues.put("status", _status);
 		_columnOriginalValues.put("employeeId", _employeeId);
+		_columnOriginalValues.put(
+			"employeeAddressProofFileEntryId",
+			_employeeAddressProofFileEntryId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1007,6 +1045,8 @@ public class EmployeeAddressModelImpl
 		columnBitmasks.put("status", 2048L);
 
 		columnBitmasks.put("employeeId", 4096L);
+
+		columnBitmasks.put("employeeAddressProofFileEntryId", 8192L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

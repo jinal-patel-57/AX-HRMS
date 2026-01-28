@@ -10,6 +10,7 @@
 <form id="profileForm"
       action="${editEmployeeProfileUrl}"
       method="post"
+      enctype="multipart/form-data"
       data-senna="off">
 
 <!-- ========================================================= -->
@@ -236,6 +237,26 @@
     </div>
 </div>
 </c:if>
+
+<div class="row mt-3" id="addressProofSection">
+    <div class="col-md-6 col-sm-12 mb-3">
+        <label class="form-label">
+            <liferay-ui:message key="address-proof-document"/>
+            <span class="text-danger">*</span>
+        </label>
+
+        <input type="file"
+               class="form-control"
+               id="<portlet:namespace/>addressProofFile"
+               name="<portlet:namespace/>addressProofFile"
+               accept="application/pdf,image/*" />
+
+        <small class="form-text text-muted">
+            Upload address proof (PDF / JPG / PNG)
+        </small>
+    </div>
+</div>
+
 
 <!-- ========================================================= -->
 <!-- NOMINEE DETAILS -->

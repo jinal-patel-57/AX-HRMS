@@ -736,30 +736,37 @@ function setConfigsForAddExperienceSection(config) {
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
+                var formData = new FormData(form2[0]);
                 if (!form2.valid()) {
-                    return;
-                }
-                $.ajax({
-                    url: form2.attr('action'),
-                    method: 'POST',
-                    data: form2.serialize(),
-                    success: function (response) {
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("updateFlagAddress").value = "true";
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).addClass('show active');
-                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            $(nextTabContentId).find('input').first().focus();
-                        }
-                    },
-                    error: function () {
-                        console.log('There was an error saving the data. Please try again.');
+                        return;
                     }
+                    $("#overlay").fadeIn(300);
+                    $.ajax({
+                        url: form2.attr('action'),
+                        method: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            const currentTab = $('.nav-link.active');
+                            document.getElementById("updateFlagAddress").value = "true";
+                            const nextTabButton = currentTab.parent().next().find('.nav-link');
+                            if (nextTabButton.length > 0) {
+                                nextTabButton.tab('show');
+                                const nextTabContentId = nextTabButton.attr('data-bs-target');
+                                $(nextTabContentId).addClass('show active');
+                                $(currentTab.attr('data-bs-target')).removeClass('show active');
+                                $(nextTabContentId).find('input').first().focus();
+                            }
+                        },
+                        error: function () {
+                            console.log('There was an error saving the data. Please try again.');
+                        },
+                        complete: function () {
+                            $("#overlay").fadeOut(300);
+                        }
+                    });
                 });
-            });
             AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation = setConfigsForAddressValidation;
         });
     }

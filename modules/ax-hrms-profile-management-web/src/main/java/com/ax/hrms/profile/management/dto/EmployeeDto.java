@@ -46,7 +46,7 @@ public class EmployeeDto {
 	public String designationName;
 	public String nameAsPerPanCard;
 	public String nameAsPerAadhaarCard;
-
+	public long addressProofFileEntryId;
 	public String getNameAsPerPanCard() {
 		return nameAsPerPanCard;
 	}
@@ -654,7 +654,13 @@ public class EmployeeDto {
 		this.pincode = pincode;
 	}
 
+	public long getAddressProofFileEntryId() {
+		return addressProofFileEntryId;
+	}
 
+	public void setAddressProofFileEntryId(long addressProofFileEntryId) {
+		this.addressProofFileEntryId = addressProofFileEntryId;
+	}
 
 	public String getExperienceCertificateMediaName() {
 		return experienceCertificateMediaName;

@@ -229,6 +229,14 @@ public class EmployeeDetailsLocalServiceWrapper
 		return _employeeDetailsLocalService.fetchEmployeeDetails(employeeId);
 	}
 
+	@Override
+	public com.ax.hrms.model.EmployeeDetails fetchEmployeeDetailsByLRUserId(
+		long lrUserId) {
+
+		return _employeeDetailsLocalService.fetchEmployeeDetailsByLRUserId(
+			lrUserId);
+	}
+
 	/**
 	 * Returns the employee details matching the UUID and group.
 	 *

@@ -142,6 +142,8 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
 			employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
+			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+			employeeDto.setAddressProofFileEntryId(employeeAddress.getEmployeeAddressProofFileEntryId());
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
 			try {
@@ -179,6 +181,15 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 				if (Validator.isNotNull(panCardFile)) {
 					String previewURL = DLUtil.getPreviewURL(panCardFile, panCardFile.getFileVersion(), themeDisplay, StringPool.BLANK);
 					renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PAN_CARD_FILE, previewURL);
+				}
+			}
+			if (Validator.isNotNull(employeeDto.getAddressProofFileEntryId()) && employeeDto.getAddressProofFileEntryId() > 0) {
+				FileEntry addressProofFile = DLAppServiceUtil.getFileEntry(employeeDto.getAddressProofFileEntryId());
+
+				if (Validator.isNotNull(addressProofFile)) {
+					String previewURL = DLUtil.getPreviewURL(addressProofFile, addressProofFile.getFileVersion(), themeDisplay, StringPool.BLANK);
+					log.info("previewURL of getAddressProofFileEntryId:: " + previewURL);
+					renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.ADDRESS_PROOF_FILE, previewURL);
 				}
 			}
 

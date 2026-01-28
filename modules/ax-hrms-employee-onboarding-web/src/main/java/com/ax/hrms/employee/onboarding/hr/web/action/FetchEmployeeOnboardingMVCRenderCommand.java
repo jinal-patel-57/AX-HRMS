@@ -14,10 +14,7 @@ import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDesignation;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.EmployeeSalary;
+import com.ax.hrms.model.*;
 import com.ax.hrms.service.AddressLocalService;
 import com.ax.hrms.service.EmployeeAddressLocalService;
 import com.ax.hrms.service.EmployeeBankAccountLocalService;
@@ -30,6 +27,7 @@ import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -141,6 +139,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         
         EmployeeDetails employeeDetails;
+
 
         try {
         	long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.HR_ADMIN).getRoleId();
@@ -272,6 +271,40 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             	EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(managerId);
             	managerName = managerDetails.getFirstName() + managerDetails.getLastName() + "("+managerId+")";
             }
+
+            try {
+
+                EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+
+                long addressProofFileEntryId =
+                        employeeAddress.getEmployeeAddressProofFileEntryId();
+
+                String addressProofPreviewURL = null;
+
+                if (addressProofFileEntryId > 0) {
+                    FileEntry fileEntry;
+                    try {
+                        fileEntry = DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
+
+                        addressProofPreviewURL =
+                                DLUtil.getPreviewURL(
+                                        fileEntry,
+                                        fileEntry.getFileVersion(),
+                                        themeDisplay,
+                                        ""
+                                );
+                        renderRequest.setAttribute(
+                                "addressProofPreviewURL",
+                                addressProofPreviewURL
+                        );
+                    } catch (PortalException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Error occurred while fetching document URL :: " + e);
+            }
+
             renderRequest.setAttribute("managerName", managerName);
         } catch (PortalException e) {
             log.error("Error In EmployeeBasic Details" + e.getMessage());

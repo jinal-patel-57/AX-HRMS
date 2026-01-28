@@ -176,6 +176,7 @@
 		<field name="presentPermanentSame" type="boolean" />
 		<field name="status" type="boolean" />
 		<field name="employeeId" type="long" />
+		<field name="employeeAddressProofFileEntryId" type="long" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeBankAccount">
 		<field name="uuid" type="String" />

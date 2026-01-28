@@ -206,6 +206,12 @@ public class EmployeeDetailsLocalServiceUtil {
 		return getService().fetchEmployeeDetails(employeeId);
 	}
 
+	public static EmployeeDetails fetchEmployeeDetailsByLRUserId(
+		long lrUserId) {
+
+		return getService().fetchEmployeeDetailsByLRUserId(lrUserId);
+	}
+
 	/**
 	 * Returns the employee details matching the UUID and group.
 	 *

@@ -12,4 +12,7 @@ dependencies {
 	compileOnly project(":modules:ax-hrms-master:ax-hrms-master-api")
 	
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.0"
+    compileOnly project(":modules:ax-hrms-common-api")
+    compileOnly project(":modules:ax-hrms-configuration")
+
 }
