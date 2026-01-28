@@ -329,7 +329,7 @@
                     <!-- Designation -->
                     <label class="" for="designation"><liferay-ui:message key="designation"/><span class="text-danger">*</span></label>
                     <select class="form-control" id="designation" name="<portlet:namespace/>designation">
-                        <option><liferay-ui:message key="select-designation"/></option>
+                        <option disabled><liferay-ui:message key="select-designation"/></option>
                         <c:forEach items="${designationMasterList}" var="designation">
                             <option value="${designation.designationMasterId}"
                                 ${employeeDesignation.designationMasterId == designation.designationMasterId ? 'selected' : '' }>
@@ -495,7 +495,7 @@
                                     name="<portlet:namespace/>branch"
                                     class="form-control custom-select mr-sm-2">
 
-                                    <option value="">
+                                    <option value="" disabled >
                                         <liferay-ui:message key="Select Branch" />
                                     </option>
 

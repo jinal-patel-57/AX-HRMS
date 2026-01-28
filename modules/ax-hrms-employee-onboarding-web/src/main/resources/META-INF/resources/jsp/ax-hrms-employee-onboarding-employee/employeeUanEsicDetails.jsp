@@ -27,7 +27,7 @@
 
                     <input type="hidden" class="form-control"
                            id="<portlet:namespace />uanEsicId" name="<portlet:namespace />uanEsicId"
-                           maxlength="12" value="${employeeUanEsic.uanEsicId}"/>
+                            value="${employeeUanEsic.uanEsicId}"/>
                 </div>
             </div>
 

@@ -35,7 +35,7 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 	private Log log = LogFactoryUtil.getLog(AddEmployeeUanEsicMVCActionCommand.class);
 
 	private long employeeUanEsicId=0;
-	
+
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -45,7 +45,7 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 		String uan = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UAN).replace("-","");
 		String esicNo = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ESIC_NUMBER).replace("-","");
         String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_UAN_ESIC);
-
+		employeeUanEsicId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.UAN_ESIC_ID);
 		if(flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)) {
 				try {
 					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.createEmployeeUanEsic(CounterLocalServiceUtil.increment(EmployeeUanEsic.class.getName()));
@@ -55,8 +55,8 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 					employeeUanEsic.setModifiedBy(themeDisplay.getUserId());
 					
 					employeeUanEsicId=employeeUanEsic.getUanEsicId();
-					employeeUanEsic.setUan(uan.replace("-",""));
-					employeeUanEsic.setEsicNo(esicNo.replace("-",""));
+					employeeUanEsic.setUan(uan);
+					employeeUanEsic.setEsicNo(esicNo);
 					employeeUanEsic.setStatus(true);
 
 					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
