@@ -70,6 +70,7 @@
                         </label>
                         <input type="text" class="form-control text-uppercase" id="<portlet:namespace />ifscCode"
                                name="<portlet:namespace />ifscCode" maxlength="75"
+                               placeholder="AXIS0ABCD12"
                                value="${employeeBankAccount.ifscCode}"
                                />
                     </div>

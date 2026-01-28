@@ -78,6 +78,7 @@
                 </label>
                 <input type="text" class="form-control"
                        id="<portlet:namespace />aadharNumber"
+                       placeholder="123456789123"
                        name="<portlet:namespace />aadharNumber"
                        value="${employeeDetail.aadhaarCardNumber}" maxlength="12"/>
             </div>
@@ -91,6 +92,7 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace />panNumber"
                        name="<portlet:namespace />panNumber"
+                       placeholder="ABCDE1234F"
                        value="${employeeDetail.panCardNumber}" maxlength="10"/>
             </div>
 
