@@ -1,5 +1,6 @@
 package com.ax.hrms.report.web.util;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 
@@ -19,14 +20,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import static com.ax.hrms.report.web.constants.AkHrmsEmployeeDetailsReportWebPortletKeys.*;
 
 public class EmployeeDetailsExcelExportUtil {
 
-    private EmployeeDetailsExcelExportUtil() {
+	private EmployeeDetailsExcelExportUtil() {
         // private constructor to prevent instantiation
     }
 
@@ -40,7 +39,18 @@ public class EmployeeDetailsExcelExportUtil {
         int rowNum = 0;
 
         CellStyle headerStyle = createHeaderStyle(workbook);
-        CellStyle groupHeaderStyle = createGroupHeaderStyle(workbook);
+        //CellStyle groupHeaderStyle = createGroupHeaderStyle(workbook);
+        CellStyle officialDetailsHeaderStyle =
+        		createGroupHeaderStyle(workbook, IndexedColors.ROYAL_BLUE.getIndex());
+
+        CellStyle bankDetailsHeaderStyle =
+        		createGroupHeaderStyle(workbook, IndexedColors.SEA_GREEN.getIndex());
+
+        CellStyle personalDetailsHeaderStyle =
+        		createGroupHeaderStyle(workbook, IndexedColors.VIOLET.getIndex());
+        
+        CellStyle nomineeDetailsHeaderStyle =
+        		createGroupHeaderStyle(workbook, IndexedColors.DARK_TEAL.getIndex());
 
         
      // ===============================
@@ -48,10 +58,10 @@ public class EmployeeDetailsExcelExportUtil {
         // ===============================
         Row groupHeaderRow = sheet.createRow(rowNum++);
 
-        createMergedCell(sheet, groupHeaderRow, 3, 9, "OFFICIAL DETAILS", groupHeaderStyle);
-        createMergedCell(sheet, groupHeaderRow, 10, 12, "BANK DETAILS", groupHeaderStyle);
-        createMergedCell(sheet, groupHeaderRow, 13, 25, "PERSONAL DETAILS", groupHeaderStyle);
-        createMergedCell(sheet, groupHeaderRow, 26, 28, "NOMINEE DETAILS", groupHeaderStyle);
+        createMergedCell(sheet, groupHeaderRow, 2, 8, "OFFICIAL DETAILS", officialDetailsHeaderStyle);
+        createMergedCell(sheet, groupHeaderRow, 9, 11, "BANK DETAILS", bankDetailsHeaderStyle);
+        createMergedCell(sheet, groupHeaderRow, 12, 24, "PERSONAL DETAILS", personalDetailsHeaderStyle);
+        createMergedCell(sheet, groupHeaderRow, 25, 27, "NOMINEE DETAILS", nomineeDetailsHeaderStyle);
         
         // ===============================
         // COLUMN HEADER ROW
@@ -85,94 +95,112 @@ public class EmployeeDetailsExcelExportUtil {
      secondHeaderStyle.setBorderRight(BorderStyle.THIN);
         
         String[] headers = {
-            "Put x and get the structure)",
-            "Employee Code",
-            "Name as per PAN",
+            EMPLOYEE_CODE,
+            NAME_AS_PER_PAN,
             
-            "Gross Salary (CTC - PM)",
-            "Gross Salary (CTC - PA)",
-            "Join Date",
-            "Email Id (Official)",
-            "Designation",
-            "Department",
-            "Branch",
+            GROSS_SALARY_CTC_PM,
+            GROSS_SALARY_CTC_PA,
+            JOIN_DATE,
+            EMAIL_ID_OFFICIAL,
+            DESIGNATION,
+            DEPARTMENT,
+            BRANCH,
             
-            "Name of Bank Personal Saving A/c",
-            "IFSC Code",
-            "SBAccNo",
+            NAME_OF_BANK_PERSONAL_SAVING_A_C,
+            IFSC_CODE,
+            SB_ACC_NO,
             
-            "PAN",
-            "Email Id (Personal)",
-            "Mobile No.",
-            "Sex",
-            "(As per KYC given)",
-            "DateBirth",
-            "PFMarital Status",
-            "Name as per Adhar Card",
-            "KYC document No. (Adhar Card, Passport, Driving Licence)",
-            "Persent Address (As per KYC submitted)",
-            "Permenent Address (As per KYC submitted)",
-            "if already have (i.e PF registration already done)",
-            "if already have",
+            PAN,
+            EMAIL_ID_PERSONAL,
+            MOBILE_NO,
+            SEX,
+            AS_PER_KYC_GIVEN,
+            DATE_BIRTH,
+            PF_MARITAL_STATUS,
+            NAME_AS_PER_ADHAR_CARD,
+            KYC_DOCUMENT_NO_ADHAR_CARD_PASSPORT_DRIVING_LICENCE,
+            PERSENT_ADDRESS_AS_PER_KYC_SUBMITTED,
+            PERMENENT_ADDRESS_AS_PER_KYC_SUBMITTED,
+            IF_ALREADY_HAVE_I_E_PF_REGISTRATION_ALREADY_DONE,
+            IF_ALREADY_HAVE,
             
-            "Name of Nominee (Any of Family Member - IF married Spouse only)",
-            " With member",
-            "DOB of nominee",
+            NAME_OF_NOMINEE_ANY_OF_FAMILY_MEMBER_IF_MARRIED_SPOUSE_ONLY,
+            WITH_MEMBER,
+            DOB_OF_NOMINEE,
             
-            "Co Employee Code",
-            "Spouse Name"
+            CO_EMPLOYEE_CODE,
+            SPOUSE_NAME
         };
         
         String[] secondHeader = {
-                "",
-                "",
-                "",
+                StringPool.BLANK,
+                StringPool.BLANK,
                 
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
                 
-                "",
-                "",
-                "",
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
                 
-                "",
-                "",
-                "",
-                "",
-                "FHName",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "UAN",
-                "ESIC NO",
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                FH_NAME,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                StringPool.BLANK,
+                UAN,
+                ESIC_NO,
                 
-                "",
-                "Relationship",
-                "",
+                StringPool.BLANK,
+                RELATIONSHIP,
+                StringPool.BLANK,
                 
-                "",
-                ""
+                StringPool.BLANK,
+                StringPool.BLANK
             };
 
         for (int i = 0; i < secondHeader.length; i++) {
         	Cell cell = secondHeaderRow.createCell(i);
         	cell.setCellValue(secondHeader[i]);
-        	cell.setCellStyle(secondHeaderStyle);
+        	if(i>=2 && i<=8) {
+        		cell.setCellStyle(officialDetailsHeaderStyle);
+        	} else if(i>=9 && i<=11) {
+        		cell.setCellStyle(bankDetailsHeaderStyle);
+        	} else if(i>=12 && i<=24) {
+        		cell.setCellStyle(personalDetailsHeaderStyle);
+        	} else if(i>=25 && i<=27) {
+        		cell.setCellStyle(nomineeDetailsHeaderStyle);
+        	} else {
+        		cell.setCellStyle(headerStyle);
+        	}
         	sheet.autoSizeColumn(i);
         }
 
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
-            cell.setCellStyle(secondHeaderStyle);
+            if(i>=2 && i<=8) {
+        		cell.setCellStyle(officialDetailsHeaderStyle);
+        	} else if(i>=9 && i<=11) {
+        		cell.setCellStyle(bankDetailsHeaderStyle);
+        	} else if(i>=12 && i<=24) {
+        		cell.setCellStyle(personalDetailsHeaderStyle);
+        	} else if(i>=25 && i<=27) {
+        		cell.setCellStyle(nomineeDetailsHeaderStyle);
+        	} else {
+        		cell.setCellStyle(headerStyle);
+        	}
             sheet.autoSizeColumn(i);
         }
         
@@ -189,50 +217,48 @@ public class EmployeeDetailsExcelExportUtil {
 
             int col = 0;
 
-            row.createCell(col++).setCellValue(emp.getString("putX"));
-            row.createCell(col++).setCellValue(emp.getString("code"));
-            row.createCell(col++).setCellValue(emp.getString("panName"));
-            row.createCell(col++).setCellValue(emp.getDouble("grossSalaryPm"));
-            row.createCell(col++).setCellValue(emp.getDouble("grossSalaryPa"));
+            row.createCell(col++).setCellValue(emp.getString(CODE));
+            row.createCell(col++).setCellValue(emp.getString(PAN_NAME));
+            row.createCell(col++).setCellValue(emp.getDouble(GROSS_SALARY_PM));
+            row.createCell(col++).setCellValue(emp.getDouble(GROSS_SALARY_PA));
 
-            row.createCell(col++).setCellValue(emp.getString("joiningDate"));
-            row.createCell(col++).setCellValue(emp.getString("officialEmail"));
-            row.createCell(col++).setCellValue(emp.getString("designation"));
-            row.createCell(col++).setCellValue(emp.getString("department"));
-            row.createCell(col++).setCellValue(emp.getString("branch"));
-            row.createCell(col++).setCellValue(emp.getString("bankName"));
-            row.createCell(col++).setCellValue(emp.getString("ifsc"));
-            row.createCell(col++).setCellValue(emp.getString("savingBankAccount"));
-            row.createCell(col++).setCellValue(emp.getString("pan"));
+            row.createCell(col++).setCellValue(emp.getString(JOINING_DATE));
+            row.createCell(col++).setCellValue(emp.getString(OFFICIAL_EMAIL));
+            row.createCell(col++).setCellValue(emp.getString(DESIGNATION2));
+            row.createCell(col++).setCellValue(emp.getString(DEPARTMENT2));
+            row.createCell(col++).setCellValue(emp.getString(BRANCH2));
+            row.createCell(col++).setCellValue(emp.getString(BANK_NAME));
+            row.createCell(col++).setCellValue(emp.getString(IFSC));
+            row.createCell(col++).setCellValue(emp.getString(SAVING_BANK_ACCOUNT));
+            row.createCell(col++).setCellValue(emp.getString(PAN2));
 
-            row.createCell(col++).setCellValue(emp.getString("personalEmail"));
+            row.createCell(col++).setCellValue(emp.getString(PERSONAL_EMAIL));
             CellStyle textStyle = createTextStyle(workbook);
             sheet.setDefaultColumnStyle(15, textStyle);
             Cell mobileCell = row.createCell(col++);
             mobileCell.setCellStyle(textStyle);
-            mobileCell.setCellValue(emp.getString("mobileNo")+" ");
-            System.out.println("mob -- " + emp.getString("mobileNo"));
+            mobileCell.setCellValue(emp.getString(MOBILE_NO2)+" ");
             
+            //row.createCell(col++).setCellValue(StringPool.BLANK+emp.getString("mobileNo"));
+            row.createCell(col++).setCellValue(emp.getString(GENDER));
+            row.createCell(col++).setCellValue(emp.getString(FH_NAME2));
+            row.createCell(col++).setCellValue(emp.getString(DATE_OF_BIRTH));
+            row.createCell(col++).setCellValue(emp.getString(MARITAL_STATUS));
+            row.createCell(col++).setCellValue(emp.getString(NAME_AS_PER_AADHAR));
+            row.createCell(col++).setCellValue(emp.getString(KYC_DOC));
+            row.createCell(col++).setCellValue(emp.getString(PRESENT_ADDRESS));
+            row.createCell(col++).setCellValue(emp.getString(PERMANENT_ADDRESS));
+            row.createCell(col++).setCellValue(emp.getString(UAN2));
+            row.createCell(col++).setCellValue(emp.getString(ESIC));
             
-            //row.createCell(col++).setCellValue(""+emp.getString("mobileNo"));
-            row.createCell(col++).setCellValue(emp.getString("gender"));
-            row.createCell(col++).setCellValue(emp.getString("fhName"));
-            row.createCell(col++).setCellValue(emp.getString("dateOfBirth"));
-            row.createCell(col++).setCellValue(emp.getString("maritalStatus"));
-            row.createCell(col++).setCellValue(emp.getString("nameAsPerAadhar"));
-            row.createCell(col++).setCellValue(emp.getString("kycDoc"));
-            row.createCell(col++).setCellValue(emp.getString("presentAddress"));
-            row.createCell(col++).setCellValue(emp.getString("permanentAddress"));
-            row.createCell(col++).setCellValue(emp.getString("uan"));
-            row.createCell(col++).setCellValue(emp.getString("esic"));
+            row.createCell(col++).setCellValue(emp.getString(NOMINEE_NAME));
+            row.createCell(col++).setCellValue(emp.getString(RELATION));
+            row.createCell(col++).setCellValue(emp.getString(NOMINEE_DOB));
             
-            row.createCell(col++).setCellValue(emp.getString("nomineeName"));
-            row.createCell(col++).setCellValue(emp.getString("relation"));
-            row.createCell(col++).setCellValue(emp.getString("nomineeDob"));
-            
-            row.createCell(col++).setCellValue(emp.getString("coEmployeeCode"));
-            row.createCell(col++).setCellValue(emp.getString("spouseName"));
+            row.createCell(col++).setCellValue(emp.getString(CODE));
+            row.createCell(col++).setCellValue(emp.getString(SPOUSE_NAME2));
         }
+        sheet.createFreezePane(2, 3);
 
         // ===============================
         // DOWNLOAD RESPONSE
@@ -257,19 +283,29 @@ public class EmployeeDetailsExcelExportUtil {
         return style;
     }
 
-    private static CellStyle createGroupHeaderStyle(Workbook workbook) {
-        CellStyle style = workbook.createCellStyle();
+    private static CellStyle createGroupHeaderStyle(Workbook workbook, short bgColor) {
+    	CellStyle style = workbook.createCellStyle();
+
+        style.setFillForegroundColor(bgColor);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
         Font font = workbook.createFont();
         font.setBold(true);
+        font.setColor(IndexedColors.WHITE.getIndex());
         style.setFont(font);
-        style.setAlignment(HorizontalAlignment.CENTER);
+
         return style;
     }
     
     private static CellStyle createTextStyle(Workbook workbook) {
         DataFormat format = workbook.createDataFormat();
         CellStyle style = workbook.createCellStyle();
-        style.setDataFormat(format.getFormat("@")); // TEXT
+        style.setDataFormat(format.getFormat(StringPool.AT)); // TEXT
         return style;
     }
 

@@ -28,6 +28,7 @@ import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.LeaveDayTypeLocalService;
 import com.ax.hrms.service.LeaveRequestLocalService;
 import com.ax.hrms.service.NomineeLocalService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -59,7 +60,79 @@ import org.osgi.service.component.annotations.Reference;
 public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand {
 
 
-    public static final String EMPLOYEE_IDS = "employeeIds";
+    public static final String SPOUSE_NAME = "spouseName";
+
+    public static final String CO_EMPLOYEE_CODE = "coEmployeeCode";
+
+    public static final String NOMINEE_DOB = "nomineeDob";
+
+    public static final String RELATION = "relation";
+
+    public static final String NOMINEE_NAME = "nomineeName";
+
+    public static final String ESIC = "esic";
+
+    public static final String UAN = "uan";
+
+    public static final String PERMANENT_ADDRESS = "permanentAddress";
+
+    public static final String PRESENT_ADDRESS = "presentAddress";
+
+    public static final String MARRIED = "Married";
+
+    public static final String SINGLE = "Single";
+
+    public static final String AADHAR_CARD = "Aadhar Card";
+
+    public static final String KYC_DOC = "kycDoc";
+
+    public static final String NAME_AS_PER_AADHAR = "nameAsPerAadhar";
+
+    public static final String MARITAL_STATUS = "maritalStatus";
+
+    public static final String DATE_OF_BIRTH = "dateOfBirth";
+
+    public static final String FH_NAME = "fhName";
+
+    public static final String GENDER = "gender";
+
+    public static final String MOBILE_NO = "mobileNo";
+
+    public static final String PERSONAL_EMAIL = "personalEmail";
+
+    public static final String PAN = "pan";
+
+    public static final String SAVING_BANK_ACCOUNT = "savingBankAccount";
+
+    public static final String IFSC = "ifsc";
+
+    public static final String BANK_NAME = "bankName";
+
+    public static final String AHMEDABAD = "Ahmedabad";
+
+    public static final String BRANCH = "branch";
+
+    public static final String DESIGNATION2 = "designation";
+
+    public static final String DEPARTMENT2 = "department";
+
+    public static final String OFFICIAL_EMAIL = "officialEmail";
+
+    public static final String JOINING_DATE = "joiningDate";
+
+    public static final String GROSS_SALARY_PA = "grossSalaryPa";
+
+    public static final String GROSS_SALARY_PM = "grossSalaryPm";
+
+    public static final String PAN_NAME = "panName";
+
+    public static final String CODE = "code";
+
+    public static final String PUT_X = "putX";
+
+    public static final String DD_MM_YYYY = "dd/MM/yyyy";
+
+	public static final String EMPLOYEE_IDS = "employeeIds";
 
     public static final String EMPLOYEE_TYPE = "employeeType";
 
@@ -67,7 +140,7 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
     public boolean serveResource(ResourceRequest request, ResourceResponse response) {
 
         try {
-        	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        	SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YYYY);
 
             String employeeType = ParamUtil.getString(request, EMPLOYEE_TYPE);
 
@@ -91,69 +164,69 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
                         employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
                 JSONObject employeeDetailsJson = JSONFactoryUtil.createJSONObject();
-                employeeDetailsJson.put("putX", "-");
-                employeeDetailsJson.put("code", employeeDetails.getEmployeeCode());
-                employeeDetailsJson.put("panName", employeeDetails.getNameAsPerAadhaarCard());
+                employeeDetailsJson.put(PUT_X, StringPool.DASH);
+                employeeDetailsJson.put(CODE, employeeDetails.getEmployeeCode());
+                employeeDetailsJson.put(PAN_NAME, employeeDetails.getNameAsPerAadhaarCard());
                 try {
                 	EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
-                	employeeDetailsJson.put("grossSalaryPm", employeeSalary.getGrossSalaryCtcPm());
-                	employeeDetailsJson.put("grossSalaryPa", employeeSalary.getGrossSalaryCtcPa());
+                	employeeDetailsJson.put(GROSS_SALARY_PM, employeeSalary.getGrossSalaryCtcPm());
+                	employeeDetailsJson.put(GROSS_SALARY_PA, employeeSalary.getGrossSalaryCtcPa());
                 } catch(Exception e) {
                 	log.error("Error while fetching salary -- "+ e.getMessage());
-                	employeeDetailsJson.put("grossSalaryPm", 0.0);
-                	employeeDetailsJson.put("grossSalaryPa", 0.0);
+                	employeeDetailsJson.put(GROSS_SALARY_PM, 0.0);
+                	employeeDetailsJson.put(GROSS_SALARY_PA, 0.0);
                 }
                 Date joiningDate = employeeDetails.getJoiningDate();
-                employeeDetailsJson.put("joiningDate", sdf.format(joiningDate));
-                employeeDetailsJson.put("officialEmail", employeeDetails.getOfficialEmail());
+                employeeDetailsJson.put(JOINING_DATE, sdf.format(joiningDate));
+                employeeDetailsJson.put(OFFICIAL_EMAIL, employeeDetails.getOfficialEmail());
                 
                 try {
 					EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
 					DepartmentMaster department = departmentMasterLocalService.getDepartmentMaster(employeeDepartment.getDepartmentMasterId());
-					employeeDetailsJson.put("department", department.getDepartmentName());
+					employeeDetailsJson.put(DEPARTMENT2, department.getDepartmentName());
 				} catch(Exception e) {
 					log.error("Unable to fetch department-- "+e.getMessage());
-					employeeDetailsJson.put("department", "-");
+					employeeDetailsJson.put(DEPARTMENT2, StringPool.DASH);
 				}
 				
 				try {
 					EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
 					DesignationMaster designation = designationMasterLocalService.getDesignationMaster(employeeDesignation.getDesignationMasterId());
-					employeeDetailsJson.put("designation", designation.getDesignationName());
+					employeeDetailsJson.put(DESIGNATION2, designation.getDesignationName());
 				} catch(Exception e) {
 					log.error("Unable to fetch designation-- "+e.getMessage());
-					employeeDetailsJson.put("designation", "-");
+					employeeDetailsJson.put(DESIGNATION2, StringPool.DASH);
 				}
-				employeeDetailsJson.put("branch", "Ahmedabad");
+				employeeDetailsJson.put(BRANCH, AHMEDABAD);
 				
 				if(Validator.isNotNull(employeeDetails.getBankAccountId()) && employeeDetails.getBankAccountId()>0) {
 					try {
 						EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeDetails.getBankAccountId());
-						employeeDetailsJson.put("bankName", employeeBankAccount.getBankName());
-						employeeDetailsJson.put("ifsc", employeeBankAccount.getIfscCode());
-						employeeDetailsJson.put("savingBankAccount", employeeBankAccount.getAccountNumber());
+						employeeDetailsJson.put(BANK_NAME, employeeBankAccount.getBankName());
+						employeeDetailsJson.put(IFSC, employeeBankAccount.getIfscCode());
+						employeeDetailsJson.put(SAVING_BANK_ACCOUNT, employeeBankAccount.getAccountNumber());
 					} catch(Exception e) {
 						log.error("Error while fetching employee bank account -- " + e.getMessage());
-						employeeDetailsJson.put("bankName", "-");
-						employeeDetailsJson.put("ifsc", "-");
-						employeeDetailsJson.put("savingBankAccount", "-");
+						employeeDetailsJson.put(BANK_NAME, StringPool.DASH);
+						employeeDetailsJson.put(IFSC, StringPool.DASH);
+						employeeDetailsJson.put(SAVING_BANK_ACCOUNT, StringPool.DASH);
 					}
 				} else {
-					employeeDetailsJson.put("bankName", "-");
-					employeeDetailsJson.put("ifsc", "-");
-					employeeDetailsJson.put("savingBankAccount", "-");
+					employeeDetailsJson.put(BANK_NAME, StringPool.DASH);
+					employeeDetailsJson.put(IFSC, StringPool.DASH);
+					employeeDetailsJson.put(SAVING_BANK_ACCOUNT, StringPool.DASH);
 				}
-				employeeDetailsJson.put("pan", employeeDetails.getPanCardNumber());
-				employeeDetailsJson.put("personalEmail", employeeDetails.getPersonalEmail());
+				employeeDetailsJson.put(PAN, employeeDetails.getPanCardNumber());
+				employeeDetailsJson.put(PERSONAL_EMAIL, employeeDetails.getPersonalEmail());
 				log.info("mobile No -- " + employeeDetails.getMobileNo());
-				employeeDetailsJson.put("mobileNo", employeeDetails.getMobileNo());
-				employeeDetailsJson.put("gender", employeeDetails.getGender());
-				employeeDetailsJson.put("fhName", employeeDetails.getFatherName());
-				String employeeDobStr = Validator.isNotNull(employeeDetails.getDateOfBirth())?sdf.format(employeeDetails.getDateOfBirth()):"";
-				employeeDetailsJson.put("dateOfBirth", employeeDobStr);
-				employeeDetailsJson.put("maritalStatus", employeeDetails.isMaritalStatus()?"Married":"Single");
-				employeeDetailsJson.put("nameAsPerAadhar", employeeDetails.getNameAsPerAadhaarCard());
-				employeeDetailsJson.put("kycDoc", "Aadhar Card");
+				employeeDetailsJson.put(MOBILE_NO, employeeDetails.getMobileNo());
+				employeeDetailsJson.put(GENDER, employeeDetails.getGender());
+				employeeDetailsJson.put(FH_NAME, employeeDetails.getFatherName());
+				String employeeDobStr = Validator.isNotNull(employeeDetails.getDateOfBirth())?sdf.format(employeeDetails.getDateOfBirth()):StringPool.BLANK;
+				employeeDetailsJson.put(DATE_OF_BIRTH, employeeDobStr);
+				employeeDetailsJson.put(MARITAL_STATUS, employeeDetails.isMaritalStatus()?MARRIED:SINGLE);
+				employeeDetailsJson.put(NAME_AS_PER_AADHAR, employeeDetails.getNameAsPerAadhaarCard());
+				employeeDetailsJson.put(KYC_DOC, AADHAR_CARD);
 				
 				try {
 					long employeeAddressId = employeeDetails.getEmployeeAddressId();
@@ -161,44 +234,44 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 		            if (employeeAddress.getPresentPermanentSame()) {
 		                Address presentaddress = addressLocalService.getAddress(employeeAddress.getPresentAddress());
 		                String address = getAddressString(presentaddress);
-		                employeeDetailsJson.put("presentAddress", address);
-		                employeeDetailsJson.put("permanentAddress", address);
+		                employeeDetailsJson.put(PRESENT_ADDRESS, address);
+		                employeeDetailsJson.put(PERMANENT_ADDRESS, address);
 		            } else {
 		                Address presentaddress = addressLocalService.getAddress(employeeAddress.getPresentAddress());
 		                Address permanentaddress = addressLocalService.getAddress(employeeAddress.getPermanentAddress());
-		                employeeDetailsJson.put("presentAddress", getAddressString(presentaddress));
-		                employeeDetailsJson.put("permanentAddress", getAddressString(permanentaddress));
+		                employeeDetailsJson.put(PRESENT_ADDRESS, getAddressString(presentaddress));
+		                employeeDetailsJson.put(PERMANENT_ADDRESS, getAddressString(permanentaddress));
 		            }
 				} catch(Exception e) {
 					log.error("Error while fetching employeeAddress - " + e.getMessage());
-					employeeDetailsJson.put("presentAddress", "-");
-	                employeeDetailsJson.put("permanentAddress", "-");
+					employeeDetailsJson.put(PRESENT_ADDRESS, StringPool.DASH);
+	                employeeDetailsJson.put(PERMANENT_ADDRESS, StringPool.DASH);
 				}
 				
 				try {
 					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.getEmployeeUanEsic(employeeDetails.getUanEsicId());
-					employeeDetailsJson.put("uan", employeeUanEsic.getUan());
-					employeeDetailsJson.put("esic", employeeUanEsic.getEsicNo());
+					employeeDetailsJson.put(UAN, employeeUanEsic.getUan());
+					employeeDetailsJson.put(ESIC, employeeUanEsic.getEsicNo());
 				} catch(Exception e) {
 					log.error("Error while fetching employee uan esic -- " + e.getMessage());
-					employeeDetailsJson.put("uan", "-");
-					employeeDetailsJson.put("esic", "-");
+					employeeDetailsJson.put(UAN, StringPool.DASH);
+					employeeDetailsJson.put(ESIC, StringPool.DASH);
 				}
 				
 				try {
 					Nominee nominee = nomineeLocalService.getNominee(employeeDetails.getNominneeId());
-					employeeDetailsJson.put("nomineeName", nominee.getNomineeFirstName() + " " + nominee.getNomineeLastName());
-					employeeDetailsJson.put("relation", nominee.getRelationshipWithNominee());
+					employeeDetailsJson.put(NOMINEE_NAME, nominee.getNomineeFirstName() + " " + nominee.getNomineeLastName());
+					employeeDetailsJson.put(RELATION, nominee.getRelationshipWithNominee());
 					String nomineeDOBStr = Validator.isNotNull(nominee.getNomineeDob())?sdf.format(nominee.getNomineeDob()):"";
-					employeeDetailsJson.put("nomineeDob", nomineeDOBStr);
+					employeeDetailsJson.put(NOMINEE_DOB, nomineeDOBStr);
 				} catch(Exception e) {
 					log.error("Error while fetching nominee -- " + e.getMessage());
-					employeeDetailsJson.put("nomineeName", "-");
-					employeeDetailsJson.put("relation", "-");
-					employeeDetailsJson.put("nomineeDob", "-");
+					employeeDetailsJson.put(NOMINEE_NAME, StringPool.DASH);
+					employeeDetailsJson.put(RELATION, StringPool.DASH);
+					employeeDetailsJson.put(NOMINEE_DOB, StringPool.DASH);
 				}
-                employeeDetailsJson.put("coEmployeeCode", "-");
-                employeeDetailsJson.put("spouseName", employeeDetails.getSpouseName());
+                employeeDetailsJson.put(CO_EMPLOYEE_CODE, StringPool.DASH);
+                employeeDetailsJson.put(SPOUSE_NAME, employeeDetails.getSpouseName());
                 employeesArr.put(employeeDetailsJson);
             }
 
@@ -213,7 +286,7 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 
 	private String getAddressString(Address address) {
 		List<String> parts = new ArrayList<>();
-		String addressStr = "";
+		String addressStr = StringPool.BLANK;
 		if(Validator.isNotNull(address)) {
 			parts.add(address.getLine1());
 			if (Validator.isNotNull(address.getLine2())) {
