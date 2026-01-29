@@ -43,7 +43,7 @@ public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 
 	// Mail Body
 	public static final String LEAVE_REQUEST_MAIL_HEAD = "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;\">\n  <div style=\"padding: 20px;\">\n  <table style=\"width: 100%; border-collapse: collapse; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);\">\n <thead>\n"
-			+ "                <tr style=\"background: linear-gradient(270deg, #643CD7 -48.15%, #D03059 116.67%); color: #fff;\">\n"
+			+ "                <tr style=\"background: #893D96; color: #fff;\">\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Employee Code</th>\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Employee Name </th>\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Department</th>\n"
@@ -60,7 +60,7 @@ public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 	public static final String LEAVE_REQUEST_MAIL_FOOTER = "</tbody>\n </table>\n  </div>\n </body>\n </html>\n";
 
 	public static final String LEAVE_REQUEST_TEAM_MAIL_HEAD = "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;\">\n  <div style=\"padding: 20px;\">\n  <table style=\"width: 100%; border-collapse: collapse; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);\">\n <thead>\n"
-			+ "                <tr style=\"background: linear-gradient(270deg, #643CD7 -48.15%, #D03059 116.67%); color: #fff;\">\n"
+			+ "                <tr style=\"background: #893D96; color: #fff;\">\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Employee Code</th>\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Employee Name </th>\n"
 			+ "                    <th style=\"border: 1px solid #ddd; padding: 10px; text-align: left;\">Department</th>\n"
