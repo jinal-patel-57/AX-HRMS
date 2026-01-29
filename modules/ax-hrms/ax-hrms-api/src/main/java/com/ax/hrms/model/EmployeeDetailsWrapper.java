@@ -80,6 +80,8 @@ public class EmployeeDetailsWrapper
 		attributes.put("aadhaarCardNumber", getAadhaarCardNumber());
 		attributes.put("nameAsPerAadhaarCard", getNameAsPerAadhaarCard());
 		attributes.put("branchId", getBranchId());
+		attributes.put("documentTypeMasterId", getDocumentTypeMasterId());
+		attributes.put("kycDocumentFileEntryId", getKycDocumentFileEntryId());
 
 		return attributes;
 	}
@@ -364,6 +366,20 @@ public class EmployeeDetailsWrapper
 		if (branchId != null) {
 			setBranchId(branchId);
 		}
+
+		Long documentTypeMasterId = (Long)attributes.get(
+			"documentTypeMasterId");
+
+		if (documentTypeMasterId != null) {
+			setDocumentTypeMasterId(documentTypeMasterId);
+		}
+
+		Long kycDocumentFileEntryId = (Long)attributes.get(
+			"kycDocumentFileEntryId");
+
+		if (kycDocumentFileEntryId != null) {
+			setKycDocumentFileEntryId(kycDocumentFileEntryId);
+		}
 	}
 
 	@Override
@@ -459,6 +475,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public Date getDateOfBirth() {
 		return model.getDateOfBirth();
+	}
+
+	/**
+	 * Returns the document type master ID of this employee details.
+	 *
+	 * @return the document type master ID of this employee details
+	 */
+	@Override
+	public long getDocumentTypeMasterId() {
+		return model.getDocumentTypeMasterId();
 	}
 
 	/**
@@ -609,6 +635,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public Date getJoiningDate() {
 		return model.getJoiningDate();
+	}
+
+	/**
+	 * Returns the kyc document file entry ID of this employee details.
+	 *
+	 * @return the kyc document file entry ID of this employee details
+	 */
+	@Override
+	public long getKycDocumentFileEntryId() {
+		return model.getKycDocumentFileEntryId();
 	}
 
 	/**
@@ -997,6 +1033,16 @@ public class EmployeeDetailsWrapper
 	}
 
 	/**
+	 * Sets the document type master ID of this employee details.
+	 *
+	 * @param documentTypeMasterId the document type master ID of this employee details
+	 */
+	@Override
+	public void setDocumentTypeMasterId(long documentTypeMasterId) {
+		model.setDocumentTypeMasterId(documentTypeMasterId);
+	}
+
+	/**
 	 * Sets the employee address ID of this employee details.
 	 *
 	 * @param employeeAddressId the employee address ID of this employee details
@@ -1144,6 +1190,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setJoiningDate(Date joiningDate) {
 		model.setJoiningDate(joiningDate);
+	}
+
+	/**
+	 * Sets the kyc document file entry ID of this employee details.
+	 *
+	 * @param kycDocumentFileEntryId the kyc document file entry ID of this employee details
+	 */
+	@Override
+	public void setKycDocumentFileEntryId(long kycDocumentFileEntryId) {
+		model.setKycDocumentFileEntryId(kycDocumentFileEntryId);
 	}
 
 	/**

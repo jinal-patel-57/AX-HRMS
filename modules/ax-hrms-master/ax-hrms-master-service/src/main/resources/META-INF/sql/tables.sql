@@ -51,7 +51,8 @@ create table ax_master_DocumentTypeMaster (
 	groupId LONG,
 	createDate DATE null,
 	modifiedDate DATE null,
-	documentTypeName VARCHAR(75) null
+	documentTypeName VARCHAR(75) null,
+	isDocumentUsedForKYC BOOLEAN
 );
 
 create table ax_master_EducationLevelMaster (

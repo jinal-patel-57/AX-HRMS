@@ -6,14 +6,8 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmp
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
-import com.ax.hrms.master.model.BranchMaster;
-import com.ax.hrms.master.model.DepartmentMaster;
-import com.ax.hrms.master.model.DesignationMaster;
-import com.ax.hrms.master.model.EducationLevelMaster;
-import com.ax.hrms.master.service.BranchMasterLocalService;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.master.service.EducationLevelMasterLocalService;
+import com.ax.hrms.master.model.*;
+import com.ax.hrms.master.service.*;
 import com.ax.hrms.model.*;
 import com.ax.hrms.service.AddressLocalService;
 import com.ax.hrms.service.EmployeeAddressLocalService;
@@ -26,8 +20,10 @@ import com.ax.hrms.service.EmployeeExperienceLocalService;
 import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -139,7 +135,6 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         
         EmployeeDetails employeeDetails;
-
 
         try {
         	long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsEmployeeOnboardingHrWebPortletConstants.HR_ADMIN).getRoleId();
@@ -272,38 +267,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
             	managerName = managerDetails.getFirstName() + managerDetails.getLastName() + "("+managerId+")";
             }
 
-            try {
 
-                EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
-
-                long addressProofFileEntryId =
-                        employeeAddress.getEmployeeAddressProofFileEntryId();
-
-                String addressProofPreviewURL = null;
-
-                if (addressProofFileEntryId > 0) {
-                    FileEntry fileEntry;
-                    try {
-                        fileEntry = DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
-
-                        addressProofPreviewURL =
-                                DLUtil.getPreviewURL(
-                                        fileEntry,
-                                        fileEntry.getFileVersion(),
-                                        themeDisplay,
-                                        ""
-                                );
-                        renderRequest.setAttribute(
-                                "addressProofPreviewURL",
-                                addressProofPreviewURL
-                        );
-                    } catch (PortalException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            } catch (Exception e) {
-                log.error("Error occurred while fetching document URL :: " + e);
-            }
 
             renderRequest.setAttribute("managerName", managerName);
         } catch (PortalException e) {
@@ -320,7 +284,39 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
         employeeOnBoardingUtil.setNominee(renderRequest, employeeId);
 
-        employeeOnBoardingUtil.setAddress(renderRequest, employeeId);
+        employeeOnBoardingUtil.setAddress(renderRequest, employeeId,themeDisplay);
+
+        try {
+            List<DocumentTypeMaster> kycDocumentTypes = documentTypeMasterLocalService.fetchByIsDocumentUsedForKYC();
+            if (kycDocumentTypes != null && !kycDocumentTypes.isEmpty()) {
+                renderRequest.setAttribute("kycDocumentTypes", kycDocumentTypes);
+            }
+            long kycFileEntryId = 0;
+            employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+            if (Validator.isNotNull(employeeDetails)) {
+                kycFileEntryId = employeeDetails.getKycDocumentFileEntryId();
+            }
+
+            String kycDocumentUrl = null;
+
+            if (kycFileEntryId > 0) {
+                FileEntry fileEntry =
+                        dlAppLocalService.getFileEntry(kycFileEntryId);
+
+                kycDocumentUrl =
+                        dlurlHelper.getPreviewURL(
+                                fileEntry,
+                                fileEntry.getFileVersion(),
+                                themeDisplay,
+                                StringPool.BLANK
+                        );
+
+                renderRequest.setAttribute("kycDocumentUrl",kycDocumentUrl);
+
+            }
+        } catch (PortalException e) {
+            log.error("Error Occurred while getting preview URL :: " + e);
+        }
 
         employeeOnBoardingUtil.setBankAccount(renderRequest, employeeId);
 
@@ -335,4 +331,10 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
         return AxHrmsEmployeeOnBoardingEmployeeConstants.ADD_EMPLOYEE_ONBOARDING_JSP;
     }
+    @Reference
+    private DocumentTypeMasterLocalService documentTypeMasterLocalService;
+    @Reference
+    private DLAppLocalService dlAppLocalService;
+    @Reference
+    private DLURLHelper dlurlHelper;
 }

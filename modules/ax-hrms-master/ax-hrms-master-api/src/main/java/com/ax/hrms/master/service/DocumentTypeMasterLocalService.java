@@ -195,6 +195,9 @@ public interface DocumentTypeMasterLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<DocumentTypeMaster> fetchByIsDocumentUsedForKYC();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public DocumentTypeMaster fetchDocumentTypeMaster(
 		long documentTypeMasterId);
 

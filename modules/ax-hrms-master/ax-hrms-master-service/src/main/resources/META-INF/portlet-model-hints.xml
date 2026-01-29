@@ -51,6 +51,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="documentTypeName" type="String" />
+		<field name="isDocumentUsedForKYC" type="boolean" />
 	</model>
 	<model name="com.ax.hrms.master.model.EducationLevelMaster">
 		<field name="educationLevelMasterId" type="long" />

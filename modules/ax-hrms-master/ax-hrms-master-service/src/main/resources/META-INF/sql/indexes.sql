@@ -5,6 +5,7 @@ create index IX_C8516B60 on ax_master_DepartmentMaster (departmentName[$COLUMN_L
 create index IX_E024F2C8 on ax_master_DesignationMaster (designationName[$COLUMN_LENGTH:75$]);
 
 create index IX_D8E7ED26 on ax_master_DocumentTypeMaster (documentTypeName[$COLUMN_LENGTH:75$]);
+create index IX_4E986C14 on ax_master_DocumentTypeMaster (isDocumentUsedForKYC);
 
 create index IX_8EDEDF66 on ax_master_EducationLevelMaster (levelName[$COLUMN_LENGTH:75$]);
 

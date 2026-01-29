@@ -23,6 +23,8 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.util.List;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -53,5 +55,8 @@ public class DocumentTypeMasterLocalServiceImpl
 			log.error("DocumentTypeMasterLocalServiceImpl >>> getDocumentTypeMasterIdByName ::: Exception is: "+ exception.getMessage());
 		}
 		return 0L;
+	}
+	public List<DocumentTypeMaster> fetchByIsDocumentUsedForKYC () {
+        return documentTypeMasterPersistence.findByIsDocumentUsedForKYC(true);
 	}
 }

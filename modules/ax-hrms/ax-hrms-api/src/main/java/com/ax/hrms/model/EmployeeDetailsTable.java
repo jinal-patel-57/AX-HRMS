@@ -140,6 +140,14 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<EmployeeDetailsTable, Long> branchId = createColumn(
 		"branchId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> documentTypeMasterId =
+		createColumn(
+			"documentTypeMasterId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, Long> kycDocumentFileEntryId =
+		createColumn(
+			"kycDocumentFileEntryId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

@@ -7,7 +7,9 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrW
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.model.DocumentTypeMaster;
 import com.ax.hrms.master.model.EducationLevelMaster;
+import com.ax.hrms.master.service.DocumentTypeMasterLocalService;
 import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.service.AddressLocalService;
@@ -18,14 +20,19 @@ import com.ax.hrms.service.EmployeeEducationLocalService;
 import com.ax.hrms.service.EmployeeExperienceLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.util.DLURLHelper;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.CountryLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.awt.print.Book;
@@ -100,11 +107,12 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 
 			EmployeeOnBoardingUtil employeeOnBoardingUtil=new EmployeeOnBoardingUtil(employeeDetailsLocalService,axHrmsCommonApi, employeeAddressLocalService, employeeBankAccountLocalService, addressLocalService, nomineeLocalService,mailTemplateConfiguration);
 			employeeOnBoardingUtil.setEmployeeDetails(renderRequest, employeeId);
-			employeeOnBoardingUtil.setAddress(renderRequest, employeeId);
+			employeeOnBoardingUtil.setAddress(renderRequest, employeeId,themeDisplay);
 			employeeOnBoardingUtil.setNominee(renderRequest, employeeId);
 			employeeOnBoardingUtil.setBankAccount(renderRequest, employeeId);
 			employeeOnBoardingUtil.setUanEsic(renderRequest, employeeId,employeeUanEsicLocalService);
 			log.info("beforeeeee log");
+
 			employeeOnBoardingUtil.setEducationList(renderRequest, employeeId, employeeEducationLocalService);
 			employeeOnBoardingUtil.setExperience(renderRequest, employeeId, employeeExperienceLocalService);
 
@@ -115,12 +123,47 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 			renderRequest.setAttribute(AxHrmsEmployeeOnboardingHrWebPortletConstants.IS_EXPERIENCED, employeeDetails.getIsExperienced());
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.COUNTRY_LIST, countryList);
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LEVEL_MASTERS_LIST,educationLevelMastersList);
-			
-		} catch (NoSuchEmployeeDetailsException e1) {
-			e1.printStackTrace();
-		} catch (PortalException e) {
-            e.printStackTrace();
-        }
+
+			List<DocumentTypeMaster> kycDocumentTypes = documentTypeMasterLocalService.fetchByIsDocumentUsedForKYC();
+			if (kycDocumentTypes != null && !kycDocumentTypes.isEmpty()) {
+				renderRequest.setAttribute("kycDocumentTypes", kycDocumentTypes);
+			}
+			long kycFileEntryId = 0;
+
+			if (Validator.isNotNull(employeeDetails)) {
+				kycFileEntryId = employeeDetails.getKycDocumentFileEntryId();
+			}
+
+			String kycDocumentUrl = null;
+
+			if (kycFileEntryId > 0) {
+				FileEntry fileEntry =
+						dlAppLocalService.getFileEntry(kycFileEntryId);
+
+				kycDocumentUrl =
+						dlurlHelper.getPreviewURL(
+								fileEntry,
+								fileEntry.getFileVersion(),
+								themeDisplay,
+								StringPool.BLANK
+						);
+
+				renderRequest.setAttribute("kycDocumentUrl",kycDocumentUrl);
+
+			}
+
+		} catch (NoSuchEmployeeDetailsException ex) {
+			log.warn("Employee details not found", ex);
+		} catch (PortalException ex) {
+			log.error("Portal exception occurred while processing employee data", ex);
+		}
         return AxHrmsEmployeeOnBoardingEmployeeConstants.ADD_EMPLOYEE_ONBOARDING_JSP;
 	}
+
+	@Reference
+	private DocumentTypeMasterLocalService documentTypeMasterLocalService;
+	@Reference
+	private DLAppLocalService dlAppLocalService;
+	@Reference
+	private DLURLHelper dlurlHelper;
 }

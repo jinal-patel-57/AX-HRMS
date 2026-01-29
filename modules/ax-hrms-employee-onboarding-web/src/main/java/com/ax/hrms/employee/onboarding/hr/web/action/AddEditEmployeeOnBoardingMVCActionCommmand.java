@@ -150,6 +150,36 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
 
+            User lrUser =
+                    userLocalService.getUser(employeeDetails.getLrUserId());
+            long documentTypeMasterId = ParamUtil.getLong(
+                    actionRequest,
+                    "kycDocumentType"
+            );
+            UploadPortletRequest uploadPortletRequest =
+                    PortalUtil.getUploadPortletRequest(actionRequest);
+
+            File kycFile =
+                    uploadPortletRequest.getFile("kycDocumentFile");
+
+            String originalFileName =
+                    uploadPortletRequest.getFileName("kycDocumentFile");
+
+            String employeeFolderName =
+                    lrUser.getScreenName() + lrUser.getUserId();
+            long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+                    themeDisplay,
+                    serviceContext,
+                    kycFile,
+                    originalFileName,
+                    employeeDetails.getKycDocumentFileEntryId(),
+                    AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+                    employeeFolderName,
+                    AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+            );
+
+            employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
+            employeeDetails.setKycDocumentFileEntryId(kycFileEntryId);
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT,Locale.ENGLISH);
                 log.info("Date of DOB :-"+ ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_OF_BIRTH));

@@ -77,6 +77,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentTypeName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isDocumentUsedForKYC" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
 	<class name="com.ax.hrms.master.model.impl.EducationLevelMasterImpl" table="ax_master_EducationLevelMaster">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="educationLevelMasterId" type="long">

@@ -205,6 +205,10 @@ public class DocumentTypeMasterLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
+	public static List<DocumentTypeMaster> fetchByIsDocumentUsedForKYC() {
+		return getService().fetchByIsDocumentUsedForKYC();
+	}
+
 	public static DocumentTypeMaster fetchDocumentTypeMaster(
 		long documentTypeMasterId) {
 

@@ -766,6 +766,34 @@ public interface EmployeeDetailsModel
 	 */
 	public void setBranchId(long branchId);
 
+	/**
+	 * Returns the document type master ID of this employee details.
+	 *
+	 * @return the document type master ID of this employee details
+	 */
+	public long getDocumentTypeMasterId();
+
+	/**
+	 * Sets the document type master ID of this employee details.
+	 *
+	 * @param documentTypeMasterId the document type master ID of this employee details
+	 */
+	public void setDocumentTypeMasterId(long documentTypeMasterId);
+
+	/**
+	 * Returns the kyc document file entry ID of this employee details.
+	 *
+	 * @return the kyc document file entry ID of this employee details
+	 */
+	public long getKycDocumentFileEntryId();
+
+	/**
+	 * Sets the kyc document file entry ID of this employee details.
+	 *
+	 * @param kycDocumentFileEntryId the kyc document file entry ID of this employee details
+	 */
+	public void setKycDocumentFileEntryId(long kycDocumentFileEntryId);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

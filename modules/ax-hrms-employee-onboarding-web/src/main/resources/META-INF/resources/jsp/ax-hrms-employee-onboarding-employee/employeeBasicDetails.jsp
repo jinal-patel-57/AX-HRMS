@@ -68,10 +68,6 @@
                        value="${employeeDetail.fatherName}" maxlength="50"/>
             </div>
 
-
-
-
-
             <div class="col-md-4 col-sm-12 mb-3">
                 <label for="<portlet:namespace />aadharNumber" class="form-label">
                     <liferay-ui:message key="aadhar-number"/><span class="text-danger">*</span>
@@ -82,8 +78,6 @@
                        name="<portlet:namespace />aadharNumber"
                        value="${employeeDetail.aadhaarCardNumber}" maxlength="14"/>
             </div>
-
-
 
             <div class="col-md-4 col-sm-12 mb-3">
                 <label for="<portlet:namespace />panNumber" class="form-label">
@@ -241,9 +235,6 @@
 
            </div>
 
-
-
-
             <!-- end here that field -->
             <!-- Third Row: Marital Status, Marriage Date, and Spouse Name -->
             <div class="col-md-4 col-sm-12 mb-3">
@@ -279,7 +270,61 @@
                        value="${employeeDetail.spouseName}" maxlength="50"/>
             </div>
 
+            <div class="col-md-4 col-sm-12 mb-3">
+                <!-- KYC Document Type -->
+                <label class="form-label">
+                    <liferay-ui:message key="kyc-document-type"/>
+                    <span class="text-danger">*</span>
+                </label>
 
+                <select class="form-control"
+                        id="<portlet:namespace/>kycDocumentType"
+                        name="<portlet:namespace/>kycDocumentType">
+                    <option value="">
+                        <liferay-ui:message key="select-kyc-document-type"/>
+                    </option>
+
+                    <c:forEach items="${kycDocumentTypes}" var="documentType">
+                        <option value="${documentType.documentTypeMasterId}">
+                            ${documentType.documentTypeName}
+                        </option>
+                    </c:forEach>
+                </select>
+            </div>
+
+            <!-- KYC Document Upload -->
+            <div class="col-md-4 col-sm-12 mb-3"
+                 id="kycDocumentUploadSection"
+                 style="display: none;">
+                <label class="form-label">
+                    <liferay-ui:message key="upload-kyc-document"/>
+                    <span class="text-danger">*</span>
+                </label>
+
+                <input type="file"
+                       class="form-control"
+                       id="<portlet:namespace/>kycDocumentFile"
+                       name="<portlet:namespace/>kycDocumentFile"
+
+                <small class="form-text text-muted">
+                    PDF / JPG / PNG allowed
+                </small>
+            </div>
+
+            <c:if test="${not empty kycDocumentUrl}">
+                <div class="col-md-4 col-sm-12 mb-3">
+                    <label class="form-label">
+                            <liferay-ui:message key="uploaded-kyc-document"/>
+                    </label>
+                    <div>
+                        <a href="${kycDocumentUrl}"
+                           target="_blank"
+                           class="">
+                           <liferay-ui:message key="view-document"/>
+                        </a>
+                    </div>
+                </div>
+            </c:if>
         </div>
 
         <c:if test="${isHrStatus}">
@@ -558,3 +603,29 @@
 
 </script>
 
+<aui:script>
+    Liferay.on('allPortletsReady', function () {
+
+        var documentSelect =
+            $('#<portlet:namespace/>kycDocumentType');
+
+        var uploadSection =
+            $('#kycDocumentUploadSection');
+
+        function toggleKycUpload() {
+            if (documentSelect.val()) {
+                uploadSection.show();
+            } else {
+                uploadSection.hide();
+            }
+        }
+
+        // Initial state
+        toggleKycUpload();
+
+        // On dropdown change
+        documentSelect.on('change', function () {
+            toggleKycUpload();
+        });
+    });
+</aui:script>

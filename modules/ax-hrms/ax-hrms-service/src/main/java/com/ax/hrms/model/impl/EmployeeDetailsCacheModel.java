@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(93);
+		StringBundler sb = new StringBundler(97);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -148,6 +148,10 @@ public class EmployeeDetailsCacheModel
 		sb.append(nameAsPerAadhaarCard);
 		sb.append(", branchId=");
 		sb.append(branchId);
+		sb.append(", documentTypeMasterId=");
+		sb.append(documentTypeMasterId);
+		sb.append(", kycDocumentFileEntryId=");
+		sb.append(kycDocumentFileEntryId);
 		sb.append("}");
 
 		return sb.toString();
@@ -349,6 +353,8 @@ public class EmployeeDetailsCacheModel
 		}
 
 		employeeDetailsImpl.setBranchId(branchId);
+		employeeDetailsImpl.setDocumentTypeMasterId(documentTypeMasterId);
+		employeeDetailsImpl.setKycDocumentFileEntryId(kycDocumentFileEntryId);
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -426,6 +432,10 @@ public class EmployeeDetailsCacheModel
 		nameAsPerAadhaarCard = objectInput.readUTF();
 
 		branchId = objectInput.readLong();
+
+		documentTypeMasterId = objectInput.readLong();
+
+		kycDocumentFileEntryId = objectInput.readLong();
 	}
 
 	@Override
@@ -596,6 +606,10 @@ public class EmployeeDetailsCacheModel
 		}
 
 		objectOutput.writeLong(branchId);
+
+		objectOutput.writeLong(documentTypeMasterId);
+
+		objectOutput.writeLong(kycDocumentFileEntryId);
 	}
 
 	public String uuid;
@@ -644,5 +658,7 @@ public class EmployeeDetailsCacheModel
 	public String aadhaarCardNumber;
 	public String nameAsPerAadhaarCard;
 	public long branchId;
+	public long documentTypeMasterId;
+	public long kycDocumentFileEntryId;
 
 }

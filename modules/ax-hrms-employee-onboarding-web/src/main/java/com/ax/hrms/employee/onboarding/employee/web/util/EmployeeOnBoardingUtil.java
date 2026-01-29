@@ -23,6 +23,7 @@ import com.ax.hrms.service.EmployeeExperienceLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -219,7 +220,7 @@ public class EmployeeOnBoardingUtil {
         }
     }
 
-    public void setAddress(RenderRequest renderRequest, Long employeeId) {
+    public void setAddress(RenderRequest renderRequest, Long employeeId,ThemeDisplay themeDisplay) {
         try {
             long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
             log.info("EmployeeOnBoardingUtil >>> setAddress ::: employeeAddressId ======>>>>>" + employeeAddressId);
@@ -246,6 +247,36 @@ public class EmployeeOnBoardingUtil {
                 renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS, presentaddresss);
             }
 
+            try {
+
+                long addressProofFileEntryId =
+                        employeeAddress.getEmployeeAddressProofFileEntryId();
+
+                String addressProofPreviewURL = null;
+
+                if (addressProofFileEntryId > 0) {
+                    FileEntry fileEntry;
+                    try {
+                        fileEntry = DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
+
+                        addressProofPreviewURL =
+                                DLUtil.getPreviewURL(
+                                        fileEntry,
+                                        fileEntry.getFileVersion(),
+                                        themeDisplay,
+                                        ""
+                                );
+                        renderRequest.setAttribute(
+                                "addressProofPreviewURL",
+                                addressProofPreviewURL
+                        );
+                    } catch (PortalException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Error occurred while fetching document URL :: " + e);
+            }
 
         } catch (PortalException e) {
             log.error("Error retrieving employeeAddress: " + e.getMessage());

@@ -337,6 +337,525 @@ public class DocumentTypeMasterPersistenceImpl
 		_FINDER_COLUMN_DOCUMENTTYPENAME_DOCUMENTTYPENAME_3 =
 			"(documentTypeMaster.documentTypeName IS NULL OR documentTypeMaster.documentTypeName = '')";
 
+	private FinderPath _finderPathWithPaginationFindByIsDocumentUsedForKYC;
+	private FinderPath _finderPathWithoutPaginationFindByIsDocumentUsedForKYC;
+	private FinderPath _finderPathCountByIsDocumentUsedForKYC;
+
+	/**
+	 * Returns all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @return the matching document type masters
+	 */
+	@Override
+	public List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC) {
+
+		return findByIsDocumentUsedForKYC(
+			isDocumentUsedForKYC, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @return the range of matching document type masters
+	 */
+	@Override
+	public List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end) {
+
+		return findByIsDocumentUsedForKYC(
+			isDocumentUsedForKYC, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document type masters
+	 */
+	@Override
+	public List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end,
+		OrderByComparator<DocumentTypeMaster> orderByComparator) {
+
+		return findByIsDocumentUsedForKYC(
+			isDocumentUsedForKYC, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching document type masters
+	 */
+	@Override
+	public List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end,
+		OrderByComparator<DocumentTypeMaster> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByIsDocumentUsedForKYC;
+				finderArgs = new Object[] {isDocumentUsedForKYC};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByIsDocumentUsedForKYC;
+			finderArgs = new Object[] {
+				isDocumentUsedForKYC, start, end, orderByComparator
+			};
+		}
+
+		List<DocumentTypeMaster> list = null;
+
+		if (useFinderCache) {
+			list = (List<DocumentTypeMaster>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (DocumentTypeMaster documentTypeMaster : list) {
+					if (isDocumentUsedForKYC !=
+							documentTypeMaster.isIsDocumentUsedForKYC()) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_DOCUMENTTYPEMASTER_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_ISDOCUMENTUSEDFORKYC_ISDOCUMENTUSEDFORKYC_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(DocumentTypeMasterModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(isDocumentUsedForKYC);
+
+				list = (List<DocumentTypeMaster>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document type master
+	 * @throws NoSuchDocumentTypeMasterException if a matching document type master could not be found
+	 */
+	@Override
+	public DocumentTypeMaster findByIsDocumentUsedForKYC_First(
+			boolean isDocumentUsedForKYC,
+			OrderByComparator<DocumentTypeMaster> orderByComparator)
+		throws NoSuchDocumentTypeMasterException {
+
+		DocumentTypeMaster documentTypeMaster =
+			fetchByIsDocumentUsedForKYC_First(
+				isDocumentUsedForKYC, orderByComparator);
+
+		if (documentTypeMaster != null) {
+			return documentTypeMaster;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("isDocumentUsedForKYC=");
+		sb.append(isDocumentUsedForKYC);
+
+		sb.append("}");
+
+		throw new NoSuchDocumentTypeMasterException(sb.toString());
+	}
+
+	/**
+	 * Returns the first document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document type master, or <code>null</code> if a matching document type master could not be found
+	 */
+	@Override
+	public DocumentTypeMaster fetchByIsDocumentUsedForKYC_First(
+		boolean isDocumentUsedForKYC,
+		OrderByComparator<DocumentTypeMaster> orderByComparator) {
+
+		List<DocumentTypeMaster> list = findByIsDocumentUsedForKYC(
+			isDocumentUsedForKYC, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document type master
+	 * @throws NoSuchDocumentTypeMasterException if a matching document type master could not be found
+	 */
+	@Override
+	public DocumentTypeMaster findByIsDocumentUsedForKYC_Last(
+			boolean isDocumentUsedForKYC,
+			OrderByComparator<DocumentTypeMaster> orderByComparator)
+		throws NoSuchDocumentTypeMasterException {
+
+		DocumentTypeMaster documentTypeMaster =
+			fetchByIsDocumentUsedForKYC_Last(
+				isDocumentUsedForKYC, orderByComparator);
+
+		if (documentTypeMaster != null) {
+			return documentTypeMaster;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("isDocumentUsedForKYC=");
+		sb.append(isDocumentUsedForKYC);
+
+		sb.append("}");
+
+		throw new NoSuchDocumentTypeMasterException(sb.toString());
+	}
+
+	/**
+	 * Returns the last document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document type master, or <code>null</code> if a matching document type master could not be found
+	 */
+	@Override
+	public DocumentTypeMaster fetchByIsDocumentUsedForKYC_Last(
+		boolean isDocumentUsedForKYC,
+		OrderByComparator<DocumentTypeMaster> orderByComparator) {
+
+		int count = countByIsDocumentUsedForKYC(isDocumentUsedForKYC);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<DocumentTypeMaster> list = findByIsDocumentUsedForKYC(
+			isDocumentUsedForKYC, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the document type masters before and after the current document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param documentTypeMasterId the primary key of the current document type master
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next document type master
+	 * @throws NoSuchDocumentTypeMasterException if a document type master with the primary key could not be found
+	 */
+	@Override
+	public DocumentTypeMaster[] findByIsDocumentUsedForKYC_PrevAndNext(
+			long documentTypeMasterId, boolean isDocumentUsedForKYC,
+			OrderByComparator<DocumentTypeMaster> orderByComparator)
+		throws NoSuchDocumentTypeMasterException {
+
+		DocumentTypeMaster documentTypeMaster = findByPrimaryKey(
+			documentTypeMasterId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DocumentTypeMaster[] array = new DocumentTypeMasterImpl[3];
+
+			array[0] = getByIsDocumentUsedForKYC_PrevAndNext(
+				session, documentTypeMaster, isDocumentUsedForKYC,
+				orderByComparator, true);
+
+			array[1] = documentTypeMaster;
+
+			array[2] = getByIsDocumentUsedForKYC_PrevAndNext(
+				session, documentTypeMaster, isDocumentUsedForKYC,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected DocumentTypeMaster getByIsDocumentUsedForKYC_PrevAndNext(
+		Session session, DocumentTypeMaster documentTypeMaster,
+		boolean isDocumentUsedForKYC,
+		OrderByComparator<DocumentTypeMaster> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_DOCUMENTTYPEMASTER_WHERE);
+
+		sb.append(_FINDER_COLUMN_ISDOCUMENTUSEDFORKYC_ISDOCUMENTUSEDFORKYC_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(DocumentTypeMasterModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(isDocumentUsedForKYC);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						documentTypeMaster)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<DocumentTypeMaster> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the document type masters where isDocumentUsedForKYC = &#63; from the database.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 */
+	@Override
+	public void removeByIsDocumentUsedForKYC(boolean isDocumentUsedForKYC) {
+		for (DocumentTypeMaster documentTypeMaster :
+				findByIsDocumentUsedForKYC(
+					isDocumentUsedForKYC, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(documentTypeMaster);
+		}
+	}
+
+	/**
+	 * Returns the number of document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @return the number of matching document type masters
+	 */
+	@Override
+	public int countByIsDocumentUsedForKYC(boolean isDocumentUsedForKYC) {
+		FinderPath finderPath = _finderPathCountByIsDocumentUsedForKYC;
+
+		Object[] finderArgs = new Object[] {isDocumentUsedForKYC};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_DOCUMENTTYPEMASTER_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_ISDOCUMENTUSEDFORKYC_ISDOCUMENTUSEDFORKYC_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(isDocumentUsedForKYC);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_ISDOCUMENTUSEDFORKYC_ISDOCUMENTUSEDFORKYC_2 =
+			"documentTypeMaster.isDocumentUsedForKYC = ?";
+
 	public DocumentTypeMasterPersistenceImpl() {
 		setModelClass(DocumentTypeMaster.class);
 
@@ -922,6 +1441,27 @@ public class DocumentTypeMasterPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByDocumentTypeName", new String[] {String.class.getName()},
 			new String[] {"documentTypeName"}, false);
+
+		_finderPathWithPaginationFindByIsDocumentUsedForKYC = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByIsDocumentUsedForKYC",
+			new String[] {
+				Boolean.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"isDocumentUsedForKYC"}, true);
+
+		_finderPathWithoutPaginationFindByIsDocumentUsedForKYC = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByIsDocumentUsedForKYC",
+			new String[] {Boolean.class.getName()},
+			new String[] {"isDocumentUsedForKYC"}, true);
+
+		_finderPathCountByIsDocumentUsedForKYC = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByIsDocumentUsedForKYC",
+			new String[] {Boolean.class.getName()},
+			new String[] {"isDocumentUsedForKYC"}, false);
 
 		DocumentTypeMasterUtil.setPersistence(this);
 	}

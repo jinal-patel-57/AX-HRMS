@@ -99,6 +99,9 @@
 			<finder-column name="documentTypeName" case-sensitive="false"/>
 		</finder>
 
+		<finder name="IsDocumentUsedForKYC" return-type="Collection">
+			<finder-column name="isDocumentUsedForKYC"/>
+		</finder>
 	</entity>
 
 	<entity local-service="true" name="EducationLevelMaster" remote-service="true" >

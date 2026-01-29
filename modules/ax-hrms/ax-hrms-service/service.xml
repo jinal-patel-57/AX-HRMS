@@ -60,6 +60,8 @@
         <column name="aadhaarCardNumber" type="String"/>
         <column name="nameAsPerAadhaarCard" type="String"/>
         <column name="branchId" type="long"/>
+        <column name="documentTypeMasterId" type="long"/>
+        <column name="kycDocumentFileEntryId" type="long" />
 
 
 

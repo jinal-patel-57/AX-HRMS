@@ -17,4 +17,9 @@ public class AxHrmsEmployeeOnboardingWebPortletKeys {
 	
 	public static final String AX_HRMS_TESTING_WEB =
 			"com_ax_hrms_web_AxHrmsTestingMPLOWebPortlet";
+	public static final String ROOT_FOLDER_HRMS_DOCUMENT =
+			"HRMS Document";
+
+	public static final String FOLDER_KYC_DOCUMENT =
+			"KYC Document";
 }

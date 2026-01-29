@@ -174,7 +174,8 @@ create table ax_EmployeeAddress (
 	permanentAddress LONG,
 	presentPermanentSame BOOLEAN,
 	status BOOLEAN,
-	employeeId LONG
+	employeeId LONG,
+	employeeAddressProofFileEntryId LONG
 );
 
 create table ax_EmployeeBankAccount (
@@ -274,7 +275,9 @@ create table ax_EmployeeDetails (
 	panCardNumber VARCHAR(75) null,
 	aadhaarCardNumber VARCHAR(75) null,
 	nameAsPerAadhaarCard VARCHAR(75) null,
-	branchId LONG
+	branchId LONG,
+	documentTypeMasterId LONG,
+	kycDocumentFileEntryId LONG
 );
 
 create table ax_EmployeeDocument (

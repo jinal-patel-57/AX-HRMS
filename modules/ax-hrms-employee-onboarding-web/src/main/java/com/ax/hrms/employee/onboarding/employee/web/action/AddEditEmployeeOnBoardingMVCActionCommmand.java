@@ -7,13 +7,19 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmp
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.util.DLURLHelperUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -40,6 +46,8 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
+	@Reference
+	private UserLocalService userLocalService;
 
 	private Log log = LogFactoryUtil.getLog(AddEditEmployeeOnBoardingMVCActionCommmand.class);
 
@@ -80,6 +88,7 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
 		employeeDetails.setNameAsPerAadhaarCard(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_AADHAAR_CARD));
 
+
 		log.info("Employee details created successfully.... :: "+employeeDetails.toString());
         try {
 			SimpleDateFormat formatter = new SimpleDateFormat(AxHrmsEmployeeOnBoardingEmployeeConstants.DATE_FORMAT, Locale.ENGLISH);
@@ -95,9 +104,40 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 		employeeBasicDetailsUtil.addEditFileEntry( aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, employeeDetails.getAadhaarCardFileId(),"AADHAAR", aadhaarCardFolder, serviceContext);
 		employeeBasicDetailsUtil.addEditFileEntry( panFile, panFileName, actionRequest,  employeeDetails, employeeDetails.getPanCardFileId(), "PAN", panCardFolder, serviceContext);
 
+		User employeeUser =
+				userLocalService.getUser(employeeDetails.getLrUserId());
+		long documentTypeMasterId = ParamUtil.getLong(
+				actionRequest,
+				"kycDocumentType"
+		);
+		UploadPortletRequest uploadPortletRequest =
+				PortalUtil.getUploadPortletRequest(actionRequest);
+
+		File kycFile =
+				uploadPortletRequest.getFile("kycDocumentFile");
+
+		String originalFileName =
+				uploadPortletRequest.getFileName("kycDocumentFile");
+
+		String employeeFolderName =
+				employeeUser.getScreenName() + employeeUser.getUserId();
+		long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+				themeDisplay,
+				serviceContext,
+				kycFile,
+				originalFileName,
+				employeeDetails.getKycDocumentFileEntryId(),
+				AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+				employeeFolderName,
+				AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+		);
+
+		employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
+		employeeDetails.setKycDocumentFileEntryId(kycFileEntryId);
 		employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
 	}
 	private String generateFileName(String original) {
 		return System.currentTimeMillis() + "_" + original.replaceAll("\\s+", "_");
 	}
+
 }

@@ -79,6 +79,150 @@ public interface DocumentTypeMasterPersistence
 	public int countByDocumentTypeName(String documentTypeName);
 
 	/**
+	 * Returns all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @return the matching document type masters
+	 */
+	public java.util.List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC);
+
+	/**
+	 * Returns a range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @return the range of matching document type masters
+	 */
+	public java.util.List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching document type masters
+	 */
+	public java.util.List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DocumentTypeMasterModelImpl</code>.
+	 * </p>
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param start the lower bound of the range of document type masters
+	 * @param end the upper bound of the range of document type masters (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching document type masters
+	 */
+	public java.util.List<DocumentTypeMaster> findByIsDocumentUsedForKYC(
+		boolean isDocumentUsedForKYC, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document type master
+	 * @throws NoSuchDocumentTypeMasterException if a matching document type master could not be found
+	 */
+	public DocumentTypeMaster findByIsDocumentUsedForKYC_First(
+			boolean isDocumentUsedForKYC,
+			com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+				orderByComparator)
+		throws NoSuchDocumentTypeMasterException;
+
+	/**
+	 * Returns the first document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching document type master, or <code>null</code> if a matching document type master could not be found
+	 */
+	public DocumentTypeMaster fetchByIsDocumentUsedForKYC_First(
+		boolean isDocumentUsedForKYC,
+		com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+			orderByComparator);
+
+	/**
+	 * Returns the last document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document type master
+	 * @throws NoSuchDocumentTypeMasterException if a matching document type master could not be found
+	 */
+	public DocumentTypeMaster findByIsDocumentUsedForKYC_Last(
+			boolean isDocumentUsedForKYC,
+			com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+				orderByComparator)
+		throws NoSuchDocumentTypeMasterException;
+
+	/**
+	 * Returns the last document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching document type master, or <code>null</code> if a matching document type master could not be found
+	 */
+	public DocumentTypeMaster fetchByIsDocumentUsedForKYC_Last(
+		boolean isDocumentUsedForKYC,
+		com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+			orderByComparator);
+
+	/**
+	 * Returns the document type masters before and after the current document type master in the ordered set where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param documentTypeMasterId the primary key of the current document type master
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next document type master
+	 * @throws NoSuchDocumentTypeMasterException if a document type master with the primary key could not be found
+	 */
+	public DocumentTypeMaster[] findByIsDocumentUsedForKYC_PrevAndNext(
+			long documentTypeMasterId, boolean isDocumentUsedForKYC,
+			com.liferay.portal.kernel.util.OrderByComparator<DocumentTypeMaster>
+				orderByComparator)
+		throws NoSuchDocumentTypeMasterException;
+
+	/**
+	 * Removes all the document type masters where isDocumentUsedForKYC = &#63; from the database.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 */
+	public void removeByIsDocumentUsedForKYC(boolean isDocumentUsedForKYC);
+
+	/**
+	 * Returns the number of document type masters where isDocumentUsedForKYC = &#63;.
+	 *
+	 * @param isDocumentUsedForKYC the is document used for kyc
+	 * @return the number of matching document type masters
+	 */
+	public int countByIsDocumentUsedForKYC(boolean isDocumentUsedForKYC);
+
+	/**
 	 * Caches the document type master in the entity cache if it is enabled.
 	 *
 	 * @param documentTypeMaster the document type master

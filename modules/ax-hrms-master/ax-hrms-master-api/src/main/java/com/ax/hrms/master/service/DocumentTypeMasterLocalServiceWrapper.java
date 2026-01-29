@@ -227,6 +227,13 @@ public class DocumentTypeMasterLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.master.model.DocumentTypeMaster>
+		fetchByIsDocumentUsedForKYC() {
+
+		return _documentTypeMasterLocalService.fetchByIsDocumentUsedForKYC();
+	}
+
+	@Override
 	public com.ax.hrms.master.model.DocumentTypeMaster fetchDocumentTypeMaster(
 		long documentTypeMasterId) {
 
