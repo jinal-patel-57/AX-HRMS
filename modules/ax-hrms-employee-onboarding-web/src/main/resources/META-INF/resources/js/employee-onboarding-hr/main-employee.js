@@ -2,6 +2,48 @@
     let namespace;
 
 
+function attachFormValidationTriggers(formSelector) {
+         $.validator.setDefaults({
+
+                    highlight: function () {
+                    },
+
+                    unhighlight: function () {
+                    }
+                });
+
+    const $form = $(formSelector);
+
+    if (!$form.length) return;
+
+
+
+    // Focusout + change → field-level validation
+    $form.on(
+        "focusout change",
+        "input, select, textarea",
+        function () {
+            if (!$form.data("validator")) {
+                return;
+            }
+            $form.validate().element(this);
+        }
+    );
+
+    // Input → only for DATE fields
+    $form.on(
+        "input",
+        "input[type='date']",
+        function () {
+            if (!$form.data("validator")) {
+                return;
+            }
+            $form.validate().element(this);
+        }
+    );
+}
+
+
 
 
     function setConfigsForRejectUrl(config) {
@@ -645,6 +687,9 @@ function setConfigsForAddExperienceSection(config) {
 
 
 
+           // validation trigger
+            attachFormValidationTriggers("#stepperForm");
+
 
             $.validator.addMethod("validMobile10", function (value) {
 				return /^\d{10}$/.test(value);
@@ -977,6 +1022,8 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 return /^\d{6}$/.test(value);
             });
 
+            // validation trigger
+            attachFormValidationTriggers("#addressStepperForm");
 
 
 
@@ -1431,26 +1478,32 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
             initializeValidation();
             bindPassingYearAutoFill();
-            $(document).on('change', 'input[type="date"]', function () {
-                $(this).valid();
-            });
-           $(document).on(
-               "focusout change ",
-               "#educationStepperForm input, #educationStepperForm select,#educationStepperForm textarea",
 
-               function () {
+            // validation trigger
+            attachFormValidationTriggers("#educationStepperForm");
 
-                   const form = $("#educationStepperForm");
+//            $(document).on('change', 'input[type="date"]', function () {
+//                $(this).valid();
+//            });
+//           $(document).on(
+//               "focusout change ",
+//               "#educationStepperForm input, #educationStepperForm select,#educationStepperForm textarea",
+//
+//               function () {
+//
+//                   const form = $("#educationStepperForm");
+//
+//                   // ensure validator exists
+//                   if (!form.data("validator")) {
+//                       initializeValidation(); //
+//                   }
+//
+//                   // validate only current field
+//                   form.validate().element(this);
+//               }
+//           );
 
-                   // ensure validator exists
-                   if (!form.data("validator")) {
-                       initializeValidation(); //
-                   }
 
-                   // validate only current field
-                   form.validate().element(this);
-               }
-           );
 
 
         });
@@ -1611,22 +1664,26 @@ function setConfigsForExperienceValidation(config) {
            REAL-TIME VALIDATION (EXPERIENCE – SAME AS EDUCATION)
            ===================================================== */
 
-        $(document).on(
-            "focusout change",
-            "#experienceStepperForm input, #experienceStepperForm select",
-            function () {
+//        $(document).on(
+//            "focusout change",
+//            "#experienceStepperForm input, #experienceStepperForm select",
+//            function () {
+//
+//                const form = $("#experienceStepperForm");
+//
+//                // ensure validator exists
+//                if (!form.data("validator")) {
+//                    initializeValidation();
+//                }
+//
+//                // validate only current field (same as education)
+//                form.validate().element(this);
+//            }
+//        );
 
-                const form = $("#experienceStepperForm");
+            // validation trigger
+            attachFormValidationTriggers("#experienceStepperForm");
 
-                // ensure validator exists
-                if (!form.data("validator")) {
-                    initializeValidation();
-                }
-
-                // validate only current field (same as education)
-                form.validate().element(this);
-            }
-        );
 
         
         $(document).on('click', '.delete-experience-btn', function () {
@@ -1834,6 +1891,8 @@ function setConfigsForExperienceValidation(config) {
                  "Only alphabets and spaces are allowed"
              );
          }
+         // validation trigger
+        attachFormValidationTriggers("#bankAccountStepperForm");
 
 
         $('.next-button-bank-account-details').on('click', function (event) {
@@ -1940,6 +1999,9 @@ function setConfigsForExperienceValidation(config) {
     	$(document).on('input', '#' + namespace + 'uan', function () {
             this.value = formatUan(this.value);
         });
+
+        // validation trigger
+        attachFormValidationTriggers("#uanEsicStepperForm");
 
 		
         $('.next-button-uan-esic-details').on('click', function (event) {
@@ -2216,16 +2278,17 @@ function setConfigsForExperienceValidation(config) {
             }
         });
 
+        // validation trigger
+        attachFormValidationTriggers("#nomineeStepperForm");
 
 
-
-        $(document).on(
-            "focusout change",
-            "#nomineeStepperForm input, #nomineeStepperForm select",
-            function () {
-                $form7.validate().element(this);
-            }
-        );
+//        $(document).on(
+//            "focusout change",
+//            "#nomineeStepperForm input, #nomineeStepperForm select",
+//            function () {
+//                $form7.validate().element(this);
+//            }
+//        );
         $(document).on(
             "input",
             "#nomineeStepperForm input[type='date']",

@@ -40,25 +40,25 @@
                                 <div class="row">
 
                                     <div class="col-md-4 mb-3">
-                                        <label><liferay-ui:message key="company-name"/> *</label>
+                                        <label><liferay-ui:message key="company-name"/> <span class="text-danger">*</span> </label>
                                         <input type="text" class="form-control"
                                                name="<portlet:namespace/>companyName1"/>
                                     </div>
 
                                     <div class="col-md-4 mb-3">
-                                        <label><liferay-ui:message key="joining-date"/> *</label>
+                                        <label><liferay-ui:message key="joining-date"/> <span class="text-danger">*</span> </label>
                                         <input type="date" class="form-control"
                                                name="<portlet:namespace/>joiningDate1"/>
                                     </div>
 
                                     <div class="col-md-4 mb-3">
-                                        <label><liferay-ui:message key="relieving-date"/> *</label>
+                                        <label><liferay-ui:message key="relieving-date"/> <span class="text-danger">*</span> </label>
                                         <input type="date" class="form-control"
                                                name="<portlet:namespace/>relievingDate1"/>
                                     </div>
 
                                     <div class="col-md-4 mb-3">
-                                        <label><liferay-ui:message key="experience-certificate-attachment"/></label>
+                                        <label><liferay-ui:message key="experience-certificate-attachment"/><span class="text-danger">*</span> </label>
                                         <input type="file" class="form-control"
                                                name="<portlet:namespace/>experienceCertificateAttachment1"
                                                data-existing-file-id="0"
@@ -98,21 +98,21 @@
                                     <div class="row">
 
                                         <div class="col-md-4 mb-3">
-                                            <label><liferay-ui:message key="company-name"/> *</label>
+                                            <label><liferay-ui:message key="company-name"/> <span class="text-danger">*</span> </label>
                                             <input type="text" class="form-control"
                                                    name="<portlet:namespace/>companyName${status.index+1}"
                                                    value="${experienceItem.companyName}"/>
                                         </div>
 
                                         <div class="col-md-4 mb-3">
-                                            <label><liferay-ui:message key="joining-date"/> *</label>
+                                            <label><liferay-ui:message key="joining-date"/> <span class="text-danger">*</span> </label>
                                             <input type="date" class="form-control"
                                                    name="<portlet:namespace/>joiningDate${status.index+1}"
                                                    value="<fmt:formatDate value='${experienceItem.joiningDate}' pattern='yyyy-MM-dd'/>"/>
                                         </div>
 
                                         <div class="col-md-4 mb-3">
-                                            <label><liferay-ui:message key="relieving-date"/> *</label>
+                                            <label><liferay-ui:message key="relieving-date"/> <span class="text-danger">*</span> </label>
                                             <input type="date" class="form-control"
                                                    name="<portlet:namespace/>relievingDate${status.index+1}"
                                                    value="<fmt:formatDate value='${experienceItem.relievingDate}' pattern='yyyy-MM-dd'/>"/>
@@ -120,7 +120,7 @@
 
                                         <!-- Attachment + Preview -->
                                         <div class="col-md-4 mb-3">
-                                            <label><liferay-ui:message key="experience-certificate-attachment"/></label>
+                                            <label><liferay-ui:message key="experience-certificate-attachment"/><span class="text-danger">*</span> </label>
 
                                             <input type="file" class="form-control"
                                                    name="<portlet:namespace/>experienceCertificateAttachment${status.index+1}"

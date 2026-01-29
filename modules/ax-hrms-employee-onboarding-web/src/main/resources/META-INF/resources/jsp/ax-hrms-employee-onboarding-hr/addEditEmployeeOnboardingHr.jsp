@@ -289,7 +289,7 @@
 					<div class="form-group">
                         <label for="managerSelectBox"> 
 							<liferay-ui:message key="manager" />
-							<span class="text-danger">*</span> 
+
 						</label>
 						<select id="managerSelectBox"
 							name="<portlet:namespace/>manager" class="form-control custom-select mr-sm-2">

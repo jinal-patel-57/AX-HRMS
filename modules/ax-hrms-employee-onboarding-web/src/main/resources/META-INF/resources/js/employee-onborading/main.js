@@ -2,6 +2,48 @@
     let namespace;
 
 
+function attachFormValidationTriggers(formSelector) {
+         $.validator.setDefaults({
+
+                    highlight: function () {
+                    },
+
+                    unhighlight: function () {
+                    }
+                });
+
+    const $form = $(formSelector);
+
+    if (!$form.length) return;
+
+
+
+    // Focusout + change → field-level validation
+    $form.on(
+        "focusout change",
+        "input, select, textarea",
+        function () {
+            if (!$form.data("validator")) {
+                return;
+            }
+            $form.validate().element(this);
+        }
+    );
+
+    // Input → only for DATE fields
+    $form.on(
+        "input",
+        "input[type='date']",
+        function () {
+            if (!$form.data("validator")) {
+                return;
+            }
+            $form.validate().element(this);
+        }
+    );
+}
+
+
     function setConfigsForRejectUrl(config) {
         namespace = config.namespace;
         let rejectUrl = employeeRejectUrl;
@@ -456,6 +498,7 @@ function setConfigsForAddExperienceSection(config) {
 
 
 
+
             $.validator.addMethod("lettersOnly", function (value, element) {
                 return this.optional(element) || /^[A-Za-z\s]+$/i.test(value);
             }, "Only letters are allowed for Name.");
@@ -475,6 +518,8 @@ function setConfigsForAddExperienceSection(config) {
             fileInput.files = dataTransfer.files;
 
 
+                    // validation trigger
+                    attachFormValidationTriggers("#stepperForm");
             $('.next-button-basic-details').on('click', function (event) {
                 event.preventDefault();
                 var form1 = $('#stepperForm');
@@ -734,6 +779,9 @@ function setConfigsForAddExperienceSection(config) {
                            $.validator.addMethod("validPincode", function (value) {
                                return /^\d{6}$/.test(value);
                            });
+
+            // validation trigger
+            attachFormValidationTriggers("#addressStepperForm");
 
 
             $('.next-button-adress-details').on('click', function (event) {
@@ -1176,40 +1224,44 @@ function setConfigsForAddExperienceSection(config) {
 
           initializeValidation();
           bindPassingYearAutoFill();
+          // validation trigger
+           attachFormValidationTriggers("#educationStepperForm");
+
+
 //           Enable real-time validation for date fields
-          $(document).on('change', 'input[type="date"]', function () {
-              $(this).valid();
-          });
-
-        $(document).on(
-            "change",
-            "#educationStepperForm input[type='file']",
-            function () {
-                const form = $("#educationStepperForm");
-
-                if (!form.data("validator")) {
-                    initializeValidation();
-                }
-
-                form.validate().element(this);
-            }
-        );
-        $(document).on(
-            "focusout change",
-            "#educationStepperForm input, #educationStepperForm select",
-            function () {
-
-                const form = $("#educationStepperForm");
-
-                // ensure validator exists
-                if (!form.data("validator")) {
-                    initializeValidation(); // ✅ correct function
-                }
-
-                // validate only current field
-                form.validate().element(this);
-            }
-        );
+//          $(document).on('change', 'input[type="date"]', function () {
+//              $(this).valid();
+//          });
+//
+//        $(document).on(
+//            "change",
+//            "#educationStepperForm input[type='file']",
+//            function () {
+//                const form = $("#educationStepperForm");
+//
+//                if (!form.data("validator")) {
+//                    initializeValidation();
+//                }
+//
+//                form.validate().element(this);
+//            }
+//        );
+//        $(document).on(
+//            "focusout change",
+//            "#educationStepperForm input, #educationStepperForm select",
+//            function () {
+//
+//                const form = $("#educationStepperForm");
+//
+//                // ensure validator exists
+//                if (!form.data("validator")) {
+//                    initializeValidation(); // ✅ correct function
+//                }
+//
+//                // validate only current field
+//                form.validate().element(this);
+//            }
+//        );
 
 
 
@@ -1378,22 +1430,26 @@ function setConfigsForExperienceValidation(config) {
                 messages: messages
             });
         }
-       $(document).on(
-                   "focusout change",
-                   "#experienceStepperForm input, #experienceStepperForm select",
-                   function () {
+//       $(document).on(
+//                   "focusout change",
+//                   "#experienceStepperForm input, #experienceStepperForm select",
+//                   function () {
+//
+//                       const form = $("#experienceStepperForm");
+//
+//                       // ensure validator exists
+//                       if (!form.data("validator")) {
+//                           initializeValidation();
+//                       }
+//
+//                       // validate only current field (same as education)
+//                       form.validate().element(this);
+//                   }
+//               );
 
-                       const form = $("#experienceStepperForm");
 
-                       // ensure validator exists
-                       if (!form.data("validator")) {
-                           initializeValidation();
-                       }
-
-                       // validate only current field (same as education)
-                       form.validate().element(this);
-                   }
-               );
+            // validation trigger
+            attachFormValidationTriggers("#experienceStepperForm");
 
 
 			$(document).on('click', '.delete-experience-btn', function () {
@@ -1617,6 +1673,9 @@ function setConfigsForExperienceValidation(config) {
              );
          }
 
+           // validation trigger
+            attachFormValidationTriggers("#bankAccountStepperForm");
+
 
         $('.next-button-bank-account-details').on('click', function (event) {
             event.preventDefault();
@@ -1719,6 +1778,9 @@ function setConfigsForExperienceValidation(config) {
         $(document).on('input', '#' + namespace + 'uan', function () {
                 this.value = formatUan(this.value);
             });
+
+          // validation trigger
+          attachFormValidationTriggers("#uanEsicStepperForm");
         $('.next-button-uan-esic-details').on('click', function (event) {
         	event.preventDefault();
             if (!form6.valid()) {
@@ -1992,13 +2054,17 @@ function setConfigsForExperienceValidation(config) {
         });
 
 
-        $(document).on(
-            "focusout change",
-            "#nomineeStepperForm input, #nomineeStepperForm select",
-            function () {
-                $form7.validate().element(this);
-            }
-        );
+//        $(document).on(
+//            "focusout change",
+//            "#nomineeStepperForm input, #nomineeStepperForm select",
+//            function () {
+//                $form7.validate().element(this);
+//            }
+//        );
+
+        // validation trigger
+        attachFormValidationTriggers("#nomineeStepperForm");
+
         $(document).on(
             "input",
             "#nomineeStepperForm input[type='date']",
