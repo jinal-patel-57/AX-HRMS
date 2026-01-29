@@ -2,7 +2,7 @@
 
 <portlet:actionURL name="/addEditEmployeeAddressURL" var="addEditEmployeeAddressURL"/>
 
-<form id="addressStepperForm" action="${addEditEmployeeAddressURL}" method="post">
+<form id="addressStepperForm" action="${addEditEmployeeAddressURL}" method="post" enctype="multipart/form-data" data-senna="off">
     <div class="card-header">
         <strong>
             Address Details
@@ -246,6 +246,28 @@
                                     value="${permanentaddresss.pincode}"/>
                 </div>
             </div>
+            <div class="row mt-3" id="addressProofSection" >
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <liferay-ui:message key="address-proof-document"/>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="file"
+                               class="form-control"
+                               id="<portlet:namespace/>addressProofFile"
+                               name="<portlet:namespace/>addressProofFile" />
+                        <small class="form-text text-muted">
+                            Upload address proof (PDF / JPG / PNG)
+                        </small>
+                        <c:if test="${not empty addressProofPreviewURL}">
+                            <a href="${addressProofPreviewURL}" target="_blank">
+                                <liferay-ui:message key="view-address-proof"/>
+                            </a>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
         </div>
         <input type="hidden" id="updateFlagAddress" name="<portlet:namespace/>updateFlagAddress"
                value="${not empty addressFlagStatus? addressFlagStatus : 'false' }"/>
@@ -259,7 +281,7 @@
         <button class="btn btn-outline-primary previous-button" type="button">
             <liferay-ui:message key="previous"/>
         </button>
-        <button class="btn btn-outline-primary next-button next-button-adress-details" type="button">
+        <button class="btn btn-outline-primary next-button next-button-adress-details" type="submit">
             <liferay-ui:message key="next"/>
         </button>
     </div>
@@ -271,5 +293,10 @@
             .setConfigsForToggleAddress({
                 namespace: '<portlet:namespace />'
             });
+
+        AxHrmsEmployeeOnboardingEmployeeWebPortlet
+                .setConfigsForAddressProofToggle({
+                    namespace: '<portlet:namespace />'
+        });
     });
 </aui:script>

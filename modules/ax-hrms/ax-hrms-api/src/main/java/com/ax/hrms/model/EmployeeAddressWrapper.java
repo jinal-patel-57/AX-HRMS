@@ -47,6 +47,9 @@ public class EmployeeAddressWrapper
 		attributes.put("presentPermanentSame", isPresentPermanentSame());
 		attributes.put("status", isStatus());
 		attributes.put("employeeId", getEmployeeId());
+		attributes.put(
+			"employeeAddressProofFileEntryId",
+			getEmployeeAddressProofFileEntryId());
 
 		return attributes;
 	}
@@ -131,6 +134,13 @@ public class EmployeeAddressWrapper
 		if (employeeId != null) {
 			setEmployeeId(employeeId);
 		}
+
+		Long employeeAddressProofFileEntryId = (Long)attributes.get(
+			"employeeAddressProofFileEntryId");
+
+		if (employeeAddressProofFileEntryId != null) {
+			setEmployeeAddressProofFileEntryId(employeeAddressProofFileEntryId);
+		}
 	}
 
 	@Override
@@ -176,6 +186,16 @@ public class EmployeeAddressWrapper
 	@Override
 	public long getEmployeeAddressId() {
 		return model.getEmployeeAddressId();
+	}
+
+	/**
+	 * Returns the employee address proof file entry ID of this employee address.
+	 *
+	 * @return the employee address proof file entry ID of this employee address
+	 */
+	@Override
+	public long getEmployeeAddressProofFileEntryId() {
+		return model.getEmployeeAddressProofFileEntryId();
 	}
 
 	/**
@@ -341,6 +361,19 @@ public class EmployeeAddressWrapper
 	@Override
 	public void setEmployeeAddressId(long employeeAddressId) {
 		model.setEmployeeAddressId(employeeAddressId);
+	}
+
+	/**
+	 * Sets the employee address proof file entry ID of this employee address.
+	 *
+	 * @param employeeAddressProofFileEntryId the employee address proof file entry ID of this employee address
+	 */
+	@Override
+	public void setEmployeeAddressProofFileEntryId(
+		long employeeAddressProofFileEntryId) {
+
+		model.setEmployeeAddressProofFileEntryId(
+			employeeAddressProofFileEntryId);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.ax.hrms.profile.management.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.Address;
@@ -9,25 +10,26 @@ import com.ax.hrms.model.Nominee;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebPortletKeys;
 import com.ax.hrms.service.*;
+import com.ax.hrms.service.AddressLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.object.rest.dto.v1_0.Folder;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.service.CountryLocalService;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
         log.info("EditEmployeeProfileMVCActionCommand >>> doProcessAction ::: Edit employee profile Action called...");
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
+        UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
         try{
             EmployeeDetails oldEmployeeDetailsObj = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
             EmployeeAddress oldEmployeeAddressObj = employeeAddressLocalService.findByEmployeeId(oldEmployeeDetailsObj.getEmployeeId());
@@ -88,7 +90,66 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
                     deletePresentAddress(oldEmployeeAddressObj.getPresentAddress());
                 }
                 updateAddressIdsInEmployeeAddress(newPermanantAddressObj.getAddressId(),newPermanantAddressObj.getAddressId(),oldEmployeeAddressObj,isSamePresentAddress);
-            }else{
+            } else {
+                File addressProofFile =
+                        uploadRequest.getFile(
+                                AxHrmsProfileManagementWebConstants.ADDRESS_PROOF_FILE);
+                if (Validator.isNotNull(addressProofFile) &&
+                        addressProofFile.length() > 0) {
+
+                    log.info("Uploading Address Proof from My Profile");
+
+                    ServiceContext serviceContext =
+                            ServiceContextFactory.getInstance(
+                                    Folder.class.getName(), actionRequest);
+
+                    String rootFolderName = "HRMS Document";
+                    long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+
+                    long lrUserId = themeDisplay.getUserId();
+
+                    EmployeeDetails employeeDetails =
+                            employeeDetailsLocalService.fetchEmployeeDetailsByLRUserId(lrUserId);
+
+                    EmployeeAddress employeeAddress =
+                            employeeAddressLocalService.getEmployeeAddress(
+                                    employeeDetails.getEmployeeAddressId());
+
+                    if (Validator.isNull(addressProofFile) || addressProofFile.length() == 0) {
+                        log.info("No address proof file uploaded.");
+                        return;
+                    }
+
+                    User employeeUser =
+                            userLocalService.getUser(employeeDetails.getLrUserId());
+
+                    String employeeFolderName =
+                            employeeUser.getScreenName() + employeeUser.getUserId();
+
+                    String documentFolderName = "Address Proof";
+                    String originalFileName =
+                            uploadRequest.getFileName("addressProofFile");
+                    long addressProofFileEntryId =
+                            axHrmsCommonApi.uploadEmployeeDocument(
+                                    themeDisplay,
+                                    serviceContext,
+                                    addressProofFile,
+                                    originalFileName,
+                                    employeeAddress.getEmployeeAddressProofFileEntryId(),
+                                    rootFolderName,
+                                    employeeFolderName,
+                                    documentFolderName
+                            );
+
+                    if (addressProofFileEntryId > 0) {
+                        employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
+                        employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+
+                        log.info("Address proof uploaded successfully. FileEntryId = " + addressProofFileEntryId);
+                    }
+                }
+
+
                 List<Address> oldAddressList = getAddressList(oldEmployeeAddressObj);
                 Address newPermanantAddressObj;
                 Address newPresentAddressObj;
@@ -241,6 +302,12 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
         } catch (Exception e) {
             log.error("Error updating nominee", e);
         }
+
+
     }
 
+    @Reference
+    private AxHrmsCommonApi axHrmsCommonApi;
+    @Reference
+    private UserLocalService userLocalService;
 }

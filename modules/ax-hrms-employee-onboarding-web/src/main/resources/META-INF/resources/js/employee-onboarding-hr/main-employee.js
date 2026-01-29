@@ -1,6 +1,9 @@
 (function ($, AxHrmsEmployeeOnboardingEmployeeWebPortlet) {
     let namespace;
 
+
+
+
     function setConfigsForRejectUrl(config) {
         namespace = config.namespace;
         let rejectUrl = employeeRejectUrl;
@@ -8,6 +11,29 @@
         rejectUrl = rejectUrl.replace('REVIEW', textValue);
         window.location.href = rejectUrl;
     }
+
+     function setConfigsForAddressProofToggle(config) {
+            namespace = config.namespace;
+
+            let checkbox = $('#' + namespace + 'sameAsPermanent');
+            let addressProofSection = $('#addressProofSection');
+
+            function toggleAddressProof() {
+                if (checkbox.is(':checked')) {
+                    addressProofSection.hide();
+                } else {
+                    addressProofSection.show();
+                }
+            }
+
+            // Initial state
+            toggleAddressProof();
+
+            // Toggle on change
+            checkbox.on('change', function () {
+                toggleAddressProof();
+            });
+        }
 
 
 function setConfigsForAddExperienceSection(config) {
@@ -371,7 +397,8 @@ function setConfigsForAddExperienceSection(config) {
                     },
 
                     [namespace + "fatherName"]: {
-                        required: true
+                        required: true,
+
                     },
                     [namespace + "nameAsPerAadhaarCard"]: {
                         required: true,
@@ -393,7 +420,9 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "spouseName"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
-                        }
+                        },
+                        lettersOnly: true
+
                     },
                     [namespace + "aadhaarCard"]: {
                            documentRequired: aadhaarCardId
@@ -453,7 +482,8 @@ function setConfigsForAddExperienceSection(config) {
                     },
 
                     [namespace + "spouseName"]: {
-                        required: "Please enter your spouse's name."
+                        required: "Please enter your spouse's name.",
+                        lettersOnly: "Only letters are allowed for Name."
                     },
                       [namespace + "aadhaarCard"]: {
                            documentRequired: "Please upload Aadhaar card."
@@ -519,6 +549,20 @@ function setConfigsForAddExperienceSection(config) {
                   maxlength: 50,
                   messages: {
                       required: "Please enter last name."
+                  }
+              });
+              $('[name="' + namespace + 'department"]').rules("add", {
+                  required: true,
+
+                  messages: {
+                      required: "Please select department."
+                  }
+              });
+              $('[name="' + namespace + 'designation"]').rules("add", {
+                  required: true,
+
+                  messages: {
+                      required: "Please select designation."
                   }
               });
 
@@ -939,6 +983,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
+                var formData = new FormData(form2[0]);
                 if (!form2.valid()) {
                     return;
                 }
@@ -946,7 +991,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 $.ajax({
                     url: form2.attr('action'),
                     method: 'POST',
-                    data: form2.serialize(),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         const currentTab = $('.nav-link.active');
                         document.getElementById("updateFlagAddress").value = "true";
@@ -1388,8 +1435,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 $(this).valid();
             });
            $(document).on(
-               "keyup change input",
-               "#educationStepperForm input, #educationStepperForm select",
+               "focusout change ",
+               "#educationStepperForm input, #educationStepperForm select,#educationStepperForm textarea",
+
                function () {
 
                    const form = $("#educationStepperForm");
@@ -1564,7 +1612,7 @@ function setConfigsForExperienceValidation(config) {
            ===================================================== */
 
         $(document).on(
-            "keyup change input",
+            "focusout change",
             "#experienceStepperForm input, #experienceStepperForm select",
             function () {
 
@@ -1860,7 +1908,7 @@ function setConfigsForExperienceValidation(config) {
             },
             rules: {
                 [namespace + "uan"]: {
-                    maxlength: 15,
+                    maxlength: 14,
                     uanValidation: true
                 },
 
@@ -2172,7 +2220,7 @@ function setConfigsForExperienceValidation(config) {
 
 
         $(document).on(
-            "keyup change input",
+            "focusout change",
             "#nomineeStepperForm input, #nomineeStepperForm select",
             function () {
                 $form7.validate().element(this);
@@ -2257,5 +2305,6 @@ function setConfigsForExperienceValidation(config) {
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation = setConfigsForBankAccountValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForNomineeValidation = setConfigsForNomineeValidation;
+    AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressProofToggle = setConfigsForAddressProofToggle;
 
 })($, window.AxHrmsEmployeeOnboardingEmployeeWebPortlet || (window.AxHrmsEmployeeOnboardingEmployeeWebPortlet = {}));

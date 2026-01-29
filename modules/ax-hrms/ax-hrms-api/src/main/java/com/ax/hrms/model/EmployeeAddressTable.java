@@ -55,6 +55,10 @@ public class EmployeeAddressTable extends BaseTable<EmployeeAddressTable> {
 		"status", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<EmployeeAddressTable, Long> employeeId = createColumn(
 		"employeeId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeAddressTable, Long>
+		employeeAddressProofFileEntryId = createColumn(
+			"employeeAddressProofFileEntryId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 
 	private EmployeeAddressTable() {
 		super("ax_EmployeeAddress", EmployeeAddressTable::new);

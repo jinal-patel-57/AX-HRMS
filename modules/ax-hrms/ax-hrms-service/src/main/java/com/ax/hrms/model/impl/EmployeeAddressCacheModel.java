@@ -54,7 +54,7 @@ public class EmployeeAddressCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -82,6 +82,8 @@ public class EmployeeAddressCacheModel
 		sb.append(status);
 		sb.append(", employeeId=");
 		sb.append(employeeId);
+		sb.append(", employeeAddressProofFileEntryId=");
+		sb.append(employeeAddressProofFileEntryId);
 		sb.append("}");
 
 		return sb.toString();
@@ -123,6 +125,8 @@ public class EmployeeAddressCacheModel
 		employeeAddressImpl.setPresentPermanentSame(presentPermanentSame);
 		employeeAddressImpl.setStatus(status);
 		employeeAddressImpl.setEmployeeId(employeeId);
+		employeeAddressImpl.setEmployeeAddressProofFileEntryId(
+			employeeAddressProofFileEntryId);
 
 		employeeAddressImpl.resetOriginalValues();
 
@@ -154,6 +158,8 @@ public class EmployeeAddressCacheModel
 		status = objectInput.readBoolean();
 
 		employeeId = objectInput.readLong();
+
+		employeeAddressProofFileEntryId = objectInput.readLong();
 	}
 
 	@Override
@@ -186,6 +192,8 @@ public class EmployeeAddressCacheModel
 		objectOutput.writeBoolean(status);
 
 		objectOutput.writeLong(employeeId);
+
+		objectOutput.writeLong(employeeAddressProofFileEntryId);
 	}
 
 	public String uuid;
@@ -201,5 +209,6 @@ public class EmployeeAddressCacheModel
 	public boolean presentPermanentSame;
 	public boolean status;
 	public long employeeId;
+	public long employeeAddressProofFileEntryId;
 
 }

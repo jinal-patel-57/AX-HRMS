@@ -61,16 +61,25 @@ public class EmployeeBasicDetailsUtil {
 //			log.error("File does not exist or file name is null");
 //		}
 //	}
-public void addEditFileEntry(	File file,String fileName,ActionRequest actionRequest,EmployeeDetails employeeDetails,	long existingFileEntryId, String documentType, Folder folder, ServiceContext serviceContext) {
+public long addEditFileEntry(
+		File file,
+		String fileName,
+		ActionRequest actionRequest,
+		EmployeeDetails employeeDetails,
+		long existingFileEntryId,
+		String documentType,
+		Folder folder,
+		ServiceContext serviceContext) {
 
 	ThemeDisplay themeDisplay =
 			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 	if (file == null || !file.exists() || fileName == null) {
-		return;
+		return 0;
 	}
 
 	long userId = themeDisplay.getUserId();
+	long fileEntryId = 0;
 
 	try {
 		FileEntry fileEntry;
@@ -89,7 +98,8 @@ public void addEditFileEntry(	File file,String fileName,ActionRequest actionRequ
 					serviceContext
 			);
 		} else {
-			FileEntry existing = DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
+			FileEntry existing =
+					DLAppLocalServiceUtil.getFileEntry(existingFileEntryId);
 
 			fileEntry = DLAppLocalServiceUtil.updateFileEntry(
 					userId,
@@ -109,17 +119,21 @@ public void addEditFileEntry(	File file,String fileName,ActionRequest actionRequ
 			);
 		}
 
+		fileEntryId = fileEntry.getFileEntryId();
+
 		if ("PROFILE".equals(documentType)) {
-			employeeDetails.setProfilePicId(fileEntry.getFileEntryId());
+			employeeDetails.setProfilePicId(fileEntryId);
 		} else if ("AADHAAR".equals(documentType)) {
-			employeeDetails.setAadhaarCardFileId(fileEntry.getFileEntryId());
+			employeeDetails.setAadhaarCardFileId(fileEntryId);
 		} else if ("PAN".equals(documentType)) {
-			employeeDetails.setPanCardFileId(fileEntry.getFileEntryId());
+			employeeDetails.setPanCardFileId(fileEntryId);
 		}
 
 	} catch (Exception e) {
 		log.error("File upload failed", e);
 	}
+
+	return fileEntryId;
 }
 
 }

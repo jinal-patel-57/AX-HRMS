@@ -254,6 +254,21 @@ public interface EmployeeAddressModel
 	 */
 	public void setEmployeeId(long employeeId);
 
+	/**
+	 * Returns the employee address proof file entry ID of this employee address.
+	 *
+	 * @return the employee address proof file entry ID of this employee address
+	 */
+	public long getEmployeeAddressProofFileEntryId();
+
+	/**
+	 * Sets the employee address proof file entry ID of this employee address.
+	 *
+	 * @param employeeAddressProofFileEntryId the employee address proof file entry ID of this employee address
+	 */
+	public void setEmployeeAddressProofFileEntryId(
+		long employeeAddressProofFileEntryId);
+
 	@Override
 	public EmployeeAddress cloneWithOriginalValues();
 

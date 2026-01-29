@@ -234,6 +234,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="presentPermanentSame" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeAddressProofFileEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeBankAccountImpl" table="ax_EmployeeBankAccount">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="bankAccountId" type="long">

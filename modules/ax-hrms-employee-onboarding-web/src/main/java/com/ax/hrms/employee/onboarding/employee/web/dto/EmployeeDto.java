@@ -44,6 +44,7 @@ public class EmployeeDto {
 	public String employeeType;
 	public double stipend;
 	public String designationName;
+	public long addressProofId;
 
 	public long branchId;
 
@@ -657,9 +658,15 @@ public class EmployeeDto {
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
 	}
-	
-	
-	
+
+	public long getAddressProofId() {
+		return addressProofId;
+	}
+
+	public void setAddressProofId(long addressProofId) {
+		this.addressProofId = addressProofId;
+	}
+
 	public String getExperienceCertificateMediaName() {
 		return experienceCertificateMediaName;
 	}

@@ -178,7 +178,12 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				log.info("Branch not found for :- "+ employeeDetails.getBranchId());
 			}
 
-			
+			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+
+			long addressProofFileEntryId =
+					employeeAddress.getEmployeeAddressProofFileEntryId();
+
+			employeeDto.setAddressProofId(addressProofFileEntryId);
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
@@ -211,6 +216,17 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD_FILE, previewURL);
 				}
 			}
+
+			if(Validator.isNotNull(employeeDto.getAddressProofId()) && employeeDto.getAddressProofId()>0) {
+				FileEntry addressProofFile = DLAppServiceUtil.getFileEntry(employeeDto.getAddressProofId());
+
+				if (Validator.isNotNull(addressProofFile)) {
+					String previewURL = DLUtil.getPreviewURL(addressProofFile, addressProofFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+
+					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE, previewURL);
+				}
+			}
+
 			
 			try {
 				EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeId);

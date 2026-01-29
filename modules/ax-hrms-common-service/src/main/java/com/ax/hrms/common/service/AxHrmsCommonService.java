@@ -18,6 +18,7 @@ import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
 import com.liferay.mail.kernel.model.MailMessage;
@@ -30,12 +31,15 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.File;
@@ -44,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,7 +100,6 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
     EmployeeDetailsLocalService employeeDetailsLocalService;
     @Reference
     RoleLocalService roleLocalService;
-
 
     @Override
     public void sendMail(String toEmailAddress, String fromEmailAddress, String fromName, String subject, String body) {
@@ -587,5 +591,114 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 		return null;
 	}
 
-    
+    @Override
+    public long uploadEmployeeDocument(
+            ThemeDisplay themeDisplay,
+            ServiceContext serviceContext,
+            File file,
+            String originalFileName,
+            long existingFileEntryId,
+            String rootFolderName,
+            String employeeFolderName,
+            String documentFolderName
+    ) throws PortalException {
+
+        if (Validator.isNull(file) || file.length() == 0) {
+            log.warn("uploadEmployeeDocument :: File is null or empty");
+            return existingFileEntryId;
+        }
+
+        long userId = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
+
+        try {
+
+            Folder rootFolder =
+                    createFolder(
+                            rootFolderName,
+                            0,
+                            themeDisplay,
+                            serviceContext
+                    );
+
+            Folder employeeFolder =
+                    createFolder(
+                            employeeFolderName,
+                            rootFolder.getFolderId(),
+                            themeDisplay,
+                            serviceContext
+                    );
+
+            Folder documentFolder =
+                    createFolder(
+                            documentFolderName,
+                            employeeFolder.getFolderId(),
+                            themeDisplay,
+                            serviceContext
+                    );
+
+            String mimeType = MimeTypesUtil.getContentType(file);
+            String fileName =
+                    System.currentTimeMillis() + "_" +
+                            originalFileName.replaceAll("\\s+", "_");
+
+            FileEntry fileEntry;
+
+            if (existingFileEntryId > 0) {
+
+                byte[] fileBytes;
+                try {
+                    fileBytes = Files.readAllBytes(file.toPath());
+                } catch (IOException e) {
+                    throw new PortalException("Unable to read file bytes", e);
+                }
+
+                log.info("Updating document [" + documentFolderName + "]");
+
+                fileEntry =
+                        DLAppLocalServiceUtil.updateFileEntry(
+                                userId,
+                                existingFileEntryId,
+                                fileName,
+                                mimeType,
+                                fileName,
+                                null,
+                                StringPool.BLANK,
+                                "Updated " + documentFolderName,
+                                DLVersionNumberIncrease.MAJOR,
+                                fileBytes,
+                                null,
+                                null,
+                                null,
+                                serviceContext
+                        );
+
+            } else {
+
+                log.info("Uploading new document [" + documentFolderName + "]");
+
+                fileEntry =
+                        DLAppLocalServiceUtil.addFileEntry(
+                                userId,
+                                groupId,
+                                documentFolder.getFolderId(),
+                                fileName,
+                                mimeType,
+                                fileName,
+                                StringPool.BLANK,
+                                StringPool.BLANK,
+                                file,
+                                serviceContext
+                        );
+            }
+
+            return fileEntry.getFileEntryId();
+
+        } catch (Exception e) {
+            log.error("Document upload failed: " + documentFolderName, e);
+            throw new PortalException(e);
+        }
+    }
+
+
 }

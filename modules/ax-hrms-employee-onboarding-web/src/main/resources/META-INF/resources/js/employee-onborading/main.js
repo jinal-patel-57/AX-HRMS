@@ -1,6 +1,7 @@
 (function ($, AxHrmsEmployeeOnboardingEmployeeWebPortlet) {
     let namespace;
 
+
     function setConfigsForRejectUrl(config) {
         namespace = config.namespace;
         let rejectUrl = employeeRejectUrl;
@@ -343,7 +344,8 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "spouseName"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
-                        }
+                        },
+                         lettersOnly: true
                     },
                     [namespace + "aadhaarCard"]: {
                        documentRequired: aadhaarCardId
@@ -384,7 +386,8 @@ function setConfigsForAddExperienceSection(config) {
                         date: "Please enter a valid date."
                     },
                     [namespace + "spouseName"]: {
-                        required: "Please enter your spouse's name."
+                        required: "Please enter your spouse's name.",
+                        lettersOnly: "Only letters are allowed for Name."
                     },
                    [namespace + "aadhaarCard"]: {
                         documentRequired: "Please upload Aadhaar card."
@@ -736,30 +739,37 @@ function setConfigsForAddExperienceSection(config) {
             $('.next-button-adress-details').on('click', function (event) {
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
+                var formData = new FormData(form2[0]);
                 if (!form2.valid()) {
-                    return;
-                }
-                $.ajax({
-                    url: form2.attr('action'),
-                    method: 'POST',
-                    data: form2.serialize(),
-                    success: function (response) {
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("updateFlagAddress").value = "true";
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab('show');
-                            const nextTabContentId = nextTabButton.attr('data-bs-target');
-                            $(nextTabContentId).addClass('show active');
-                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            $(nextTabContentId).find('input').first().focus();
-                        }
-                    },
-                    error: function () {
-                        console.log('There was an error saving the data. Please try again.');
+                        return;
                     }
+                    $("#overlay").fadeIn(300);
+                    $.ajax({
+                        url: form2.attr('action'),
+                        method: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            const currentTab = $('.nav-link.active');
+                            document.getElementById("updateFlagAddress").value = "true";
+                            const nextTabButton = currentTab.parent().next().find('.nav-link');
+                            if (nextTabButton.length > 0) {
+                                nextTabButton.tab('show');
+                                const nextTabContentId = nextTabButton.attr('data-bs-target');
+                                $(nextTabContentId).addClass('show active');
+                                $(currentTab.attr('data-bs-target')).removeClass('show active');
+                                $(nextTabContentId).find('input').first().focus();
+                            }
+                        },
+                        error: function () {
+                            console.log('There was an error saving the data. Please try again.');
+                        },
+                        complete: function () {
+                            $("#overlay").fadeOut(300);
+                        }
+                    });
                 });
-            });
             AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressValidation = setConfigsForAddressValidation;
         });
     }
@@ -1166,11 +1176,11 @@ function setConfigsForAddExperienceSection(config) {
 
           initializeValidation();
           bindPassingYearAutoFill();
-          // Enable real-time validation for date fields
+//           Enable real-time validation for date fields
           $(document).on('change', 'input[type="date"]', function () {
               $(this).valid();
           });
-        // 🔥 FIX: Trigger validation when education file changes
+
         $(document).on(
             "change",
             "#educationStepperForm input[type='file']",
@@ -1185,7 +1195,7 @@ function setConfigsForAddExperienceSection(config) {
             }
         );
         $(document).on(
-            "keyup change input",
+            "focusout change",
             "#educationStepperForm input, #educationStepperForm select",
             function () {
 
@@ -1369,7 +1379,7 @@ function setConfigsForExperienceValidation(config) {
             });
         }
        $(document).on(
-                   "keyup change input",
+                   "focusout change",
                    "#experienceStepperForm input, #experienceStepperForm select",
                    function () {
 
@@ -1677,7 +1687,7 @@ function setConfigsForExperienceValidation(config) {
             },
             rules: {
                 [namespace + "uan"]: {
-                    maxlength: 15,
+                    maxlength: 14,
                     uanValidation: true
                 },
 
@@ -1698,14 +1708,17 @@ function setConfigsForExperienceValidation(config) {
             }
         });
 
-        $.validator.addMethod("uanValidation", function (value, element) {
-        	return this.optional(element) || /^[0-9]{12}$/.test(value);
-        }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)");
+      $.validator.addMethod("uanValidation", function (value, element) {
+                return this.optional(element) || /^\d{4}-\d{4}-\d{4}$/.test(value);
+            }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)");
 
 		$.validator.addMethod("esicValidation", function (value, element) {
         	return this.optional(element) || /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);
     	}, "ESIC number must be exactly 17 digits (format XX-XX-XXXXXX-XXX-XXXX)");
 
+        $(document).on('input', '#' + namespace + 'uan', function () {
+                this.value = formatUan(this.value);
+            });
         $('.next-button-uan-esic-details').on('click', function (event) {
         	event.preventDefault();
             if (!form6.valid()) {
@@ -1980,7 +1993,7 @@ function setConfigsForExperienceValidation(config) {
 
 
         $(document).on(
-            "keyup change input",
+            "focusout change",
             "#nomineeStepperForm input, #nomineeStepperForm select",
             function () {
                 $form7.validate().element(this);

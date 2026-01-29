@@ -93,7 +93,6 @@
         <finder return-type="Collection" name="IsTerminated">
             <finder-column name="isTerminated"></finder-column>
         </finder>
-
     </entity>
 
 
@@ -211,6 +210,7 @@
         <column name="presentPermanentSame" type="boolean"/>
         <column name="status" type="boolean"/>
         <column name="employeeId" type="long"/>
+        <column name="employeeAddressProofFileEntryId" type="long"/>
 
         <!-- finder method  -->
         <finder name="EmployeeId" return-type="EmployeeAddress">

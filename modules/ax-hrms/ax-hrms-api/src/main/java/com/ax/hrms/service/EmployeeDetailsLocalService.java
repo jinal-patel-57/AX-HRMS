@@ -197,6 +197,9 @@ public interface EmployeeDetailsLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public EmployeeDetails fetchEmployeeDetails(long employeeId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public EmployeeDetails fetchEmployeeDetailsByLRUserId(long lrUserId);
+
 	/**
 	 * Returns the employee details matching the UUID and group.
 	 *
