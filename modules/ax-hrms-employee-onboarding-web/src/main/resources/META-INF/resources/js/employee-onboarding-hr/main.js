@@ -32,10 +32,6 @@ var setFileInputValues;
 
         $(document).ready(function () {
 
-
-
-
-
             $("#EmployeeOnBoardingHrForm").validate({
                 rules: {
                     [namespace + "employeeCode"]: {
@@ -238,8 +234,7 @@ var setFileInputValues;
             $.validator.addMethod(
 			    "linkUrlValidation",
 			    function (value, element) {
-			        return this.optional(element) ||
-			               /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(value);
+			        return this.optional(element) || /^(https?:\/\/)?((localhost|(\d{1,3}\.){3}\d{1,3})|((www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}))(:\d+)?(\/.*)?$/.test(value);
 			    },
 			    "Please enter a valid URL"
 			);

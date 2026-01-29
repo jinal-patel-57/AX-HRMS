@@ -15,8 +15,7 @@
                         </label>
                         <input type="text" class="form-control" id="<portlet:namespace />accountNumber"
                                name="<portlet:namespace />accountNumber" maxlength="20"
-                               value="${employeeBankAccount.accountNumber}"
-                               required/>
+                               value="${employeeBankAccount.accountNumber}"/>
                         <input type="hidden" class="form-control" id="<portlet:namespace />bankAccountId"
                                name="<portlet:namespace />bankAccountId" maxlength="75"
                                value="${employeeBankAccount.bankAccountId}"

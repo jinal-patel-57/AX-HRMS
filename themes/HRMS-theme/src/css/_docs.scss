@@ -98,6 +98,9 @@
 }
 .page-link.focus, .page-link:focus{box-shadow: none;}
 
+.title-container{padding: 0 0 1rem 1rem;}
+.page-title{color: var(--text-primary);}
+
 .btn-primary{background: var(--linear_gradient1); color: var(--whitecolor) !important; border-color: var(--linear_gradient1) !important;}
 .btn-primary:hover{background: #fff; color: var(--text-primary) !important;}
 .btn-primary:focus, .btn-primary.focus,

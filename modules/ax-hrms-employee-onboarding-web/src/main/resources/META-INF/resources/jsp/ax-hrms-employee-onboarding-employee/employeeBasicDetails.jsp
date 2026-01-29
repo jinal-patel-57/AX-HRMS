@@ -80,7 +80,7 @@
                        id="<portlet:namespace />aadharNumber"
                        placeholder="123456789123"
                        name="<portlet:namespace />aadharNumber"
-                       value="${employeeDetail.aadhaarCardNumber}" maxlength="12"/>
+                       value="${employeeDetail.aadhaarCardNumber}" maxlength="14"/>
             </div>
 
 

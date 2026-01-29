@@ -110,6 +110,12 @@
 						<h2 class="hide-accessible sr-only" role="heading" aria-level="1">
 							${htmlUtil.escape(the_title)}
 						</h2>
+						<#assign layoutName = themeDisplay.getLayout().getName(themeDisplay.getLocale()) />
+						<#if is_signed_in && layoutName != 'Dashboard'>
+							<div class="title-container">
+								<h4 class="page-title mb-1">${themeDisplay.getLayout().getName(themeDisplay.getLocale())}</h4>
+							</div>
+						</#if>
 						<#if selectable>
 							<@liferay_util["include"]
 								page=content_include />
