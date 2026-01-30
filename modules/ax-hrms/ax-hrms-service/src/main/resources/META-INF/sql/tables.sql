@@ -154,7 +154,7 @@ create table ax_Comment (
 	commentId LONG not null primary key,
 	type_ LONG,
 	action VARCHAR(75) null,
-	comment_ VARCHAR(75) null,
+	comment_ VARCHAR(500) null,
 	status BOOLEAN,
 	requestId LONG
 );

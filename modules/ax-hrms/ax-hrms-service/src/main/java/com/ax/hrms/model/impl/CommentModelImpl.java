@@ -92,7 +92,7 @@ public class CommentModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_Comment (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,commentId LONG not null primary key,type_ LONG,action VARCHAR(75) null,comment_ VARCHAR(75) null,status BOOLEAN,requestId LONG)";
+		"create table ax_Comment (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,commentId LONG not null primary key,type_ LONG,action VARCHAR(75) null,comment_ VARCHAR(500) null,status BOOLEAN,requestId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_Comment";
 
