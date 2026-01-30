@@ -100,8 +100,10 @@ function childNavigation() {
       $(this).valid();
     }
   });
-  $('.custom-multi-select').select2({
-    placeholder: $(this).attr('placeholder') || 'Select Employees(s)'
+  $('.custom-multi-select').each(function () {
+    $(this).select2({
+      placeholder: $(this).attr('placeholder') || 'Select Options'
+    });
   });
 
   // On select
