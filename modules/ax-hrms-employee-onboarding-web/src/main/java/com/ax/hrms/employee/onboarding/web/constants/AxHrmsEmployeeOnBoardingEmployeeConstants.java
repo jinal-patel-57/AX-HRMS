@@ -73,6 +73,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String AADHAAR_CARD="aadhaarCard";
 	public static final String ADDRESS_PROOF_FILE="addressProofFile";
 	public static final String ADDRESS_PROOF_FOLDER="Address Proof";
+	public static final String KYC_DOCUMENT_FILE="kycDocumentFile";
 
 	//AddEmployeeBankAccountMVCActionCommand
 	public static final String ACCOUNT_NUMBER ="accountNumber";

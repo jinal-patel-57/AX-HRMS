@@ -134,6 +134,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 				kycFileEntryId = employeeDetails.getKycDocumentFileEntryId();
 			}
 
+			long documentTypeMasterId = employeeDetails.getDocumentTypeMasterId();
 			String kycDocumentUrl = null;
 
 			if (kycFileEntryId > 0) {
@@ -149,6 +150,7 @@ public class FetchEmployeeOnboardingMVCRenderCommand implements MVCRenderCommand
 						);
 
 				renderRequest.setAttribute("kycDocumentUrl",kycDocumentUrl);
+				renderRequest.setAttribute("documentTypeMasterId",documentTypeMasterId);
 
 			}
 

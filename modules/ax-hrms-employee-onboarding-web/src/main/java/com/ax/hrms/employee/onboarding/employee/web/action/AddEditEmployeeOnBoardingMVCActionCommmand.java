@@ -132,7 +132,9 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 				AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
 		);
 
-		employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
+		if (documentTypeMasterId > 0) {
+			employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
+		}
 		employeeDetails.setKycDocumentFileEntryId(kycFileEntryId);
 		employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
 	}

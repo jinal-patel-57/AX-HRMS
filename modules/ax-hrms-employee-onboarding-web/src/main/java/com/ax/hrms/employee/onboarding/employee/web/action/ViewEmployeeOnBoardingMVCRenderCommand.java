@@ -6,10 +6,8 @@ import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmp
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
-import com.ax.hrms.master.service.BranchMasterLocalService;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.master.service.EducationLevelMasterLocalService;
+import com.ax.hrms.master.model.DocumentTypeMaster;
+import com.ax.hrms.master.service.*;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeBankAccount;
@@ -111,6 +109,9 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 	@Reference
 	BranchMasterLocalService branchMasterLocalService;
 
+	@Reference
+	private DocumentTypeMasterLocalService documentTypeMasterLocalService;
+
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -172,10 +173,21 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
             employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
+			employeeDto.setKycDocumentFileEntryId(employeeDetails.getKycDocumentFileEntryId());
+			employeeDto.setDocumentTypeMasterId(employeeDetails.getDocumentTypeMasterId());
 			try {
 				employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId()) ? branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName() : "");
 			}catch(Exception e){
 				log.info("Branch not found for :- "+ employeeDetails.getBranchId());
+			}
+			long documentTypeMasterId = employeeDto.getDocumentTypeMasterId();
+			String documentTypeMasterName = null;
+
+			if (documentTypeMasterId > 0) {
+				DocumentTypeMaster documentTypeMaster = documentTypeMasterLocalService.getDocumentTypeMaster(documentTypeMasterId);
+				documentTypeMasterName = documentTypeMaster.getDocumentTypeName();
+				renderRequest.setAttribute("documentTypeMasterName",documentTypeMasterName);
+				log.info("documentTypeMasterName::: "+ documentTypeMasterName);
 			}
 
 			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
@@ -224,6 +236,15 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 					String previewURL = DLUtil.getPreviewURL(addressProofFile, addressProofFile.getFileVersion(), themeDisplay,StringPool.BLANK);
 
 					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE, previewURL);
+				}
+			}
+			if(Validator.isNotNull(employeeDto.getKycDocumentFileEntryId()) && employeeDto.getKycDocumentFileEntryId()>0) {
+				FileEntry kycDocumentFile = DLAppServiceUtil.getFileEntry(employeeDto.getKycDocumentFileEntryId());
+
+				if (Validator.isNotNull(kycDocumentFile)) {
+					String previewURL = DLUtil.getPreviewURL(kycDocumentFile, kycDocumentFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+					log.info("previewURL of kycDocumentFile ::: " + previewURL);
+					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.KYC_DOCUMENT_FILE, previewURL);
 				}
 			}
 

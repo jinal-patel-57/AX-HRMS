@@ -49,6 +49,8 @@ public class EmployeeDto {
 	public long branchId;
 
 	public String branchName;
+	public long kycDocumentFileEntryId;
+	public long documentTypeMasterId;
 
 	public long getBranchId() {
 		return branchId;
@@ -665,6 +667,22 @@ public class EmployeeDto {
 
 	public void setAddressProofId(long addressProofId) {
 		this.addressProofId = addressProofId;
+	}
+
+	public long getKycDocumentFileEntryId() {
+		return kycDocumentFileEntryId;
+	}
+
+	public void setKycDocumentFileEntryId(long kycDocumentFileEntryId) {
+		this.kycDocumentFileEntryId = kycDocumentFileEntryId;
+	}
+
+	public long getDocumentTypeMasterId() {
+		return documentTypeMasterId;
+	}
+
+	public void setDocumentTypeMasterId(long documentTypeMasterId) {
+		this.documentTypeMasterId = documentTypeMasterId;
 	}
 
 	public String getExperienceCertificateMediaName() {

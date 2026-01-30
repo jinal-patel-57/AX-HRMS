@@ -395,6 +395,23 @@ function setConfigsForAddExperienceSection(config) {
 
                    [namespace + "panCard"]: {
                        documentRequired: panCardId
+                   },
+                   [namespace + "kycDocumentType"]: {
+                       required: function () {
+                           // Required only if no document already uploaded
+                           return !isKycDocumentAlreadyUploaded;
+                       }
+                   },
+                   [namespace + "kycDocumentFile"]: {
+                       required: function () {
+                           var kycTypeSelected =
+                               $("#" + namespace + "kycDocumentType").val();
+
+                           // Required only if:
+                           // 1. KYC type selected
+                           // 2. No document already uploaded
+                           return kycTypeSelected && !isKycDocumentAlreadyUploaded;
+                       }
                    }
                 },
                 messages: {
@@ -450,6 +467,12 @@ function setConfigsForAddExperienceSection(config) {
                         minlength: "PAN number must be exactly 10 characters.",
                         maxlength: "PAN number must be exactly 10 characters.",
                         validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
+                    },
+                    [namespace + "kycDocumentFile"]: {
+                        required: "Please upload KYC document."
+                    },
+                    [namespace + "kycDocumentType"]: {
+                        required: "Please select KYC document type."
                     }
 
 
