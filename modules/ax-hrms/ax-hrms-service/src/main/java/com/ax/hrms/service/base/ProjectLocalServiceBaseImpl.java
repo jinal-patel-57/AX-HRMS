@@ -16,6 +16,7 @@ import com.ax.hrms.service.persistence.AppraisalMeetingPersistence;
 import com.ax.hrms.service.persistence.AppraisalProcessPersistence;
 import com.ax.hrms.service.persistence.AppraisalReminderPersistence;
 import com.ax.hrms.service.persistence.AttachmentPersistence;
+import com.ax.hrms.service.persistence.CommentPersistence;
 import com.ax.hrms.service.persistence.CompensatoryDataPersistence;
 import com.ax.hrms.service.persistence.EmployeeAddressPersistence;
 import com.ax.hrms.service.persistence.EmployeeBankAccountPersistence;
@@ -631,6 +632,9 @@ public abstract class ProjectLocalServiceBaseImpl
 
 	@Reference
 	protected AttachmentPersistence attachmentPersistence;
+
+	@Reference
+	protected CommentPersistence commentPersistence;
 
 	@Reference
 	protected CompensatoryDataPersistence compensatoryDataPersistence;

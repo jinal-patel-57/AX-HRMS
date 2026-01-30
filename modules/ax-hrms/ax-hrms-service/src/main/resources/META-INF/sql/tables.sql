@@ -143,6 +143,22 @@ create table ax_Attachment (
 	timeTrackerId LONG
 );
 
+create table ax_Comment (
+	uuid_ VARCHAR(75) null,
+	companyId LONG,
+	createdBy LONG,
+	modifiedBy LONG,
+	groupId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	commentId LONG not null primary key,
+	type_ LONG,
+	action VARCHAR(75) null,
+	comment_ VARCHAR(75) null,
+	status BOOLEAN,
+	requestId LONG
+);
+
 create table ax_CompensatoryData (
 	uuid_ VARCHAR(75) null,
 	companyId LONG,

@@ -24,6 +24,11 @@ create unique index IX_EC06EFCB on ax_AppraisalReminder (uuid_[$COLUMN_LENGTH:75
 create index IX_5ED08DE5 on ax_Attachment (timeTrackerId);
 create unique index IX_F50656C7 on ax_Attachment (uuid_[$COLUMN_LENGTH:75$], groupId);
 
+create index IX_49347BDC on ax_Comment (requestId, status, type_, action[$COLUMN_LENGTH:75$]);
+create index IX_59031623 on ax_Comment (status);
+create index IX_FF0936F8 on ax_Comment (type_);
+create unique index IX_12F3FB3 on ax_Comment (uuid_[$COLUMN_LENGTH:75$], groupId);
+
 create index IX_BD0E801D on ax_CompensatoryData (employeeId);
 create index IX_B0E787D8 on ax_CompensatoryData (managerId);
 create unique index IX_54C37CF6 on ax_CompensatoryData (uuid_[$COLUMN_LENGTH:75$], groupId);

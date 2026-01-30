@@ -145,6 +145,21 @@
 		<field name="attachmentId" type="long" />
 		<field name="timeTrackerId" type="long" />
 	</model>
+	<model name="com.ax.hrms.model.Comment">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="commentId" type="long" />
+		<field name="type" type="long" />
+		<field name="action" type="String" />
+		<field name="comment" type="String" />
+		<field name="status" type="boolean" />
+		<field name="requestId" type="long" />
+	</model>
 	<model name="com.ax.hrms.model.CompensatoryData">
 		<field name="uuid" type="String" />
 		<field name="companyId" type="long" />

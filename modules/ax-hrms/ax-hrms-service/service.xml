@@ -1518,8 +1518,64 @@
             <finder-column name="startDate"/>
             <finder-column name="endDate"/>
         </finder>
+    </entity>
+    
+    <entity local-service="true" name="Comment" remote-service="true" uuid="true">
+
+        <!-- Audit fields -->
+
+        <column name="companyId" type="long"/>
+        <column name="createdBy" type="long"/>
+        <column name="modifiedBy" type="long"/>
+        <column name="groupId" type="long"/>
+        <column name="createDate" type="Date"/>
+        <column name="modifiedDate" type="Date"/>
+
+        <!-- PK fields -->
+
+        <column name="commentId" type="long" primary="true"/>
 
 
+        <!-- Other fields -->
+
+        <column name="type" type="long"/>
+        <column name="action" type="String"/>
+        <column name="comment" type="String"/>
+        <column name="status" type="boolean"/>
+        <column name="requestId" type="long"/>
+        <order by="desc">
+            <order-column name="createDate" />
+        </order>
+        <!-- FINDERS -->
+        <finder name="Type" return-type="Collection">
+            <finder-column name="type"/>
+        </finder>
+
+        <finder name="Status" return-type="Collection">
+            <finder-column name="status"/>
+        </finder>
+
+        <finder name="RequestId" return-type="Collection">
+            <finder-column name="requestId"/>
+        </finder>
+
+        <finder name="RequestIdAndStatus" return-type="Collection">
+            <finder-column name="requestId"/>
+            <finder-column name="status"/>
+        </finder>
+        
+        <finder name="TypeRequestIdAndStatus" return-type="Collection">
+            <finder-column name="type"/>
+            <finder-column name="requestId"/>
+            <finder-column name="status"/>
+        </finder>
+        
+        <finder name="TypeActionRequestIdAndStatus" return-type="Collection">
+        	<finder-column name="type"/>
+        	<finder-column name="action"/>
+            <finder-column name="requestId"/>
+            <finder-column name="status"/>
+        </finder>
     </entity>
 
 </service-builder>
