@@ -13,9 +13,8 @@
     --text-primary: #893D96;
 
 }
-.modal-open .modal:not(.show) {
-    display: none !important;
-}
+.modal-open .modal:not(.show) {display: none !important;}
+.modal-title{color: var(--text-primary);}
 
 .text-break {word-break: break-all;}
 
@@ -336,7 +335,7 @@ body.page-loading #overlay { display: block;}
 .table-responsive{min-height: 250px;}
 
 /*=== Select2 overwrite styling ===*/
-.select2-container {margin-right: 10px; display: block;}
+.select2-container {margin-right: 10px; display: block; width: auto !important; min-width: 200px;}
 .select2-container .select2-selection {min-height: 38px; border: 1px solid #dee2e6; border-radius: 10px;}
 .select2-container .select2-selection .select2-selection__rendered{line-height: 38px;}
 .select2-container .select2-selection .select2-selection__arrow {height: 36px;}
@@ -357,3 +356,9 @@ body.page-loading #overlay { display: block;}
 .wish-message{max-width: 400px; text-align: center;}
 
 .taglib-empty-result-message .taglib-empty-result-message-header, .taglib-empty-result-message .taglib-empty-result-message-header-has-plus-btn{background-image: url("../images/no_result.gif"); max-width: 500px;}
+
+.status{border-radius: 20px; padding: 4px 8px;}
+.status.approved{background: #28a74530; color: #28a745;}
+.status.cancelled{background: #ffc10730; color: #ffc107;}
+.status.rejected{background: #dc354530; color: #dc3545;} 
+.status.pending{background: #17a2b830; color: #17a2b8;}
