@@ -52,6 +52,14 @@ public class CommentLocalServiceUtil {
 		return getService().addComment(comment);
 	}
 
+	public static Comment addWorkflowComment(
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay, long type,
+		String action, long requestId, String commentText) {
+
+		return getService().addWorkflowComment(
+			themeDisplay, type, action, requestId, commentText);
+	}
+
 	/**
 	 * Creates a new comment with the primary key. Does not add the comment to the database.
 	 *

@@ -43,6 +43,15 @@ public class CommentLocalServiceWrapper
 		return _commentLocalService.addComment(comment);
 	}
 
+	@Override
+	public com.ax.hrms.model.Comment addWorkflowComment(
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay, long type,
+		String action, long requestId, String commentText) {
+
+		return _commentLocalService.addWorkflowComment(
+			themeDisplay, type, action, requestId, commentText);
+	}
+
 	/**
 	 * Creates a new comment with the primary key. Does not add the comment to the database.
 	 *
