@@ -304,26 +304,26 @@
             </div>
 
             <!-- KYC Document Upload -->
-            <div class="col-md-4 col-sm-12 mb-3"
-                 id="kycDocumentUploadSection"
+            <div class="col-md-4 col-sm-12 mb-3" id="kycDocumentUploadSection">
+
                 <label class="form-label">
                     <liferay-ui:message key="upload-kyc-document"/>
-                            <span class="text-danger">*</span>
+                    <span class="text-danger">*</span>
                 </label>
 
                 <input type="file"
                        class="form-control"
                        id="<portlet:namespace/>kycDocumentFile"
-                       name="<portlet:namespace/>kycDocumentFile"
+                       name="<portlet:namespace/>kycDocumentFile" />
 
                 <c:if test="${not empty kycDocumentUrl}">
                     <div>
-                        <a href="${kycDocumentUrl}"
-                           target="_blank"
-                           class="">
-                           <liferay-ui:message key="view-kyc-document"/>
+                        <a href="${kycDocumentUrl}" target="_blank">
+                            <liferay-ui:message key="view-kyc-document"/>
                         </a>
+                    </div>
                 </c:if>
+
             </div>
 
         </div>
