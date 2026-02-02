@@ -142,7 +142,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle">Action</h5>
                 <button type="button" class="close" data-dismiss="modal">
-                    �
+                      <i class="icon-remove"></i>
                 </button>
             </div>
 
