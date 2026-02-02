@@ -2182,5 +2182,7 @@ function setConfigsForExperienceValidation(config) {
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForBankAccountValidation = setConfigsForBankAccountValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForUanEsicValidation = setConfigsForUanEsicValidation;
     AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForNomineeValidation = setConfigsForNomineeValidation;
+    AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForAddressProofToggle = setConfigsForAddressProofToggle;
+
 
 })($, window.AxHrmsEmployeeOnboardingEmployeeWebPortlet || (window.AxHrmsEmployeeOnboardingEmployeeWebPortlet = {}));
