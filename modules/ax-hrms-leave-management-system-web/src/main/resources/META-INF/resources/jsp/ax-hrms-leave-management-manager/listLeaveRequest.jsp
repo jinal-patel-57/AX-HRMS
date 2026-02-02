@@ -69,9 +69,30 @@
                         <ul class="dropdown-menu">
                            <c:choose>
                            <c:when test="${fn:toLowerCase(leaveRequest.status) eq 'pending'}">
-                            <li><a href="${approveURL}" class="dropdown-item"><i class="icon-ok"></i> Approve</a></li>
-                            <li><a href="${rejectURL}" class="dropdown-item"><i class="icon-ban-circle"></i> Reject</a></li>
-                               <li><a href="${cancelURL}" class="dropdown-item"><i class="icon-remove"></i> Cancel</a></li>
+                            <li>
+                              <a href="javascript:void(0);"
+                                 class="dropdown-item"
+                                 onclick="openActionModal('${approveURL}', 'APPROVE')">
+                                 <i class="icon-ok"></i>
+                                 Approve
+                              </a>
+                            </li>
+                            <li>
+                            <a href="javascript:void(0);"
+                               class="dropdown-item"
+                               onclick="openActionModal('${rejectURL}', 'REJECT')">
+                                <i class="icon-ban-circle"></i>
+                                Reject
+                            </a>
+                            </li>
+                               <li>
+                               <a href="javascript:void(0);"
+                                 class="dropdown-item"
+                                  onclick="openActionModal('${cancelURL}', 'CANCEL')">
+                                   <i class="icon-remove"></i>
+                                   <liferay-ui:message key="cancel"/>
+                               </a>
+                               </li>
                                                          <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
 
                              </c:when>
@@ -84,7 +105,14 @@
                                          </li>
                                      </c:when>
                               <c:otherwise>
-                            <li><a href="${cancelURL}" class="dropdown-item"><i class="icon-remove"></i> Cancel</a></li>
+                            <li>
+                               <a href="javascript:void(0);"
+                                class="dropdown-item"
+                                  onclick="openActionModal('${cancelURL}', 'CANCEL')">
+                                   <i class="icon-remove"></i>
+                                   Cancel
+                               </a>
+                            </li>
                             <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
                             </c:otherwise>
                            </c:choose>
@@ -100,3 +128,75 @@
 
     </div>
 </div>
+
+
+
+
+<div class="modal fade" id="actionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Action</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    �
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <textarea class="form-control"
+                          id="actionComment"
+                          placeholder="Enter comment"
+                          rows="4"></textarea>
+
+                <input type="hidden" id="requestId">
+                <input type="hidden" id="actionURL">
+                <input type="hidden" id="actionType">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Close
+                </button>
+
+                <button class="btn btn-primary"
+                        onclick="submitAction()">
+                    Submit
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function openActionModal(actionURL, action) {
+
+    	document.getElementById('actionURL').value = actionURL;
+        document.getElementById('actionComment').value = '';
+
+        document.getElementById('modalTitle').innerText =
+            action.charAt(0) + action.slice(1).toLowerCase() + " Request";
+
+        $('#actionModal').modal('show');
+    }
+
+
+    function submitAction() {
+
+        const comment = document.getElementById('actionComment').value.trim();
+        var actionURL = document.getElementById('actionURL').value.replace('COMMENT', comment);
+        console.log("actionURL -- ", actionURL);
+
+        if (!comment) {
+            alert('Comment is required');
+            return;
+        }
+        debugger;
+        window.location.href = actionURL;
+
+    }
+</script>

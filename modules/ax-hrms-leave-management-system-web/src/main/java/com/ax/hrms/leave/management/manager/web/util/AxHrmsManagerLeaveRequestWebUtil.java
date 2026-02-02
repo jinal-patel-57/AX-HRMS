@@ -226,7 +226,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
     }
 
 
-    public void sendMailtoEmployee(String fromName, String fromEmailAddress, Long leaveRequestId, StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, boolean isApprove, boolean isCancelled) {
+    public void sendMailtoEmployee(String fromName, String fromEmailAddress, Long leaveRequestId, StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration,String comment, boolean isApprove, boolean isCancelled) {
         try {
             LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
@@ -238,6 +238,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             String mailContent = isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeBody() : mailTemplateConfiguration.mailLeaveRejectEmployeeBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT}", comment);
 
             String subject = isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
 

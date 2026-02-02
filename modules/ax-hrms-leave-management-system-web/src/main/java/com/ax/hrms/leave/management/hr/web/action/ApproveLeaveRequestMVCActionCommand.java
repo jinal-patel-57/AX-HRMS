@@ -100,8 +100,6 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 		String comment = ParamUtil.getString(actionRequest, "comment");
 
 		try {
-			
-
 			Long leaveRequestId = ParamUtil.getLong(actionRequest,
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_ID);
 			long approvedStatusId = ParamUtil.getLong(actionRequest,
@@ -119,11 +117,11 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
 			// SENDING MAIL TO EMPLOYEE 
 			String employeeMail =notificationTemplateConfiguration.leaveApprovedNotificationToEmployee();
-			employeeMail = employeeMail.replace("${COMMENT}", comment);
+//			employeeMail = employeeMail.replace("${COMMENT}", comment);
 			StringBuilder employeeMailBody = new StringBuilder(
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
 			leaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, leaveRequestId,
-					employeeMailBody,mailTemplateConfiguration,true,false);
+					employeeMailBody,mailTemplateConfiguration,comment,true,false);
 
 			//SENDING MAIL TO THE TEAM
 			String teamMailSubject = AxHrmsHrLeaveManagementSystemWebPortletConstants.YOUR_TEAM_MEMBER_IS_ON_LEAVE;

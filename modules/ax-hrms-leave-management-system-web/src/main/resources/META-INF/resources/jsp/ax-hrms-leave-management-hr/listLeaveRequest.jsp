@@ -84,31 +84,39 @@
 
                                     <div class="dropdown ">
                                         <button class="btn fa fa-ellipsis-v dropdown-toggle"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="icon-ellipsis-vertical"></i>
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                               <i class="icon-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li>
-                                            	<button class="dropdown-item"
-										        	onclick="openActionModal('${approveLeaveRequestURL}', 'APPROVE')">
-										    			<i class="icon-ok"></i> <liferay-ui:message
-                                                    key="approve"/>
-												</button>
-											</li>
-                                            <%-- <li><a href="${approveLeaveRequestURL}"
-                                                   class="dropdown-item"><i class="icon-ok"></i> <liferay-ui:message
-                                                    key="approve"/></a>
-                                            </li> --%>
-                                            <li>
+                                      
+                                     
+                                         
+                                            <li><a href="javascript:void(0);"
+                                                   class="dropdown-item"
+                                                   onclick="openActionModal('${approveLeaveRequestURL}', 'APPROVE')">
+                                                    <i class="icon-ok"></i>
+                                                    <liferay-ui:message key="approve"/>
+                                                </a>
 
-                                                <a href="${rejectLeaveRequestURL}"
-                                                   class="dropdown-item"><i class="icon-ban-circle"></i> <liferay-ui:message
-                                                        key="reject"/></a>
                                             </li>
                                             <li>
-                                                <a href="${cancelLeaveRequestURL}"
-                                                   class="dropdown-item"><i class="icon-remove"></i> <liferay-ui:message
-                                                        key="cancel"/></a>
+
+                                               <a href="javascript:void(0);"
+                                                  class="dropdown-item"
+                                                  onclick="openActionModal('${rejectLeaveRequestURL}', 'REJECT')">
+                                                   <i class="icon-ban-circle"></i>
+                                                   <liferay-ui:message key="reject"/>
+                                               </a>
+
+                                            </li>
+                                            <li>
+                                              <a href="javascript:void(0);"
+                                                 class="dropdown-item"
+                                                 onclick="openActionModal('${cancelLeaveRequestURL}', 'CANCEL')">
+                                                  <i class="icon-remove"></i>
+                                                  <liferay-ui:message key="cancel"/>
+                                              </a>
+
                                             </li>
                                             <li>
                                                 <a href="${viewLeaveRequestURL}"
@@ -134,9 +142,13 @@
                                                         key="view"/></a>
                                             </li>
                                             <li>
-                                                <a href="${cancelLeaveRequestURL}"
-                                                   class="dropdown-item"><i class="icon-remove"></i> <liferay-ui:message
-                                                        key="cancel"/></a>
+                                                <a href="javascript:void(0);"
+                                                   class="dropdown-item"
+                                                   onclick="openActionModal('${cancelLeaveRequestURL}', 'CANCEL')">
+                                                    <i class="icon-remove"></i>
+                                                    <liferay-ui:message key="cancel"/>
+                                                </a>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -205,7 +217,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle">Action</h5>
                 <button type="button" class="close" data-dismiss="modal">
-                    ×
+                    ï¿½
                 </button>
             </div>
 

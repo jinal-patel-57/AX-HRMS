@@ -77,7 +77,10 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 	@Reference
 	EmployeeDepartmentLocalService employeeDepartmentLocalService;
 
-	@Reference
+    @Reference
+    CommentLocalService commentLocalService;
+
+    @Reference
 	EmployeeDesignationLocalService employeeDesignationLocalService;
 	@Reference
 	AxHrmsHrLeaveRequestWebUtil leaveRequestWebUtil;
@@ -100,8 +103,9 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.CANCELLED_ID);
 			long rejectedId = ParamUtil.getLong(actionRequest,
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED_ID);
+            String comment = ParamUtil.getString(actionRequest, "comment");
 
-			String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+            String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 			String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
 					PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
@@ -116,12 +120,14 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 				leaveRequest.setLeaveCompensatoryStatusMasterId(cancelId);
 				SessionMessages.add(actionRequest,
 						AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_CANCELLED);
+                commentLocalService.addWorkflowComment(themeDisplay, 1l, "Cancelled", leaveRequestId, comment);
 
-			} else {
+            } else {
 				isCancelled = false;
 				leaveRequest.setLeaveCompensatoryStatusMasterId(rejectedId);
 				SessionMessages.add(actionRequest,
 						AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_REJECTED);
+                commentLocalService.addWorkflowComment(themeDisplay, 1l, "Rejected", leaveRequestId, comment);
 
 			}
 			leaveRequest.setHrApprovalId(employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
@@ -156,7 +162,6 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 					subject = notificationTemplateConfiguration.leaveRejectedNotificationToEmployee();
 				} else {
 					subject =notificationTemplateConfiguration.leaveCancelledNotificationToEmployee();
-
 				}
 
 
@@ -164,19 +169,17 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 
 				StringBuilder employeeMailBody = new StringBuilder(
 						AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
+
 				leaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, leaveRequestId,
-						employeeMailBody,mailTemplateConfiguration,false,isCancelled);
+						employeeMailBody,mailTemplateConfiguration,comment,false,isCancelled);
 
 				// SEND NOTITIFCATION TO EMPLOYEE
 				leaveRequestWebUtil.sendNotificationToEmployee(subject, employee);
-				
-				
-				
+
 			}
 		} catch (Exception e) {
 			log.error(" RejectCancelLeaveRequestMVCActionCommand >>> Action >>> " + e.getMessage());
 			SessionErrors.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.SOME_ERROR_FOUND);
-
 		}
 		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 	}

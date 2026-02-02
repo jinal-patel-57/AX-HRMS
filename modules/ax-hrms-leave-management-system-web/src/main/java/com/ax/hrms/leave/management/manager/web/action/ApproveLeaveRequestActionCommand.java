@@ -9,6 +9,7 @@ import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.EmployeeEducation;
 import com.ax.hrms.model.LeaveRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
+import com.ax.hrms.service.CommentLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.LeaveRequestLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,6 +44,8 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
 
     @Reference
     EmployeeDetailsLocalService employeeDetailsLocalService;
+    @Reference
+    CommentLocalService commentLocalService;
 
 
     @Reference
@@ -68,6 +71,8 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             log.info(" leaveRequestId: " + leaveRequestId);
             long approvedStatusId = ParamUtil.getLong(actionRequest,
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.APPROVED_ID);
+            String comment = ParamUtil.getString(actionRequest, "comment");
+
             log.info(" leave request id : " + leaveRequestId);
             LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
@@ -88,7 +93,7 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             StringBuilder employeeMailBody = new StringBuilder(
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
             axHrmsManagerLeaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, leaveRequestId,
-                    employeeMailBody,mailTemplateConfiguration,true,false);
+                    employeeMailBody,mailTemplateConfiguration,comment,true,false);
 
             //SENDING MAIL TO THE TEAM
             String teamMailSubject = AxHrmsHrLeaveManagementSystemWebPortletConstants.YOUR_TEAM_MEMBER_IS_ON_LEAVE;
@@ -104,6 +109,7 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);
 
 
+            commentLocalService.addWorkflowComment(themeDisplay, 1l, "Approved", leaveRequestId, comment);
 
 
 

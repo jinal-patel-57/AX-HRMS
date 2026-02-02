@@ -302,7 +302,7 @@ public class AxHrmsHrLeaveRequestWebUtil {
 	}
 
 	public void sendMailtoEmployee(String fromName, String fromEmailAddress, Long leaveRequestId,
-			StringBuilder body,MailTemplateConfiguration mailTemplateConfiguration,boolean isApprove,boolean isCancelled) {
+			StringBuilder body,MailTemplateConfiguration mailTemplateConfiguration,String comment,boolean isApprove,boolean isCancelled) {
 		try {
             log.info("sending mail to the :: ---> "+fromEmailAddress);
 			LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
@@ -318,6 +318,7 @@ public class AxHrmsHrLeaveRequestWebUtil {
 
              mailContent =  mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName()+StringPool.SPACE+employee.getLastName());
              mailContent =  mailContent.replace("${BODY}", body);
+             mailContent =  mailContent.replace("${COMMENT}", comment);
 
               String subject =  isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() :isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
                
