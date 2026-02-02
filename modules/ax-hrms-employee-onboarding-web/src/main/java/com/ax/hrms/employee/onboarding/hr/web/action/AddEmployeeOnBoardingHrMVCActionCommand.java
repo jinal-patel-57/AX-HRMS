@@ -432,7 +432,14 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
                             .findByLeaveTypeMasterIdAndYearOfPolicyAndEligibleAfterMonths(
                                     ltm.getLeaveTypeMasterId(), currentYear, 0);
 
+            log.info("Leave type Master :- "+ ltm);
+
             log.info("Leave Policy Master :- " + lpm);
+
+            if (Validator.isNull(lpm)) {
+                continue;
+
+            }
 
             LeaveBalance lb = leaveBalanceLocalService.createLeaveBalance(
                     CounterLocalServiceUtil.increment(LeaveBalance.class.getName())
