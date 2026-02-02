@@ -19,6 +19,7 @@ import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveRequest;
+import com.ax.hrms.service.CommentLocalService;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -51,6 +52,10 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	LeaveRequestLocalService leaveRequestLocalService;
+	
+	@Reference
+	CommentLocalService commentLocalService;
+	
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
 
@@ -92,6 +97,7 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 		String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 		String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
 				PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		String comment = ParamUtil.getString(actionRequest, "comment");
 
 		try {
 			
@@ -112,7 +118,8 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 			leaveRequestLocalService.updateLeaveRequest(leaveRequest);
 
 			// SENDING MAIL TO EMPLOYEE 
-			String employeeMailSubject =notificationTemplateConfiguration.leaveApprovedNotificationToEmployee();
+			String employeeMail =notificationTemplateConfiguration.leaveApprovedNotificationToEmployee();
+			employeeMail = employeeMail.replace("${COMMENT}", comment);
 			StringBuilder employeeMailBody = new StringBuilder(
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
 			leaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, leaveRequestId,
@@ -127,8 +134,11 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 			leaveRequestWebUtil.sendMailtoTeam(fromName, fromEmailAddress, leaveRequestId, teamMailBody,mailTemplateConfiguration);
             leaveRequestWebUtil.sendNotificationToTeam("approve is done by hr.",leaveRequestId);
 			// SENDING NOTIFICATION TO EMPLOYEE			
-			leaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
+			leaveRequestWebUtil.sendNotificationToEmployee(employeeMail, employee);
 			SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);
+			
+			//Add comment code
+			commentLocalService.addWorkflowComment(themeDisplay, 1l, "Approved", leaveRequestId, comment);
 
 		} catch (Exception e) {
 			log.error("ApproveLeaveRequestMVCRenderActionCommand >>> Action >>> Error in this method !!!!! "

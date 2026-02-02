@@ -23,7 +23,7 @@
 
 <div class="card">
   <div class="card-header d-flex align-items-center justify-content-end">
-			<a class="btn btn-primary btn-sm " onclick="open_compensatory_form_modal()"">
+			<a class="btn btn-primary btn-sm " onclick="open_compensatory_form_modal()">
                 <liferay-ui:message key="request-compensation"/>
                 </a>
 </div>

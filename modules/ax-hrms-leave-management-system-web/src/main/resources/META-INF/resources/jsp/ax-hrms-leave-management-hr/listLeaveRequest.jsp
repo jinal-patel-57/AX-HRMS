@@ -50,6 +50,7 @@
                         <liferay-ui:search-container-column-text name="Action">
                             <portlet:actionURL name="/approveLeaveRequest" var="approveLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                                <portlet:param name="comment" value="COMMENT"/>
                                 <portlet:param name="approvedId" value="${approvedId}"/>
                             </portlet:actionURL>
 
@@ -78,6 +79,12 @@
                                             <i class="icon-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
+                                            <li>
+                                            	<button class="btn btn-success"
+										        	onclick="openActionModal('${approveLeaveRequestURL}', 'APPROVE')">
+										    			Approveee
+												</button>
+											</li>
                                             <li><a href="${approveLeaveRequestURL}"
                                                    class="dropdown-item"><i class="icon-ok"></i> <liferay-ui:message
                                                     key="approve"/></a>
@@ -148,3 +155,101 @@
         </div>
     </div>
 </div>
+
+<%-- <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog"
+     aria-labelledby="addCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCommentModalLabel"><liferay-ui:message
+                        key="add-comment-data"/>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="${addCommentURL}" id="addCommentForm" method="post">
+	            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="comment"><liferay-ui:message key="comment"/></label>
+                        <textarea id="comment" class="form-control"
+                                  name="<portlet:namespace />comment"></textarea>
+                        <label id="comment-error" class="error text-danger" for="comment"></label>
+                    </div>
+	            </div>
+	            <div class="modal-footer d-flex justify-content-end">
+	                <button type="button" class="btn btn-outline-danger btn-sm mr-1" data-dismiss="modal"><liferay-ui:message
+	                        key="close"/></button>
+	                <button type="button" class="btn btn-outline-success btn-sm"
+	                        onclick="submit_compensatory_form()"><liferay-ui:message key="submit"/></button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div> --%>
+
+<div class="modal fade" id="actionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Action</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    ×
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <textarea class="form-control"
+                          id="actionComment"
+                          placeholder="Enter comment"
+                          rows="4"></textarea>
+
+                <input type="hidden" id="requestId">
+                <input type="hidden" id="actionURL">
+                <input type="hidden" id="actionType">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Close
+                </button>
+
+                <button class="btn btn-primary"
+                        onclick="submitAction()">
+                    Submit
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+function openActionModal(actionURL, action) {
+
+	document.getElementById('actionURL').value = actionURL;
+    document.getElementById('actionComment').value = '';
+
+    document.getElementById('modalTitle').innerText =
+        action.charAt(0) + action.slice(1).toLowerCase() + " Request";
+
+    $('#actionModal').modal('show');
+}
+
+function submitAction() {
+
+	const comment = document.getElementById('actionComment').value.trim();
+    var actionURL = document.getElementById('actionURL').value.replace('COMMENT', comment);
+    console.log("actionURL -- ", actionURL);
+
+    if (!comment) {
+        alert('Comment is required');
+        return;
+    }
+    debugger;
+    window.location.href = actionURL;
+
+}
+</script>
