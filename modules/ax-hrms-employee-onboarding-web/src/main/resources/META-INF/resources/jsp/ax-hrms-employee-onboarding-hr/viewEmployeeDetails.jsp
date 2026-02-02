@@ -504,7 +504,6 @@
                                    </div>
                                </div>
                        </div>
-                       <h1>test</h1>
                        </c:if>
                    </div>
                </div>

@@ -597,11 +597,10 @@ function setConfigsForAddExperienceSection(config) {
               });
 
               $('[name="' + namespace + 'middleName"]').rules("add", {
-                  required: true,
                   lettersOnly: true,
                   maxlength: 50,
                   messages: {
-                      required: "Please enter middle name."
+                      
                   }
               });
 

@@ -70,7 +70,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="fileUpload1"><liferay-ui:message key='exp-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled accept="application/pdf"
+                        <input type="file" class="form-control" id="fileUpload1" disabled accept="application/pdf"
                                name="<portlet:namespace/>file1">
                     </div>
                     <div class="form-group">

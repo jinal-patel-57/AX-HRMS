@@ -363,7 +363,7 @@
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Middle Name -->
-                    <label class="" for="middleName"><liferay-ui:message key="middle-name"/><span class="text-danger">*</span></label>
+                    <label class="" for="middleName"><liferay-ui:message key="middle-name"/></label>
                     <input id="middleName" placeholder="<liferay-ui:message key='middle-name'/>"
                            class="form-control" type="text"
                            name="<portlet:namespace/>middleName"

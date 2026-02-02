@@ -53,7 +53,6 @@ var setFileInputValues;
                         lettersOnly: true,
                     },
                     [namespace + "middleName"]: {
-                        required: true,
                         maxlength: 50,
                         lettersOnly: true,
                     },
@@ -112,7 +111,6 @@ var setFileInputValues;
                             "Use only letters for Last Name!",
                     },
                     [namespace + "middleName"]: {
-                        required: "Please enter Middle Name",
                         maxlength: "Middle Name exceeding maximum length!",
                         lettersOnly:
                             "Use only letters for Middle Name!",
@@ -140,11 +138,11 @@ var setFileInputValues;
                     },
                     [namespace + "grossSalaryCTCPM"]: {
                         required: "Please Enter a valid Salary",
-                        numericality: "Plese enter a valid Salary"
+                        numericality: "Plese Enter a Valid Salary"
                     },
                     [namespace + "grossSalaryCTCPA"]: {
                         required: "Please Enter a valid Salary",
-                        numericality: "Plese enter a valid Salary"
+                        numericality: "Plese Enter a Valid Salary"
                     },
                     [namespace + "insuranceLink"]: {
                         linkUrlValidation: "Please enter a valid URL"
@@ -173,6 +171,8 @@ var setFileInputValues;
                         );
                     }
 
+					const today = new Date().toISOString().split("T")[0];
+					$("#joiningDate").attr("max", today);
 
               /* ================= EXPERIENCE TOGGLE ================= */
 
@@ -250,7 +250,10 @@ var setFileInputValues;
             $.validator.addMethod(
                 "numericality",
                 function (value, element) {
-                    return this.optional(element) || /^\d*\.?\d+$/.test(value);
+                    if (this.optional(element)) {
+			            return true;
+			        }
+			        return /^\d*\.?\d+$/.test(value) && parseFloat(value) > 0;
                 },
                 "Please Use Decimals."
             );
@@ -354,6 +357,9 @@ var setFileInputValues;
                     $('#insuranceLink').prop('disabled', false); // Enable insurance link input
                 }
             }
+            $('#offBoardBtn').on('click', function (event) {
+	            $('#offBoardBtn').prop('disabled', true);
+            });
 
             // Initial check on page load
             checkEmployeeType();

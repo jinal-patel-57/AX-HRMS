@@ -87,7 +87,7 @@
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="middleName"><liferay-ui:message
-								key="middle-name" /><span class="text-danger">*</span></label> <input
+								key="middle-name" /></label> <input
 							id="middleName"
 							placeholder="<liferay-ui:message key='middle-name'/>"
 							class="form-control" type="text"
