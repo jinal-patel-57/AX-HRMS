@@ -52,6 +52,28 @@ function attachFormValidationTriggers(formSelector) {
         window.location.href = rejectUrl;
     }
 
+     function setConfigsForAddressProofToggle(config) {
+            namespace = config.namespace;
+
+            let checkbox = $('#' + namespace + 'sameAsPermanent');
+            let addressProofSection = $('#addressProofSection');
+
+            function toggleAddressProof() {
+                if (checkbox.is(':checked')) {
+                    addressProofSection.hide();
+                } else {
+                    addressProofSection.show();
+                }
+            }
+
+            // Initial state
+            toggleAddressProof();
+
+            // Toggle on change
+            checkbox.on('change', function () {
+                toggleAddressProof();
+            });
+        }
 
 function setConfigsForAddExperienceSection(config) {
 

@@ -483,8 +483,24 @@ function setConfigsForAddExperienceSection(config) {
                             minlength: 10,
                             maxlength: 10,
                             validPAN: true
-                        }
+                        },
+                        [namespace + "kycDocumentType"]: {
+                           required: function () {
+                               // Required only if no document already uploaded
+                               return !isKycDocumentAlreadyUploaded;
+                           }
+                        },
+                       [namespace + "kycDocumentFile"]: {
+                           required: function () {
+                               var kycTypeSelected =
+                                   $("#" + namespace + "kycDocumentType").val();
 
+                               // Required only if:
+                               // 1. KYC type selected
+                               // 2. No document already uploaded
+                               return kycTypeSelected && !isKycDocumentAlreadyUploaded;
+                           }
+                       }
                 },
                 messages: {
                     [namespace + "personalEmail"]: {
@@ -540,14 +556,18 @@ function setConfigsForAddExperienceSection(config) {
                               validAadhaar: "Aadhaar must be in format 1234-1234-1234."
 
                         },
-
                         [namespace + "panNumber"]: {
                             required: "Please enter PAN number.",
                             minlength: "PAN number must be exactly 10 characters.",
                             maxlength: "PAN number must be exactly 10 characters.",
                             validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
+                        },
+                        [namespace + "kycDocumentFile"]: {
+                            required: "Please upload KYC document."
+                        },
+                        [namespace + "kycDocumentType"]: {
+                            required: "Please select KYC document type."
                         }
-
 
                 }
             });

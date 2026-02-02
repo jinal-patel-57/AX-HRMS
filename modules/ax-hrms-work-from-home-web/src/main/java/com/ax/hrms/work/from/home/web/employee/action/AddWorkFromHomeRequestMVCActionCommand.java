@@ -197,6 +197,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setStartDate(startDate);
             wfh.setEndDate(endDate);
             wfh.setRequestDate(new Date());
+            assert employeeDetails != null;
             wfh.setEmployeeId(employeeDetails.getEmployeeId());
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setReviewerId(employeeDetails.getEmployeeId());
