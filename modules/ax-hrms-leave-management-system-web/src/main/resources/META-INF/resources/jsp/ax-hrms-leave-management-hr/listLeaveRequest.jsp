@@ -89,15 +89,16 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                            	<button class="btn btn-success"
+                                            	<button class="dropdown-item"
 										        	onclick="openActionModal('${approveLeaveRequestURL}', 'APPROVE')">
-										    			Approveee
+										    			<i class="icon-ok"></i> <liferay-ui:message
+                                                    key="approve"/>
 												</button>
 											</li>
-                                            <li><a href="${approveLeaveRequestURL}"
+                                            <%-- <li><a href="${approveLeaveRequestURL}"
                                                    class="dropdown-item"><i class="icon-ok"></i> <liferay-ui:message
                                                     key="approve"/></a>
-                                            </li>
+                                            </li> --%>
                                             <li>
 
                                                 <a href="${rejectLeaveRequestURL}"
