@@ -44,16 +44,19 @@
 
                     <portlet:actionURL name="/leave/approve" var="approveURL">
                         <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                        <portlet:param name="comment" value="COMMENT"/>
                         <portlet:param name="approvedId" value="${approvedId}"/>
                     </portlet:actionURL>
 
                     <portlet:actionURL name="/rejectCancelLeaveRequest" var="rejectURL">
                         <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                        <portlet:param name="comment" value="COMMENT"/>
                         <portlet:param name="rejectedId" value="${rejectedId}"/>
                     </portlet:actionURL>
 
                     <portlet:actionURL name="/rejectCancelLeaveRequest" var="cancelURL">
                          <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                         <portlet:param name="comment" value="COMMENT"/>
                          <portlet:param name="cancelId" value="${cancelId}"/>
                     </portlet:actionURL>
 

@@ -104,7 +104,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 			long rejectedId = ParamUtil.getLong(actionRequest,
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED_ID);
             String comment = ParamUtil.getString(actionRequest, "comment");
-
+            log.info("comment is the :: "+comment);
             String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 			String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
 					PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);

@@ -65,11 +65,13 @@
 
                             <portlet:actionURL name="/rejectCancelLeaveRequest" var="rejectLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                                <portlet:param name="comment" value="COMMENT"/>
                                 <portlet:param name="rejectedId" value="${rejectedId}"/>
                             </portlet:actionURL>
 
                             <portlet:actionURL name="/rejectCancelLeaveRequest" var="cancelLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
+                                <portlet:param name="comment" value="COMMENT"/>
                                 <portlet:param name="cancelId" value="${cancelId}"/>
                             </portlet:actionURL>
 

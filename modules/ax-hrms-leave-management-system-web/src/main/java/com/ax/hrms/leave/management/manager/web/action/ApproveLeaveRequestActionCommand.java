@@ -72,7 +72,7 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             long approvedStatusId = ParamUtil.getLong(actionRequest,
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.APPROVED_ID);
             String comment = ParamUtil.getString(actionRequest, "comment");
-
+            log.info(" comment: " + comment);
             log.info(" leave request id : " + leaveRequestId);
             LeaveRequest leaveRequest = leaveRequestLocalService.findByleaveRequestId(leaveRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
