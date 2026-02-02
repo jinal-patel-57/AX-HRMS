@@ -8,12 +8,12 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
         localization = "content/Language",name="links-configuration")
 public interface LinksConfiguration {
 
-    @Meta.AD(deflt = "https://www.google.com/",
+    @Meta.AD(deflt = "/web/ax-hrms/",
             name = "Login URL",
             required = false)
     public String loginLink();
 
-    @Meta.AD(deflt = "https://www.google.com/",
+    @Meta.AD(deflt = "/web/ax-hrms/employee-on-boarding",
             name = "Employee Onboarding Employee URL",
             required = false)
     public String employeeOnBoardingLink();

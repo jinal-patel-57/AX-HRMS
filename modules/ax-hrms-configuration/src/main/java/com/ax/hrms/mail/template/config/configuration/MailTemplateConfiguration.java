@@ -8,12 +8,61 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
         localization = "content/Language", name = "mail-template-configuration")
 public interface MailTemplateConfiguration {
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD( deflt = "Welcome to the Team",
             name = "Permanent Employee OnBoarding Mail (SUBJECT)",
             required = false)
     public String mailOnBoardingPermanentAndTemporaryEmployeesSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html>" +
+                            "<html>" +
+                            "<head>" +
+                            "    <meta charset=\"UTF-8\">" +
+                            "    <title>Onboarding Details</title>" +
+                            "</head>" +
+                            "<body style=\"font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;\">" +
+                            "    <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" " +
+                            "           style=\"max-width: 600px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 8px;\">" +
+                            "        <tr>" +
+                            "            <td>" +
+                            "                <h2 style=\"color: #333333;\">Dear Employee,</h2>" +
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    Welcome to our organization! Your onboarding has been successfully initiated." +
+                            "                </p>" +
+
+                            "                <h3 style=\"color: #333333;\">Your Login Details:</h3>" +
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    <strong>Email:</strong> ${EMPLOYEE_MAIL}<br>" +
+                            "                    <strong>Password:</strong> ${EMPLOYEE_PASSWORD}" +
+                            "                </p>" +
+
+                            "                <h3 style=\"color: #333333;\">Important Links:</h3>" +
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    <strong>Login:</strong> " +
+                            "                    <a href=\"${LOGIN_LINK}\" style=\"background-color: #0066cc; color: #ffffff; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-size: 14px;\">Login Here</a>" +
+                            "                </p>" +
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    <strong>Complete Onboarding:</strong> " +
+                            "                    <a href=\"${ONBOARDING_LINK}\" style=\"background-color: #0066cc; color: #ffffff; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-size: 14px;\">Complete Onboarding</a>" +
+                            "                </p>" +
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    <strong>Insurance Details:</strong> " +
+                            "                    <a href=\"${INSURANCE_LINK}\" style=\"background-color: #0066cc; color: #ffffff; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-size: 14px;\">View Insurance</a>" +
+                            "                </p>" +
+
+                            "                <p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "                    If you have any questions, feel free to reach out to the HR team." +
+                            "                </p>" +
+
+                            "                <p style=\"margin-top: 30px; color: #333333; font-size: 14px;\">" +
+                            "                    Regards,<br><strong>HR Team</strong>" +
+                            "                </p>" +
+                            "            </td>" +
+                            "        </tr>" +
+                            "    </table>" +
+                            "</body>" +
+                            "</html>",
             name = "Permanent Employee OnBoarding Mail (BODY)",
             required = false)
     public String mailOnBoardingPermanentAndTemporaryEmployeesBody();
@@ -116,48 +165,93 @@ public interface MailTemplateConfiguration {
 
     // Anniversary Web Portlet
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Wishes for Work Anniversary",
             name = "Anniversary Wish (SUBJECT)",
             required = false)
     public String mailAnniversaryWishSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
-//description = "${EMPLOYEE_NAME} ${SENDER_NAME} ",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html>" +
+                            "<html><head><meta charset=\"UTF-8\"><title>Email Template</title></head>" +
+                            "<body style=\"font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;\">" +
+                            "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" " +
+                            "style=\"max-width: 600px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 8px;\">" +
+                            "<tr><td>" +
+                            "<p style=\"color:#333;font-size:14px;\">Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                            "<p style=\"color:#555;font-size:14px;line-height:1.6;\">${WISH_BODY}</p>" +
+                            "<p style=\"margin-top:30px;color:#333;font-size:14px;\">Best Regards,<br><strong>${SENDER_NAME}</strong></p>" +
+                            "</td></tr></table></body></html>",
             name = "Anniversary Wish (BODY)",
             required = false)
     public String mailAnniversaryWishBody();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt = "Welcome to the Team",
             name = "Intern and Contractor OnBoarding Mail (SUBJECT)",
             required = false)
     public String mailOnBoardingInternAndContractorEmployeesSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Onboarding Details</title></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background-color:#f7f7f7;padding:20px;\">" +
+                            "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" " +
+                            "style=\"max-width:600px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<h2>Dear Employee,</h2>" +
+                            "<p>Welcome to our organization! Your onboarding has been successfully initiated.</p>" +
+                            "<h3>Your Login Details:</h3>" +
+                            "<p><strong>Email:</strong> ${EMPLOYEE_MAIL}<br><strong>Password:</strong> ${EMPLOYEE_PASSWORD}</p>" +
+                            "<p><strong>Login:</strong> <a href=\"${LOGIN_LINK}\">Login Here</a></p>" +
+                            "<p><strong>Complete Onboarding:</strong> <a href=\"${ONBOARDING_LINK}\">Complete Onboarding</a></p>" +
+                            "<p>Regards,<br><strong>HR Team</strong></p>" +
+                            "</td></tr></table></body></html>",
             name = "Intern and Contractor OnBoarding Mail (BODY)",
             required = false)
     public String mailOnBoardingInternAndContractorEmployeesBody();
 
     //
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt = "Request to Verify Onboarding Information",
             name = "Verify OnBoarding Details HR MAIL (SUBJECT)",
             required = false)
     public String mailHrForOnBoardingDetailsVerificationSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background:#f2f2f2;padding:20px;\">" +
+                            "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<p>Dear HR,</p>" +
+                            "<p>Please verify the onboarding details for <strong>${EMPLOYEE_NAME}</strong>.</p>" +
+                            "<a href=\"${VERIFICATION_LINK}\">Verify Onboarding Details</a>" +
+                            "</td></tr></table></body></html>",
             name = "Verify OnBoarding Details HR MAIL  (BODY)",
             required = false)
     public String mailHrForOnBoardingDetailsVerificationBody();
 
     //
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt = "Action Required: Re-Upload Onboarding Details",
             name = "Re-Upload OnBoarding Details Employee MAIL  (SUBJECT)",
             required = false)
     public String reUploadOnboardingDetailsEmployeeMailSubject();
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background:#f2f2f2;padding:20px;\">" +
+                            "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                            "<p>${COMMENTS}</p>" +
+                            "<a href=\"${RE_UPLOAD_LINK}\">Re-upload Onboarding Details</a>" +
+                            "</td></tr></table></body></html>",
             name = "Re-Upload OnBoarding Details Employee MAIL  (BODY)",
             required = false)
     public String reUploadOnboardingDetailsEmployeeMailBody();
@@ -166,13 +260,19 @@ public interface MailTemplateConfiguration {
     //
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt = "Employee OnBoarding Details Verification",
             name = "Employee OnBoarding Details Successfully Verified Employee MAIL  (SUBJECT)",
             required = false)
     public String onboardingVerificationSuccessEmailSubject();
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body><p>Dear ${EMPLOYEE_NAME},</p>" +
+                            "<p>Your onboarding details have been successfully verified.</p>" +
+                            "<p>Regards,<br>HR Team</p></body></html>",
             name = "Employee OnBoarding Details Successfully Verified Employee MAIL  (BODY)",
             required = false)
     public String onboardingVerificationSuccessEmailBody();
@@ -180,12 +280,17 @@ public interface MailTemplateConfiguration {
 
     //
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Employee Off-Boarding Mail",
             name = "Employee Off-Boarding Mail (SUBJECT)",
             required = false)
     public String employeeOffBoardingMailSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt =
+            "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                    "<body><p>Dear ${EMPLOYEE_NAME},</p>" +
+                    "<p>${EMPLOYEE_DETAILS}</p>" +
+                    "<p>${FULL_AND_FINAL_DETAILS}</p>" +
+                    "<p>Regards,<br>HR Team</p></body></html>",
             name = "Employee Off-Boarding Mail (BODY)",
             required = false)
     public String employeeOffBoardingMailBody();
@@ -193,12 +298,12 @@ public interface MailTemplateConfiguration {
 
 //Birthday Portlet
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Happy Birthday",
             name = "Birthday Wish (SUBJECT)",
             required = false)
     public String mailBirthdayWishSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "${WISH_BODY}",
             //description = "${EMPLOYEE_NAME} ${SENDER_NAME} ",
             name = "Birthday Wish (BODY)",
             required = false)
@@ -206,12 +311,12 @@ public interface MailTemplateConfiguration {
 
 
     // New Joiner Portlet
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Congratulations and Best Wishes",
             name = "New Joinee Wish (SUBJECT)",
             required = false)
     public String mailNewJoinerWishSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "${WISH_BODY}",
             //description = "${EMPLOYEE_NAME} ${SENDER_NAME} ",
             name = "New Joinee Wish (BODY)",
             required = false)
@@ -271,24 +376,24 @@ public interface MailTemplateConfiguration {
 
     // Daily Scheduler
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Birthday Person",
             //description = "${TABLE} ",
             name = "Daily Scheduler Birthday (SUBJECT)",
             required = false)
     public String mailDailySchedulerBirthdaySubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Anniversary Person",
             //description = "${TABLE} ",
             name = "Daily Scheduler Anniversary (SUBJECT)",
             required = false)
     public String mailDailySchedulerAnniversarySubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "${TABLE}",
             name = "Daily Scheduler Birthday(BODY)",
             required = false)
     public String mailDailySchedulerBirthdayBody();
     
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "${TABLE}",
     		name = "Daily Scheduler Anniversary(BODY)",
     		required = false)
     public String mailDailySchedulerAnniversaryBody();
@@ -296,35 +401,58 @@ public interface MailTemplateConfiguration {
     
 
     // Leave Data for Employee
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Leave Request Has Been Approved",
             name = "Leave Approve Mail to  Employee (SUBJECT)",
             required = false)
     public String mailLeaveApproveEmployeeSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                            "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                            "<p>${BODY}</p>" +
+                            "</td></tr></table></body></html>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Leave Approve Mail to  Employee (BODY)",
             required = false)
     public String mailLeaveApproveEmployeeBody();
     
     
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Leave Request Has Been Rejected",
     		name = "Leave Reject Mail to  Employee (SUBJECT)",
     		required = false)
     public String mailLeaveRejectEmployeeSubject();
     
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                            "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                            "<p>${BODY}</p>" +
+                            "</td></tr></table></body></html>",
     		//description = "${EMPLOYEE_NAME} ${BODY} ",
     		name = "Leave Reject Mail to  Employee (BODY)",
     		required = false)
     public String mailLeaveRejectEmployeeBody();
     
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt = "Your Leave Request Has Been Cancelled",
     		name = "Leave Cancel Mail to  Employee (SUBJECT)",
     		required = false)
     public String mailLeaveCancelEmployeeSubject();
     
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt =
+            "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                    "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                    "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                    "<tr><td>" +
+                    "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                    "<p>${BODY}</p>" +
+                    "</td></tr></table></body></html>",
     		//description = "${EMPLOYEE_NAME} ${BODY} ",
     		name = "Leave Cancel Mail to  Employee (BODY)",
     		required = false)
@@ -334,12 +462,12 @@ public interface MailTemplateConfiguration {
     
 
     // Leave Data for Team
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Leave Management Team",
             name = "Leave Management Team(SUBJECT)",
             required = false)
     public String mailLeaveManagementTeamSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "${BODY}",
             //description = " ${BODY} ",
             name = "Leave Management Team(BODY)",
             required = false)
@@ -353,38 +481,60 @@ public interface MailTemplateConfiguration {
     public String mailLeaveRequestManagerSubject();
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt = "Your Compensatory Request Has Been Cancelled",
             name = "Compensatory Leave Request Cancel Mail to Employee (SUBJECT)",
             required = false)
     public String mailCompensatoryLeaveRequestCancelEmployeeSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(  deflt =
+            "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                    "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                    "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                    "<tr><td>" +
+                    "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                    "<p>${BODY}</p>" +
+                    "</td></tr></table></body></html>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Compensatory Leave Request Cancel Mail to Employee (BODY)",
             required = false)
     public String mailCompensatoryLeaveRequestCancelEmployeeBody();
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Compensatory Request Has Been Approved",
             name = "Compensatory Leave Request Approved Mail to Employee (SUBJECT)",
             required = false)
     public String mailCompensatoryLeaveRequestApprovedEmployeeSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt =
+            "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                    "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                    "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                    "<tr><td>" +
+                    "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                    "<p>${BODY}</p>" +
+                    "</td></tr></table></body></html>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Compensatory Leave Request Approved Mail to Employee (BODY)",
             required = false)
     public String mailCompensatoryLeaveRequestApprovedEmployeeBody();
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(    deflt = "Your Compensatory Request Has Been Rejected",
             name = "Compensatory Leave Request Rejected Mail to Employee (SUBJECT)",
             required = false)
     public String mailCompensatoryLeaveRequestRejectedEmployeeSubject();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head>" +
+                            "<body style=\"font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;\">" +
+                            "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
+                            "<tr><td>" +
+                            "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
+                            "<p>${BODY}</p>" +
+                            "</td></tr></table></body></html>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Compensatory Leave Request Rejected Mail to Employee (BODY)",
             required = false)
     public String mailCompensatoryLeaveRequestRejectedEmployeeBody();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD( deflt = "New Compensatory Request",
             name = "Compensatory Leave Request Manager And HR (SUBJECT)",
             required = false)
     public String mailCompensatoryLeaveRequestManagerAndHrSubject();
@@ -416,7 +566,30 @@ public interface MailTemplateConfiguration {
 
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(
+            deflt =
+                    "<!DOCTYPE html>" +
+                            "<html>" +
+                            "<head>" +
+                            "<meta charset=\"UTF-8\">" +
+                            "<title>Email Template</title>" +
+                            "</head>" +
+                            "<body style=\"font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;\">" +
+                            "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" " +
+                            "style=\"max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px;\">" +
+                            "<tr>" +
+                            "<td>" +
+                            "<p style=\"color: #333333; font-size: 15px;\">" +
+                            "Dear <strong>${EMPLOYEE_NAME}</strong>," +
+                            "</p>" +
+                            "<p style=\"color: #555555; font-size: 14px; line-height: 1.6;\">" +
+                            "${BODY}" +
+                            "</p>" +
+                            "</td>" +
+                            "</tr>" +
+                            "</table>" +
+                            "</body>" +
+                            "</html>",
             //description = "${EMPLOYEE_NAME} ${BODY} ",
             name = "Compensatory Leave Request Manager And HR (BODY)",
             required = false)

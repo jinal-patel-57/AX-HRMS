@@ -11,14 +11,14 @@ public interface NotificationTemplateConfiguration {
   
  // Anniversary Web Portlet
  
- @Meta.AD(deflt = "<h1>HELLO</h1>",
+ @Meta.AD(deflt = "${EMPLOYEE_CODE} - ${EMPLOYEE_NAME}, ${DESIGNATION_NAME} (${DEPARTMENT_NAME}) ${TITLE} on ${DATE} ${MONTH} ${YEAR}.",
        name="Anniversary Wish", //  ${EMPLOYEE_CODE} ${EMPLOYEE_NAME} ${DEPARTMENT_NAME} ${DESIGNATION_NAME} ${TITLE} ${MONTH} ${DATE} ${YEAR}
        required = false)
 public String notificationAnniversary();
  
  // Birthday Web Portlet
  
- @Meta.AD(deflt = "<h1>HELLO</h1>",
+ @Meta.AD(deflt = "${EMPLOYEE_CODE} ${EMPLOYEE_NAME} ${DEPARTMENT_NAME} ${DESIGNATION_NAME} ${TITLE} ${MONTH} ${DATE} ${YEAR}",
 		 name="Birthday Wish", //  ${EMPLOYEE_CODE} ${EMPLOYEE_NAME} ${DEPARTMENT_NAME} ${DESIGNATION_NAME} ${TITLE} ${MONTH} ${DATE} ${YEAR}
 		 required = false)
  public String notificationBirthday();
@@ -103,18 +103,18 @@ public String notificationAnniversary();
             required = false)
     public String appraisalReminderToHrNotification();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Leave Request Has Been Approved",
             name="Leave Approved Notification to Employee (Employee)",
             required = false)
     public String leaveApprovedNotificationToEmployee();
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Leave Request Has Been Rejected",
             name="Leave Rejected Notification to Employee (Employee)",
             required = false)
     public String leaveRejectedNotificationToEmployee();
 
 
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Leave Request Has Been Cancelled",
             name="Leave Cancelled Notification to Employee (Employee)",
             required = false)
     public String leaveCancelledNotificationToEmployee();
@@ -122,15 +122,15 @@ public String notificationAnniversary();
             name="Compensatory Leave Request Cancelled Notification to Employee (Employee)",
             required = false)
     public String compensatoryLeaveRequestCancelledNotificationToEmployee();
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Compensatory Request Has Been Approved",
             name="Compensatory Leave Request Approved Notification to Employee (Employee)",
             required = false)
     public String compensatoryLeaveRequestApprovedNotificationToEmployee();
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "Your Compensatory Request Has Been Rejected",
             name="Compensatory Leave Request Rejected Notification to Employee (Employee)",
             required = false)
     public String compensatoryLeaveRequestRejectedNotificationToEmployee();
-    @Meta.AD(deflt = "<h1>HELLO</h1>",
+    @Meta.AD(deflt = "New Compensatory Request Has Been Added.",
             name="Compensatory Leave Request Notification to Manager And HR (Employee)",
             required = false)
     public String compensatoryLeaveRequestNotificationToManagerAndHr();
