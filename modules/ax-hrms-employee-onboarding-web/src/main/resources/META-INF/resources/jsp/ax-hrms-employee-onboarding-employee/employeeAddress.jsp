@@ -246,28 +246,28 @@
                                     value="${permanentaddresss.pincode}"/>
                 </div>
             </div>
-            <div class="row mt-3" id="addressProofSection" >
-                <div class="col-md-6 col-sm-12 mb-3">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <liferay-ui:message key="address-proof-document"/>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="file"
-                               class="form-control"
-                               id="<portlet:namespace/>addressProofFile"
-                               name="<portlet:namespace/>addressProofFile" />
-                        <small class="form-text text-muted">
-                            Upload address proof (PDF / JPG / PNG)
-                        </small>
-                        <c:if test="${not empty addressProofPreviewURL}">
-                            <a href="${addressProofPreviewURL}" target="_blank">
-                                <liferay-ui:message key="view-address-proof"/>
-                            </a>
+                <div class="row mt-3" id="addressProofSection">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <liferay-ui:message key="address-proof-document"/>
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="file"
+                                   class="form-control"
+                                   id="<portlet:namespace/>addressProofFile"
+                                   name="<portlet:namespace/>addressProofFile" />
+                        <c:if test="${not presentPermanentSame}">
+                            <c:if test="${not empty addressProofPreviewURL}">
+                                <a href="${addressProofPreviewURL}" target="_blank">
+                                    <liferay-ui:message key="view-address-proof"/>
+                                </a>
+                            </c:if>
                         </c:if>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
         <input type="hidden" id="updateFlagAddress" name="<portlet:namespace/>updateFlagAddress"
                value="${not empty addressFlagStatus? addressFlagStatus : 'false' }"/>
