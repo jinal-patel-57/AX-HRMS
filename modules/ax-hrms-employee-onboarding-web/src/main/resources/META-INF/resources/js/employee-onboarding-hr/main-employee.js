@@ -174,15 +174,22 @@ function setConfigsForAddExperienceSection(config) {
 	    // -------------------------
 	    // Checkbox toggle
 	    // -------------------------
-	    sameAsPermanentCheckbox.addEventListener("change", function () {
-	        if (this.checked) {
-	            copyPermanentToPresent(permanentFields, presentFields);
-	            togglePresentFields(presentFields, true);
-	        } else {
-	            togglePresentFields(presentFields, false);
-	        }
-	    });
-	
+        sameAsPermanentCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                copyPermanentToPresent(permanentFields, presentFields);
+                togglePresentFields(presentFields, true);
+            } else {
+                togglePresentFields(presentFields, false);
+                // New logic to clear fields
+                clearPresentFields(presentFields);
+            }
+        });
+        function clearPresentFields(presentFields) {
+            Object.values(presentFields).forEach(field => {
+                field.value = "";
+            });
+        }
+
 	    // -------------------------
 	    // Listen to permanent field changes
 	    // -------------------------
@@ -948,7 +955,10 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         required: true,
                         digits: true,
                         validPincode: true
-                    }
+                    },
+                    [namespace + "addressProofFile"]: {
+                        required: true
+                    },
                 },
 
                 messages: {
@@ -1020,7 +1030,10 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         required: "Please enter the present pincode.",
                         digits: "Pincode should contain only digits.",
                         validPincode: "Pincode must be exactly 6 digits."
-                    }
+                    },
+                    [namespace + "addressProofFile"]: {
+                        required: "Please enter the Address Proof File."
+                    },
                 }
 
             });

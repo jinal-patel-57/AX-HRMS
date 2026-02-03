@@ -274,6 +274,7 @@ public class EmployeeOnBoardingUtil {
                         throw new RuntimeException(e);
                     }
                 }
+                renderRequest.setAttribute("presentPermanentSame",employeeAddress.getPresentPermanentSame());
             } catch (Exception e) {
                 log.error("Error occurred while fetching document URL :: " + e);
             }
