@@ -69,11 +69,9 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
     	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long employeeId = ParamUtil.getLong(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.EMPLOYEE_ID);
-        String offBoard = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.OFF_BOARD);
-
+        String offBoard = ParamUtil.getString(actionRequest, "action");
         EmployeeOffBoarding employeeOffBoarding = employeeOffBoardingLocalService.findByEmployeeId(employeeId);
         EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeOffBoarding.getEmployeeId());
-
         if (!areAllCheckBoxSaved(employeeOffBoarding)) {
             String kt = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.KT);
             String nda = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.NDA);

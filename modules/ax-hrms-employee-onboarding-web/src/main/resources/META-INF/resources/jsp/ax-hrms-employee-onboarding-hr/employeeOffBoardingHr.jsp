@@ -11,10 +11,11 @@
 <div class="card">
     <div class="card-header"><strong>Employee Off-Boarding HR</strong></div>
     <form action="${employeeOffBoardingHrURL}" method="post" enctype="multipart/form-data"
-      data-senna="off">
+      data-senna="off" id="offBoardFm">
 
         <div class="card-body">
             <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeId}">
+            <input type="hidden" name="<portlet:namespace/>action" id="action" value="">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -70,7 +71,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="fileUpload1"><liferay-ui:message key='exp-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" id="fileUpload1" disabled accept="application/pdf"
+                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled accept="application/pdf"
                                name="<portlet:namespace/>file1">
                     </div>
                     <div class="form-group">
@@ -80,7 +81,7 @@
                     </div>
                     <div class="form-group">
                         <label for="fileUpload3"><liferay-ui:message key='full-final-letter'/><span class="text-danger">*</span></label>
-                        <textarea class="form-control-file file-upload" id="fileUpload3" disabled rows="4"
+                        <textarea class="form-control file-upload" id="fileUpload3" disabled rows="4"
                                   name="<portlet:namespace/>fullAndFinal">${fullAndFinalLetterFileName}</textarea>
                     </div>
                 </div>

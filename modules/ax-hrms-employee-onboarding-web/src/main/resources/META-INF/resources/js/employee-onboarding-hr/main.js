@@ -359,6 +359,9 @@ var setFileInputValues;
             }
             $('#offBoardBtn').on('click', function (event) {
 	            $('#offBoardBtn').prop('disabled', true);
+	            $('#action').val('offBoard');
+	            //window.location.href = $('#offBoardFm').attr('action');
+	            $('#offBoardFm').submit();
             });
 
             // Initial check on page load
