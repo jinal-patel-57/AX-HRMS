@@ -108,7 +108,7 @@ public class WFHStatusUtil {
     }
 
 
-    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap, boolean isApprove, boolean isCancelled) {
+    public static void sendMailtoManager(String fromName, String fromEmailAddress, StringBuilder body, WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employeeDetails, MailTemplateConfiguration mailTemplateConfiguration, EmployeeDetailsLocalService employeeDetailsLocalService, AxHrmsCommonApi axHrmsCommonApi, Map<String, Object> serviceMap, boolean isApprove, boolean isCancelled, String userComment) {
         try {
             log.info("SENDING MAIL TO MANAGER");
             EmployeeDetails managerOrHr = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getEmployeeId());
@@ -127,7 +127,7 @@ public class WFHStatusUtil {
                     (LeaveCompensatoryStatusMasterLocalService) serviceMap.get("leaveStatusLocalService");
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
 
-            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
+            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService, userComment);
 //
             // SEND MAIL TO EMPLOYE
 
@@ -168,7 +168,7 @@ public class WFHStatusUtil {
 //        return body;
 //    }
 
-    public static void sendMailtoTeam(String fromName, String fromEmailAddress,List<String> teamEmailList,Map<String, Object> serviceMap,StringBuilder body,WorkFromHomeRequest workFromHomeRequest,AxHrmsCommonApi axHrmsCommonApi, MailTemplateConfiguration mailTemplateConfiguration)
+    public static void sendMailtoTeam(String fromName, String fromEmailAddress,List<String> teamEmailList,Map<String, Object> serviceMap,StringBuilder body,WorkFromHomeRequest workFromHomeRequest,AxHrmsCommonApi axHrmsCommonApi, MailTemplateConfiguration mailTemplateConfiguration,String userComment)
     {
         DepartmentMasterLocalService departmentMasterLocalService =
                 (DepartmentMasterLocalService) serviceMap.get("departmentMasterLocalService");
@@ -191,7 +191,7 @@ public class WFHStatusUtil {
         try {
             employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
             String subject=mailTemplateConfiguration.mailWFHApproveTeamSubject();
-            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
+            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService, userComment);
             String mailContent=mailTemplateConfiguration.mailWFHApproveTeamBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 
@@ -226,7 +226,7 @@ public class WFHStatusUtil {
     }
 
 
-    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body, LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService, DepartmentMasterLocalService departmentMasterLocalService, DesignationMasterLocalService designationMasterLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService ,EmployeeDesignationLocalService employeeDesignationLocalService) throws PortalException {
+    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body, LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService, DepartmentMasterLocalService departmentMasterLocalService, DesignationMasterLocalService designationMasterLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService ,EmployeeDesignationLocalService employeeDesignationLocalService, String userComment) throws PortalException {
         WFHStatusUtil wFHStatusUtil = new WFHStatusUtil();
         LeaveCompensatoryStatusMaster string = leaveStatusLocalService.findByLeaveCompensatoryStatusById(workFromHomeRequest.getStatus());
         log.info("string.getLeaveCompensatoryStatus() :; " + string.getLeaveCompensatoryStatus());
@@ -263,6 +263,15 @@ public class WFHStatusUtil {
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
 
                 .append("</tr>");
+
+        // Add comment/remarks section if available
+        if (userComment != null && !userComment.trim().isEmpty()) {
+            body.append("<tr>")
+                .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")  
+                .append("<strong>Remarks/Comments:</strong> ").append(userComment)
+                .append("</td>")
+                .append("</tr>");
+        }
 
         body.append(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_FOOTER);
 

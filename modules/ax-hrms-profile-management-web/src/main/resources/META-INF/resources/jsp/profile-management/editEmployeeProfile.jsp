@@ -250,7 +250,13 @@
                id="<portlet:namespace/>addressProofFile"
                name="<portlet:namespace/>addressProofFile"
                accept="application/pdf,image/*" />
-
+             <c:if test="${not presentPermanentSame}">
+                            <c:if test="${not empty addressProofPreviewURL}">
+                                <a href="${addressProofPreviewURL}" target="_blank">
+                                    <liferay-ui:message key="view-address-proof"/>
+                                </a>
+                            </c:if>
+             </c:if>
         <small class="form-text text-muted">
             Upload address proof (PDF / JPG / PNG)
         </small>

@@ -12,6 +12,7 @@ import com.ax.hrms.service.*;
 import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.ax.hrms.work.from.home.web.constants.WFHActionConstants;
 import com.ax.hrms.work.from.home.web.hr.util.WFHStatusUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -67,12 +68,20 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
     @Reference
     EmployeeDesignationLocalService employeeDesignationLocalService;
 
+    @Reference
+    private CommentLocalService commentLocalService;
+
     @Override
     public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         try {
             long wfhId = ParamUtil.getLong(actionRequest, "wfhId");
+
+            String userComment = ParamUtil.getString(actionRequest,"actionComment");
+
+
+            commentLocalService.addWorkflowComment(themeDisplay, 2L, WFHActionConstants.REJECT, wfhId, userComment);
 
             WorkFromHomeRequest wfh = workFromHomeRequestLocalService.fetchWorkFromHomeRequest(wfhId);
 
@@ -110,7 +119,7 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             wfh.setReviewerId(employeeDetails.getEmployeeId());
-            wfh.setEmployeeId(currentUserId);
+            wfh.setEmployeeId(employeeDetails.getEmployeeId());
             wfh.setModifiedBy(themeDisplay.getUserId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
 
@@ -121,11 +130,11 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
             if (manager != null && manager.getEmployeeId() != rejectEmployeeDetails.getEmployeeId()) {
 
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false, userComment);
                 WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, manager);
 
             }
-            WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, employeeDetails1, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
+            WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, wfh, employeeDetails1, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false, userComment);
 
 
             WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, employeeDetails1);
@@ -142,7 +151,7 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
                 StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false, userComment);
             }
 
 

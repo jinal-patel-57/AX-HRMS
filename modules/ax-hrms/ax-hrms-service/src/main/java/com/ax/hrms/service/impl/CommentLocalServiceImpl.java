@@ -12,6 +12,8 @@ import com.liferay.portal.aop.AopService;
 import java.util.Date;
 import java.util.List;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import org.osgi.service.component.annotations.Component;
 
@@ -62,6 +64,23 @@ public class CommentLocalServiceImpl extends CommentLocalServiceBaseImpl {
 
 		Date now = new Date();
 
+		if ("CANCEL".equalsIgnoreCase(action)) {
+
+			List<Comment> activeComments =
+					commentPersistence.findByTypeRequestIdAndStatus(
+							type, requestId, true);
+
+			for (Comment oldComment : activeComments) {
+
+				oldComment.setStatus(false);
+				oldComment.setModifiedDate(now);
+				oldComment.setModifiedBy(themeDisplay.getUserId());
+
+				commentPersistence.update(oldComment);
+			}
+
+		}
+
 		comment.setCompanyId(themeDisplay.getCompanyId());
 		comment.setGroupId(themeDisplay.getScopeGroupId());
 		comment.setCreatedBy(themeDisplay.getUserId());
@@ -78,5 +97,6 @@ public class CommentLocalServiceImpl extends CommentLocalServiceBaseImpl {
 		return commentPersistence.update(comment);
 	}
 
-
+	private static final Log _log =
+			LogFactoryUtil.getLog(CommentLocalServiceImpl.class);
 }

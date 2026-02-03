@@ -13,6 +13,7 @@ import com.ax.hrms.notification.template.config.configuration.NotificationTempla
 import com.ax.hrms.service.*;
 
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.ax.hrms.work.from.home.web.constants.WFHActionConstants;
 import com.ax.hrms.work.from.home.web.hr.util.WFHStatusUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -29,6 +30,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -71,6 +73,9 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
     EmployeeDesignationLocalService employeeDesignationLocalService;
     @Reference
     DesignationMasterLocalService designationMasterLocalService;
+    @Reference
+    private CommentLocalService commentLocalService;
+
     @Override
     public boolean processAction(ActionRequest request, ActionResponse response)
             throws PortletException {
@@ -80,6 +85,11 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
             long wfhId = Long.parseLong(request.getParameter("wfhId"));
 
             WorkFromHomeRequest wfh = workFromHomeRequestLocalService.fetchWorkFromHomeRequest(wfhId);
+            String userComment = ParamUtil.getString(request,"actionComment");
+
+
+            commentLocalService.addWorkflowComment(themeDisplay, 2L, WFHActionConstants.CANCEL, wfhId, userComment);
+
 
             if (wfh == null) {
                 SessionErrors.add(request, "wfhNotFound");
@@ -127,10 +137,10 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
             EmployeeDetails cancelEmployeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             String employeeCanceledNotification =notificationTemplateConfiguration.WFHRequestCanceledNotificationToEmployee();
 
-            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
+            WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,employeeMailBody,wfh,employeeDetails1,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true, userComment);
             if (manager != null && manager.getEmployeeId() != cancelEmployeeDetails.getEmployeeId()) {
 
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, true);
+                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, managerMailBody, wfh, manager, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, true, userComment);
                 WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, manager);
 
             }
@@ -150,7 +160,7 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
                 EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
                 log.info("Employee Id: " + HremployeeDetails.toString());
                 WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true);
+                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true, userComment);
             }
 
             SessionMessages.add(request, "wfhCancelled");

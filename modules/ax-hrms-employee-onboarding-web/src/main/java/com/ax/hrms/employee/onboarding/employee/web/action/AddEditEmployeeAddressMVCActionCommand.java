@@ -1,5 +1,7 @@
 package com.ax.hrms.employee.onboarding.employee.web.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.employee.onboarding.employee.web.util.EmployeeBasicDetailsUtil;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.model.Address;
@@ -12,18 +14,24 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.*;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import java.io.File;
 
 @Component(immediate = true, property = {
 		"javax.portlet.name=" + AxHrmsEmployeeOnboardingWebPortletKeys.AX_HRMS_EMPLOYEE_ONBOARDING_EMPLOYEE_WEB,
@@ -38,6 +46,12 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 
 	@Reference
 	EmployeeDetailsLocalService employeeDetailsLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
+
+	@Reference
+	private AxHrmsCommonApi axHrmsCommonApi;
 
 	private Log log = LogFactoryUtil.getLog(AddEditEmployeeAddressMVCActionCommand.class);
 
@@ -91,6 +105,8 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 
 	private Address createOrUpdateAddress(ActionRequest actionRequest, long addressId, boolean isPermanent, AddressLocalService addressLocalService, boolean isUpdate, boolean sameAsPermanent) throws PortalException {
 		Address address;
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		if (isUpdate) {
 			address = getAddressForUpdate(isPermanent, addressId, sameAsPermanent);
@@ -98,16 +114,82 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			address = addressLocalService.createAddress(CounterLocalServiceUtil.increment(Address.class.getName()));
 		}
 
-		setBothTypeAddress(actionRequest, isPermanent, address);
+		File addressProofFile =
+				uploadRequest.getFile(
+						AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE);
 
-		if (isUpdate) {
-			handleAddressUpdate(address, isPermanent, sameAsPermanent);
-		} else {
-			addNewAddress(address, isPermanent);
+		if (Validator.isNotNull(addressProofFile) && addressProofFile.length() > 0) {
+
+			String addressProofFileName =
+					System.currentTimeMillis() + "_" +
+							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE
+									.replaceAll("\\s+", "_");
+
+			long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+
+			EmployeeDetails employeeDetails =
+					employeeDetailsLocalService.getEmployeeDetails(
+							ParamUtil.getLong(actionRequest, "employeeId"));
+
+			EmployeeBasicDetailsUtil employeeBasicDetailsUtil =
+					new EmployeeBasicDetailsUtil();
+
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+
+			EmployeeAddress employeeAddress =
+					employeeAddressLocalService.findByEmployeeId(employeeId);
+
+			EmployeeDetails employeeUser =
+					employeeDetailsLocalService.getEmployeeDetails(employeeId);
+
+			User employeeLrUser =
+					userLocalService.getUser(employeeUser.getLrUserId());
+
+			Folder folder =
+					axHrmsCommonApi.createFolder(
+							AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT,
+							0,
+							themeDisplay,
+							serviceContext);
+
+			Folder parentFolder =
+					axHrmsCommonApi.createFolder(
+							String.format("%s%d",
+									employeeLrUser.getScreenName(),
+									employeeLrUser.getUserId()),
+							folder.getFolderId(),
+							themeDisplay,
+							serviceContext);
+
+			Folder addressProofFolder =
+					axHrmsCommonApi.createFolder(
+							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FOLDER,
+							parentFolder.getFolderId(),
+							themeDisplay,
+							serviceContext);
+
+			long addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
+					addressProofFile,
+					addressProofFileName,
+					actionRequest,
+					employeeDetails,
+					employeeAddress.getEmployeeAddressProofFileEntryId(),
+					"ADDRESS_PROOF",
+					addressProofFolder,
+					serviceContext
+			);
+			employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
+			employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+			setBothTypeAddress(actionRequest, isPermanent, address);
+
+			if (isUpdate) {
+				handleAddressUpdate(address, isPermanent, sameAsPermanent);
+			} else {
+				addNewAddress(address, isPermanent);
+			}
 		}
 		return address;
 	}
-
 	private Address setBothTypeAddress(ActionRequest actionRequest, boolean isPermanent,Address address){
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String line1 = ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_ADDRESS_LINE1 : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS_LINE1);

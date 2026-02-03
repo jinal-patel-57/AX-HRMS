@@ -3,14 +3,19 @@ package com.ax.hrms.profile.management.action;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebPortletKeys;
 import com.ax.hrms.profile.management.dto.EmployeeDto;
 import com.ax.hrms.profile.management.util.EmployeeProfileUtil;
 import com.ax.hrms.service.*;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.CountryLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -76,14 +81,46 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
             employeeProfileUtil.setEmployeeDetails(renderRequest, employeeId);
             employeeProfileUtil.setAddress(renderRequest, employeeId);
             employeeProfileUtil.setNominee(renderRequest, employeeId);
-            renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.COUNTRY_LIST,countryLocalService.getCountries(-1,-1));
+
+            renderRequest.setAttribute(
+                    AxHrmsProfileManagementWebConstants.COUNTRY_LIST,
+                    countryLocalService.getCountries(-1, -1)
+            );
+
+            long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
+
+            EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
+
+            long addressProofFileEntryId = employeeAddress.getEmployeeAddressProofFileEntryId();
+
+            String addressProofPreviewURL = null;
+
+            if (addressProofFileEntryId > 0) {
+
+                FileEntry fileEntry =
+                        DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
+
+                addressProofPreviewURL =
+                        DLUtil.getPreviewURL(
+                                fileEntry,
+                                fileEntry.getFileVersion(),
+                                themeDisplay,
+                                ""
+                        );
+
+                renderRequest.setAttribute(
+                        "addressProofPreviewURL",
+                        addressProofPreviewURL
+                );
+            }
+
         } catch (NoSuchEmployeeDetailsException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new PortletException(e);
         }
-
-
-
 
         return AxHrmsProfileManagementWebConstants.EDIT_EMPLOYEE_PROFILE_JSP_FILE;
     }
+
 }

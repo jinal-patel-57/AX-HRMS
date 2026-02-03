@@ -75,14 +75,46 @@
                         <ul class="dropdown-menu">
                             <c:choose>
                                 <c:when test="${wfh.status.toLowerCase() eq 'pending'}">
-                                    <li><a href="${approveURL}" class="dropdown-item">Approve</a></li>
-                                    <li><a href="${rejectURL}" class="dropdown-item">Reject</a></li>
-                                    <li><a href="${cancelURL}" class="dropdown-item">Cancel</a></li>
+                                     <li>
+                                         <a href="#"
+                                            class="dropdown-item wfh-action-btn"
+                                            data-title="Approve Work From Home"
+                                            data-url="${approveURL}">
+                                            Approve
+                                         </a>
+                                     </li>
+
+                                     <li>
+                                         <a href="#"
+                                            class="dropdown-item wfh-action-btn"
+                                            data-title="Reject Work From Home"
+                                            data-url="${rejectURL}">
+                                            Reject
+                                         </a>
+                                     </li>
+
+                                     <li>
+                                         <a href="#"
+                                            class="dropdown-item wfh-action-btn"
+                                            data-title="Cancel Work From Home"
+                                            data-url="${cancelURL}">
+                                            Cancel
+                                         </a>
+                                     </li>
+
                                 </c:when>
 
                                 <c:when test="${wfh.status.toLowerCase() eq 'approved'
                                     || wfh.status.toLowerCase() eq 'rejected'}">
-                                    <li><a href="${cancelURL}" class="dropdown-item">Cancel</a></li>
+                                    <li>
+                                         <a href="#"
+                                            class="dropdown-item wfh-action-btn"
+                                            data-title="Cancel Work From Home"
+                                            data-url="${cancelURL}">
+                                            Cancel
+                                         </a>
+                                    </li>
+
                                 </c:when>
                             </c:choose>
 
@@ -97,6 +129,35 @@
         </liferay-ui:search-container>
     </div>
 </div>
+
+<div class="modal" id="wfhActionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <form method="post" id="wfhActionForm">
+          <div class="modal-body">
+          <textarea class="form-control"
+                    name="<portlet:namespace/>actionComment"
+                    id="<portlet:namespace/>actionComment"
+                    placeholder="Enter comment"
+                    rows="4"></textarea>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+
 <script>
 $('.table-responsive').on('show.bs.dropdown', function () {
      $('.table-responsive').css( "overflow", "inherit" );
@@ -105,4 +166,39 @@ $('.table-responsive').on('show.bs.dropdown', function () {
 $('.table-responsive').on('hide.bs.dropdown', function () {
      $('.table-responsive').css( "overflow", "auto" );
 })
+
+$(document).on('click', '.wfh-action-btn', function (e) {
+    e.preventDefault();
+
+});
+
+</script>
+
+<script>
+$(function () {
+
+    const commentSelector = '#<portlet:namespace/>actionComment';
+
+    $(document).on('click', '.wfh-action-btn', function (e) {
+        e.preventDefault();
+
+        const actionUrl = $(this).data('url');
+        const title = $(this).data('title');
+
+        // Set form action
+        $('#wfhActionForm').attr('action', actionUrl);
+
+        // Set modal title
+        $('#wfhActionModal .modal-title').text(title);
+
+        // Clear textarea
+        $(commentSelector).val('');
+
+        // Show modal (Bootstrap way)
+        $('#wfhActionModal').show();
+    });
+
+});
+</script>
+
 </script>
