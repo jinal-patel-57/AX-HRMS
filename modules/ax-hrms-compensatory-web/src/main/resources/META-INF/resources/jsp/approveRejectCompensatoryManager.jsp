@@ -10,6 +10,11 @@
         .modal-open .modal:not(.show) {
             display: none !important;
         }
+        label.error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
     </style>
 
 </head>
@@ -78,16 +83,35 @@
                             <ul class="dropdown-menu">
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <!--<a class="dropdown-item"
                                        onclick="open_compensatory_form_modal(${compensatoryDataDto.compensatoryDataId},${ compensatoryDataDto.getRequestedHours() })"><i
                                             class="icon-check"></i> <liferay-ui:message
                                             key="approve"/>
-                                    </a></li>
+                                    </a>-->
+
+                                    <a class="dropdown-item"
+                                       onclick="openApproveModal(
+                                           ${compensatoryDataDto.compensatoryDataId},
+                                           ${compensatoryDataDto.getRequestedHours()}
+                                       )">
+                                        <i class="icon-check"></i>
+                                        <liferay-ui:message key="approve"/>
+                                    </a>
+
+                                 </li>
 
                                 <li>
-                                    <a href="${rejectCompensatoryDataURL }" class="dropdown-item "><i
+                                    <!--<a href="${rejectCompensatoryDataURL }" class="dropdown-item "><i
                                             class="icon-ban-circle"></i> <liferay-ui:message
-                                            key="reject"/></a>
+                                            key="reject"/></a>-->
+
+
+                                    <a class="dropdown-item"
+                                       onclick="openRejectModal(${compensatoryDataDto.compensatoryDataId})">
+                                        <i class="icon-ban-circle"></i>
+                                        <liferay-ui:message key="reject"/>
+                                    </a>
+
                                 </li>
 
                             </ul>
@@ -102,9 +126,16 @@
                             <ul class="dropdown-menu">
 
                                 <li>
-                                    <a href="${cancelCompensatoryDataURL }" class="dropdown-item "><i
+                                   <!-- <a href="${cancelCompensatoryDataURL }" class="dropdown-item "><i
                                             class="icon-ban-circle"></i> <liferay-ui:message
-                                            key="cancel"/></a>
+                                            key="cancel"/></a>-->
+
+                                   <a class="dropdown-item"
+                                      onclick="openCancelModal(${compensatoryDataDto.compensatoryDataId})">
+                                       <i class="icon-ban-circle"></i>
+                                       <liferay-ui:message key="cancel"/>
+                                   </a>
+
                                 </li>
 
                             </ul>
@@ -150,8 +181,24 @@
                                name="<portlet:namespace />approvedHours"/>
                         <label id="approvedHours-error" class="error text-danger" for="approvedHours"></label>
                     </div>
+                    <div class="form-group col-12">
+                        <label for="comment">
+                            <liferay-ui:message key="comment"/>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <textarea id="comment"
+                                  class="form-control"
+                                  rows="3"
+                                  name="<portlet:namespace />comment"></textarea>
+                    </div>
+
                     <input type="hidden" id="hiddenCompensatoryDataId"
                            name="<portlet:namespace />compensatoryDataId">
+
+                           <input type="hidden"
+                                  id="actionType"
+                                  name="<portlet:namespace />actionType">
+
             </div>
             <div class="modal-footer d-flex justify-content-end">
                 <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"><liferay-ui:message
@@ -171,4 +218,58 @@
         config.namespace = '<portlet:namespace />';
         axHrmsCompensatoryDataWebPortlet.setConfigs(config);
     });
+        function openApproveModal(id, requestedHours) {
+            $('#hiddenCompensatoryDataId').val(id);
+            $('#requestedHours').val(requestedHours);
+            $('#approvedHours').prop('disabled', false).closest('.form-group').show();
+            $('#requestedHours')
+                .prop('readonly', true)
+                .closest('.form-group')
+                .show();
+            $('#requestedHours').prop('disabled', false).closest('.form-group').show();
+            $('#actionType').val('APPROVE');
+            $('#comment').val('');
+
+            $('#approveCompensationModal').modal('show');
+        }
+
+        function openRejectModal(id) {
+            $('#hiddenCompensatoryDataId').val(id);
+
+            // Hide approved hours
+            $('#approvedHours').val('').prop('disabled', true).closest('.form-group').hide();
+            $('#requestedHours').val('').closest('.form-group').hide();
+
+            $('#actionType').val('REJECT');
+            $('#comment').val('');
+
+            $('#approveCompensationModal').modal('show');
+        }
+
+       function submit_compensatory_form() {
+            $('#approveCompensationForm').submit();
+        }
+
+       function resetModal() {
+           $('#requestedHours').val('').closest('.form-group').show();
+           $('#approvedHours').val('').prop('disabled', false).closest('.form-group').show();
+           $('#comment').val('');
+       }
+
+       function openCancelModal(id) {
+           resetModal();
+
+           $('#hiddenCompensatoryDataId').val(id);
+
+           // Hide hours fields
+           $('#requestedHours').closest('.form-group').hide();
+           $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+
+           $('#actionType').val('CANCEL');
+
+           // Optional: change modal title
+           $('#approveCompensationModalLabel').text('Cancel Compensation Request');
+
+           $('#approveCompensationModal').modal('show');
+       }
 </script>

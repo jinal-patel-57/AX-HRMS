@@ -42,9 +42,16 @@ var submit_compensatory_form;
                         positiveInteger: true,
                         lessThanOrEqualRequested: true
                     },
+                    [namespace + "comment"]: {
+                                required: true,
+                                maxCharThousand: true
+                            }
                 },
                 messages: {
-                  
+                    [namespace + "comment"]: {
+                        required: "Comment is required.",
+                        maxCharThousand: "Comment cannot exceed 1000 characters."
+                    }
                 },
                 errorPlacement: function (error, element) {
                     error.insertAfter(element);
