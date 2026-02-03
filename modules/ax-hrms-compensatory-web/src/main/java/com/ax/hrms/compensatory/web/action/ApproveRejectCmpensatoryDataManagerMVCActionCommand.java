@@ -65,6 +65,9 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
     EmployeeSalaryLocalService employeeSalaryLocalService;
 
     @Reference
+    CommentLocalService commentLocalService;
+
+    @Reference
     LeaveTypeMasterLocalService leaveTypeMasterLocalService;
 
     @Reference
@@ -118,7 +121,8 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-
+        String comment = ParamUtil.getString(actionRequest, "comment");
+        log.info("comment is the ::"+comment);
         if (approvedHours > 0 ) {
 
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
@@ -136,6 +140,8 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                 log.info("Exception Raised Due to :: "+portalException.getMessage());
             }
             log.info("Compensatory ModifiedBy : "+compensatoryData.getModifiedBy());
+            commentLocalService.addWorkflowComment(themeDisplay, 3l, "Approved", compensatoryDataId, comment);
+
             compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
 
             LeaveTypeMaster leaveTypeMaster = leaveTypeMasterLocalService.findByLeaveTypeName(AxHrmsCompensatoryDataConstants.COMPENSATORY_OFF);
@@ -187,7 +193,6 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
                         leaveBalance.getNoOfRemainingLeaves() + roundedDays
                 );
 
-
                 leaveBalanceLocalService.updateLeaveBalance(leaveBalance);
                 log.info("Compensatory Leave Balance :- "+ leaveBalance);
                 log.info("Compensatory leave added successfully..!!!");
@@ -200,13 +205,9 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             StringBuilder employeeMailBody = new StringBuilder(
                     AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_HEAD);
             axHrmsCompensatoryLeaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, compensatoryData.getCompensatoryDataId(),
-                    employeeMailBody,mailTemplateConfiguration,true,false);
+                    employeeMailBody,mailTemplateConfiguration,comment,true,false);
             axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
             SessionMessages.add(actionRequest,"compensation-request-approved");
-
-
-
-
 
         } else {
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
@@ -220,6 +221,9 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             }catch (PortalException portalException){
                 log.info("Exception Raised Due to :: "+portalException.getMessage());
             }
+
+            commentLocalService.addWorkflowComment(themeDisplay, 3l, "Rejected", compensatoryDataId, comment);
+
             compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
 
             // Rejected Notification and mail to the Employee
@@ -230,16 +234,10 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
             StringBuilder employeeMailBody = new StringBuilder(
                     AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_HEAD);
             axHrmsCompensatoryLeaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, compensatoryData.getCompensatoryDataId(),
-                    employeeMailBody,mailTemplateConfiguration,false,false);
+                    employeeMailBody,mailTemplateConfiguration,comment,false,false);
             axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToEmployee(employeeMailSubject, employee);
 
-
-
-
-
-
             SessionMessages.add(actionRequest,"compensation-request-rejected");
-
         }
 
 

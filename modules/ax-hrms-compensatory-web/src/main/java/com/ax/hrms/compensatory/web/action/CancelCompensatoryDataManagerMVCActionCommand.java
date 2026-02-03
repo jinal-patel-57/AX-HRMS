@@ -52,6 +52,9 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
     EmployeeSalaryLocalService employeeSalaryLocalService;
 
     @Reference
+    CommentLocalService commentLocalService;
+
+    @Reference
     LeaveTypeMasterLocalService leaveTypeMasterLocalService;
 
     @Reference
@@ -100,6 +103,8 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+        String comment = ParamUtil.getString(actionRequest, "comment");
+        log.info("comment is the ::"+comment);
         CompensatoryData compensatoryData = null;
         long approvedStatusId = 0;
         long cancelledStatusId = 0;
@@ -168,6 +173,8 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
             if (cancelledStatusId > 0) {
                 compensatoryData.setLeaveCompensatoryStatusMasterId(cancelledStatusId);
                 compensatoryData.setModifiedBy(themeDisplay.getUserId());
+                commentLocalService.addWorkflowComment(themeDisplay, 3l, "Cancel", compensatoryDataId, comment);
+
                 compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
                 log.info("Compensatory request cancelled successfully");
             }
@@ -194,7 +201,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
                 fromEmailAddress,
                 compensatoryData.getCompensatoryDataId(),
                 mailBody,
-                mailTemplateConfiguration,
+                mailTemplateConfiguration,comment,
                 false,
                 true);
         EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getEmployeeId());
@@ -216,6 +223,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
                 compensatoryData.getModifiedBy(),
                 approverMailBody,
                 mailTemplateConfiguration,
+                comment,
                 false,
                 true);
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));

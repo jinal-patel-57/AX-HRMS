@@ -76,7 +76,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
     private static final Log log = LogFactoryUtil.getLog(AxHrmsCompensatoryLeaveRequestWebUtil.class);
 
     public void sendMailtoEmployee(String fromName, String fromEmailAddress, Long compensatoryRequestId,
-                                   StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, boolean isApprove, boolean isCancelled) {
+                                   StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration,String comment, boolean isApprove, boolean isCancelled) {
         try {
             CompensatoryData compensatoryRequest = CompensatoryDataLocalServiceUtil.getCompensatoryData(compensatoryRequestId);
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryRequest.getEmployeeId());
@@ -91,6 +91,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             mailContent = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeBody() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT}", comment);
 
                  subject = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeSubject() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeSubject();
 
@@ -103,7 +104,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
     }
 
     public void sendMailtoApprovePerson(String fromName, String fromEmailAddress, Long compensatoryRequestId, Long approverId,
-                                   StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration, boolean isApprove, boolean isCancelled) {
+                                   StringBuilder body, MailTemplateConfiguration mailTemplateConfiguration,String comment, boolean isApprove, boolean isCancelled) {
         try {
             EmployeeDetails approver = employeeDetailsLocalService.findByLrUserId(approverId);
             CompensatoryData compensatoryRequest = CompensatoryDataLocalServiceUtil.getCompensatoryData(compensatoryRequestId);
@@ -119,6 +120,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             mailContent = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT}", comment);
             mailContent=mailContent.replace("${APPROVER_NAME}", approver.getFirstName() + StringPool.SPACE + approver.getLastName());
             subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverSubject();
             axHrmsCommonApi.sendMail(approver.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
