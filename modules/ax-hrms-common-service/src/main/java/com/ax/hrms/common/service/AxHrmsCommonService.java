@@ -319,17 +319,54 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
     }
 
 
+//    @Override
+//    public List<User> fetchRolePersonList(long companyId, String roleName, int start, int end) {
+//        Role hrRole = null;
+//        try {
+//            log.info("fetchRolePersonList");
+//            hrRole = roleLocalService.getRole(companyId, roleName);
+//            log.info("fetchRolePersonList with hrRole "+hrRole.toString());
+//        } catch (PortalException e) {
+//            log.error("CANNOT FETCH YOUR ROLE PERSON");
+//        }
+//        List<User> lrHrAdminUsers = userLocalService.getRoleUsers(hrRole.getRoleId(), start, end);
+//        log.info("lrHrAdminUsers :: "+lrHrAdminUsers);
+//        return lrHrAdminUsers;
+//    }
+
     @Override
-    public List<User> fetchRolePersonList(long companyId, String roleName, int start, int end) {
-        Role hrRole = null;
+    public List<User> fetchRolePersonList(
+            long companyId, String roleName, int start, int end) {
+
+        List<User> users = new ArrayList<>();
+
         try {
-            hrRole = roleLocalService.getRole(companyId, roleName);
+            log.info("fetchRolePersonList");
+
+            Role role = roleLocalService.getRole(companyId, roleName);
+            log.info("Role found: " + role.getName());
+
+            // Get userIds instead of Users directly
+            long[] userIds = userLocalService.getRoleUserIds(role.getRoleId());
+
+            for (long userId : userIds) {
+                try {
+                    User user = userLocalService.fetchUser(userId); // SAFE
+                    if (user != null && !user.isDefaultUser()) {
+                        users.add(user);
+                    }
+                } catch (Exception e) {
+                    log.error("Invalid user mapping for userId: " + userId, e);
+                }
+            }
+
         } catch (PortalException e) {
-            log.error("CANNOT FETCH YOUR ROLE PERSON");
+            log.error("Unable to fetch role: " + roleName, e);
         }
-        List<User> lrHrAdminUsers = userLocalService.getRoleUsers(hrRole.getRoleId(), start, end);
-        return lrHrAdminUsers;
+        return users;
     }
+
+
 
     @Override
     public boolean processAddresses(ActionRequest actionRequest, boolean sameAsPermanent, ThemeDisplay themeDisplay, AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService, EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate) {
