@@ -43,6 +43,25 @@ function attachFormValidationTriggers(formSelector) {
     );
 }
 
+function applyGenericDateRestriction(element) {
+    if (!element) return;
+    
+    const today = new Date().toISOString().split('T')[0];
+    element.setAttribute('min', '1900-01-01');
+    element.setAttribute('max', today);
+
+    element.addEventListener('input', function () {
+        const val = this.value; // Expected format: yyyy-mm-dd
+        if (val) {
+            const parts = val.split('-');
+            if (parts[0] && parts[0].length > 4) {
+                parts[0] = parts[0].substring(0, 4);
+                this.value = parts.join('-');
+            }
+        }
+    });
+}
+
 
 
 
@@ -358,6 +377,16 @@ function setConfigsForAddExperienceSection(config) {
             return age >= 18 && age <= 60;
         }, "Age must be between 18 and 60 years.");
 
+         // Generic date range validation (1900 to today)
+        $.validator.addMethod("pastDate1900", function (value, element) {
+            if (this.optional(element)) return true;
+            const date = new Date(value);
+            const minDate = new Date("1900-01-01");
+            const today = new Date();
+            today.setHours(23, 59, 59, 999); 
+            return date >= minDate && date <= today;
+        }, "Please enter a date between 01-01-1900 and today.");
+
         /* ================= Aadhaar & PAN FILE VALIDATION ================= */
 
       $.validator.addMethod(
@@ -435,7 +464,8 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "dateOfBirth"]: {
                         required: true,
                         date: true,
-                        ageRange: true
+                        ageRange: true,
+                        pastDate1900: true
                     },
                     [namespace + "mobileNo"]: {
                         required: true,
@@ -457,7 +487,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
                         },
-                        date: true
+                        date: true,
+                        pastDate1900: true
                     },
                     [namespace + "employeeProfilePicture"]: {
                         profilePicRequired: true,
@@ -579,6 +610,22 @@ function setConfigsForAddExperienceSection(config) {
                 }
             });
             /* ===== HR ONLY FIELD RULES + MESSAGES ===== */
+
+            // Integrate generic date restriction for DOB and Joining Date
+            const dobInput = document.getElementById(namespace + "dateOfBirth");
+            if (dobInput) {
+                applyGenericDateRestriction(dobInput);
+            }
+            const joiningDateInput = document.getElementById(namespace + "joiningDate");
+            if (joiningDateInput) {
+                applyGenericDateRestriction(joiningDateInput);
+            }
+
+            const marriageDateInput = document.getElementById(namespace + "marriageDate");
+            if (marriageDateInput) {
+                applyGenericDateRestriction(marriageDateInput);
+            }
+
           if (typeof isHrStatus !== "undefined" && isHrStatus === true) {
 
               $('[name="' + namespace + 'employeeCode"]').rules("add", {
@@ -637,6 +684,7 @@ function setConfigsForAddExperienceSection(config) {
               $('[name="' + namespace + 'joiningDate"]').rules("add", {
                   required: true,
                   date: true,
+                  pastDate1900: true,
                   messages: {
                       required: "Please select joining date."
                   }
@@ -1208,8 +1256,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                    rules[startDateKey] = {
                          required: true,
                          date: true,
-                         notFutureDate: true,
-                         validFourDigitYear: true
+                         pastDate1900: true
                      };
 
                  const startSelector = `[name="${startDateKey}"]`;
@@ -1217,8 +1264,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                  rules[endDateKey] = {
                      required: true,
                      date: true,
-                     notFutureDate: true,
-                     validFourDigitYear: true,
+                     pastDate1900: true,
                      endAfterStart: startSelector
                  };
 
@@ -1514,6 +1560,10 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
             // validation trigger
             attachFormValidationTriggers("#educationStepperForm");
 
+            document.querySelectorAll('#educationStepperForm input[type="date"]').forEach(input => {
+                applyGenericDateRestriction(input);
+            });
+
 //            $(document).on('change', 'input[type="date"]', function () {
 //                $(this).valid();
 //            });
@@ -1645,16 +1695,14 @@ function setConfigsForExperienceValidation(config) {
                     rules[joining] = {
                         required: true,
                         date: true,
-                        notFutureDate: true,
-                        validYearLength: true
+                        pastDate1900: true
                     };
 
                     rules[relieving] = {
                         required: true,
                         date: true,
                         afterJoiningDate: joining,
-                        notFutureDate: true,
-                        validYearLength: true
+                        pastDate1900: true
                     };
                     rules[expCertKey] = {
                         fileRequiredIfNoExisting: true
@@ -2233,8 +2281,7 @@ function setConfigsForExperienceValidation(config) {
                       }
                   },
                   date: true,
-                  notFutureDate: true,
-                  validYearLength: true
+                  pastDate1900: true
               }
 
 
@@ -2386,6 +2433,11 @@ function setConfigsForExperienceValidation(config) {
                 }
             });
         });
+        const nomineeDobInput = document.getElementById(namespace + "nomineeDob");
+        if (nomineeDobInput) {
+            applyGenericDateRestriction(nomineeDobInput);
+        }
+
         AxHrmsEmployeeOnboardingEmployeeWebPortlet.setConfigsForNomineeValidation = setConfigsForNomineeValidation;
     }
 

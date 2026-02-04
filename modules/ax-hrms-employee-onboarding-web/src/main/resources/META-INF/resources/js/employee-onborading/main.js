@@ -43,6 +43,25 @@ function attachFormValidationTriggers(formSelector) {
     );
 }
 
+function applyGenericDateRestriction(element) {
+    if (!element) return;
+    
+    const today = new Date().toISOString().split('T')[0];
+    element.setAttribute('min', '1900-01-01');
+    element.setAttribute('max', today);
+
+    element.addEventListener('input', function () {
+        const val = this.value; // Expected format: yyyy-mm-dd
+        if (val) {
+            const parts = val.split('-');
+            if (parts[0] && parts[0].length > 4) {
+                parts[0] = parts[0].substring(0, 4);
+                this.value = parts.join('-');
+            }
+        }
+    });
+}
+
 
     function setConfigsForRejectUrl(config) {
         namespace = config.namespace;
@@ -300,6 +319,16 @@ function setConfigsForAddExperienceSection(config) {
                     return age >= 18 && age <= 60;
                 }, "Age must be between 18 and 60 years.");
 
+                 // Generic date range validation (1900 to today)
+                $.validator.addMethod("pastDate1900", function (value, element) {
+                    if (this.optional(element)) return true;
+                    const date = new Date(value);
+                    const minDate = new Date("1900-01-01");
+                    const today = new Date();
+                    today.setHours(23, 59, 59, 999); 
+                    return date >= minDate && date <= today;
+                }, "Please enter a date between 01-01-1900 and today.");
+
                  /* ================= Aadhaar & PAN FILE VALIDATION ================= */
 
                  $.validator.addMethod(
@@ -376,7 +405,8 @@ function setConfigsForAddExperienceSection(config) {
                     [namespace + "dateOfBirth"]: {
                        required: true,
                        date: true,
-                       ageRange: true
+                       ageRange: true,
+                       pastDate1900: true
                    },
                     [namespace + "mobileNo"]: {
                         required: true,
@@ -410,7 +440,8 @@ function setConfigsForAddExperienceSection(config) {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
                         },
-                        date: true
+                        date: true,
+                        pastDate1900: true
                     },
                     [namespace + "spouseName"]: {
                         required: function () {
@@ -507,6 +538,18 @@ function setConfigsForAddExperienceSection(config) {
 
                 }
             });
+
+            // Integrate generic date restriction for DOB
+            const dobInput = document.getElementById(namespace + "dateOfBirth");
+            if (dobInput) {
+                applyGenericDateRestriction(dobInput);
+            }
+
+            const marriageDateInput = document.getElementById(namespace + "marriageDate");
+            if (marriageDateInput) {
+                applyGenericDateRestriction(marriageDateInput);
+            }
+
             $.validator.addMethod("validMobile10", function (value) {
 				return /^\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");
@@ -994,16 +1037,14 @@ function setConfigsForAddExperienceSection(config) {
                   rules[startDateName] = {
                       required: true,
                       date: true,
-                      notFutureDate: true,
-                      validFourDigitYear: true
+                      pastDate1900: true
                   };
 
                   rules[endDateName] = {
                       required: true,
                       date: true,
-                      notFutureDate: true,
-                      endAfterStart: startSelector,
-                      validFourDigitYear: true
+                      pastDate1900: true,
+                      endAfterStart: startSelector
                   };
 
 
@@ -1064,6 +1105,10 @@ function setConfigsForAddExperienceSection(config) {
                   },
                   rules: rules,
                   messages: messages,
+              });
+
+              document.querySelectorAll('#educationStepperForm input[type="date"]').forEach(input => {
+                  applyGenericDateRestriction(input);
               });
               
               $('.delete-section').on('click', function (event) {
@@ -1441,16 +1486,14 @@ function setConfigsForExperienceValidation(config) {
                    rules[joining] = {
                        required: true,
                        date: true,
-                       notFutureDate: true,
-                       validYearLength: true
+                       pastDate1900: true
                    };
 
                    rules[relieving] = {
                        required: true,
                        date: true,
                        afterJoiningDate: joining,
-                       notFutureDate: true,
-                       validYearLength: true
+                       pastDate1900: true
                    };
                    rules[expCertKey] = {
                        fileRequiredIfNoExisting: true
@@ -1486,6 +1529,10 @@ function setConfigsForExperienceValidation(config) {
                 },
                 rules: rules,
                 messages: messages
+            });
+
+            document.querySelectorAll('#experienceStepperForm input[type="date"]').forEach(input => {
+                applyGenericDateRestriction(input);
             });
         }
 //       $(document).on(
@@ -2035,8 +2082,7 @@ function setConfigsForExperienceValidation(config) {
                                   }
                               },
                               date: true,
-                              notFutureDate: true,
-                              validYearLength: true
+                              pastDate1900: true
                           }
 
 
@@ -2122,6 +2168,11 @@ function setConfigsForExperienceValidation(config) {
 
         // validation trigger
         attachFormValidationTriggers("#nomineeStepperForm");
+
+        const nomineeDobInput = document.getElementById(namespace + "nomineeDob");
+        if (nomineeDobInput) {
+            applyGenericDateRestriction(nomineeDobInput);
+        }
 
         $(document).on(
             "input",
