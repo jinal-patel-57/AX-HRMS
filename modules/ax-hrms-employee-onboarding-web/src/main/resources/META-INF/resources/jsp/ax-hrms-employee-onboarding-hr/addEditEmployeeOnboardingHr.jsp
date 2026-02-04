@@ -74,6 +74,18 @@
 							id="firstName-error" class="error text-danger" for="firstName"></label>
 					</div>
 				</div>
+
+				<div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label class="" for="middleName"><liferay-ui:message
+                                key="middle-name" /></label> <input
+                            id="middleName"
+                            placeholder="<liferay-ui:message key='middle-name'/>"
+                            class="form-control" type="text"
+                            name="<portlet:namespace/>middleName" /> <label
+                            id="middleName-error" class="error text-danger" for="middleName"></label>
+                    </div>
+                </div>
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="lastName"><liferay-ui:message
@@ -84,17 +96,7 @@
 							class="error text-danger" for="lastName"></label>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-12">
-					<div class="form-group">
-						<label class="" for="middleName"><liferay-ui:message
-								key="middle-name" /></label> <input
-							id="middleName"
-							placeholder="<liferay-ui:message key='middle-name'/>"
-							class="form-control" type="text"
-							name="<portlet:namespace/>middleName" /> <label
-							id="middleName-error" class="error text-danger" for="middleName"></label>
-					</div>
-				</div>
+
 
 
 				<div class="col-md-4 col-sm-12">

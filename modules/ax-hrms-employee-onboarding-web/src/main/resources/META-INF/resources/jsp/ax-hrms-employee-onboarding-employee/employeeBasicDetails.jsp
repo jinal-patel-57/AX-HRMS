@@ -74,7 +74,7 @@
                 </label>
                 <input type="text" class="form-control"
                        id="<portlet:namespace />aadharNumber"
-                       placeholder="123456789123"
+                       placeholder="1234-5678-9123"
                        name="<portlet:namespace />aadharNumber"
                        value="${employeeDetail.aadhaarCardNumber}" maxlength="14"/>
             </div>
@@ -149,7 +149,7 @@
             <!-- Aadhaar Card -->
             <div class="col-md-4 col-sm-12 mb-3">
                 <label class="form-label">
-                    Aadhaar Card <span class="text-danger">*</span>
+                    Aadhaar Card<span class="text-danger">*</span>
                 </label>
 
                 <input type="file"
@@ -194,7 +194,7 @@
             <!-- PAN Card -->
            <div class="col-md-4 col-sm-12 mb-3">
                <label class="form-label">
-                   PAN Card <span class="text-danger">*</span>
+                   PAN Card<span class="text-danger">*</span>
                </label>
 
                <input type="file"
@@ -273,8 +273,7 @@
             <div class="col-md-4 col-sm-12 mb-3">
                 <!-- KYC Document Type -->
                 <label class="form-label">
-                    <liferay-ui:message key="kyc-document-type"/>
-                            <span class="text-danger">*</span>
+                    <liferay-ui:message key="kyc-document-type"/><span class="text-danger">*</span>
                 </label>
 
                 <select class="form-control"
@@ -307,8 +306,7 @@
             <div class="col-md-4 col-sm-12 mb-3" id="kycDocumentUploadSection">
 
                 <label class="form-label">
-                    <liferay-ui:message key="upload-kyc-document"/>
-                    <span class="text-danger">*</span>
+                    <liferay-ui:message key="upload-kyc-document"/><span class="text-danger">*</span>
                 </label>
 
                 <input type="file"
@@ -350,6 +348,15 @@
                            value='${employeeDetail.firstName}'/>
                     <label id="firstName-error" class="error text-danger" for="firstName"></label>
                 </div>
+                 <div class="col-md-4 col-sm-12 mb-3">
+                    <!-- Middle Name -->
+                    <label class="" for="middleName"><liferay-ui:message key="middle-name"/></label>
+                    <input id="middleName" placeholder="<liferay-ui:message key='middle-name'/>"
+                           class="form-control" type="text"
+                           name="<portlet:namespace/>middleName"
+                           value="${employeeUser.middleName}"/>
+                    <label id="middleName-error" class="error text-danger" for="middleName"></label>
+                </div>
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Last Name -->
@@ -361,15 +368,7 @@
                     <label id="lastName-error" class="error text-danger" for="lastName"></label>
                 </div>
 
-                <div class="col-md-4 col-sm-12 mb-3">
-                    <!-- Middle Name -->
-                    <label class="" for="middleName"><liferay-ui:message key="middle-name"/></label>
-                    <input id="middleName" placeholder="<liferay-ui:message key='middle-name'/>"
-                           class="form-control" type="text"
-                           name="<portlet:namespace/>middleName"
-                           value="${employeeUser.middleName}"/>
-                    <label id="middleName-error" class="error text-danger" for="middleName"></label>
-                </div>
+
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Designation -->
@@ -558,7 +557,7 @@
                     <div class="form-group">
 
                         <label for="managerSelectBox">
-                            <liferay-ui:message key="manager" /><span class="text-danger">*</span>
+                            <liferay-ui:message key="manager" />
                         </label>
                         <select id="managerSelectBox"
                                 name="<portlet:namespace/>manager"

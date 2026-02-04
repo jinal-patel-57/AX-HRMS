@@ -110,7 +110,7 @@
                                     <!-- Certificate Attachment -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="education-certificate-attachment"/>
+                                            <liferay-ui:message key="education-certificate-attachment"/><span class="text-danger">*</span>
                                         </label>
 
                                         <input type="file"
