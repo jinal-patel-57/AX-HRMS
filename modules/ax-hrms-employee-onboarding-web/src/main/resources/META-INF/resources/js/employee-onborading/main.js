@@ -551,7 +551,7 @@ function setConfigsForAddExperienceSection(config) {
             }
 
             $.validator.addMethod("validMobile10", function (value) {
-				return /^\d{10}$/.test(value);
+				return /^(?!0{10})\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");
 
             $("#" + namespace + "panNumber").on("keyup", function () {
@@ -595,8 +595,8 @@ function setConfigsForAddExperienceSection(config) {
 
 
             $.validator.addMethod("lettersOnly", function (value, element) {
-                return this.optional(element) || /^[A-Za-z\s]+$/i.test(value);
-            }, "Only letters are allowed for Name.");
+                return this.optional(element) || /^(?=.*[A-Za-z])[A-Za-z\s]+$/.test(value);
+            }, "Only letters are allowed.");
 
             $("#" + namespace + "fatherName").rules("add", {
                 lettersOnly: true
@@ -674,6 +674,8 @@ function setConfigsForAddExperienceSection(config) {
                 var marriageDateField = $("#" + namespace + "marriageDate");
                 var spouseNameField = $("#" + namespace + "spouseName");
                 if (maritalStatusCheckbox.is(":checked")) {
+                    const today = new Date().toISOString().split("T")[0];
+					marriageDateField.attr("max", today);
                     spouseNameField.prop("disabled", false);
                     marriageDateField.prop("disabled", false);
                     marriageDateField.rules("add", {required: true, date: true});
@@ -878,7 +880,7 @@ function setConfigsForAddExperienceSection(config) {
                            });
 
                            $.validator.addMethod("validPincode", function (value) {
-                               return /^\d{6}$/.test(value);
+                               return /^(?!0{6})\d{6}$/.test(value);
                            });
 
             // validation trigger
