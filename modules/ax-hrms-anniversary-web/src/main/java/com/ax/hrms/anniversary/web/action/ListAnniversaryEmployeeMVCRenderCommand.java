@@ -64,7 +64,7 @@ public class ListAnniversaryEmployeeMVCRenderCommand implements MVCRenderCommand
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         AnniversaryUtil anniversaryEmployeeRetrieverUtil = new AnniversaryUtil(employeeDetailsLocalService,axHrmsCommonApi,leaveBalanceLocalService,leavePolicyMasterLocalService,leaveTypeMasterLocalService,designationMasterLocalService,departmentMasterLocalService);
-        List<EmployeeDetails> anniversaryEmployeeDetailList = anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1,-1));
+        List<EmployeeDetails> anniversaryEmployeeDetailList = anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.findByIsTerminated(false));
         List<EmployeeDetailsDto> employeeDetailsDtoList = anniversaryEmployeeRetrieverUtil.getEmployeeDetailsDtoList(anniversaryEmployeeDetailList,departmentMasterLocalService,designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
         List<WishTypeMaster> wishTypeMasterList = wishTypeMasterLocalService.getWishTypeMasters(-1,-1);
 

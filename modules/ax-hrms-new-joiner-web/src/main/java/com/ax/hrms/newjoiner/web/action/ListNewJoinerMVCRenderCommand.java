@@ -69,7 +69,7 @@ public class ListNewJoinerMVCRenderCommand implements MVCRenderCommand{
         }catch(NoSuchWishTypeMasterException e){
             log.error("ListNewJoinerMVCRenderCommand >>> Render ::: NoSuchWishTypeMasterException is: "+e.getMessage());
         }
-        List<NewJoinerDto> newJoinerList = NewJoinerRetrieverUtil.getNewJoinerList(employeeDetailsLocalService.getEmployeeDetailses(-1,-1),departmentMasterLocalService,designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
+        List<NewJoinerDto> newJoinerList = NewJoinerRetrieverUtil.getNewJoinerList(employeeDetailsLocalService.findByIsTerminated(false),departmentMasterLocalService,designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.NEW_JOINER_LIST,newJoinerList);
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.WISH_TYPE_MASTER_LIST,wishTypeMasterList);
         renderRequest.setAttribute(AxHrmsNewJoinerWebPortletConstants.WISH_TYPE_MASTER_ID,newJoinerWishMasterId);

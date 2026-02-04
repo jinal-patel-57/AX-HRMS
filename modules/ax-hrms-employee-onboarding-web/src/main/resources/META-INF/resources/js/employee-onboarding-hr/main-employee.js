@@ -534,7 +534,7 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please Enter FatherName."
                     },
                     [namespace + "nameAsPerAadhaarCard"]: {
-                        required: "Please Enter Name.",
+                        required: "Please Enter Name as per Aadhar Card.",
                         lettersOnly: "Only letters are allowed for Name."
 
                     },
