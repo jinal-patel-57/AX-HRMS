@@ -67,12 +67,12 @@
                         </button>
 
                         <ul class="dropdown-menu">
-                            <li><a href="${viewWFH}" class="dropdown-item">View</a></li>
+                            <li><a href="${viewWFH}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
 
                             <c:if test="${wfh.status == 'Pending'}">
-                                <li><a href="${editWFH}" class="dropdown-item">Edit</a></li>
+                                <li><a href="${editWFH}" class="dropdown-item"><i class="icon-edit"></i> Edit</a></li>
                                 <li><a href="${deleteWFH}" class="dropdown-item"
-                                       onclick="return confirm('Delete WFH request?');">Delete</a></li>
+                                       onclick="return confirm('Delete WFH request?');"> <i class="icon-trash"></i> Delete</a></li>
                             </c:if>
                         </ul>
                     </div>

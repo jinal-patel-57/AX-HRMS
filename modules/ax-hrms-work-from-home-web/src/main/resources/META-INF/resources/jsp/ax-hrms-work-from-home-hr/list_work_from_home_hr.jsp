@@ -80,7 +80,7 @@
                                             class="dropdown-item wfh-action-btn"
                                             data-title="Approve Work From Home"
                                             data-url="${approveURL}">
-                                            Approve
+                                            <i class="icon-ok"></i> Approve
                                          </a>
                                      </li>
 
@@ -89,7 +89,7 @@
                                             class="dropdown-item wfh-action-btn"
                                             data-title="Reject Work From Home"
                                             data-url="${rejectURL}">
-                                            Reject
+                                            <i class="icon-ban-circle"></i> Reject
                                          </a>
                                      </li>
 
@@ -98,7 +98,7 @@
                                             class="dropdown-item wfh-action-btn"
                                             data-title="Cancel Work From Home"
                                             data-url="${cancelURL}">
-                                            Cancel
+                                            <i class="icon-remove"></i> Cancel
                                          </a>
                                      </li>
 
@@ -111,14 +111,14 @@
                                             class="dropdown-item wfh-action-btn"
                                             data-title="Cancel Work From Home"
                                             data-url="${cancelURL}">
-                                            Cancel
+                                            <i class="icon-remove"></i> Cancel
                                          </a>
                                     </li>
 
                                 </c:when>
                             </c:choose>
 
-                            <li><a href="${viewURL}" class="dropdown-item">View</a></li>
+                            <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
                         </ul>
                     </div>
                 </liferay-ui:search-container-column-text>
