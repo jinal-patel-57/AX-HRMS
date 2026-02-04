@@ -31,8 +31,15 @@
 
                 <liferay-ui:search-container-column-text name="official-email"
                                                          value="${employeeDetails.officialEmail}"/>
+                                                         
+				<liferay-ui:search-container-column-text name="status"
+                                                         value="${!employeeDetails.isTerminated?'Active':'Terminated'}"/>
 
-
+				<portlet:renderURL var="viewEmployeeDetailsURL">
+					<portlet:param name="mvcRenderCommandName" value="/showEmployeeOnboardingURL"/>
+					<portlet:param name="employeeId" value="${employeeDetails.employeeId}"/>
+					<portlet:param name="cmd" value="view"/>
+				</portlet:renderURL>
                 <liferay-ui:search-container-column-text name="actions">
                     <c:if test="${!employeeDetails.isTerminated}">
 
@@ -51,11 +58,7 @@
                             <portlet:param name="employeeId" value="${employeeDetails.employeeId}"/>
                         </portlet:renderURL>
 
-                        <portlet:renderURL var="viewEmployeeDetailsURL">
-                            <portlet:param name="mvcRenderCommandName" value="/showEmployeeOnboardingURL"/>
-                            <portlet:param name="employeeId" value="${employeeDetails.employeeId}"/>
-                            <portlet:param name="cmd" value="view"/>
-                        </portlet:renderURL>
+                        
 
                         <!-- <a href="" class="btn btn-sm btn-outline-success mr-3"><i
                         class="fa-solid fa-eye"></i></a> -->
@@ -89,6 +92,21 @@
                                                 key="mark-as-permanent"/></a>
                                     </li>
                                 </c:if>
+                            </ul>
+                        </div>
+                    </c:if>
+                    <c:if test="${employeeDetails.isTerminated}">
+                    	<div class="dropdown ">
+                            <button class="btn fa fa-ellipsis-v dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="${viewEmployeeDetailsURL}"
+                                       class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
+                                            key="view"/></a>
+                                </li>
                             </ul>
                         </div>
                     </c:if>
