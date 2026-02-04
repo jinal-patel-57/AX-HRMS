@@ -12,6 +12,7 @@ import javax.portlet.RenderResponse;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
@@ -49,6 +50,9 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 	@Reference
 	PolicyLocalService policyLocalService;
 
+	@Reference
+	private RoleLocalService roleLocalService;
+
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -64,7 +68,7 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 //			log.info("Role Name ::: " + role.getName());
 //		}
 		List<Role> regularRoles =
-				RoleLocalServiceUtil.getTypeRoles(RoleConstants.TYPE_REGULAR);
+				roleLocalService.getTypeRoles(RoleConstants.TYPE_REGULAR);
 		List<Role> customRoles = new ArrayList<>();
 
 		for (Role role : regularRoles) {

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -65,6 +66,9 @@ public class FetchPolicyProcessManagementHrAdminMVCRenderCommand implements MVCR
     
     @Reference
     RolePoliciesLocalService rolePoliciesLocalService;
+
+    @Reference
+    private RoleLocalService roleLocalService;
     
     private static final Log log = LogFactoryUtil.getLog(FetchPolicyProcessManagementHrAdminMVCRenderCommand.class);
     
@@ -106,8 +110,8 @@ public class FetchPolicyProcessManagementHrAdminMVCRenderCommand implements MVCR
         renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Upload_Documents_Policy_Process_Management, fileName);
 
         List<Role> regularRoles =
-                RoleLocalServiceUtil.getTypeRoles(RoleConstants.TYPE_REGULAR);
-        
+                roleLocalService.getTypeRoles(RoleConstants.TYPE_REGULAR);
+
         List<Role> customRoles = new ArrayList<>();
 
         for (Role role : regularRoles) {
