@@ -42,6 +42,14 @@
             return this.optional(element) || /^[a-zA-Z0-9\s]+$/.test(value);
         }, "Special characters are not allowed");
 
+        // ================= FILE TYPE VALIDATION (PDF, DOC, DOCX ONLY) =================
+        $.validator.addMethod("validFileType", function (value, element) {
+            if (!value) return true; 
+            
+            const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+            return allowedExtensions.test(value);
+        }, "Please upload only PDF or DOC files");
+
         // ================= DATE VALIDATION (UP TO NEXT YEAR END) =================
       $.validator.addMethod(
           "validApplicableDate",
@@ -107,7 +115,8 @@
 
               // Upload Document
               [namespace + uploadDocument]: {
-                  required: true
+                  required: true,
+                  validFileType: true
               },
 
               // Policy Year
@@ -153,7 +162,8 @@
               },
 
               [namespace + uploadDocument]: {
-                  required: "Please upload document"
+                  required: "Please upload document",
+                  validFileType: "Please upload only PDF or DOC files"
               },
 
               [namespace + policyYear]: {
