@@ -1,5 +1,6 @@
 package com.ax.hrms.policy.process.management.hr.admin.web.action;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,11 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -46,13 +52,26 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
         List<PolicyTypeMaster> policyTypes = policyTypeMasterLocalService.getPolicyTypeMasters(-1,-1);
 
 		
 		List<Integer> policyYear = policyLocalService.getAllYear();
 
 		List<Role> roles = RoleLocalServiceUtil.getRoles(-1, -1);
+//		for (Role role : roles) {
+//			log.info("Role Name ::: " + role.getName());
+//		}
+		List<Role> regularRoles =
+				RoleLocalServiceUtil.getTypeRoles(RoleConstants.TYPE_REGULAR);
+		List<Role> customRoles = new ArrayList<>();
+
+		for (Role role : regularRoles) {
+			if (!role.isSystem()) {
+				customRoles.add(role);
+			}
+		}
 
 		// ------------------ Calculate next year end date ------------------
 		Calendar cal = Calendar.getInstance();
@@ -69,7 +88,7 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 
 
 
-		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, roles);
+		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, customRoles);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Types_Policy_Process_Management, policyTypes);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Year_Policy_Process_Management, policyYear);
 		renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Year_Policy_Process_Management, ParamUtil.getInteger(renderRequest,AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Year_Policy_Process_Management));
@@ -77,5 +96,6 @@ public class AddPolicyProcessManagementHrAdminMVCRender implements MVCRenderComm
 		return AxHrmsPolicyProcessManagementWebPortletConstants.Add_Edit_Policy_Process_Management;
 	}
 
-	
+	private static final Log log = LogFactoryUtil.getLog(AddPolicyProcessManagementHrAdminMVCRender.class);
+
 }

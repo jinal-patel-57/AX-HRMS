@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -102,17 +104,23 @@ public class FetchPolicyProcessManagementHrAdminMVCRenderCommand implements MVCR
         
         
         renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Upload_Documents_Policy_Process_Management, fileName);
-        
-       
-        
-		List<Role> roles = RoleLocalServiceUtil.getRoles(-1, -1);
 
+        List<Role> regularRoles =
+                RoleLocalServiceUtil.getTypeRoles(RoleConstants.TYPE_REGULAR);
         
+        List<Role> customRoles = new ArrayList<>();
+
+        for (Role role : regularRoles) {
+            if (!role.isSystem()) {
+                customRoles.add(role);
+            }
+        }
+
         List<RolePolicies> rolepoliciesList = rolePoliciesLocalService.findByPolicyId(policyId);
         List<Integer> policyYear = policyLocalService.getAllYear();
         
         
-        renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, roles);
+        renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_NAME, customRoles);
 
         renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.ROLE_POLICIES_ID, getRolePoliciesId(rolepoliciesList));
         renderRequest.setAttribute(AxHrmsPolicyProcessManagementWebPortletConstants.Year_Policy_Process_Management, year);
