@@ -198,6 +198,29 @@
               $(this).valid();
           });
 
+      // PAST DATE WARNING
+      $("#applicableDate").on("change blur", function () {
+          const selectedValue = $(this).val();
+          if (selectedValue) {
+              const selectedDate = new Date(selectedValue);
+              const today = new Date();
+              
+              selectedDate.setHours(0, 0, 0, 0);
+              today.setHours(0, 0, 0, 0);
+              
+              if (selectedDate < today) {
+                  $("#pastDateWarning").show();
+              } else {
+                  $("#pastDateWarning").hide();
+              }
+          } else {
+              $("#pastDateWarning").hide();
+          }
+      });
+
+      if ($("#applicableDate").val()) {
+          $("#applicableDate").trigger("change");
+      }
 
 
         addEditPolicyHrAdminForm.ready(function(){

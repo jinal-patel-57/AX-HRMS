@@ -131,7 +131,9 @@
                                         class="form-control"
                                         value="<fmt:formatDate pattern='yyyy-MM-dd' value='${policy.getApplicableDate()}' />"
                                     />
-
+							<div id="pastDateWarning" class="text-warning mt-1" style="display: none;">
+								<small><i class="fa fa-exclamation-triangle"></i> This policy will be effective from a past date.</small>
+							</div>
 
 
 
