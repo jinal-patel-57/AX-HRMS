@@ -183,9 +183,11 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
         String line3 = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PERMANANT_LINE3,GetterUtil.DEFAULT_STRING);
         String pincode = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PERMANANT_PINCODE,GetterUtil.DEFAULT_STRING);
         String state = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PERMANANT_STATE,GetterUtil.DEFAULT_STRING);
+        String city = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PERMANANT_CITY,GetterUtil.DEFAULT_STRING);
 
         address.setCountry(countryId);
         address.setState(state);
+        address.setCity(city);
         address.setLine1(line1);
         address.setLine2(line2);
         address.setLine3(line3);
@@ -213,9 +215,11 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
         String line3 = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PRESENT_LINE3,GetterUtil.DEFAULT_STRING);
         String pincode = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PRESENT_PINCODE,GetterUtil.DEFAULT_STRING);
         String state = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PRESENT_STATE,GetterUtil.DEFAULT_STRING);
+        String city = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PRESENT_CITY,GetterUtil.DEFAULT_STRING);
 
         address.setCountry(countryId);
         address.setState(state);
+        address.setCity(city);
         address.setLine1(line1);
         address.setLine2(line2);
         address.setLine3(line3);
@@ -272,7 +276,10 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
                     employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
             long nomineeId = employeeDetails.getNominneeId();
-            Nominee nominee = nomineeLocalService.getNominee(nomineeId);
+            Nominee nominee = null;
+            if (nomineeId > 0) {
+                nominee = nomineeLocalService.getNominee(nomineeId);
+            }
             Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
 
             nominee.setNomineeFirstName(

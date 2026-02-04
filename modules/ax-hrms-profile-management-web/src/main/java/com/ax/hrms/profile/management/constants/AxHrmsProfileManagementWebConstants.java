@@ -20,12 +20,14 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String PERMANANT_LINE3 = "permanantLine3";
 	public static final String PERMANANT_PINCODE = "permanantPincode";
 	public static final String PERMANANT_STATE = "permanantState";
+	public static final String PERMANANT_CITY = "permanentCity";
 	public static final String PERMANANT_COUNTRY = "permanantCountry";
 	public static final String PRESENT_LINE1 = "presentLine1";
 	public static final String PRESENT_LINE2 = "presentLine2";
 	public static final String PRESENT_LINE3 = "presentLine3";
 	public static final String PRESENT_PINCODE = "presentPincode";
 	public static final String PRESENT_STATE = "presentState";
+	public static final String PRESENT_CITY = "presentCity";
 	public static final String PRESENT_COUNTRY = "presentCountry";
 	public static final String FIRST_NAME = "firstName";
 	public static final String MIDDLE_NAME = "middleName";
