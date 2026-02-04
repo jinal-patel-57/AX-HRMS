@@ -60,7 +60,9 @@ import org.osgi.service.component.annotations.Reference;
 public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand {
 
 
-    public static final String SPOUSE_NAME = "spouseName";
+    public static final String EMPLOYEE_NAME = "Employee Name";
+
+	public static final String SPOUSE_NAME = "spouseName";
 
     public static final String CO_EMPLOYEE_CODE = "coEmployeeCode";
 
@@ -165,6 +167,7 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 
                 JSONObject employeeDetailsJson = JSONFactoryUtil.createJSONObject();
                 employeeDetailsJson.put(PUT_X, StringPool.DASH);
+                employeeDetailsJson.put("employeeName", employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
                 employeeDetailsJson.put(CODE, employeeDetails.getEmployeeCode());
                 employeeDetailsJson.put(PAN_NAME, employeeDetails.getNameAsPerAadhaarCard());
                 try {

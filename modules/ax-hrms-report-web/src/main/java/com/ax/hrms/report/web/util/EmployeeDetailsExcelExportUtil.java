@@ -95,7 +95,7 @@ public class EmployeeDetailsExcelExportUtil {
      secondHeaderStyle.setBorderRight(BorderStyle.THIN);
         
         String[] headers = {
-            EMPLOYEE_CODE,
+        	HEADER_EMPLOYEE_NAME,
             NAME_AS_PER_PAN,
             
             GROSS_SALARY_CTC_PM,
@@ -217,7 +217,7 @@ public class EmployeeDetailsExcelExportUtil {
 
             int col = 0;
 
-            row.createCell(col++).setCellValue(emp.getString(CODE));
+            row.createCell(col++).setCellValue(emp.getString("employeeName"));
             row.createCell(col++).setCellValue(emp.getString(PAN_NAME));
             row.createCell(col++).setCellValue(emp.getDouble(GROSS_SALARY_PM));
             row.createCell(col++).setCellValue(emp.getDouble(GROSS_SALARY_PA));
@@ -267,7 +267,7 @@ public class EmployeeDetailsExcelExportUtil {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
         resourceResponse.setProperty(
-            "Content-Disposition", "attachment; filename=Employee_Details_Report.xlsx");
+            "Content-Disposition", "attachment; filename=AX_Employee_Details_Report.xlsx");
 
         OutputStream os = resourceResponse.getPortletOutputStream();
         workbook.write(os);
