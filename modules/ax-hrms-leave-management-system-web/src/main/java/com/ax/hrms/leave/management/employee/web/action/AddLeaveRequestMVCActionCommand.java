@@ -7,6 +7,7 @@ import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemW
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementWebPortletConstants;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.exception.NoSuchLeaveCompensatoryStatusMasterException;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
@@ -14,6 +15,9 @@ import com.ax.hrms.model.*;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.*;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
+import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -100,10 +104,21 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         }
 
         if(eligibleEmployee.getEmployeeType().equalsIgnoreCase("intern") || eligibleEmployee.getEmployeeType().equalsIgnoreCase("Contractor")){
-            SessionErrors.add(actionRequest,AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION);
+            SessionErrors.add(actionRequest,AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_UNAUTHORIZED);
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            return;
         }
+        
+        long overlapCount = getOverlapCount(actionRequest, employeeId);
 
-
+        log.info("overlapped count " + overlapCount);
+        
+        if(overlapCount>0) {
+        	log.info("overlapped");
+        	SessionErrors.add(actionRequest,AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_OVERLAPPED);
+        	actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            return;
+        }
 
         long leaveRequestId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
         log.info("leaveRequestId: " + leaveRequestId);
@@ -151,6 +166,65 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
     }
 
+	private long getOverlapCount(ActionRequest actionRequest, long employeeId) {
+		String start = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.START_DATE);
+        String end = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.END_DATE);
+        DateFormat dateFormat = new SimpleDateFormat(AxHrmsLeaveManagementWebPortletConstants.LIFERAY_DB_DATETIME_FORMAT);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = dateFormat.parse(start + AxHrmsLeaveManagementWebPortletConstants.DEFAULT_TIME);
+            endDate = dateFormat.parse(end + AxHrmsLeaveManagementWebPortletConstants.DEFAULT_TIME);
+        } catch (ParseException e1) {
+            log.info("AddEditLeaveRequestMVCActionCommand >>> setLeaveRequestData ::: Exception: " + e1.getMessage());
+        }
+        
+        long approvedStatusId = 0;
+        long pendingStatusId = 0;
+
+        try {
+            approvedStatusId =
+                leaveCompensatoryStatusMasterLocalService
+                    .findByLeaveCompensatoryStatusName("Approved")
+                    .getLeaveCompensatoryStatusMasterId();
+
+            pendingStatusId =
+                leaveCompensatoryStatusMasterLocalService
+                    .findByLeaveCompensatoryStatusName("Pending")
+                    .getLeaveCompensatoryStatusMasterId();
+
+        } catch (NoSuchLeaveCompensatoryStatusMasterException e) {
+            log.error("Status master not found", e);
+        }
+        Long[] validStatusIds = new Long[] {approvedStatusId, pendingStatusId};
+        
+        DSLQuery dslQuery = DSLQueryFactoryUtil.select(
+        		DSLFunctionFactoryUtil
+                .count(LeaveRequestTable.INSTANCE.leaveRequestId)
+                .as("overlapCount")
+        ).from(
+                LeaveRequestTable.INSTANCE
+        ).where(
+            LeaveRequestTable.INSTANCE.employeeId.eq(employeeId)
+            .and(
+                LeaveRequestTable.INSTANCE.startDateTime.lte(endDate)
+            )
+            .and(
+                LeaveRequestTable.INSTANCE.endDateTime.gte(startDate)
+            ).and(
+                LeaveRequestTable.INSTANCE.leaveCompensatoryStatusMasterId.in(
+            		validStatusIds
+                )
+            )
+        );
+        
+        List<Long> result =
+        	    (List<Long>) leaveRequestLocalService.dslQuery(dslQuery);
+
+        long overlapCount = result.isEmpty() ? 0 : result.get(0);
+		return overlapCount;
+	}
+
     private void addLeaveRequestData(ActionRequest actionRequest, LeaveRequest leaveRequest) {
         leaveRequestLocalService.addLeaveRequest(leaveRequest);
         SessionMessages.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_INSERTED_MESSAGE_KEY);
@@ -178,7 +252,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } catch (ParseException e1) {
             log.info("AddEditLeaveRequestMVCActionCommand >>> setLeaveRequestData ::: Exception: " + e1.getMessage());
         }
-
+        
         Date[] leaveDatesArray = getDatesBetween(startDate, endDate);
         int[] leaveDates = new int[leaveDatesArray.length];
         int count = 0;
@@ -197,14 +271,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         } else {
             leaveRequest = leaveRequestLocalService.createLeaveRequest(CounterLocalServiceUtil.increment(LeaveRequest.class.getName()));
             leaveRequest.setCreatedBy(themeDisplay.getUserId());
-            long companyId = themeDisplay.getCompanyId();
-            String roleName = "HR Admin";
             log.info("leaveRequestId: " + leaveRequest.getLeaveRequestId());
-            EmployeeDetails employee = null;
-
-
-
-
         }
         try {
             if (leaveRequest != null) {

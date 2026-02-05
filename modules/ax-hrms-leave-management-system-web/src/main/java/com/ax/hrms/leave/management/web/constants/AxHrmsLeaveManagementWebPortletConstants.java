@@ -14,9 +14,10 @@ public class AxHrmsLeaveManagementWebPortletConstants {
     public static final String LIST_OF_LEAVE_REQUEST_JSP_PATH = "/jsp/ax-hrms-leave-management-employee/listLeaveRequestOfEmployee.jsp";
     public static final String ADD_LEAVE_REQUEST_JSP_PATH = "/jsp/ax-hrms-leave-management-employee/addLeaveRequestByEmployee.jsp";
     public static final String VIEW_LEAVE_REQUEST_JSP_PATH = "/jsp/ax-hrms-leave-management-employee/viewLeaveRequestDetail.jsp";
-
+    
     public static final String ADD_LEAVE_REQUEST_MVC_COMMAND_NAME = "/addLeaveRequest";
 
+    
     public static final String PORTLET_CATEGORY = "AX HRMS";
     public static final String LEAVE_REQUEST_DISPLAY_NAME = "LeaveRequest ";
     public static final String LEAVE_REQUEST = "leaveRequest";
@@ -29,6 +30,7 @@ public class AxHrmsLeaveManagementWebPortletConstants {
     public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY = "leave-request-not-inserted";
     public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION = "leave-request-not-inserted-because-of-probation";
     public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_UNAUTHORIZED = "leave-request-not-inserted-because-of-unauthorized";
+    public static final String LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_OVERLAPPED = "leave-request-not-inserted-because-of-ovelapped";
     public static final String LEAVE_REQUEST_EDITED_MESSAGE_KEY = "leaveRequest-edited-message";
     public static final String LEAVE_REQUEST_DELETED_MESSAGE_KEY = "leaveRequest-deleted-message";
     public static final String LEAVE_REQUEST_CANCEL_MESSAGE_KEY = "leaveRequest-canceled-message";
