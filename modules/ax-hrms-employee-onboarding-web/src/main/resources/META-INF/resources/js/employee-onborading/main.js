@@ -1034,8 +1034,8 @@ function setConfigsForAddExperienceSection(config) {
                   const startSelector = `[name="${startDateName}"]`;
 
                   rules[levelNameName] = { required: true };
-                  rules[institutionName] = { required: true, maxlength: 250 };
-                  rules[degreeName] = { required: true, maxlength: 75 };
+                  rules[institutionName] = { required: true, maxlength: 250, lettersOnly: true };
+                  rules[degreeName] = { required: true, maxlength: 75, lettersOnly: true };
                   rules[startDateName] = {
                       required: true,
                       date: true,
@@ -1065,11 +1065,13 @@ function setConfigsForAddExperienceSection(config) {
                   messages[levelNameName] = { required: "Please select an education level name." };
                   messages[institutionName] = {
                       required: "Please enter the institution name.",
-                      maxlength: "Institution name should not exceed 250 characters."
+                      maxlength: "Institution name should not exceed 250 characters.",
+                      lettersOnly: "Only letters and spaces are allowed.",
                   };
                   messages[degreeName] = {
                       required: "Please enter the degree obtained.",
-                      maxlength: "Degree should not exceed 75 characters."
+                      maxlength: "Degree should not exceed 75 characters.",
+                      lettersOnly: "Only letters and spaces are allowed.",
                   };
                  messages[startDateName] = {
                      required: "Please enter the start date.",

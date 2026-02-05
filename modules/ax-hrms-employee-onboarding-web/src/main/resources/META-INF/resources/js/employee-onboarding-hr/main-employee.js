@@ -787,7 +787,7 @@ function setConfigsForAddExperienceSection(config) {
 
             $.validator.addMethod("lettersOnly", function (value, element) {
                 return this.optional(element) || /^(?=.*[A-Za-z])[A-Za-z\s]+$/.test(value);
-            }, "Only letters are allowed for Name.");
+            }, "Only letters are allowed.");
 
             $("#" + namespace + "fatherName").rules("add", {
                 lettersOnly: true
@@ -1253,8 +1253,8 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                     const eduCertKey = `${namespace}educationCertificateAttachment${idx}`;
 
                     rules[levelNameKey] = {required: true};
-                    rules[institutionKey] = {required: true, maxlength: 250};
-                    rules[degreeKey] = {required: true, maxlength: 75};
+                    rules[institutionKey] = {required: true, maxlength: 250, lettersOnly: true};
+                    rules[degreeKey] = {required: true, maxlength: 75, lettersOnly: true};
                    rules[startDateKey] = {
                          required: true,
                          date: true,
@@ -1286,11 +1286,13 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                     };
                     messages[institutionKey] = {
                         required: "Please enter institution name.",
-                        maxlength: "Institution name must not exceed 250 characters."
+                        maxlength: "Institution name must not exceed 250 characters.",
+                        lettersOnly: "Only letters and spaces are allowed."
                     };
                     messages[degreeKey] = {
                         required: "Please enter degree.",
-                        maxlength: "Degree must not exceed 75 characters."
+                        maxlength: "Degree must not exceed 75 characters.",
+                        lettersOnly: "Only letters and spaces are allowed."
                     };
                      messages[startDateKey] = {
                          required: "Please enter the start date.",
