@@ -6,6 +6,7 @@ var setFileInputValues;
 
     function setConfigsForValidation(config) {
         namespace = config.namespace;
+
         $.validator.addMethod("validUsernameEmail", function (value, element) {
             const domain = $(element).data("domain");  // dynamic domain from JSP
 
@@ -76,16 +77,16 @@ var setFileInputValues;
                         date: true
                     },
                     [namespace + "grossSalaryCTCPM"]: {
-                        required: true,
-                        numericality: true
+//                        required: true,
+//                        numericality: true
                     },
                     [namespace + "stipend"]: {
                         required: true,
                         numericality: true
                     },
                     [namespace + "grossSalaryCTCPA"]: {
-                        required: true,
-                        numericality: true
+//                        required: true,
+//                        numericality: true
                     },
                     [namespace + "insuranceLink"]: {
                         linkUrlValidation: true
@@ -137,12 +138,12 @@ var setFileInputValues;
                         date: "Enter a proper Date Only"
                     },
                     [namespace + "grossSalaryCTCPM"]: {
-                        required: "Please Enter a valid Salary",
-                        numericality: "Plese Enter a Valid Salary"
+//                        required: "Please Enter a valid Salary",
+//                        numericality: "Plese Enter a Valid Salary"
                     },
                     [namespace + "grossSalaryCTCPA"]: {
-                        required: "Please Enter a valid Salary",
-                        numericality: "Plese Enter a Valid Salary"
+//                        required: "Please Enter a valid Salary",
+//                        numericality: "Plese Enter a Valid Salary"
                     },
                     [namespace + "insuranceLink"]: {
                         linkUrlValidation: "Please enter a valid URL"
@@ -247,16 +248,14 @@ var setFileInputValues;
                 "Please enter only alphabetical characters."
             );
 
-            $.validator.addMethod(
-                "numericality",
-                function (value, element) {
-                    if (this.optional(element)) {
-			            return true;
-			        }
-			        return /^\d*\.?\d+$/.test(value) && parseFloat(value) > 0;
-                },
-                "Please Use Decimals."
-            );
+          $.validator.addMethod(
+              "numericality",
+              function (value, element) {
+                  return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
+              },
+              "Please enter a valid number"
+          );
+
 
             $.validator.addMethod("lettersAndNumbersOnly", function (value, element) {
                 return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
@@ -272,6 +271,10 @@ var setFileInputValues;
 
         $(document).ready(function () {
             toggleFileUploads();
+
+
+
+
 
             let allCheckedOnReady = $('.checkbox').length === $('.checkbox:checked').length;
             if (allCheckedOnReady) {
@@ -332,6 +335,62 @@ var setFileInputValues;
         });
 
         $(document).ready(function () {
+
+        function bindDecimalInput(selector) {
+            $(document).on("input", selector, function () {
+                let v = this.value;
+
+                // allow only digits and dot
+                v = v.replace(/[^0-9.]/g, "");
+
+                // allow only one dot
+                const dotIndex = v.indexOf(".");
+                if (dotIndex !== -1) {
+                    v = v.substring(0, dotIndex + 1) +
+                        v.substring(dotIndex + 1).replace(/\./g, "");
+                }
+
+                this.value = v;
+            });
+        }
+
+            bindDecimalInput("#grossSalaryCTCPM, #grossSalaryCTCPA");
+
+
+         function toggleCTCValidation() {
+                        const employeeType = $("#typeOfEmployee").val();
+
+                        const $ctcPM = $('[name="' + namespace + 'grossSalaryCTCPM"]');
+                        const $ctcPA = $('[name="' + namespace + 'grossSalaryCTCPA"]');
+
+                        const $asterisks = $("#grossSalaryCTCPM, #grossSalaryCTCPA")
+                            .closest(".form-group")
+                            .find(".required-asterisk");
+
+                        if (employeeType === "intern") {
+                            $ctcPM.rules("remove", "required");
+                            $ctcPA.rules("remove", "required");
+
+                            $asterisks.addClass("d-none");
+
+                            // Clear validation state
+                            $ctcPM.removeClass("is-invalid is-valid").valid();
+                            $ctcPA.removeClass("is-invalid is-valid").valid();
+                        } else {
+                            $ctcPM.rules("add", {
+                                required: true,
+                                messages: {
+                                    required: "Please enter Gross Salary (CTC PM)"
+                                }
+                            });
+
+
+
+                            $asterisks.removeClass("d-none");
+                        }
+                    }
+
+
             // Function to check the selected type of employee
             function checkEmployeeType() {
                 var selectedType = $('#typeOfEmployee').val();
@@ -371,6 +430,15 @@ var setFileInputValues;
             $('#typeOfEmployee').on('change', function () {
                 checkEmployeeType();
             });
+
+            // On page load
+            toggleCTCValidation();
+
+            // On employee type change
+            $("#typeOfEmployee").on("change", function () {
+                toggleCTCValidation();
+            });
+
         });
 
 

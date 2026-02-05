@@ -249,16 +249,7 @@ function setConfigsForAddExperienceSection(config) {
         let storedExperienceYears = null;
 /* ================= HR COMMON LOGIC ================= */
 
-        // Salary PM → PA auto calculation
-        $("#grossSalaryCTCPM").on("input keyup", function () {
-            let ctcPm = parseFloat($(this).val());
 
-            if (!isNaN(ctcPm)) {
-                $("#grossSalaryCTCPA").val(ctcPm * 12);
-            } else {
-                $("#grossSalaryCTCPA").val("");
-            }
-        });
 
 
         // ===== Validators reused from HR =====
@@ -692,10 +683,10 @@ function setConfigsForAddExperienceSection(config) {
 
               $('[name="' + namespace + 'grossSalaryCTCPM"]').rules("add", {
                   required: true,
-                  numericality: true,
+
                   messages: {
                       required: "Please enter gross salary per month.",
-                      numericality: "Please enter a valid salary amount."
+
                   }
               });
               $('[name="' + namespace + 'branch"]').rules("add", {
@@ -706,6 +697,50 @@ function setConfigsForAddExperienceSection(config) {
 
                   }
               });
+
+                $(document).ready(function () {
+
+                   $("#grossSalaryCTCPM").on("input", function () {
+                       const pm = parseFloat(this.value);
+                       const $pa = $("#grossSalaryCTCPA");
+
+                       if (!isNaN(pm) && pm > 0) {
+                           $pa.val((pm * 12).toFixed(2)).valid();
+                       } else {
+                           $pa.val("").valid();
+                       }
+
+
+                   });
+
+                    function bindDecimalInput(selector) {
+                               $(document).on("input", selector, function () {
+                                   let v = this.value;
+
+                                   // allow only digits and dot
+                                   v = v.replace(/[^0-9.]/g, "");
+
+                                   // allow only one dot
+                                   const dotIndex = v.indexOf(".");
+                                   if (dotIndex !== -1) {
+                                       v = v.substring(0, dotIndex + 1) +
+                                           v.substring(dotIndex + 1).replace(/\./g, "");
+                                   }
+
+                                   this.value = v;
+                               });
+                           }
+
+                           bindDecimalInput("#grossSalaryCTCPM, #grossSalaryCTCPA");
+
+
+                    });
+
+
+
+
+
+
           }
              /* ================= EXPERIENCE TOGGLE ================= */
 
@@ -1953,7 +1988,7 @@ function setConfigsForExperienceValidation(config) {
 
                 [namespace + "ifscCode"]: {
                     maxlength: "IFSC code should not exceed 75 characters.",
-                    ifscCodeValidation: "Please enter a valid IFSC code."
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
                 }
             }
         });

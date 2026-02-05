@@ -12,7 +12,7 @@
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --%>
 </head>
 
 <div class="card">
@@ -78,7 +78,7 @@
 
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
-                        <label class="" for="insuranceLink"><liferay-ui:message key="insurance-link"/><span class="text-danger">*</span></label>
+                        <label class="" for="insuranceLink"><liferay-ui:message key="insurance-link"/></label>
                         <input id="insuranceLink" placeholder="<liferay-ui:message key='insurance-link'/>"
                                class="form-control" type="text" name="<portlet:namespace/>insuranceLink"/>
                         <label id="insuranceLink-error" class="error text-danger" for="insuranceLink"></label>
@@ -107,7 +107,7 @@
                     <div class="form-group">
                         <label class="" for="grossSalaryCTCPA"><liferay-ui:message key="gross-salary-ctc-pa"/><span class="text-danger">*</span></label>
                         <input id="grossSalaryCTCPA" placeholder="<liferay-ui:message key='gross-salary-ctc-pa'/>"
-                               class="form-control" type="text" name="<portlet:namespace/>grossSalaryCTCPA"/>
+                               class="form-control" type="text" name="<portlet:namespace/>grossSalaryCTCPA" readonly/>
                         <label id="grossSalaryCTCPA-error" class="error text-danger" for="grossSalaryCTCPA"></label>
                     </div>
                 </div>
@@ -220,7 +220,10 @@
 
 </div>
 
+
+
 <script>
+
     $(document).ready(function () {
         var config = new Object({}),
             namespace = '<portlet:namespace />';
@@ -229,4 +232,32 @@
 
         AxHrmsEmployeeOnboardingHrWebPortlet.setConfigsForValidation(config);
     });
+
+
+
+   $(document).ready(function () {
+
+     $("#grossSalaryCTCPM").on("input", function () {
+         const pm = parseFloat(this.value);
+         const $pa = $("#grossSalaryCTCPA");
+
+         if (!isNaN(pm) && pm > 0) {
+             $pa.val((pm * 12).toFixed(2)).valid();
+         } else {
+             $pa.val("").valid();
+         }
+
+
+     });
+
+
+
+
+   });
+
+
+
+
+
+
 </script>

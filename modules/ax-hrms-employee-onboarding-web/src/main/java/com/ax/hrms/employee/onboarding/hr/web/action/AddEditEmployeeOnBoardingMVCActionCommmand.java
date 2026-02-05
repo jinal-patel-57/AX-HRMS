@@ -231,6 +231,22 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 employeeDetails.setIsProbationEnabled(isProbationEnabled.equalsIgnoreCase("Enabled"));
                 employeeDetails.setBranchId(branchId);
                 employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
+                if(employeeDetails.getEmployeeType().equalsIgnoreCase("intern")) {
+                    employeeDetails.setStipend(ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.STIPEND));
+                }else{
+                    try {
+                        EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
+
+                        log.info("employee salary -- " + employeeSalary);
+
+                        employeeSalary.setGrossSalaryCtcPa(grossSalaryCTCPA);
+                        employeeSalary.setGrossSalaryCtcPm(grossSalaryCTCPM);
+                        log.info("before update ");
+                        employeeSalaryLocalService.updateEmployeeSalary(employeeSalary);
+                    } catch(NoSuchEmployeeSalaryException nsese) {
+                        nsese.printStackTrace();
+                    }
+                }
 
                 log.info("Manager id in the employee side: " + ParamUtil.getLong(actionRequest, "manager"));
                 oldManagerId = employeeDetails.getManagerId();
@@ -239,18 +255,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 //                updateEmployeeWithManager(themeDisplay.getCompanyId(),employeeDetails,ParamUtil.getLong(actionRequest, "manager"),oldManagerId);
 
-				try {
-					EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
-	                
-	                log.info("employee salary -- " + employeeSalary);
-	                
-	                employeeSalary.setGrossSalaryCtcPa(grossSalaryCTCPA);
-	                employeeSalary.setGrossSalaryCtcPm(grossSalaryCTCPM);
-	                log.info("before update ");
-	                employeeSalaryLocalService.updateEmployeeSalary(employeeSalary);
-				} catch(NoSuchEmployeeSalaryException nsese) {
-					nsese.printStackTrace();
-				}
+
                 
 
                log.info("after update ");

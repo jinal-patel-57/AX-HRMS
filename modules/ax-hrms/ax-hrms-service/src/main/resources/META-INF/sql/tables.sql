@@ -768,7 +768,7 @@ create table ax_WorkFromHomeRequest (
 	workFromHomeRequestId LONG not null primary key,
 	employeeId LONG,
 	reviewerId LONG,
-	teamMailId VARCHAR(75) null,
+	teamMailId VARCHAR(2000) null,
 	status LONG,
 	reason VARCHAR(75) null,
 	requestDate DATE null,

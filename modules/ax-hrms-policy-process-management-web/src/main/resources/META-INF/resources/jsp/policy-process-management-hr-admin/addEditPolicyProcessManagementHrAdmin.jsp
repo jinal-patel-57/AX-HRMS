@@ -142,31 +142,7 @@
 
 					</div>
 
-					<div class="col-md-4 col-sm-12 ">
-						<div class="form-group">
 
-							<label for="policyYear"><liferay-ui:message
-									key="year-text" /><span class="text-danger">*</span></label> <select id="policyYear"
-								class="form-control" name="<portlet:namespace/>policyYear">
-								<c:choose>
-									<c:when test="${policy.getYear() ne null}">
-										<option value="${policy.getYear()}"
-											${policy.getYear() eq year ? 'selected' : ''}>
-											${policy.getYear()}</option>
-									</c:when>
-									<c:otherwise>
-										<option value="" selected>
-											<liferay-ui:message key="select-option" />
-										</option>
-									</c:otherwise>
-								</c:choose>
-
-							</select>
-
-
-						</div>
-
-					</div>
 
 					<div class="col-md-4 col-sm-12 ">
 						<div class="form-group">

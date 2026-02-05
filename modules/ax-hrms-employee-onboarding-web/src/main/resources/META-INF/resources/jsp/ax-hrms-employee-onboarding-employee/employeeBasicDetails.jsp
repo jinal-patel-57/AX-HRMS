@@ -15,6 +15,8 @@
             <liferay-ui:message key="basic-details"/>
         </strong>
     </div>
+
+    <input type="hidden" class="form-control"  name="<portlet:namespace />employeeType" value="${employeeDetail.employeeType}"/>
     <div class="card-body">
         <!-- First Row: Personal Email, Date of Birth, Mobile No -->
         <div class="row mb-3">
@@ -472,9 +474,27 @@
                     <input id="grossSalaryCTCPA" placeholder="<liferay-ui:message key='gross-salary-ctc-pa'/>"
                            class="form-control" type="text"
                            name="<portlet:namespace/>grossSalaryCTCPA"
-                           value="${ctcPa}" readonly />
+                           value="${ctcPa}" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*" readonly />
                     <label id="grossSalaryCTCPA-error" class="error text-danger" for="grossSalaryCTCPA"></label>
                 </div>
+                <div class="col-md-4 col-sm-12 mb-3" id="stipendWrapper" style="display:none;">
+                    <label for="stipendAmount">
+                        <liferay-ui:message key="Stipend" />
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input id="stipendAmount"
+                           class="form-control"
+                           type="text"
+                           name="<portlet:namespace/>stipendAmount"
+                           inputmode="decimal"
+                           pattern="[0-9]*[.]?[0-9]*" value="${employeeDetail.stipend}"/>
+
+                    <label id="stipendAmount-error"
+                           class="error text-danger"
+                           for="stipendAmount"></label>
+                </div>
+
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Department -->
@@ -557,7 +577,7 @@
                     <div class="form-group">
 
                         <label for="managerSelectBox">
-                            <liferay-ui:message key="manager" />
+                            <liferay-ui:message key="Reporting Manager" />
                         </label>
                         <select id="managerSelectBox"
                                 name="<portlet:namespace/>manager"
@@ -601,6 +621,8 @@
 
 
 
+
+
 </script>
 
 <aui:script>
@@ -628,3 +650,57 @@
     });
      var isKycDocumentAlreadyUploaded = ${not empty kycDocumentUrl};
 </aui:script>
+<script>
+Liferay.on('allPortletsReady', function () {
+
+    var employeeType =
+        $('input[name="<portlet:namespace />employeeType"]').val();
+
+    var grossPmWrapper = $('#grossSalaryCTCPM').closest('.col-md-4');
+    var grossPaWrapper = $('#grossSalaryCTCPA').closest('.col-md-4');
+    var stipendWrapper = $('#stipendWrapper');
+
+    var grossPm = $('#grossSalaryCTCPM');
+    var grossPa = $('#grossSalaryCTCPA');
+    var stipend = $('#stipendAmount');
+
+    function applyEmployeeTypeRules() {
+
+        if (employeeType &&
+            employeeType.toLowerCase() === 'intern') {
+
+            // Hide CTC fields
+            grossPmWrapper.hide();
+            grossPaWrapper.hide();
+
+            grossPm.val('').prop('required', false);
+            grossPa.val('').prop('required', false);
+
+            // Show stipend
+            stipendWrapper.show();
+            stipend.prop('required', true);
+
+        } else {
+
+            // Show CTC fields
+            grossPmWrapper.show();
+            grossPaWrapper.show();
+
+            grossPm.prop('required', true);
+            grossPa.prop('required', true);
+
+            // Hide stipend
+            stipendWrapper.hide();
+            stipend.val('').prop('required', false);
+        }
+    }
+
+    applyEmployeeTypeRules();
+    $(document).on('input', '#stipendAmount', function () {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
+
+});
+</script>
+

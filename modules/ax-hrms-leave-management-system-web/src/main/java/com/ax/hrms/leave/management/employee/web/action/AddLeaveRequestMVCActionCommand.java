@@ -99,6 +99,10 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
             return;
         }
 
+        if(eligibleEmployee.getEmployeeType().equalsIgnoreCase("intern") || eligibleEmployee.getEmployeeType().equalsIgnoreCase("Contractor")){
+            SessionErrors.add(actionRequest,AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION);
+        }
+
 
 
         long leaveRequestId = ParamUtil.getLong(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR, AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);

@@ -2,6 +2,7 @@ package com.ax.hrms.policy.process.management.hr.admin.web.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -96,8 +97,8 @@ public class PolicyWebUtil {
 				AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Applicable_Date_Policy_Process_Management,
 				null);
 
-		int year = ParamUtil.getInteger(actionRequest,
-				AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Year_Policy_Process_Management);
+//		int year = ParamUtil.getInteger(actionRequest,
+//				AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Year_Policy_Process_Management);
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Date_Format_Policy_Process_Management);
@@ -107,6 +108,9 @@ public class PolicyWebUtil {
 		long policyTypeMasterId = ParamUtil.getLong(actionRequest,AxHrmsPolicyProcessManagementWebPortletConstants.Selected_Policy_Type_Policy_Process_Management);
 		long policyId = ParamUtil.getLong(actionRequest,
 				AxHrmsPolicyProcessManagementWebPortletConstants.Policy_Id_Policy_Process_Management, 0L);
+
+		LocalDate localDate = LocalDate.parse(enteredDate); // yyyy-MM-dd
+		int year = localDate.getYear();
 
 
 		try {

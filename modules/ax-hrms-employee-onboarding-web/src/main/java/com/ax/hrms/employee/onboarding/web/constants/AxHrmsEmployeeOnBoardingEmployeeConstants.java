@@ -58,6 +58,7 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
     public static final String AADHAR_NUMBER ="aadharNumber";
     public static final String NAME_AS_PER_AADHAAR_CARD ="nameAsPerAadhaarCard";
     public static final String PAN_NUMBER ="panNumber";
+    public static final String STIPEND ="stipendAmount";
 
 
     public static final String HRMS_DOCUMENT="HRMS Document";

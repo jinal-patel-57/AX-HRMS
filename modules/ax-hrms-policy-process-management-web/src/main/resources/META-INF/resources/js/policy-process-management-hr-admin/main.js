@@ -8,7 +8,7 @@
     let selectedType;
     let applicableDate;
     let uploadDocument;
-    let policyYear;
+   // let policyYear;
     let role;
 
     function formatDateDDMMYYYY(date) {
@@ -29,12 +29,12 @@
          selectedType= config.selectedType;
          applicableDate= config.applicableDate;
          uploadDocument= config.uploadDocument;
-         policyYear= config.policyYear;
+        // policyYear= config.policyYear;
          role= config.role;
         
         
         addEditPolicyHrAdminForm = $('#'+namespace+'addEditPolicyHrAdminForm');
-        yearSelectElement = document.getElementById('policyYear');
+      //  yearSelectElement = document.getElementById('policyYear');
 
 
         // ================= NO SPECIAL CHARACTERS =================
@@ -120,10 +120,10 @@
               },
 
               // Policy Year
-              [namespace + policyYear]: {
-                  required: true,
-                  digits: true
-              },
+//              [namespace + policyYear]: {
+//                  required: true,
+//                  digits: true
+//              },
 
               // Role
               [namespace + role]: {
@@ -166,10 +166,10 @@
                   validFileType: "Please upload only PDF or DOC files"
               },
 
-              [namespace + policyYear]: {
-                  required: "Please select year",
-                  digits: "Invalid year"
-              },
+//              [namespace + policyYear]: {
+//                  required: "Please select year",
+//                  digits: "Invalid year"
+//              },
 
               [namespace + role]: {
                   required: "Please select role"
@@ -225,14 +225,14 @@
 
         addEditPolicyHrAdminForm.ready(function(){
         	console.log("Ruuning Me!!!!!!!!!!!!1");
-        	yearSelectElement = document.getElementById('policyYear');
+//        	yearSelectElement = document.getElementById('policyYear');
         	
             const currentYear = new Date().getFullYear();
             let tempYear = 0;
             for(tempYear = currentYear-2;tempYear <= currentYear+2;tempYear++){
                 
         	console.log(tempYear);
-            $('#policyYear').append('<option value="'+tempYear+'">'+tempYear+'</option>');;
+//            $('#policyYear').append('<option value="'+tempYear+'">'+tempYear+'</option>');;
             
             
             }

@@ -1756,7 +1756,7 @@ function setConfigsForExperienceValidation(config) {
 
                 [namespace + "ifscCode"]: {
                     maxlength: "IFSC code should not exceed 75 characters.",
-                    ifscCodeValidation: "Please enter a valid IFSC code."
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
                 }
             }
         });

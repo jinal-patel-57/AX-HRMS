@@ -10,6 +10,7 @@
 <liferay-ui:error key="something-went-wrong-message-key" message="something-went-wrong"/>
 <liferay-ui:error key="leave-request-not-inserted" message="leave-request-not-inserted"/>
 <liferay-ui:error key="leave-request-not-inserted-because-of-probation" message="leave-request-not-inserted-because-of-probation-message"/>
+<liferay-ui:error key="leave-request-not-inserted-because-of-unauthorized" message="leave-request-not-inserted-because-of-unauthorized-message"/>
 <!-- Session Message Keys End -->
 
 <portlet:renderURL var="addLeaveRequestUrl">

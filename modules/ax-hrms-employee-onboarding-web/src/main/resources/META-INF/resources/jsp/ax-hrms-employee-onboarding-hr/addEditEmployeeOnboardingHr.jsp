@@ -146,7 +146,7 @@
 
 					<div class="form-group">
 						<label class="" for="grossSalaryCTCPM"><liferay-ui:message
-								key="gross-salary-ctc-pm" /> </label> <input id="grossSalaryCTCPM"
+								key="gross-salary-ctc-pm" /><span class="text-danger required-asterisk d-none">*</span> </label> <input id="grossSalaryCTCPM"
 							placeholder="<liferay-ui:message key='gross-salary-ctc-pm'/>"
 							class="form-control" type="text"
 							name="<portlet:namespace/>grossSalaryCTCPM" /> <label
@@ -158,10 +158,10 @@
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="grossSalaryCTCPA"><liferay-ui:message
-								key="gross-salary-ctc-pa" /> </label> <input id="grossSalaryCTCPA"
+								key="gross-salary-ctc-pa" /><span class="text-danger required-asterisk d-none">*</span> </label> <input id="grossSalaryCTCPA"
 							placeholder="<liferay-ui:message key='gross-salary-ctc-pa'/>"
 							class="form-control" type="text"
-							name="<portlet:namespace/>grossSalaryCTCPA"  readonly /> <label
+							name="<portlet:namespace/>grossSalaryCTCPA" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*"  readonly /> <label
 							id="grossSalaryCTCPA-error" class="error text-danger"
 							for="grossSalaryCTCPA"></label>
 					</div>
@@ -179,14 +179,14 @@
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="isProbationEnabled"><liferay-ui:message
-								key="probation-status" /></label>
+								key="probation-status" /><span class="text-danger">*</span></label>
 						<div class="d-flex c-gap-3 align-items-center">
 							<div class="form-check d-flex align-items-center c-gap-1">
 								<input class="form-check-input" type="radio"
 									name="<portlet:namespace />isProbationEnabled" id="enabled"
 									value="Enabled" checked> <label
 									class="form-check-label" for="enabled"><liferay-ui:message
-										key="enabled" /><span class="text-danger">*</span></label>
+										key="enabled" /></label>
 							</div>
 							<div class="form-check d-flex align-items-center c-gap-1">
 								<input class="form-check-input" type="radio"
@@ -290,7 +290,7 @@
 				<div class="col-sm-12 col-md-4 col-lg-4">
 					<div class="form-group">
                         <label for="managerSelectBox"> 
-							<liferay-ui:message key="manager" />
+							<liferay-ui:message key="Reporting Manager" />
 
 						</label>
 						<select id="managerSelectBox"
@@ -450,15 +450,20 @@
        });
 
 
-         $("#grossSalaryCTCPM").on("input keyup", function () {
-               let ctcPm = parseFloat($(this).val());
+     $("#grossSalaryCTCPM").on("input", function () {
+         const pm = parseFloat(this.value);
+         const $pa = $("#grossSalaryCTCPA");
 
-               if (!isNaN(ctcPm)) {
-                   $("#grossSalaryCTCPA").val(ctcPm * 12);
-               } else {
-                   $("#grossSalaryCTCPA").val("");
-               }
-           });
+         if (!isNaN(pm) && pm > 0) {
+             $pa.val((pm * 12).toFixed(2)).valid();
+         } else {
+             $pa.val("").valid();
+         }
+
+
+     });
+
+
 
 
            function checkEmailExists(email) {
@@ -523,6 +528,9 @@
                 emailInput.on("blur", function () {
                     checkEmailExists($(this).val());
                 });
+
+
+
 
 
 
