@@ -48,6 +48,8 @@
                 </liferay-ui:search-container-column-text>
 
 
+            <c:set var="isSameEmployee"
+                   value="${currentEmployeeId == wfh.employeeId}" />
 
                 <liferay-ui:search-container-column-text name="Action">
 
@@ -70,57 +72,70 @@
 
                     <div class="dropdown">
                         <button class="btn fa fa-ellipsis-v dropdown-toggle"
-                                data-toggle="dropdown"><i class="icon-ellipsis-vertical"></i></button>
+                                data-toggle="dropdown">
+                            <i class="icon-ellipsis-vertical"></i>
+                        </button>
 
                         <ul class="dropdown-menu">
-                            <c:choose>
-                                <c:when test="${wfh.status.toLowerCase() eq 'pending'}">
-                                     <li>
-                                         <a href="#"
-                                            class="dropdown-item wfh-action-btn"
-                                            data-title="Approve Work From Home"
-                                            data-url="${approveURL}">
-                                            <i class="icon-ok"></i> Approve
-                                         </a>
-                                     </li>
 
-                                     <li>
-                                         <a href="#"
-                                            class="dropdown-item wfh-action-btn"
-                                            data-title="Reject Work From Home"
-                                            data-url="${rejectURL}">
-                                            <i class="icon-ban-circle"></i> Reject
-                                         </a>
-                                     </li>
+                            <!-- ACTIONS ONLY IF NOT SAME EMPLOYEE -->
+                            <c:if test="${!isSameEmployee}">
+                                <c:choose>
 
-                                     <li>
-                                         <a href="#"
-                                            class="dropdown-item wfh-action-btn"
-                                            data-title="Cancel Work From Home"
-                                            data-url="${cancelURL}">
-                                            <i class="icon-remove"></i> Cancel
-                                         </a>
-                                     </li>
+                                    <c:when test="${wfh.status.toLowerCase() eq 'pending'}">
+                                        <li>
+                                            <a href="#"
+                                               class="dropdown-item wfh-action-btn"
+                                               data-title="Approve Work From Home"
+                                               data-url="${approveURL}">
+                                                <i class="icon-ok"></i> Approve
+                                            </a>
+                                        </li>
 
-                                </c:when>
+                                        <li>
+                                            <a href="#"
+                                               class="dropdown-item wfh-action-btn"
+                                               data-title="Reject Work From Home"
+                                               data-url="${rejectURL}">
+                                                <i class="icon-ban-circle"></i> Reject
+                                            </a>
+                                        </li>
 
-                                <c:when test="${wfh.status.toLowerCase() eq 'approved'
-                                    || wfh.status.toLowerCase() eq 'rejected'}">
-                                    <li>
-                                         <a href="#"
-                                            class="dropdown-item wfh-action-btn"
-                                            data-title="Cancel Work From Home"
-                                            data-url="${cancelURL}">
-                                            <i class="icon-remove"></i> Cancel
-                                         </a>
-                                    </li>
+                                        <li>
+                                            <a href="#"
+                                               class="dropdown-item wfh-action-btn"
+                                               data-title="Cancel Work From Home"
+                                               data-url="${cancelURL}">
+                                                <i class="icon-remove"></i> Cancel
+                                            </a>
+                                        </li>
+                                    </c:when>
 
-                                </c:when>
-                            </c:choose>
+                                    <c:when test="${wfh.status.toLowerCase() eq 'approved'
+                                        || wfh.status.toLowerCase() eq 'rejected'}">
+                                        <li>
+                                            <a href="#"
+                                               class="dropdown-item wfh-action-btn"
+                                               data-title="Cancel Work From Home"
+                                               data-url="${cancelURL}">
+                                                <i class="icon-remove"></i> Cancel
+                                            </a>
+                                        </li>
+                                    </c:when>
 
-                            <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
+                                </c:choose>
+                            </c:if>
+
+                            <!-- VIEW IS ALWAYS ALLOWED -->
+                            <li>
+                                <a href="${viewURL}" class="dropdown-item">
+                                    <i class="icon-eye-open"></i> View
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
+
                 </liferay-ui:search-container-column-text>
 
             </liferay-ui:search-container-row>

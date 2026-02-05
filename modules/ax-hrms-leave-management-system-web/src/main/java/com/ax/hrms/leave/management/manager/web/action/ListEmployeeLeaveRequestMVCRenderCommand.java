@@ -117,6 +117,7 @@
 package com.ax.hrms.leave.management.manager.web.action;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.leave.management.manager.web.dto.LeaveWithEmployeeDTO;
 import com.ax.hrms.leave.management.manager.web.util.AxHrmsManagerLeaveRequestWebUtil;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
@@ -257,6 +258,17 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         log.info("Total leave requests found for team = " + managerLeaveList.size());
         log.info(" leave requests found for team = " + managerLeaveList);
         log.info("Total leave requests found = " + finalList.size());
+
+        EmployeeDetails currentEmployee = null;
+        try {
+            currentEmployee = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+            renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
+        } catch (NoSuchEmployeeDetailsException e) {
+            renderRequest.setAttribute("currentEmployeeId", 0);
+            throw new RuntimeException(e);
+        }
+
+
         renderRequest.setAttribute(APPROVED_ID, approvedId);
         renderRequest.setAttribute(REJECTED_ID, rejectedId);
         renderRequest.setAttribute(CANCELLED_ID, cancelId);

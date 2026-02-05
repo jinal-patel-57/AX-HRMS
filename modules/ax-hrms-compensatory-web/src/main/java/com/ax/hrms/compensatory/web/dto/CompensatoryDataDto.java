@@ -10,6 +10,15 @@ public class CompensatoryDataDto {
     String managerName;
     String ModifiedBy;
     String employeeName;
+    long employeeId;
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public String getModifiedBy() {
         return ModifiedBy;

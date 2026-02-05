@@ -78,13 +78,13 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
         int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
+        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         int compensatoryDatasCount = 0;
 
 
         List<CompensatoryDataDto> compensatoryDataDtoList = new ArrayList<>();
         try {
-            ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
             long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
@@ -106,6 +106,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
                 compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
                 compensatoryDataDto.setDescription(compensatoryData.getDescription());
+                compensatoryDataDto.setEmployeeId(compensatoryData.getEmployeeId());
                 try {
                     EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(compensatoryData.getModifiedBy());
                     compensatoryDataDto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
@@ -120,15 +121,27 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setManagerName(managerDetails.getFirstName() + StringPool.SPACE + managerDetails.getLastName());
                 EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getEmployeeId());
                 compensatoryDataDto.setEmployeeName(employee.getFirstName()+ StringPool.SPACE + employee.getLastName());
+
                 compensatoryDataDtoList.add(compensatoryDataDto);
                 compensatoryDatasCount += 1;
             }
+
             renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
         } catch (PortalException e) {
             renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
         }
 
         // adding the managers list to
+
+        EmployeeDetails currentEmployee = null;
+        try {
+            currentEmployee = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+            renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
+        } catch (NoSuchEmployeeDetailsException e) {
+            renderRequest.setAttribute("currentEmployeeId", 0);
+            throw new RuntimeException(e);
+        }
+
 
         renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_COUNT, compensatoryDatasCount);
         renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);

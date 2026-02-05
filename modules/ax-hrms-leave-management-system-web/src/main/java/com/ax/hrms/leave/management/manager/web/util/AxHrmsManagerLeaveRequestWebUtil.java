@@ -147,6 +147,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             leaveRequestDto.setLeaveRequestId(leaveRequestId);
 
             leaveRequestDto.setEmployeeName(employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
+            leaveRequestDto.setEmployeeId(leaveRequest.getEmployeeId());
 
             EmployeeDepartment emplyeeDepartment = employeeDepartmentLocalService.findByEmployeeId(leaveRequest.getEmployeeId());
 

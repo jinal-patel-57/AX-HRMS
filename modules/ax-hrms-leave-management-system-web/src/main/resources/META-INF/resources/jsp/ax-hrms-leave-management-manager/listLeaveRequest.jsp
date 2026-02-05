@@ -39,6 +39,8 @@
 
 
                          <liferay-ui:search-container-column-text name="Status" value="${leaveRequest.status}"/>
+<c:set var="isSameEmployee"
+       value="${currentEmployeeId == leaveRequest.employeeId}" />
 
                 <liferay-ui:search-container-column-text name="Action">
 
@@ -69,57 +71,78 @@
                         <button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown">                                            <i class="icon-ellipsis-vertical"></i>
 </button>
 
-                        <ul class="dropdown-menu">
+                       <ul class="dropdown-menu">
                            <c:choose>
-                           <c:when test="${fn:toLowerCase(leaveRequest.status) eq 'pending'}">
-                            <li>
-                              <a href="javascript:void(0);"
-                                 class="dropdown-item"
-                                 onclick="openActionModal('${approveURL}', 'APPROVE')">
-                                 <i class="icon-ok"></i>
-                                 Approve
-                              </a>
-                            </li>
-                            <li>
-                            <a href="javascript:void(0);"
-                               class="dropdown-item"
-                               onclick="openActionModal('${rejectURL}', 'REJECT')">
-                                <i class="icon-ban-circle"></i>
-                                Reject
-                            </a>
-                            </li>
-                               <li>
-                               <a href="javascript:void(0);"
-                                 class="dropdown-item"
-                                  onclick="openActionModal('${cancelURL}', 'CANCEL')">
-                                   <i class="icon-remove"></i>
-                                   <liferay-ui:message key="cancel"/>
-                               </a>
-                               </li>
-                                                         <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
 
-                             </c:when>
 
-                                     <c:when test="${fn:toLowerCase(leaveRequest.status) eq 'cancelled'}">
-                                         <li>
-                                             <a href="${viewURL}" class="dropdown-item">
-                                                 <i class="icon-eye-open"></i> View
-                                             </a>
-                                         </li>
-                                     </c:when>
-                              <c:otherwise>
-                            <li>
-                               <a href="javascript:void(0);"
-                                class="dropdown-item"
-                                  onclick="openActionModal('${cancelURL}', 'CANCEL')">
-                                   <i class="icon-remove"></i>
-                                   Cancel
-                               </a>
-                            </li>
-                            <li><a href="${viewURL}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
-                            </c:otherwise>
+                               <c:when test="${fn:toLowerCase(leaveRequest.status) eq 'pending'}">
+
+                                   <c:if test="${!isSameEmployee}">
+                                       <li>
+                                           <a href="javascript:void(0);"
+                                              class="dropdown-item"
+                                              onclick="openActionModal('${approveURL}', 'APPROVE')">
+                                               <i class="icon-ok"></i> Approve
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a href="javascript:void(0);"
+                                              class="dropdown-item"
+                                              onclick="openActionModal('${rejectURL}', 'REJECT')">
+                                               <i class="icon-ban-circle"></i> Reject
+                                           </a>
+                                       </li>
+
+                                       <li>
+                                           <a href="javascript:void(0);"
+                                              class="dropdown-item"
+                                              onclick="openActionModal('${cancelURL}', 'CANCEL')">
+                                               <i class="icon-remove"></i> Cancel
+                                           </a>
+                                       </li>
+                                   </c:if>
+
+                                   <li>
+                                       <a href="${viewURL}" class="dropdown-item">
+                                           <i class="icon-eye-open"></i> View
+                                       </a>
+                                   </li>
+
+                               </c:when>
+
+                               <c:when test="${fn:toLowerCase(leaveRequest.status) eq 'cancelled'}">
+                                   <li>
+                                       <a href="${viewURL}" class="dropdown-item">
+                                           <i class="icon-eye-open"></i> View
+                                       </a>
+                                   </li>
+                               </c:when>
+
+                               <c:otherwise>
+
+                                   <!-- CANCEL ONLY IF NOT SAME EMPLOYEE -->
+                                   <c:if test="${!isSameEmployee}">
+                                       <li>
+                                           <a href="javascript:void(0);"
+                                              class="dropdown-item"
+                                              onclick="openActionModal('${cancelURL}', 'CANCEL')">
+                                               <i class="icon-remove"></i> Cancel
+                                           </a>
+                                       </li>
+                                   </c:if>
+
+                                   <li>
+                                       <a href="${viewURL}" class="dropdown-item">
+                                           <i class="icon-eye-open"></i> View
+                                       </a>
+                                   </li>
+
+                               </c:otherwise>
+
                            </c:choose>
-                        </ul>
+                       </ul>
+
                     </div>
 
                 </liferay-ui:search-container-column-text>

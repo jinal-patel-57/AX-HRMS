@@ -55,6 +55,8 @@
 
                            value='<span class="status ${fn:toLowerCase(fn:replace(leaveRequest.status, " ", "-"))}">${leaveRequest.status}</span>' />
 
+<c:set var="isSameEmployee"
+       value="${currentEmployeeId == leaveRequest.employeeId}" />
 
                         <liferay-ui:search-container-column-text name="Action">
                             <portlet:actionURL name="/approveLeaveRequest" var="approveLeaveRequestURL">
@@ -81,7 +83,27 @@
                             </portlet:renderURL>
 
                             <c:choose>
-                                <c:when test="${leaveRequest.status.toLowerCase() eq 'pending'}">
+                            <c:when test="${isSameEmployee}">
+                                <div class="dropdown ">
+                                    <button class="btn fa fa-ellipsis-v dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="icon-ellipsis-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="${viewLeaveRequestURL}"
+                                               class="dropdown-item">
+                                                <i class="icon-eye-open"></i>
+                                                <liferay-ui:message key="view"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </c:when>
+
+
+
+                                <c:when test="${!isSameEmployee && leaveRequest.status.toLowerCase() eq 'pending'}">
 
 
                                     <div class="dropdown ">
@@ -129,7 +151,7 @@
                                     </div>
 
                                 </c:when>
-                                <c:when test="${leaveRequest.status.toLowerCase() eq 'approved' || leaveRequest.status.toLowerCase() eq 'rejected'}">
+                                <c:when test="${!isSameEmployee && (leaveRequest.status.toLowerCase() eq 'approved' || leaveRequest.status.toLowerCase() eq 'rejected')}">
 
 
                                     <div class="dropdown ">

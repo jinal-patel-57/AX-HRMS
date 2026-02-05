@@ -6,6 +6,9 @@ import java.util.List;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.ax.hrms.model.EmployeeDetails;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -76,6 +79,7 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse)  {
 		int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
 		int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		int totalLeaveRequest = leaveRequestLocalService.getLeaveRequestsCount();
 		int totalPageContainer = (totalLeaveRequest + deltaValue - 1) / deltaValue;
@@ -106,6 +110,12 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED);
 			long cancelId = leaveRequestWebUtil.getLeaveStatusId(
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.CANCELLED);
+
+
+			EmployeeDetails currentEmployee = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+
+
+			renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
 
 			renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.TOTAL_LEAVE_REQUEST,
 					totalLeaveRequest);

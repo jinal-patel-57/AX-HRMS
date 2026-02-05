@@ -12,7 +12,17 @@ public class WFHRequestDto {
     private Date requestDate;
     private Date startDate;
     private Date endDate;
+
     private String modifiedBy;
+    private long employeeId;
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public String getModifiedBy() {
         return modifiedBy;

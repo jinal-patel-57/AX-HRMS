@@ -61,6 +61,9 @@
 
                 <liferay-ui:search-container-column-text name="description"
                                                          value="${ compensatoryDataDto.getDescription() }"/>
+         <c:set var="isSameEmployee"
+                value="${currentEmployeeId == compensatoryDataDto.employeeId}" />
+
 
                 <liferay-ui:search-container-column-text name="action" cssClass="text-center">
                         <portlet:actionURL name="/cancelCompensatoryData"
@@ -68,7 +71,7 @@
                             <portlet:param name="compensatoryDataId"
                                            value="${compensatoryDataDto.compensatoryDataId}"/>
                         </portlet:actionURL>
-                    <c:if test="${ compensatoryDataDto.getStatus() =='Pending' }">
+                    <c:if test="${!isSameEmployee && compensatoryDataDto.getStatus() =='Pending' }">
                         <portlet:actionURL name="/approveRejectCompensatoryData"
                                            var="rejectCompensatoryDataURL">
                             <portlet:param name="compensatoryDataId"
@@ -117,7 +120,7 @@
                             </ul>
                         </div>
                     </c:if>
-                    <c:if test="${ compensatoryDataDto.getStatus() =='Approved' }">
+                    <c:if test="${ !isSameEmployee && compensatoryDataDto.getStatus() =='Approved' }">
                         <div class="dropdown">
                             <button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">

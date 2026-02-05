@@ -154,6 +154,7 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
+                dto.setEmployeeId(wfh.getEmployeeId());
                 try {
                     EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(wfh.getModifiedBy());
                     dto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
@@ -168,6 +169,10 @@ public class ListWFHHRRenderCommand implements MVCRenderCommand {
             searchContainer.setDeltaConfigurable(true);
             searchContainer.setResultsAndTotal(() -> dtoList, totalWFHRequests);
 
+            EmployeeDetails currentEmployee = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+
+
+            renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
             renderRequest.setAttribute("wfhSC", searchContainer);
             renderRequest.setAttribute("totalWFHRequest", totalWFHRequests);
             renderRequest.setAttribute("delta", delta);
