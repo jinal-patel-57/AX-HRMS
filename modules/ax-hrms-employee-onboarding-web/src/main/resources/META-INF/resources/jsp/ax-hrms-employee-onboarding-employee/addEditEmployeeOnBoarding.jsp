@@ -8,7 +8,7 @@
 <liferay-ui:success key="updatedSuccessfully" message="Your request has been completed successfully."/>
 
 <c:if test="${isOnBoarded}">
-    <div class="alert alert-warning">This form is submitted for the review.
+    <div class="alert alert-warning">This form is submitted. You can check your details in <a href="/web/ax-hrms/my-profile">My Profile</a>.
     </div>
 </c:if>
 
