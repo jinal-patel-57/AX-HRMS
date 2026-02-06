@@ -95,7 +95,7 @@
 							<input type="file" class="form-control"
 								id="uploadDocument" value="${URL}" title="${fileName}"
 								name="<portlet:namespace/>uploadDocument"
-								accept="application/pdf,.pdf,application/msword,.doc,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx"/>
+								/>
 
 							<c:if test="${not empty fileName}">
 								<a href="${URL}" target="_blank"><liferay-ui:message

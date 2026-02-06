@@ -36,6 +36,15 @@
         addEditPolicyHrAdminForm = $('#'+namespace+'addEditPolicyHrAdminForm');
       //  yearSelectElement = document.getElementById('policyYear');
 
+        $.validator.addMethod(
+            "validExtension",
+            function (value, element) {
+                if (!value) return true; // handled by required
+
+                return /\.(pdf|jpg|jpeg|png)$/i.test(value);
+            },
+            "Only PDF, JPG, JPEG, or PNG files are allowed."
+        );
 
         // ================= NO SPECIAL CHARACTERS =================
         $.validator.addMethod("noSpecialChars", function (value, element) {
@@ -79,6 +88,22 @@
       );
 
 
+    $.validator.addMethod(
+        "maxFileSize",
+        function (value, element, maxSizeMB) {
+            if (!element.files || element.files.length === 0) {
+                return true;
+            }
+
+            const file = element.files[0];
+            const maxSizeBytes = maxSizeMB * 1024 * 1024;
+            console.log("File size",maxSizeBytes)
+            return file.size <= maxSizeBytes;
+        },
+        "File size must not exceed 10 MB."
+    );
+
+
 
 
 
@@ -116,7 +141,8 @@
               // Upload Document
               [namespace + uploadDocument]: {
                   required: true,
-                  validFileType: true
+                  validExtension: true,
+                  maxFileSize: 10
               },
 
               // Policy Year
@@ -163,7 +189,8 @@
 
               [namespace + uploadDocument]: {
                   required: "Please upload document",
-                  validFileType: "Please upload only PDF or DOC files"
+                  validExtension: "Please upload only PDF or DOC files",
+                  maxFileSize: "File size must not exceed 10 MB."
               },
 
 //              [namespace + policyYear]: {
@@ -197,6 +224,7 @@
           .on("change blur keyup", function () {
               $(this).valid();
           });
+
 
       // PAST DATE WARNING
       $("#applicableDate").on("change blur", function () {
