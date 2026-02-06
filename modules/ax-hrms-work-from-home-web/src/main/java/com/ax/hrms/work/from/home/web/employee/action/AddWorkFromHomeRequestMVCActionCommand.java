@@ -12,7 +12,6 @@ import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
-import com.ax.hrms.service.persistence.LeaveRequestUtil;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
@@ -34,10 +33,8 @@ import org.osgi.service.component.annotations.Reference;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component(property = {"javax.portlet.name=" + AxHrmsWorkFromHomePortletKeys.AXHRMSWORKFROMHOME, "mvc.command.name=/addEditWFH"}, service = MVCActionCommand.class)
 public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand {
@@ -96,12 +93,13 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         log.info("here ok.....");
 
+
+
         // -----------------------------
         // VALIDATION SECTION
         // -----------------------------
 
         boolean hasError = false;
-
         // Empty fields check
         if (Validator.isNull(teamMailId) ||
                 Validator.isNull(reason) ||
@@ -110,7 +108,36 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
             SessionErrors.add(actionRequest, "empty-fields");
             hasError = true;
+        }else {
+
+            // Split by comma
+            String[] emailArray = teamMailId.split(",");
+
+            Set<String> uniqueEmails = new LinkedHashSet<>();
+            boolean invalidEmailFound = false;
+
+            for (String email : emailArray) {
+                String trimmedEmail = email.trim();
+
+                // Validate email format
+                if (!Validator.isEmailAddress(trimmedEmail)) {
+                    invalidEmailFound = true;
+                    break;
+                }
+
+                uniqueEmails.add(trimmedEmail.toLowerCase());
+            }
+
+            if (invalidEmailFound) {
+                SessionErrors.add(actionRequest, "email-invalid");
+                hasError = true;
+            } else {
+                // Remove duplicates & rebuild string
+                teamMailId = uniqueEmails.stream()
+                        .collect(Collectors.joining(","));
+            }
         }
+
 
         // Email validation
         if (Validator.isNull(teamMailId)) {

@@ -30,6 +30,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
 <liferay-ui:error key="reason-min-char-invalid" message="Reason must be at least 10 characters"/>
 <liferay-ui:error key="reason-max-char-invalid" message="Reason must be less than 250 characters"/>
 <liferay-ui:error key="empty-fields" message="Please fill all required fields"/>
+<liferay-ui:error key="email-invalid" message="One or more email addresses are invalid." />
 
 <liferay-ui:success key="wfh-added" message="Work From Home request added successfully!" />
 <liferay-ui:success key="wfh-updated" message="Work From Home request updated successfully!" />
@@ -58,7 +59,12 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        class="form-control"
                        value="<%= isEdit ? wfh.getTeamMailId() : "" %>"
                        required />
-                <small class="text-danger" id="emailError"></small>
+                <small class=" text-muted">
+                    Multiple email IDs can be entered, separated by commas.
+                    <strong>Example:</strong> hr@company.com, manager@company.com
+                </small>
+
+                <small class="text-danger d-block mt-1" id="emailError"></small>
             </div>
 
             <div class="form-group">
@@ -138,10 +144,44 @@ document.addEventListener("DOMContentLoaded", function () {
     /* ---------------- EMAIL VALIDATION ---------------- */
     function validateEmail() {
 
-        if (!email.value.trim()) {
+        const value = email.value.trim();
+
+        if (!value) {
             emailError.innerText = "Team Mail ID is required.";
             return false;
         }
+
+        // Split by comma
+        const emails = value.split(",");
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const uniqueEmails = new Set();
+        let invalidFound = false;
+
+        emails.forEach(function (mail) {
+            const trimmed = mail.trim().toLowerCase();
+
+            if (!trimmed) {
+                invalidFound = true;
+                return;
+            }
+
+            if (!emailRegex.test(trimmed)) {
+                invalidFound = true;
+                return;
+            }
+
+            uniqueEmails.add(trimmed);
+        });
+
+        if (invalidFound) {
+            emailError.innerText =
+                "Please enter valid email addresses separated by commas.";
+            return false;
+        }
+
+        // Remove duplicates & normalize value
+        email.value = Array.from(uniqueEmails).join(",");
 
         emailError.innerText = "";
         return true;
