@@ -258,6 +258,9 @@
                                    class="form-control"
                                    id="<portlet:namespace/>addressProofFile"
                                    name="<portlet:namespace/>addressProofFile" />
+                            <small class="form-text text-muted">
+                                Allowed file types: PDF, JPG, PNG, JPEG
+                            </small>
                         <c:if test="${not presentPermanentSame}">
                             <c:if test="${not empty addressProofPreviewURL}">
                                 <input type="hidden"

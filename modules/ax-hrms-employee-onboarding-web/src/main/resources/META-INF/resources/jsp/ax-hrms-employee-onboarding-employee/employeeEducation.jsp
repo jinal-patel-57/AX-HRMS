@@ -118,6 +118,9 @@
                                                id="<portlet:namespace/>educationCertificateAttachment1"
                                                data-existing-file-id="0"
                                                name="<portlet:namespace/>educationCertificateAttachment1" />
+                                        <small class="form-text text-muted">
+                                            Allowed file types: PDF, JPG, PNG, JPEG
+                                        </small>
                                     </div>
 
                                     <!-- Passing Year -->
@@ -240,7 +243,9 @@
                                                    id="<portlet:namespace/>educationCertificateAttachment${status.index+1}"
                                                    data-existing-file-id="${educationItem.educationCertificateMediaId}"
                                                    name="<portlet:namespace/>educationCertificateAttachment${status.index+1}"/>
-
+                                            <small class="form-text text-muted">
+                                                Allowed file types: PDF, JPG, PNG, JPEG
+                                            </small>
                                            <c:if test="${educationItem.educationCertificateMediaId > 0}">
                                                                                                <%
                                                                                                    com.ax.hrms.model.EmployeeEducation edu =

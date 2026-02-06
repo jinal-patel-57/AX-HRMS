@@ -334,10 +334,18 @@ function setConfigsForAddExperienceSection(config) {
                  $.validator.addMethod(
                           "documentRequired",
                           function (value, element, existingFileId) {
+
+                                  const form = element.form;
+
                               // UPDATE case → already uploaded
                               if (existingFileId && existingFileId > 0) {
                                   return true;
                               }
+
+                              if (!form._submitAttempted) {
+                                    return true;
+                              }
+
                               // ADD case → must upload
                               return element.files && element.files.length > 0;
                           }
@@ -346,6 +354,7 @@ function setConfigsForAddExperienceSection(config) {
                           $.validator.addMethod(
                               "fileRequiredIfNoExisting",
                               function (value, element) {
+                                  const form = element.form;
 
                                   const existingFileId = $(element).data("existing-file-id");
 
@@ -353,7 +362,9 @@ function setConfigsForAddExperienceSection(config) {
                                   if (existingFileId && existingFileId !== "0" && existingFileId !== 0) {
                                       return true;
                                   }
-
+                                  if (!form._submitAttempted) {
+                                    return true;
+                                  }
                                   // ADD case → must upload
                                   return element.files && element.files.length > 0;
                               },
@@ -443,6 +454,15 @@ function setConfigsForAddExperienceSection(config) {
                         date: true,
                         pastDate1900: true
                     },
+                    [namespace + "employeeProfilePicture"]: {
+                        profilePicRequired: true,
+//                        required: function () {
+//                            return !profilePicName || profilePicName.trim() === "";
+//                        },
+                        validExtensionForProfileImage:true,
+                            maxFileSize: true
+
+                    },
                     [namespace + "spouseName"]: {
                         required: function () {
                             return $("#" + namespace + "maritalStatus").is(":checked");
@@ -451,11 +471,13 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "aadhaarCard"]: {
                        documentRequired: aadhaarCardId,
+                       validExtension:true,
                        maxFileSize: 10
                    },
 
                    [namespace + "panCard"]: {
                        documentRequired: panCardId,
+                       validExtension:true,
                        maxFileSize: 10
                    },
                    [namespace + "kycDocumentType"]: {
@@ -465,15 +487,35 @@ function setConfigsForAddExperienceSection(config) {
                        }
                    },
                    [namespace + "kycDocumentFile"]: {
-                       required: function () {
-                           var kycTypeSelected =
-                               $("#" + namespace + "kycDocumentType").val();
+                       required: function (element) {
+                                                               var kycTypeSelected =
+                                                                   $("#" + namespace + "kycDocumentType").val();
+                                                               const form = element.form;
+                                                        // UPDATE case → already uploaded
+                                                        if (isKycDocumentAlreadyUploaded) {
+                                                            return false;
+                                                        }
 
-                           // Required only if:
-                           // 1. KYC type selected
-                           // 2. No document already uploaded
-                           return kycTypeSelected && !isKycDocumentAlreadyUploaded;
-                       }
+                                                        // Do not validate before clicking Next
+                                                        if (!form._submitAttempted) {
+                                                            return false;
+                                                        }
+                                                               // Required only if:
+                                                               // 1. KYC type selected
+                                                               // 2. No document already uploaded
+                                                               return kycTypeSelected && !isKycDocumentAlreadyUploaded;
+                                                           },
+                       validExtension: true,
+                       maxFileSize: 10
+//                        function () {
+//                           var kycTypeSelected =
+//                               $("#" + namespace + "kycDocumentType").val();
+//
+//                           // Required only if:
+//                           // 1. KYC type selected
+//                           // 2. No document already uploaded
+//                           return kycTypeSelected && !isKycDocumentAlreadyUploaded;
+//                       }
                    }
                 },
                 messages: {
@@ -492,6 +534,11 @@ function setConfigsForAddExperienceSection(config) {
                         minlength: "Mobile number must be at least 10 digits long.",
                         maxlength: "Mobile number must not exceed 15 digits.",
                         validMobile10: "Enter a valid 10-digit mobile number"
+                    },
+                    [namespace + "employeeProfilePicture"]: {
+                        profilePicRequired: "Please select a profile picture",
+                           validExtensionForProfileImage:"Only JPG, JPEG, or PNG files are allowed.",
+                           maxFileSize: "File size must not exceed 10 MB."
                     },
 
                     [namespace + "fatherName"]: {
@@ -512,14 +559,15 @@ function setConfigsForAddExperienceSection(config) {
                     },
                    [namespace + "aadhaarCard"]: {
                         documentRequired: "Please upload Aadhaar card.",
-                        maxFileSize: 10
+                        validExtension:"Only PDF, JPG, JPEG, or PNG files are allowed.",
+                        maxFileSize: "File size must not exceed 10 MB."
                     },
 
                     [namespace + "panCard"]: {
                         documentRequired: "Please upload PAN card.",
-                        maxFileSize: 10
+                        validExtension:"Only PDF, JPG, JPEG, or PNG files are allowed.",
+                        maxFileSize: "File size must not exceed 10 MB."
                     },
-
                         [namespace + "aadharNumber"]: {
                             required: "Please enter Aadhaar number.",
                               validAadhaar: "Aadhaar must be in format 1234-1234-1234."
@@ -533,7 +581,10 @@ function setConfigsForAddExperienceSection(config) {
                         validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
                     },
                     [namespace + "kycDocumentFile"]: {
-                        required: "Please upload KYC document."
+//                        required: "Please upload KYC document."
+                            required: "Please upload KYC document.",
+                            validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                            maxFileSize: "File size must not exceed 10 MB."
                     },
                     [namespace + "kycDocumentType"]: {
                         required: "Please select KYC document type."
@@ -601,6 +652,54 @@ $.validator.addMethod(
     "File size must not exceed 10 MB."
 );
 
+        $.validator.addMethod(
+            "validExtension",
+            function (value, element) {
+                if (!value) return true; // handled by required
+
+                return /\.(pdf|jpg|jpeg|png)$/i.test(value);
+            },
+            "Only PDF, JPG, JPEG, or PNG files are allowed."
+        );
+
+        $.validator.addMethod(
+            "validExtensionForProfileImage",
+            function (value, element) {
+                if (!value) return true; // handled by required
+
+                return /\.(jpg|jpeg|png)$/i.test(value);
+            },
+            "Only JPG, JPEG, or PNG files are allowed."
+        );
+
+$.validator.addMethod(
+    "profilePicRequired",
+    function (value, element) {
+        const form = element.form;
+
+        // Do not validate until Next/Submit is clicked
+        if (!form._submitAttempted) {
+            return true;
+        }
+
+        // New file selected
+        if (element.files && element.files.length > 0) {
+            return true;
+        }
+
+        // Existing file already saved in DB
+        if (profilePicName && profilePicName.trim() !== "") {
+            return true;
+        }
+
+        return false;
+    },
+    "Please select a profile picture"
+);
+
+
+
+
 
 
 
@@ -651,6 +750,12 @@ $.validator.addMethod(
                 event.preventDefault();
                 console.log("Inside the js of the employee onboarding!!!!!!")
                 var form1 = $('#stepperForm');
+
+                form1[0]._submitAttempted = true;
+                form1.find('input[type="file"]').each(function () {
+                    $(this).valid();
+                });
+
                 if (!form1.valid()) {
                     return;
                 }
@@ -816,7 +921,25 @@ $.validator.addMethod(
                                        validPincode: true
                                    },
                                    [namespace + "addressProofFile"]: {
-                                       required: true
+                                       required: function (element) {
+                                               const form = element.form;
+                                               if (!form._submitAttempted) {
+                                                   return false;
+                                               }
+
+                                               if ($("#" + namespace + "addressProofAlreadyUploaded").length) {
+                                                   return false;
+                                               }
+
+                                             if (element.files && element.files.length > 0) {
+                                                 return false;
+                                             }
+
+
+                                               return true;
+                                           },
+                                           validExtension: true,
+                                           maxFileSize: 10
                                    },
                                },
 
@@ -892,8 +1015,9 @@ $.validator.addMethod(
                                        validPincode: "Pincode must be exactly 6 digits."
                                    },
                                    [namespace + "addressProofFile"]: {
-                                       required: "Please enter the Address Proof File."
-                                   },
+                                    required: "Please enter the Address Proof File.",
+                                     validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                                     maxFileSize: "File size must not exceed 10 MB."                                   },
                                }
 
                            });
@@ -924,6 +1048,10 @@ $.validator.addMethod(
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
                 var formData = new FormData(form2[0]);
+                form2[0]._submitAttempted = true;
+                form2.find('input[type="file"]').each(function () {
+                    $(this).valid();
+                });
                 if (!form2.valid()) {
                         return;
                     }
@@ -1092,7 +1220,9 @@ $.validator.addMethod(
 
 
                     rules[eduCertKey] = {
-                        fileRequiredIfNoExisting: true
+                        fileRequiredIfNoExisting: true,
+                        validExtension: true,
+                        maxFileSize:10
                     };
 
                   messages[levelNameName] = { required: "Please select an education level name." };
@@ -1128,8 +1258,9 @@ $.validator.addMethod(
                   };
 
                   messages[eduCertKey] = {
-                      fileRequiredIfNoExisting: "Please upload education certificate."
-                  };
+                         fileRequiredIfNoExisting: "Please upload education certificate.",
+                         validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                         maxFileSize: "File size must not exceed 10 MB."                  };
               });
 
               form3.validate({
@@ -1312,6 +1443,7 @@ $.validator.addMethod(
                     initializeValidation();
 
                     const form3 = $('#educationStepperForm');
+                    form3[0]._submitAttempted = true;
 
                     if (!form3.valid()) {
                         return false;

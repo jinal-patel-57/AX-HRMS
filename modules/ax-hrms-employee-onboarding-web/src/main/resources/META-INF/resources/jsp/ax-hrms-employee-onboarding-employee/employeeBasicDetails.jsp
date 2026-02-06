@@ -115,7 +115,7 @@
                        class="form-control"/>
 
                 <small class="form-text text-muted">
-                    Allowed file types: PDF, JPG, PNG, JPEG
+                    Allowed file types: JPG, PNG, JPEG
                 </small>
                        <c:if test="${employeeDetail.profilePicId > 0}">
                                       <%

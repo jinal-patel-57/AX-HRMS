@@ -63,6 +63,9 @@
                                                name="<portlet:namespace/>experienceCertificateAttachment1"
                                                data-existing-file-id="0"
                                                multiple/>
+                                        <small class="form-text text-muted">
+                                            Allowed file types: PDF, JPG, PNG, JPEG
+                                        </small>
                                     </div>
 
                                     <input type="hidden" id="currentIndex"
@@ -126,7 +129,9 @@
                                                    data-existing-file-id="${experienceItem.experienceCertificateMediaId}"
                                                    multiple
                                                    />
-
+                                            <small class="form-text text-muted">
+                                                Allowed file types: PDF, JPG, PNG, JPEG
+                                            </small>
                                             <c:if test="${not empty experienceItem.experienceCertificateMediaId}">
                                                   <%
                                                      com.ax.hrms.model.EmployeeExperience exp =
