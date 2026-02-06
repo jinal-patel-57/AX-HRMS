@@ -206,8 +206,13 @@
             <div class="modal-footer d-flex justify-content-end">
                 <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"><liferay-ui:message
                         key="close"/></button>
-                <button type="button" class="btn btn-outline-success btn-sm"
-                        onclick="submit_compensatory_form()"><liferay-ui:message key="approve"/></button>
+               <button type="button"
+                       id="submitCompensationBtn"
+                       class="btn btn-outline-success btn-sm"
+                       onclick="submit_compensatory_form()">
+                   <liferay-ui:message key="approve"/>
+               </button>
+
             </div>
             </form>
         </div>
@@ -222,57 +227,124 @@
         axHrmsCompensatoryDataWebPortlet.setConfigs(config);
     });
         function openApproveModal(id, requestedHours) {
+
+            resetModalState();
+
             $('#hiddenCompensatoryDataId').val(id);
-            $('#requestedHours').val(requestedHours);
+            $('#requestedHours').val(requestedHours).prop('readonly', true);
+
             $('#approvedHours').prop('disabled', false).closest('.form-group').show();
-            $('#requestedHours')
-                .prop('readonly', true)
-                .closest('.form-group')
-                .show();
-            $('#requestedHours').prop('disabled', false).closest('.form-group').show();
+
             $('#actionType').val('APPROVE');
-            $('#comment').val('');
 
             $('#approveCompensationModal').modal('show');
         }
 
-        function openRejectModal(id) {
-            $('#hiddenCompensatoryDataId').val(id);
 
-            // Hide approved hours
-            $('#approvedHours').val('').prop('disabled', true).closest('.form-group').hide();
-            $('#requestedHours').val('').closest('.form-group').hide();
+       function openRejectModal(id) {
 
-            $('#actionType').val('REJECT');
-            $('#comment').val('');
+           resetModalState();
 
-            $('#approveCompensationModal').modal('show');
-        }
+           $('#hiddenCompensatoryDataId').val(id);
+
+           // Hide hours
+           $('#requestedHours').closest('.form-group').hide();
+           $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+
+           // Change title & button
+           $('#approveCompensationModalLabel')
+               .text('<liferay-ui:message key="Reject Compensation Request"/>');
+
+           $('#submitCompensationBtn')
+               .text('<liferay-ui:message key="reject"/>')
+               .removeClass('btn-outline-success')
+               .addClass('btn-outline-danger');
+
+           $('#actionType').val('REJECT');
+
+           $('#approveCompensationModal').modal('show');
+       }
+
 
        function submit_compensatory_form() {
             $('#approveCompensationForm').submit();
         }
 
-       function resetModal() {
-           $('#requestedHours').val('').closest('.form-group').show();
-           $('#approvedHours').val('').prop('disabled', false).closest('.form-group').show();
+
+
+      function openCancelModal(id) {
+
+          resetModalState();
+
+          $('#hiddenCompensatoryDataId').val(id);
+
+          // Hide hours
+          $('#requestedHours').closest('.form-group').hide();
+          $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+
+          // Change title & button
+          $('#approveCompensationModalLabel')
+              .text('<liferay-ui:message key="Cancel Compensation Request"/>');
+
+          $('#submitCompensationBtn')
+              .text('<liferay-ui:message key="cancel"/>')
+              .removeClass('btn-outline-success')
+              .addClass('btn-outline-danger');
+
+          $('#actionType').val('CANCEL');
+
+          $('#approveCompensationModal').modal('show');
+      }
+
+
+
+       function resetModalState() {
+
+           // Reset modal title
+           $('#approveCompensationModalLabel')
+               .text('<liferay-ui:message key="approve-compensation-hours"/>');
+
+           // Reset submit button
+           $('#submitCompensationBtn')
+               .text('<liferay-ui:message key="approve"/>')
+               .removeClass('btn-outline-danger')
+               .addClass('btn-outline-success');
+
+           // Reset fields
+           $('#requestedHours').val('').prop('disabled', false)
+               .prop('readonly', false)
+               .closest('.form-group').show();
+
+           $('#approvedHours').val('').prop('disabled', false)
+               .closest('.form-group').show();
+
            $('#comment').val('');
+           $('#actionType').val('');
        }
+$('#approveCompensationModal').on('hidden.bs.modal', function () {
+    resetModalState();
+    clearValidationErrors();
+});
 
-       function openCancelModal(id) {
-           resetModal();
+function clearValidationErrors() {
 
-           $('#hiddenCompensatoryDataId').val(id);
+    // Remove error messages
+    $('#approveCompensationForm')
+        .find('label.error')
+        .text('')
+        .hide();
 
-           // Hide hours fields
-           $('#requestedHours').closest('.form-group').hide();
-           $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+    // Remove error class from inputs
+    $('#approveCompensationForm')
+        .find('.error')
+        .removeClass('error');
 
-           $('#actionType').val('CANCEL');
+    // Reset jQuery validator if attached
+    var validator = $('#approveCompensationForm').data('validator');
+    if (validator) {
+        validator.resetForm();
+    }
+}
 
-           // Optional: change modal title
-           $('#approveCompensationModalLabel').text('Cancel Compensation Request');
 
-           $('#approveCompensationModal').modal('show');
-       }
 </script>

@@ -46,6 +46,7 @@
             "Only PDF, JPG, JPEG, or PNG files are allowed."
         );
 
+
         // ================= NO SPECIAL CHARACTERS =================
         $.validator.addMethod("noSpecialChars", function (value, element) {
             return this.optional(element) || /^[a-zA-Z0-9\s]+$/.test(value);
@@ -86,6 +87,34 @@
               return "Please enter a date on or before " + formatDateDDMMYYYY(maxDate);
           }
       );
+ function applyGenericDateRestriction(element) {
+              if (!element) return;
+
+              const nextYear = new Date().getFullYear() + 1;
+              const pastYear = new Date().getFullYear() - 2;
+              const maxDate = `${nextYear}-12-31`;
+              const minDate = `${pastYear}-01-01`;
+
+              element.setAttribute('min', minDate);
+              element.setAttribute('max', maxDate);
+
+              element.addEventListener('input', function () {
+                  const val = this.value;
+                  if (val) {
+                      const parts = val.split('-');
+                      if (parts[0] && parts[0].length > 4) {
+                          parts[0] = parts[0].substring(0, 4);
+                          this.value = parts.join('-');
+                      }
+                  }
+              });
+          }
+
+          const applicableDateInput = document.getElementById("applicableDate");
+                          if (applicableDateInput) {
+                              applyGenericDateRestriction(applicableDateInput);
+                          }
+
 
 
     $.validator.addMethod(

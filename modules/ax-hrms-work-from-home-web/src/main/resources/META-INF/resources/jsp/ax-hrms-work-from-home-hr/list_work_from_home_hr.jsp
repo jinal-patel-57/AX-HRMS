@@ -182,10 +182,7 @@ $('.table-responsive').on('hide.bs.dropdown', function () {
      $('.table-responsive').css( "overflow", "auto" );
 })
 
-$(document).on('click', '.wfh-action-btn', function (e) {
-    e.preventDefault();
 
-});
 
 </script>
 
@@ -216,4 +213,19 @@ $(function () {
 });
 </script>
 
+<script>
+$(document).on('click', '[data-dismiss="modal"], .modal .close', function () {
+
+    // Reset form
+    $('#wfhActionForm')[0].reset();
+
+    // Clear modal title (optional but clean)
+    $('#wfhActionModal .modal-title').text('');
+
+     $('#wfhActionForm').attr('action', '');
+
+    // Close modal (same method you used to open)
+    $('#wfhActionModal').hide();
+});
 </script>
+

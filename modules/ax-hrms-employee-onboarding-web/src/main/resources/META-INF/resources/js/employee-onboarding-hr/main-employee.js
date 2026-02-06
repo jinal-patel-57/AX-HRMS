@@ -793,6 +793,7 @@ $.validator.addMethod(
                   }
               });
 
+
                 $(document).ready(function () {
 
                    $("#grossSalaryCTCPM").on("input", function () {
@@ -2016,6 +2017,10 @@ function setConfigsForExperienceValidation(config) {
 
             // validation trigger
             attachFormValidationTriggers("#experienceStepperForm");
+
+             document.querySelectorAll('#experienceStepperForm input[type="date"]').forEach(input => {
+                            applyGenericDateRestriction(input);
+                        });
 
 
         

@@ -128,6 +128,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let startTouched = false;
     let endTouched = false;
 
+
+
+
+
+
+
+
     /* ---------------- EMAIL VALIDATION ---------------- */
     function validateEmail() {
 
@@ -264,5 +271,48 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }); */
 });
+
+
+
+ $(document).ready(function () {
+
+ function applyGenericDateRestriction(element) {
+     if (!element) return;
+
+     const currentYear = new Date().getFullYear();
+     const lastYear = new Date().getFullYear()-1;
+     const maxDate = `${currentYear}-12-31`;
+     const minDate = `${lastYear}-01-01`;
+
+     element.setAttribute('min', minDate);
+     element.setAttribute('max', maxDate);
+
+     element.addEventListener('input', function () {
+         const val = this.value;
+         if (val) {
+             const parts = val.split('-');
+             if (parts[0] && parts[0].length > 4) {
+                 parts[0] = parts[0].substring(0, 4);
+                 this.value = parts.join('-');
+             }
+         }
+     });
+ }
+
+  const startDate = document.getElementById("startDate");
+     const endDate = document.getElementById("endDate");
+
+                 if (startDate) {
+                     applyGenericDateRestriction(startDate);
+                     console.log("start date");
+                 }
+                 if (endDate) {
+                     applyGenericDateRestriction(endDate);
+                     console.log("end date");
+                 }
+
+
+
+ });
 </script>
 
