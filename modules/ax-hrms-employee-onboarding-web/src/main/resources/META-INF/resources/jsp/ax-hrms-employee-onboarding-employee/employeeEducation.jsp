@@ -117,7 +117,7 @@
                                                class="form-control"
                                                id="<portlet:namespace/>educationCertificateAttachment1"
                                                data-existing-file-id="0"
-                                               name="<portlet:namespace/>educationCertificateAttachment1" accept="image/*,application/pdf"/>
+                                               name="<portlet:namespace/>educationCertificateAttachment1" />
                                     </div>
 
                                     <!-- Passing Year -->
@@ -239,7 +239,7 @@
                                                    class="form-control"
                                                    id="<portlet:namespace/>educationCertificateAttachment${status.index+1}"
                                                    data-existing-file-id="${educationItem.educationCertificateMediaId}"
-                                                   name="<portlet:namespace/>educationCertificateAttachment${status.index+1}" accept="image/*,application/pdf"/>
+                                                   name="<portlet:namespace/>educationCertificateAttachment${status.index+1}"/>
 
                                            <c:if test="${educationItem.educationCertificateMediaId > 0}">
                                                                                                <%
@@ -309,7 +309,7 @@
                                        class="btn btn-outline-danger delete-section delete-education-btn">
                                         <i class="icon-trash"></i>
                                     </a> --%>
-                                    
+
                                     <button
 							            type="button"
 							            class="btn btn-outline-danger delete-education-btn"
@@ -317,7 +317,7 @@
 							            data-url="${deleteEmployeeEducationURL}" >
 							            <i class="icon-trash"></i>
 							        </button>
-                                    
+
                                 </div>
                                 </c:if>
 

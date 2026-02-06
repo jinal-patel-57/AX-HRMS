@@ -233,5 +233,23 @@ $(document).ready(function () {
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
 
+    const form = document.getElementById("<portlet:namespace />leaveRequestForm");
+    const submitBtn = document.getElementById("<portlet:namespace />submit");
+
+    let isSubmitting = false;
+
+    form.addEventListener("submit", function () {
+
+        if (isSubmitting) {
+            return false;
+        }
+
+        isSubmitting = true;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Submitting...";
+    });
+});
 </script>

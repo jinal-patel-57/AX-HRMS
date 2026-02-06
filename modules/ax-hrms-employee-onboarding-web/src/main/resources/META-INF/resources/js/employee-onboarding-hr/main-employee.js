@@ -380,28 +380,92 @@ function setConfigsForAddExperienceSection(config) {
 
         /* ================= Aadhaar & PAN FILE VALIDATION ================= */
 
-      $.validator.addMethod(
-          "documentRequired",
-          function (value, element, existingFileId) {
-              // UPDATE case → already uploaded
-              if (existingFileId && existingFileId > 0) {
-                  return true;
-              }
-              // ADD case → must upload
-              return element.files && element.files.length > 0;
-          }
-      );
+//      $.validator.addMethod(
+//          "documentRequired",
+//          function (value, element, existingFileId) {
+//
+////                  const $el = $(element);
+////
+////                  if (!$el.data("validatedOnce")) {
+////                      $el.data("validatedOnce", true);
+////                      return true;
+////                  }
+//
+//            const $el = $(element);
+//
+//            if (!element.files || element.files.length === 0) {
+//
+//                // If user has NOT tried to submit yet → skip error
+//                if (!$el.closest("form").data("submitted")) {
+//                    return true;
+//                }
+//            }
+//
+//              // UPDATE case → already uploaded
+//              if (existingFileId && existingFileId > 0) {
+//                  return true;
+//              }
+//              // ADD case → must upload
+//              return element.files && element.files.length > 0;
+//          }
+//      );
+
+$.validator.addMethod(
+    "documentRequired",
+    function (value, element, existingFileId) {
+
+        const form = element.form;
+
+        // UPDATE case → file already exists in DB
+        if (existingFileId && existingFileId > 0) {
+            return true;
+        }
+
+        // 🟡 Before clicking Next → skip validation
+        if (!form._submitAttempted) {
+            return true;
+        }
+
+        // After clicking Next → file is mandatory
+        return element.files && element.files.length > 0;
+    },
+    "Please upload the required document."
+);
+
+
+        $.validator.addMethod(
+            "validExtension",
+            function (value, element) {
+                if (!value) return true; // handled by required
+
+                return /\.(pdf|jpg|jpeg|png)$/i.test(value);
+            },
+            "Only PDF, JPG, JPEG, or PNG files are allowed."
+        );
+
+        $.validator.addMethod(
+            "validExtensionForProfileImage",
+            function (value, element) {
+                if (!value) return true; // handled by required
+
+                return /\.(jpg|jpeg|png)$/i.test(value);
+            },
+            "Only JPG, JPEG, or PNG files are allowed."
+        );
 
       $.validator.addMethod(
           "fileRequiredIfNoExisting",
           function (value, element) {
-
+              const form = element.form;
               const existingFileId = $(element).data("existing-file-id");
 
               // UPDATE case → file already exists
               if (existingFileId && existingFileId !== "0" && existingFileId !== 0) {
                   return true;
               }
+//              if (!form._submitAttempted) {
+//                return true;
+//              }
 
               // ADD case → file must be selected
               return element.files && element.files.length > 0;
@@ -417,15 +481,12 @@ function setConfigsForAddExperienceSection(config) {
         function formatAadhaar(value) {
             if (!value) return "";
 
-            // remove non-digits
             value = value.replace(/\D/g, "");
 
-            // limit to 12 digits
             if (value.length > 12) {
                 value = value.substring(0, 12);
             }
 
-            // add hyphens after every 4 digits
             return value.replace(/(\d{4})(\d{0,4})(\d{0,4})/, function (_, a, b, c) {
                 return [a, b, c].filter(Boolean).join("-");
             });
@@ -440,7 +501,12 @@ function setConfigsForAddExperienceSection(config) {
 
             var $form1 = $("#stepperForm");
             $form1.validate({
-                errorClass: 'is-invalid',
+                onchange: function (element) {
+                    if (element.type === "file" && !element.files.length) {
+                        return;
+                    }
+                    this.element(element);
+                },
                 validClass: 'is-valid',
                 errorElement: 'div',
                 errorPlacement: function (error, element) {
@@ -483,9 +549,12 @@ function setConfigsForAddExperienceSection(config) {
                     },
                     [namespace + "employeeProfilePicture"]: {
                         profilePicRequired: true,
-                        required: function () {
-                            return !profilePicName || profilePicName.trim() === "";
-                        }
+//                        required: function () {
+//                            return !profilePicName || profilePicName.trim() === "";
+//                        },
+                        validExtensionForProfileImage:true,
+                            maxFileSize: true
+
                     },
 
                     [namespace + "spouseName"]: {
@@ -496,11 +565,15 @@ function setConfigsForAddExperienceSection(config) {
 
                     },
                     [namespace + "aadhaarCard"]: {
-                           documentRequired: aadhaarCardId
+                           documentRequired: aadhaarCardId,
+                           validExtension: true,
+                           maxFileSize: 10
                        },
 
                        [namespace + "panCard"]: {
-                           documentRequired: panCardId
+                           documentRequired: panCardId,
+                           validExtension: true,
+                           maxFileSize: 10
                        },
                         [namespace + "aadharNumber"]: {
                             required: true,
@@ -520,15 +593,26 @@ function setConfigsForAddExperienceSection(config) {
                            }
                         },
                        [namespace + "kycDocumentFile"]: {
-                           required: function () {
+                           required: function (element) {
                                var kycTypeSelected =
                                    $("#" + namespace + "kycDocumentType").val();
+                               const form = element.form;
+                        // UPDATE case → already uploaded
+                        if (isKycDocumentAlreadyUploaded) {
+                            return false;
+                        }
 
+                        // Do not validate before clicking Next
+                        if (!form._submitAttempted) {
+                            return false;
+                        }
                                // Required only if:
                                // 1. KYC type selected
                                // 2. No document already uploaded
                                return kycTypeSelected && !isKycDocumentAlreadyUploaded;
-                           }
+                           },
+                           validExtension: true,
+                           maxFileSize: 10
                        }
                 },
                 messages: {
@@ -549,7 +633,9 @@ function setConfigsForAddExperienceSection(config) {
                         validMobile10: "Enter a valid 10-digit mobile number"
                     },
                     [namespace + "employeeProfilePicture"]: {
-                        profilePicRequired: "Please select a profile picture"
+                        profilePicRequired: "Please select a profile picture",
+                           validExtensionForProfileImage:"Only JPG, JPEG, or PNG files are allowed.",
+                           maxFileSize: "File size must not exceed 10 MB."
                     },
 
                     [namespace + "fatherName"]: {
@@ -564,20 +650,27 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please enter your marriage date.",
                         date: "Please enter a valid date."
                     },
-                    [namespace + "employeeProfilePicture"]: {
-                        required: "Please select a profile picture."
-                    },
+//                    [namespace + "employeeProfilePicture"]: {
+//                        required: "Please select a profile picture.",
+//                        validExtensionForProfileImage:"Only JPG, JPEG, or PNG files are allowed.",
+//                        maxFileSize: "File size must not exceed 10 MB."
+//                    },
 
                     [namespace + "spouseName"]: {
                         required: "Please enter your spouse's name.",
                         lettersOnly: "Only letters are allowed for Name."
                     },
                       [namespace + "aadhaarCard"]: {
-                           documentRequired: "Please upload Aadhaar card."
+                           documentRequired: "Please upload Aadhaar card.",
+                           validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                           maxFileSize: "File size must not exceed 10 MB.",
+
                        },
 
                        [namespace + "panCard"]: {
-                           documentRequired: "Please upload PAN card."
+                           documentRequired: "Please upload PAN card.",
+                               validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                               maxFileSize: "File size must not exceed 10 MB."
                        },
 
                         [namespace + "aadharNumber"]: {
@@ -592,7 +685,9 @@ function setConfigsForAddExperienceSection(config) {
                             validPAN: "Please enter a valid PAN number (e.g., ABCDE1234F)."
                         },
                         [namespace + "kycDocumentFile"]: {
-                            required: "Please upload KYC document."
+                            required: "Please upload KYC document.",
+                            validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                            maxFileSize: "File size must not exceed 10 MB."
                         },
                         [namespace + "kycDocumentType"]: {
                             required: "Please select KYC document type."
@@ -800,6 +895,41 @@ function setConfigsForAddExperienceSection(config) {
             attachFormValidationTriggers("#stepperForm");
 
 
+
+
+
+
+
+
+
+
+$.validator.addMethod(
+    "maxFileSize",
+    function (value, element, maxSizeMB) {
+        if (!element.files || element.files.length === 0) {
+            return true;
+        }
+
+        const file = element.files[0];
+
+                const allowedExtensions = /\.(pdf|jpg|jpeg|png)$/i;
+
+                if (!allowedExtensions.test(file.name)) {
+                    return true;
+                }
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+        console.log("maxSizeBytes in the hr",maxSizeBytes)
+        return file.size <= maxSizeBytes;
+    },
+    "File size must not exceed 10 MB."
+);
+
+
+
+
+
+
+
             $.validator.addMethod("validMobile10", function (value) {
 				return /^(?!0{10})\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");
@@ -827,12 +957,58 @@ function setConfigsForAddExperienceSection(config) {
             $("#" + namespace + "fatherName").rules("add", {
                 lettersOnly: true
             });
-            $.validator.addMethod("profilePicRequired", function (value, element) {
-		    	if (profilePicName) {
-		        	return true; // already uploaded earlier
-		    	}
-		    	return element.files && element.files.length > 0; }, 
-		    "Please select a profile picture");
+//            $.validator.addMethod("profilePicRequired", function (value, element) {
+//                        const form = element.form;
+//
+//                        // Do NOT validate until submit is attempted
+//                        if (!form._submitAttempted) {
+//                            return true;
+//                        }
+//
+//
+//		    	        if (element.files && element.files.length > 0) {
+//                            return true;
+//                        }
+//
+//                        // If file already exists in DB → valid
+//                        if (typeof profilePicName !== "undefined" &&
+//                            profilePicName !== null &&
+//                            profilePicName.trim() !== "") {
+//                            return true;
+//                        }
+//
+//
+//		    	if (profilePicName) {
+//		        	return true; // already uploaded earlier
+//		    	}
+//		    	return element.files && element.files.length > 0; },
+//		    "Please select a profile picture");
+
+
+$.validator.addMethod(
+    "profilePicRequired",
+    function (value, element) {
+        const form = element.form;
+
+        // Do not validate until Next/Submit is clicked
+        if (!form._submitAttempted) {
+            return true;
+        }
+
+        // New file selected
+        if (element.files && element.files.length > 0) {
+            return true;
+        }
+
+        // Existing file already saved in DB
+        if (profilePicName && profilePicName.trim() !== "") {
+            return true;
+        }
+
+        return false;
+    },
+    "Please select a profile picture"
+);
 
 
 
@@ -860,10 +1036,18 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
             $('.next-button-basic-details').on('click', function (event) {
                 event.preventDefault();
+                console.log("Inside the js of the employee onboarding!!!!!!")
+
+
                 var form1 = $('#stepperForm');
-                if (!form1.valid()) {
-                    return;
-                }
+
+                    form1[0]._submitAttempted = true;
+                form1.find('input[type="file"]').each(function () {
+                    $(this).valid();
+                });
+                    if (!form1.valid()) {
+                        return;
+                    }
 
                 var aadhaarField = $("#" + namespace + "aadharNumber");
                 if (aadhaarField.length) {
@@ -947,9 +1131,6 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
             toggleMaritalStatusFields();
             $("#" + namespace + "maritalStatus").on("change", toggleMaritalStatusFields);
-
-
-
 
 
 
@@ -1042,7 +1223,25 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         validPincode: true
                     },
                     [namespace + "addressProofFile"]: {
-                        required: true
+                        required:  function (element) {
+                                              const form = element.form;
+                                              if (!form._submitAttempted) {
+                                                  return false;
+                                              }
+
+                                              if ($("#" + namespace + "addressProofAlreadyUploaded").length) {
+                                                  return false;
+                                              }
+
+                                            if (element.files && element.files.length > 0) {
+                                                return false;
+                                            }
+
+
+                                              return true;
+                                          },
+                        validExtension: true,
+                        maxFileSize: 10
                     },
                 },
 
@@ -1117,7 +1316,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         validPincode: "Pincode must be exactly 6 digits."
                     },
                     [namespace + "addressProofFile"]: {
-                        required: "Please enter the Address Proof File."
+                        required: "Please enter the Address Proof File.",
+                         validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                         maxFileSize: "File size must not exceed 10 MB."
                     },
                 }
 
@@ -1148,6 +1349,10 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 event.preventDefault();
                 const form2 = $('#addressStepperForm');
                 var formData = new FormData(form2[0]);
+                form2[0]._submitAttempted = true;
+                form2.find('input[type="file"]').each(function () {
+                    $(this).valid();
+                });
                 if (!form2.valid()) {
                     return;
                 }
@@ -1313,7 +1518,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                     };
 
                     rules[eduCertKey] = {
-                        fileRequiredIfNoExisting: true
+                        fileRequiredIfNoExisting: true,
+                        validExtension: true,
+                        maxFileSize:10
                     };
 
                     messages[levelNameKey] = {
@@ -1350,7 +1557,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                          maxlength: "Passing year should be 4 digits long."
                      };
                      messages[eduCertKey] = {
-                         fileRequiredIfNoExisting: "Please upload education certificate."
+                         fileRequiredIfNoExisting: "Please upload education certificate.",
+                         validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                         maxFileSize: "File size must not exceed 10 MB."
                      };
                 });
 
@@ -1516,63 +1725,64 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
             }
 
 
-            // ======================================================
-            // SUBMIT BUTTON (AJAX WITH FILE SUPPORT)
-            // ======================================================
-            $('.next-button-education-details').on('click', function (event) {
+                // ======================================================
+                // SUBMIT BUTTON (AJAX WITH FILE SUPPORT)
+                // ======================================================
+                $('.next-button-education-details').on('click', function (event) {
 
-                initializeValidation();
-                const form3 = $('#educationStepperForm');
+                    initializeValidation();
+                    const form3 = $('#educationStepperForm');
+                    form3[0]._submitAttempted = true;
 
-                if (!form3.valid()) {
-                    return false;
-                }
-
-                // Use FormData to support file upload
-                const formData = new FormData(form3[0]);
-
-                $("#overlay").fadeIn(300);
-                $.ajax({
-                    url: form3.attr("action"),
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-
-                        const currentTab = $('.nav-link.active');
-                        document.getElementById("firstVisitEducation").value = "false";
-
-                        const nextTabButton = currentTab.parent().next().find('.nav-link');
-
-                        if (nextTabButton.length > 0) {
-                            nextTabButton.tab("show");
-
-                            const nextId = nextTabButton.attr("data-bs-target");
-                            
-                            $(nextId).addClass('show active');
-                            $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            
-                            $(nextId).find("input").first().focus();
-                            let url = new URL(window.location.href);
-
-							const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
-							if (url.searchParams.has(paramName)) {
-							    url.searchParams.delete(paramName);
-							
-							    window.history.replaceState({}, document.title, url.toString());
-							}
-                            
-                        }
-                    },
-                    error: function () {
-                        console.log("Error saving data. Please try again.");
-                    },
-                    complete: function () {
-                        $("#overlay").fadeOut(300);
+                    if (!form3.valid()) {
+                        return false;
                     }
+
+                    // Use FormData to support file upload
+                    const formData = new FormData(form3[0]);
+
+                    $("#overlay").fadeIn(300);
+                    $.ajax({
+                        url: form3.attr("action"),
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+
+                            const currentTab = $('.nav-link.active');
+                            document.getElementById("firstVisitEducation").value = "false";
+
+                            const nextTabButton = currentTab.parent().next().find('.nav-link');
+
+                            if (nextTabButton.length > 0) {
+                                nextTabButton.tab("show");
+
+                                const nextId = nextTabButton.attr("data-bs-target");
+
+                                $(nextId).addClass('show active');
+                                $(currentTab.attr('data-bs-target')).removeClass('show active');
+
+                                $(nextId).find("input").first().focus();
+                                let url = new URL(window.location.href);
+
+                                const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
+                                if (url.searchParams.has(paramName)) {
+                                    url.searchParams.delete(paramName);
+
+                                    window.history.replaceState({}, document.title, url.toString());
+                                }
+
+                            }
+                        },
+                        error: function () {
+                            console.log("Error saving data. Please try again.");
+                        },
+                        complete: function () {
+                            $("#overlay").fadeOut(300);
+                        }
+                    });
                 });
-            });
             $('#noactionbtnEducation').on('click', function (e) {
                 e.preventDefault();
 
@@ -1744,7 +1954,9 @@ function setConfigsForExperienceValidation(config) {
                         pastDate1900: true
                     };
                     rules[expCertKey] = {
-                        fileRequiredIfNoExisting: true
+                        fileRequiredIfNoExisting: true,
+                        validExtension: true,
+                        maxFileSize:10
                     };
 
                     messages[company] = {
@@ -1763,7 +1975,9 @@ function setConfigsForExperienceValidation(config) {
                       validYearLength: "Year must be exactly 4 digits."
                   };
                   messages[expCertKey] = {
-                      fileRequiredIfNoExisting: "Please upload experience certificate."
+                      fileRequiredIfNoExisting: "Please upload experience certificate.",
+                      validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
+                      maxFileSize: "File size must not exceed 10 MB."
                   };
                 });
 
@@ -2109,7 +2323,8 @@ function setConfigsForExperienceValidation(config) {
 
        $.validator.addMethod("uanValidation", function (value, element) {
            return this.optional(element) || /^\d{4}-\d{4}-\d{4}$/.test(value);
-       }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)");
+       }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)"
+       );
 
 		$.validator.addMethod("esicValidation", function (value, element) {
         	return this.optional(element) || /^(\d{2}-\d{2}-\d{6}-\d{3}-\d{4})$/.test(value);

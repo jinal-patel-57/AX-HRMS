@@ -450,11 +450,13 @@ function setConfigsForAddExperienceSection(config) {
                          lettersOnly: true
                     },
                     [namespace + "aadhaarCard"]: {
-                       documentRequired: aadhaarCardId
+                       documentRequired: aadhaarCardId,
+                       maxFileSize: 10
                    },
 
                    [namespace + "panCard"]: {
-                       documentRequired: panCardId
+                       documentRequired: panCardId,
+                       maxFileSize: 10
                    },
                    [namespace + "kycDocumentType"]: {
                        required: function () {
@@ -509,11 +511,13 @@ function setConfigsForAddExperienceSection(config) {
                         lettersOnly: "Only letters are allowed for Name."
                     },
                    [namespace + "aadhaarCard"]: {
-                        documentRequired: "Please upload Aadhaar card."
+                        documentRequired: "Please upload Aadhaar card.",
+                        maxFileSize: 10
                     },
 
                     [namespace + "panCard"]: {
-                        documentRequired: "Please upload PAN card."
+                        documentRequired: "Please upload PAN card.",
+                        maxFileSize: 10
                     },
 
                         [namespace + "aadharNumber"]: {
@@ -575,6 +579,34 @@ function setConfigsForAddExperienceSection(config) {
               });
 
 
+
+
+
+
+
+
+
+$.validator.addMethod(
+    "maxFileSize",
+    function (value, element, maxSizeMB) {
+        if (!element.files || element.files.length === 0) {
+            return true;
+        }
+
+        const file = element.files[0];
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+        console.log("File size",maxSizeBytes)
+        return file.size <= maxSizeBytes;
+    },
+    "File size must not exceed 10 MB."
+);
+
+
+
+
+
+
+
             /* ================= Aadhaar Validation ================= */
             $.validator.addMethod("validAadhaar", function (value, element) {
                 if (this.optional(element)) {
@@ -617,6 +649,7 @@ function setConfigsForAddExperienceSection(config) {
                     attachFormValidationTriggers("#stepperForm");
             $('.next-button-basic-details').on('click', function (event) {
                 event.preventDefault();
+                console.log("Inside the js of the employee onboarding!!!!!!")
                 var form1 = $('#stepperForm');
                 if (!form1.valid()) {
                     return;

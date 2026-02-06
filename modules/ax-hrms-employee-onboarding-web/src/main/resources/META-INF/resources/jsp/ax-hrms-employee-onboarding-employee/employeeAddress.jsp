@@ -260,6 +260,9 @@
                                    name="<portlet:namespace/>addressProofFile" />
                         <c:if test="${not presentPermanentSame}">
                             <c:if test="${not empty addressProofPreviewURL}">
+                                <input type="hidden"
+                                       id="<portlet:namespace/>addressProofAlreadyUploaded"
+                                       value="true"/>
                                 <a href="${addressProofPreviewURL}" target="_blank">
                                     <liferay-ui:message key="view-address-proof"/>
                                 </a>

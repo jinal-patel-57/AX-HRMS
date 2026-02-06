@@ -101,7 +101,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
             </portlet:renderURL>
 
             <a href="${backURL}" class="btn btn-outline-danger">Back</a>
-            <button class="btn btn-outline-success" type="submit">
+            <button class="btn btn-outline-success" type="submit" id="submitBtn">
                 <%= isEdit ? "Update" : "Submit" %>
             </button>
         </div>
@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const reason = document.getElementById("reason");
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
+    const submitBtn = document.getElementById("submitBtn");
 
     const emailError = document.getElementById("emailError");
     const reasonError = document.getElementById("reasonError");
@@ -212,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         validateDates();
     });
 
-    /* ---------------- FINAL SUBMIT ---------------- */
+    /* ---------------- FINAL SUBMIT ----------------
     form.addEventListener("submit", function (event) {
 
         startTouched = true;
@@ -225,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isEmailValid || !isReasonValid || !isDateValid) {
             event.preventDefault();
         }
-    });
+    });*/
 
 
     form.addEventListener("submit", function (event) {
@@ -240,9 +241,28 @@ document.addEventListener("DOMContentLoaded", function () {
         const isDateValid = validateDates(true);
 
         if (isEmailValid && isReasonValid && isDateValid) {
-            form.submit(); // manual submit
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Submitting...";
+            form.submit();
         }
     });
+
+
+  /*  form.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        startTouched = true;
+        endTouched = true;
+
+        const isEmailValid = validateEmail();
+        const isReasonValid = validateReason();
+        const isDateValid = validateDates(true);
+
+        if (isEmailValid && isReasonValid && isDateValid) {
+            form.submit(); // manual submit
+        }
+    }); */
 });
 </script>
 

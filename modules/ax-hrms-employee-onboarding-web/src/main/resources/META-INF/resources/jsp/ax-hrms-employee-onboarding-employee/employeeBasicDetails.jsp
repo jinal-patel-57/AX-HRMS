@@ -112,9 +112,11 @@
                        value="${profilePicName}"
                        name="<portlet:namespace />employeeProfilePicture"
 
-                       class="form-control"
-                       accept="image/*" >
+                       class="form-control"/>
 
+                <small class="form-text text-muted">
+                    Allowed file types: PDF, JPG, PNG, JPEG
+                </small>
                        <c:if test="${employeeDetail.profilePicId > 0}">
                                       <%
                                           com.ax.hrms.model.EmployeeDetails edu =
@@ -158,9 +160,10 @@
                        class="form-control"
                        id="<portlet:namespace />aadhaarCard"
                        name="<portlet:namespace />aadhaarCard"
-                       accept="application/pdf,image/*"
                        value="${aadhaarCardFileName}"/>
-
+                <small class="form-text text-muted">
+                    Allowed file types: PDF, JPG, PNG, JPEG
+                </small>
                 <c:if test="${employeeDetail.aadhaarCardFileId > 0}">
                     <%
                         com.ax.hrms.model.EmployeeDetails edu =
@@ -203,9 +206,10 @@
                       class="form-control"
                       id="<portlet:namespace />panCard"
                       name="<portlet:namespace />panCard"
-                      accept="application/pdf,image/*"
                       value="panCardFileName"/>
-
+               <small class="form-text text-muted">
+                   Allowed file types: PDF, JPG, PNG, JPEG
+               </small>
              <c:if test="${employeeDetail.panCardFileId > 0}">
                  <%
                      com.ax.hrms.model.EmployeeDetails edu =
@@ -315,6 +319,9 @@
                        class="form-control"
                        id="<portlet:namespace/>kycDocumentFile"
                        name="<portlet:namespace/>kycDocumentFile" />
+                <small class="form-text text-muted">
+                    Allowed file types: PDF, JPG, PNG, JPEG
+                </small>
 
                 <c:if test="${not empty kycDocumentUrl}">
                     <div>
