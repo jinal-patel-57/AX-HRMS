@@ -458,7 +458,7 @@
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Joining Date -->
                     <label class="" for="joiningDate"><liferay-ui:message key="joining-date"/><span class="text-danger">*</span></label>
-                    <input id="joiningDate" placeholder="<liferay-ui:message key='joining-date'/>"
+                    <input id="<portlet:namespace />joiningDate" placeholder="<liferay-ui:message key='joining-date'/>"
                            class="form-control" type="date"
                            name="<portlet:namespace/>joiningDate"
                            value="<fmt:formatDate value='${employeeDetail.joiningDate}' pattern='yyyy-MM-dd'/>"/>

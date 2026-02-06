@@ -1700,9 +1700,7 @@ function setConfigsForExperienceValidation(config) {
                 messages: messages
             });
 
-            document.querySelectorAll('#experienceStepperForm input[type="date"]').forEach(input => {
-                applyGenericDateRestriction(input);
-            });
+
         }
 //       $(document).on(
 //                   "focusout change",
@@ -1724,6 +1722,9 @@ function setConfigsForExperienceValidation(config) {
 
             // validation trigger
             attachFormValidationTriggers("#experienceStepperForm");
+             document.querySelectorAll('#experienceStepperForm input[type="date"]').forEach(input => {
+                                        applyGenericDateRestriction(input);
+                                    });
 
 
 			$(document).on('click', '.delete-experience-btn', function () {

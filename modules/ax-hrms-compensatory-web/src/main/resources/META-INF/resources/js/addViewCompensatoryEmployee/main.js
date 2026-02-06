@@ -10,6 +10,28 @@ var submit_compensatory_form;
 
         $(document).ready(function () {
 
+        function applyGenericDateRestriction(element) {
+            if (!element) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            element.setAttribute('min', '1900-01-01');
+            element.setAttribute('max', today);
+
+            element.addEventListener('input', function () {
+                const val = this.value; // Expected format: yyyy-mm-dd
+                if (val) {
+                    const parts = val.split('-');
+                    if (parts[0] && parts[0].length > 4) {
+                        parts[0] = parts[0].substring(0, 4);
+                        this.value = parts.join('-');
+                    }
+                }
+            });
+        }
+            const compensationDate = document.getElementById("compensationDate");
+                            if (compensationDate) {
+                                applyGenericDateRestriction(compensationDate);
+                            }
             $.validator.addMethod("notAfterToday", function (value) {
                 if (!value) return true;
 
@@ -106,6 +128,8 @@ var submit_compensatory_form;
                 }
             });
         });
+
+
 
         open_compensatory_form_modal = function () {
             $('#addCompensatoryDataModal').modal('show');
