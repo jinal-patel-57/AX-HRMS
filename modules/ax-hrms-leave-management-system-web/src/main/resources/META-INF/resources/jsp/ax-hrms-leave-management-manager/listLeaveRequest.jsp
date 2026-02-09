@@ -217,11 +217,7 @@
         var actionURL = document.getElementById('actionURL').value.replace('COMMENT', comment);
         console.log("actionURL -- ", actionURL);
 
-        if (!comment) {
-            alert('Comment is required');
-            return;
-        }
-        debugger;
+
         window.location.href = actionURL;
 
     }
