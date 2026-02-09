@@ -52,16 +52,6 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
     EmployeeAddressLocalService employeeAddressLocalService;
     @Reference
     AddressLocalService addressLocalService;
-    @Reference
-    EmployeeDesignationLocalService employeeDesignationLocalService;
-    @Reference
-    EmployeeDepartmentLocalService employeeDepartmentLocalService;
-    @Reference
-    DesignationMasterLocalService designationMasterLocalService;
-    @Reference
-    DepartmentMasterLocalService departmentMasterLocalService;
-    @Reference
-    CountryLocalService countryLocalService;
 
     @Reference
     NomineeLocalService nomineeLocalService;

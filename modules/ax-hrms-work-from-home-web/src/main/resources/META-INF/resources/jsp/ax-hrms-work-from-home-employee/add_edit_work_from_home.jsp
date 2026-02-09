@@ -209,28 +209,48 @@ document.addEventListener("DOMContentLoaded", function () {
     /* ---------------- DATE VALIDATION ---------------- */
     function validateDates(showAll = false) {
         let valid = true;
+        const today = new Date();
 
-        // START DATE
-        if ((startTouched || showAll) && !startDate.value) {
-            startError.innerText = "Start Date is required.";
-            valid = false;
-        } else {
-            startError.innerText = "";
+        // Validate Start Date
+        if (startTouched || showAll) {
+            if (!startDate.value) {
+                startError.innerText = "Start Date is required.";
+                valid = false;
+            } else {
+                const date = new Date(startDate.value);
+                const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                const currMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                
+                if (date < prevMonth) {
+                    startError.innerText = "Start date cannot be earlier than the previous month";
+                    valid = false;
+                } else if (date > currMonthEnd) {
+                    startError.innerText = "Start date cannot be in future months beyond the current month";
+                    valid = false;
+                } else {
+                    startError.innerText = "";
+                }
+            }
         }
 
-        // END DATE
+        // Validate End Date
         if (endTouched || showAll) {
             if (!endDate.value) {
                 endError.innerText = "End Date is required.";
                 valid = false;
-            } else if (
-                startDate.value &&
-                new Date(endDate.value) < new Date(startDate.value)
-            ) {
-                endError.innerText = "End Date must be after Start Date.";
-                valid = false;
             } else {
-                endError.innerText = "";
+                const date = new Date(endDate.value);
+                const yearEnd = new Date(today.getFullYear(), 11, 31);
+                
+                if (date > yearEnd) {
+                    endError.innerText = "End date cannot be beyond December 31 of the current year";
+                    valid = false;
+                } else if (startDate.value && date < new Date(startDate.value)) {
+                    endError.innerText = "End Date must be after Start Date";
+                    valid = false;
+                } else {
+                    endError.innerText = "";
+                }
             }
         }
 
@@ -316,17 +336,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
  $(document).ready(function () {
 
- function applyGenericDateRestriction(element) {
+ // Apply WFH-specific date restrictions
+ function applyWFHDateRestriction(element, isStartDate) {
      if (!element) return;
 
-     const currentYear = new Date().getFullYear();
-     const lastYear = new Date().getFullYear()-1;
-     const maxDate = `${currentYear}-12-31`;
-     const minDate = `${lastYear}-01-01`;
+     const today = new Date();
+     const currentYear = today.getFullYear();
+     const currentMonth = today.getMonth();
+     
+     if (isStartDate) {
+         // Start Date: Previous month to current month
+         const previousMonthStart = new Date(currentYear, currentMonth - 1, 1);
+         const currentMonthEnd = new Date(currentYear, currentMonth + 1, 0);
+         
+         const minDate = previousMonthStart.toISOString().split('T')[0];
+         const maxDate = currentMonthEnd.toISOString().split('T')[0];
+         
+         element.setAttribute('min', minDate);
+         element.setAttribute('max', maxDate);
+     } else {
+         // End Date: Any date up to December 31 of current year
+         const minDate = new Date(currentYear, 0, 1).toISOString().split('T')[0];
+         const maxDate = `${currentYear}-12-31`;
+         
+         element.setAttribute('min', minDate);
+         element.setAttribute('max', maxDate);
+     }
 
-     element.setAttribute('min', minDate);
-     element.setAttribute('max', maxDate);
-
+     // Prevent manual year input exceeding 4 digits
      element.addEventListener('input', function () {
          const val = this.value;
          if (val) {
@@ -343,12 +380,10 @@ document.addEventListener("DOMContentLoaded", function () {
      const endDate = document.getElementById("endDate");
 
                  if (startDate) {
-                     applyGenericDateRestriction(startDate);
-                     console.log("start date");
+                     applyWFHDateRestriction(startDate, true); // true = is start date
                  }
                  if (endDate) {
-                     applyGenericDateRestriction(endDate);
-                     console.log("end date");
+                     applyWFHDateRestriction(endDate, false); // false = is end date
                  }
 
 

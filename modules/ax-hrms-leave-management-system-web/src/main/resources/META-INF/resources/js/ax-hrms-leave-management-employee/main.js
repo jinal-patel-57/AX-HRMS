@@ -348,18 +348,18 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
 
     let now = new Date();
     let endDate = new Date(value);
-    let firstDateOfMonth;
 
     endDate.setHours(0, 0, 0, 0);
 
-    // Same month logic
-    if ($('#' + namespace + 'hrStatus').val())
-        firstDateOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    else
-        firstDateOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    // WFH-style validation: up to December 31 of current year
+    const currentYear = now.getFullYear();
+    const currentYearEnd = new Date(currentYear, 11, 31);
+    currentYearEnd.setHours(23, 59, 59, 999);
 
-    /* Month validation */
-    if (endDate < firstDateOfMonth) {
+    // Check if end date is beyond current year
+    if (endDate > currentYearEnd) {
+        $.validator.messages.validEndDate = 
+            "End date cannot be beyond December 31 of the current year.";
         return false;
     }
 
@@ -371,17 +371,15 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
 
         if (endDate < startDate) {
             $.validator.messages.validEndDate =
-                "End date should not be earlier than start date.";
+                "End date must be after start date.";
             return false;
         }
     }
 
-    $.validator.messages.validEndDate =
-        "Enter a valid date (on or after the first day of the month).";
-
+    $.validator.messages.validEndDate = "Enter a valid end date.";
     return true;
 
-}, "Enter a valid date (on or after the first day of the month).");
+}, "Enter a valid end date.");
 
 
 
@@ -389,18 +387,25 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
         jQuery.validator.addMethod("validDate", function (value, element) {
             let now = new Date();
             let selectedDate = new Date(value);
-            let firstDateOfMonth = undefined;
+            
             // Set the selected date's time to 00:00:00 to compare only dates, not times
             selectedDate.setHours(0, 0, 0, 0);
 
-            // Get the first date of the current month
-            if($('#'+namespace+'hrStatus').val())
-                firstDateOfMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
-            else
-                firstDateOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            // Compare the selected date with the first date of the current month
-            return selectedDate >= firstDateOfMonth;
-        }, "Enter a valid date (on or before the first day of the month).");
+            // WFH-style validation: previous month to current month only
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            
+            // Get first day of previous month
+            const previousMonthStart = new Date(currentYear, currentMonth - 1, 1);
+            previousMonthStart.setHours(0, 0, 0, 0);
+            
+            // Get last day of current month
+            const currentMonthEnd = new Date(currentYear, currentMonth + 1, 0);
+            currentMonthEnd.setHours(23, 59, 59, 999);
+            
+            // Validate: date must be >= previous month start AND <= current month end
+            return selectedDate >= previousMonthStart && selectedDate <= currentMonthEnd;
+        }, "Start date must be within the previous month or current month only.");
         //jQuery Validation end here
 
         // first event: When Window load first time
