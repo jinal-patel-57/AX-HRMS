@@ -168,18 +168,38 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 							themeDisplay,
 							serviceContext);
 
-			long addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
-					addressProofFile,
-					addressProofFileName,
-					actionRequest,
-					employeeDetails,
-					employeeAddress.getEmployeeAddressProofFileEntryId(),
-					"ADDRESS_PROOF",
-					addressProofFolder,
-					serviceContext
-			);
-			employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
-			employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+
+			try {
+				long addressProofFileEntryId = 0;
+				if (isUpdate) {
+					addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
+							addressProofFile,
+							addressProofFileName,
+							actionRequest,
+							employeeDetails,
+							employeeAddress.getEmployeeAddressProofFileEntryId(),
+							"ADDRESS_PROOF",
+							addressProofFolder,
+							serviceContext
+					);
+				} else {
+					addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
+							addressProofFile,
+							addressProofFileName,
+							actionRequest,
+							employeeDetails,
+							0,
+							"ADDRESS_PROOF",
+							addressProofFolder,
+							serviceContext
+					);
+				}
+
+				employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
+				employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+			} catch (Exception e) {
+				log.error("error while adding address proof :: " + e);
+			}
 			setBothTypeAddress(actionRequest, isPermanent, address);
 
 			if (isUpdate) {

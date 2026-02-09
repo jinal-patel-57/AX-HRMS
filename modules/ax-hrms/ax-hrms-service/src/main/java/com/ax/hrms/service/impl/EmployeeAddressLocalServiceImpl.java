@@ -33,6 +33,6 @@ public class EmployeeAddressLocalServiceImpl
 	extends EmployeeAddressLocalServiceBaseImpl {
 	public EmployeeAddress findByEmployeeId(long employeeId)
 			throws NoSuchEmployeeAddressException{
-		return employeeAddressPersistence.findByEmployeeId(employeeId);
+		return employeeAddressPersistence.fetchByEmployeeId(employeeId);
 	}
 }
