@@ -264,7 +264,7 @@ l<%@page import="com.ax.hrms.model.Address"%>
                          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">KYC Document File</div>
-                                <div class="label-content">   <a target="_blank" href="${kycDocumentFile}">View KYC Document File</a></div>
+                                <div class="label-content"> <c:if test="${not empty kycDocumentFile}">  <a target="_blank" href="${kycDocumentFile}">View KYC Document File</a></c:if></div>
                             </div>
                          </div>
                     </c:if>

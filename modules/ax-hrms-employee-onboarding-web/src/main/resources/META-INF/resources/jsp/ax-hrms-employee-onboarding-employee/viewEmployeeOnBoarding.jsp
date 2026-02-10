@@ -244,19 +244,19 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Aadhaar Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
+                            <div class="label-content"><c:if test="${not empty aadharCardFile}"><a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></c:if></div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Pan Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
+                            <div class="label-content"><c:if test="${not empty panCardFile}"><a target="_blank" href="${panCardFile}">View Pan Card</a></c:if></div>
                         </div>
                     </div>
                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Profile Pic</div>
-                            <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
+                            <div class="label-content"><c:if test="${not empty profilePic}"><a target="_blank" href="${profilePic}">View Profile Pic</a></c:if></div>
                         </div>
                     </div>
                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
@@ -269,7 +269,7 @@
                          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
                                 <div class="label-name">KYC Document File</div>
-                                <div class="label-content">   <a target="_blank" href="${kycDocumentFile}">View KYC Document File</a></div>
+                                <div class="label-content"> <c:if test="${not empty kycDocumentFile}">  <a target="_blank" href="${kycDocumentFile}">View KYC Document File</a></c:if></div>
                             </div>
                          </div>
                     </c:if>
@@ -497,7 +497,7 @@
                             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                 <div class="form-group-view">
                                     <div class="label-name">Address Proof File</div>
-                                    <div class="label-content">   <a target="_blank" href="${addressProofFile}">View Address Proof File</a></div>
+                                              <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof File</a></c:if>
                                 </div>
                             </div>
                         </c:if>

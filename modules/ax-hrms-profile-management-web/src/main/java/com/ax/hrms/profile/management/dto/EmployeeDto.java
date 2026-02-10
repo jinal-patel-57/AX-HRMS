@@ -33,7 +33,7 @@ public class EmployeeDto {
 
 	public boolean isExperienced;
 
-
+	public long kycDocumentFileEntryId;
 	public boolean isProbationEnabled;
 	public long profilePicId;
 	public long aadhaarCardFileId;
@@ -49,6 +49,10 @@ public class EmployeeDto {
 	public long addressProofFileEntryId;
 	public String getNameAsPerPanCard() {
 		return nameAsPerPanCard;
+	}
+
+	public long getKycDocumentFileEntryId() {
+		return kycDocumentFileEntryId;
 	}
 
 	public void setNameAsPerPanCard(String nameAsPerPanCard) {

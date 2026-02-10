@@ -146,6 +146,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setAddressProofFileEntryId(employeeAddress.getEmployeeAddressProofFileEntryId());
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
+
 			try {
 				employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId()) ? branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName() : "");
 			}catch(Exception e){
@@ -158,6 +159,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			} else {
 				employeeDto.setReportingManager("");
 			}
+
 
 			if (Validator.isNotNull(employeeDto.getProfilePicId()) && employeeDto.getProfilePicId() > 0) {
 				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(employeeDto.getProfilePicId());
@@ -192,6 +194,16 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 					renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.ADDRESS_PROOF_FILE, previewURL);
 				}
 			}
+			if(Validator.isNotNull(employeeDto.getKycDocumentFileEntryId()) && employeeDto.getKycDocumentFileEntryId()>0) {
+				FileEntry kycDocumentFile = DLAppServiceUtil.getFileEntry(employeeDto.getKycDocumentFileEntryId());
+
+				if (Validator.isNotNull(kycDocumentFile)) {
+					String previewURL = DLUtil.getPreviewURL(kycDocumentFile, kycDocumentFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+					log.info("previewURL of kycDocumentFile ::: " + previewURL);
+					renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.KYC_DOCUMENT_FILE, previewURL);
+				}
+			}
+
 
 			try {
 				EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employeeId);
@@ -259,6 +271,8 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			EmployeeAddress employeeAddress = employeeAddressLocalService
 					.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_ADDRESS, employeeAddress);
+
+
 			if (employeeAddress.getPresentPermanentSame()) {
 				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());
 				Address permanentaddresss = addressLocalService.getAddress(employeeAddress.getPermanentAddress());

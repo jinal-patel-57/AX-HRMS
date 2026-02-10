@@ -13,8 +13,10 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String MAIN_JS_FILE = "/js/profile-management/main.js";
 	public static final String EDIT_MVC_COMMAND_NAME = "editEmployeeProfile";
 	public static final String IS_SAME_PRESENT_ADDRESS = "isSamePresentAddress";
+	public static final String KYC_DOCUMENT_FILE="kycDocumentFile";
 
-//	Address Field Name
+
+	//	Address Field Name
 	public static final String PERMANANT_LINE1 = "permanantLine1";
 	public static final String PERMANANT_LINE2 = "permanantLine2";
 	public static final String PERMANANT_LINE3 = "permanantLine3";
