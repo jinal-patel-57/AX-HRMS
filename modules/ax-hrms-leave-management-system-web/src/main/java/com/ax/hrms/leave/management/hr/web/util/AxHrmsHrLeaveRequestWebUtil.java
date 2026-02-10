@@ -127,8 +127,8 @@ public class AxHrmsHrLeaveRequestWebUtil {
 					employee.getLrUserId(),
 					AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
 					UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
-			
-			
+
+
 
 			ServiceContext serviceContext = new ServiceContext();
             SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
@@ -142,7 +142,35 @@ public class AxHrmsHrLeaveRequestWebUtil {
 		}
 
 	}
+	public void sendNotificationToEmployee(
+			String body,
+			EmployeeDetails employee,
+			String url) {
 
+		try {
+			JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
+
+			notificationJSON.put("body", body);
+			notificationJSON.put("redirectURL", url);
+log.info("url ::::  " + url);
+			UserNotificationEvent userNotification =
+					UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
+							employee.getLrUserId(),
+							AxHrmsLeaveManagementSystemWebPortletKeys
+									.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+							UserNotificationDeliveryConstants.TYPE_WEBSITE,
+							notificationJSON
+					);
+
+			log.info(
+					"SENDING NOTIFICATION IN LEAVE REQUEST PORTLET .... " +
+							userNotification.getPayload()
+			);
+
+		} catch (Exception e) {
+			log.error("Error in notification employee", e);
+		}
+	}
 
 
 	public LeaveRequestDto setLeaveRequestData(Long leaveRequestId)

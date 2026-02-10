@@ -2,9 +2,12 @@ package com.ax.hrms.leave.management.hr.web.action;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -117,7 +120,6 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
 			// SENDING MAIL TO EMPLOYEE 
 			String employeeMail =notificationTemplateConfiguration.leaveApprovedNotificationToEmployee();
-//			employeeMail = employeeMail.replace("${COMMENT}", comment);
 			StringBuilder employeeMailBody = new StringBuilder(
 					AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
 			leaveRequestWebUtil.sendMailtoEmployee(fromName, fromEmailAddress, leaveRequestId,
@@ -131,8 +133,30 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                     AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_TEAM_MAIL_HEAD);
 			leaveRequestWebUtil.sendMailtoTeam(fromName, fromEmailAddress, leaveRequestId, teamMailBody,mailTemplateConfiguration);
             leaveRequestWebUtil.sendNotificationToTeam("approve is done by hr.",leaveRequestId);
-			// SENDING NOTIFICATION TO EMPLOYEE			
-			leaveRequestWebUtil.sendNotificationToEmployee(employeeMail, employee);
+			// SENDING NOTIFICATION TO EMPLOYEE
+
+
+
+			PortletURL leavePortletURL =
+					PortletURLFactoryUtil.create(
+							actionRequest,
+							AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+							themeDisplay.getPlid(),
+							PortletRequest.RENDER_PHASE
+					);
+
+			leavePortletURL.setParameter("mvcRenderCommandName", "/");
+			leavePortletURL.setParameter(
+					"leaveRequestId",
+					String.valueOf(leaveRequestId)
+			);
+			log.info("leavePortletURL ::: "+ leavePortletURL);
+
+			leaveRequestWebUtil.sendNotificationToEmployee(
+					employeeMail,
+					employee,
+					leavePortletURL.toString()
+			);
 			SessionMessages.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_APPROVED);
 			
 			//Add comment code

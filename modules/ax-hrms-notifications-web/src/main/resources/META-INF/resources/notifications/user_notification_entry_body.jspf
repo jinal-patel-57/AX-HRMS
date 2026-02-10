@@ -1,0 +1,29 @@
+<%--
+/**
+* SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+* SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+*/
+--%>
+<%
+	String ptrn = "dd-MMM-yyyy hh:mm a"; // Example: 22-Apr-2025 1:32 PM
+    Format dateTimeFmt = FastDateFormatFactoryUtil.getSimpleDateFormat(ptrn, locale, timeZone);
+    JSONObject payloadJSON = JSONFactoryUtil.createJSONObject(
+        userNotificationEvent.getPayload()
+    );
+
+    String redirectURL = payloadJSON.getString("redirectURL");
+%>
+<a href="<%= redirectURL %>" style="text-decoration:none;color:inherit;">
+    <span style="white-space: nowrap;">
+        <%= HtmlUtil.unescape(userNotificationFeedEntry.getBody()) %>
+    </span>
+</a>
+
+<span class="text-default" title="<%= dateTimeFormat.format(userNotificationEvent.getTimestamp()) %>">
+<%= Time.getRelativeTimeDescription(
+        userNotificationEvent.getTimestamp(),
+        themeDisplay.getLocale(),
+        themeDisplay.getTimeZone(),
+        dateTimeFmt
+    ) %>
+</span>
