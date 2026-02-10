@@ -189,13 +189,17 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 				renderRequest.setAttribute("documentTypeMasterName",documentTypeMasterName);
 				log.info("documentTypeMasterName::: "+ documentTypeMasterName);
 			}
-
-			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
-
-			long addressProofFileEntryId =
-					employeeAddress.getEmployeeAddressProofFileEntryId();
-
-			employeeDto.setAddressProofId(addressProofFileEntryId);
+			try {
+				EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+				
+				long addressProofFileEntryId =
+						employeeAddress.getEmployeeAddressProofFileEntryId();
+				
+				employeeDto.setAddressProofId(addressProofFileEntryId);
+				
+			} catch(Exception e) {
+				log.error("Error while fetching address - " + e.getMessage());
+			}
 
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
