@@ -200,9 +200,7 @@ l<%@page import="com.ax.hrms.model.Address"%>
                           <div class="form-group-view">
                               <div class="label-name">Aadhar Card Number</div>
                             <div class="label-content">
-                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-
-                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-
-                                                            ${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
+								${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
                             </div>
                           </div>
                       </div>
@@ -240,20 +238,20 @@ l<%@page import="com.ax.hrms.model.Address"%>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Aadhar Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></div>
+                            <div class="label-content"><c:if test="${not empty aadharCardFile}"><a target="_blank" href="${aadharCardFile}">View Aadhaar Card</a></c:if></div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Pan Card File</div>
-                            <div class="label-content">   <a target="_blank" href="${panCardFile}">View Pan Card</a></div>
+                            <div class="label-content"><c:if test="${not empty panCardFile}"><a target="_blank" href="${panCardFile}">View Pan Card</a></c:if></div>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Profile Pic</div>
-                            <div class="label-content">   <a target="_blank" href="${profilePic}">View Profile Pic</a></div>
+                            <div class="label-content"><c:if test="${not empty profilePic}"><a target="_blank" href="${profilePic}">View Profile Pic</a></c:if></div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
@@ -362,7 +360,7 @@ l<%@page import="com.ax.hrms.model.Address"%>
                                     <div class="form-group-view">
                                         <div class="label-name">Address Proof File</div>
                                             <div class="label-content">
-                                              <a target="_blank" href="${addressProofFile}">View Address Proof File</a>
+                                              <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof File</a></c:if>
                                             </div>
                                     </div>
                               </div>
