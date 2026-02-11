@@ -5,13 +5,48 @@
 <portlet:renderURL var="startEmployeeOnboarding">
     <portlet:param name="mvcRenderCommandName" value="/onboardingFormHr"/>
 </portlet:renderURL>
-
+<portlet:renderURL var="searchEmployeeOnboardURL">
+    <portlet:param name="mvcRenderCommandName" value="/employee/search"/>
+</portlet:renderURL>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <strong>Employee On-Boarding HR</strong>
-        <a href="${startEmployeeOnboarding}" class="btn btn-primary"><liferay-ui:message
-                key="start-employee-onboarding"/></a>
+
+        <!-- LEFT SIDE -->
+        <strong class="mb-0">Employee On-Boarding HR</strong>
+
+        <!-- RIGHT SIDE -->
+        <div class="d-flex align-items-center">
+
+            <!-- Search Section -->
+            <div class="d-flex align-items-center mr-3">
+                <input type="text"
+                       id="searchInput"
+                       class="form-control form-control-sm mr-2"
+                       placeholder="Search..."
+                       value="${param.searchQuery}" />
+
+                <a href="javascript:void(0);"
+                   class="btn btn-primary btn-sm mr-2"
+                   onclick="redirectToSearch()">
+                    <liferay-ui:message key="search" />
+                </a>
+
+                <a href="javascript:void(0);"
+                   class="btn btn-outline-secondary btn-sm"
+                   onclick="clearSearch()">
+                    Clear
+                </a>
+            </div>
+
+            <!-- Start Onboarding Button -->
+            <a href="${startEmployeeOnboarding}"
+               class="btn btn-primary btn-sm">
+                <liferay-ui:message key="start-employee-onboarding"/>
+            </a>
+
+        </div>
+
     </div>
     <div class="card-body">
 
@@ -121,3 +156,22 @@
     </div>
     <%--    <div class="card-footer">Footer</div>--%>
 </div>
+<script>
+
+function redirectToSearch() {
+    var value = document.getElementById('searchInput').value;
+
+    var url = '${searchEmployeeOnboardURL}' +
+              '&<portlet:namespace/>searchQuery=' +
+              encodeURIComponent(value);
+
+    window.location.href = url;
+}
+function clearSearch() {
+    // Get current URL without query string
+    var baseUrl = window.location.origin + window.location.pathname;
+
+    // Redirect to clean URL
+    window.location.href = baseUrl;
+}
+</script>

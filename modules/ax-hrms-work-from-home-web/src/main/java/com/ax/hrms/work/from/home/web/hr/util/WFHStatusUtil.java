@@ -137,6 +137,8 @@ public class WFHStatusUtil {
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", managerOrHr.getFirstName() + StringPool.SPACE + managerOrHr.getLastName());
 
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT}", userComment);
+
 //            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 //            mailContent =  mailContent.replace("${BODY}", body);
             log.info("SENDING MAIL TO MANAGER ...." + mailContent);
@@ -196,6 +198,7 @@ public class WFHStatusUtil {
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT}", userComment);
 
            log.info("-----------------------------------------------------------");
            log.info("Mail Content...." + mailContent);

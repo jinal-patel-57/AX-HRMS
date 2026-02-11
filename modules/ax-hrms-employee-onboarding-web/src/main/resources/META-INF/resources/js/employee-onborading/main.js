@@ -681,7 +681,10 @@ $.validator.addMethod(
         if (!form._submitAttempted) {
             return true;
         }
-
+       const file = element.files[0];
+        if (!file || !file.name || file.name.trim() === '' || file.size === 0) {
+            return false;
+        }
         // New file selected
         if (element.files && element.files.length > 0) {
             return true;

@@ -5,9 +5,25 @@
 <liferay-ui:success key="wfh-rejected" message="Work From Home request Rejected successfully!" />
 <liferay-ui:success key="wfh-cancelled" message="Work From Home request Cancelled successfully!" />
 <liferay-ui:error key="wfh-error" message="Sorry,Some Error Found!" />
-
+<portlet:renderURL var="searchWFHURL">
+    <portlet:param name="mvcRenderCommandName" value="/wfh/search"/>
+</portlet:renderURL>
 <div class="card">
     <div class="card-header">
+
+<!--<input type="text"
+       id="searchInput"
+
+       class="form-control form-control-sm mr-1"
+       placeholder="Search..."
+       value="${param.searchQuery}" />
+             <a href="javascript:void(0);"
+                class="btn btn-outline-dark btn-sm"
+                onclick="redirectToSearch()">
+                 <liferay-ui:message key="search" />
+             </a>-->
+
+
         <strong>List Work From Home Requests</strong>
     </div>
 
@@ -227,5 +243,18 @@ $(document).on('click', '[data-dismiss="modal"], .modal .close', function () {
     // Close modal (same method you used to open)
     $('#wfhActionModal').hide();
 });
+
+
+
+
+/*function redirectToSearch() {
+    var value = document.getElementById('searchInput').value;
+
+    var url = '${searchWFHURL}' +
+              '&<portlet:namespace/>searchQuery=' +
+              encodeURIComponent(value);
+
+    window.location.href = url;
+}*/
 </script>
 
