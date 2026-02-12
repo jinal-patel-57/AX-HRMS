@@ -135,6 +135,9 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 					new EmployeeBasicDetailsUtil();
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+			
+		    serviceContext.setAddGroupPermissions(true);
+		    serviceContext.setAddGuestPermissions(false);
 
 			EmployeeAddress employeeAddress =
 					employeeAddressLocalService.findByEmployeeId(employeeId);

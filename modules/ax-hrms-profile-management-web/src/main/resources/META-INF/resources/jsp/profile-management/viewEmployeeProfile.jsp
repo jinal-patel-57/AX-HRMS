@@ -175,7 +175,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Maritial Status</div>
-                            <div class="label-content">${employeeDetail.maritalStatus}</div>
+                            <div class="label-content">${employeeDetail.maritalStatus ? 'Married' : 'Single'}</div>
                         </div>
                     </div>
                     <c:if test="${employeeDetail.maritalStatus}">

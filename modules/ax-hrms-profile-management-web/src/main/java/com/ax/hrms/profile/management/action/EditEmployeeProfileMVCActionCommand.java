@@ -283,7 +283,9 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
 
             String dob = ParamUtil.getString(actionRequest,
                     AxHrmsProfileManagementWebConstants.NOMINEE_DOB);
-            nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+            if(Validator.isNotNull(dob) && !dob.isBlank()) {
+            	nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+            }
 
             address.setLine1(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE1));
             address.setLine2(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE2));

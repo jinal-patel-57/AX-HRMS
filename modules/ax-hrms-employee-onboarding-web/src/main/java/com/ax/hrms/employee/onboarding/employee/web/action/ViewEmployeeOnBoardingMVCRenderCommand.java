@@ -30,6 +30,7 @@ import com.ax.hrms.service.EmployeeExperienceLocalService;
 import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.EmployeeUanEsicLocalService;
 import com.ax.hrms.service.NomineeLocalService;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.petra.string.StringPool;
@@ -100,6 +101,9 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 
 	@Reference
 	NomineeLocalService nomineeLocalService;
+	
+	@Reference
+	DLAppLocalService dlAppLocalService;
 
 	@Reference
 	EmployeeEducationLocalService employeeEducationLocalService;
@@ -234,12 +238,16 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			}
 
 			if(Validator.isNotNull(employeeDto.getAddressProofId()) && employeeDto.getAddressProofId()>0) {
-				FileEntry addressProofFile = DLAppServiceUtil.getFileEntry(employeeDto.getAddressProofId());
-
-				if (Validator.isNotNull(addressProofFile)) {
-					String previewURL = DLUtil.getPreviewURL(addressProofFile, addressProofFile.getFileVersion(), themeDisplay,StringPool.BLANK);
-
-					renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE, previewURL);
+				try {
+					FileEntry addressProofFile = dlAppLocalService.getFileEntry(employeeDto.getAddressProofId());
+					
+					if (Validator.isNotNull(addressProofFile)) {
+						String previewURL = DLUtil.getPreviewURL(addressProofFile, addressProofFile.getFileVersion(), themeDisplay,StringPool.BLANK);
+						
+						renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE, previewURL);
+					}
+				}catch(Exception e) {
+					log.error("Error while fetching addressproof -- " + e.getMessage());
 				}
 			}
 			if(Validator.isNotNull(employeeDto.getKycDocumentFileEntryId()) && employeeDto.getKycDocumentFileEntryId()>0) {

@@ -522,6 +522,7 @@ $.validator.addMethod(
                         required: true,
                         date: true,
                         ageRange: true,
+                        notFutureDate: true,
                         pastDate1900: true
                     },
                     [namespace + "mobileNo"]: {
@@ -545,6 +546,7 @@ $.validator.addMethod(
                             return $("#" + namespace + "maritalStatus").is(":checked");
                         },
                         date: true,
+                        notFutureDate: true,
                         pastDate1900: true
                     },
                     [namespace + "employeeProfilePicture"]: {
@@ -623,6 +625,7 @@ $.validator.addMethod(
                     [namespace + "dateOfBirth"]: {
                         required: "Please enter your date of birth.",
                         date: "Please enter a valid date.",
+                        notFutureDate: "Future dates are not allowed.",
                         ageRange: "Age must be between 18 and 60 years."
                     },
                     [namespace + "mobileNo"]: {
@@ -648,6 +651,7 @@ $.validator.addMethod(
                     },
                     [namespace + "marriageDate"]: {
                         required: "Please enter your marriage date.",
+                        notFutureDate: "Future dates are not allowed.",
                         date: "Please enter a valid date."
                     },
 //                    [namespace + "employeeProfilePicture"]: {
@@ -1111,7 +1115,8 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 var spouseNameField = $("#" + namespace + "spouseName");
                 if (maritalStatusCheckbox.is(":checked")) {
 		            const today = new Date().toISOString().split("T")[0];
-					marriageDateField.attr("max", today);
+					//marriageDateField.attr("max", today);
+					marriageDateField.removeAttr("max");
                     spouseNameField.prop("disabled", false);
                     marriageDateField.prop("disabled", false);
                     marriageDateField.rules("add", {required: true, date: true});
@@ -1685,7 +1690,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 			       return;
 			    }
 			    
-			    if (!confirm('Are you sure you want to delete this education record? ' + educationId)) {
+			    if (!confirm('Are you sure you want to delete this education record?')) {
 			        return;
 			    }
 			    
