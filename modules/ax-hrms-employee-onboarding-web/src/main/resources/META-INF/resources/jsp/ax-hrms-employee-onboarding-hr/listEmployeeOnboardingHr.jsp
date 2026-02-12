@@ -1,6 +1,7 @@
 <%@ include file="../../init.jsp" %>
 <liferay-ui:success key="updatedSuccessfully" message="Your request has been completed successfully."/>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <liferay-ui:success key="off-boarded" message="off-boarded"/>
 <portlet:renderURL var="startEmployeeOnboarding">
     <portlet:param name="mvcRenderCommandName" value="/onboardingFormHr"/>
@@ -67,8 +68,12 @@
                 <liferay-ui:search-container-column-text name="official-email"
                                                          value="${employeeDetails.officialEmail}"/>
                                                          
-				<liferay-ui:search-container-column-text name="employee-type"
-                                                         value="${employeeDetails.employeeType}"/>
+				<!--<liferay-ui:search-container-column-text name="employee-type"
+                                                         value="${employeeDetails.employeeType}"/>-->
+                <liferay-ui:search-container-column-text
+                    name="employee-type"
+                    value="<%= employeeDetails.getEmployeeType().substring(0,1).toUpperCase() + employeeDetails.getEmployeeType().substring(1) %>" />
+
                                                          
 				<liferay-ui:search-container-column-text name="status"
                                                          value="${!employeeDetails.isTerminated?'Active':'Terminated'}"/>

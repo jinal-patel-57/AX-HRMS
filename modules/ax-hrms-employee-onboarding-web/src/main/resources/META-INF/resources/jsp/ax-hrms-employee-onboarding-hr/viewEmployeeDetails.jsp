@@ -1,4 +1,4 @@
-l<%@page import="com.ax.hrms.model.Address"%>
+<%@page import="com.ax.hrms.model.Address"%>
 <%@page import="com.liferay.portal.kernel.service.CountryLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -50,7 +50,7 @@ l<%@page import="com.ax.hrms.model.Address"%>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
-                            <div class="label-name">Depatment</div>
+                            <div class="label-name">Department</div>
                             <div class="label-content">${employeeDetail.departmentName}</div>
                         </div>
                     </div>
@@ -199,9 +199,11 @@ l<%@page import="com.ax.hrms.model.Address"%>
                       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                           <div class="form-group-view">
                               <div class="label-name">Aadhar Card Number</div>
+                          <c:if test="${not empty employeeDetail.aadhaarCardNumber}">
                             <div class="label-content">
 								${fn:substring(employeeDetail.aadhaarCardNumber, 0, 4)}-${fn:substring(employeeDetail.aadhaarCardNumber, 4, 8)}-${fn:substring(employeeDetail.aadhaarCardNumber, 8, 12)}
                             </div>
+                          </c:if>
                           </div>
                       </div>
 
@@ -498,7 +500,7 @@ l<%@page import="com.ax.hrms.model.Address"%>
 
                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                    <div class="form-group-view">
-                                       <div class="label-name">Pin Code Test</div>
+                                       <div class="label-name">Pin Code</div>
                                        <div class="label-content">${permanentaddresss.pincode}</div>
                                    </div>
                                </div>

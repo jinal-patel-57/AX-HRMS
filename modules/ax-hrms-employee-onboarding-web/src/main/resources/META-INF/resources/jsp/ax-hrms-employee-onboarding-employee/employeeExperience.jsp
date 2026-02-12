@@ -60,9 +60,11 @@
                                     <div class="col-md-4 mb-3">
                                         <label><liferay-ui:message key="experience-certificate-attachment"/><span class="text-danger">*</span> </label>
                                         <input type="file" class="form-control"
+                                               id="<portlet:namespace/>experienceCertificateAttachment1"
                                                name="<portlet:namespace/>experienceCertificateAttachment1"
                                                data-existing-file-id="0"
-                                               multiple/>
+                                               multiple
+                                               />
                                         <small class="form-text text-muted">
                                             Allowed file types: PDF, JPG, PNG, JPEG
                                         </small>
@@ -125,6 +127,7 @@
                                             <label><liferay-ui:message key="experience-certificate-attachment"/><span class="text-danger">*</span> </label>
 
                                             <input type="file" class="form-control"
+                                            id="<portlet:namespace/>experienceCertificateAttachment${status.index+1}"
                                                    name="<portlet:namespace/>experienceCertificateAttachment${status.index+1}"
                                                    data-existing-file-id="${experienceItem.experienceCertificateMediaId}"
                                                    multiple

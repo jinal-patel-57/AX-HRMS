@@ -14,7 +14,7 @@
                             <liferay-ui:message key="account-number"/>
                         </label>
                         <input type="text" class="form-control" id="<portlet:namespace />accountNumber"
-                               name="<portlet:namespace />accountNumber" maxlength="20"
+                               name="<portlet:namespace />accountNumber" minlength="12"
                                value="${employeeBankAccount.accountNumber}"/>
                         <input type="hidden" class="form-control" id="<portlet:namespace />bankAccountId"
                                name="<portlet:namespace />bankAccountId" maxlength="75"
@@ -68,7 +68,7 @@
                             <liferay-ui:message key="ifsc-code"/>
                         </label>
                         <input type="text" class="form-control text-uppercase" id="<portlet:namespace />ifscCode"
-                               name="<portlet:namespace />ifscCode" maxlength="75"
+                               name="<portlet:namespace />ifscCode" maxlength="11"
                                placeholder="AXIS0ABCD12"
                                value="${employeeBankAccount.ifscCode}"
                                />

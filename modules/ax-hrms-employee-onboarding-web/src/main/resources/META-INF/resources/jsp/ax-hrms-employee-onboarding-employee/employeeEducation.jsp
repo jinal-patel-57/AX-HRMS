@@ -271,7 +271,7 @@
                                                                                                    }
                                                                                                %>
 
-                                                                                               <a target="_blank" href="<%= previewURL %>">View Existing Attachment</a>
+                                                                                               <a target="_blank" href="<%= previewURL %>">View Education Certificate</a>
                                                                                            </c:if>
                                         </div>
 

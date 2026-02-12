@@ -542,7 +542,7 @@ function setConfigsForAddExperienceSection(config) {
                     },
 
                     [namespace + "fatherName"]: {
-                        required: "Please Enter FatherName."
+                        required: "Please Enter FatherName / HusbandName"
                     },
                      [namespace + "nameAsPerAadhaarCard"]: {
                         required: "Please Enter Name as per Aadhar Card.",
@@ -676,24 +676,51 @@ $.validator.addMethod(
     "profilePicRequired",
     function (value, element) {
         const form = element.form;
+        console.log("---- Profile Pic Validation Start ----");
+
+        console.log("Element:", element);
+        console.log("Files object:", element.files);
 
         // Do not validate until Next/Submit is clicked
         if (!form._submitAttempted) {
             return true;
         }
-       const file = element.files[0];
-        if (!file || !file.name || file.name.trim() === '' || file.size === 0) {
-            return false;
-        }
+//       const file = element.files[0];
+//        if (!file || !file.name || file.name.trim() === '' || file.size === 0) {
+//            return false;
+//        }
         // New file selected
+//        if (element.files && element.files.length > 0) {
+////            return true;
+//            console.log("Files length:", element.files.length);
+//                console.log("File name:", element.files[0].name);
+//                console.log("File size:", element.files[0].size);
+//                console.log("Returning TRUE (new file selected)");
+//
+//   const file = element.files[0];
+//        if (!file || !file.name || file.name.trim() === '' || file.size === 0) {
+//            return false;
+//        }
+//        }
+
         if (element.files && element.files.length > 0) {
-            return true;
+            if (element.files[0].size > 0) {
+                return true;
+            }
         }
+
+        console.log("profilePicName:", profilePicName);
 
         // Existing file already saved in DB
         if (profilePicName && profilePicName.trim() !== "") {
+                    console.log("Returning TRUE (existing DB file)");
+
             return true;
         }
+
+
+        console.log("Returning FALSE ❌");
+        console.log("---- Profile Pic Validation End ----");
 
         return false;
     },
@@ -1018,7 +1045,7 @@ $.validator.addMethod(
                                        validPincode: "Pincode must be exactly 6 digits."
                                    },
                                    [namespace + "addressProofFile"]: {
-                                    required: "Please enter the Address Proof File.",
+                                    required: "Please upload the Address Proof File.",
                                      validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
                                      maxFileSize: "File size must not exceed 10 MB."                                   },
                                }
@@ -1689,6 +1716,8 @@ function setConfigsForExperienceValidation(config) {
                    messages[expCertKey] = {
                        fileRequiredIfNoExisting: "Please upload experience certificate."
                    };
+
+
                 });
 
             form.validate({
@@ -1728,6 +1757,48 @@ function setConfigsForExperienceValidation(config) {
              document.querySelectorAll('#experienceStepperForm input[type="date"]').forEach(input => {
                                         applyGenericDateRestriction(input);
                                     });
+
+$(document).on('change', 'input[name*="relievingDate"]', function () {
+initializeValidation()
+    console.log("Relieving date changed");
+    console.log("Field name:", $(this).attr("name"));
+    console.log("Value:", $(this).val());
+
+    const form = $("#experienceStepperForm");
+
+    if (form.data("validator")) {
+        form.validate().element(this);
+        console.log("Validation triggered on change");
+    } else {
+        console.log("Validator not initialized yet");
+    }
+});
+
+
+$(document).on('change', 'input[name*="joiningDate"]', function () {
+initializeValidation()
+    const form = $("#experienceStepperForm");
+
+    const joiningName = $(this).attr("name");
+    console.log("Joining changed:", joiningName);
+
+    // Extract index (example: joiningDate3 → 3)
+    const index = joiningName.match(/\d+$/);
+
+    if (index) {
+        const relievingName = joiningName.replace("joiningDate", "relievingDate");
+
+        const relievingField = $('[name="' + relievingName + '"]');
+
+        if (relievingField.length) {
+            console.log("Triggering relieving validation:", relievingName);
+
+            form.validate().element(relievingField);
+        }
+    }
+});
+
+
 
 
 			$(document).on('click', '.delete-experience-btn', function () {
@@ -1870,6 +1941,7 @@ function setConfigsForExperienceValidation(config) {
             rules: {
                 [namespace + "accountNumber"]: {
                     maxlength: 20,
+                    minlength:12,
                     accountNumberValidation: true
                 },
 
@@ -1925,7 +1997,7 @@ function setConfigsForExperienceValidation(config) {
 
                 [namespace + "ifscCode"]: {
                     maxlength: "IFSC code should not exceed 75 characters.",
-                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AXIS0ABCD12)"
                 }
             }
         });
@@ -1937,8 +2009,9 @@ function setConfigsForExperienceValidation(config) {
         }, "Account number should not contain alphabet characters, underscores, special characters, or whitespaces.");
         
         $.validator.addMethod("ifscCodeValidation", function (value, element) {
-      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
-    	}, "Please enter a valid IFSC code (Format: AAAA0BBBBBB)");
+      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase());
+
+    	}, "Please enter a valid IFSC code (Format: AXIS0ABCD12)");
 
     	 if (!$.validator.methods.onlyLettersAndSpaces) {
              $.validator.addMethod(
@@ -2287,7 +2360,7 @@ function setConfigsForExperienceValidation(config) {
                                 validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
                             },
                             [namespace + "nomineeCity"]: {
-                                required: "Please enter the city.",
+                                required: "Please enter the city for the present address.",
                                 maxlength: "City name cannot exceed 75 characters.",
                                 validNameOnly: "City name should contain only alphabets and space."
 
