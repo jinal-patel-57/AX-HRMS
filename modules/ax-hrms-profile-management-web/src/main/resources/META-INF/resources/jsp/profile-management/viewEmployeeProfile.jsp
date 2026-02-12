@@ -56,7 +56,7 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
-                            <div class="label-name">Depatment</div>
+                            <div class="label-name">Department</div>
                             <div class="label-content">${employeeDetail.departmentName}</div>
                         </div>
                     </div>
