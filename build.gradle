@@ -1,1 +1,27 @@
 // Check GETTING_STARTED.markdown for information regarding usage.
+plugins {
+    id "org.sonarqube" version "7.1.0.6387"
+}
+sonarqube {
+    properties {
+        property "sonar.projectKey", "HRMS-Liferay-Workspace"
+        property "sonar.projectName", "HRMS Liferay Workspace"
+        property "sonar.host.url", "http://localhost:9000"
+            
+
+        // MAIN sources only
+        property "sonar.sources", ""
+        property "sonar.tests", ""
+//        property "sonar.inclusions", "**/src/main/java/**/*.java"
+        property "sonar.language", "java"
+        property "sonar.sourceEncoding", "UTF-8"
+        //property "sonar.gradle.skipCompile", "true"
+        property "sonar.java.binaries", "modules/**/build/classes/java/main"
+
+        property "sonar.tests", ""
+
+        // Exclusions (very important for Liferay)
+        property "sonar.exclusions", "**/build/resources/main/META-INF/resources/**/*.jsp,**/*Impl.java,**/*-service/**/model/impl/**/*.java,**/*-service/**/service/persistence/**/**/*.java,**/*-service/**/service/base/**/*.java,**/*-service/**/service/http/**/*.java,**/*-service/**/service/util/**/*.java,**/*-api/**/dto/**/*.java,**/*-api/**/exception/**/*.java,**/*-api/**/model/**/*.java,**/*-api/**/service/**/*.java,**/*-rest-builder-api/**,**/*-rest-builder-test/**,**/*-rest-builder-client/**,**/*-rest-builder-impl/**/graphql/**,**/*-rest-builder-impl/**/jaxrs/**,**/*-rest-builder-impl/**/resource/v1_0/factory/**,**/*-rest-builder-impl/**/resource/v1_0/Base*.java,**/*-rest-builder-impl/**/resource/v1_0/OpenAPI*.java,**/*-rbac-service/**/service/impl/*ServiceImpl.java,**/*-gis-rest-builder-impl/**/internal/batch/**,**/*-invoice-rest-builder-impl/**/internal/resource/v1_0/**"
+
+    }
+}
