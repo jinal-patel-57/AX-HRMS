@@ -27,7 +27,7 @@ AUI().ready(function () {
 
 
 function sidebarNavigation() {
-  $('.side_navbar > ul > li > .collapsed_icon').click(function () {
+  $('.side_navbar > ul > li > .trans').click(function () {
     $(".side_navbar > ul > li > ul > li.parent_sub_child").removeClass('active');
     $('.side_navbar > ul > li > ul > li > .collapsed_icon').removeClass('active');
     $(".side_navbar > ul > li > ul > li.parent_sub_child").removeClass('active');

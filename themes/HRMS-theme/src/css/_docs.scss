@@ -252,6 +252,10 @@ span.collapsed_icon.active::before{transform: translateX(-50%) rotate(-135deg);}
 .collapsedMenu .side_navbar > ul > li.parent > a{padding: 0;}
 .collapsedMenu .side_navbar > ul > li:hover ul.child{display: block;}
 
+
+li.parent > a + span.collapsed_icon {pointer-events: none !important;}
+
+
 .collapsedMenu .header .header_logo{width: 65px;}
 .collapsedMenu .header_logo a img.collapsed{display: block;}
 .collapsedMenu .header_logo a img.expanded{display: none;}

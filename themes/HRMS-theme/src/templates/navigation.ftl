@@ -9,8 +9,9 @@
 		</#if>
 
 		<li class="${nav_item_css_class} parent" id="layout_${nav_item.getLayoutId()}" role="presentation">
+			
 			<a ${nav_item_attr_has_popup} href="${nav_item.getURL()}" ${nav_item.getTarget()} role="menuitem" data-sena-off="true"
-				class="trans" title="${nav_item.getName()}">
+				class="trans" title="${nav_item.getName()}" <#if nav_item.hasChildren()> onclick="return false;" </#if> >
 				<div class="span_flex">
 					<span class="nav_img">
 						<#if nav_item_layout.getIconImageId() != 0>
