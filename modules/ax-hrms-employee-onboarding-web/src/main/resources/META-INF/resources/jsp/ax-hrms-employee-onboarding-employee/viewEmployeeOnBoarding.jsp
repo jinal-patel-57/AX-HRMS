@@ -95,12 +95,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                    <%-- <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Insurance Link</div>
                             <div class="label-content email">${employeeDetail.insuranceLink}</div>
                         </div>
-                    </div>
+                    </div> --%>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">Gross Salary Per Month</div>
@@ -119,9 +119,6 @@
                             <div class="label-content">${employeeDetail.stipend}</div>
                         </div>
                     </div>
-                    
-                    
-                    
                     
                 </div>
             </div>
@@ -513,7 +510,7 @@
                 <strong>Education Details</strong>
             </div>
             <div class="card-body">
-                <c:forEach var="education" items="${educationList}">
+                <c:forEach var="education" items="${educationList}" varStatus="status">
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
@@ -573,6 +570,9 @@
                                                     </div>
                                                 </div>
                     </div>
+                    <c:if test="${!status.last}">
+	                    <hr/>
+	                </c:if>
                 </c:forEach>
             </div>
         </div>
