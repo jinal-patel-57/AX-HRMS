@@ -2,6 +2,7 @@ package com.ax.hrms.employee.onboarding.hr.web.action;
 
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingHrWebPortletConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
 import com.ax.hrms.link.config.configuration.LinksConfiguration;
@@ -52,7 +53,7 @@ import java.util.*;
 )
 public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionCommand {
 
-    public static Log log = LogFactoryUtil.getLog(ListEmployeesMVCRenderCommand.class);
+    public static Log log = LogFactoryUtil.getLog(AddEmployeeOnBoardingHrMVCActionCommand.class);
 
     @Reference
     MailTemplateConfiguration mailTemplateConfiguration;
@@ -140,13 +141,12 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         double grossSalaryCTCPA = ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.GROSS_SALARY_CTC_PA);
         String typeOfEmployee = ParamUtil.getString(actionRequest, "typeOfEmployee");
         double stipend = ParamUtil.getDouble(actionRequest, "stipend");
-
-
-
-
-
+        long branchId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnboardingHrWebPortletConstants.BRANCH);
+        log.info("BranchId in add :-"+ branchId);
 
         EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
+        employeeDetails.setBranchId(branchId);
+        employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
         // converting role names into role IDS
         List<Long> roleIds = new ArrayList<>();
         long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal

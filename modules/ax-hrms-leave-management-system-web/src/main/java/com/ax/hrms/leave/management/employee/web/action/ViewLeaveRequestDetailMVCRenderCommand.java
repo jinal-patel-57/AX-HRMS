@@ -87,8 +87,12 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 				boolean isFestivalFloater = leavePolicyMasterLocalService.findByLeaveTypeMasterId(leaveRequest.getLeaveTypeMasterId()).getIsApplicableFloater();
 				if (isFestivalFloater) {
 					Date date = leaveRequest.getStartDateTime();
-					String floaterHolidayName = holidayLocalService.findByDate(date).getHolidayName();
-					renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.FLOATER_HOLIDAY_NAME, floaterHolidayName);
+					try {
+						String floaterHolidayName = holidayLocalService.findByDate(date).getHolidayName();
+						renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.FLOATER_HOLIDAY_NAME, floaterHolidayName);
+					}catch(Exception e) {
+						log.error("Error while fetching festival floater -- " + e.getMessage());
+					}
 				}
 			}catch (Exception e){
 				e.printStackTrace();

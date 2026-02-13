@@ -80,10 +80,7 @@ var setFileInputValues;
 //                        required: true,
 //                        numericality: true
                     },
-                    [namespace + "stipend"]: {
-                        required: true,
-                        numericality: true
-                    },
+
                     [namespace + "grossSalaryCTCPA"]: {
 //                        required: true,
 //                        numericality: true
@@ -394,15 +391,47 @@ var setFileInputValues;
             // Function to check the selected type of employee
             function checkEmployeeType() {
                 var selectedType = $('#typeOfEmployee').val();
+                const $stipendAsterisk = $(".required-asterisk-stipend");
+                const $stipend = $('#stipend');
                 if (selectedType === 'intern') {
                     $('#designation').val('Intern');
                     $('#stipend').prop('disabled', false);
                     $('#stipend').attr('placeholder', 'Stipend');
                     $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', true); // Disable CTC fields
+
+                     $stipend.prop('disabled', false);
+                           $stipend.attr('placeholder', 'Stipend');
+
+                           $stipend.rules("remove");
+
+                           $stipend.rules("add", {
+                               required: true,
+                               numericality: true,
+                               messages: {
+                                   required: "Please enter Stipend",
+                                   numericality: "Please enter valid number"
+                               }
+                           });
+
+                           $stipendAsterisk.removeClass("d-none");
+
+
+
                 } else {
-                    $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', false); // Enable CTC fields
-                    $('#stipend').prop('disabled', true);
-                    $('#stipend').attr('placeholder', 'NA');
+
+                                $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', false);
+
+                                 $stipend.rules("remove");
+
+                                       $stipend.prop('disabled', true);
+                                       $stipend.attr('placeholder', 'NA');
+                                       $stipend.val('');
+
+                                       $stipend.removeClass("is-invalid is-valid");
+                                       $stipend.valid();
+
+                                       $stipendAsterisk.addClass("d-none");
+
                 }
                 if (selectedType === 'intern' || selectedType === 'contractor') {
                     $('#enabled, #disabled').prop('disabled', true); // Disable probation radio buttons

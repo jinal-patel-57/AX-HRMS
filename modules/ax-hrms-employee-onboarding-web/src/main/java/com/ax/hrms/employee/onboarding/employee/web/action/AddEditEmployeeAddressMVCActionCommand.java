@@ -61,14 +61,17 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+		
+	    serviceContext.setAddGroupPermissions(true);
+	    serviceContext.setAddGuestPermissions(false);
 		boolean sameAsPermanent = ParamUtil.getBoolean(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.SAME_AS_PERMANENT, GetterUtil.DEFAULT_BOOLEAN);
 
 		String flag = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.UPDATE_FLAG_ADDRESS);
 		log.info("AddEditEmployeeAddressMVCActionCommand >>> doProcessAction :::" + flag);
 		boolean isUpdate = flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.TRUE);
 
-		boolean result = processAddresses(actionRequest,sameAsPermanent, themeDisplay, addressLocalService,employeeAddressLocalService, employeeDetailsLocalService, isUpdate);
+		boolean result = processAddresses(actionRequest,sameAsPermanent, themeDisplay, addressLocalService,employeeAddressLocalService, employeeDetailsLocalService, isUpdate, serviceContext);
 
 		if (result) {
 			log.info(AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_SUCCESS);
@@ -77,7 +80,7 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 		}
 	}
 
-	public boolean processAddresses(ActionRequest actionRequest, boolean sameAsPermanent, ThemeDisplay themeDisplay,AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService,EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate) {
+	public boolean processAddresses(ActionRequest actionRequest, boolean sameAsPermanent, ThemeDisplay themeDisplay,AddressLocalService addressLocalService, EmployeeAddressLocalService employeeAddressLocalService,EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate, ServiceContext serviceContext) {
 		try {
 			log.info("isUpdate  -- " + isUpdate );
 			log.info("sameAsPermanent  -- " + sameAsPermanent);
@@ -90,10 +93,10 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 				presentAddressId = employeeAddress.getPresentAddress();
 				employeeAddressId = employeeAddress.getEmployeeAddressId();
 			}
-			Address permanentAddress = createOrUpdateAddress(actionRequest, permanentAddressId, true, addressLocalService, isUpdate,sameAsPermanent);
+			Address permanentAddress = createOrUpdateAddress(actionRequest, permanentAddressId, true, addressLocalService, isUpdate,sameAsPermanent, serviceContext);
 			Address presentAddress = null;
 			if (!sameAsPermanent) {
-				presentAddress = createOrUpdateAddress(actionRequest, presentAddressId, false, addressLocalService, isUpdate,sameAsPermanent);
+				presentAddress = createOrUpdateAddress(actionRequest, presentAddressId, false, addressLocalService, isUpdate,sameAsPermanent, serviceContext);
 			}
 			createOrUpdateEmployeeAddress(permanentAddress, presentAddress, themeDisplay, employeeAddressLocalService, employeeDetailsLocalService, isUpdate);
 			return true;
@@ -103,7 +106,7 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 		}
 	}
 
-	private Address createOrUpdateAddress(ActionRequest actionRequest, long addressId, boolean isPermanent, AddressLocalService addressLocalService, boolean isUpdate, boolean sameAsPermanent) throws PortalException {
+	private Address createOrUpdateAddress(ActionRequest actionRequest, long addressId, boolean isPermanent, AddressLocalService addressLocalService, boolean isUpdate, boolean sameAsPermanent, ServiceContext serviceContext) throws PortalException {
 		Address address;
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -134,10 +137,7 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			EmployeeBasicDetailsUtil employeeBasicDetailsUtil =
 					new EmployeeBasicDetailsUtil();
 
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
 			
-		    serviceContext.setAddGroupPermissions(true);
-		    serviceContext.setAddGuestPermissions(false);
 
 			EmployeeAddress employeeAddress =
 					employeeAddressLocalService.findByEmployeeId(employeeId);

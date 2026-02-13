@@ -169,7 +169,7 @@
 				<div class="col-md-4 col-sm-12">
 					<div class="form-group">
 						<label class="" for="stipend"><liferay-ui:message
-								key="stipend" /></label> <input id="stipend"
+								key="stipend" /><span class="text-danger required-asterisk-stipend d-none">*</span></label> <input id="stipend"
 							placeholder="<liferay-ui:message key='stipend'/>"
 							class="form-control" type="text"
 							name="<portlet:namespace/>stipend" disabled /> <label
