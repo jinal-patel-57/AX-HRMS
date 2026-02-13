@@ -78,7 +78,7 @@
 		            </portlet:renderURL>
 		            
 		              <portlet:actionURL var="deleteHolidayURL" name="/deleteHoliday">
-                        <portlet:param name="holidayId" value="${holiday.holidayId}" />
+                        <portlet:param name="holidayId" value="SELECTED_ID" />
                         <portlet:param name="selectedYear" value="SELECTED_YEAR"/>
                         <portlet:param name="backURL" value="${homeUrl}"/>
                     </portlet:actionURL>

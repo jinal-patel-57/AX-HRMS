@@ -494,8 +494,10 @@
                             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                 <div class="form-group-view">
                                     <div class="label-name">Address Proof</div>
-                                              <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof</a></c:if>
-                                </div>
+                                        <div class="label-content">
+                                             <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof</a></c:if>
+                                         </div>
+                                        </div>
                             </div>
                         </c:if>
                 </div>

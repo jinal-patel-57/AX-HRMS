@@ -33,6 +33,15 @@ public class EmployeeDto {
 	String previewUrl;
 	long permanantCountryId;
 	long presentCountryId;
+	String city;
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	private EmployeeDto() {}
 	

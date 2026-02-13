@@ -1,5 +1,6 @@
 package com.ax.hrms.employee.directory.employee.web.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.directory.util.EmployeeDetailUtil;
 import com.ax.hrms.employee.directory.web.constants.AxHrmsEmployeeDirectoryEmployeeWebPortletConstants;
 import com.ax.hrms.employee.directory.web.constants.AxHrmsEmployeeDirectoryEmployeeWebPortletKeys;
@@ -16,6 +17,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -27,6 +29,7 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -59,9 +62,13 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
 	@Reference
 	EmployeeDesignationLocalService employeeDesignationLocalService;
 
+	@Reference
+	AxHrmsCommonApi axHrmsCommonApi;
+
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         String name = ParamUtil.getString(renderRequest, AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.SEARCH_QUERY, GetterUtil.DEFAULT_STRING);
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_SEARCHEDVALUE, name);
@@ -84,7 +91,8 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
                 }
             }
         }
-
+		boolean isHR = axHrmsCommonApi.isRolePerson(themeDisplay,AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.HR_ADMIN);
+		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.IS_HR,isHR);
 
 		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 		SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null, StringPool.BLANK);

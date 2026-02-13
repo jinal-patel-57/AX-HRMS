@@ -1,10 +1,11 @@
 <%@ include file="/init.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 
 <liferay-portlet:renderURL var="backURL" />
 
 <liferay-ui:success key="detail-update-success-message"
-	message="Profile detail updated..."></liferay-ui:success>
+	message="Profile details updated successfully"></liferay-ui:success>
 
 
 
@@ -81,7 +82,7 @@
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
 					<div class="form-group-view">
 						<div class="label-name">
-							<liferay-ui:message key="phone-number" />
+							<liferay-ui:message key="Mobile Number" />
 						</div>
 						<div class="label-content">${employeeProfileDetail.mobileNumber}</div>
 					</div>
@@ -93,7 +94,7 @@
 						<div class="label-name">
 							<liferay-ui:message key="personal-email" />
 						</div>
-						<div class="label-content">${employeeProfileDetail.personalEmailId}</div>
+						<div class="label-content email">${employeeProfileDetail.personalEmailId}</div>
 					</div>
 
 				</div>
@@ -103,7 +104,7 @@
 						<div class="label-name">
 							<liferay-ui:message key="official-email-id" />
 						</div>
-						<div class="label-content">${employeeProfileDetail.officialEmailId}</div>
+						<div class="label-content email">${employeeProfileDetail.officialEmailId}</div>
 					</div>
 
 				</div>
@@ -113,7 +114,9 @@
 						<div class="label-name">
 							<liferay-ui:message key="joining-date" />
 						</div>
-						<div class="label-content">${employeeProfileDetail.joiningDate}</div>
+						<div class="label-content">
+						 <fmt:formatDate value='${employeeProfileDetail.joiningDate}' pattern='dd-MM-yyyy'/>
+						</div>
 					</div>
 
 				</div>
@@ -204,6 +207,15 @@
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
 							<div class="form-group-view">
 								<div class="label-name">
+									<liferay-ui:message key="City" />
+								</div>
+								<div class="label-content">${permanantAddress.city}</div>
+							</div>
+
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+							<div class="form-group-view">
+								<div class="label-name">
 									<liferay-ui:message key="state" />
 								</div>
 								<div class="label-content">${permanantAddress.state}</div>
@@ -280,6 +292,15 @@
 
 							</div>
 
+							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+								<div class="form-group-view">
+									<div class="label-name">
+										<liferay-ui:message key="City" />
+									</div>
+									<div class="label-content">${permanantAddress.city}</div>
+								</div>
+
+							</div>
 							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
 								<div class="form-group-view">
 									<div class="label-name">

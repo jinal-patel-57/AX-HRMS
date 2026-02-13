@@ -182,7 +182,7 @@
     function setConfigsForDeleteHoliday(config) {
 
         let url = config.deleteUrl;
-        url = url.replace('SELECTED_YEAR', config.selectedYear);
+        url = url.replace('SELECTED_ID', config.holidayId);
 
         if (confirm("Are you sure you want to delete this holiday?")) {
             window.location.href = url;

@@ -31,7 +31,7 @@
 
         <div class="d-flex align-items-center">
             <form class="form-inline mr-2" onsubmit="searchValue(); return false;">
-                <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" onchange="searchValue()">
+                <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" >
                 <button type="submit" class="btn btn-outline-dark btn-sm"><liferay-ui:message key="search" /></button>
             </form>
 
