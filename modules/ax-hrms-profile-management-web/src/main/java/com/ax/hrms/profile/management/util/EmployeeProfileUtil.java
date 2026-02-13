@@ -9,11 +9,14 @@ import com.ax.hrms.model.Nominee;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.service.*;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.CountryLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.RenderRequest;
 import java.util.Map;
@@ -88,6 +91,7 @@ public class EmployeeProfileUtil {
 		}
 	}
 	public void setAddress(RenderRequest renderRequest, Long employeeId) {
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		try {
 			long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
 			log.info("EmployeeOnBoardingUtil >>> setAddress ::: employeeAddressId ======>>>>>" + employeeAddressId);
@@ -114,7 +118,22 @@ public class EmployeeProfileUtil {
 				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PRESENT_ADDRESS, presentaddresss);
 			}
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,employeeAddress.getPresentPermanentSame());
+			long addressProofFileEntryId = employeeAddress.getEmployeeAddressProofFileEntryId();
+			FileEntry fileEntry =
+					DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
 
+			String addressProofPreviewURL =
+					DLUtil.getPreviewURL(
+							fileEntry,
+							fileEntry.getFileVersion(),
+							themeDisplay,
+							""
+					);
+
+			renderRequest.setAttribute(
+					"addressProofPreviewURL",
+					addressProofPreviewURL
+			);
 
 
 		} catch (PortalException e) {

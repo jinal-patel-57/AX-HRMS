@@ -142,8 +142,10 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
 			employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
-			EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
-			employeeDto.setAddressProofFileEntryId(employeeAddress.getEmployeeAddressProofFileEntryId());
+            if(Validator.isNotNull(employeeDetails.getEmployeeAddressId())) {
+                EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+                employeeDto.setAddressProofFileEntryId(employeeAddress.getEmployeeAddressProofFileEntryId());
+            }
 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
 

@@ -563,7 +563,7 @@
                                                         <div class="label-content">
                                                             
                                                             <c:if test="${not empty education.educationCertificatePreviewUrl}">
-                                                            	<a href="${education.educationCertificatePreviewUrl}" target="_blank">Download Education Certificate</a>
+                                                            	<a href="${education.educationCertificatePreviewUrl}" target="_blank">View Education Certificate</a>
                                                             </c:if>
 
                                                             <c:if test="${empty education.educationCertificatePreviewUrl}">
@@ -605,7 +605,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
-                                <div class="label-name">Reliving Date</div>
+                                <div class="label-name">Relieving Date</div>
                                 <div class="label-content">
                                     <fmt:formatDate value='${experience.relievingDate}' pattern='dd-MM-yyyy'/>
                                 </div>
@@ -613,7 +613,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                                                                       <div class="form-group-view">
-                                                                          <div class="label-name">Experience Certificates</div>
+                                                                          <div class="label-name">Experience Certificate</div>
                                                                           <div class="label-content">
 
                                                                               <c:if test="${not empty experience.experienceCertificatePreviewUrls}">
@@ -624,7 +624,7 @@
 
                                                                                           <li>
                                                                                               <a href="${docUrl}" target="_blank">
-                                                                                                  Download Experience Certificate ${status.index + 1}
+                                                                                                  View Experience Certificate ${status.index + 1}
                                                                                               </a>
                                                                                           </li>
 

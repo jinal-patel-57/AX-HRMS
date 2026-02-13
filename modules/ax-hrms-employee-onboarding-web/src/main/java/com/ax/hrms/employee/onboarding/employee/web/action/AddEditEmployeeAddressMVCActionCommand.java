@@ -137,7 +137,6 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			EmployeeBasicDetailsUtil employeeBasicDetailsUtil =
 					new EmployeeBasicDetailsUtil();
 
-			
 
 			EmployeeAddress employeeAddress =
 					employeeAddressLocalService.findByEmployeeId(employeeId);
@@ -199,18 +198,19 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 				}
 
 				employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
-				employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
 			} catch (Exception e) {
 				log.error("error while adding address proof :: " + e);
 			}
-			setBothTypeAddress(actionRequest, isPermanent, address);
+			employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+		}
+		setBothTypeAddress(actionRequest, isPermanent, address);
 
 			if (isUpdate) {
 				handleAddressUpdate(address, isPermanent, sameAsPermanent);
 			} else {
 				addNewAddress(address, isPermanent);
 			}
-		}
+
 		return address;
 	}
 	private Address setBothTypeAddress(ActionRequest actionRequest, boolean isPermanent,Address address){

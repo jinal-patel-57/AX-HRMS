@@ -243,7 +243,7 @@
                     </label> <input type="text" class="form-control"
                                     id="<portlet:namespace />presentpinCode"
                                     name="<portlet:namespace />presentpinCode" maxlength="6"
-                                    value="${permanentaddresss.pincode}"/>
+                                    value="${presentaddresss.pincode}"/>
                 </div>
             </div>
                 <div class="row mt-3" id="addressProofSection">
