@@ -24,7 +24,7 @@
     </div>
 
     <c:catch>
-        <form method="Post" action="${addLeaveRequestUrl }" id="<portlet:namespace/>leaveRequestForm">
+        <form method="Post" action="${addLeaveRequestUrl }" id="<portlet:namespace/>leaveRequestForm" >
             <div class="card-body">
                 <div class="row">
 
@@ -77,14 +77,14 @@
                                 <liferay-ui:message key="start-date"/>
                             </label><span class="text-danger">*</span>
                             <input type="date" id="<portlet:namespace />startDate" name="<portlet:namespace />startDate"
-                                   class="form-control"/>
+                                   class="form-control" max="9999-12-31"/>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-4 col-lg-4" id="endDateContainer">
                         <div class="form-group">
                             <label><liferay-ui:message key="end-date"/><span class="text-danger">*</span></label>
                             <input type="date" id="<portlet:namespace />endDate" name="<portlet:namespace />endDate"
-                                   class="form-control"/>
+                                   class="form-control" max="9999-12-31"/>
                         </div>
                     </div>
 
@@ -240,14 +240,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isSubmitting = false;
 
-    form.addEventListener("submit", function () {
+    form.addEventListener("submit", function (e) {
+
+        if (!$(form).valid()) {
+            e.preventDefault();
+            return false;
+        }
 
         if (isSubmitting) {
+            e.preventDefault();
             return false;
         }
 
         isSubmitting = true;
-
         submitBtn.disabled = true;
         submitBtn.innerText = "Submitting...";
     });

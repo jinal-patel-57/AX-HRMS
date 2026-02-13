@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:renderURL var="homeUrl"/>
 
@@ -45,7 +46,10 @@
                         <div class="label-content">-</div>
                     </c:if>
                     <c:forEach var="leaveInformToTeamMap" items="${leaveInformToTeamDetailMap}">
-                        <div class="label-content">${leaveInformToTeamMap.value }</div>
+                       <!-- <div class="label-content">${leaveInformToTeamMap.value }</div> -->
+                       <div class="label-content email">
+                           ${fn:toLowerCase(leaveInformToTeamMap.value)}
+                       </div>
                     </c:forEach>
                 </div>
             </div>

@@ -158,7 +158,7 @@
                         <select id="projectManagerSelect" name="<portlet:namespace />projectManager"
                                 class="custom-select mr-sm-2">
                             <!-- adding the user list -->
-                            <option value=""><liferay-ui:message key="select-manager"/><span class="text-danger">*</span></option>
+                            <option value=""><liferay-ui:message key="select-manager"/></option>
                             <c:forEach var="manager" items="${managerList}">
                                 <option value="${manager.employeeId}">${manager.firstName} ${manager.lastName}
                                 </option>
@@ -169,6 +169,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description"><liferay-ui:message key="description"/></label>
+                        <span class="text-danger">*</span>
                         <textarea id="description" class="form-control"
                                   name="<portlet:namespace />description"></textarea>
                         <label id="description-error" class="error text-danger" for="description"></label>

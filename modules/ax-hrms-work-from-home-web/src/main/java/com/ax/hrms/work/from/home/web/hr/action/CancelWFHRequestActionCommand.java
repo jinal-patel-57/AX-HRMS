@@ -30,10 +30,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -162,6 +159,7 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
                 WFHStatusUtil.sendNotificationToEmployee(employeeCanceledNotification, HremployeeDetails);
                 WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false,true, userComment);
             }
+            response.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
             SessionMessages.add(request, "wfhCancelled");
 

@@ -24,15 +24,12 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.*;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -119,12 +116,16 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
             EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(currentUserId);
             wfh.setReviewerId(employeeDetails.getEmployeeId());
-            wfh.setEmployeeId(employeeDetails.getEmployeeId());
+//            wfh.setEmployeeId(employeeDetails.getEmployeeId());
             wfh.setModifiedBy(themeDisplay.getUserId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
+            log.info("wfh details :: "+wfh.toString());
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
+            log.info("employee is the :: "+employeeDetails1.toString());
+
             EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails1.getManagerId());
+            log.info("manager is the :: "+manager.getFirstName()+" "+manager.getLastName());
             StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             String employeeRejectedNotification = notificationTemplateConfiguration.WFHRequestRejectedNotificationToEmployee();
 
@@ -156,6 +157,8 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 
 
             // Success message (matches your JSP)
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
             SessionMessages.add(actionRequest, "wfh-rejected");
 
         } catch (Exception e) {

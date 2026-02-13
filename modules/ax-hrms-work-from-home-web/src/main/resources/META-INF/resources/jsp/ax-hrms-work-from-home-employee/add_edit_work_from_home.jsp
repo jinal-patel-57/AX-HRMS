@@ -58,10 +58,9 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        name="<portlet:namespace/>teamMailId"
                        class="form-control"
                        value="<%= isEdit ? wfh.getTeamMailId() : "" %>"
-                       required />
+                        />
                 <small class=" text-muted">
                     Multiple email IDs can be entered, separated by commas.
-                    <strong>Example:</strong> hr@company.com, manager@company.com
                 </small>
 
                 <small class="text-danger d-block mt-1" id="emailError"></small>
@@ -73,7 +72,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
                           id="reason"
                           name="<portlet:namespace/>reason"
                           rows="3"
-                          required><%= isEdit ? wfh.getReason() : "" %></textarea>
+                          ><%= isEdit ? wfh.getReason() : "" %></textarea>
                 <small class="text-danger" id="reasonError"></small>
             </div>
 
@@ -84,7 +83,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        class="form-control"
                        name="<portlet:namespace/>startDate"
                        value="<%= isEdit ? df.format(wfh.getStartDate()) : "" %>"
-                       required />
+                       />
                 <small class="text-danger" id="startError"></small>
             </div>
 
@@ -95,7 +94,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        class="form-control"
                        name="<portlet:namespace/>endDate"
                        value="<%= isEdit ? df.format(wfh.getEndDate()) : "" %>"
-                       required />
+                        />
                 <small class="text-danger" id="endError"></small>
             </div>
 

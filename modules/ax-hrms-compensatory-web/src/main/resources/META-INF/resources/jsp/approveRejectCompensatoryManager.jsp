@@ -187,7 +187,7 @@
                     <div class="form-group col-12">
                         <label for="comment">
                             <liferay-ui:message key="comment"/>
-                            <span class="text-danger">*</span>
+
                         </label>
                         <textarea id="comment"
                                   class="form-control"

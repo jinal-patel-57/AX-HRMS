@@ -24,10 +24,7 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -158,6 +155,8 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             WFHStatusUtil.sendMailtoTeam(fromName, fromEmailAddress, teamEmailList, serviceMap, employeeMailBody, wfh, axHrmsCommonApi, mailTemplateConfiguration,userComment);
             log.info("mail sent successfully");
             // Send success message
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
             SessionMessages.add(actionRequest, "wfh-approved");
 
         } catch (Exception e) {

@@ -43,13 +43,13 @@ var submit_compensatory_form;
                         lessThanOrEqualRequested: true
                     },
                     [namespace + "comment"]: {
-                                required: true,
+//                                required: true,
                                 maxCharThousand: true
                             }
                 },
                 messages: {
                     [namespace + "comment"]: {
-                        required: "Comment is required.",
+//                        required: "Comment is required.",
                         maxCharThousand: "Comment cannot exceed 1000 characters."
                     }
                 },

@@ -782,7 +782,7 @@ $.validator.addMethod(
 
               $('[name="' + namespace + 'grossSalaryCTCPM"]').rules("add", {
                   required: true,
-
+                  ctcLimitByEmployeeType: true,
                   messages: {
                       required: "Please enter gross salary per month.",
 
@@ -902,6 +902,27 @@ $.validator.addMethod(
 
 
 
+
+
+$.validator.addMethod("ctcLimitByEmployeeType", function (value, element) {
+    if (!value) return true; // handled by required rule
+
+    var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+    var amount = parseFloat(value);
+
+    if (isNaN(amount)) return false;
+
+    if (employeeType && employeeType.toLowerCase() === 'intern') {
+        return amount <= 100000; // 1,00,000
+    } else {
+        return amount <= 1000000; // 10,00,000
+    }
+}, function () {
+    var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+    return employeeType && employeeType.toLowerCase() === 'intern'
+        ? "For interns, CTC per month cannot exceed ₹1,00,000."
+        : "For employees, CTC per month cannot exceed ₹10,00,000.";
+});
 
 
 

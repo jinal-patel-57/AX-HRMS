@@ -331,7 +331,13 @@ function closeCustomModal() {
                        required: "Please enter reason for leave",
                        validLetters: "Only letters, numbers, space and . , - are allowed",
                        maxlength: "Reason cannot exceed 70 characters"
-                   }
+                   },
+                                   [namespace + "startDate"]: {
+                                       required: "Start Date is required.",
+                                   },
+                                   [namespace + "endDate"]: {
+                                       required: "End Date is required.",
+                                   },
             },
             errorPlacement: function (error, element) {
                 error.insertAfter(element);
