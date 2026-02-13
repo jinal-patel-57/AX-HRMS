@@ -587,7 +587,7 @@
                 <strong>Experience Details</strong>
             </div>
             <div class="card-body">
-                <c:forEach var="experience" items="${experienceList}">
+                <c:forEach var="experience" items="${experienceList}" varStatus="status">
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                             <div class="form-group-view">
@@ -643,6 +643,9 @@
 
                         </div>
                     </div>
+                    <c:if test="${!status.last}">
+	                    <hr/>
+	                </c:if>
                 </c:forEach>
             </div>
         </div>
@@ -863,6 +866,51 @@
     </div>
 </div>
 </c:if>
+
+<!-- Custom Message Modal -->
+<div id="rejectMessageModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <div class="custom-modal-header">
+            <span id="customModalTitle">Reject Message</span>
+            <button type="button" class="custom-modal-close" onclick="closeCustomModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="custom-modal-body" id="customModalBody">
+        	<div class="modal-info">Employee details have been rejected and sent back to the employee for correction.</div>
+        </div>
+
+        <div class="custom-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" onclick="closeRejectModal()">
+                Ok
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Message Modal -->
+<div id="approveMessageModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <div class="custom-modal-header">
+            <span id="customModalTitle">Message</span>
+            <button type="button" class="custom-modal-close" onclick="closeCustomModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="custom-modal-body" id="customModalBody">
+        	<div class="modal-info">Employee onboarded successfully.</div>
+        </div>
+
+        <div class="custom-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" onclick="closeApproveModal()">
+                Ok
+            </button>
+        </div>
+    </div>
+</div>
+
 
 <script>
     const namespace = '<portlet:namespace />';
