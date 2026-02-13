@@ -78,10 +78,27 @@ function applyGenericDateRestriction(element) {
 
             let checkbox = $('#' + namespace + 'sameAsPermanent');
             let addressProofSection = $('#addressProofSection');
+            let addressProofInput = $('#' + namespace + 'addressProofFile');
+            let form = $("#addressStepperForm");
+
+
 
             function toggleAddressProof() {
                 if (checkbox.is(':checked')) {
                     addressProofSection.hide();
+
+
+                    addressProofInput.val("");
+
+                    addressProofInput.removeClass("is-invalid is-valid");
+
+                    addressProofInput.next(".invalid-feedback").remove();
+
+                    if (form.data("validator")) {
+                        form.validate().resetElements(addressProofInput);
+                    }
+
+
                 } else {
                     addressProofSection.show();
                 }
@@ -193,16 +210,37 @@ function setConfigsForAddExperienceSection(config) {
 	    // -------------------------
 	    // Checkbox toggle
 	    // -------------------------
+
         sameAsPermanentCheckbox.addEventListener("change", function () {
+
+            const form = $("#addressStepperForm");
+
             if (this.checked) {
+
                 copyPermanentToPresent(permanentFields, presentFields);
                 togglePresentFields(presentFields, true);
+
+                Object.values(presentFields).forEach(field => {
+
+                    $(field).removeClass("is-invalid is-valid");
+
+                    $(field).next(".invalid-feedback").remove();
+
+                    if (form.data("validator")) {
+                        form.validate().resetElements($(field));
+                    }
+                });
+
             } else {
+
                 togglePresentFields(presentFields, false);
-                // New logic to clear fields
                 clearPresentFields(presentFields);
+
             }
         });
+
+
+
         function clearPresentFields(presentFields) {
             Object.values(presentFields).forEach(field => {
                 field.value = "";
