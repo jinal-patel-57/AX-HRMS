@@ -1,2 +1,49 @@
-.ax-hrms-employee-onboarding-web {
-}
+    /* Overlay */
+    .custom-modal-overlay {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Modal box */
+    .custom-modal {
+        background: #fff;
+        width: 420px;
+        border-radius: 6px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: fadeInScale 0.2s ease-in-out;
+    }
+
+    /* Header */
+    .custom-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+    }
+
+    /* Close icon */
+    .custom-modal-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Body */
+    .custom-modal-body {
+        padding: 16px;
+    }
+
+    /* Footer */
+    .custom-modal-footer {
+        padding: 12px 16px;
+        text-align: right;
+        border-top: 1px solid #dee2e6;
+    }

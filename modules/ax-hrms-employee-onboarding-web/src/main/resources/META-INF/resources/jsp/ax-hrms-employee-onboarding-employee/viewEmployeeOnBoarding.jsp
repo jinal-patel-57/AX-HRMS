@@ -872,9 +872,7 @@
     <div class="custom-modal">
         <div class="custom-modal-header">
             <span id="customModalTitle">Reject Message</span>
-            <button type="button" class="custom-modal-close" onclick="closeCustomModal()">
-                &times;
-            </button>
+            
         </div>
 
         <div class="custom-modal-body" id="customModalBody">
@@ -894,9 +892,7 @@
     <div class="custom-modal">
         <div class="custom-modal-header">
             <span id="customModalTitle">Message</span>
-            <button type="button" class="custom-modal-close" onclick="closeCustomModal()">
-                &times;
-            </button>
+            
         </div>
 
         <div class="custom-modal-body" id="customModalBody">
@@ -929,20 +925,29 @@
         $("#comments-error").text("");
         return true;
     }
+    
+    function closeRejectModal(){
+    	const comment = $('#' + namespace + 'review').val().trim();
+        const rejectUrl = rejectUrlTemplate.replace("REVIEW", encodeURIComponent(comment));
+        window.location.href = rejectUrl;
+    }
+    
+    function closeApproveModal(){
+    	window.location.href = approvalUrl;
+    }
 
     // Handle Approve action
     function approveAction() {
         if (!validateComments()) return;
-        window.location.href = approvalUrl;
+        document.getElementById('approveMessageModal').style.display = 'flex';
+        //window.location.href = approvalUrl;
     }
 
     // Handle Reject action
     function rejectAction() {
         if (!validateComments()) return;
 
-        const comment = $('#' + namespace + 'review').val().trim();
-        const rejectUrl = rejectUrlTemplate.replace("REVIEW", encodeURIComponent(comment));
-
-        window.location.href = rejectUrl;
+        document.getElementById('rejectMessageModal').style.display = 'flex';
+        //window.location.href = rejectUrl;
     }
 </script>
