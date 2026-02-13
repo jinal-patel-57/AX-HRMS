@@ -15,6 +15,7 @@ import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeDepartment;
 import com.ax.hrms.model.EmployeeDesignation;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.EmployeeDetailsTable;
 import com.ax.hrms.model.EmployeeSalary;
 import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.service.AddressLocalService;
@@ -26,6 +27,8 @@ import com.ax.hrms.service.EmployeeProbationDetailsLocalService;
 import com.ax.hrms.service.EmployeeSalaryLocalService;
 import com.ax.hrms.service.LeaveBalanceLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -175,166 +178,175 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    if(!"0".equalsIgnoreCase(outerKey)) {
 			    	log.info("innerMap -- " + innerMap);
 			    	
-			    	EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
-			        // converting role names into role IDS
-			        List<Long> roleIds = new ArrayList<>();
-					long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal
-			        roleIds.add(employeeRoleId);
-			        log.info(employeeRoleId + " role");
-			        String[] designations = new String[] {Validator.isNotNull(innerMap.get("6"))? innerMap.get("6").toString():""};
-			        for (String designation : designations) {
-			            // Get the role ID for the current designation
-			        	log.info("designation -- " + designation);
-			        	if(!designation.isBlank()) {
-			        		try {
-			        			long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
-			        			EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
-			        			employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
-			        			employeeDesignation.setCreatedBy(themeDisplay.getUserId());
-			        			employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
-			        			employeeDesignation.setCreateDate(new Date());
-			        			employeeDesignation.setModifiedDate(new Date());
-			        			employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
-			        			employeeDesignation.setStatus(true);
-			        			employeeDesignation.setStartDate(new Date());
-			        			employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
-			        			employeeDesignationLocalService.addEmployeeDesignation(employeeDesignation);
-			        			
-			        			// Add the role ID to the array
-			        			roleIds.add(designationRoleId);
-			        		} catch(Exception e) {
-			        			log.error("Error while adding designation -- " + e.getMessage());
-			        		}
-			        	}
-			        }
-	
-			        String[] departments = new String[] {Validator.isNotNull(innerMap.get("5"))?innerMap.get("5").toString():""};
-			        for (String department : departments) {
-			            // Get the role ID for the current department
-			        	if(!department.isBlank()) {
-			        		try {
-			        			long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
-			        			EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
-			        			employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
-			        			employeeDepartment.setCreatedBy(themeDisplay.getUserId());
-			        			employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
-			        			employeeDepartment.setCreateDate(new Date());
-			        			employeeDepartment.setModifiedDate(new Date());
-			        			employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
-			        			employeeDepartment.setStatus(true);
-			        			employeeDepartment.setDateOfChange(new Date());
-			        			employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
-			        			employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
-			        			
-			        			// Add the role ID to the array
-			        			roleIds.add(departmentRoleId);
-			        		} catch(Exception e) {
-			        			log.error("Error while adding department -- " + e.getMessage());
-			        		}
-			        	}
-			        }
-	
-			        long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
-	
-			        //creating new user in the database of Liferay and sending the message also.
-			        Map<User, String> userPassMap = axHrmsCommonApi.createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles);
-	
-			        User user = null;
-			        String password = StringPool.BLANK;
-			        log.info("before for loop -- " + userPassMap);
-			        for (Map.Entry<User, String> entry : userPassMap.entrySet()) {
-			        	log.info("inside for loop -- " + entry.getKey() + "----" + entry.getValue());
-			            user = entry.getKey();
-			            password = entry.getValue();
-			        }
-			        assert user != null;
-			        long userId = user.getUserId();
-	
-			        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-			        Date joiningDateParsed = formatter.parse(innerMap.get("7").toString());
-			        if(Validator.isNotNull(innerMap.get("8"))) {
-			        	Date dob = formatter.parse(innerMap.get("8").toString());
-			        	employeeDetails.setDateOfBirth(dob);
-			        }
-	
-			        //converting iExperienced from string to bool
-			        boolean isExperiencedBool = true;
-			        //isExperiencedBool = isExperienced.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.YES);
-	
-			        //Audit fields
-			        employeeDetails.setCompanyId(themeDisplay.getCompanyId());
-			        employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
-			        employeeDetails.setCreateDate(new Date());
-			        employeeDetails.setModifiedDate(new Date());
-			        employeeDetails.setLrUserId(userId);
-			        employeeDetails.setJoiningDate(joiningDateParsed);
-			        employeeDetails.setEmployeeCode(innerMap.get("13").toString());
-			        employeeDetails.setFirstName(innerMap.get("2").toString());
-			        employeeDetails.setLastName(innerMap.get("3").toString());
-			        employeeDetails.setOfficialEmail(innerMap.get("4").toString());
-			        employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString():"Male");
-			        employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
-			        employeeDetails.setIsTerminated(false);
-			        employeeDetails.setIsEmployeeOnboarded(false);
-			        employeeDetails.setCreatedBy(themeDisplay.getUserId());
-			        employeeDetails.setProbationStatusId(0);
-	
-			        employeeDetailsLocalService.addEmployeeDetails(employeeDetails);
-			        
-		            //adding new salary object to the ddb
-		            EmployeeSalary employeeSalary = employeeSalaryLocalService.createEmployeeSalary(CounterLocalServiceUtil.increment(EmployeeSalary.class.getName()));
-		            employeeSalary.setEmployeeId(employeeDetails.getEmployeeId());
-		            employeeSalary.setGrossSalaryCtcPa(0);
-		            employeeSalary.setGrossSalaryCtcPm(0);
-		            employeeSalary.setStatus(true);
-		            employeeSalaryLocalService.addEmployeeSalary(employeeSalary);
-			        
-		            employeeDetails.setIsExperienced(isExperiencedBool);
-		            employeeDetails.setInsuranceLink(StringPool.BLANK);
-		            
-			        employeeDetails.setEmployeeType("Permanent");
-			        
-			        Address address = addressLocalService.createAddress(CounterLocalServiceUtil.increment(Address.class.getName()));
-			        address.setCompanyId(themeDisplay.getCompanyId());
-					address.setGroupId(themeDisplay.getScopeGroupId());
-					address.setCreatedBy(themeDisplay.getUserId());
-					address.setModifiedBy(themeDisplay.getUserId());
-					address.setLine1(Validator.isNotNull(innerMap.get("11"))?innerMap.get("11").toString():"");
-					addressLocalService.addAddress(address);
-					EmployeeAddress employeeAddress = employeeAddressLocalService.createEmployeeAddress(CounterLocalServiceUtil.increment(EmployeeAddress.class.getName()));
-					
-					employeeAddress.setCompanyId(themeDisplay.getCompanyId());
-					employeeAddress.setGroupId(themeDisplay.getScopeGroupId());
-					employeeAddress.setCreatedBy(themeDisplay.getUserId());
-					employeeAddress.setModifiedBy(themeDisplay.getUserId());
-					employeeAddress.setPermanentAddress(address.getAddressId());
-					employeeAddress.setPresentAddress(address.getAddressId());
-					employeeAddress.setPresentPermanentSame(true);
-					employeeAddress.setStatus(true);
-					employeeAddress.setEmployeeId(employeeDetails.getEmployeeId());
-					
-					employeeAddressLocalService.addEmployeeAddress(employeeAddress);
+			    	EmployeeDetailsTable employeeDetailsTable = EmployeeDetailsTable.INSTANCE;
+			    	String officialEmail = innerMap.get("4").toString();
+			    	DSLQuery dslQuery = DSLQueryFactoryUtil.select(employeeDetailsTable).from(employeeDetailsTable).where(employeeDetailsTable.officialEmail.eq(officialEmail));
+			    	
+			    	List<EmployeeDetails> employeeList = employeeDetailsLocalService.dslQuery(dslQuery);
+			    	if(Validator.isNull(employeeList) || employeeList.size()==0) {
+			    		EmployeeDetails employeeDetails = employeeDetailsLocalService.createEmployeeDetails(CounterLocalServiceUtil.increment(EmployeeDetails.class.getName()));
+			    		// converting role names into role IDS
+			    		List<Long> roleIds = new ArrayList<>();
+			    		long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal
+			    		roleIds.add(employeeRoleId);
+			    		log.info(employeeRoleId + " role");
+			    		String[] designations = new String[] {Validator.isNotNull(innerMap.get("6"))? innerMap.get("6").toString():""};
+			    		for (String designation : designations) {
+			    			// Get the role ID for the current designation
+			    			log.info("designation -- " + designation);
+			    			if(!designation.isBlank()) {
+			    				try {
+			    					long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
+			    					EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
+			    					employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
+			    					employeeDesignation.setCreatedBy(themeDisplay.getUserId());
+			    					employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
+			    					employeeDesignation.setCreateDate(new Date());
+			    					employeeDesignation.setModifiedDate(new Date());
+			    					employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
+			    					employeeDesignation.setStatus(true);
+			    					employeeDesignation.setStartDate(new Date());
+			    					employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
+			    					employeeDesignationLocalService.addEmployeeDesignation(employeeDesignation);
+			    					
+			    					// Add the role ID to the array
+			    					roleIds.add(designationRoleId);
+			    				} catch(Exception e) {
+			    					log.error("Error while adding designation -- " + e.getMessage());
+			    				}
+			    			}
+			    		}
+			    		
+			    		String[] departments = new String[] {Validator.isNotNull(innerMap.get("5"))?innerMap.get("5").toString():""};
+			    		for (String department : departments) {
+			    			// Get the role ID for the current department
+			    			if(!department.isBlank()) {
+			    				try {
+			    					long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
+			    					EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
+			    					employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
+			    					employeeDepartment.setCreatedBy(themeDisplay.getUserId());
+			    					employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
+			    					employeeDepartment.setCreateDate(new Date());
+			    					employeeDepartment.setModifiedDate(new Date());
+			    					employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
+			    					employeeDepartment.setStatus(true);
+			    					employeeDepartment.setDateOfChange(new Date());
+			    					employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
+			    					employeeDepartmentLocalService.addEmployeeDepartment(employeeDepartment);
+			    					
+			    					// Add the role ID to the array
+			    					roleIds.add(departmentRoleId);
+			    				} catch(Exception e) {
+			    					log.error("Error while adding department -- " + e.getMessage());
+			    				}
+			    			}
+			    		}
+			    		
+			    		long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
+			    		
+			    		//creating new user in the database of Liferay and sending the message also.
+			    		Map<User, String> userPassMap = axHrmsCommonApi.createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles);
+			    		
+			    		User user = null;
+			    		String password = StringPool.BLANK;
+			    		log.info("before for loop -- " + userPassMap);
+			    		for (Map.Entry<User, String> entry : userPassMap.entrySet()) {
+			    			log.info("inside for loop -- " + entry.getKey() + "----" + entry.getValue());
+			    			user = entry.getKey();
+			    			password = entry.getValue();
+			    		}
+			    		assert user != null;
+			    		long userId = user.getUserId();
+			    		
+			    		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+			    		Date joiningDateParsed = formatter.parse(innerMap.get("7").toString());
+			    		if(Validator.isNotNull(innerMap.get("8"))) {
+			    			Date dob = formatter.parse(innerMap.get("8").toString());
+			    			employeeDetails.setDateOfBirth(dob);
+			    		}
+			    		
+			    		//converting iExperienced from string to bool
+			    		boolean isExperiencedBool = true;
+			    		//isExperiencedBool = isExperienced.equals(AxHrmsEmployeeOnboardingHrWebPortletConstants.YES);
+			    		
+			    		//Audit fields
+			    		employeeDetails.setCompanyId(themeDisplay.getCompanyId());
+			    		employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
+			    		employeeDetails.setCreateDate(new Date());
+			    		employeeDetails.setModifiedDate(new Date());
+			    		employeeDetails.setLrUserId(userId);
+			    		employeeDetails.setJoiningDate(joiningDateParsed);
+			    		employeeDetails.setEmployeeCode(innerMap.get("13").toString());
+			    		employeeDetails.setFirstName(innerMap.get("2").toString());
+			    		employeeDetails.setLastName(innerMap.get("3").toString());
+			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString());
+			    		employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString():"Male");
+			    		employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
+			    		employeeDetails.setIsTerminated(false);
+			    		employeeDetails.setIsEmployeeOnboarded(false);
+			    		employeeDetails.setCreatedBy(themeDisplay.getUserId());
+			    		employeeDetails.setProbationStatusId(0);
+			    		
+			    		employeeDetailsLocalService.addEmployeeDetails(employeeDetails);
+			    		
+			    		//adding new salary object to the ddb
+			    		EmployeeSalary employeeSalary = employeeSalaryLocalService.createEmployeeSalary(CounterLocalServiceUtil.increment(EmployeeSalary.class.getName()));
+			    		employeeSalary.setEmployeeId(employeeDetails.getEmployeeId());
+			    		employeeSalary.setGrossSalaryCtcPa(0);
+			    		employeeSalary.setGrossSalaryCtcPm(0);
+			    		employeeSalary.setStatus(true);
+			    		employeeSalaryLocalService.addEmployeeSalary(employeeSalary);
+			    		
+			    		employeeDetails.setIsExperienced(isExperiencedBool);
+			    		employeeDetails.setInsuranceLink(StringPool.BLANK);
+			    		
+			    		employeeDetails.setEmployeeType("Permanent");
+			    		
+			    		Address address = addressLocalService.createAddress(CounterLocalServiceUtil.increment(Address.class.getName()));
+			    		address.setCompanyId(themeDisplay.getCompanyId());
+			    		address.setGroupId(themeDisplay.getScopeGroupId());
+			    		address.setCreatedBy(themeDisplay.getUserId());
+			    		address.setModifiedBy(themeDisplay.getUserId());
+			    		address.setLine1(Validator.isNotNull(innerMap.get("11"))?innerMap.get("11").toString():"");
+			    		addressLocalService.addAddress(address);
+			    		EmployeeAddress employeeAddress = employeeAddressLocalService.createEmployeeAddress(CounterLocalServiceUtil.increment(EmployeeAddress.class.getName()));
+			    		
+			    		employeeAddress.setCompanyId(themeDisplay.getCompanyId());
+			    		employeeAddress.setGroupId(themeDisplay.getScopeGroupId());
+			    		employeeAddress.setCreatedBy(themeDisplay.getUserId());
+			    		employeeAddress.setModifiedBy(themeDisplay.getUserId());
+			    		employeeAddress.setPermanentAddress(address.getAddressId());
+			    		employeeAddress.setPresentAddress(address.getAddressId());
+			    		employeeAddress.setPresentPermanentSame(true);
+			    		employeeAddress.setStatus(true);
+			    		employeeAddress.setEmployeeId(employeeDetails.getEmployeeId());
+			    		
+			    		employeeAddressLocalService.addEmployeeAddress(employeeAddress);
+			    		
+			    		employeeDetails.setEmployeeAddressId(employeeAddress.getEmployeeAddressId());
+			    		
+			    		boolean isMarried = false;
+			    		if(Validator.isNotNull(innerMap.get("12"))) {
+			    			isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
+			    		} 
+			    		employeeDetails.setMaritalStatus(isMarried);
+			    		
+			    		//adding probation status
+			    		employeeDetails.setProbationStatusId(probationStatusMasterLocalService.findByProbationStatusName("Completed").getProbationStatusMasterId());
+			    		employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
+			    		
+			    		sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
+			    		
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Earned Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Loyalty Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Paternity Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Personal Floater");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString(), "Compensatory Off");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString(), "Festival Floater");
+			    	}
 
-					employeeDetails.setEmployeeAddressId(employeeAddress.getEmployeeAddressId());
-					
-					boolean isMarried = false;
-					if(Validator.isNotNull(innerMap.get("12"))) {
-						isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
-					} 
-					employeeDetails.setMaritalStatus(isMarried);
-					
-					//adding probation status
-		            employeeDetails.setProbationStatusId(probationStatusMasterLocalService.findByProbationStatusName("Completed").getProbationStatusMasterId());
-		            employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
-			        
-			        sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
-			        
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Earned Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Loyalty Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Paternity Leave");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Personal Floater");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString(), "Compensatory Off");
-			        addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString(), "Festival Floater");
+			    	
 			        
 			    }
 			} catch (Exception e) {
