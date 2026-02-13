@@ -88,15 +88,15 @@ function applyGenericDateRestriction(element) {
                     addressProofSection.hide();
 
 
-                    addressProofInput.val("");
+//                    addressProofInput.val("");
 
                     addressProofInput.removeClass("is-invalid is-valid");
 
                     addressProofInput.next(".invalid-feedback").remove();
 
-                    if (form.data("validator")) {
-                        form.validate().resetElements(addressProofInput);
-                    }
+//                    if (form.data("validator")) {
+//                        form.validate().resetElements(addressProofInput);
+//                    }
 
 
                 } else {
@@ -756,16 +756,7 @@ $.validator.addMethod(
 
           if (typeof isHrStatus !== "undefined" && isHrStatus === true) {
 
-              $('[name="' + namespace + 'employeeCode"]').rules("add", {
-                  required: true,
-                  lettersAndNumbersOnly: true,
-                  maxlength: 50,
-                  messages: {
-                      required: "Please enter employee code.",
-                      lettersAndNumbersOnly: "Employee code can contain only letters and numbers.",
-                      maxlength: "Employee code cannot exceed 50 characters."
-                  }
-              });
+
 
               $('[name="' + namespace + 'firstName"]').rules("add", {
                   required: true,

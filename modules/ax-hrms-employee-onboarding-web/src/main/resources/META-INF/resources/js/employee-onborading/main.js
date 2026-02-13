@@ -83,15 +83,15 @@ function applyGenericDateRestriction(element) {
                 if (checkbox.is(':checked')) {
                     addressProofSection.hide();
 
-                    addressProofInput.val("");
+//                    addressProofInput.val("");
 
                     addressProofInput.removeClass("is-invalid is-valid");
 
                     addressProofInput.next(".invalid-feedback").remove();
 
-                    if (form.data("validator")) {
-                          form.validate().resetElements(addressProofInput);
-                    }
+//                    if (form.data("validator")) {
+//                          form.validate().resetElements(addressProofInput);
+//                    }
                 } else {
                     addressProofSection.show();
                 }

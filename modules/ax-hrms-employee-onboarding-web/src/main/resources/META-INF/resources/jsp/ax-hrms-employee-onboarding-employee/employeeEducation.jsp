@@ -45,7 +45,7 @@
                                     <!-- Level Name -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="level-name"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="level-name"/><span class="text-danger">*</span>
                                         </label>
 
                                         <select id="<portlet:namespace/>levelName1"
@@ -64,7 +64,7 @@
                                     <!-- Institution -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="Institution"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="Institution"/><span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                                class="form-control"
@@ -76,7 +76,7 @@
                                     <!-- Degree -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="Degree"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="Degree"/><span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                                class="form-control"
@@ -88,7 +88,7 @@
                                     <!-- Start Date -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="start-date"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="start-date"/><span class="text-danger">*</span>
                                         </label>
                                         <input type="date"
                                                class="form-control"
@@ -99,7 +99,7 @@
                                     <!-- End Date -->
                                     <div class="col-md-4 col-sm-12 mb-3">
                                         <label class="form-label">
-                                            <liferay-ui:message key="end-date"/> <span class="text-danger">*</span>
+                                            <liferay-ui:message key="end-date"/><span class="text-danger">*</span>
                                         </label>
                                         <input type="date"
                                                class="form-control"
@@ -214,7 +214,7 @@
 
                                         <!-- Start Date -->
                                         <div class="col-md-4 col-sm-12 mb-3">
-                                            <label class="form-label"><liferay-ui:message key="start-date"/></label>
+                                            <label class="form-label"><liferay-ui:message key="start-date"/><span class="text-danger">*</span></label>
                                             <input type="date"
                                                    class="form-control"
                                                    id="<portlet:namespace/>startDate${status.index+1}"
@@ -224,7 +224,7 @@
 
                                         <!-- End Date -->
                                         <div class="col-md-4 col-sm-12 mb-3">
-                                            <label class="form-label"><liferay-ui:message key="end-date"/></label>
+                                            <label class="form-label"><liferay-ui:message key="end-date"/><span class="text-danger">*</span></label>
                                             <input type="date"
                                                    class="form-control"
                                                    id="<portlet:namespace/>endDate${status.index+1}"
@@ -235,7 +235,7 @@
                                         <!-- Attachment -->
                                         <div class="col-md-4 col-sm-12 mb-3">
                                             <label class="form-label">
-                                                <liferay-ui:message key="education-certificate-attachment"/>
+                                                <liferay-ui:message key="education-certificate-attachment"/><span class="text-danger">*</span>
                                             </label>
 
                                             <input type="file"

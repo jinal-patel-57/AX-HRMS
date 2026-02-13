@@ -344,7 +344,7 @@
                     <input id="employeeCode" placeholder="<liferay-ui:message key='employee-code'/>"
                            class="form-control" type="text"
                            name="<portlet:namespace/>employeeCode"
-                           value='${employeeDetail.employeeCode}'/>
+                           value='${employeeDetail.employeeCode}' readonly/>
                     <label id="employeeCode-error" class="error text-danger" for="employeeCode"></label>
                 </div>
 
@@ -519,7 +519,7 @@
                 </div>
 
                 <!-- <div class="col-md-4 col-sm-12 mb-3">
-                    
+
                     <label class="" for="gender"><liferay-ui:message key="gender"/><span class="text-danger">*</span></label><br/>
                     <div class="d-flex c-gap-3 align-items-center">
                         <div class="form-check">
