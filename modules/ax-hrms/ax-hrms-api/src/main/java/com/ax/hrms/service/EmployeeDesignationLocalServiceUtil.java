@@ -240,6 +240,12 @@ public class EmployeeDesignationLocalServiceUtil {
 		return getService().findByEmployeeId(employeeId);
 	}
 
+	public static List<EmployeeDesignation> findByEmployeeIdToGetAllDesignation(
+		long employeeId) {
+
+		return getService().findByEmployeeIdToGetAllDesignation(employeeId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

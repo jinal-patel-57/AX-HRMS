@@ -24,15 +24,19 @@
 
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
 					<div class="form-group-view">
-						<div class="profilePic">
+						<div class="profilePic mr-2">
 							<img src="${employeeProfileDetail.previewUrl}" class="cover">
 						</div>
 						<div class="col-6 align-center">
-							<div class="row">
+							<div class="row label-content">
+							<div class="label-content">
 								<h3>${employeeProfileDetail.getFullName()}</h3>
+								</div>
 							</div>
 							<div class="row">
+							<div class="text-unset">
 								<p>${employeeProfileDetail.officialEmailId}</p>
+								</div>
 							</div>
 						</div>
 					</div>

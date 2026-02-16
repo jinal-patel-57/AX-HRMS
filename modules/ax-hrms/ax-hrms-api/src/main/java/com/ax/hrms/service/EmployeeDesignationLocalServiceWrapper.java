@@ -269,6 +269,14 @@ public class EmployeeDesignationLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.EmployeeDesignation>
+		findByEmployeeIdToGetAllDesignation(long employeeId) {
+
+		return _employeeDesignationLocalService.
+			findByEmployeeIdToGetAllDesignation(employeeId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

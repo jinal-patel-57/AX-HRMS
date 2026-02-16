@@ -3,12 +3,10 @@ package com.ax.hrms.employee.directory.util;
 import com.ax.hrms.employee.directory.dto.EmployeeDto;
 import com.ax.hrms.employee.directory.web.constants.AxHrmsCommonEmployeeConstants;
 import com.ax.hrms.master.model.DepartmentMaster;
+import com.ax.hrms.master.model.DesignationMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.model.Address;
-import com.ax.hrms.model.EmployeeAddress;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.*;
 import com.ax.hrms.service.*;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.util.DLUtil;
@@ -76,24 +74,94 @@ public class EmployeeUtil {
 		employeeDto.setJoiningDate(employeeDetails.getJoiningDate());
 		
 		try {
+//			try {
+//				long designationId = employeeDesignationLocalService.findByEmployeeId(employeeId).getDesignationMasterId();
+//				employeeDto.setDesignationName(designationMasterLocalService.getDesignationMaster(designationId).getDesignationName());
+//				employeeDto.setDesignationId(designationId);
+//			} catch(Exception e) {
+//				employeeDto.setDesignationName("-");
+//				employeeDto.setDesignationId(0l);
+//			}
 			try {
-				long designationId = employeeDesignationLocalService.findByEmployeeId(employeeId).getDesignationMasterId();
-				employeeDto.setDesignationName(designationMasterLocalService.getDesignationMaster(designationId).getDesignationName());
-				employeeDto.setDesignationId(designationId);
-			} catch(Exception e) {
+
+				List<EmployeeDesignation> employeeDesignations =
+						employeeDesignationLocalService
+								.findByEmployeeIdToGetAllDesignation(employeeId);
+
+				boolean designationFound = false;
+
+				for (EmployeeDesignation employeeDesignation : employeeDesignations) {
+
+					if (employeeDesignation.isStatus()) {
+
+						long designationId = employeeDesignation.getDesignationMasterId();
+
+						DesignationMaster designationMaster =
+								designationMasterLocalService.fetchDesignationMaster(designationId);
+
+						if (designationMaster != null) {
+							employeeDto.setDesignationName(designationMaster.getDesignationName());
+							employeeDto.setDesignationId(designationId);
+							designationFound = true;
+							break;
+						}
+					}
+				}
+
+				if (!designationFound) {
+					employeeDto.setDesignationName("-");
+					employeeDto.setDesignationId(0L);
+				}
+
+			} catch (Exception e) {
+				log.error("Error fetching designation for employeeId: " + employeeId, e);
 				employeeDto.setDesignationName("-");
-				employeeDto.setDesignationId(0l);
+				employeeDto.setDesignationId(0L);
 			}
-			
-			List<Long> departmentIds = new ArrayList<>();
-			List<String> departmentNames = new ArrayList<>();
-			for(EmployeeDepartment employeeDepartment : employeeDepartmentLocalService.findByEmployeeIdGetDepartments(employeeId)) {
-				DepartmentMaster departmentMaster = departmentMasterLocalService.fetchDepartmentMaster(employeeDepartment.getDepartmentMasterId());
-				departmentIds.add(departmentMaster.getDepartmentMasterId());
-				departmentNames.add(departmentMaster.getDepartmentName());
+
+
+//			List<Long> departmentIds = new ArrayList<>();
+//			List<String> departmentNames = new ArrayList<>();
+//			for(EmployeeDepartment employeeDepartment : employeeDepartmentLocalService.findByEmployeeIdGetDepartments(employeeId)) {
+//				DepartmentMaster departmentMaster = departmentMasterLocalService.fetchDepartmentMaster(employeeDepartment.getDepartmentMasterId());
+//				departmentIds.add(departmentMaster.getDepartmentMasterId());
+//				departmentNames.add(departmentMaster.getDepartmentName());
+//			}
+//			employeeDto.setDepartmentId(departmentIds);
+//			employeeDto.setDepartmentNames(departmentNames);
+
+			try {
+
+				List<Long> departmentIds = new ArrayList<>();
+				List<String> departmentNames = new ArrayList<>();
+
+				List<EmployeeDepartment> employeeDepartments =
+						employeeDepartmentLocalService.findByEmployeeIdGetDepartments(employeeId);
+
+				for (EmployeeDepartment employeeDepartment : employeeDepartments) {
+
+					if (employeeDepartment.isStatus()) {
+
+						DepartmentMaster departmentMaster =
+								departmentMasterLocalService
+										.fetchDepartmentMaster(employeeDepartment.getDepartmentMasterId());
+
+						if (departmentMaster != null) {
+							departmentIds.add(departmentMaster.getDepartmentMasterId());
+							departmentNames.add(departmentMaster.getDepartmentName());
+						}
+					}
+				}
+
+				employeeDto.setDepartmentId(departmentIds);
+				employeeDto.setDepartmentNames(departmentNames);
+
+			} catch (Exception e) {
+				log.error("Error fetching department for employeeId: " + employeeId, e);
+				employeeDto.setDepartmentId(new ArrayList<>());
+				employeeDto.setDepartmentNames(new ArrayList<>());
 			}
-			employeeDto.setDepartmentId(departmentIds);
-			employeeDto.setDepartmentNames(departmentNames);
+
 
 			boolean isSamePresentAddress = false;
 			if(employeeAddress != null){

@@ -77,16 +77,18 @@ WHERE
             SELECT cast(employee.employeeid AS text) as employeeid
             from ax_employeedetails as employee,
                 ax_employeedepartment as employeeDepartment
-            WHERE employee.employeeid = employeeDepartment.employeeid AND
+            WHERE employee.employeeid = employeeDepartment.employeeid AND employeeDepartment.status = true AND
               employeeDepartment.departmentmasterid = ? AND employee.isterminated = false
         ]]>
+
+
     </sql>
     <sql id="findEmployeeByDesignationId">
         <![CDATA[
             SELECT cast(employee.employeeid AS text) as employeeid
             from ax_employeedetails as employee,
                  ax_employeedesignation as employeeDesignation
-            WHERE employee.employeeid = employeeDesignation.employeeid AND
+            WHERE employee.employeeid = employeeDesignation.employeeid AND employeeDesignation.status = true AND
                 employeeDesignation.designationmasterid = ? AND employee.isterminated = false;
         ]]>
     </sql>
@@ -97,7 +99,7 @@ WHERE
                  ax_employeedesignation as employeeDesignation,
                  ax_employeedepartment as employeeDepartment
             WHERE (employee.employeeid = employeeDepartment.employeeid
-                    AND employee.employeeid = employeeDesignation.employeeid)
+                    AND employee.employeeid = employeeDesignation.employeeid) AND (employeeDepartment.status = true AND employeeDesignation.status = true )
                     AND (employeeDesignation.designationmasterid = ? AND employeeDepartment.departmentmasterid = ?)
                     AND employee.isterminated = false;
         ]]>

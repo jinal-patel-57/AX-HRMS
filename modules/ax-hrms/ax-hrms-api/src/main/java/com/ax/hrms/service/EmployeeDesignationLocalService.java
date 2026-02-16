@@ -218,6 +218,9 @@ public interface EmployeeDesignationLocalService
 	public EmployeeDesignation findByEmployeeId(long employeeId)
 		throws NoSuchEmployeeDesignationException;
 
+	public List<EmployeeDesignation> findByEmployeeIdToGetAllDesignation(
+		long employeeId);
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 

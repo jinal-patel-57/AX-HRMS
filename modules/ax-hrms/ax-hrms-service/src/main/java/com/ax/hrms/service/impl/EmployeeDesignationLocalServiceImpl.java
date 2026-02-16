@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import org.osgi.service.component.annotations.Component;
 
+import java.util.List;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -54,5 +56,10 @@ public class EmployeeDesignationLocalServiceImpl
 			long designationMasterId, boolean status, long employeeId)
 			throws NoSuchEmployeeDesignationException {
 		return employeeDesignationPersistence.findByEmployeeDesignationStatusAndEmployeeId(designationMasterId,status,employeeId);
+	}
+
+	public List<EmployeeDesignation> findByEmployeeIdToGetAllDesignation(
+			long employeeId) {
+		return employeeDesignationPersistence.findByEmployeeIdToGetAllDesignation(employeeId);
 	}
 }

@@ -146,6 +146,7 @@ private List<Long> getEmployeeIdsList(long departmentId, long designationId) {
 			employeeIdSet.addAll(
 					employeeDetailsLocalService.getEmployeeIdByDepartmentId(departmentId)
 			);
+
 		} else {
 			employeeIdSet.addAll(
 					employeeDetailsLocalService.getEmployeeIdByDesignationIdAndDepartmentId(
