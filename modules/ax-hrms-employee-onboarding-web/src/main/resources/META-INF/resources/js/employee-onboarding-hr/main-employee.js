@@ -459,7 +459,7 @@ $.validator.addMethod(
             return true;
         }
 
-        // 🟡 Before clicking Next → skip validation
+        // Before clicking Next → skip validation
         if (!form._submitAttempted) {
             return true;
         }
@@ -653,6 +653,11 @@ $.validator.addMethod(
                            },
                            validExtension: true,
                            maxFileSize: 10
+                       },
+                       [namespace + "stipendAmount"]: {
+                            required: true,
+                            number: true,
+                            ctcLimitByEmployeeType: true
                        }
                 },
                 messages: {
@@ -733,8 +738,11 @@ $.validator.addMethod(
                         },
                         [namespace + "kycDocumentType"]: {
                             required: "Please select KYC document type."
+                        },
+                        [namespace + "stipendAmount"]: {
+                            required: "Please enter stipend.",
+                            number: "Please enter a valid amount.",
                         }
-
                 }
             });
             /* ===== HR ONLY FIELD RULES + MESSAGES ===== */
@@ -819,10 +827,8 @@ $.validator.addMethod(
               });
               $('[name="' + namespace + 'branch"]').rules("add", {
                   required: true,
-
                   messages: {
                       required: "Please select Branch.",
-
                   }
               });
 
@@ -936,7 +942,11 @@ $.validator.addMethod(
 $.validator.addMethod("ctcLimitByEmployeeType", function (value, element) {
     if (!value) return true; // handled by required rule
 
-    var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+//    var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+// var employeeType = $("#employeeType").val();
+    var employeeType = $('input[name="' + namespace + 'employeeType"]').val();
+
+ console.log("employeeType :: ",employeeType)
     var amount = parseFloat(value);
 
     if (isNaN(amount)) return false;
@@ -947,13 +957,11 @@ $.validator.addMethod("ctcLimitByEmployeeType", function (value, element) {
         return amount <= 1000000; // 10,00,000
     }
 }, function () {
-    var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+    var employeeType = $('input[name="' + namespace + 'employeeType"]').val();
     return employeeType && employeeType.toLowerCase() === 'intern'
-        ? "For interns, CTC per month cannot exceed ₹1,00,000."
-        : "For employees, CTC per month cannot exceed ₹10,00,000.";
+        ? "Stipend per month cannot exceed ₹1,00,000."
+        : "CTC per month cannot exceed ₹10,00,000.";
 });
-
-
 
 
 

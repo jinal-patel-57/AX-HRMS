@@ -77,17 +77,18 @@ var setFileInputValues;
                         date: true
                     },
                     [namespace + "grossSalaryCTCPM"]: {
-//                        required: true,
-//                        numericality: true
+                            ctcLimitByEmployeeType:true
                     },
 
                     [namespace + "grossSalaryCTCPA"]: {
-//                        required: true,
-//                        numericality: true
+
                     },
                     [namespace + "insuranceLink"]: {
                         linkUrlValidation: true
-                    }
+                    },
+                    [namespace + "stipend"]: {
+                        ctcLimitByEmployeeType:true
+                    },
                 },
                 messages: {
                     [namespace + "employeeCode"]: {
@@ -138,6 +139,10 @@ var setFileInputValues;
 //                        required: "Please Enter a valid Salary",
 //                        numericality: "Plese Enter a Valid Salary"
                     },
+                    [namespace + "stipend"]: {
+                        required: "Please enter stipend",
+
+                    },
                     [namespace + "grossSalaryCTCPA"]: {
 //                        required: "Please Enter a valid Salary",
 //                        numericality: "Plese Enter a Valid Salary"
@@ -150,6 +155,39 @@ var setFileInputValues;
                     error.insertAfter(element);
                 },
             });
+
+
+
+
+
+            $.validator.addMethod("ctcLimitByEmployeeType", function (value, element) {
+                if (!value) return true; // handled by required rule
+
+//                var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+                var employeeType = $("#typeOfEmployee").val();
+                var amount = parseFloat(value);
+                console.log("employeeTpye ::  ",employeeType)
+                if (isNaN(amount)) return false;
+
+                if (employeeType && employeeType.toLowerCase() === 'intern') {
+                    return amount <= 100000; // 1,00,000
+                } else {
+                    return amount <= 1000000; // 10,00,000
+                }
+            }, function () {
+//                var employeeType = $('input[name="<portlet:namespace />employeeType"]').val();
+                var employeeType = $("#typeOfEmployee").val();
+
+                return employeeType && employeeType.toLowerCase() === 'intern'
+                    ? "Stipend per month cannot exceed ₹1,00,000."
+                    : "CTC per month cannot exceed ₹10,00,000.";
+            });
+
+
+
+
+
+
 
             $.validator.addMethod(
                 "lettersAndSpacesOnly",
@@ -393,20 +431,80 @@ var setFileInputValues;
                 var selectedType = $('#typeOfEmployee').val();
                 const $stipendAsterisk = $(".required-asterisk-stipend");
                 const $stipend = $('#stipend');
+                var $grossFields = $('#grossSalaryCTCPA, #grossSalaryCTCPM');
+                    var $form = $("#stepperForm");
+
+    var validator = $form.data("validator");
+
                 if (selectedType === 'intern') {
-                    $('#designation').val('Intern');
+//                    $('#designation').val('Intern');
+
+    const $designation = $('#designation');
+
+    if ($designation.find('option[value="Intern"]').length) {
+        $designation.val('Intern');
+    }
+
+//    $designation.prop('disabled', true);
+
+//        $grossFields.each(function () {
+//            $(this)
+//                .val('')
+//                .prop('disabled', true)
+//                .removeClass("is-invalid is-valid error");
+//
+//            $(this).next("label.error").remove();
+//        });
+
+        $grossFields.each(function () {
+
+            // Clear value
+            $(this).val('');
+
+            // If validator exists → reset this field properly
+            if (validator) {
+                validator.resetElements($(this));
+            }
+
+            // Disable after reset
+            $(this).prop('disabled', true);
+
+        });
+
+                if (validator) {
+                    validator.resetForm();
+                }
+
                     $('#stipend').prop('disabled', false);
+
+
+
+
+                        $(this).val(''); // remove value
+
+//                        $(this).removeClass("is-invalid error"); // remove error class
+//
+//                        $(this).next("label.error").remove(); // remove error message label
+
+                        if ($("#stepperForm").data("validator")) {
+                            $("#stepperForm").data("validator").resetForm();
+                        }
+
+
+
+
                     $('#stipend').attr('placeholder', 'Stipend');
                     $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', true); // Disable CTC fields
 
                      $stipend.prop('disabled', false);
                            $stipend.attr('placeholder', 'Stipend');
-
+                     $stipend.removeClass("is-invalid is-valid");
                            $stipend.rules("remove");
 
                            $stipend.rules("add", {
                                required: true,
                                numericality: true,
+                               ctcLimitByEmployeeType:true,
                                messages: {
                                    required: "Please enter Stipend",
                                    numericality: "Please enter valid number"
@@ -418,7 +516,11 @@ var setFileInputValues;
 
 
                 } else {
-
+        $grossFields.each(function () {
+            $(this)
+                .prop('disabled', false)
+                .removeClass("is-invalid is-valid");
+        });
                                 $('#grossSalaryCTCPA, #grossSalaryCTCPM').prop('disabled', false);
 
                                  $stipend.rules("remove");
@@ -427,8 +529,13 @@ var setFileInputValues;
                                        $stipend.attr('placeholder', 'NA');
                                        $stipend.val('');
 
-                                       $stipend.removeClass("is-invalid is-valid");
+//                                       $stipend.removeClass("is-invalid is-valid error");
+//                                       $stipend.next("label.error").remove();
+
                                        $stipend.valid();
+                                      if (validator) {
+                                            validator.resetForm();
+                                      }
 
                                        $stipendAsterisk.addClass("d-none");
 
@@ -454,6 +561,10 @@ var setFileInputValues;
 
             // Initial check on page load
             checkEmployeeType();
+
+
+
+
 
             // Check when the type of employee changes
             $('#typeOfEmployee').on('change', function () {
