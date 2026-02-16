@@ -112,8 +112,6 @@ String currentURL = PortalUtil.getCurrentURL(request);
         </div>
     </form>
 </div>
-
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -132,17 +130,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let startTouched = false;
     let endTouched = false;
+     const today = new Date();
+        // 1st of previous month
+        const prevMonthStart = new Date(
+            today.getFullYear(),
+            today.getMonth() - 1,
+            1
+        );
+
+        // 31st December of current year
+        const yearEnd = new Date(
+            today.getFullYear(),
+            11,
+            31
+        );
+    function applyWFHDateRestriction(element) {
+        if (!element) return;
 
 
 
 
 
+        console.log("prevMonthStart :: ",prevMonthStart)
+        const minDate = prevMonthStart.toLocaleDateString('en-CA');
+        const maxDate = yearEnd.toLocaleDateString('en-CA');
+
+        element.setAttribute("min", prevMonthStart.toLocaleDateString('en-CA'));
+        element.setAttribute("max", yearEnd.toLocaleDateString('en-CA'));
+        element.min = minDate;
+        element.max = maxDate;
+
+        // Prevent manual invalid year typing
+        element.addEventListener("input", function () {
+            const val = this.value;
+            if (val) {
+                const parts = val.split("-");
+                if (parts[0] && parts[0].length > 4) {
+                    parts[0] = parts[0].substring(0, 4);
+                    this.value = parts.join("-");
+                }
+            }
+        });
+    }
 
 
 
-    /* ---------------- EMAIL VALIDATION ---------------- */
+
+    // Apply restriction to both date fields
+
+    applyWFHDateRestriction(startDate);
+    applyWFHDateRestriction(endDate);
+
+
+    /* ================= EMAIL VALIDATION ================= */
+
     function validateEmail() {
-
         const value = email.value.trim();
 
         if (!value) {
@@ -150,26 +192,17 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
 
-        // Split by comma
         const emails = value.split(",");
-
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const uniqueEmails = new Set();
         let invalidFound = false;
 
         emails.forEach(function (mail) {
             const trimmed = mail.trim().toLowerCase();
-
-            if (!trimmed) {
+            if (!trimmed || !emailRegex.test(trimmed)) {
                 invalidFound = true;
                 return;
             }
-
-            if (!emailRegex.test(trimmed)) {
-                invalidFound = true;
-                return;
-            }
-
             uniqueEmails.add(trimmed);
         });
 
@@ -179,18 +212,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
 
-        // Remove duplicates & normalize value
         email.value = Array.from(uniqueEmails).join(",");
-
         emailError.innerText = "";
         return true;
     }
 
-    /* ---------------- REASON VALIDATION ---------------- */
-    function validateReason() {
-        const len = reason.value.trim().length;
+    /* ================= REASON VALIDATION ================= */
 
-        if (!reason.value.trim()) {
+    function validateReason() {
+        const value = reason.value.trim();
+        const len = value.length;
+
+        if (!value) {
             reasonError.innerText = "Reason is required.";
             return false;
         } else if (len < 10) {
@@ -205,58 +238,42 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    /* ---------------- DATE VALIDATION ---------------- */
-    function validateDates(showAll = false) {
-        let valid = true;
-        const today = new Date();
+    /* ================= DATE VALIDATION ================= */
 
-        // Validate Start Date
+    function validateDates(showAll = false) {
+
+        let valid = true;
+
         if (startTouched || showAll) {
             if (!startDate.value) {
                 startError.innerText = "Start Date is required.";
                 valid = false;
             } else {
-                const date = new Date(startDate.value);
-                const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-                const currMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                
-                if (date < prevMonth) {
-                    startError.innerText = "Start date cannot be earlier than the previous month";
-                    valid = false;
-                } else if (date > currMonthEnd) {
-                    startError.innerText = "Start date cannot be in future months beyond the current month";
-                    valid = false;
-                } else {
-                    startError.innerText = "";
-                }
+                startError.innerText = "";
             }
         }
 
-        // Validate End Date
         if (endTouched || showAll) {
             if (!endDate.value) {
                 endError.innerText = "End Date is required.";
                 valid = false;
+            } else if (
+                startDate.value &&
+                new Date(endDate.value + "T00:00:00") <
+                new Date(startDate.value + "T00:00:00")
+            ) {
+                endError.innerText = "End Date must be after Start Date.";
+                valid = false;
             } else {
-                const date = new Date(endDate.value);
-                const yearEnd = new Date(today.getFullYear(), 11, 31);
-                
-                if (date > yearEnd) {
-                    endError.innerText = "End date cannot be beyond December 31 of the current year";
-                    valid = false;
-                } else if (startDate.value && date < new Date(startDate.value)) {
-                    endError.innerText = "End Date must be after Start Date";
-                    valid = false;
-                } else {
-                    endError.innerText = "";
-                }
+                endError.innerText = "";
             }
         }
 
         return valid;
     }
 
-    /* ---------------- EVENT LISTENERS ---------------- */
+    /* ================= EVENT LISTENERS ================= */
+
     email.addEventListener("blur", validateEmail);
     reason.addEventListener("blur", validateReason);
 
@@ -265,35 +282,12 @@ document.addEventListener("DOMContentLoaded", function () {
         validateDates();
     });
 
-    startDate.addEventListener("change", function () {
-        validateDates(); // do NOT force end date error
-    });
-
     endDate.addEventListener("blur", function () {
         endTouched = true;
         validateDates();
     });
 
-    endDate.addEventListener("change", function () {
-        endTouched = true;
-        validateDates();
-    });
-
-    /* ---------------- FINAL SUBMIT ----------------
-    form.addEventListener("submit", function (event) {
-
-        startTouched = true;
-        endTouched = true;
-
-        const isEmailValid = validateEmail();
-        const isReasonValid = validateReason();
-        const isDateValid = validateDates(true);
-
-        if (!isEmailValid || !isReasonValid || !isDateValid) {
-            event.preventDefault();
-        }
-    });*/
-
+    /* ================= FINAL SUBMIT ================= */
 
     form.addEventListener("submit", function (event) {
 
@@ -307,86 +301,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const isDateValid = validateDates(true);
 
         if (isEmailValid && isReasonValid && isDateValid) {
+
             submitBtn.disabled = true;
             submitBtn.innerText = "Submitting...";
+
             form.submit();
         }
     });
 
-
-  /*  form.addEventListener("submit", function (event) {
-
-        event.preventDefault();
-
-        startTouched = true;
-        endTouched = true;
-
-        const isEmailValid = validateEmail();
-        const isReasonValid = validateReason();
-        const isDateValid = validateDates(true);
-
-        if (isEmailValid && isReasonValid && isDateValid) {
-            form.submit(); // manual submit
-        }
-    }); */
 });
-
-
-
- $(document).ready(function () {
-
- // Apply WFH-specific date restrictions
- function applyWFHDateRestriction(element, isStartDate) {
-     if (!element) return;
-
-     const today = new Date();
-     const currentYear = today.getFullYear();
-     const currentMonth = today.getMonth();
-     
-     if (isStartDate) {
-         // Start Date: Previous month to current month
-         const previousMonthStart = new Date(currentYear, currentMonth - 1, 1);
-         const currentMonthEnd = new Date(currentYear, currentMonth + 1, 0);
-         
-         const minDate = previousMonthStart.toISOString().split('T')[0];
-         const maxDate = currentMonthEnd.toISOString().split('T')[0];
-         
-         element.setAttribute('min', minDate);
-         element.setAttribute('max', maxDate);
-     } else {
-         // End Date: Any date up to December 31 of current year
-         const minDate = new Date(currentYear, 0, 1).toISOString().split('T')[0];
-         const maxDate = `${currentYear}-12-31`;
-         
-         element.setAttribute('min', minDate);
-         element.setAttribute('max', maxDate);
-     }
-
-     // Prevent manual year input exceeding 4 digits
-     element.addEventListener('input', function () {
-         const val = this.value;
-         if (val) {
-             const parts = val.split('-');
-             if (parts[0] && parts[0].length > 4) {
-                 parts[0] = parts[0].substring(0, 4);
-                 this.value = parts.join('-');
-             }
-         }
-     });
- }
-
-  const startDate = document.getElementById("startDate");
-     const endDate = document.getElementById("endDate");
-
-                 if (startDate) {
-                     applyWFHDateRestriction(startDate, true); // true = is start date
-                 }
-                 if (endDate) {
-                     applyWFHDateRestriction(endDate, false); // false = is end date
-                 }
-
-
-
- });
 </script>
-
