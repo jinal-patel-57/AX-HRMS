@@ -16,13 +16,7 @@
 </liferay-portlet:resourceURL>
 <!-- Different URL End -->
 
-<style>
-#mySelect[multiple] {
-    height: 38px !important;
-    overflow: hidden;
-}
 
-</style>
 
 <div class="card">
     <div class="card-header">

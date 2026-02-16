@@ -98,7 +98,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 				log.info("presentAddress -- " + presentAddress);
 			}
 
-			EmployeeAddress employeeAddress = createOrUpdateEmployeeAddress(actionRequest ,permanentAddress, presentAddress, themeDisplay, employeeAddressLocalService, employeeDetailsLocalService, isUpdate);
+			EmployeeAddress employeeAddress = createOrUpdateEmployeeAddress(actionRequest ,permanentAddress, presentAddress, themeDisplay, employeeAddressLocalService, employeeDetailsLocalService, isUpdate,serviceContext);
 			log.info("employeeAddress -- " + employeeAddress);
 			return true;
 		} catch (Exception e) {
@@ -140,96 +140,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		long country = ParamUtil.getLong(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_COUNTRY : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_COUNTRY);
 		String pincode = ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_PINCODE : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_PINCODE);
         String city= ParamUtil.getString(actionRequest, isPermanent ? AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_CITY : AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_CITY);
-		File addressProofFile =
-				uploadRequest.getFile(
-						AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE);
 
-		if (Validator.isNotNull(addressProofFile) && addressProofFile.length() > 0) {
-
-			String addressProofFileName =
-					System.currentTimeMillis() + "_" +
-							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE
-									.replaceAll("\\s+", "_");
-
-			long employeeId = ParamUtil.getLong(actionRequest,"employeeId");
-
-			EmployeeDetails employeeDetails =
-					employeeDetailsLocalService.getEmployeeDetails(
-							ParamUtil.getLong(actionRequest, "employeeId"));
-
-			EmployeeBasicDetailsUtil employeeBasicDetailsUtil =
-					new EmployeeBasicDetailsUtil();
-
-			EmployeeAddress employeeAddress =
-					employeeAddressLocalService.findByEmployeeId(employeeId);
-
-			EmployeeDetails employeeUser =
-					employeeDetailsLocalService.getEmployeeDetails(employeeId);
-
-			User employeeLrUser =
-					userLocalService.getUser(employeeUser.getLrUserId());
-
-			Folder folder =
-					axHrmsCommonApi.createFolder(
-							AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT,
-							0,
-							themeDisplay,
-							serviceContext);
-
-			Folder parentFolder =
-					axHrmsCommonApi.createFolder(
-							String.format("%s%d",
-									employeeLrUser.getScreenName(),
-									employeeLrUser.getUserId()),
-							folder.getFolderId(),
-							themeDisplay,
-							serviceContext);
-
-			Folder addressProofFolder =
-					axHrmsCommonApi.createFolder(
-							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FOLDER,
-							parentFolder.getFolderId(),
-							themeDisplay,
-							serviceContext);
-
-			log.info("addressProofFolder:::: "  + addressProofFolder);
-
-			log.info("addressProofFile:::: "  + addressProofFile);
-
-			try {
-				long addressProofFileEntryId = 0;
-				if (isUpdate) {
-					 addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
-							addressProofFile,
-							addressProofFileName,
-							actionRequest,
-							employeeDetails,
-							employeeAddress.getEmployeeAddressProofFileEntryId(),
-							"ADDRESS_PROOF",
-							addressProofFolder,
-							serviceContext
-					);
-				}
-				else {
-					addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
-							addressProofFile,
-							addressProofFileName,
-							actionRequest,
-							employeeDetails,
-							0,
-							"ADDRESS_PROOF",
-							addressProofFolder,
-							serviceContext
-					);
-				}
-
-				employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
-				employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
-			} catch (Exception e) {
-				log.error("error while adding address proof :: " + e);
-			}
-
-		}
 		address.setCompanyId(themeDisplay.getCompanyId());
 		address.setGroupId(themeDisplay.getScopeGroupId());
 		address.setCreatedBy(themeDisplay.getUserId());
@@ -273,7 +184,7 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		return address;
 	}
 
-	private EmployeeAddress createOrUpdateEmployeeAddress(ActionRequest actionRequest ,Address permanentAddress, Address presentAddress, ThemeDisplay themeDisplay, EmployeeAddressLocalService employeeAddressLocalService, EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate) throws PortalException {
+	private EmployeeAddress createOrUpdateEmployeeAddress(ActionRequest actionRequest ,Address permanentAddress, Address presentAddress, ThemeDisplay themeDisplay, EmployeeAddressLocalService employeeAddressLocalService, EmployeeDetailsLocalService employeeDetailsLocalService, boolean isUpdate,ServiceContext serviceContext) throws PortalException {
 		EmployeeAddress employeeAddress;
 		if (isUpdate) {
 			employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
@@ -286,6 +197,96 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 		employeeAddress.setCreatedBy(themeDisplay.getUserId());
 		employeeAddress.setModifiedBy(themeDisplay.getUserId());
 		employeeAddress.setPermanentAddress(permanentAddress.getAddressId());
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		File addressProofFile =
+				uploadRequest.getFile(
+						AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE);
+
+		if (Validator.isNotNull(addressProofFile) && addressProofFile.length() > 0) {
+
+			String addressProofFileName =
+					System.currentTimeMillis() + "_" +
+							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FILE
+									.replaceAll("\\s+", "_");
+
+			long employeeId = ParamUtil.getLong(actionRequest,"employeeId");
+
+			EmployeeDetails employeeDetails =
+					employeeDetailsLocalService.getEmployeeDetails(
+							ParamUtil.getLong(actionRequest, "employeeId"));
+
+			EmployeeBasicDetailsUtil employeeBasicDetailsUtil =
+					new EmployeeBasicDetailsUtil();
+
+
+
+			EmployeeDetails employeeUser =
+					employeeDetailsLocalService.getEmployeeDetails(employeeId);
+
+			User employeeLrUser =
+					userLocalService.getUser(employeeUser.getLrUserId());
+
+			Folder folder =
+					axHrmsCommonApi.createFolder(
+							AxHrmsEmployeeOnBoardingEmployeeConstants.HRMS_DOCUMENT,
+							0,
+							themeDisplay,
+							serviceContext);
+
+			Folder parentFolder =
+					axHrmsCommonApi.createFolder(
+							String.format("%s%d",
+									employeeLrUser.getScreenName(),
+									employeeLrUser.getUserId()),
+							folder.getFolderId(),
+							themeDisplay,
+							serviceContext);
+
+			Folder addressProofFolder =
+					axHrmsCommonApi.createFolder(
+							AxHrmsEmployeeOnBoardingEmployeeConstants.ADDRESS_PROOF_FOLDER,
+							parentFolder.getFolderId(),
+							themeDisplay,
+							serviceContext);
+
+			log.info("addressProofFolder:::: "  + addressProofFolder);
+
+			log.info("addressProofFile:::: "  + addressProofFile);
+
+			try {
+				long addressProofFileEntryId = 0;
+				if (isUpdate) {
+					addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
+							addressProofFile,
+							addressProofFileName,
+							actionRequest,
+							employeeDetails,
+							employeeAddress.getEmployeeAddressProofFileEntryId(),
+							"ADDRESS_PROOF",
+							addressProofFolder,
+							serviceContext
+					);
+				}
+				else {
+					addressProofFileEntryId = employeeBasicDetailsUtil.addEditFileEntry(
+							addressProofFile,
+							addressProofFileName,
+							actionRequest,
+							employeeDetails,
+							0,
+							"ADDRESS_PROOF",
+							addressProofFolder,
+							serviceContext
+					);
+				}
+
+				employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
+				employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
+			} catch (Exception e) {
+				log.error("error while adding address proof :: " + e);
+			}
+
+		}
 		if (presentAddress != null) {
 			employeeAddress.setPresentAddress(presentAddress.getAddressId());
 			employeeAddress.setPresentPermanentSame(false);
