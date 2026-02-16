@@ -565,7 +565,7 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
                     dateInputsContainer.empty();
                 }
             }else{
-                showMessage("Please select the required leave dates.");
+//                showMessage("Please select the required leave dates.");
             }
 
         });
