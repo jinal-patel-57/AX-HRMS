@@ -16,6 +16,14 @@
 </liferay-portlet:resourceURL>
 <!-- Different URL End -->
 
+<style>
+#mySelect[multiple] {
+    height: 38px !important;
+    overflow: hidden;
+}
+
+</style>
+
 <div class="card">
     <div class="card-header">
         <strong>
@@ -92,8 +100,8 @@
                         <div class="form-group">
                             <label><liferay-ui:message key="team"/></label>
                             <select id="mySelect" name="<portlet:namespace />teamIdSelectBox"
-                                    class="form-control custom-select mr-sm-2">
-                                <option value="">Select an option</option>
+                                    class="form-control custom-select mr-sm-2" >
+                                <option value="" >Select an option</option>
                                 <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
                                     <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.employeeCode} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
                                 </c:forEach>

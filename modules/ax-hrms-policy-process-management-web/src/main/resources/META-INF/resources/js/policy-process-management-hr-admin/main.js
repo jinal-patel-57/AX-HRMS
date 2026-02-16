@@ -41,9 +41,9 @@
             function (value, element) {
                 if (!value) return true; // handled by required
 
-                return /\.(pdf|jpg|jpeg|png)$/i.test(value);
+                return /\.(pdf)$/i.test(value);
             },
-            "Only PDF, JPG, JPEG, or PNG files are allowed."
+            "Only PDF files are allowed."
         );
 
 

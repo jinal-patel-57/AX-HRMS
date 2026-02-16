@@ -96,6 +96,9 @@
 								id="uploadDocument" value="${URL}" title="${fileName}"
 								name="<portlet:namespace/>uploadDocument"
 								/>
+								  <small class="form-text text-muted">
+                                                    Allowed file types: PDF
+                                                </small>
 
 							<c:if test="${not empty fileName}">
 								<a href="${URL}" target="_blank"><liferay-ui:message
