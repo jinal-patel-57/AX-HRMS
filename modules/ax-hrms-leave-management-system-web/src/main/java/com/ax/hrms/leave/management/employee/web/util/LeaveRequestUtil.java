@@ -107,6 +107,9 @@ public class LeaveRequestUtil {
 					if(leavePolicyMaster != null){
 						leaveRequestDetailDto.setIsContinous(leavePolicyMaster.getIsContinuous());
 						leaveRequestDetailDto.setIsApplicableFloater(leavePolicyMaster.getIsApplicableFloater());
+                        if(leavePolicyMaster.getIsApplicableFloater()){
+                            leaveRequestDetailDto.setIsContinous(false);
+                        }
 					}
 				}
 				leaveRequestDetailDto.setNoOfRemainingLeaves(leaveBalance.getNoOfRemainingLeaves());

@@ -28,12 +28,15 @@
                                                                  value="${leaveRequest.departmentName}"/>
                         <liferay-ui:search-container-column-text name="Designation Name"
                                                                  value="${leaveRequest.designationName}"/>
-
+                        <liferay-ui:search-container-column-text name="Leave Type Name"
+                                                                 value="${leaveRequest.leaveType}"/>
                                 <liferay-ui:search-container-column-text name="Start Date of Leave"
                                                                          value="${leaveRequest.startDateOfLeaveRequest}"/>
 
                         <liferay-ui:search-container-column-text name="End Date of Leave"
                                                                  value="${leaveRequest.endDateOfLeaveRequest}"/>
+                                       <liferay-ui:search-container-column-text name="Date of Request Leave"
+                                                                                value="${leaveRequest.dateOfRequestedLeave}"/>
                <liferay-ui:search-container-column-text name="Modified by"
                                                                       value="${ leaveRequest.getModifiedUser() }"></liferay-ui:search-container-column-text>
 

@@ -609,6 +609,7 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
                     // Create a new <select> element
                     const floaterSelectElement = $('<select>').attr('id', namespace+'floaterDays');
                     floaterSelectElement.attr('class','form-control custom-select mr-sm-2');
+                    floaterSelectElement.attr('name', namespace+'floaterDays');
 
                     // Add options to the <select> element
                     floaterSelectElement.append('<option value="">--Select Floater Day--</option>');
@@ -623,7 +624,15 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
 
                     // Add the new <select> element to the page
                     if(remainingLeave != 0.0)
-                        floaterDaysContainer.empty().append('<label>Restricted Holiday</label>').append(floaterSelectElement);
+                        floaterDaysContainer.empty().append('<label>Restricted Holiday<span class="text-danger">*</span></label>').append(floaterSelectElement);
+
+                    // Add validation rule dynamically
+                    floaterSelectElement.rules("add", {
+                        required: true,
+                        messages: {
+                            required: "Please select a restricted holiday."
+                        }
+                    });
 
                     hideEndDateContainer();
                     hideStartDateContainer();
@@ -631,7 +640,13 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
                     
                     // Attach an event handler to the dynamic select element
                     floaterSelectElement.on('change', function() {
-                    	
+                    	if (!isApplicableForFloater) {
+                            let floaterField = $('#' + namespace + 'floaterDays');
+                            if (floaterField.length) {
+                                floaterField.rules("remove");
+                            }
+                        }
+
                         let floaterDate = $('#'+namespace+'floaterDays').val();
 
                         if(floaterDate != ""){

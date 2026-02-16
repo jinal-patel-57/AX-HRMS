@@ -278,6 +278,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
             employeeDetails.setIsProbationEnabled(false);
         } else {
             employeeDetails.setIsExperienced(isExperiencedBool);
+            employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
             employeeDetails.setInsuranceLink(insuranceLink);
             addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay);
         }
