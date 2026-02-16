@@ -41,7 +41,12 @@
                                                                       value="${ leaveRequest.getModifiedUser() }"></liferay-ui:search-container-column-text>
 
 
-                         <liferay-ui:search-container-column-text name="Status" value="${leaveRequest.status}"/>
+                     <%--    <liferay-ui:search-container-column-text name="Status" value="${leaveRequest.status}"/> --%>
+
+                       <liferay-ui:search-container-column-text
+                           name="Status"
+                           value='<span class="status ${fn:toLowerCase(fn:replace(leaveRequest.status, " ", "-"))}">${leaveRequest.status}</span>' />
+
 <c:set var="isSameEmployee"
        value="${currentEmployeeId == leaveRequest.employeeId}" />
 

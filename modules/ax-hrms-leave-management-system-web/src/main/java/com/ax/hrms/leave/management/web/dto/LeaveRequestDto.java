@@ -9,7 +9,10 @@ import java.util.Date;
 public class LeaveRequestDto {
 	
 	long userId;
-	long employeeId;
+
+
+
+    long employeeId;
 	String employeeName;
 	String leaveType;
 	long leaveTypeId;
@@ -38,9 +41,17 @@ public class LeaveRequestDto {
 	String leaveDate;
 
 	String modifiedUser;
+    String reason;
 
+    public String getReason() {
+        return reason;
+    }
 
-	public void setApplicableFloater(boolean applicableFloater) {
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public void setApplicableFloater(boolean applicableFloater) {
 		isApplicableFloater = applicableFloater;
 	}
 
@@ -289,5 +300,38 @@ public class LeaveRequestDto {
 	public void setNoOfDays(double noOfDays) {
 		this.noOfDays = noOfDays;
 	}
-
+    @Override
+    public String toString() {
+        return "LeaveRequestDto{" +
+                "userId=" + userId +
+                ", employeeId=" + employeeId +
+                ", employeeName='" + employeeName + '\'' +
+                ", leaveType='" + leaveType + '\'' +
+                ", leaveTypeId=" + leaveTypeId +
+                ", leaveTypeDescription='" + leaveTypeDescription + '\'' +
+                ", leavePeriod='" + leavePeriod + '\'' +
+                ", noOfHours=" + noOfHours +
+                ", noOfDays=" + noOfDays +
+                ", leaveRequestId=" + leaveRequestId +
+                ", leaveRequestStatus='" + leaveRequestStatus + '\'' +
+                ", noOfRemainingLeaves=" + noOfRemainingLeaves +
+                ", isContinuous=" + isContinuous +
+                ", isApplicableFloater=" + isApplicableFloater +
+                ", departmentName='" + departmentName + '\'' +
+                ", designationName='" + designationName + '\'' +
+                ", startDateOfLeave=" + startDateOfLeave +
+                ", endDateOfLeave=" + endDateOfLeave +
+                ", dateOfRequestLeave=" + dateOfRequestLeave +
+                ", status='" + status + '\'' +
+                ", halfDay=" + halfDay +
+                ", firstHalf=" + firstHalf +
+                ", totalNoOfDays=" + totalNoOfDays +
+                ", startDateOfLeaveRequest='" + startDateOfLeaveRequest + '\'' +
+                ", endDateOfLeaveRequest='" + endDateOfLeaveRequest + '\'' +
+                ", dateOfRequestedLeave='" + dateOfRequestedLeave + '\'' +
+                ", leaveDate='" + leaveDate + '\'' +
+                ", modifiedUser='" + modifiedUser + '\'' +
+                ", reason='" + reason + '\'' +
+                '}';
+    }
 }

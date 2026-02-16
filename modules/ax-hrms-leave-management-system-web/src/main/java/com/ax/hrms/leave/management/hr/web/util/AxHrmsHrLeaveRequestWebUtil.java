@@ -212,11 +212,11 @@ log.info("url ::::  " + url);
 			String startDateOfLeave = setDateFormat((leaveRequest.getStartDateTime()));
 			String endDateOfLeave = setDateFormat((leaveRequest.getEndDateTime()));
 			String dateOfRequestDate = setDateFormat((leaveRequest.getDateOfRequest()));
-
+            leaveRequestDto.setReason(leaveRequest.getReason());
 			leaveRequestDto.setStartDateOfLeaveRequest(startDateOfLeave);
 			leaveRequestDto.setEndDateOfLeaveRequest(endDateOfLeave);
 			leaveRequestDto.setDateOfRequestedLeave(dateOfRequestDate);
-
+            leaveRequestDto.setReason(leaveRequest.getReason());
 			if (Validator.isNotNull(leaveRequest.getModifiedBy())){
 				EmployeeDetails modifiedUser = employeeDetailsLocalService.findByLrUserId(leaveRequest.getModifiedBy());
 

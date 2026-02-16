@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 
 <!-- Session Message Keys Start -->
@@ -53,14 +54,20 @@
 
 
 
-                <liferay-ui:search-container-column-text name="Status">
+           <%--    <liferay-ui:search-container-column-text name="Status">
                     <c:if test="${leaveRequest.getLeaveRequestStatus() == 'Cancelled'}">
                         <p class="text-danger m-0">Cancelled</p>
                     </c:if>
                     <c:if test="${leaveRequest.getLeaveRequestStatus() != 'Cancelled'}">
                         <p class="text-secondary m-0">${leaveRequest.getLeaveRequestStatus()}</p>
                     </c:if>
-                </liferay-ui:search-container-column-text>
+                </liferay-ui:search-container-column-text>--%>
+
+                <liferay-ui:search-container-column-text
+                           name="Status"
+                           value='<span class="status ${fn:toLowerCase(fn:replace(leaveRequest.getLeaveRequestStatus(), " ", "-"))}">${leaveRequest.getLeaveRequestStatus()}</span>' />
+
+
                 <liferay-ui:search-container-column-text name="Action">
 
                     <portlet:actionURL name="/cancelLeaveRequest" var="cancelUrl">

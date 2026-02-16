@@ -66,6 +66,12 @@
                     <div class="label-content">${empty leaveRequestDto ? '' : leaveRequestDto.status}</div>
                 </div>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+                <div class="form-group-view">
+                    <div class="label-name"><liferay-ui:message key="reason"/></div>
+                    <div class="label-content">${empty leaveRequestDto ? '' : leaveRequestDto.reason}</div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-6 col-12">
