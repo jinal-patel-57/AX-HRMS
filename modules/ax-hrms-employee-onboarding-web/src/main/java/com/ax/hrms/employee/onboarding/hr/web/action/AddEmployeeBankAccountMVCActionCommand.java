@@ -65,7 +65,8 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setModifiedBy(themeDisplay.getUserId());
 
 				employeeBankAccount.setAccountNumber(accountNumber);
-				employeeBankAccount.setAccountType(accountType);
+//				employeeBankAccount.setAccountType(accountType);
+                employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
 				employeeBankAccount.setIfscCode(ifscCode);
@@ -102,7 +103,8 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setCreatedBy(themeDisplay.getUserId());
 				employeeBankAccount.setModifiedBy(themeDisplay.getUserId());
 				employeeBankAccount.setAccountNumber(accountNumber);
-				employeeBankAccount.setAccountType(accountType);
+//				employeeBankAccount.setAccountType(accountType);
+                employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
 				employeeBankAccount.setIfscCode(ifscCode);

@@ -77,6 +77,11 @@
     border-color: #893D96 !important;
 
 	}
+
+	.form-control:focus[readonly] {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
         /*=== End Tabing boostrape overwrite styling===*/
     </style>
 </head>

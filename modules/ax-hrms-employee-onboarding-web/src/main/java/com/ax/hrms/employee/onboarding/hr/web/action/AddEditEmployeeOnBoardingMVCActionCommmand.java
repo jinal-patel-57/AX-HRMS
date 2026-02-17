@@ -219,7 +219,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 Date joiningDateParsed = formatter.parse(joiningDate);
 
                 employeeDetails.setJoiningDate(joiningDateParsed);
-                employeeDetails.setEmployeeCode(employeeCode);
+//                employeeDetails.setEmployeeCode(employeeCode);
                 employeeDetails.setFirstName(firstName);
                 employeeDetails.setLastName(lastName);
                 employeeDetails.setGender(gender);
