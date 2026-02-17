@@ -62,6 +62,21 @@
             padding-right: 0;
         }
 
+        .form-control.is-valid, .was-validated .form-control:valid{
+
+            border-color: var(--bs-border-color) !important;
+            padding-right: unset !important;
+            background-image: unset !important;
+            background-repeat: unset !important;
+            background-position: unset !important;
+            background-size: unset !important;
+        }
+	.form-control.is-valid:focus, .was-validated .form-control:valid:focus{
+
+	  box-shadow: 0 0 0 0.25rem rgba(137, 61, 150, 0.2509803922) !important;
+    border-color: #893D96 !important;
+
+	}
         /*=== End Tabing boostrape overwrite styling===*/
     </style>
 </head>
