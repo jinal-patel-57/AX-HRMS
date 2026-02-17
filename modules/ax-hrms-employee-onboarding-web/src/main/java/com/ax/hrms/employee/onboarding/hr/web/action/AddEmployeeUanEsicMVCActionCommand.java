@@ -49,6 +49,7 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
         long employeeId = ParamUtil.getLong(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_ID);
 
         log.info("uanEsic Flag ===> " + flag);
+		log.info("Employee Id:- "+ employeeId);
 		if(flag.equals(AxHrmsEmployeeOnBoardingEmployeeConstants.FALSE)) {
 				try {
 					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.createEmployeeUanEsic(CounterLocalServiceUtil.increment(EmployeeUanEsic.class.getName()));
@@ -62,7 +63,7 @@ public class AddEmployeeUanEsicMVCActionCommand extends BaseMVCActionCommand {
 					employeeUanEsic.setEsicNo(esicNo);
 					employeeUanEsic.setStatus(true);
 
-					EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+					EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 					employeeDetails.setUanEsicId(employeeUanEsic.getUanEsicId());
 					employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
 					employeeUanEsicLocalService.addEmployeeUanEsic(employeeUanEsic);

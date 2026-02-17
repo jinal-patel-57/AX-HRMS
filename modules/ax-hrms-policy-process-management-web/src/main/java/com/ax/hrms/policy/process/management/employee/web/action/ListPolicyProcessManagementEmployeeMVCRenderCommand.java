@@ -96,6 +96,7 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 
 			policyList = policyLocalService.findByYear(currentYear);
 
+
 			User user = themeDisplay.getUser();
 			List<Role> userRoleList = user.getRoles();
 			log.info("userRoleList" + userRoleList);
@@ -159,25 +160,27 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 		List<PolicyDto> policyDtoList = new ArrayList<>();
 
 		for(Policy policy : policyList) {
-			PolicyDto policyDto = new PolicyDto();
-			policyDto.setDate(axHrmsCommonApi.setDateFormat(policy.getApplicableDate()));
-			policyDto.setPolicyId(policy.getPolicyId());
-			policyDto.setPolicyName(policy.getPolicyName());
-			policyDto.setPolicyTypeName(policyTypeMasterLocalService.getPolicyTypeMaster(policy.getPolicyTypeId()).getPolicyType());
-			policyDto.setDescription(policy.getPolicyDescription());
-			policyDto.setStatus(policy.getStatus());
-			policyDto.setYear(policy.getYear());
+			if (Boolean.TRUE.equals(policy.getStatus())) {
+				PolicyDto policyDto = new PolicyDto();
+				policyDto.setDate(axHrmsCommonApi.setDateFormat(policy.getApplicableDate()));
+				policyDto.setPolicyId(policy.getPolicyId());
+				policyDto.setPolicyName(policy.getPolicyName());
+				policyDto.setPolicyTypeName(policyTypeMasterLocalService.getPolicyTypeMaster(policy.getPolicyTypeId()).getPolicyType());
+				policyDto.setDescription(policy.getPolicyDescription());
+				policyDto.setStatus(policy.getStatus());
+				policyDto.setYear(policy.getYear());
 
-			List<RolePolicies> rolePolicies = rolePoliciesLocalService.findByPolicyId(policy.getPolicyId());
-			List<String> roleList = new ArrayList<>();
-			for(RolePolicies role : rolePolicies) {
-				roleList.add(RoleLocalServiceUtil.getRole(role.getRoleId()).getName());
+				List<RolePolicies> rolePolicies = rolePoliciesLocalService.findByPolicyId(policy.getPolicyId());
+				List<String> roleList = new ArrayList<>();
+				for (RolePolicies role : rolePolicies) {
+					roleList.add(RoleLocalServiceUtil.getRole(role.getRoleId()).getName());
+				}
+				policyDto.setRoleNameList(roleList);
+				policyDto.setFile(DLAppLocalServiceUtil.getFileEntry(policy.getPolicyDocumentId()));
+				policyDto.setPreviewURL(DLUtil.getPreviewURL(policyDto.getFile(), policyDto.getFile().getFileVersion(), themeDisplay, StringPool.BLANK));
+				policyDtoList.add(policyDto);
+
 			}
-			policyDto.setRoleNameList(roleList);
-			policyDto.setFile(DLAppLocalServiceUtil.getFileEntry(policy.getPolicyDocumentId()));
-			policyDto.setPreviewURL(DLUtil.getPreviewURL(policyDto.getFile(), policyDto.getFile().getFileVersion(), themeDisplay, StringPool.BLANK));
-			policyDtoList.add(policyDto);
-
 		}
 		return policyDtoList;
 	}

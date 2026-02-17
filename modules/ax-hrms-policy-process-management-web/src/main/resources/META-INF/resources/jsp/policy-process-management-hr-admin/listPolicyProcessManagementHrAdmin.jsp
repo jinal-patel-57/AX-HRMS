@@ -71,7 +71,7 @@
         
         
         
-        <liferay-ui:search-container-column-text name="Policy Date" value="${policy.date}" />
+        <liferay-ui:search-container-column-text name="Applicable Date" value="${policy.date}" />
         
         <liferay-ui:search-container-column-text name="Policy Status" value="${policy.status ? 'Active' : 'In Active'}" />
 
