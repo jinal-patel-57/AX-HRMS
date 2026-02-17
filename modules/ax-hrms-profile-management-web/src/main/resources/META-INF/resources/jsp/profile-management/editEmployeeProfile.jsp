@@ -232,12 +232,6 @@
                </div>
            </div>
 
-
-        </div>
-    </div>
-</div>
-</c:if>
-
 <div class="row mt-3" id="addressProofSection">
     <div class="col-md-6 col-sm-12 mb-3">
         <label class="form-label">
@@ -262,6 +256,13 @@
         </small>
     </div>
 </div>
+
+        </div>
+    </div>
+</div>
+</c:if>
+
+
 
 
 <!-- ========================================================= -->

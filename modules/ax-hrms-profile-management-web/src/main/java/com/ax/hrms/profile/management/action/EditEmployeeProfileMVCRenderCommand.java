@@ -79,7 +79,7 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
         try {
             employeeId = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId();
             employeeProfileUtil.setEmployeeDetails(renderRequest, employeeId);
-            employeeProfileUtil.setAddress(renderRequest, employeeId);
+//            employeeProfileUtil.setAddress(renderRequest, employeeId);
             employeeProfileUtil.setNominee(renderRequest, employeeId);
 
             renderRequest.setAttribute(

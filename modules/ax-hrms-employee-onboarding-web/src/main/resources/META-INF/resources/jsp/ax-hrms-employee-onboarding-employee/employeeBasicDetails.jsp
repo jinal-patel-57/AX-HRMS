@@ -268,7 +268,7 @@
 
             <div class="col-md-4 col-sm-12 mb-3">
                 <label for="<portlet:namespace />spouseName" class="form-label">
-                    <liferay-ui:message key="spouse-name"/>
+                    <liferay-ui:message key="spouse-name"/><span class="text-danger">*</span>
                 </label>
                 <input type="text" class="form-control"
                        id="<portlet:namespace />spouseName"
