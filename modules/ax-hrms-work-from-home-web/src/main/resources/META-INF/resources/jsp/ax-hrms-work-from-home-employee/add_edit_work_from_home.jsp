@@ -130,33 +130,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let startTouched = false;
     let endTouched = false;
-     const today = new Date();
-        // 1st of previous month
-        const prevMonthStart = new Date(
-            today.getFullYear(),
-            today.getMonth() - 1,
-            1
-        );
 
-        // 31st December of current year
-        const yearEnd = new Date(
-            today.getFullYear(),
-            11,
-            31
-        );
+    const today = new Date();
+
+    // 1st of previous month
+    const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+
+    // 31st December of current year
+    const yearEnd = new Date(today.getFullYear(), 11, 31);
+
+    function isWeekend(dateStr) {
+        if (!dateStr) return false;
+        const day = new Date(dateStr + "T00:00:00").getDay(); // 0 = Sun, 6 = Sat
+        return day === 0 || day === 6;
+    }
+
+    function nextMonday(dateStr) {
+        const d = new Date(dateStr + "T00:00:00");
+        const day = d.getDay();
+        // Saturday → +2, Sunday → +1
+        const daysToAdd = day === 6 ? 2 : 1;
+        d.setDate(d.getDate() + daysToAdd);
+        return d.toLocaleDateString("en-CA"); // returns YYYY-MM-DD
+    }
+
     function applyWFHDateRestriction(element) {
         if (!element) return;
 
+        const minDate = prevMonthStart.toLocaleDateString("en-CA");
+        const maxDate = yearEnd.toLocaleDateString("en-CA");
 
-
-
-
-        console.log("prevMonthStart :: ",prevMonthStart)
-        const minDate = prevMonthStart.toLocaleDateString('en-CA');
-        const maxDate = yearEnd.toLocaleDateString('en-CA');
-
-        element.setAttribute("min", prevMonthStart.toLocaleDateString('en-CA'));
-        element.setAttribute("max", yearEnd.toLocaleDateString('en-CA'));
+        element.setAttribute("min", minDate);
+        element.setAttribute("max", maxDate);
         element.min = minDate;
         element.max = maxDate;
 
@@ -173,16 +178,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
-
-
     // Apply restriction to both date fields
-
     applyWFHDateRestriction(startDate);
     applyWFHDateRestriction(endDate);
-
-
-    /* ================= EMAIL VALIDATION ================= */
 
     function validateEmail() {
         const value = email.value.trim();
@@ -217,8 +215,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    /* ================= REASON VALIDATION ================= */
-
     function validateReason() {
         const value = reason.value.trim();
         const len = value.length;
@@ -238,15 +234,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    /* ================= DATE VALIDATION ================= */
-
     function validateDates(showAll = false) {
-
         let valid = true;
 
         if (startTouched || showAll) {
             if (!startDate.value) {
                 startError.innerText = "Start Date is required.";
+                valid = false;
+            } else if (isWeekend(startDate.value)) {
+                startError.innerText =
+                    "Start Date cannot be a weekend. Please choose a weekday.";
                 valid = false;
             } else {
                 startError.innerText = "";
@@ -257,10 +254,14 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!endDate.value) {
                 endError.innerText = "End Date is required.";
                 valid = false;
+            } else if (isWeekend(endDate.value)) {
+                endError.innerText =
+                    "End Date cannot be a weekend. Please choose a weekday.";
+                valid = false;
             } else if (
                 startDate.value &&
                 new Date(endDate.value + "T00:00:00") <
-                new Date(startDate.value + "T00:00:00")
+                    new Date(startDate.value + "T00:00:00")
             ) {
                 endError.innerText = "End Date must be after Start Date.";
                 valid = false;
@@ -271,8 +272,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return valid;
     }
-
-    /* ================= EVENT LISTENERS ================= */
 
     email.addEventListener("blur", validateEmail);
     reason.addEventListener("blur", validateReason);
@@ -287,10 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
         validateDates();
     });
 
-    /* ================= FINAL SUBMIT ================= */
-
     form.addEventListener("submit", function (event) {
-
         event.preventDefault();
 
         startTouched = true;
@@ -301,10 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const isDateValid = validateDates(true);
 
         if (isEmailValid && isReasonValid && isDateValid) {
-
             submitBtn.disabled = true;
             submitBtn.innerText = "Submitting...";
-
             form.submit();
         }
     });
