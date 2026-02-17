@@ -141,7 +141,9 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
                 mailMessage.addFileAttachment(file1, dlFileEntry1.getFileName());
                 mailMessage.addFileAttachment(file2, dlFileEntry2.getFileName());
                 mailMessage.setTo(toAddress);
-                MailServiceUtil.sendEmail(mailMessage);
+                if(Validator.isNotNull(employeeDetails.getPersonalEmail()) && !employeeDetails.getPersonalEmail().isBlank()) {
+                	MailServiceUtil.sendEmail(mailMessage);
+                }
             }catch (Exception e){
                 log.error("Error sending the Full and final mail.");
             }
