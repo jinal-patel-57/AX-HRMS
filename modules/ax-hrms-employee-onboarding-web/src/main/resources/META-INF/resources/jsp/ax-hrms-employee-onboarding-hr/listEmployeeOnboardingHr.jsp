@@ -70,9 +70,15 @@
                                                          
 				<!--<liferay-ui:search-container-column-text name="employee-type"
                                                          value="${employeeDetails.employeeType}"/>-->
-                <liferay-ui:search-container-column-text
-                    name="employee-type"
-                    value="<%= employeeDetails.getEmployeeType().substring(0,1).toUpperCase() + employeeDetails.getEmployeeType().substring(1) %>" />
+               <liferay-ui:search-container-column-text
+                   name="employee-type"
+                   value="<%=
+                       (employeeDetails.getEmployeeType() != null
+                       && employeeDetails.getEmployeeType().length() > 0)
+                       ? employeeDetails.getEmployeeType().substring(0,1).toUpperCase()
+                         + employeeDetails.getEmployeeType().substring(1)
+                       : "-"
+                   %>" />
 
                                                          
 				<liferay-ui:search-container-column-text name="status"

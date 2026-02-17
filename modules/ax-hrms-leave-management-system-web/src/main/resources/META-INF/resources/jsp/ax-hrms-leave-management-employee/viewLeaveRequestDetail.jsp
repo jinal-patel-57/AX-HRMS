@@ -19,7 +19,7 @@
                 </div>
             </div>
           
-            <c:if test="${empty floaterHolidayName}">
+            <c:if test="${not empty leaveRequest.reason}">
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="form-group-view">
                         <div class="label-name"><liferay-ui:message key="reason"/></div>
@@ -29,7 +29,7 @@
             </c:if>
 
 
-            <c:if test="${not empty floaterHolidayName}">
+            <c:if test="${empty leaveRequest.reason}">
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="form-group-view">
                         <div class="label-name"><liferay-ui:message key="floater-holiday-name"/></div>
