@@ -122,6 +122,9 @@ function setConfigsForAddExperienceSection(config) {
     clone.querySelectorAll("input").forEach(input => {
 
         input.name = input.name.replace(/\d+$/, "") + index;
+         if (input.id) {
+            input.id = input.id.replace(/[0-9]+$/, '') + index;
+         }
 
         if (input.type === "file") {
             const fresh = document.createElement("input");
@@ -129,12 +132,25 @@ function setConfigsForAddExperienceSection(config) {
             fresh.className = input.className;
             fresh.name = input.name;
             fresh.multiple=true;
+            fresh.id = input.id;
             fresh.accept = input.accept;
             input.parentNode.replaceChild(fresh, input);
         } else {
             input.value = "";
         }
     });
+
+    // THis code is for the removing the validation error while add the new experience.
+    clone.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+    clone.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+    clone.querySelectorAll("[aria-describedby]").forEach(el => {
+        el.removeAttribute("aria-describedby");
+    });
+        $(clone).find("input, select, textarea").each(function () {
+            $(this).removeData("previousValue");
+            $(this).removeData("rules");
+            $(this).off(".validate");
+        });
 
     const oldFooter = clone.querySelector(".card-footer");
     if (oldFooter) oldFooter.remove();
@@ -855,6 +871,10 @@ $.validator.addMethod(
 		        event.preventDefault();
 		        const currentTab = $('.nav-link.active');
 		        const previousTabButton = currentTab.parent().prev().find('.nav-link');
+		        const eduForm = document.getElementById("educationStepperForm");
+                if (eduForm) {
+                    eduForm._submitAttempted = false;
+                }
 		        if (previousTabButton.length > 0) {
 		            previousTabButton.tab('show');
 		            const previousTabContentId = previousTabButton.attr('data-bs-target');
@@ -866,7 +886,7 @@ $.validator.addMethod(
                                     $aadhaar.val(formatAadhaar($aadhaar.val()));
                                 }
                             }, 0);
-		            $(previousTabContentId).find('input').first().focus();
+		         //   $(previousTabContentId).find('input').first().focus();
 		        }
 		    });
 				
@@ -1135,7 +1155,7 @@ $.validator.addMethod(
                                 const nextTabContentId = nextTabButton.attr('data-bs-target');
                                 $(nextTabContentId).addClass('show active');
                                 $(currentTab.attr('data-bs-target')).removeClass('show active');
-                                $(nextTabContentId).find('input').first().focus();
+                             //   $(nextTabContentId).find('input').first().focus();
                             }
                         },
                         error: function () {
@@ -1260,7 +1280,7 @@ $.validator.addMethod(
 
                   rules[levelNameName] = { required: true };
                   rules[institutionName] = { required: true, maxlength: 250, lettersOnly: true };
-                  rules[degreeName] = { required: true, maxlength: 75, lettersOnly: true };
+                  rules[degreeName] = { required: true, minlength: 2,maxlength: 75, validDegree: true};
                   rules[startDateName] = {
                       required: true,
                       date: true,
@@ -1297,8 +1317,9 @@ $.validator.addMethod(
                   };
                   messages[degreeName] = {
                       required: "Please enter the degree obtained.",
+                      minlength: "Degree must be at least 2 characters.",
                       maxlength: "Degree should not exceed 75 characters.",
-                      lettersOnly: "Only letters and spaces are allowed.",
+                      validDegree: "Only letters, spaces, dot (.), hyphen (-), and parentheses are allowed."
                   };
                  messages[startDateName] = {
                      required: "Please enter the start date.",
@@ -1447,6 +1468,8 @@ $.validator.addMethod(
               document.getElementById("educationCurrentIndex").value = index;
 
               initializeValidation();
+                const form = document.getElementById("educationStepperForm");
+                form._submitAttempted = false;
           }
           
         	
@@ -1512,7 +1535,7 @@ $.validator.addMethod(
                     if (!form3.valid()) {
                         return false;
                     }
-
+                    form3[0]._submitAttempted = false;
                     const formData = new FormData(form3[0]);
 
                     $.ajax({
@@ -1528,7 +1551,10 @@ $.validator.addMethod(
                             const nextTabButton = currentTab.parent().next().find('.nav-link');
                             if (nextTabButton.length > 0) {
                                 nextTabButton.tab('show');
-
+                            const eduForm = document.getElementById("educationStepperForm");
+                            if (eduForm) {
+                                eduForm._submitAttempted = false;
+                            }
                                 const nextTabContentId = nextTabButton.attr('data-bs-target');
                                 $(nextTabContentId).addClass('show active');
                                 $(currentTab.attr('data-bs-target')).removeClass('show active');
@@ -1554,7 +1580,7 @@ $.validator.addMethod(
               if (nextTabButton.length > 0) {
                   nextTabButton.tab('show');
                   const nextTabContentId = nextTabButton.attr('data-bs-target');
-                  $(nextTabContentId).find('input').first().focus();
+//                  $(nextTabContentId).find('input').first().focus();
               }
           });
 
@@ -1895,11 +1921,11 @@ initializeValidation()
             initializeValidation();
 
             const form = $("#experienceStepperForm");
-
+            form[0]._submitAttempted = true;
             if (!form.valid()) {
                 return false;
             }
-
+            form._submitAttempted = false;
             const formData = new FormData(form[0]);
 
             $.ajax({
@@ -2152,6 +2178,19 @@ initializeValidation()
             }
         });
 
+           $.validator.addMethod(
+               "validDegree",
+               function (value, element) {
+                   if (this.optional(element)) return true;
+
+                   value = value.trim();
+
+                   return /^[A-Za-z]+(?:\.[A-Za-z]+)*(?:[ -][A-Za-z]+(?:\.[A-Za-z]+)*)*(?: ?\([A-Za-z]+(?:\.[A-Za-z]+)*\))?$/.test(value);
+               },
+               "Please enter a valid degree name."
+           );
+
+
       $.validator.addMethod("uanValidation", function (value, element) {
                 return this.optional(element) || /^\d{4}-\d{4}-\d{4}$/.test(value);
             }, "UAN number must be exactly 12 digits (format XXXX-XXXX-XXXX)");
@@ -2162,6 +2201,18 @@ initializeValidation()
 
         $(document).on('input', '#' + namespace + 'uan', function () {
                 this.value = formatUan(this.value);
+            });
+
+
+            $(document).on("change", 'input[type="file"]', function () {
+              //  initializeValidation()
+                const form = $(this.form);
+
+                console.log("Inside the OK....",form)
+                console.log("form.data(validator) :: ",form.data("validator"))
+                if (form.data("validator")) {
+                    form.validate().element(this);
+                }
             });
 
           // validation trigger

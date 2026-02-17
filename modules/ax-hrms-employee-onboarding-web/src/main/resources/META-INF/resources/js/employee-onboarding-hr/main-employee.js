@@ -131,11 +131,17 @@ function setConfigsForAddExperienceSection(config) {
     clone.querySelectorAll("input").forEach(input => {
 
         input.name = input.name.replace(/\d+$/, "") + index;
+        console.log("input :: ",input)
+         if (input.id) {
+                        input.id = input.id.replace(/[0-9]+$/, '') + index;
+         }
 
+         console.log("input after id :: ",input)
         if (input.type === "file") {
             const fresh = document.createElement("input");
             fresh.type = "file";
             fresh.className = input.className;
+            fresh.id = input.id;
             fresh.name = input.name;
             fresh.multiple=true;
             fresh.accept = input.accept;
@@ -143,6 +149,19 @@ function setConfigsForAddExperienceSection(config) {
         } else {
             input.value = "";
         }
+    });
+
+
+// THis code is for the removing the validation error while add the new experience.
+clone.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+clone.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+clone.querySelectorAll("[aria-describedby]").forEach(el => {
+    el.removeAttribute("aria-describedby");
+});
+    $(clone).find("input, select, textarea").each(function () {
+        $(this).removeData("previousValue");
+        $(this).removeData("rules");
+        $(this).off(".validate");
     });
 
     const oldFooter = clone.querySelector(".card-footer");
@@ -169,6 +188,9 @@ function setConfigsForAddExperienceSection(config) {
         .appendChild(clone);
 
     document.getElementById("currentIndex").value = index;
+
+//        initializeValidation();
+
 }
 
 
@@ -501,9 +523,9 @@ $.validator.addMethod(
               if (existingFileId && existingFileId !== "0" && existingFileId !== 0) {
                   return true;
               }
-//              if (!form._submitAttempted) {
-//                return true;
-//              }
+              if (!form._submitAttempted) {
+                return true;
+              }
 
               // ADD case → file must be selected
               return element.files && element.files.length > 0;
@@ -1151,6 +1173,10 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 		        event.preventDefault();
 		        const currentTab = $('.nav-link.active');
 		        const previousTabButton = currentTab.parent().prev().find('.nav-link');
+		        const eduForm = document.getElementById("educationStepperForm");
+                if (eduForm) {
+                    eduForm._submitAttempted = false;
+                }
 		        if (previousTabButton.length > 0) {
 		            previousTabButton.tab('show');
 		            const previousTabContentId = previousTabButton.attr('data-bs-target');
@@ -1163,7 +1189,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                                 }
                             }, 0);
 
-		            $(previousTabContentId).find('input').first().focus();
+		       //     $(previousTabContentId).find('input').first().focus();
 		        }
 		    });
 
@@ -1436,7 +1462,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                             const nextTabContentId = nextTabButton.attr('data-bs-target');
                             $(nextTabContentId).addClass('show active');
                             $(currentTab.attr('data-bs-target')).removeClass('show active');
-                            $(nextTabContentId).find('input').first().focus();
+                          //  $(nextTabContentId).find('input').first().focus();
                         }
                     },
                     error: function () {
@@ -1558,7 +1584,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
                     rules[levelNameKey] = {required: true};
                     rules[institutionKey] = {required: true, maxlength: 250, lettersOnly: true};
-                    rules[degreeKey] = {required: true, maxlength: 75, lettersOnly: true};
+                    rules[degreeKey] = {required: true,minlength: 2, maxlength: 75, validDegree: true};
                    rules[startDateKey] = {
                          required: true,
                          date: true,
@@ -1595,11 +1621,12 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         maxlength: "Institution name must not exceed 250 characters.",
                         lettersOnly: "Only letters and spaces are allowed."
                     };
-                    messages[degreeKey] = {
-                        required: "Please enter degree.",
-                        maxlength: "Degree must not exceed 75 characters.",
-                        lettersOnly: "Only letters and spaces are allowed."
-                    };
+                        messages[degreeKey] = {
+                            required: "Please enter degree.",
+                                minlength: "Degree must be at least 2 characters.",
+                            maxlength: "Degree must not exceed 75 characters.",
+                            validDegree: "Only letters, spaces, dot (.), hyphen (-), and parentheses are allowed."
+                        };
                      messages[startDateKey] = {
                          required: "Please enter the start date.",
                          date: "Please enter a valid date.",
@@ -1731,6 +1758,9 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
                 initializeValidation();
                 bindPassingYearAutoFill();
+
+                const form = document.getElementById("educationStepperForm");
+                form._submitAttempted = false;
             }
 
 
@@ -1802,6 +1832,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                         return false;
                     }
 
+                    form3[0]._submitAttempted = false;
                     // Use FormData to support file upload
                     const formData = new FormData(form3[0]);
 
@@ -1821,13 +1852,18 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
 
                             if (nextTabButton.length > 0) {
                                 nextTabButton.tab("show");
+                            // Reset submit attempt when tab loads
+                            const eduForm = document.getElementById("educationStepperForm");
+                            if (eduForm) {
+                                eduForm._submitAttempted = false;
+                            }
 
                                 const nextId = nextTabButton.attr("data-bs-target");
 
                                 $(nextId).addClass('show active');
                                 $(currentTab.attr('data-bs-target')).removeClass('show active');
 
-                                $(nextId).find("input").first().focus();
+                            //    $(nextId).find("input").first().focus();
                                 let url = new URL(window.location.href);
 
                                 const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_EdCurIndex";
@@ -1864,7 +1900,7 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 $(currentContentId).removeClass('show active');
                 $(nextContentId).addClass('show active');
 
-                $(nextContentId).find('input,select').first().focus();
+             //   $(nextContentId).find('input,select').first().focus();
             });
 
             initializeValidation();
@@ -1951,6 +1987,20 @@ function setConfigsForExperienceValidation(config) {
                 "Year must contain exactly 4 digits."
             );
 
+           $.validator.addMethod(
+               "validDegree",
+               function (value, element) {
+                   if (this.optional(element)) return true;
+
+                   value = value.trim();
+
+                   return /^[A-Za-z]+(?:\.[A-Za-z]+)*(?:[ -][A-Za-z]+(?:\.[A-Za-z]+)*)*(?: ?\([A-Za-z]+(?:\.[A-Za-z]+)*\))?$/.test(value);
+               },
+               "Please enter a valid degree name."
+           );
+
+
+
             /* ---- Prevent typing more than valid date length ---- */
             $(document).on("input", "input[type='date']", function () {
                 if (this.value.length > 10) {
@@ -1958,6 +2008,16 @@ function setConfigsForExperienceValidation(config) {
                 }
             });
 
+            $(document).on("change", 'input[type="file"]', function () {
+                initializeValidation()
+                const form = $(this.form);
+
+                console.log("Inside the OK....",form)
+                console.log("form.data(validator) :: ",form.data("validator"))
+                if (form.data("validator")) {
+                    form.validate().element(this);
+                }
+            });
         /* ================= VALIDATION ================= */
 
         $.validator.addMethod(
@@ -2150,8 +2210,10 @@ function setConfigsForExperienceValidation(config) {
             initializeValidation();
 
             const form = $("#experienceStepperForm");
-            if (!form.valid()) return;
+                form[0]._submitAttempted = true;
 
+            if (!form.valid()) return;
+            form._submitAttempted = false;
             const formData = new FormData(form[0]);
 
             $("#overlay").fadeIn(300);

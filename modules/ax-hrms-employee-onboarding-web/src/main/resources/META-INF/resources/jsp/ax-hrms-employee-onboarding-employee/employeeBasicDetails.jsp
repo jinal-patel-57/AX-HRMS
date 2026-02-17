@@ -612,6 +612,7 @@
 
     </div>
     <div class="card-footer text-right align-items-center">
+                <button type="button" class="btn btn-outline-primary previous-button-step-one">Back</button>
             <button type="submit" class="btn btn-outline-primary next-button next-button-basic-details">Next</button>
     </div>
 </form>
@@ -709,5 +710,13 @@ Liferay.on('allPortletsReady', function () {
 
 
 });
+
+
+    $(document).on('click', '.previous-button-step-one', function (event) {
+        event.preventDefault();
+        window.history.back();
+    });
+
+
 </script>
 
