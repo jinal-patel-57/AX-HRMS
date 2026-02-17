@@ -54,7 +54,7 @@
 
         <liferay-ui:search-container deltaConfigurable="${true}" total="${count}"
                                      searchContainer="${EmployeeOnBoardingHrSC}" delta="4"
-                                     emptyResultsMessage="No Employees found!!, Please add one to Se it here.">
+                                     emptyResultsMessage="No Employees found!!, Please add one to See it here.">
             <liferay-ui:search-container-results results="${EmployeeOnBoardingHrSC.results}"/>
 
             <liferay-ui:search-container-row className="com.ax.hrms.model.EmployeeDetails" modelVar="employeeDetails"

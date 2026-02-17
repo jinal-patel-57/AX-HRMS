@@ -175,7 +175,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		zohoEmployeeMap.forEach((outerKey, innerMap) -> {
 			try {
 				log.info("Outer: " + outerKey);
-			    if(!"0".equalsIgnoreCase(outerKey)) {
+			    if(!"0".equalsIgnoreCase(outerKey) && Validator.isNotNull(innerMap) && Validator.isNotNull(innerMap.get("4")) && Validator.isNotNull(innerMap.get("4").toString())) {
 			    	log.info("innerMap -- " + innerMap);
 			    	
 			    	EmployeeDetailsTable employeeDetailsTable = EmployeeDetailsTable.INSTANCE;
@@ -282,7 +282,11 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		employeeDetails.setLastName(innerMap.get("3").toString());
 			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString());
 			    		employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString():"Male");
-			    		employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
+			    		//employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
+			    		employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))
+			    		        ? innerMap.get("9").toString().replaceAll("\\D", "")
+					    		          .replaceFirst("^.*(\\d{10})$", "$1")
+					    		        : "");
 			    		employeeDetails.setIsTerminated(false);
 			    		employeeDetails.setIsEmployeeOnboarded(false);
 			    		employeeDetails.setCreatedBy(themeDisplay.getUserId());
