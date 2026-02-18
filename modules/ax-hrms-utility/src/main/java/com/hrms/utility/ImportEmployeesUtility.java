@@ -30,6 +30,7 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -37,6 +38,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -46,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
 
 import java.io.File;
@@ -54,9 +57,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -87,7 +92,7 @@ import org.osgi.service.component.annotations.Reference;
 public class ImportEmployeesUtility extends MVCPortlet {
 
 	private Log log = LogFactoryUtil.getLog(ImportEmployeesUtility.class);
-	
+	private final Random random = new Random();
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
 	
@@ -246,7 +251,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
 			    		
 			    		//creating new user in the database of Liferay and sending the message also.
-			    		Map<User, String> userPassMap = axHrmsCommonApi.createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles);
+			    		Map<User, String> userPassMap = createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles, innerMap.get("13").toString());
 			    		
 			    		User user = null;
 			    		String password = StringPool.BLANK;
@@ -349,9 +354,6 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString(), "Compensatory Off");
 			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString(), "Festival Floater");
 			    	}
-
-			    	
-			        
 			    }
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -414,6 +416,53 @@ public class ImportEmployeesUtility extends MVCPortlet {
 	    	log.info("Blank leave -- " + leaveCount);
 	    }
 	}
+	
+	public Map<User, String> createNewEmployeeUser(String firstName, String middleName, String lastName, String email, ThemeDisplay themeDisplay, long[] roles, String employeeCode) {
+        String password = generatePassword(8);
+        User user = null;
+        Map<User, String> retMp = new HashMap<>();
+        try {
+            user = userLocalService.addUser(themeDisplay.getUserId(), themeDisplay.getCompanyId(), false, password, password, false,
+            		employeeCode, email, themeDisplay.getLocale(), firstName, middleName, lastName, 0L, 0L,
+                    false, 1, 1, 2000, "jobTitle", 1, new long[]{themeDisplay.getScopeGroupId()}, null, roles, null, false, new ServiceContext());
+            user.setStatus(WorkflowConstants.STATUS_APPROVED);
+            user.setPasswordReset(true);
+            user.setEmailAddressVerified(true);
+            userLocalService.updateUser(user);
+            //sending mail for new user on-boarding
+            retMp.put(user, password);
+            return retMp;
+        } catch (Exception e) {
+        	log.error("ERROR CREATING THE NEW EMPLOYEE USER -- " + e.getMessage());
+        	e.printStackTrace();
+        }
+        retMp.put(user, password);
+        return retMp;
+    }
+	
+	public String generatePassword(int length) {
+        StringBuilder password = new StringBuilder();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$";
+
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return password.toString();
+    }
+
+    public String generateUserName(String firstName, String middleName, String lastName, ThemeDisplay themeDisplay) {
+        String username = "";
+        username = firstName + "." + lastName;
+        try {
+            userLocalService.getUserByScreenName(themeDisplay.getCompanyId(), username);
+            username = firstName + "." + middleName + "." + lastName;
+            return username;
+        } catch (PortalException e) {
+            return username;
+        }
+
+    }
 	
 	private void sendCredentialMailToEmployee(EmployeeDetails employeeDetails, String password, ThemeDisplay themeDisplay) {
         String subject = mailTemplateConfiguration.mailOnBoardingPermanentAndTemporaryEmployeesSubject();
