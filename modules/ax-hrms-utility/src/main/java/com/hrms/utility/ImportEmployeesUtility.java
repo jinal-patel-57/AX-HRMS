@@ -265,7 +265,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		long userId = user.getUserId();
 			    		
 			    		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-			    		Date joiningDateParsed = formatter.parse(innerMap.get("7").toString());
+			    		Date joiningDateParsed = formatter.parse(innerMap.get("7").toString().trim());
 			    		if(Validator.isNotNull(innerMap.get("8"))) {
 			    			Date dob = formatter.parse(innerMap.get("8").toString());
 			    			employeeDetails.setDateOfBirth(dob);
@@ -362,7 +362,13 @@ public class ImportEmployeesUtility extends MVCPortlet {
 		
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 		if (Validator.isNotNull(redirect)) {
-			actionResponse.sendRedirect(redirect);  
+			String url = themeDisplay.getURLHome();
+			log.info("url -- " + url);
+			String baseUrl = url.substring(0, url.lastIndexOf("/"));
+			log.info("baseUrl -- " + baseUrl);
+			String newUrl = baseUrl + "/employee-onboarding-hr";
+			log.info("newUrl -- " + newUrl);
+			actionResponse.sendRedirect(newUrl);  
 		}
 	}
 
