@@ -536,7 +536,14 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
         body = body.replace("${EMPLOYEE_PASSWORD}", password);
         body = body.replace("${LOGIN_LINK}", themeDisplay.getURLPortal() + linksConfiguration.loginLink());
         body = body.replace("${ONBOARDING_LINK}", themeDisplay.getURLPortal() + linksConfiguration.employeeOnBoardingLink());
-        body = body.replace("${INSURANCE_LINK}", employeeDetails.getInsuranceLink());
+        String insuranceLink = employeeDetails.getInsuranceLink();
+
+        if (insuranceLink != null &&
+                !(insuranceLink.startsWith("http://") || insuranceLink.startsWith("https://"))) {
+
+            insuranceLink = "https://" + insuranceLink;
+        }
+        body = body.replace("${INSURANCE_LINK}", insuranceLink);
 
         axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_MAIL_ADDRESS, AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_NAME, subject, body);
 
