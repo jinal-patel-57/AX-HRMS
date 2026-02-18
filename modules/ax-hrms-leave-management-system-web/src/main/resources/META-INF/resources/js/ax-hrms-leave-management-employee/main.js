@@ -680,92 +680,165 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
             });
         }
 
+//        function teamIdMultiSelect(){
+//            localStorage.clear();
+//
+//            let getTeamIds = () => {
+//                return JSON.parse(localStorage.getItem('selectedOptions'));
+//            }
+//
+//            let teamIdStrings = "";
+//            let setTeamIdString = () => {
+//                let teamIds = getTeamIds();
+//                if (teamIds !== null) {
+//                    teamIdStrings = teamIds.join(',');
+//                }
+//                else
+//                    teamIdStrings = "";
+//            }
+//            let setTeamIdInParams = () => {
+//                setTeamIdString();
+//                let teamIdElement = document.getElementById(namespace+"teamId");
+//                teamIdElement.value = teamIdStrings;
+//            }
+//
+//            $(document).ready(function() {
+//                const mySelect = $('#mySelect');
+//                const selectedOptionsContainer = $('#selectedOptionsContainer');
+//                let selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+//
+//                function updateSelectedOptions() {
+//
+//                    const isAlreadyInArray = selectedValues.includes($(this).val());
+//                    console.log($(this).val());
+//
+//                    mySelect.find('option:selected').each(function() {
+//                        if(!isAlreadyInArray && $(this).val() !== ""){
+//                            selectedValues.push($(this).val());
+//                        }
+//                    });
+//                    localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
+//                    renderSelectedOptions();
+//                }
+//
+//                function getTeamIdString(){
+//                    return teamIdString;
+//                }
+//
+//                // ⭐⭐⭐ THIS FUNCTION IS UPDATED ⭐⭐⭐
+//                function renderSelectedOptions() {
+//                    selectedOptionsContainer.empty(); // Clear previous options
+//
+//                    selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+//
+//                    for (const value of selectedValues) {
+//
+//                        const selectedOptionElement = $('<div>').addClass('selected-option');
+//
+//                        // ⭐ NEW CODE: Get option TEXT instead of value
+//                        const text = $('#mySelect option[value="' + value + '"]').text();
+//
+//                        const span = $('<span>').text(text); // show text instead of ID
+//
+//                        const closeButton = $('<button>').text('x'); // Close icon
+//
+//                        closeButton.click(function() {
+//                            const index = selectedValues.indexOf(value);
+//                            selectedValues.splice(index, 1);
+//                            localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
+//                            console.log(JSON.stringify(selectedValues));
+//                            renderSelectedOptions();
+//                            if(selectedValues.length == 0) {
+//                                localStorage.clear();
+//                            }
+//                            setTeamIdInParams();
+//                        });
+//
+//                        selectedOptionElement.append(span, closeButton);
+//                        selectedOptionsContainer.append(selectedOptionElement);
+//                    }
+//                }
+//                // ⭐⭐⭐ END UPDATED renderSelectedOptions() ⭐⭐⭐
+//
+//                // Bind events
+//                mySelect.change(updateSelectedOptions);
+//                window.onload = renderSelectedOptions;
+//                mySelect.change(setTeamIdInParams);
+//            });
+//        }
+
         function teamIdMultiSelect(){
-            localStorage.clear();
 
             let getTeamIds = () => {
-                return JSON.parse(localStorage.getItem('selectedOptions'));
-            }
+                return JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+            };
 
-            let teamIdStrings = "";
-            let setTeamIdString = () => {
-                let teamIds = getTeamIds();
-                if (teamIds !== null) {
-                    teamIdStrings = teamIds.join(',');
-                }
-                else
-                    teamIdStrings = "";
-            }
             let setTeamIdInParams = () => {
-                setTeamIdString();
+                let teamIds = getTeamIds();
                 let teamIdElement = document.getElementById(namespace+"teamId");
-                teamIdElement.value = teamIdStrings;
-            }
+                teamIdElement.value = teamIds.join(',');
+            };
 
             $(document).ready(function() {
+                  localStorage.removeItem('selectedOptions');
+
                 const mySelect = $('#mySelect');
                 const selectedOptionsContainer = $('#selectedOptionsContainer');
-                let selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
 
-                function updateSelectedOptions() {
+                let selectedValues = getTeamIds();
 
-                    const isAlreadyInArray = selectedValues.includes($(this).val());
-                    console.log($(this).val());
-
-                    mySelect.find('option:selected').each(function() {
-                        if(!isAlreadyInArray && $(this).val() !== ""){
-                            selectedValues.push($(this).val());
-                        }
-                    });
-                    localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
-                    renderSelectedOptions();
-                }
-
-                function getTeamIdString(){
-                    return teamIdString;
-                }
-
-                // ⭐⭐⭐ THIS FUNCTION IS UPDATED ⭐⭐⭐
                 function renderSelectedOptions() {
-                    selectedOptionsContainer.empty(); // Clear previous options
 
-                    selectedValues = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+                    selectedOptionsContainer.empty();
 
-                    for (const value of selectedValues) {
+                    selectedValues = getTeamIds();
+
+                    selectedValues.forEach(function(value){
 
                         const selectedOptionElement = $('<div>').addClass('selected-option');
 
-                        // ⭐ NEW CODE: Get option TEXT instead of value
                         const text = $('#mySelect option[value="' + value + '"]').text();
 
-                        const span = $('<span>').text(text); // show text instead of ID
+                        const span = $('<span>').text(text);
 
-                        const closeButton = $('<button>').text('x'); // Close icon
+                        const closeButton = $('<button type="button">').text('x');
 
-                        closeButton.click(function() {
-                            const index = selectedValues.indexOf(value);
-                            selectedValues.splice(index, 1);
+                        closeButton.click(function(){
+
+                            selectedValues = selectedValues.filter(v => v !== value);
+
                             localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
-                            console.log(JSON.stringify(selectedValues));
+
                             renderSelectedOptions();
-                            if(selectedValues.length == 0) {
-                                localStorage.clear();
-                            }
                             setTeamIdInParams();
                         });
 
                         selectedOptionElement.append(span, closeButton);
                         selectedOptionsContainer.append(selectedOptionElement);
-                    }
+                    });
                 }
-                // ⭐⭐⭐ END UPDATED renderSelectedOptions() ⭐⭐⭐
 
-                // Bind events
-                mySelect.change(updateSelectedOptions);
-                window.onload = renderSelectedOptions;
-                mySelect.change(setTeamIdInParams);
+                function updateSelectedOptions() {
+
+                    let value = $(this).val();
+
+                    if(value && !selectedValues.includes(value)){
+                        selectedValues.push(value);
+                        localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
+                        renderSelectedOptions();
+                        setTeamIdInParams();
+                    }
+
+                    $(this).val('');
+                }
+
+                mySelect.off('change').on('change', updateSelectedOptions);
+
+                renderSelectedOptions();
+                setTeamIdInParams();
             });
         }
+
         teamIdMultiSelect();
 
 
