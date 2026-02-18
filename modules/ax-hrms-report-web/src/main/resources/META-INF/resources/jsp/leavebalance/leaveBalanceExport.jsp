@@ -71,6 +71,7 @@
                                 </option>
                             </c:forEach>
                         </select>
+                        <small class="text-danger" id="employeeError"></small>
 
                         <div id="selectedOptionsContainer" class="selected-options"></div>
                     </div>
@@ -88,11 +89,107 @@
 
     </div>
 </div>
-
-
-
 <script>
-    function toggleEmployeeSelect(enable) {
-        document.getElementById("employeeIds").disabled = !enable;
-    }
+    $(document).ready(function () {
+
+        const employeeSelect = $("#employeeIds");
+        const form = $("form");
+        const employeeError = $("#employeeError");
+
+        /* -------- Initialize Select2 ONLY ONCE -------- */
+
+        employeeSelect.select2({
+            placeholder: "Select Employee(s)",
+            allowClear: true,
+            width: "100%"
+        });
+
+        /* -------- Toggle Function -------- */
+
+        function toggleEmployeeSelect(enable) {
+
+            if (enable) {
+                // Enable select2 properly
+                employeeSelect.prop("disabled", false);
+            } else {
+                // Clear selected values properly
+                employeeSelect.val(null).trigger("change");
+            employeeSelect.select2({
+                placeholder: "Select Employee(s)",
+                allowClear: true,
+                width: '100%'
+            });
+                // Disable using select2 mechanism
+                employeeSelect.prop("disabled", true);
+
+                clearEmployeeError();
+            }
+
+
+        }
+
+        /* -------- Clear Error -------- */
+
+        function clearEmployeeError() {
+            employeeError.text("");
+            employeeSelect.removeClass("is-invalid");
+        }
+
+        /* -------- Validation -------- */
+
+        function validateForm() {
+
+            clearEmployeeError();
+
+            const selectedEmployeeType =
+                $("input[name='<portlet:namespace/>employeeType']:checked").val();
+
+            const selectedEmployees = employeeSelect.val();
+
+            let isValid = true;
+
+            if (selectedEmployeeType === "SPECIFIC") {
+
+                if (!selectedEmployees || selectedEmployees.length === 0) {
+                    employeeError.text("Please select at least one employee.");
+                    employeeSelect.addClass("is-invalid");
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        /* -------- Radio Change -------- */
+
+        $("input[name='<portlet:namespace/>employeeType']").on("change", function () {
+
+            const selectedValue =
+                $("input[name='<portlet:namespace/>employeeType']:checked").val();
+
+            if (selectedValue === "ALL") {
+                toggleEmployeeSelect(false);
+            } else {
+                toggleEmployeeSelect(true);
+            }
+        });
+
+        /* -------- Remove error on selection -------- */
+
+        employeeSelect.on("change", function () {
+            clearEmployeeError();
+        });
+
+        /* -------- Form Submit -------- */
+
+        form.on("submit", function (e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }
+        });
+
+        /* -------- Default State -------- */
+        toggleEmployeeSelect(false);
+
+    });
 </script>
