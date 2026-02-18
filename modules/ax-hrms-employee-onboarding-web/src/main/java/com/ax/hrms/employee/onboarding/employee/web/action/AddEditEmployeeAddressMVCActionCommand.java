@@ -62,6 +62,10 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+
+		employeeAddressId = 0;
+		permanentAddressId =0;
+		presentAddressId=0;
 		
 	    serviceContext.setAddGroupPermissions(true);
 	    serviceContext.setAddGuestPermissions(false);
@@ -102,6 +106,7 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			return true;
 		} catch (Exception e) {
 			log.error("Error in processAddresses: " + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -307,7 +312,6 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
             } catch (Exception e) {
                 log.error("error while adding address proof :: " + e);
             }
-            employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
         }
 
 		if (presentAddress != null) {

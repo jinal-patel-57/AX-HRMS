@@ -55,6 +55,9 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Folder.class.getName(), actionRequest);
+		employeeAddressId = 0;
+		permanentAddressId =0;
+		presentAddressId=0;
 	    serviceContext.setAddGroupPermissions(true);
 	    serviceContext.setAddGuestPermissions(false);
 		boolean sameAsPermanent = ParamUtil.getBoolean(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.SAME_AS_PERMANENT, GetterUtil.DEFAULT_BOOLEAN);
@@ -281,7 +284,6 @@ public class AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionCommand
 				}
 
 				employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
-				employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
 			} catch (Exception e) {
 				log.error("error while adding address proof :: " + e);
 			}
