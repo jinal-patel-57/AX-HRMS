@@ -68,8 +68,7 @@
                 <liferay-ui:search-container-column-text name="official-email"
                                                          value="${employeeDetails.officialEmail}"/>
                                                          
-				<!--<liferay-ui:search-container-column-text name="employee-type"
-                                                         value="${employeeDetails.employeeType}"/>-->
+
                <liferay-ui:search-container-column-text
                    name="employee-type"
                    value="<%=
