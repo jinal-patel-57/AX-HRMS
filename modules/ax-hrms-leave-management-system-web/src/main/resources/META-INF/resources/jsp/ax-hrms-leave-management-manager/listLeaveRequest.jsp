@@ -23,11 +23,7 @@
 
                 <liferay-ui:search-container-column-text
                         name="Employee Name"
-                        value="${leaveRequest.employeeName}" />
-                        <liferay-ui:search-container-column-text name="Department Name"
-                                                                 value="${leaveRequest.departmentName}"/>
-                        <liferay-ui:search-container-column-text name="Designation Name"
-                                                                 value="${leaveRequest.designationName}"/>
+                        value="${leaveRequest.employeeName}" />                        
                         <liferay-ui:search-container-column-text name="Leave Type Name"
                                                                  value="${leaveRequest.leaveType}"/>
                                 <liferay-ui:search-container-column-text name="Start Date of Leave"

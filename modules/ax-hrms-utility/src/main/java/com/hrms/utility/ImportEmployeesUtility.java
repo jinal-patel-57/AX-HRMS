@@ -184,7 +184,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    	log.info("innerMap -- " + innerMap);
 			    	
 			    	EmployeeDetailsTable employeeDetailsTable = EmployeeDetailsTable.INSTANCE;
-			    	String officialEmail = innerMap.get("4").toString();
+			    	String officialEmail = innerMap.get("4").toString().trim();
 			    	DSLQuery dslQuery = DSLQueryFactoryUtil.select(employeeDetailsTable).from(employeeDetailsTable).where(employeeDetailsTable.officialEmail.eq(officialEmail));
 			    	
 			    	List<EmployeeDetails> employeeList = employeeDetailsLocalService.dslQuery(dslQuery);
@@ -195,20 +195,20 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Employee").getRoleId(); // finds the role EMPLOYEE and assigns it to every employee onboarded on the portal
 			    		roleIds.add(employeeRoleId);
 			    		log.info(employeeRoleId + " role");
-			    		String[] designations = new String[] {Validator.isNotNull(innerMap.get("6"))? innerMap.get("6").toString():""};
+			    		String[] designations = new String[] {Validator.isNotNull(innerMap.get("6"))? innerMap.get("6").toString().trim():""};
 			    		for (String designation : designations) {
 			    			// Get the role ID for the current designation
 			    			log.info("designation -- " + designation);
 			    			if(!designation.isBlank()) {
 			    				try {
-			    					long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation).getRoleId();
+			    					long designationRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), designation.trim()).getRoleId();
 			    					EmployeeDesignation employeeDesignation = employeeDesignationLocalService.createEmployeeDesignation(CounterLocalServiceUtil.increment(EmployeeDesignation.class.getName()));
 			    					employeeDesignation.setCompanyId(themeDisplay.getCompanyId());
 			    					employeeDesignation.setCreatedBy(themeDisplay.getUserId());
 			    					employeeDesignation.setGroupId(themeDisplay.getCompanyGroupId());
 			    					employeeDesignation.setCreateDate(new Date());
 			    					employeeDesignation.setModifiedDate(new Date());
-			    					employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation).getDesignationMasterId());
+			    					employeeDesignation.setDesignationMasterId(designationMasterLocalService.findByDesignationName(designation.trim()).getDesignationMasterId());
 			    					employeeDesignation.setStatus(true);
 			    					employeeDesignation.setStartDate(new Date());
 			    					employeeDesignation.setEmployeeId(employeeDetails.getEmployeeId());
@@ -222,19 +222,19 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    			}
 			    		}
 			    		
-			    		String[] departments = new String[] {Validator.isNotNull(innerMap.get("5"))?innerMap.get("5").toString():""};
+			    		String[] departments = new String[] {Validator.isNotNull(innerMap.get("5"))?innerMap.get("5").toString().trim():""};
 			    		for (String department : departments) {
 			    			// Get the role ID for the current department
 			    			if(!department.isBlank()) {
 			    				try {
-			    					long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department).getRoleId();
+			    					long departmentRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), department.trim()).getRoleId();
 			    					EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.createEmployeeDepartment(CounterLocalServiceUtil.increment(EmployeeDepartment.class.getName()));
 			    					employeeDepartment.setCompanyId(themeDisplay.getCompanyId());
 			    					employeeDepartment.setCreatedBy(themeDisplay.getUserId());
 			    					employeeDepartment.setGroupId(themeDisplay.getCompanyGroupId());
 			    					employeeDepartment.setCreateDate(new Date());
 			    					employeeDepartment.setModifiedDate(new Date());
-			    					employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department).getDepartmentMasterId());
+			    					employeeDepartment.setDepartmentMasterId(departmentMasterLocalService.findByDepartmentName(department.trim()).getDepartmentMasterId());
 			    					employeeDepartment.setStatus(true);
 			    					employeeDepartment.setDateOfChange(new Date());
 			    					employeeDepartment.setEmployeeId(employeeDetails.getEmployeeId());
@@ -251,7 +251,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
 			    		
 			    		//creating new user in the database of Liferay and sending the message also.
-			    		Map<User, String> userPassMap = createNewEmployeeUser(innerMap.get("2").toString(), "", innerMap.get("3").toString(), innerMap.get("4").toString(), themeDisplay, roles, innerMap.get("13").toString());
+			    		Map<User, String> userPassMap = createNewEmployeeUser(innerMap.get("2").toString().trim(), "", innerMap.get("3").toString().trim(), innerMap.get("4").toString().trim(), themeDisplay, roles, innerMap.get("13").toString().trim());
 			    		
 			    		User user = null;
 			    		String password = StringPool.BLANK;
@@ -267,7 +267,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 			    		Date joiningDateParsed = formatter.parse(innerMap.get("7").toString().trim());
 			    		if(Validator.isNotNull(innerMap.get("8"))) {
-			    			Date dob = formatter.parse(innerMap.get("8").toString());
+			    			Date dob = formatter.parse(innerMap.get("8").toString().trim());
 			    			employeeDetails.setDateOfBirth(dob);
 			    		}
 			    		
@@ -282,14 +282,14 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		employeeDetails.setModifiedDate(new Date());
 			    		employeeDetails.setLrUserId(userId);
 			    		employeeDetails.setJoiningDate(joiningDateParsed);
-			    		employeeDetails.setEmployeeCode(innerMap.get("13").toString());
-			    		employeeDetails.setFirstName(innerMap.get("2").toString());
-			    		employeeDetails.setLastName(innerMap.get("3").toString());
-			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString());
-			    		employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString():"Male");
+			    		employeeDetails.setEmployeeCode(innerMap.get("13").toString().trim());
+			    		employeeDetails.setFirstName(innerMap.get("2").toString().trim());
+			    		employeeDetails.setLastName(innerMap.get("3").toString().trim());
+			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString().trim());
+			    		employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString().trim():"Male");
 			    		//employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
 			    		employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))
-			    		        ? innerMap.get("9").toString().replaceAll("\\D", "")
+			    		        ? innerMap.get("9").toString().trim().replaceAll("\\D", "")
 					    		          .replaceFirst("^.*(\\d{10})$", "$1")
 					    		        : "");
 			    		employeeDetails.setIsTerminated(false);
@@ -317,7 +317,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		address.setGroupId(themeDisplay.getScopeGroupId());
 			    		address.setCreatedBy(themeDisplay.getUserId());
 			    		address.setModifiedBy(themeDisplay.getUserId());
-			    		address.setLine1(Validator.isNotNull(innerMap.get("11"))?innerMap.get("11").toString():"");
+			    		address.setLine1(Validator.isNotNull(innerMap.get("11"))?innerMap.get("11").toString().trim():"");
 			    		addressLocalService.addAddress(address);
 			    		EmployeeAddress employeeAddress = employeeAddressLocalService.createEmployeeAddress(CounterLocalServiceUtil.increment(EmployeeAddress.class.getName()));
 			    		
@@ -337,7 +337,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		
 			    		boolean isMarried = false;
 			    		if(Validator.isNotNull(innerMap.get("12"))) {
-			    			isMarried="Married".contentEquals(innerMap.get("12").toString())?true:false;
+			    			isMarried="Married".contentEquals(innerMap.get("12").toString().trim())?true:false;
 			    		} 
 			    		employeeDetails.setMaritalStatus(isMarried);
 			    		
@@ -347,12 +347,12 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		
 			    		sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
 			    		
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString(), "Earned Leave");
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString(), "Loyalty Leave");
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString(), "Paternity Leave");
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString(), "Personal Floater");
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString(), "Compensatory Off");
-			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString(), "Festival Floater");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("14").toString().trim(), "Earned Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("15").toString().trim(), "Loyalty Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("16").toString().trim(), "Paternity Leave");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("17").toString().trim(), "Personal Floater");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("18").toString().trim(), "Compensatory Off");
+			    		addLeaveBalanceForNewEmployee(employeeDetails, themeDisplay, innerMap.get("19").toString().trim(), "Festival Floater");
 			    	}
 			    }
 			} catch (Exception e) {

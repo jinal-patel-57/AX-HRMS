@@ -31,10 +31,6 @@
                     <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
                         <liferay-ui:search-container-column-text name="Employee Name"
                                                                  value="${leaveRequest.employeeName}"/>
-                        <liferay-ui:search-container-column-text name="Department Name"
-                                                                 value="${leaveRequest.departmentName}"/>
-                        <liferay-ui:search-container-column-text name="Designation Name"
-                                                                 value="${leaveRequest.designationName}"/>
                         <liferay-ui:search-container-column-text name="Leave Type Name"
                                                                  value="${leaveRequest.leaveType}"/>
                         <liferay-ui:search-container-column-text name="Start Date of Leave"
