@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         isSubmitting = true;
         submitBtn.disabled = true;
-        submitBtn.innerText = "Submitting...";
+
     });
 });
 </script>

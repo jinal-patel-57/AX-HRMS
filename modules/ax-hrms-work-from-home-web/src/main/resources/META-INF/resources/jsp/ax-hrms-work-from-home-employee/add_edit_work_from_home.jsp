@@ -298,7 +298,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (isEmailValid && isReasonValid && isDateValid) {
             submitBtn.disabled = true;
-            submitBtn.innerText = "Submitting...";
             form.submit();
         }
     });
