@@ -25,10 +25,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.Localization;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.roles.admin.role.type.contributor.RoleTypeContributor;
 import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributorProvider;
@@ -301,6 +298,8 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
             sendCredentialMailToEmployee(employeeDetails, password, themeDisplay);
         }
         //Send OnBoarding Mail :
+
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
     }
     
     public Map<User, String> createNewEmployeeUser(String firstName, String middleName, String lastName, String email, ThemeDisplay themeDisplay, long[] roles, String employeeCode) {
