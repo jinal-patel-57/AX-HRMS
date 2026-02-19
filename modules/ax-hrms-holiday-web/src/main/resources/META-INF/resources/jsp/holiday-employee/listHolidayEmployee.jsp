@@ -41,7 +41,7 @@
                 name="Day"
                 value="<%= new java.text.SimpleDateFormat(\"EEEE\").format(holiday.getDate()) %>" />
   		
-        <liferay-ui:search-container-column-text name="" value="${holiday.getIsFloater() ? 'Restricted Holiday' : ''}" />
+        <liferay-ui:search-container-column-text name="Holiday Type" value="${holiday.getIsFloater() ? 'Restricted Holiday' : ''}" />
 
                       
     </liferay-ui:search-container-row>

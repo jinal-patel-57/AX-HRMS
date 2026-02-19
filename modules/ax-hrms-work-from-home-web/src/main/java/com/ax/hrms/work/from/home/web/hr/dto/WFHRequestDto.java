@@ -12,9 +12,17 @@ public class WFHRequestDto {
     private Date requestDate;
     private Date startDate;
     private Date endDate;
-
+    private String employeeOfficialMailId;
     private String modifiedBy;
     private long employeeId;
+
+    public String getEmployeeOfficialMailId() {
+        return employeeOfficialMailId;
+    }
+
+    public void setEmployeeOfficialMailId(String employeeOfficialMailId) {
+        this.employeeOfficialMailId = employeeOfficialMailId;
+    }
 
     public long getEmployeeId() {
         return employeeId;

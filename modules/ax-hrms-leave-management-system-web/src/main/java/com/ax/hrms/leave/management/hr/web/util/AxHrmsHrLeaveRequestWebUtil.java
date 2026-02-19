@@ -186,9 +186,8 @@ log.info("url ::::  " + url);
 
 			leaveRequestDto.setLeaveRequestId(leaveRequestId);
 			leaveRequestDto.setEmployeeId(leaveRequest.getEmployeeId());
-
+            leaveRequestDto.setEmployeeOfficialMail(employeeDetails.getOfficialEmail());
 			leaveRequestDto.setEmployeeName(employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
-
 			try {
 				EmployeeDepartment emplyeeDepartment = employeeDepartmentLocalService
 						.findByEmployeeId(leaveRequest.getEmployeeId());

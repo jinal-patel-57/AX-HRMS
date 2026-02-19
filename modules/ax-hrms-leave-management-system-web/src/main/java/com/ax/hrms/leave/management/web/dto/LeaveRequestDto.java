@@ -37,10 +37,19 @@ public class LeaveRequestDto {
 	String startDateOfLeaveRequest;
 	String endDateOfLeaveRequest;
 	String dateOfRequestedLeave;
-	
+    String employeeOfficialMail;
 	String leaveDate;
 
 	String modifiedUser;
+
+    public String getEmployeeOfficialMail() {
+        return employeeOfficialMail;
+    }
+
+    public void setEmployeeOfficialMail(String employeeOfficialMail) {
+        this.employeeOfficialMail = employeeOfficialMail;
+    }
+
     String reason;
 
     public String getReason() {

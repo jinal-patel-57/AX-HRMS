@@ -20,6 +20,10 @@
                 <td>${wfh.employeeName}</td>
             </tr>
             <tr>
+                <th>Employee Official Mail ID</th>
+                <td>${wfh.employeeOfficialMailId}</td>
+            </tr>
+            <tr>
                 <th>Team Mail ID</th>
                 <td>${wfh.teamMailId}</td>
             </tr>

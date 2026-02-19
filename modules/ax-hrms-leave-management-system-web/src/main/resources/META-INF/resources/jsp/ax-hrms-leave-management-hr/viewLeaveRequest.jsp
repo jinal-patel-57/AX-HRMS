@@ -20,6 +20,14 @@
 
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
                 <div class="form-group-view">
+                    <div class="label-name"><liferay-ui:message key="employee-email-id"/></div>
+                    <div class="label-content email">${empty leaveRequestDto ? '' : leaveRequestDto.employeeOfficialMail}</div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+                <div class="form-group-view">
                     <div class="label-name"><liferay-ui:message key="department-name"/></div>
                     <div class="label-content">${empty leaveRequestDto ? '' : leaveRequestDto.departmentName}</div>
                 </div>

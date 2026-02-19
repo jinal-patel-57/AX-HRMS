@@ -13,6 +13,16 @@ public class WFHRequestDto {
     private Date startDate;
     private Date endDate;
     private String modifiedBy;
+    private String employeeOfficialMailId;
+
+    public String getEmployeeOfficialMailId() {
+        return employeeOfficialMailId;
+    }
+
+    public void setEmployeeOfficialMailId(String employeeOfficialMailId) {
+        this.employeeOfficialMailId = employeeOfficialMailId;
+    }
+
     // ---------------- Getters and Setters ----------------
     public String getModifiedBy() {
         return modifiedBy;

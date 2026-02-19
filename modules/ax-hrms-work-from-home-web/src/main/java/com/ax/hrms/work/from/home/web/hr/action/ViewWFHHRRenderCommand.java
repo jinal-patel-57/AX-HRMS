@@ -58,6 +58,7 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
             dto.setRequestDate(wfh.getRequestDate());
             dto.setStartDate(wfh.getStartDate());
             dto.setEndDate(wfh.getEndDate());
+            dto.setEmployeeOfficialMailId(employeeDetails.getOfficialEmail());
             dto.setEmployeeName(employeeDetails.getFirstName()+" "+employeeDetails.getLastName());
             // Get all status values
             List<LeaveCompensatoryStatusMaster> statusList =

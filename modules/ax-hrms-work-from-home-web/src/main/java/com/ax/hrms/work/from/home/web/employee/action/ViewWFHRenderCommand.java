@@ -79,7 +79,7 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
                 dto.setRequestDate(wfh.getRequestDate());
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
-
+                dto.setEmployeeOfficialMailId(employeeDetails.getOfficialEmail());
                 request.setAttribute("wfh", dto);
             }
         }
