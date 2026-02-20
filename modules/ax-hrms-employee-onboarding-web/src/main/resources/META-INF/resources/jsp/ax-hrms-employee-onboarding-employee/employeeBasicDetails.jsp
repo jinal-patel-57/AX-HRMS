@@ -596,7 +596,7 @@
 
                             <c:forEach var="employee" items="${employeeDetailsList}">
                                 <option value="${employee.getEmployeeId()}"       ${employee.getEmployeeId()==employeeDetail.getManagerId()? 'selected' : '' }>
-                                    ${employee.firstName} ${employee.lastName}  (${employee.getEmployeeId()})
+                                    ${employee.firstName} ${employee.lastName}  (${employee.getEmployeeCode()})
                                 </option>
                             </c:forEach>
 

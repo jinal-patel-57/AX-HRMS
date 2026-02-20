@@ -40,8 +40,7 @@
 
             <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
 
-                <liferay-ui:search-container-column-text name="Employee Name"
-                                                         value="${ leaveRequest.getEmployeeName() }"></liferay-ui:search-container-column-text>
+
                 <liferay-ui:search-container-column-text name="Leave Type"
                                                          value="${ leaveRequest.getLeaveType() }"></liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Leave Period"
