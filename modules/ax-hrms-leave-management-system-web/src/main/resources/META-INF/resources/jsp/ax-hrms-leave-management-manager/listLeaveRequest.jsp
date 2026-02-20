@@ -174,11 +174,18 @@
             </div>
 
             <div class="modal-body">
+                                    <label for="comment">
+                                        <liferay-ui:message key="Comment"/>
+                                       <span class="text-danger">*</span>
+                                    </label>
                 <textarea class="form-control"
                           id="actionComment"
                           placeholder="Enter comment"
                           rows="4"></textarea>
-
+            <small id="actionCommentError"
+                   class="text-danger d-none">
+                Comment is required.
+            </small>
                 <input type="hidden" id="requestId">
                 <input type="hidden" id="actionURL">
                 <input type="hidden" id="actionType">
@@ -214,13 +221,31 @@
         $('#actionModal').modal('show');
     }
 
+    document.getElementById('actionComment')
+        .addEventListener('input', function () {
+
+            this.classList.remove('is-invalid');
+            document.getElementById('actionCommentError')
+                .classList.add('d-none');
+    });
 
     function submitAction() {
+     const commentField = document.getElementById('actionComment');
+        const errorField = document.getElementById('actionCommentError');
 
-        const comment = document.getElementById('actionComment').value.trim();
+        const comment = commentField.value.trim();
+        if (comment === '') {
+            commentField.classList.add('is-invalid');
+            errorField.classList.remove('d-none');
+            commentField.focus();
+            return;
+        } else {
+            commentField.classList.remove('is-invalid');
+            errorField.classList.add('d-none');
+        }
+       // const comment = document.getElementById('actionComment').value.trim();
         var actionURL = document.getElementById('actionURL').value.replace('COMMENT', comment);
         console.log("actionURL -- ", actionURL);
-
 
         window.location.href = actionURL;
 

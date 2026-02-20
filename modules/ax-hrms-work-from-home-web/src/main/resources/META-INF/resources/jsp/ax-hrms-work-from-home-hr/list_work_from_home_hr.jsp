@@ -172,12 +172,19 @@
       </div>
     <form method="post" id="wfhActionForm">
           <div class="modal-body">
+                        <label for="comment">
+                            <liferay-ui:message key="Comment"/>
+                           <span class="text-danger">*</span>
+                        </label>
           <textarea class="form-control"
                     name="<portlet:namespace/>actionComment"
                     id="<portlet:namespace/>actionComment"
                     placeholder="Enter comment"
                     rows="4"></textarea>
-
+    <small class="text-danger d-none"
+           id="<portlet:namespace/>commentError">
+        Comment is required.
+    </small>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -203,6 +210,39 @@ $('.table-responsive').on('hide.bs.dropdown', function () {
 </script>
 
 <script>
+
+$(document).on('submit', '#wfhActionForm', function (e) {
+
+    const commentField = $('#<portlet:namespace/>actionComment');
+    const errorField = $('#<portlet:namespace/>commentError');
+
+    if (commentField.val().trim() === '') {
+
+        e.preventDefault();
+
+        // Show error
+        commentField.addClass('is-invalid');
+        errorField.removeClass('d-none');
+
+        commentField.focus();
+        return false;
+
+    } else {
+
+        // Remove error if valid
+        commentField.removeClass('is-invalid');
+        errorField.addClass('d-none');
+    }
+
+});
+
+
+$(document).on('input', '#<portlet:namespace/>actionComment', function () {
+    $(this).removeClass('is-invalid');
+    $('#<portlet:namespace/>commentError').addClass('d-none');
+});
+
+
 $(function () {
 
     const commentSelector = '#<portlet:namespace/>actionComment';
