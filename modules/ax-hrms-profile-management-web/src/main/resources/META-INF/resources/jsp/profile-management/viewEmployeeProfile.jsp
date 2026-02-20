@@ -30,10 +30,36 @@
     <div class="card-body">
 
 		<div class="card">
+
+
+
             <div class="card-header">
                 <strong>Overview</strong>
             </div>
             <div class="card-body">
+
+            <div class="profile-overview-wrapper mb-3">
+                <div class="profile-overview-inner">
+
+                    <div class="profilePic">
+                        <c:choose>
+                            <c:when test="${not empty profilePic}">
+                                <img src="${profilePic}" class="cover" />
+                            </c:when>
+                            <c:otherwise>
+                                <img src="<%= themeDisplay.getPathThemeImages() %>/user_portrait.png" class="cover" />
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
+                    <div class="profile-info label-content">
+                        <h3 class="mb-1">
+                            ${employeeDetail.firstName} ${employeeDetail.lastName}
+                        </h3>
+                    </div>
+
+                </div>
+            </div>
                 <div class="row">
                 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 d-none ">
                         <div class="form-group-view">

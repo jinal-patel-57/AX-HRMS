@@ -1,18 +1,20 @@
 .ax-hrms-profile-management-web {
 }
 .profilePic{
-    display: inline-block;
-    height: 60px;
-    width: 60px;
-    background-color: #f7f7f7;
-    border-radius: 50%;
-    box-sizing: border-box;
-    float: left;
-    overflow: hidden;
-    cursor: pointer;
-    background-size: cover;
-    position: relative;
-    background-position: -36px;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f7f7f7;
+  border: 3px solid #dee2e6;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  margin: auto;
+}
+
+.cover{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 .data-title{
     color:red;
@@ -30,4 +32,36 @@
 }
 .error{
     color: red;
+}
+
+.profile-overview-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    width: 100%;
+}
+
+.profile-overview-wrapper * {
+    text-align: left !important;
+}
+
+
+.profile-overview-wrapper {
+    width: 100%;
+}
+
+.profile-overview-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;   /* Force left */
+}
+
+.profilePic {
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    text-align: left;
 }
