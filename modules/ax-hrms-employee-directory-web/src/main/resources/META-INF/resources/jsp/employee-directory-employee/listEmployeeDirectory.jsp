@@ -64,7 +64,26 @@
 <liferay-ui:search-container total="${directorySearchContainer.total}" delta="20" searchContainer="${directorySearchContainer}" emptyResultsMessage="No-Employee-found" iteratorURL="${iteratorURL}">
     <liferay-ui:search-container-results results="${directorySearchContainer.results}" />
         <liferay-ui:search-container-row className="com.ax.hrms.model.CustomEmployeeDetailsDTO" modelVar="employee" keyProperty="employeeId">
-        <liferay-ui:search-container-column-text name="Employee Name" value="${employee.getFirstName()} ${employee.getLastName()}" />
+        <liferay-ui:search-container-column-text name="Employee Name">
+            <div class="employee-name-cell">
+                <div class="employee-img">
+                    <c:choose>
+                        <c:when test="${not empty employee.profilePicUrl}">
+                            <img src="${employee.profilePicUrl}" />
+                        </c:when>
+                        <c:otherwise>
+                            <img src="<%= themeDisplay.getPathThemeImages() %>/user_portrait.png" />
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                <div class="employee-name-text">
+                    ${employee.getFirstName()} ${employee.getLastName()}
+                </div>
+            </div>
+        </liferay-ui:search-container-column-text>
+
+       <%-- <liferay-ui:search-container-column-text name="Employee Name" value="${employee.getFirstName()} ${employee.getLastName()}" /> --%>
         <liferay-ui:search-container-column-text name="Official Email" value="${employee.getOfficialEmail()}" />
         <liferay-ui:search-container-column-text name="Mobile Number" value="${employee.getMobileNo()}" />
        <liferay-ui:search-container-column-text name="Date Of Birth">

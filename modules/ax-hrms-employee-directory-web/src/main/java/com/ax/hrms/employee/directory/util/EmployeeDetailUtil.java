@@ -9,9 +9,15 @@ import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.liferay.document.library.kernel.service.DLAppServiceUtil;
+import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +58,7 @@ public class EmployeeDetailUtil {
 //        return employeeDetailsDTO;
 //    }
 
-    public CustomEmployeeDetailsDTO getEmployeeDetail(long employeeId) throws PortalException {
+    public CustomEmployeeDetailsDTO getEmployeeDetail(long employeeId, ThemeDisplay themeDisplay) throws PortalException {
 
         CustomEmployeeDetailsDTO employeeDetailsDTO = new CustomEmployeeDetailsDTO();
 
@@ -69,6 +75,17 @@ public class EmployeeDetailUtil {
             employeeDetailsDTO.setSkypeId(employeeDetails.getSkypeId());
             employeeDetailsDTO.setDateOfBirth(employeeDetails.getDateOfBirth());
 
+
+            try {
+                FileEntry profileImageFileEntry = DLAppServiceUtil.getFileEntry(employeeDetails.getProfilePicId());
+                if (Validator.isNotNull(profileImageFileEntry)) {
+
+                    String previewURL = DLUtil.getPreviewURL(profileImageFileEntry, profileImageFileEntry.getFileVersion(), themeDisplay, StringPool.BLANK);
+                    employeeDetailsDTO.setProfilePicUrl(previewURL);
+                }
+            }catch(Exception e) {
+                _log.error("Error while fetching profile picture - " + e.getMessage());
+            }
             try {
                 List<EmployeeDesignation> employeeDesignations =
                         employeeDesignationLocalService.findByEmployeeIdToGetAllDesignation(employeeId);

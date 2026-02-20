@@ -12,14 +12,21 @@ public class CustomEmployeeDetailsDTO {
     private String skypeId;
     private String designationName;
     private String departmentName;
-    
+    private String profilePicUrl;
     private Date dateOfBirth;
     private Date leavingDate;
 
 	private List<String> departmentList;
-    
-    
-	public Date getleavingDate() {
+
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
+    }
+
+    public Date getleavingDate() {
 		return leavingDate;
 	}
 	public void setleavingDate(Date leavingDate) {

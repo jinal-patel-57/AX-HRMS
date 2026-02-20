@@ -100,7 +100,7 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 				customEmployeeDetailsDTO = new CustomEmployeeDetailsDTO();
 				EmployeeDetailUtil employeeDetailUtil = new EmployeeDetailUtil(employeeDetailsLocalService,employeeDepartmentLocalService,employeeDesignationLocalService,departmentMasterLocalService,designationMasterLocalService);
 				try {
-					customEmployeeDetailsDTO = employeeDetailUtil.getEmployeeDetail(employeeId);
+					customEmployeeDetailsDTO = employeeDetailUtil.getEmployeeDetail(employeeId,themeDisplay);
 					if(customEmployeeDetailsDTO.getleavingDate() == null)
 						employeeDetailsList.add(customEmployeeDetailsDTO);
 				} catch (PortalException e) {

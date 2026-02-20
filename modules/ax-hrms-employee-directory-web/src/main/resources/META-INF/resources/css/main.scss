@@ -28,3 +28,35 @@
   height: 100%;
   width: 100%;
 }
+
+
+.directory-profile-pic {
+    width: 45px;
+    height: 45px;
+}
+
+.directory-profile-pic img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+}
+
+.employee-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.employee-img img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+}
+
+.employee-name-text {
+    font-weight: 500;
+}
