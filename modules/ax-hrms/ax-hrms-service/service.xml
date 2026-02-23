@@ -1583,4 +1583,39 @@
         </finder>
     </entity>
 
+
+    <entity local-service="true" name="WorkFromHomeDayType" remote-service="true" uuid="true">
+
+        <!-- Audit fields -->
+
+        <column name="companyId" type="long"/>
+        <column name="createdBy" type="long"/>
+        <column name="modifiedBy" type="long"/>
+        <column name="groupId" type="long"/>
+        <column name="createDate" type="Date"/>
+        <column name="modifiedDate" type="Date"/>
+
+        <!-- PK field -->
+
+        <column name="workFromHomeDayTypeId" primary="true" type="long"/>
+
+        <!-- Other fields -->
+
+        <column name="workFromHomeRequestId" type="long"/>
+        <column name="workFromHomeDate" type="Date"/>
+        <column name="isHalfDay" type="boolean"/>
+        <column name="isFirstHalf" type="boolean"/>
+
+        <!-- Finder methods -->
+
+        <finder return-type="Collection" name="WorkFromHomeRequestId">
+            <finder-column name="workFromHomeRequestId"/>
+        </finder>
+
+        <finder return-type="Collection" name="WorkFromHomeDate">
+            <finder-column name="workFromHomeDate"/>
+        </finder>
+
+    </entity>
+
 </service-builder>

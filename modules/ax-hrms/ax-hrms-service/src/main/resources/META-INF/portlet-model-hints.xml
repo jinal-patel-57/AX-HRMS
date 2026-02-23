@@ -728,6 +728,20 @@
 		<field name="month" type="int" />
 		<field name="year" type="int" />
 	</model>
+	<model name="com.ax.hrms.model.WorkFromHomeDayType">
+		<field name="uuid" type="String" />
+		<field name="companyId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="modifiedBy" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="workFromHomeDayTypeId" type="long" />
+		<field name="workFromHomeRequestId" type="long" />
+		<field name="workFromHomeDate" type="Date" />
+		<field name="isHalfDay" type="boolean" />
+		<field name="isFirstHalf" type="boolean" />
+	</model>
 	<model name="com.ax.hrms.model.WorkFromHomeRequest">
 		<field name="uuid" type="String" />
 		<field name="companyId" type="long" />

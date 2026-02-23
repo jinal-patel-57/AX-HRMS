@@ -45,6 +45,7 @@
 	<import class="com.ax.hrms.model.TaskReview" />
 	<import class="com.ax.hrms.model.TimeTracker" />
 	<import class="com.ax.hrms.model.UpcomingProbationEmployee" />
+	<import class="com.ax.hrms.model.WorkFromHomeDayType" />
 	<import class="com.ax.hrms.model.WorkFromHomeRequest" />
 	<class name="com.ax.hrms.model.impl.AddressImpl" table="ax_Address">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="addressId" type="long">
@@ -828,6 +829,22 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="probationDetailId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="month" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="year" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="com.ax.hrms.model.impl.WorkFromHomeDayTypeImpl" table="ax_WorkFromHomeDayType">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="workFromHomeDayTypeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" column="uuid_" name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="workFromHomeRequestId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="workFromHomeDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isHalfDay" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="isFirstHalf" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.WorkFromHomeRequestImpl" table="ax_WorkFromHomeRequest">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="workFromHomeRequestId" type="long">

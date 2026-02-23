@@ -51,6 +51,7 @@ import com.ax.hrms.service.persistence.TaskPersistence;
 import com.ax.hrms.service.persistence.TaskReviewPersistence;
 import com.ax.hrms.service.persistence.TimeTrackerPersistence;
 import com.ax.hrms.service.persistence.UpcomingProbationEmployeePersistence;
+import com.ax.hrms.service.persistence.WorkFromHomeDayTypePersistence;
 import com.ax.hrms.service.persistence.WorkFromHomeRequestPersistence;
 
 import com.liferay.portal.aop.AopService;
@@ -295,6 +296,9 @@ public abstract class AppraisalFormTemplatesServiceBaseImpl
 	@Reference
 	protected UpcomingProbationEmployeePersistence
 		upcomingProbationEmployeePersistence;
+
+	@Reference
+	protected WorkFromHomeDayTypePersistence workFromHomeDayTypePersistence;
 
 	@Reference
 	protected WorkFromHomeRequestPersistence workFromHomeRequestPersistence;

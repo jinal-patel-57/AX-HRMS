@@ -79,7 +79,9 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         System.out.println("workFromHomeRequestId:" + wfhId);
         System.out.println("wfhId in doProcessAction = " + wfhId);
         log.info("wfhId in doProcessAction = " + wfhId);
-        String teamMailId = ParamUtil.getString(actionRequest, "teamMailId");
+//        String teamMailId = ParamUtil.getString(actionRequest, "teamMailId");
+        String teamMailId = ParamUtil.getString(actionRequest, "teamId");
+        log.info("teammailid:-"+ teamMailId);
         String reason = ParamUtil.getString(actionRequest, "reason");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

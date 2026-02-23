@@ -5,7 +5,7 @@
 <liferay-ui:success key="wfh-updated" message="Work From Home request updated successfully!" />
 
 <portlet:renderURL var="addWFHForm">
-    <portlet:param name="mvcPath" value="/jsp/ax-hrms-work-from-home-employee/add_edit_work_from_home.jsp" />
+    <portlet:param name="mvcRenderCommandName" value="/addWFHForm" />
 </portlet:renderURL>
 
 <div class="card">
@@ -52,10 +52,7 @@
                         <portlet:param name="workFromHomeRequestId" value="${wfh.workFromHomeRequestId}" />
                     </portlet:renderURL>
 
-                    <portlet:renderURL var="editWFH">
-                        <portlet:param name="mvcRenderCommandName" value="/editWFHForm" />
-                        <portlet:param name="workFromHomeRequestId" value="${wfh.workFromHomeRequestId}" />
-                    </portlet:renderURL>
+
 
                     <portlet:actionURL var="deleteWFH" name="/deleteWFH">
                         <portlet:param name="workFromHomeRequestId" value="${wfh.workFromHomeRequestId}" />
@@ -70,9 +67,15 @@
                             <li><a href="${viewWFH}" class="dropdown-item"><i class="icon-eye-open"></i> View</a></li>
 
                             <c:if test="${wfh.status == 'Pending'}">
-                                <li><a href="${editWFH}" class="dropdown-item"><i class="icon-edit"></i> Edit</a></li>
-                                <li><a href="${deleteWFH}" class="dropdown-item"
-                                       onclick="return confirm('Delete WFH request?');"> <i class="icon-trash"></i> Delete</a></li>
+
+
+                               <li>
+                                   <a href="javascript:void(0);"
+                                      class="dropdown-item delete-wfh-btn"
+                                      data-delete-url="${deleteWFH}">
+                                       <i class="icon-trash"></i> Delete
+                                   </a>
+                               </li>
                             </c:if>
                         </ul>
                     </div>
@@ -95,3 +98,33 @@ $('.table-responsive').on('hide.bs.dropdown', function () {
      $('.table-responsive').css( "overflow", "auto" );
 })
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".delete-wfh-btn").forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const deleteUrl = this.getAttribute("data-delete-url");
+
+            Liferay.Util.openConfirmModal({
+                title: "Delete Work From Home Request",
+                message: "Are you sure you want to delete this Work From Home request? This action cannot be undone.",
+                confirmButtonLabel: "Delete",
+                cancelButtonLabel: "Cancel",
+                onConfirm: function (confirmed) {
+
+                    if (confirmed) {
+                        window.location.href = deleteUrl;
+                    }
+
+                }
+            });
+
+        });
+
+    });
+
+});
+</script></script>

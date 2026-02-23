@@ -757,6 +757,21 @@ create table ax_WorkFromHome (
 	endDate DATE null
 );
 
+create table ax_WorkFromHomeDayType (
+	uuid_ VARCHAR(75) null,
+	companyId LONG,
+	createdBy LONG,
+	modifiedBy LONG,
+	groupId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	workFromHomeDayTypeId LONG not null primary key,
+	workFromHomeRequestId LONG,
+	workFromHomeDate DATE null,
+	isHalfDay BOOLEAN,
+	isFirstHalf BOOLEAN
+);
+
 create table ax_WorkFromHomeRequest (
 	uuid_ VARCHAR(75) null,
 	companyId LONG,

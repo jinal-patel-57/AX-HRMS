@@ -51,20 +51,32 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        value="<%= wfh.getWorkFromHomeRequestId() %>"/>
             </c:if>
 
-            <div class="form-group">
-                <label>Team Mail ID <span class="text-danger">*</span></label>
-                <input type="text"
-                       id="email"
-                       name="<portlet:namespace/>teamMailId"
-                       class="form-control"
-                       value="<%= isEdit ? wfh.getTeamMailId() : "" %>"
-                        />
-                <small class=" text-muted">
-                    Multiple email IDs can be entered, separated by commas.
-                </small>
+          <div class="form-group">
+              <label>Team <span class="text-danger">*</span></label>
 
-                <small class="text-danger d-block mt-1" id="emailError"></small>
-            </div>
+              <select id="mySelect" name="<portlet:namespace />wfhTeamIdSelectBox"
+                      class="form-control custom-select mr-sm-2">
+
+                  <option value="">Select Employee</option>
+
+                  <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
+                      <option value="${employeeDetailsList.getOfficialEmail()}">
+                          ${employeeDetailsList.employeeCode} -
+                          ${employeeDetailsList.getFirstName()}
+                          ${employeeDetailsList.getLastName()}
+                      </option>
+                  </c:forEach>
+
+              </select>
+
+              <input type="hidden"
+                     id="<portlet:namespace />teamId"
+                     name="<portlet:namespace />teamId"/>
+
+              <div id="selectedOptionsContainer" class="selected-options mt-2"></div>
+
+              <small class="text-danger d-block mt-1" id="teamError"></small>
+          </div>
 
             <div class="form-group">
                 <label>Reason <span class="text-danger">*</span></label>
@@ -117,13 +129,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("wfhForm");
 
-    const email = document.getElementById("email");
+
     const reason = document.getElementById("reason");
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
     const submitBtn = document.getElementById("submitBtn");
 
-    const emailError = document.getElementById("emailError");
+
     const reasonError = document.getElementById("reasonError");
     const startError = document.getElementById("startError");
     const endError = document.getElementById("endError");
@@ -182,38 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
     applyWFHDateRestriction(startDate);
     applyWFHDateRestriction(endDate);
 
-    function validateEmail() {
-        const value = email.value.trim();
 
-        if (!value) {
-            emailError.innerText = "Team Mail ID is required.";
-            return false;
-        }
-
-        const emails = value.split(",");
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const uniqueEmails = new Set();
-        let invalidFound = false;
-
-        emails.forEach(function (mail) {
-            const trimmed = mail.trim().toLowerCase();
-            if (!trimmed || !emailRegex.test(trimmed)) {
-                invalidFound = true;
-                return;
-            }
-            uniqueEmails.add(trimmed);
-        });
-
-        if (invalidFound) {
-            emailError.innerText =
-                "Please enter valid email addresses separated by commas.";
-            return false;
-        }
-
-        email.value = Array.from(uniqueEmails).join(",");
-        emailError.innerText = "";
-        return true;
-    }
 
     function validateReason() {
         const value = reason.value.trim();
@@ -273,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return valid;
     }
 
-    email.addEventListener("blur", validateEmail);
+
     reason.addEventListener("blur", validateReason);
 
     startDate.addEventListener("blur", function () {
@@ -292,15 +273,100 @@ document.addEventListener("DOMContentLoaded", function () {
         startTouched = true;
         endTouched = true;
 
-        const isEmailValid = validateEmail();
+       const isTeamValid = validateWFHTeam();
         const isReasonValid = validateReason();
         const isDateValid = validateDates(true);
 
-        if (isEmailValid && isReasonValid && isDateValid) {
+        if (isTeamValid && isReasonValid && isDateValid) {
             submitBtn.disabled = true;
             form.submit();
         }
     });
+
+function wfhTeamMultiSelect(){
+
+    const namespace = '<portlet:namespace />';
+    const storageKey = namespace + "wfhSelectedOptions";
+
+    let getTeamIds = () => {
+        return JSON.parse(localStorage.getItem(storageKey) || '[]');
+    };
+
+    let setTeamIdInParams = () => {
+        let teamIds = getTeamIds();
+        let teamIdElement = document.getElementById(namespace + "teamId");
+        teamIdElement.value = teamIds.join(',');
+    };
+
+    localStorage.removeItem(storageKey);
+
+    const wfhSelect = $('#mySelect');
+    const wfhContainer = $('#selectedOptionsContainer');
+
+    let wfhSelectedValues = getTeamIds();
+
+    function renderSelectedOptions() {
+
+        wfhContainer.empty();
+
+        wfhSelectedValues = getTeamIds();
+
+        wfhSelectedValues.forEach(function(value){
+
+            const selectedOptionElement = $('<div>').addClass('selected-option');
+
+            const text = $('#mySelect option[value="' + value + '"]').text();
+
+            const span = $('<span>').text(text);
+
+            const closeButton = $('<button type="button">').text('x');
+
+            closeButton.click(function(){
+
+                wfhSelectedValues = wfhSelectedValues.filter(v => v !== value);
+
+                localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
+
+                renderSelectedOptions();
+                setTeamIdInParams();
+            });
+
+            selectedOptionElement.append(span, closeButton);
+            wfhContainer.append(selectedOptionElement);
+        });
+    }
+
+    function updateSelectedOptions() {
+
+        let value = $(this).val();
+
+        if(value && !wfhSelectedValues.includes(value)){
+            wfhSelectedValues.push(value);
+            localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
+            renderSelectedOptions();
+            setTeamIdInParams();
+        }
+
+        $(this).val('');
+    }
+
+    wfhSelect.off('change').on('change', updateSelectedOptions);
+
+    // Validation
+    window.validateWFHTeam = function(){
+        if(wfhSelectedValues.length === 0){
+            $('#teamError').text("Please select at least one team member.");
+            return false;
+        }
+        $('#teamError').text("");
+        return true;
+    };
+
+    renderSelectedOptions();
+    setTeamIdInParams();
+}
+
+wfhTeamMultiSelect();
 
 });
 </script>
