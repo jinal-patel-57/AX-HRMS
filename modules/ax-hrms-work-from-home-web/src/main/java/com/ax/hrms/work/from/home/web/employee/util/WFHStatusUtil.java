@@ -202,6 +202,8 @@ public class WFHStatusUtil {
                 .findByDesignationNameById(employeeDesignation.getDesignationMasterId());
 
 
+
+
         body.append("<tr>")
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(employee.getEmployeeCode()).append("</td>")
@@ -218,6 +220,7 @@ public class WFHStatusUtil {
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getStartDate())).append("</td>")
 
+                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
 
                 .append("</tr>");

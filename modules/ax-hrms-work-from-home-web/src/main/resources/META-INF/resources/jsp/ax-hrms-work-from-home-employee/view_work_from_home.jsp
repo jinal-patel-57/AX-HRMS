@@ -99,12 +99,12 @@
                                     </td>
                                     <td>
                                         <p class="text-center my-0">
-                                            <b>Day Type</b>
+                                            <b>Day</b>
                                         </p>
                                     </td>
                                     <td>
                                         <p class="text-center my-0">
-                                            <b>Half Type</b>
+                                            <b>Half</b>
                                         </p>
                                     </td>
                                 </tr>

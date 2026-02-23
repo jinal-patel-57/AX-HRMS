@@ -150,10 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const today = new Date();
 
-    // 1st of previous month
     const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
-    // 31st December of current year
     const yearEnd = new Date(today.getFullYear(), 11, 31);
 
     function isWeekend(dateStr) {
