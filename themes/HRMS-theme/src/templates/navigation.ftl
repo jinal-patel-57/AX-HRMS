@@ -1,5 +1,16 @@
+<#assign employeeDetailsLocalService = serviceLocator.findService("com.ax.hrms.service.EmployeeDetailsLocalService")/>
+<#assign lrUserId = themeDisplay.getUserId() />
+<#assign isAdmin = themeDisplay.getPermissionChecker().isOmniadmin() />
+<#assign isOnboarded = false />
+<#if !isAdmin && themeDisplay.isSignedIn() && validator.isNotNull(employeeDetailsLocalService) && lrUserId?has_content && (lrUserId > 0)>
+	<#assign employeeDetails = employeeDetailsLocalService.fetchEmployeeDetailsByLRUserId(lrUserId)!null />
+	<#if validator.isNotNull(employeeDetails) && employeeDetails??>
+		<#assign isOnboarded = employeeDetails.isEmployeeOnboarded  />
+	</#if>
+</#if>
+
 <div class="side_navbar" aria-label="<@liferay.language key=" site-pages" />" role="navigation" >
-<ul role="menubar">
+<ul role="menubar" class="${lrUserId}">
 
 	<#list nav_items as nav_item>
 		<#assign nav_item_attr_has_popup="" nav_item_css_class="" nav_item_layout=nav_item.getLayout() />
@@ -36,11 +47,13 @@
 						<#if nav_child.isSelected()>
 							<#assign nav_child_css_class="selected" />
 						</#if>
-
-						<li class="${nav_child_css_class}" id="layout_${nav_child.getLayoutId()}" role="presentation">
-							<a href="${nav_child.getURL()}" ${nav_child.getTarget()} role="menuitem" class="trans" data-sena-off="true"
-								title="${nav_child.getName()}">${nav_child.getName()}</a>
-						</li>
+						<#if isAdmin || (nav_child.getURL()?contains("employee-on-boarding") && !isOnboarded) || !nav_child.getURL()?contains("employee-on-boarding")>
+							<li class="${nav_child_css_class}" id="layout_${nav_child.getLayoutId()}" role="presentation">
+								<a href="${nav_child.getURL()}" ${nav_child.getTarget()} role="menuitem" class="trans" data-sena-off="true"
+									title="${nav_child.getName()}">${nav_child.getName()}</a>
+							</li>
+						</#if>
+						
 					</#list>
 				</ul>
 			</#if>
