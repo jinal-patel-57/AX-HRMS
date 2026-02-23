@@ -13,61 +13,156 @@
 
 <div class="card">
     <div class="card-header">
-        <strong>Work From Home Details</strong>
+        <strong>
+            View Work From Home Request
+        </strong>
     </div>
 
     <div class="card-body">
 
-        <table class="table table-bordered">
-            <tr>
-                <th>Employee Name</th>
-                <td>${wfh.employeeName}</td>
-            </tr>
-            <tr>
-                <th>Employee Official Mail ID</th>
-                <td>${wfh.employeeOfficialMailId}</td>
-            </tr>
-            <tr>
-                <th>Team Mail ID</th>
-                <td>${wfh.teamMailId}</td>
-            </tr>
+        <!-- FIRST ROW -->
+        <div class="row">
 
-            <tr>
-                <th>Status</th>
-                <td>${wfh.status}</td>
-            </tr>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="form-group-view">
+                    <div class="label-name">Employee Name</div>
+                    <div class="label-content">${wfh.employeeName}</div>
+                </div>
+            </div>
 
-            <tr>
-                <th>Reason</th>
-                <td>${wfh.reason}</td>
-            </tr>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="form-group-view">
+                    <div class="label-name">Employee Official Mail ID</div>
+                    <div class="label-content email">
+                        ${wfh.employeeOfficialMailId}
+                    </div>
+                </div>
+            </div>
 
-            <tr>
-                <th>Request Date</th>
-                <td>
-                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MM-yyyy" />
-                </td>
-            </tr>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="form-group-view">
+                    <div class="label-name">Team Mail ID</div>
+                    <div class="label-content email">
+                        ${wfh.teamMailId}
+                    </div>
+                </div>
+            </div>
 
-            <tr>
-                <th>Start Date</th>
-                <td>
-                    <fmt:formatDate value="${wfh.startDate}" pattern="dd-MM-yyyy" />
-                </td>
-            </tr>
+        </div>
 
-            <tr>
-                <th>End Date</th>
-                <td>
-                    <fmt:formatDate value="${wfh.endDate}" pattern="dd-MM-yyyy" />
-                </td>
-            </tr>
+        <!-- SECOND ROW -->
+        <div class="row">
 
-        </table>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="form-group-view">
+                    <div class="label-name">Status</div>
+                    <div class="label-content">${wfh.status}</div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group-view">
+                                <div class="label-name">No of Days</div>
+                                <div class="label-content">${wfh.noOfDays}</div>
+                            </div>
+                        </div>
+
+            <c:if test="${not empty wfh.reason}">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="form-group-view">
+                        <div class="label-name">Reason</div>
+                        <div class="label-content">${wfh.reason}</div>
+                    </div>
+                </div>
+            </c:if>
+
+        </div>
+
+        <!-- WFH SUMMARY SECTION (Exactly Like Leave Summary) -->
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>
+                            Work From Home Summary
+                        </strong>
+                    </div>
+
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <p class="text-center my-0">
+                                            <b>Date</b>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center my-0">
+                                            <b>Day Type</b>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center my-0">
+                                            <b>Half Type</b>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <c:forEach var="wfhDay" items="${wfh.wfhDayTypeList}">
+                                    <tr>
+
+                                        <!-- Date -->
+                                        <td>
+                                            <fmt:formatDate
+                                                value="${wfhDay.workFromHomeDate}"
+                                                pattern="dd-MM-yyyy"
+                                                var="formattedWFHDate"/>
+                                            <p class="text-center my-0">
+                                                ${formattedWFHDate}
+                                            </p>
+                                        </td>
+
+                                        <!-- Day Type -->
+                                        <td>
+                                            <p class="text-center my-0">
+                                                ${wfhDay.isHalfDay() ? "Half Day" : "Full Day"}
+                                            </p>
+                                        </td>
+
+                                        <!-- Half Type -->
+                                        <td>
+                                            <p class="text-center my-0">
+                                                <c:choose>
+                                                    <c:when test="${wfhDay.isHalfDay()}">
+                                                        ${wfhDay.isFirstHalf() ? "First Half" : "Second Half"}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        -
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </p>
+                                        </td>
+
+                                    </tr>
+                                </c:forEach>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 
-    <div class="card-footer text-right">
-        <a href="${backURL}" class="btn btn-outline-danger">Back</a>
+    <div class="card-footer text-right align-items-center">
+        <a href="${backURL}" class="btn btn-outline-danger">
+            Back
+        </a>
     </div>
 </div>

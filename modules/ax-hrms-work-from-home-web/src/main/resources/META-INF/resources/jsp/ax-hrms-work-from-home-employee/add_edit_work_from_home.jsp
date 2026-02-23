@@ -109,6 +109,9 @@ String currentURL = PortalUtil.getCurrentURL(request);
                         />
                 <small class="text-danger" id="endError"></small>
             </div>
+            <div class="form-group">
+                <div id="wfhDateInputsContainer" style="display:none;"></div>
+            </div>
 
         </div>
 
@@ -134,6 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
     const submitBtn = document.getElementById("submitBtn");
+    const namespace = '<portlet:namespace />';
+    const dateInputsContainer = $('#wfhDateInputsContainer');
 
 
     const reasonError = document.getElementById("reasonError");
@@ -256,8 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     reason.addEventListener("blur", validateReason);
-
-    startDate.addEventListener("blur", function () {
+  startDate.addEventListener("blur", function () {
         startTouched = true;
         validateDates();
     });
@@ -266,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
         endTouched = true;
         validateDates();
     });
+
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -285,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function wfhTeamMultiSelect(){
 
-    const namespace = '<portlet:namespace />';
+
     const storageKey = namespace + "wfhSelectedOptions";
 
     let getTeamIds = () => {
@@ -367,6 +372,109 @@ function wfhTeamMultiSelect(){
 }
 
 wfhTeamMultiSelect();
+
+
+
+/* ===============================
+   WFH Dynamic Date Creator
+   =============================== */
+
+function dynamicDateCreator() {
+
+    let startDateValue = $('#startDate').val();
+    let endDateValue = $('#endDate').val();
+
+    if (!startDateValue || !endDateValue) return;
+
+    dateInputsContainer.empty();
+
+    let start = new Date(startDateValue + "T00:00:00");
+    let end = new Date(endDateValue + "T00:00:00");
+
+    let current = new Date(start);
+
+    while (current <= end) {
+
+        let day = ('0' + current.getDate()).slice(-2);
+        let month = ('0' + (current.getMonth() + 1)).slice(-2);
+        let year = current.getFullYear();
+        let dateString = year + '-' + month + '-' + day;
+
+        if (current.getDay() !== 0 && current.getDay() !== 6) {
+
+            const dateContainer = $('<div>')
+                .addClass('d-flex align-items-center c-gap-4 mb-3');
+
+            const dateDiv = $('<input>')
+                .attr('type', 'date')
+                .addClass('form-control')
+                .val(dateString)
+                .prop('readOnly', true)
+                .attr('name', namespace + 'wfhDate');
+
+            const checkboxName = namespace + 'day' + dateString.replaceAll('-', '') + 'IsHalf';
+
+            const halfCheckbox = $('<input>')
+                .attr('type', 'checkbox')
+                .attr('name', checkboxName);
+
+            const halfLabel = $('<label>')
+                .text(' Is Half Day')
+                .addClass('ml-1');
+
+            const wrapper = $('<div>')
+                .addClass('dayTypeSelectContainer d-flex align-items-center')
+                .append(halfCheckbox)
+                .append(halfLabel);
+
+            dateContainer.append(dateDiv);
+            dateContainer.append(wrapper);
+
+            dateInputsContainer.append(dateContainer);
+        }
+
+        current.setDate(current.getDate() + 1);
+    }
+
+    dateInputsContainer.show();
+}
+
+dateInputsContainer.on('change', 'input[type="checkbox"]', function () {
+
+    let isChecked = $(this).is(':checked');
+    let parentDiv = $(this).parent();
+
+    if (isChecked) {
+
+        let isFirstHalf = '<div class="d-flex align-items-center c-gap-2 ml-4 '
+            + $(this).attr('name').replace('IsHalf', 'halfType') + '">'
+            + '<div class="d-flex align-items-center c-gap-2">'
+            + '<input class="form-check-input" type="radio" name="'
+            + $(this).attr('name').replace('IsHalf', 'halfType')
+            + '" value="firstHalf" checked/>'
+            + '<label class="m-0"> First Half</label></div>';
+
+        let isSecondHalf = '<div class="d-flex align-items-center c-gap-2">'
+            + '<input class="form-check-input" type="radio" name="'
+            + $(this).attr('name').replace('IsHalf', 'halfType')
+            + '" value="secondHalf"/>'
+            + '<label class="m-0"> Second Half</label></div></div>';
+
+        parentDiv.append(isFirstHalf + isSecondHalf);
+
+    } else {
+        $('.' + $(this).attr('name').replace('IsHalf', 'halfType')).remove();
+    }
+});
+
+$('#startDate').on('change', function () {
+    $('#endDate').val('');
+    dateInputsContainer.hide();
+});
+
+$('#endDate').on('blur', function () {
+    dynamicDateCreator();
+});
 
 });
 </script>

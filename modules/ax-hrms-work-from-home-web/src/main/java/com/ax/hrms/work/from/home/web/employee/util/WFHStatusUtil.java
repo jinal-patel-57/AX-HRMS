@@ -8,14 +8,13 @@ import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDesignation;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.model.*;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.WorkFromHomeDayTypeLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
 import com.ax.hrms.work.from.home.web.employee.notification.SendNotificationToUserHandler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -29,10 +28,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Utility class to get readable WFH status from LeaveCompensatoryStatusMaster
@@ -229,6 +225,37 @@ public class WFHStatusUtil {
         body.append(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_FOOTER);
 
         return body;
+    }
+    public static void  setWorkFromHomeDayTypeData(WFHRequestDto dto, WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService) {
+
+        List<WorkFromHomeDayType> dayTypeList =
+                workFromHomeDayTypeLocalService
+                        .findByWorkFromHomeRequestId(
+                                dto.getWorkFromHomeRequestId());
+
+        List<WFHRequestDto> dayDtoList = new ArrayList<>();
+
+        double totalDays = 0.0;
+
+        for (WorkFromHomeDayType day : dayTypeList) {
+
+            WFHRequestDto dayDto = new WFHRequestDto();
+
+            dayDto.setWorkFromHomeDate(day.getWorkFromHomeDate());
+            dayDto.setHalfDay(day.getIsHalfDay());
+            dayDto.setFirstHalf(day.getIsFirstHalf());
+
+            dayDtoList.add(dayDto);
+
+            if (day.getIsHalfDay()) {
+                totalDays += 0.5;
+            } else {
+                totalDays += 1.0;
+            }
+        }
+
+        dto.setWfhDayTypeList(dayDtoList);
+        dto.setNoOfDays(totalDays);
     }
 
 }

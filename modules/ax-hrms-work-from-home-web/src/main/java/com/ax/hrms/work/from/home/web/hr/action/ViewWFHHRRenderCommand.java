@@ -5,10 +5,11 @@ import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.WorkFromHomeDayTypeLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
+import com.ax.hrms.work.from.home.web.hr.util.WFHStatusUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import org.osgi.service.component.annotations.Component;
@@ -36,6 +37,9 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
 
     @Reference
     private EmployeeDetailsLocalService employeeDetailsLocalService;
+
+    @Reference
+    private WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
     @Override
     public String render(RenderRequest request, RenderResponse response) throws PortletException {
 
@@ -66,10 +70,12 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
 
             // Convert status ID → Name using util
             String readableStatus = WFHStatusUtil.getStatusNameById(wfh.getStatus(), statusList);
+            WFHStatusUtil.setWorkFromHomeDayTypeData(dto,workFromHomeDayTypeLocalService);
 
             dto.setStatus(readableStatus);
 
-            // Put DTO in request
+
+
             request.setAttribute("wfh", dto);
         }
 

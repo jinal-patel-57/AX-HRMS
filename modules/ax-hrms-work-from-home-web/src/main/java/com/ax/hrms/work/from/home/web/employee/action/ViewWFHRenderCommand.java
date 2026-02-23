@@ -1,13 +1,12 @@
 
 package com.ax.hrms.work.from.home.web.employee.action;
 
+import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHome;
-import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.WorkFromHomeLocalServiceUtil;
+import com.ax.hrms.service.WorkFromHomeDayTypeLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto;
@@ -15,7 +14,6 @@ import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -41,6 +39,9 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
 
     @Reference
     private EmployeeDetailsLocalService  employeeDetailsLocalService;
+
+    @Reference
+    private WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
 
     @Override
     public String render(RenderRequest request, RenderResponse response) {
@@ -80,6 +81,7 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
                 dto.setStartDate(wfh.getStartDate());
                 dto.setEndDate(wfh.getEndDate());
                 dto.setEmployeeOfficialMailId(employeeDetails.getOfficialEmail());
+                WFHStatusUtil.setWorkFromHomeDayTypeData(dto,workFromHomeDayTypeLocalService);
                 request.setAttribute("wfh", dto);
             }
         }

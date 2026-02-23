@@ -7,11 +7,11 @@
     import com.ax.hrms.model.EmployeeDetails;
     import com.ax.hrms.model.WorkFromHomeRequest;
     import com.ax.hrms.service.EmployeeDetailsLocalService;
+    import com.ax.hrms.service.WorkFromHomeDayTypeLocalService;
     import com.ax.hrms.service.WorkFromHomeRequestLocalService;
     import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
-    import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
     import com.ax.hrms.work.from.home.web.hr.dto.WFHRequestDto;
-
+    import com.ax.hrms.work.from.home.web.hr.util.WFHStatusUtil;
     import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
     import com.liferay.petra.sql.dsl.query.DSLQuery;
     import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -22,7 +22,6 @@
     import com.liferay.portal.kernel.theme.ThemeDisplay;
     import com.liferay.portal.kernel.util.ParamUtil;
     import com.liferay.portal.kernel.util.WebKeys;
-
     import org.osgi.service.component.annotations.Component;
     import org.osgi.service.component.annotations.Reference;
 
@@ -31,6 +30,7 @@
     import javax.portlet.RenderResponse;
     import java.util.ArrayList;
     import java.util.List;
+
     import static com.ax.hrms.model.WorkFromHomeRequestTable.INSTANCE;
 
     @Component(
@@ -55,6 +55,9 @@
 
         @Reference
         private AxHrmsCommonApi axHrmsCommonApi;
+
+        @Reference
+        private WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
 
         @Override
         public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
@@ -210,9 +213,10 @@
                     try {
                         EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(wfh.getModifiedBy());
                         dto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());
-                    }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
-                        log.info("noSuchEmployeeDetailsException :: "+noSuchEmployeeDetailsException.getMessage());
+                    }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException) {
+                        log.info("noSuchEmployeeDetailsException :: " + noSuchEmployeeDetailsException.getMessage());
                     }
+                    WFHStatusUtil.setWorkFromHomeDayTypeData(dto,workFromHomeDayTypeLocalService);
                     dtoList.add(dto);
                 }
 
@@ -235,4 +239,5 @@
 
             return "/jsp/ax-hrms-work-from-home-hr/list_work_from_home_hr.jsp";
         }
+
     }

@@ -38,6 +38,7 @@
                                 <liferay-ui:search-container-column-text name="End Date">
                                     <fmt:formatDate value="${wfh.endDate}" pattern="dd-MM-yyyy" />
                                 </liferay-ui:search-container-column-text>
+                 <liferay-ui:search-container-column-text name="No of Days" value="${wfh.noOfDays}" />
                 <liferay-ui:search-container-column-text
                         name="Reason"
                         value="${wfh.reason}" />

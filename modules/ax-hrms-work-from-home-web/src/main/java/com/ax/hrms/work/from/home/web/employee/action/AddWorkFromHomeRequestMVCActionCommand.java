@@ -6,12 +6,10 @@ import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.WorkFromHomeDayType;
 import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
-import com.ax.hrms.service.EmployeeDepartmentLocalService;
-import com.ax.hrms.service.EmployeeDesignationLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.WorkFromHomeRequestLocalService;
+import com.ax.hrms.service.*;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
@@ -69,6 +67,9 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
     @Reference
     EmployeeDesignationLocalService employeeDesignationLocalService;
+
+    @Reference
+    WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -232,7 +233,24 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setReviewerId(employeeDetails.getEmployeeId());
             log.info("over here");
             workFromHomeRequestLocalService.addWorkFromHomeRequest(wfh);
+            addWFHDayTypeData(actionRequest, wfh.getWorkFromHomeRequestId(), themeDisplay);
             log.info("add successfullyt");
+
+
+            // adding details in workFromHomeDayType table
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             //Sending notification to Manager
 
@@ -281,6 +299,17 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setReviewerId(employeeDetails.getEmployeeId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
+            // delete old records
+            List<WorkFromHomeDayType> oldList =
+                    workFromHomeDayTypeLocalService
+                            .findByWorkFromHomeRequestId(wfhId);
+
+            for (WorkFromHomeDayType old : oldList) {
+                workFromHomeDayTypeLocalService.deleteWorkFromHomeDayType(old);
+            }
+
+// insert new records
+            addWFHDayTypeData(actionRequest, wfhId, themeDisplay);
 
             //Send Notification and Mail
             EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails.getManagerId());
@@ -318,5 +347,79 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         // Hide default Liferay error message
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
+    }
+
+    private void addWFHDayTypeData(
+            ActionRequest actionRequest,
+            long wfhRequestId,
+            ThemeDisplay themeDisplay) {
+
+        String[] selectedDates =
+                ParamUtil.getParameterValues(actionRequest, "wfhDate");
+
+        log.info("selectedDate:-"+ selectedDates);
+
+        if (selectedDates == null || selectedDates.length == 0) {
+            return;
+        }
+
+        SimpleDateFormat sdf =
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+        for (String dateStr : selectedDates) {
+
+            try {
+
+                Date wfhDate =
+                        sdf.parse(dateStr + " 00:00:00.0000");
+
+                String dateKey = dateStr.replace("-", "");
+
+                boolean isHalf =
+                        ParamUtil.getBoolean(
+                                actionRequest,
+                                "day" + dateKey + "IsHalf",
+                                false);
+
+                boolean isFirstHalf = false;
+
+                if (isHalf) {
+
+                    String halfType =
+                            ParamUtil.getString(
+                                    actionRequest,
+                                    "day" + dateKey + "halfType");
+
+                    isFirstHalf =
+                            "firstHalf".equalsIgnoreCase(halfType);
+                }
+
+                long id =
+                        CounterLocalServiceUtil.increment(
+                                WorkFromHomeDayType.class.getName());
+
+                WorkFromHomeDayType dayType =
+                        workFromHomeDayTypeLocalService
+                                .createWorkFromHomeDayType(id);
+
+                dayType.setCompanyId(themeDisplay.getCompanyId());
+                dayType.setGroupId(themeDisplay.getScopeGroupId());
+                dayType.setCreatedBy(themeDisplay.getUserId());
+                dayType.setModifiedBy(themeDisplay.getUserId());
+                dayType.setCreateDate(new Date());
+                dayType.setModifiedDate(new Date());
+
+                dayType.setWorkFromHomeRequestId(wfhRequestId);
+                dayType.setWorkFromHomeDate(wfhDate);
+                dayType.setIsHalfDay(isHalf);
+                dayType.setIsFirstHalf(isFirstHalf);
+
+                workFromHomeDayTypeLocalService
+                        .addWorkFromHomeDayType(dayType);
+
+            } catch (Exception e) {
+                log.error("Error saving WFH day type", e);
+            }
+        }
     }
 }
