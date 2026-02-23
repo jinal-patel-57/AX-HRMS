@@ -38,7 +38,9 @@ public class AxHrmsCompensatoryDataConstants {
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Status</th>\n"
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensatory Request Date</th>\n"
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensation Date</th>\n"
-            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensatory Request Hours</th>\n"
+            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Requested Type</th>\n"
+            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Approved Type</th>\n"
+
 
 
 
@@ -56,7 +58,9 @@ public class AxHrmsCompensatoryDataConstants {
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Status</th>\n"
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensatory Request Date</th>\n"
             + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensation Date</th>\n"
-            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Compensatory Request Hours</th>\n"
+            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Request Type</th>\n"
+            + "                    <th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Approved Type</th>\n"
+
 
 
 

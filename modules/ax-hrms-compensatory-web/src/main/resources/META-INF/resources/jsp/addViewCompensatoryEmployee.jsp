@@ -15,6 +15,11 @@
          color: #dc3545 !important;
 
         }
+        #compensationTypeError label.error {
+            display: block;
+
+            color: #dc3545;
+        }
     </style>
 
 </head>
@@ -48,11 +53,11 @@
 
 
 
-                    <liferay-ui:search-container-column-text name="Requested Hours"
-                                                             value="${ compensatoryDataDto.getRequestedHours() }"/>
+                    <liferay-ui:search-container-column-text name="Requested Type"
+                                                             value="${ compensatoryDataDto.getRequestedCompensationType() }"/>
 
-                    <liferay-ui:search-container-column-text name="Approved Hours"
-                                                             value="${ compensatoryDataDto.getApprovedHours() }"/>
+                    <liferay-ui:search-container-column-text name="Approved Type"
+                                                             value="${ compensatoryDataDto.getApprovedCompensationType() }"/>
 
                     <liferay-ui:search-container-column-text name="Manager Name"
                                                              value="${ compensatoryDataDto.getManagerName() }"/>
@@ -143,11 +148,35 @@
                         <label id="compensationDate-error" class="error text-danger" for="compensationDate"></label>
                     </div>
                     <div class="form-group">
-                        <label for="compensationHours"><liferay-ui:message key="no-of-compensation-hours"/><span class="text-danger">*</span></label>
-                        <input id="compensationHours" class="form-control" type="text"
-                               name="<portlet:namespace />compensationHours"/>
-                        <label id="compensationHours-error" class="error text-danger"
-                               for="compensationHours"></label>
+                        <label>
+                            <liferay-ui:message key="Compensation Day Type"/>
+                            <span class="text-danger">*</span>
+                        </label>
+
+                      <div id="compensationTypeGroup">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="<portlet:namespace />compensationType"
+                                   id="halfDay"
+                                   value="HALF">
+                            <label class="form-check-label" for="halfDay">
+                                Half Day
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="<portlet:namespace />compensationType"
+                                   id="fullDay"
+                                   value="FULL">
+                            <label class="form-check-label" for="fullDay">
+                                Full Day
+                            </label>
+                        </div>
+                        <div id="compensationTypeError"></div>
+                    </div>
+
+
                     </div>
                     <div class="form-group">
                         <label for="projectManagerSelect"><liferay-ui:message

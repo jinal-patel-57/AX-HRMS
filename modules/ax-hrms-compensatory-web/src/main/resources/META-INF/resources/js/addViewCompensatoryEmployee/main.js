@@ -66,9 +66,12 @@ var submit_compensatory_form;
                         required: true,
                         notAfterToday: true
                     },
-                    [namespace + "compensationHours"]: {
-                        required: true,
-                        positiveInteger: true
+//                    [namespace + "compensationHours"]: {
+//                        required: true,
+//                        positiveInteger: true
+//                    },
+                    [namespace + "compensationType"]: {
+                        required: true
                     },
                     [namespace + "projectManager"]: {
                         required: true,
@@ -88,9 +91,12 @@ var submit_compensatory_form;
                         required: "Please enter compensation date.",
                         notAfterToday: "Compensation date cannot be in the future."
                     },
-                    [namespace + "compensationHours"]: {
-                        required: "Please enter hours.",
-                        positiveInteger: "Hours must be a positive number."
+//                    [namespace + "compensationHours"]: {
+//                        required: "Please enter hours.",
+//                        positiveInteger: "Hours must be a positive number."
+//                    },
+                    [namespace + "compensationType"]: {
+                        required: "Please select half day or full day."
                     },
                     [namespace + "projectManager"]: {
                         required: "Please select manager.",
@@ -103,16 +109,40 @@ var submit_compensatory_form;
                 },
 
                 errorPlacement: function (error, element) {
-                    error.addClass("text-danger");
-                    error.insertAfter(element);
+//                    error.addClass("text-danger");
+//                    error.insertAfter(element);
+
+//                  if (element.attr("name") === namespace + "compensationType") {
+//                        error.appendTo("#compensationType-error");   // ✅ place inside custom label
+//                    } else {
+//                        error.insertAfter(element);
+//                    }
+   if (element.attr("name") === namespace + "compensationType") {
+        $("#compensationTypeError").html(error);
+    } else {
+        error.insertAfter(element);
+    }
+
                 },
 
                 highlight: function (element) {
-                    $(element).addClass("is-invalid");
+//                    $(element).addClass("is-invalid");
+
+    if ($(element).attr("name") === namespace + "compensationType") {
+        $("#compensationTypeGroup").addClass("is-invalid-group");
+    } else {
+        $(element).addClass("is-invalid");
+    }
                 },
 
                 unhighlight: function (element) {
-                    $(element).removeClass("is-invalid");
+//                    $(element).removeClass("is-invalid");
+    if ($(element).attr("name") === namespace + "compensationType") {
+        $("#compensationTypeGroup").removeClass("is-invalid-group");
+    } else {
+        $(element).removeClass("is-invalid");
+    }
+
                 },
 
                 onfocusout: function (element) {

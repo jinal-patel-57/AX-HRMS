@@ -12,6 +12,26 @@ public class CompensatoryDataDto {
     String employeeName;
     long employeeId;
 
+    private String requestedCompensationType;   // HALF or FULL
+    private String approvedCompensationType;    // HALF or FULL
+
+
+    public String getRequestedCompensationType() {
+        return requestedCompensationType;
+    }
+
+    public void setRequestedCompensationType(String requestedCompensationType) {
+        this.requestedCompensationType = requestedCompensationType;
+    }
+
+    public String getApprovedCompensationType() {
+        return approvedCompensationType;
+    }
+
+    public void setApprovedCompensationType(String approvedCompensationType) {
+        this.approvedCompensationType = approvedCompensationType;
+    }
+
     public long getEmployeeId() {
         return employeeId;
     }

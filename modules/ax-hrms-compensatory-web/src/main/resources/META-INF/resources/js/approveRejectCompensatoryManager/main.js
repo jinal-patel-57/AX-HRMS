@@ -60,6 +60,7 @@ var submit_compensatory_form;
       
             open_compensatory_form_modal = function (compId,reqHrs) {
                 $('#hiddenCompensatoryDataId').val(compId);
+                console.log("reqHrs :: ",reqHrs)
                 $('#requestedHours').val(reqHrs);
                 $('#approveCompensationModal').modal('show');
             }

@@ -280,6 +280,28 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
                 .findByLeaveCompensatoryStatusById(compensatoryData.getLeaveCompensatoryStatusMasterId());
 
         // SET DATA OF LEAVE REQUEST IN THE BODY OF MAIL
+        int requestedHours = compensatoryData.getRequestedHours();
+        int approvedHours = compensatoryData.getApprovedHours();
+        String requestedType="";
+        String approvedType="";
+
+        if (requestedHours == 4) {
+            requestedType = "Half Day";
+        } else if (requestedHours == 8) {
+            requestedType = "Full Day";
+        } else {
+            requestedType = "-";
+        }
+
+
+
+        if (approvedHours == 4) {
+            approvedType = "Half Day";
+        } else if (approvedHours == 8) {
+            approvedType = "Full Day";
+        } else {
+            approvedType = "-";
+        }
 
         body.append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE).append(employee.getEmployeeCode())
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
@@ -295,7 +317,9 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
                 .append(leaveRequestUtil.setDateFormat(compensatoryData.getDateOfCompensation()))
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
-                .append(compensatoryData.getRequestedHours())
+                .append(requestedType)
+                .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
+                .append(approvedType)
                .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE_CLOSING);
 
         body.append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_FOOTER);

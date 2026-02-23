@@ -32,7 +32,7 @@ import javax.portlet.ActionResponse;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-@Component(property = {"javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_MANAGER_WEB_PORTLET, "mvc.command.name=/cancelCompensatoryData"}, service = MVCActionCommand.class)
+    @Component(property = {"javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_MANAGER_WEB_PORTLET, "mvc.command.name=/cancelCompensatoryData"}, service = MVCActionCommand.class)
 public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCActionCommand {
     Log log = LogFactoryUtil.getLog(CancelCompensatoryDataManagerMVCActionCommand.class);
 
@@ -100,6 +100,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
         long compensatoryDataId = ParamUtil.getLong(actionRequest, AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_ID);
+        log.info("compensatoryDataId :: " + compensatoryDataId);
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
@@ -171,10 +172,11 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
         // Update status to CANCELLED
         try {
             if (cancelledStatusId > 0) {
+                log.info("cancelledStatusId :: "+cancelledStatusId);
                 compensatoryData.setLeaveCompensatoryStatusMasterId(cancelledStatusId);
                 compensatoryData.setModifiedBy(themeDisplay.getUserId());
                 commentLocalService.addWorkflowComment(themeDisplay, 3l, "Cancel", compensatoryDataId, comment);
-
+//                log.info("compensatoryData.getLeaveCompensatoryStatusMasterId() :: "+compensatoryData.getLeaveCompensatoryStatusMasterId());
                 compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
                 log.info("Compensatory request cancelled successfully");
             }

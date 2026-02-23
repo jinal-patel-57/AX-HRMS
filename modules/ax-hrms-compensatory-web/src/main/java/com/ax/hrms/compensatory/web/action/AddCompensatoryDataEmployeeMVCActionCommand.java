@@ -34,139 +34,151 @@ import java.util.List;
  * Author: Nivid Koradiya
  */
 @Component(immediate = true, property = {
-                "javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_EMPLOYEE_WEB_PORTLET,
-                "mvc.command.name=/addCompensatoryData"
+        "javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_EMPLOYEE_WEB_PORTLET,
+        "mvc.command.name=/addCompensatoryData"
 }, service = MVCActionCommand.class)
 public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
-        Log log = LogFactoryUtil.getLog(AddCompensatoryDataEmployeeMVCActionCommand.class);
+    Log log = LogFactoryUtil.getLog(AddCompensatoryDataEmployeeMVCActionCommand.class);
 
-        @Reference
-        UserLocalService userLocalService;
+    @Reference
+    UserLocalService userLocalService;
 
-        @Reference
-        AxHrmsCommonApi axHrmsCommonApi;
+    @Reference
+    AxHrmsCommonApi axHrmsCommonApi;
 
-        @Reference
-        RoleLocalService roleLocalService;
+    @Reference
+    RoleLocalService roleLocalService;
 
-        @Reference
-        EmployeeDetailsLocalService employeeDetailsLocalService;
+    @Reference
+    EmployeeDetailsLocalService employeeDetailsLocalService;
 
-        @Reference
-        EmployeeSalaryLocalService employeeSalaryLocalService;
+    @Reference
+    EmployeeSalaryLocalService employeeSalaryLocalService;
 
-        @Reference
-        LeaveTypeMasterLocalService leaveTypeMasterLocalService;
+    @Reference
+    LeaveTypeMasterLocalService leaveTypeMasterLocalService;
 
-        @Reference
-        LeavePolicyMasterLocalService leavePolicyMasterLocalService;
+    @Reference
+    LeavePolicyMasterLocalService leavePolicyMasterLocalService;
 
-        @Reference
-        LeaveBalanceLocalService leaveBalanceLocalService;
+    @Reference
+    LeaveBalanceLocalService leaveBalanceLocalService;
 
-        @Reference
-        EmployeeProbationDetailsLocalService employeeProbationDetailsLocalService;
+    @Reference
+    EmployeeProbationDetailsLocalService employeeProbationDetailsLocalService;
 
-        @Reference
-        ProbationStatusMasterLocalService probationStatusMasterLocalService;
+    @Reference
+    ProbationStatusMasterLocalService probationStatusMasterLocalService;
 
-        @Reference
-        DepartmentMasterLocalService departmentMasterLocalService;
+    @Reference
+    DepartmentMasterLocalService departmentMasterLocalService;
 
-        @Reference
-        DesignationMasterLocalService designationMasterLocalService;
+    @Reference
+    DesignationMasterLocalService designationMasterLocalService;
 
-        @Reference
-        EmployeeDepartmentLocalService employeeDepartmentLocalService;
+    @Reference
+    EmployeeDepartmentLocalService employeeDepartmentLocalService;
 
-        @Reference
-        EmployeeDesignationLocalService employeeDesignationLocalService;
+    @Reference
+    EmployeeDesignationLocalService employeeDesignationLocalService;
 
-        @Reference
-        CompensatoryDataLocalService compensatoryDataLocalService;
+    @Reference
+    CompensatoryDataLocalService compensatoryDataLocalService;
 
-        @Reference
-        LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
+    @Reference
+    LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 
-        @Reference
-        NotificationTemplateConfiguration notificationTemplateConfiguration;
-
-
-        @Reference
-        MailTemplateConfiguration mailTemplateConfiguration;
+    @Reference
+    NotificationTemplateConfiguration notificationTemplateConfiguration;
 
 
-        @Reference
-        AxHrmsCompensatoryLeaveRequestWebUtil axHrmsCompensatoryLeaveRequestWebUtil;
+    @Reference
+    MailTemplateConfiguration mailTemplateConfiguration;
 
 
-        @Override
-        protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-                SimpleDateFormat sdf = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER);
-                Date compensationDate = ParamUtil.getDate(actionRequest,
-                                AxHrmsCompensatoryDataConstants.COMPENSATION_DATE, sdf);
-                int compensationHours = ParamUtil.getInteger(actionRequest,
-                                AxHrmsCompensatoryDataConstants.COMPENSATION_HOURS);
-                long projectManager = ParamUtil.getLong(actionRequest, AxHrmsCompensatoryDataConstants.PROJECT_MANAGER);
-                String description = ParamUtil.getString(actionRequest, AxHrmsCompensatoryDataConstants.DESCRIPTION);
-            ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-            String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-            String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
-                    PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-
-                boolean hrManagerStatus= ParamUtil.getBoolean(actionRequest,"hrManagerStatus");
-
-                CompensatoryData compensatoryData = compensatoryDataLocalService.createCompensatoryData(
-                                CounterLocalServiceUtil.increment(CompensatoryData.class.getName()));
-                compensatoryData.setDateOfCompensation(compensationDate);
-                compensatoryData.setApprovedHours(0);
-                if(hrManagerStatus){
-                        String employeeNames = ParamUtil.getString(actionRequest,"employeeNames");
-                        compensatoryData.setEmployeeId(Long.parseLong(employeeNames));
-
-                }else {
-                        compensatoryData.setEmployeeId(
-                                employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
-                }
-                compensatoryData.setRequestedHours(compensationHours);
-                compensatoryData.setManagerId(projectManager);
-                compensatoryData.setDescription(description);
-                compensatoryData.setLeaveCompensatoryStatusMasterId(
-                                leaveCompensatoryStatusMasterLocalService
-                                                .findByLeaveCompensatoryStatusName(
-                                                                AxHrmsCompensatoryDataConstants.PENDING)
-                                                .getLeaveCompensatoryStatusMasterId());
-
-                compensatoryData.setCompanyId(themeDisplay.getCompanyId());
-                compensatoryData.setCreatedBy(themeDisplay.getUserId());
-                compensatoryData.setGroupId(themeDisplay.getCompanyGroupId());
-                compensatoryData.setCreateDate(new Date());
-                compensatoryData.setModifiedDate(new Date());
-                compensatoryData.setModifiedBy(themeDisplay.getUserId());
-                CompensatoryData compensatoryData1 =  compensatoryDataLocalService.addCompensatoryData(compensatoryData);
+    @Reference
+    AxHrmsCompensatoryLeaveRequestWebUtil axHrmsCompensatoryLeaveRequestWebUtil;
 
 
-            // Request Notification and mail to the HR and Manager
-            try {
-                EmployeeDetails manager = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
-
-                List<User> userList = axHrmsCommonApi.fetchRolePersonList(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN, -1, -1);
-                userList.add(userLocalService.getUser(manager.getLrUserId()));
-                String employeeMailSubject = notificationTemplateConfiguration.compensatoryLeaveRequestNotificationToManagerAndHr();
-                StringBuilder employeeMailBody = new StringBuilder(
-                        AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_HEAD);
-                axHrmsCompensatoryLeaveRequestWebUtil.sendMailtoManagerAndHr(fromName, fromEmailAddress, compensatoryData1.getCompensatoryDataId(),
-                        employeeMailBody, mailTemplateConfiguration, themeDisplay, userList);
-
-
-                axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToManagerAndHr(employeeMailSubject, userList);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-            SessionMessages.add(actionRequest, "compensation-request-submitted");
-                actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+    @Override
+    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER);
+        Date compensationDate = ParamUtil.getDate(actionRequest,
+                AxHrmsCompensatoryDataConstants.COMPENSATION_DATE, sdf);
+        String compensationType = ParamUtil.getString(
+                actionRequest,
+                "compensationType"
+        );
+        log.info("compensationType :: "+compensationType);
+        int compensationHours = 0;
+        if ("HALF".equalsIgnoreCase(compensationType)) {
+            compensationHours = 4;
+        } else if ("FULL".equalsIgnoreCase(compensationType)) {
+            compensationHours = 8;
         }
+
+        log.info("compensationHours :: "+compensationHours);
+
+        long projectManager = ParamUtil.getLong(actionRequest, AxHrmsCompensatoryDataConstants.PROJECT_MANAGER);
+        String description = ParamUtil.getString(actionRequest, AxHrmsCompensatoryDataConstants.DESCRIPTION);
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+        boolean hrManagerStatus = ParamUtil.getBoolean(actionRequest, "hrManagerStatus");
+
+        CompensatoryData compensatoryData = compensatoryDataLocalService.createCompensatoryData(
+                CounterLocalServiceUtil.increment(CompensatoryData.class.getName()));
+        compensatoryData.setDateOfCompensation(compensationDate);
+        compensatoryData.setApprovedHours(0);
+        if (hrManagerStatus) {
+            String employeeNames = ParamUtil.getString(actionRequest, "employeeNames");
+            compensatoryData.setEmployeeId(Long.parseLong(employeeNames));
+
+        } else {
+            compensatoryData.setEmployeeId(
+                    employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
+        }
+        compensatoryData.setRequestedHours(compensationHours);
+        compensatoryData.setManagerId(projectManager);
+        compensatoryData.setDescription(description);
+        compensatoryData.setLeaveCompensatoryStatusMasterId(
+                leaveCompensatoryStatusMasterLocalService
+                        .findByLeaveCompensatoryStatusName(
+                                AxHrmsCompensatoryDataConstants.PENDING)
+                        .getLeaveCompensatoryStatusMasterId());
+
+        compensatoryData.setCompanyId(themeDisplay.getCompanyId());
+        compensatoryData.setCreatedBy(themeDisplay.getUserId());
+        compensatoryData.setGroupId(themeDisplay.getCompanyGroupId());
+        compensatoryData.setCreateDate(new Date());
+        compensatoryData.setModifiedDate(new Date());
+        compensatoryData.setModifiedBy(themeDisplay.getUserId());
+        CompensatoryData compensatoryData1 = compensatoryDataLocalService.addCompensatoryData(compensatoryData);
+
+
+        // Request Notification and mail to the HR and Manager
+        try {
+            EmployeeDetails manager = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
+
+            List<User> userList = axHrmsCommonApi.fetchRolePersonList(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN, -1, -1);
+            userList.add(userLocalService.getUser(manager.getLrUserId()));
+            String employeeMailSubject = notificationTemplateConfiguration.compensatoryLeaveRequestNotificationToManagerAndHr();
+            StringBuilder employeeMailBody = new StringBuilder(
+                    AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_HEAD);
+            axHrmsCompensatoryLeaveRequestWebUtil.sendMailtoManagerAndHr(fromName, fromEmailAddress, compensatoryData1.getCompensatoryDataId(),
+                    employeeMailBody, mailTemplateConfiguration, themeDisplay, userList);
+
+
+            axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToManagerAndHr(employeeMailSubject, userList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SessionMessages.add(actionRequest, "compensation-request-submitted");
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+    }
 
 }

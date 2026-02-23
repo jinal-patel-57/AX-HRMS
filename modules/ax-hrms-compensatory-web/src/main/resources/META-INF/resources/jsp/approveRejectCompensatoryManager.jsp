@@ -47,11 +47,11 @@
                                                              value="${ compensatoryDataDto.getModifiedBy() }"/>
 
 
-                <liferay-ui:search-container-column-text name="requested-hours"
-                                                         value="${ compensatoryDataDto.getRequestedHours() }"/>
+                <liferay-ui:search-container-column-text name="Requested Type"
+                                                         value="${ compensatoryDataDto.getRequestedCompensationType() }"/>
 
-                <liferay-ui:search-container-column-text name="approved-hours"
-                                                         value="${ compensatoryDataDto.getApprovedHours() }"/>
+                <liferay-ui:search-container-column-text name="Approved Type"
+                                                         value="${ compensatoryDataDto.getApprovedCompensationType() }"/>
 
                 <liferay-ui:search-container-column-text name="manager-name"
                                                          value="${ compensatoryDataDto.getManagerName() }"/>
@@ -68,8 +68,7 @@
                 <liferay-ui:search-container-column-text name="action" cssClass="text-center">
                         <portlet:actionURL name="/cancelCompensatoryData"
                                            var="cancelCompensatoryDataURL">
-                            <portlet:param name="compensatoryDataId"
-                                           value="${compensatoryDataDto.compensatoryDataId}"/>
+
                         </portlet:actionURL>
                     <c:if test="${!isSameEmployee && compensatoryDataDto.getStatus() =='Pending' }">
                         <portlet:actionURL name="/approveRejectCompensatoryData"
@@ -95,7 +94,7 @@
                                     <a class="dropdown-item"
                                        onclick="openApproveModal(
                                            ${compensatoryDataDto.compensatoryDataId},
-                                           ${compensatoryDataDto.getRequestedHours()}
+                                           '${compensatoryDataDto.getRequestedCompensationType()}'
                                        )">
                                         <i class="icon-check"></i>
                                         <liferay-ui:message key="approve"/>
@@ -171,20 +170,48 @@
                 <form action="${approveCompensatoryDataURL}" id="approveCompensationForm" method="post"
                       class="row">
 
-                    <div class="form-group col-6">
-                        <label for="requestedHours"><liferay-ui:message key="requested-hours"/><span class="text-danger">*</span></label>
+                    <div class="form-group col-6" id="requestedTypeGroup">
+                     <%--   <label for="requestedHours"><liferay-ui:message key="requested-hours"/><span class="text-danger">*</span></label>
                         <input id="requestedHours" class="form-control" type="text"
                                name="<portlet:namespace />requestedHours" disabled/>
-                        <label id="requestedHours-error" class="error text-danger" for="requestedHours"></label>
+                        <label id="requestedHours-error" class="error text-danger" for="requestedHours"></label> --%>
+
+                    <label>
+                        <liferay-ui:message key="requested-type"/>
+                    </label>
+
+                    <div>
+                        <strong id="requestedCompensationType"></strong>
                     </div>
 
-                    <div class="form-group col-6">
-                        <label for="approvedHours"><liferay-ui:message key="approved-hours"/><span class="text-danger">*</span></label>
-                        <input id="approvedHours" class="form-control" type="text"
-                               name="<portlet:namespace />approvedHours"/>
-                        <label id="approvedHours-error" class="error text-danger" for="approvedHours"></label>
                     </div>
-                    <div class="form-group col-12">
+
+                    <div class="form-group col-6" id="approvedTypeGroup">
+                        <label for="approvedHours"><liferay-ui:message key="approved-hours"/><span class="text-danger">*</span></label>
+                    <%--    <input id="approvedHours" class="form-control" type="text"
+                               name="<portlet:namespace />approvedHours"/>
+                        <label id="approvedHours-error" class="error text-danger" for="approvedHours"></label> --%>
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="<portlet:namespace />approvedCompensationType"
+                                   value="HALF">
+                            <label class="form-check-label">Half Day</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="<portlet:namespace />approvedCompensationType"
+                                   value="FULL">
+                            <label class="form-check-label">Full Day</label>
+                        </div>
+
+                        <label id="approvedCompensationType-error"
+                               class="error text-danger"></label>
+
+                    </div>
+                    <div class="form-group col-12" id="commentGroup">
                         <label for="comment">
                             <liferay-ui:message key="comment"/>
                            <span class="text-danger">*</span>
@@ -226,14 +253,37 @@
         config.namespace = '<portlet:namespace />';
         axHrmsCompensatoryDataWebPortlet.setConfigs(config);
     });
-        function openApproveModal(id, requestedHours) {
+        function openApproveModal(id, requestedType) {
 
             resetModalState();
+            $('#approveCompensationForm')
+                .attr('action', '${approveCompensatoryDataURL}');
 
+                var namespace = '<portlet:namespace />';
             $('#hiddenCompensatoryDataId').val(id);
-            $('#requestedHours').val(requestedHours).prop('readonly', true);
+             console.log("requestedType,",requestedType)
+            if (requestedType === "Half Day") {
+                $('#requestedCompensationType').text("Half Day");
+                requestedType ="HALF"
+            } else if (requestedType === "Full Day") {
+                $('#requestedCompensationType').text("Full Day");
+                requestedType ="FULL"
+            } else {
+                $('#requestedCompensationType').text("-");
+            }
 
-            $('#approvedHours').prop('disabled', false).closest('.form-group').show();
+         //   $('#requestedHours').val(requestedHours).prop('readonly', true);
+
+        //    $('#approvedHours').prop('disabled', false).closest('.form-group').show();
+
+
+    $('input[name="' + namespace + 'approvedCompensationType"]').prop('checked', false);
+
+    $('input[name="' + namespace + 'approvedCompensationType"][value="' + requestedType + '"]')
+        .prop('checked', true);
+
+
+
 
             $('#actionType').val('APPROVE');
 
@@ -245,11 +295,24 @@
 
            resetModalState();
 
+            $('#approveCompensationForm')
+                .attr('action', '${approveCompensatoryDataURL}');
+
            $('#hiddenCompensatoryDataId').val(id);
 
            // Hide hours
            $('#requestedHours').closest('.form-group').hide();
            $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+
+            // Hide Requested Type
+            $('#requestedTypeGroup').hide();
+
+            // Hide Approved Type
+            $('#approvedTypeGroup').hide();
+
+            // Show Comment only
+            $('#commentGroup').show();
+
 
            // Change title & button
            $('#approveCompensationModalLabel')
@@ -276,11 +339,26 @@
 
           resetModalState();
 
-          $('#hiddenCompensatoryDataId').val(id);
+         // $('#hiddenCompensatoryDataId').val(id);
+
 
           // Hide hours
           $('#requestedHours').closest('.form-group').hide();
           $('#approvedHours').prop('disabled', true).closest('.form-group').hide();
+
+            // Hide Requested Type
+            $('#requestedTypeGroup').hide();
+
+            // Hide Approved Type
+            $('#approvedTypeGroup').hide();
+
+            // Show Comment only
+            $('#commentGroup').show();
+
+          $('#hiddenCompensatoryDataId').val(id);
+
+          $('#approveCompensationForm')
+          .attr('action', '${cancelCompensatoryDataURL}');
 
           // Change title & button
           $('#approveCompensationModalLabel')
@@ -299,7 +377,11 @@
 
 
        function resetModalState() {
+            // Hide Requested Type
+            $('#requestedTypeGroup').show();
 
+            // Hide Approved Type
+            $('#approvedTypeGroup').show();
            // Reset modal title
            $('#approveCompensationModalLabel')
                .text('<liferay-ui:message key="approve-compensation-hours"/>');

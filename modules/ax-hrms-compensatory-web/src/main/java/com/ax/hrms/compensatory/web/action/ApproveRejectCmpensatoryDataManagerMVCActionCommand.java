@@ -116,19 +116,37 @@ public class ApproveRejectCmpensatoryDataManagerMVCActionCommand extends BaseMVC
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         int approvedHours = ParamUtil.getInteger(actionRequest, AxHrmsCompensatoryDataConstants.APPROVED_HOURS);
+        String actionType = ParamUtil.getString(actionRequest, "actionType");
+
         long compensatoryDataId = ParamUtil.getLong(actionRequest, AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_ID);
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+        String approvedCompensationType =
+                ParamUtil.getString(actionRequest, "approvedCompensationType");
         String comment = ParamUtil.getString(actionRequest, "comment");
         log.info("comment is the ::"+comment);
+        log.info("approvedCompensationType is the ::"+approvedCompensationType);
+        log.info("action Type :: "+ actionType);
+        if ("APPROVE".equalsIgnoreCase(actionType)) {
+            if ("HALF".equalsIgnoreCase(approvedCompensationType)) {
+                approvedHours = 4;
+            } else if ("FULL".equalsIgnoreCase(approvedCompensationType)) {
+                approvedHours = 8;
+            }
+            log.info("approvedHours is the ::"+approvedHours);
+        } else if ("REJECT".equalsIgnoreCase(actionType)) {
+
+            approvedHours=0;
+
+        }
         if (approvedHours > 0 ) {
 
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
 
 
-            compensatoryData.setApprovedHours(Math.min(approvedHours, compensatoryData.getRequestedHours()));
+            compensatoryData.setApprovedHours(approvedHours);
             compensatoryData.setLeaveCompensatoryStatusMasterId(
                     leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName(AxHrmsCompensatoryDataConstants.APPROVED)
                             .getLeaveCompensatoryStatusMasterId()
