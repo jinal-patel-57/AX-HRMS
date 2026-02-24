@@ -1,5 +1,6 @@
 package com.ax.hrms.hr.dashboard.leave.report.web.action;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.hr.dashboard.leave.report.web.constants.AxHrmsHrDashboardLeaveReportWebPortletKeys;
 import com.ax.hrms.hr.dashboard.leave.report.web.dto.TodaysLeaveEmployee;
 import com.ax.hrms.master.exception.NoSuchLeaveCompensatoryStatusMasterException;
@@ -35,6 +36,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -67,9 +70,14 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 	
 	@Reference
 	DepartmentMasterLocalService departmentMasterLocalService;
+
+	@Reference
+	AxHrmsCommonApi axHrmsCommonApi;
+
 	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		log.info("inside render");
 		Calendar cal = Calendar.getInstance();
@@ -100,8 +108,7 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 		        .and(leaveDayTypeTable.leaveDate.lte(endOfDay))
 		);
 		List<LeaveDayType> todaysLeaves = leaveDayTypeLocalService.dslQuery(dslQuery);
-		log.info("todays leave -- " + todaysLeaves);
-		log.info("todays leave count -- " + todaysLeaves.size());
+
 		
 		List<TodaysLeaveEmployee> todaysLeaveEmployees = new ArrayList<>();
 		
@@ -155,6 +162,8 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 			}
 		}
 		renderRequest.setAttribute("todaysLeaves", todaysLeaveEmployees);
+		boolean isHrAdmin = axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+		renderRequest.setAttribute("isHrAdmin", isHrAdmin);
 		return "/jsp/dashboardleavereport/listTodaysLeaveEmployees.jsp";
 	}
 

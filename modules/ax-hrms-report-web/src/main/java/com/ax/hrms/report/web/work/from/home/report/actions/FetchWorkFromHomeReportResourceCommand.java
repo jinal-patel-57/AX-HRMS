@@ -6,17 +6,11 @@ import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
-import com.ax.hrms.model.EmployeeDepartment;
-import com.ax.hrms.model.EmployeeDesignation;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHomeRequest;
+import com.ax.hrms.model.*;
 import com.ax.hrms.report.web.constants.AxHrmsWorkFromHomeReportWebPortletKeys;
 import com.ax.hrms.report.web.portlet.AxHrmsWorkFromHomeReportWebPortlet;
 import com.ax.hrms.report.web.util.WFHExcelExportUtil;
-import com.ax.hrms.service.EmployeeDepartmentLocalService;
-import com.ax.hrms.service.EmployeeDesignationLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.WorkFromHomeRequestLocalService;
+import com.ax.hrms.service.*;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -144,22 +138,26 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
 
                     row.put("Leave Period", wfhStartDate + " - " + wfhEndDate);
 
-                    long days = 0;
+//                    long days = 0;
+//
+//                    LocalDate start = workFromHomeRequest.getStartDate().toInstant()
+//                            .atZone(ZoneId.systemDefault())
+//                            .toLocalDate();
+//
+//                    LocalDate end = workFromHomeRequest.getEndDate().toInstant()
+//                            .atZone(ZoneId.systemDefault())
+//                            .toLocalDate();
+//
+//                    for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+//                        DayOfWeek dayOfWeek = date.getDayOfWeek();
+//                        if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
+//                            days++;
+//                        }
+//                    }
 
-                    LocalDate start = workFromHomeRequest.getStartDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
+                    double days = setWorkFromHomeDayTypeData(workFromHomeRequest.getWorkFromHomeRequestId(),workFromHomeDayTypeLocalService);
 
-                    LocalDate end = workFromHomeRequest.getEndDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
 
-                    for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
-                        DayOfWeek dayOfWeek = date.getDayOfWeek();
-                        if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
-                            days++;
-                        }
-                    }
 
                     row.put("No. Of Days", String.valueOf(days));
                     long statusId = workFromHomeRequest.getStatus();
@@ -202,6 +200,31 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
 
         return false;
     }
+    public double  setWorkFromHomeDayTypeData(long wfhId, WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService) {
+
+        List<WorkFromHomeDayType> dayTypeList =
+                workFromHomeDayTypeLocalService
+                        .findByWorkFromHomeRequestId(
+                                wfhId);
+
+
+
+        double totalDays = 0.0;
+
+        for (WorkFromHomeDayType day : dayTypeList) {
+
+
+
+            if (day.getIsHalfDay()) {
+                totalDays += 0.5;
+            } else {
+                totalDays += 1.0;
+            }
+        }
+        return totalDays;
+
+
+    }
 
     private static final Log log = LogFactoryUtil.getLog(FetchWorkFromHomeReportResourceCommand.class);
 
@@ -225,4 +248,7 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
 
     @Reference
     LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
+
+    @Reference
+    WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
 }

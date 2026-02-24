@@ -18,12 +18,16 @@
 
 <c:if test="${not empty todaysLeaves}">
 	<div class="card">
+
 		<div
 			class="card-header d-flex align-items-center justify-content-between">
-			<strong>Today's Leaves</strong> <a class="btn btn-primary"
+			<strong>Today's Leaves</strong>
+			<c:if test="${isHrAdmin}"><a class="btn btn-primary"
 				href="/web/ax-hrms/leave-management" target="_blank">All Leave
 				Requests</a>
+				</c:if>
 		</div>
+
 		<div class="card-body ax-body">
 			<table class="table ">
 				<thead>
