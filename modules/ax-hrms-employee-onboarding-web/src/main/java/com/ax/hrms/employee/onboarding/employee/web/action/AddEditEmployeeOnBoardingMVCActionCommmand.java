@@ -106,6 +106,7 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 
 		User employeeUser =
 				userLocalService.getUser(employeeDetails.getLrUserId());
+		employeeUser.setPortraitId(employeeDetails.getProfilePicId());
 		long documentTypeMasterId = ParamUtil.getLong(
 				actionRequest,
 				"kycDocumentType"

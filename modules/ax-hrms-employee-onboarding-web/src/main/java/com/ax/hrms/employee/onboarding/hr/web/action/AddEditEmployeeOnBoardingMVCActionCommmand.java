@@ -152,6 +152,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
             User lrUser =
                     userLocalService.getUser(employeeDetails.getLrUserId());
+            
             long documentTypeMasterId = ParamUtil.getLong(
                     actionRequest,
                     "kycDocumentType"
@@ -389,10 +390,10 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 //            employeeBasicDetailsUtil.addEditFileEntry(file, fileName, actionRequest, employeeDetails, profilePictureFolder,serviceContext);
 //            employeeBasicDetailsUtil.addEditFileEntry(aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, aadhaarCardFolder,serviceContext);
 //            employeeBasicDetailsUtil.addEditFileEntry(panFile, panFileName, actionRequest, employeeDetails, panCardFolder,serviceContext);
-            employeeBasicDetailsUtil.addEditFileEntry( file,  fileName, actionRequest, employeeDetails,employeeDetails.getProfilePicId(),"PROFILE", profilePictureFolder, serviceContext);
+            long profilePicId = employeeBasicDetailsUtil.addEditFileEntry( file,  fileName, actionRequest, employeeDetails,employeeDetails.getProfilePicId(),"PROFILE", profilePictureFolder, serviceContext);
             employeeBasicDetailsUtil.addEditFileEntry( aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, employeeDetails.getAadhaarCardFileId(),"AADHAAR", aadhaarCardFolder, serviceContext);
             employeeBasicDetailsUtil.addEditFileEntry( panFile, panFileName, actionRequest,  employeeDetails, employeeDetails.getPanCardFileId(), "PAN", panCardFolder, serviceContext);
-
+            lrUser.setPortraitId(profilePicId);
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
             updateEmployeeWithManager(themeDisplay.getCompanyId(), employeeDetails, employeeDetails.getManagerId(),oldManagerId);
