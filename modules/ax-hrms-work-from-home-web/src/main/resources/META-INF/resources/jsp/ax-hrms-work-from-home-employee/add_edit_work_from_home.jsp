@@ -42,7 +42,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
         <strong><%= isEdit ? "Edit Work From Home Request" : "Add Work From Home Request" %></strong>
     </div>
 
-    <form id="wfhForm" action="${saveWFHURL}" method="post">
+    <form id="wfhForm" action="${saveWFHURL}" method="post" >
         <div class="card-body">
 
             <c:if test="${isEdit}">
@@ -145,146 +145,166 @@ document.addEventListener("DOMContentLoaded", function () {
     const startError = document.getElementById("startError");
     const endError = document.getElementById("endError");
 
-    let startTouched = false;
-    let endTouched = false;
-
-    const today = new Date();
-
-    const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-
-    const yearEnd = new Date(today.getFullYear(), 11, 31);
-
-    function isWeekend(dateStr) {
-        if (!dateStr) return false;
-        const day = new Date(dateStr + "T00:00:00").getDay(); // 0 = Sun, 6 = Sat
-        return day === 0 || day === 6;
-    }
-
-    function nextMonday(dateStr) {
-        const d = new Date(dateStr + "T00:00:00");
-        const day = d.getDay();
-        // Saturday → +2, Sunday → +1
-        const daysToAdd = day === 6 ? 2 : 1;
-        d.setDate(d.getDate() + daysToAdd);
-        return d.toLocaleDateString("en-CA"); // returns YYYY-MM-DD
-    }
-
-    function applyWFHDateRestriction(element) {
-        if (!element) return;
-
-        const minDate = prevMonthStart.toLocaleDateString("en-CA");
-        const maxDate = yearEnd.toLocaleDateString("en-CA");
-
-        element.setAttribute("min", minDate);
-        element.setAttribute("max", maxDate);
-        element.min = minDate;
-        element.max = maxDate;
-
-        // Prevent manual invalid year typing
-        element.addEventListener("input", function () {
-            const val = this.value;
-            if (val) {
-                const parts = val.split("-");
-                if (parts[0] && parts[0].length > 4) {
-                    parts[0] = parts[0].substring(0, 4);
-                    this.value = parts.join("-");
-                }
-            }
-        });
-    }
-
-    // Apply restriction to both date fields
-    applyWFHDateRestriction(startDate);
-    applyWFHDateRestriction(endDate);
 
 
 
-    function validateReason() {
-        const value = reason.value.trim();
-        const len = value.length;
+const today = new Date();
+const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+const yearEnd = new Date(today.getFullYear(), 11, 31);
 
-        if (!value) {
-            reasonError.innerText = "Reason is required.";
-            return false;
-        } else if (len < 10) {
-            reasonError.innerText = "Reason must be at least 10 characters.";
-            return false;
-        } else if (len > 250) {
-            reasonError.innerText = "Reason must not exceed 250 characters.";
-            return false;
-        }
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return year + '-' + month + '-' + day;
+}
 
-        reasonError.innerText = "";
+$("#startDate, #endDate").attr({
+    min: formatDate(prevMonthStart),
+    max: formatDate(yearEnd)
+});
+
+
+
+
+$.validator.addMethod("noWeekend", function(value) {
+    if (!value) return true;
+    const day = new Date(value + "T00:00:00").getDay();
+    return day !== 0 && day !== 6;
+}, "Saturday and Sunday are not allowed.");
+
+$.validator.addMethod("greaterThanStart", function(value) {
+    const start = $("#startDate").val();
+    if (!start || !value) return true;
+    return new Date(value) >= new Date(start);
+}, "End Date must be after Start Date.");
+
+function validateTeamField() {
+    let teamValue = $("#" + ns + "teamId").val();
+
+    if (!teamValue || teamValue.trim() === "") {
+        $("#teamError").text("Please select at least one team member.");
+        return false;
+    } else {
+        $("#teamError").text("");
         return true;
     }
+}
+$.validator.addMethod("validReason", function(value, element) {
+    return this.optional(element) ||
+        /^(?=.*[a-zA-Z])[a-zA-Z0-9\s.,'()\/-]+$/.test(value);
+}, "Reason must contain at least one letter and no special characters.");
 
-    function validateDates(showAll = false) {
-        let valid = true;
 
-        if (startTouched || showAll) {
-            if (!startDate.value) {
-                startError.innerText = "Start Date is required.";
-                valid = false;
-            } else if (isWeekend(startDate.value)) {
-                startError.innerText =
-                    "Start Date cannot be a weekend. Please choose a weekday.";
-                valid = false;
-            } else {
-                startError.innerText = "";
-            }
+const ns = '<portlet:namespace />';
+
+$("#wfhForm").validate({
+
+  ignore: [],
+
+    rules: {
+        [ns + "reason"]: {
+            required: true,
+            minlength: 10,
+            maxlength: 250,
+            validReason: true
+        },
+        [ns + "startDate"]: {
+            required: true,
+            noWeekend: true
+        },
+        [ns + "endDate"]: {
+            required: true,
+            noWeekend: true,
+            greaterThanStart: true
+        },
+        [ns + "teamId"]: {
+            required: true
         }
+    },
 
-        if (endTouched || showAll) {
-            if (!endDate.value) {
-                endError.innerText = "End Date is required.";
-                valid = false;
-            } else if (isWeekend(endDate.value)) {
-                endError.innerText =
-                    "End Date cannot be a weekend. Please choose a weekday.";
-                valid = false;
-            } else if (
-                startDate.value &&
-                new Date(endDate.value + "T00:00:00") <
-                    new Date(startDate.value + "T00:00:00")
-            ) {
-                endError.innerText = "End Date must be after Start Date.";
-                valid = false;
-            } else {
-                endError.innerText = "";
-            }
+    messages: {
+        [ns + "teamId"]: {
+            required: "Please select at least one team member."
         }
+    },
 
-        return valid;
+    errorElement: "small",
+    errorClass: "text-danger",
+     onkeyup: false,
+
+
+    errorPlacement: function(error, element) {
+
+
+            error.insertAfter(element);
+
+    },
+
+    highlight: function(element) {
+        $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function(element) {
+        $(element).removeClass("is-invalid");
+    },
+
+   submitHandler: function(form) {
+
+       let isTeamValid = validateTeamField();
+
+       if (!isTeamValid) {
+           return false;
+       }
+
+       submitBtn.disabled = true;
+       form.submit();
+   }
+});
+
+
+let startDateTouched = false;
+let endDateTouched = false;
+
+$("#startDate").on("focus", function () {
+    startDateTouched = true;
+});
+
+$("#endDate").on("focus", function () {
+    endDateTouched = true;
+});
+
+$("#startDate, #endDate").on("blur", function () {
+
+    let startValid = true;
+    let endValid = true;
+
+    if (startDateTouched) {
+        startValid = $("#startDate").valid();
     }
 
+    if (endDateTouched) {
+        endValid = $("#endDate").valid();
+    }
 
-    reason.addEventListener("blur", validateReason);
-  startDate.addEventListener("blur", function () {
-        startTouched = true;
-        validateDates();
-    });
+    // Generate only if both fields touched and valid
+    if (
+        startDateTouched &&
+        endDateTouched &&
+        startValid &&
+        endValid &&
+        $("#startDate").val() &&
+        $("#endDate").val()
+    ) {
+        dynamicDateCreator();
+    } else {
+        dateInputsContainer.empty();
+        dateInputsContainer.hide();
+    }
+});
 
-    endDate.addEventListener("blur", function () {
-        endTouched = true;
-        validateDates();
-    });
 
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        startTouched = true;
-        endTouched = true;
-
-       const isTeamValid = validateWFHTeam();
-        const isReasonValid = validateReason();
-        const isDateValid = validateDates(true);
-
-        if (isTeamValid && isReasonValid && isDateValid) {
-            submitBtn.disabled = true;
-            form.submit();
-        }
-    });
 
 function wfhTeamMultiSelect(){
 
@@ -299,6 +319,7 @@ function wfhTeamMultiSelect(){
         let teamIds = getTeamIds();
         let teamIdElement = document.getElementById(namespace + "teamId");
         teamIdElement.value = teamIds.join(',');
+
     };
 
     localStorage.removeItem(storageKey);
@@ -332,6 +353,7 @@ function wfhTeamMultiSelect(){
 
                 renderSelectedOptions();
                 setTeamIdInParams();
+                 $("#" + namespace + "teamId").valid();
             });
 
             selectedOptionElement.append(span, closeButton);
@@ -348,7 +370,8 @@ function wfhTeamMultiSelect(){
             localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
             renderSelectedOptions();
             setTeamIdInParams();
-            validateWFHTeam();
+
+             $("#" + namespace + "teamId").valid();
         }
 
         $(this).val('');
@@ -356,18 +379,8 @@ function wfhTeamMultiSelect(){
 
     wfhSelect.off('change').on('change', updateSelectedOptions);
 
-    // Validation
-   window.validateWFHTeam = function(){
-       const latestValues = getTeamIds(); // Always fetch fresh data
 
-       if(latestValues.length === 0){
-           $('#teamError').text("Please select at least one team member.");
-           return false;
-       }
 
-       $('#teamError').text("");
-       return true;
-   };
 
     renderSelectedOptions();
     setTeamIdInParams();
@@ -377,9 +390,7 @@ wfhTeamMultiSelect();
 
 
 
-/* ===============================
-   WFH Dynamic Date Creator
-   =============================== */
+
 
 function dynamicDateCreator() {
 
@@ -469,14 +480,8 @@ dateInputsContainer.on('change', 'input[type="checkbox"]', function () {
     }
 });
 
-$('#startDate').on('change', function () {
-    $('#endDate').val('');
-    dateInputsContainer.hide();
-});
 
-$('#endDate').on('blur', function () {
-    dynamicDateCreator();
-});
+
 
 });
 </script>
