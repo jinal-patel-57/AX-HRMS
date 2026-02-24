@@ -18,13 +18,11 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
 
 	@Override
 	public String notificationAnniversary() {
-		// TODO Auto-generated method stub
 		return _configuration.notificationAnniversary();
 	}
 
 	@Override
 	public String notificationBirthday() {
-		// TODO Auto-generated method stub
 		return _configuration.notificationBirthday();
 	}
 
@@ -119,6 +117,16 @@ public class NotificationTemplateConfigurationImpl implements NotificationTempla
     @Override
     public String WFHRequestManagerAndHr() {
         return _configuration.WFHRequestManagerAndHr();
+    }
+
+    @Override
+    public String upcomingBirthdayNotification() {
+        return _configuration.upcomingBirthdayNotification();
+    }
+
+    @Override
+    public String upcomingAnniversaryNotification() {
+        return _configuration.upcomingAnniversaryNotification();
     }
 
     @Override

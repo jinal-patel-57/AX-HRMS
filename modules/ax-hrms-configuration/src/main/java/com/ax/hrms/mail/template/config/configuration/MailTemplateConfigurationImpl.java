@@ -380,6 +380,26 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
     }
 
     @Override
+    public String mailUpcomingBirthdayHrMarketingSubject() {
+        return _configuration.mailUpcomingBirthdayHrMarketingSubject();
+    }
+
+    @Override
+    public String mailUpcomingBirthdayHrMarketingBody() {
+        return _configuration.mailUpcomingBirthdayHrMarketingBody();
+    }
+
+    @Override
+    public String mailUpcomingAnniversaryHrMarketingSubject() {
+        return _configuration.mailUpcomingAnniversaryHrMarketingSubject();
+    }
+
+    @Override
+    public String mailUpcomingAnniversaryHrMarketingBody() {
+        return _configuration.mailUpcomingAnniversaryHrMarketingBody();
+    }
+
+    @Override
 	public String mailRemovalProjectSubject() {
 		return _configuration.mailRemovalProjectSubject();
 	}

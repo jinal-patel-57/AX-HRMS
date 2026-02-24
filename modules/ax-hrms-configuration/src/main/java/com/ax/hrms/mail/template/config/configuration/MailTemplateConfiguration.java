@@ -690,4 +690,44 @@ public interface MailTemplateConfiguration {
             required = false
     )
     public String mailWFHApproveTeamBody();
+
+
+    @Meta.AD(
+            deflt = "Upcoming Employee Birthdays - After 7 Days",
+            name = "Upcoming Birthday Notification to HR and Marketing (SUBJECT)",
+            required = false
+    )
+    public String mailUpcomingBirthdayHrMarketingSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Dear Team,</p>" +
+                    "<p>Please find below the list of employees who have upcoming <b>Birthdays</b> on <b>${EVENT_DATE}</b>" +
+                    "${BODY}" +
+                    "<p>Kindly make the necessary arrangements.</p>" +
+                    "<p>Regards,<br/>HRMS</p>",
+            name = "Upcoming Birthday Notification to HR and Marketing (BODY)",
+            required = false
+    )
+    public String mailUpcomingBirthdayHrMarketingBody();
+
+
+    @Meta.AD(
+            deflt = "Upcoming Work Anniversaries - After 7 Days",
+            name = "Upcoming Work Anniversary Notification to HR and Marketing (SUBJECT)",
+            required = false
+    )
+    public String mailUpcomingAnniversaryHrMarketingSubject();
+
+
+    @Meta.AD(
+            deflt = "<p>Dear Team,</p>" +
+                    "<p>Please find below the list of employees who have upcoming <b>Work Anniversaries</b> on <b>${EVENT_DATE}</b>" +
+                    "${BODY}" +
+                    "<p>Kindly take the necessary action.</p>" +
+                    "<p>Regards,<br/>HRMS</p>",
+            name = "Upcoming Work Anniversary Notification to HR and Marketing (BODY)",
+            required = false
+    )
+    public String mailUpcomingAnniversaryHrMarketingBody();
 }

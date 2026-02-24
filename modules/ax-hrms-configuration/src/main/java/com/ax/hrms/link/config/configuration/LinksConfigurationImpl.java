@@ -28,6 +28,11 @@ public class LinksConfigurationImpl implements LinksConfiguration {
         return _configuration.appraisalProcessManagementPageLink();
     }
 
+    @Override
+    public String marketingTeamEmailIds() {
+        return _configuration.marketingTeamEmailIds();
+    }
+
     // below code need not be changed (strictly)
     @Activate
     @Modified

@@ -23,4 +23,11 @@ public interface LinksConfiguration {
             required = false)
     public String appraisalProcessManagementPageLink();
 
+    @Meta.AD(
+            deflt = "",
+            name = "Marketing Team Email IDs (Comma Separated)",
+            description = "Enter multiple email addresses separated by commas. Example: marketing1@company.com, marketing2@company.com",
+            required = false
+    )
+    public String marketingTeamEmailIds();
 }

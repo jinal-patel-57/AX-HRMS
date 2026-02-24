@@ -174,4 +174,18 @@ public String notificationAnniversary();
             required = false
     )
     public String WFHRequestManagerAndHr();
+
+    @Meta.AD(
+            deflt = " Upcoming Birthday on ${EVENT_DATE}\n${EMPLOYEE_NAMES}",
+            name = "Upcoming Birthday Notification to HR and Marketing",
+            required = false
+    )
+    public String upcomingBirthdayNotification();
+
+    @Meta.AD(
+            deflt = "Upcoming Work Anniversary on ${EVENT_DATE}\n${EMPLOYEE_NAMES}",
+            name = "Upcoming Work Anniversary Notification to HR and Marketing",
+            required = false
+    )
+    public String upcomingAnniversaryNotification();
 }

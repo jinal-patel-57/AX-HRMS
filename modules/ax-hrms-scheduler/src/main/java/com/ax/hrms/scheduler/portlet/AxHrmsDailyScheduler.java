@@ -3,21 +3,16 @@ package com.ax.hrms.scheduler.portlet;
 
 import com.ax.hrms.anniversary.web.constants.AxHrmsAnniversaryWebPortletConstants;
 import com.ax.hrms.anniversary.web.util.AnniversaryUtil;
-import com.ax.hrms.birthday.web.scheduler.AxHrmsBirthdayJobScheduler;
 import com.ax.hrms.birthday.web.util.BirthdayWebUtil;
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.constants.AxHrmsBirthdayWebPortletConstants;
+import com.ax.hrms.link.config.configuration.LinksConfiguration;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.model.DepartmentMaster;
+import com.ax.hrms.master.model.DesignationMaster;
 import com.ax.hrms.master.model.TemplateLevelMaster;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
-import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
-import com.ax.hrms.master.service.TemplateLevelMasterLocalService;
-import com.ax.hrms.master.service.WishTypeMasterLocalService;
-import com.ax.hrms.model.AppraisalEvaluationFormStatus;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.PipProgram;
+import com.ax.hrms.master.service.*;
+import com.ax.hrms.model.*;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.scheduler.constants.AxHrmsSchedulerPortletKeys;
 import com.ax.hrms.scheduler.portlet.notification.SendNotificationToUserHandler;
@@ -45,19 +40,12 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-@Component(
-        property = {
-                "dispatch.task.executor.name=Ax Hrms Daily Scheduler", "dispatch.task.executor.type=Ax Hrms Daily Scheduler"
-        },
-        service = DispatchTaskExecutor.class
-)
+@Component(property = {"dispatch.task.executor.name=Ax Hrms Daily Scheduler", "dispatch.task.executor.type=Ax Hrms Daily Scheduler"}, service = DispatchTaskExecutor.class)
 public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
-	private static final Log log = LogFactoryUtil.getLog(AxHrmsDailyScheduler.class);
+    private static final Log log = LogFactoryUtil.getLog(AxHrmsDailyScheduler.class);
 
     @Reference
     AppraisalEvaluationFormStatusLocalService appraisalEvaluationFormStatusLocalService;
@@ -81,56 +69,59 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
     TemplateLevelMasterLocalService templateLevelMasterLocalService;
 
 
-	@Reference
-	private DepartmentMasterLocalService departmentMasterLocalService;
+    @Reference
+    private DepartmentMasterLocalService departmentMasterLocalService;
 
-	@Reference
-	private EmployeeDepartmentLocalService employeeDepartmentLocalService;
+    @Reference
+    private EmployeeDepartmentLocalService employeeDepartmentLocalService;
+
+    @Reference
+    private LinksConfiguration linksConfiguration;
 
 
+    @Reference
+    private EmployeeDesignationLocalService employeeDesignationLocalService;
 
-	@Reference
-	private EmployeeDesignationLocalService employeeDesignationLocalService;
+    @Reference
+    private DesignationMasterLocalService designationMasterLocalService;
+    @Reference
+    private UserNotificationEventLocalService userNotificationEventLocalService;
 
-	@Reference
-	private DesignationMasterLocalService designationMasterLocalService;
-	@Reference
-	private UserNotificationEventLocalService userNotificationEventLocalService;
+    @Reference
+    private WishTypeMasterLocalService wishTypeMasterLocalService;
 
-	@Reference
-	private WishTypeMasterLocalService wishTypeMasterLocalService;
+    @Reference
+    private LeaveBalanceLocalService leaveBalanceLocalService;
+    @Reference
+    private LeavePolicyMasterLocalService leavePolicyMasterLocalService;
+    @Reference
+    private LeaveTypeMasterLocalService leaveTypeMasterLocalService;
+    @Reference
+    private EmployeeWishLocalService employeeWishLocalService;
 
-	@Reference
-	private LeaveBalanceLocalService leaveBalanceLocalService;
-	@Reference
-	private LeavePolicyMasterLocalService leavePolicyMasterLocalService;
-	@Reference
-	private LeaveTypeMasterLocalService leaveTypeMasterLocalService;
-	@Reference
-	private EmployeeWishLocalService employeeWishLocalService;
-	
-	@Reference
-	private MailTemplateConfiguration mailTemplateConfiguration;
+    @Reference
+    private MailTemplateConfiguration mailTemplateConfiguration;
 
-	@Reference
-	private NotificationTemplateConfiguration notificationTemplateConfiguration;
+    @Reference
+    private NotificationTemplateConfiguration notificationTemplateConfiguration;
 
     @Override
     public void doExecute(DispatchTrigger dispatchTrigger, DispatchTaskExecutorOutput dispatchTaskExecutorOutput) throws Exception {
-        
-        Group group = GroupLocalServiceUtil.fetchGroup(PortalUtil.getDefaultCompanyId(), "Guest");
-		String fromName = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-		String fromEmailAddress = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
-		try {
-			sendMailForPendingAppraisalEvaluation();
-	        sendNotificationAndMailToHrForPipMeetings();
-			sendMailAndNotificationToHrForBirthdayWishes(fromName, fromEmailAddress,group.getCompanyId());
-			sendMailAndNotificationToHrForAnniversaryWishes(group, group.getGroupId(),
-					group.getCreatorUserId(), group.getCompanyId());
-		} catch (Exception e) {
-			log.error("AxHrmsBirthdayJobScheduler >>> doExecute >>> " + e.getMessage());
-		}
+        Group group = GroupLocalServiceUtil.fetchGroup(PortalUtil.getDefaultCompanyId(), "Guest");
+        String fromName = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+        try {
+            log.info("Inside the do execute method of the Daily Schedular");
+            send7thDayBirthdayAndAnniversaryToHrAndMarketing(fromName, fromEmailAddress, group.getCompanyId());
+            sendMailForPendingAppraisalEvaluation();
+            sendNotificationAndMailToHrForPipMeetings();
+            sendMailAndNotificationToHrForBirthdayWishes(fromName, fromEmailAddress, group.getCompanyId());
+            sendMailAndNotificationToHrForAnniversaryWishes(group, group.getGroupId(), group.getCreatorUserId(), group.getCompanyId());
+        } catch (Exception e) {
+            log.error("AxHrmsBirthdayJobScheduler >>> doExecute >>> " + e.getMessage());
+        }
     }
 
     @Override
@@ -152,10 +143,7 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
         appraisalEvaluationFormStatusList2.forEach(e -> {
             Calendar cal2 = Calendar.getInstance();
             cal2.setTime(e.getSubmissionDate());
-            if (
-                    cal2.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
-                            cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH) &&
-                            cal2.get(Calendar.DATE) == cal.get(Calendar.DATE)) {
+            if (cal2.get(Calendar.YEAR) == cal.get(Calendar.YEAR) && cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH) && cal2.get(Calendar.DATE) == cal.get(Calendar.DATE)) {
                 appraisalEvaluationFormStatusList.add(e);
             }
         });
@@ -181,8 +169,7 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
         for (AppraisalEvaluationFormStatus appraisalEvaluationFormStatus : appraisalEvaluationFormStatusList) {
             TemplateLevelMaster templateLevelMaster = templateLevelMasterLocalService.getTemplateLevelMaster(appraisalFormTemplatesLocalService.getAppraisalFormTemplates(appraisalEvaluationFormStatus.getAppraisalFormTemplateId()).getTemplateLevelId());
             EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(appraisalEvaluationFormStatus.getEmployeeId());
-            EmployeeDetails apprisee = employeeDetailsLocalService.getEmployeeDetails(
-                    appraisalReminderLocalService.findByAppraisalProcessId(appraisalEvaluationFormStatus.getAppraisalProcessId()).getEmployeeId());
+            EmployeeDetails apprisee = employeeDetailsLocalService.getEmployeeDetails(appraisalReminderLocalService.findByAppraisalProcessId(appraisalEvaluationFormStatus.getAppraisalProcessId()).getEmployeeId());
             // Append table data
             x++;
             htmlBuilder.append("    <tr>\n");
@@ -201,13 +188,7 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
         String fromName = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
         for (User hrAdmin : hrUsers) {
-            axHrmsCommonApi.sendMail(
-                    hrAdmin.getEmailAddress(),
-                    fromEmailAddress,
-                    fromName,
-                    "PENDING APPRAISAL FORMS!",
-                    htmlBuilder.toString()
-            );
+            axHrmsCommonApi.sendMail(hrAdmin.getEmailAddress(), fromEmailAddress, fromName, "PENDING APPRAISAL FORMS!", htmlBuilder.toString());
         }
     }
 
@@ -264,9 +245,7 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
 
                     for (User hrAdmin : hrUsers) {
 
-                        UserNotificationEvent userNotificationEvent = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
-                                hrAdmin.getUserId(), AxHrmsSchedulerPortletKeys.AXHRMSSCHEDULER,
-                                UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
+                        UserNotificationEvent userNotificationEvent = UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(hrAdmin.getUserId(), AxHrmsSchedulerPortletKeys.AXHRMSSCHEDULER, UserNotificationDeliveryConstants.TYPE_WEBSITE, notificationJSON);
                         ServiceContext serviceContext = new ServiceContext();
                         SendNotificationToUserHandler sendNotificationToUserHandler = new SendNotificationToUserHandler();
                         sendNotificationToUserHandler.callGetBody(userNotificationEvent, serviceContext);
@@ -287,40 +266,303 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
         String fromName = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
         for (User hrAdmin : hrUsers) {
-            axHrmsCommonApi.sendMail(
-                    hrAdmin.getEmailAddress(),
-                    fromEmailAddress,
-                    fromName,
-                    "UPCOMING PIP PROGRAM MEETINGS",
-                    htmlBuilder.toString()
-            );
+            axHrmsCommonApi.sendMail(hrAdmin.getEmailAddress(), fromEmailAddress, fromName, "UPCOMING PIP PROGRAM MEETINGS", htmlBuilder.toString());
 
         }
 
 
     }
-    private void sendMailAndNotificationToHrForBirthdayWishes(String fromName, String fromEmailAddress,long companyId)
-			throws Exception {
-		StringBuilder body = new StringBuilder(AxHrmsBirthdayWebPortletConstants.HR_BIRTHDAY_REMMINDER_MAIL_HEAD);
 
-		BirthdayWebUtil birthdayWebUtil = new BirthdayWebUtil(employeeDetailsLocalService,
-				employeeDepartmentLocalService, employeeDesignationLocalService, departmentMasterLocalService,
-				designationMasterLocalService, wishTypeMasterLocalService);
+    private void sendMailAndNotificationToHrForBirthdayWishes(String fromName, String fromEmailAddress, long companyId) throws Exception {
+        StringBuilder body = new StringBuilder(AxHrmsBirthdayWebPortletConstants.HR_BIRTHDAY_REMMINDER_MAIL_HEAD);
 
-		birthdayWebUtil.sendMailAndNotificationToHr(fromName, fromEmailAddress, body,
-				axHrmsCommonApi,companyId,mailTemplateConfiguration,notificationTemplateConfiguration);
+        BirthdayWebUtil birthdayWebUtil = new BirthdayWebUtil(employeeDetailsLocalService, employeeDepartmentLocalService, employeeDesignationLocalService, departmentMasterLocalService, designationMasterLocalService, wishTypeMasterLocalService);
 
-	}
+        birthdayWebUtil.sendMailAndNotificationToHr(fromName, fromEmailAddress, body, axHrmsCommonApi, companyId, mailTemplateConfiguration, notificationTemplateConfiguration);
 
-	private void sendMailAndNotificationToHrForAnniversaryWishes(Group group, long groupId,
-			long userId, long companyId) throws Exception {
-		StringBuilder body = new StringBuilder(AxHrmsAnniversaryWebPortletConstants.ANNIVERSARY_REMMINDER_MAIL_HEAD);
+    }
 
-		AnniversaryUtil anniversaryEmployeeRetrieverUtil = new AnniversaryUtil(employeeDetailsLocalService,axHrmsCommonApi,leaveBalanceLocalService,leavePolicyMasterLocalService,leaveTypeMasterLocalService,designationMasterLocalService,departmentMasterLocalService);
+    private void sendMailAndNotificationToHrForAnniversaryWishes(Group group, long groupId, long userId, long companyId) throws Exception {
+        StringBuilder body = new StringBuilder(AxHrmsAnniversaryWebPortletConstants.ANNIVERSARY_REMMINDER_MAIL_HEAD);
 
-		anniversaryEmployeeRetrieverUtil.sendMailAndNotificationToHr(group,body,employeeDepartmentLocalService,employeeDesignationLocalService,mailTemplateConfiguration,notificationTemplateConfiguration);
-		anniversaryEmployeeRetrieverUtil.addLoyaltyLeave(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1,-1)),groupId,userId,companyId);
-		anniversaryEmployeeRetrieverUtil.updateExperience(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1,-1)));
-	}
+        AnniversaryUtil anniversaryEmployeeRetrieverUtil = new AnniversaryUtil(employeeDetailsLocalService, axHrmsCommonApi, leaveBalanceLocalService, leavePolicyMasterLocalService, leaveTypeMasterLocalService, designationMasterLocalService, departmentMasterLocalService);
 
+        anniversaryEmployeeRetrieverUtil.sendMailAndNotificationToHr(group, body, employeeDepartmentLocalService, employeeDesignationLocalService, mailTemplateConfiguration, notificationTemplateConfiguration);
+        anniversaryEmployeeRetrieverUtil.addLoyaltyLeave(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1, -1)), groupId, userId, companyId);
+        anniversaryEmployeeRetrieverUtil.updateExperience(anniversaryEmployeeRetrieverUtil.getAnniversaryEmployee(employeeDetailsLocalService.getEmployeeDetailses(-1, -1)));
+    }
+
+
+    private void send7thDayBirthdayAndAnniversaryToHrAndMarketing(String fromName, String fromEmailAddress, long companyId) throws Exception {
+        try {
+            Calendar targetDate = Calendar.getInstance();
+            targetDate.set(Calendar.HOUR_OF_DAY, 0);
+            targetDate.set(Calendar.MINUTE, 0);
+            targetDate.set(Calendar.SECOND, 0);
+            targetDate.set(Calendar.MILLISECOND, 0);
+            StringBuilder birthdayNamesBuilder = new StringBuilder();
+            StringBuilder anniversaryNamesBuilder = new StringBuilder();
+
+
+            //  Add 7 days
+            targetDate.add(Calendar.DAY_OF_MONTH, 7);
+            log.info("7th Day Scheduler Started");
+            log.info("Target Date (After 7 Days): " + targetDate.getTime());
+
+            int targetDay = targetDate.get(Calendar.DAY_OF_MONTH);
+            int targetMonth = targetDate.get(Calendar.MONTH);
+
+            List<EmployeeDetails> employees = employeeDetailsLocalService.getEmployeeDetailses(-1, -1);
+            log.info("Total Employees Fetched: " + employees.size());
+
+            StringBuilder birthdayTable = new StringBuilder();
+            StringBuilder anniversaryTable = new StringBuilder();
+
+            birthdayTable.append(getTableHeader());
+            anniversaryTable.append(getTableHeader());
+
+            int birthdayCount = 0;
+            int anniversaryCount = 0;
+
+            for (EmployeeDetails emp : employees) {
+                try {
+                    //  Birthday Check
+                    if (emp.getDateOfBirth() != null) {
+                        Calendar birthCal = Calendar.getInstance();
+                        birthCal.setTime(emp.getDateOfBirth());
+
+                        if (birthCal.get(Calendar.DAY_OF_MONTH) == targetDay && birthCal.get(Calendar.MONTH) == targetMonth) {
+
+                            birthdayCount++;
+                            log.info("Birthday Matched: " + emp.getFirstName() + " " + emp.getLastName());
+
+                            birthdayNamesBuilder.append(birthdayCount)
+                                    .append(". ")
+                                    .append(emp.getEmployeeCode() != null ? emp.getEmployeeCode() : "-")
+                                    .append(" - ")
+                                    .append(emp.getFirstName() != null ? emp.getFirstName() : "")
+                                    .append(" ")
+                                    .append(emp.getLastName() != null ? emp.getLastName() : "")
+                                    .append("\n");
+
+                            birthdayTable.append(getRow(emp));
+                        }
+
+                    }
+
+                    // Anniversary Check
+                    if (emp.getJoiningDate() != null) {
+                        Calendar joinCal = Calendar.getInstance();
+                        joinCal.setTime(emp.getJoiningDate());
+
+                        if (joinCal.get(Calendar.DAY_OF_MONTH) == targetDay && joinCal.get(Calendar.MONTH) == targetMonth) {
+
+                            anniversaryCount++;
+
+                            anniversaryNamesBuilder.append(anniversaryCount)
+                                    .append(". ")
+                                    .append(emp.getEmployeeCode() != null ? emp.getEmployeeCode() : "-")
+                                    .append(" - ")
+                                    .append(emp.getFirstName() != null ? emp.getFirstName() : "")
+                                    .append(" ")
+                                    .append(emp.getLastName() != null ? emp.getLastName() : "")
+                                    .append("\n");
+
+
+                            log.info("Anniversary Matched: " + emp.getFirstName() + " " + emp.getLastName());
+
+                            anniversaryTable.append(getRow(emp));
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("Error processing employee: " + emp.getEmployeeId(), e);
+                }
+            }
+
+            birthdayTable.append("</table>");
+            anniversaryTable.append("</table>");
+
+            log.info("Total Birthday Matches: " + birthdayCount);
+            log.info("Total Anniversary Matches: " + anniversaryCount);
+            List<User> hrUsers = axHrmsCommonApi.fetchHrAdminList(companyId);
+            log.info("Total HR Admin Users Found: " + hrUsers.size());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+            String formattedDate = sdf.format(targetDate.getTime());
+            //  SEND BIRTHDAY MAIL
+            if (birthdayCount > 0) {
+
+                String subject = mailTemplateConfiguration.mailUpcomingBirthdayHrMarketingSubject();
+
+                String body = mailTemplateConfiguration.mailUpcomingBirthdayHrMarketingBody().replace("${BODY}", birthdayTable.toString()).replace("${EVENT_DATE}", formattedDate);
+                log.info("Sending Birthday Mail to HR & Marketing...");
+                String notificationMessage =
+                        notificationTemplateConfiguration.upcomingBirthdayNotification()
+                                .replace("${EVENT_DATE}", formattedDate)
+                                .replace("${EMPLOYEE_NAMES}", birthdayNamesBuilder.toString());
+
+                sendWebsiteNotificationToUsers(hrUsers, notificationMessage);
+                sendToHrAndMarketing(hrUsers, subject, body, fromName, fromEmailAddress);
+            }
+
+            //  SEND ANNIVERSARY MAIL
+            if (anniversaryCount > 0) {
+
+                String subject = mailTemplateConfiguration.mailUpcomingAnniversaryHrMarketingSubject();
+
+                String body = mailTemplateConfiguration.mailUpcomingAnniversaryHrMarketingBody().replace("${BODY}", anniversaryTable.toString()).replace("${EVENT_DATE}", formattedDate);
+                log.info("Sending Anniversary Mail to HR & Marketing...");
+                String notificationMessage =
+                        notificationTemplateConfiguration
+                                .upcomingAnniversaryNotification()
+                                .replace("${EVENT_DATE}", formattedDate)
+                                .replace("${EMPLOYEE_NAMES}", anniversaryNamesBuilder.toString());
+
+                sendWebsiteNotificationToUsers(hrUsers, notificationMessage);
+                sendToHrAndMarketing(hrUsers, subject, body, fromName, fromEmailAddress);
+            }
+        } catch (Exception exception) {
+            log.error("Error in 7th Day Birthday & Anniversary Scheduler" + exception.getMessage());
+        }
+    }
+
+    private void sendToHrAndMarketing(List<User> hrUsers, String subject, String body, String fromName, String fromEmailAddress) {
+
+        try {
+
+            // HR Users
+            for (User hr : hrUsers) {
+
+                try {
+                    axHrmsCommonApi.sendMail(hr.getEmailAddress(), fromEmailAddress, fromName, subject, body);
+                } catch (Exception e) {
+                    log.error("Failed sending mail to HR: " + hr.getEmailAddress(), e);
+                }
+            }
+
+            // Marketing
+            String marketingEmails = linksConfiguration.marketingTeamEmailIds();
+
+            if (marketingEmails != null && !marketingEmails.trim().isEmpty()) {
+                Set<String> uniqueEmails = new HashSet<>();
+                String[] emailArray = marketingEmails.split(",");
+                for (String email : emailArray) {
+                    if (email != null && !email.trim().isEmpty()) {
+                        uniqueEmails.add(email.trim().toLowerCase());
+                    }
+                }
+
+                for (String email : uniqueEmails) {
+
+                    try {
+                        axHrmsCommonApi.sendMail(email.trim(), fromEmailAddress, fromName, subject, body);
+                    } catch (Exception e) {
+                        log.error("Failed sending mail to Marketing: " + email, e);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Error in sendToHrAndMarketing()", e);
+        }
+    }
+
+
+    private String getTableHeader() {
+
+        return "<table style='width:100%; border-collapse: collapse;'>" + "<tr>" + "<th style='border:1px solid #ddd; padding:8px;'>Employee Code</th>" + "<th style='border:1px solid #ddd; padding:8px;'>Employee Name</th>" + "<th style='border:1px solid #ddd; padding:8px;'>Department</th>" + "<th style='border:1px solid #ddd; padding:8px;'>Designation</th>" + "</tr>";
+    }
+
+    private String getRow(EmployeeDetails emp) {
+
+        String departmentName = "-";
+        String designationName = "-";
+
+        try {
+
+            if (emp != null) {
+
+                try {
+                    EmployeeDepartment empDept = employeeDepartmentLocalService.findByEmployeeId(emp.getEmployeeId());
+
+                    if (empDept != null) {
+                        DepartmentMaster dept = departmentMasterLocalService.fetchDepartmentMaster(empDept.getDepartmentMasterId());
+
+                        if (dept != null) {
+                            departmentName = dept.getDepartmentName();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    log.warn("Department fetch failed for employeeId: " + emp.getEmployeeId(), e);
+                }
+
+                try {
+                    EmployeeDesignation empDes = employeeDesignationLocalService.findByEmployeeId(emp.getEmployeeId());
+
+                    if (empDes != null) {
+                        DesignationMaster des = designationMasterLocalService.fetchDesignationMaster(empDes.getDesignationMasterId());
+
+                        if (des != null) {
+                            designationName = des.getDesignationName();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    log.warn("Designation fetch failed for employeeId: " + emp.getEmployeeId(), e);
+                }
+            }
+
+            return "<tr>" + "<td style='border:1px solid #ddd; padding:8px;'>" + (emp.getEmployeeCode() != null ? emp.getEmployeeCode() : "-") + "</td>" + "<td style='border:1px solid #ddd; padding:8px;'>" + (emp.getFirstName() != null ? emp.getFirstName() : "") + " " + (emp.getLastName() != null ? emp.getLastName() : "") + "</td>" + "<td style='border:1px solid #ddd; padding:8px;'>" + departmentName + "</td>" + "<td style='border:1px solid #ddd; padding:8px;'>" + designationName + "</td>" + "</tr>";
+
+        } catch (Exception e) {
+            log.error("Error building row for employeeId: " + emp.getEmployeeId(), e);
+            return "";
+        }
+    }
+
+    private void sendWebsiteNotificationToUsers(
+            List<User> users,
+            String notificationMessage
+    ) {
+
+        if (users == null || users.isEmpty()) {
+            log.warn("No users found for sending notification.");
+            return;
+        }
+
+        for (User user : users) {
+
+            if (user == null) {
+                continue;
+            }
+
+            try {
+
+                JSONObject notificationJSON = JSONFactoryUtil.createJSONObject();
+                notificationJSON.put("body", notificationMessage);
+                notificationJSON.put("title", "HRMS Notification");
+                notificationJSON.put("timestamp", System.currentTimeMillis());
+
+                UserNotificationEvent userNotificationEvent =
+                        UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
+                                user.getUserId(),
+                                AxHrmsSchedulerPortletKeys.AXHRMSSCHEDULER,
+                                UserNotificationDeliveryConstants.TYPE_WEBSITE,
+                                notificationJSON
+                        );
+
+                ServiceContext serviceContext = new ServiceContext();
+
+                SendNotificationToUserHandler handler =
+                        new SendNotificationToUserHandler();
+
+                handler.callGetBody(userNotificationEvent, serviceContext);
+
+                log.info("Website notification sent to userId: " + user.getUserId());
+
+            } catch (Exception e) {
+                log.error("Failed sending notification to userId: " + user.getUserId(), e);
+            }
+        }
+    }
 }
