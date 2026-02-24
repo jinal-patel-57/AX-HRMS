@@ -348,6 +348,7 @@ function wfhTeamMultiSelect(){
             localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
             renderSelectedOptions();
             setTeamIdInParams();
+            validateWFHTeam();
         }
 
         $(this).val('');
@@ -356,14 +357,17 @@ function wfhTeamMultiSelect(){
     wfhSelect.off('change').on('change', updateSelectedOptions);
 
     // Validation
-    window.validateWFHTeam = function(){
-        if(wfhSelectedValues.length === 0){
-            $('#teamError').text("Please select at least one team member.");
-            return false;
-        }
-        $('#teamError').text("");
-        return true;
-    };
+   window.validateWFHTeam = function(){
+       const latestValues = getTeamIds(); // Always fetch fresh data
+
+       if(latestValues.length === 0){
+           $('#teamError').text("Please select at least one team member.");
+           return false;
+       }
+
+       $('#teamError').text("");
+       return true;
+   };
 
     renderSelectedOptions();
     setTeamIdInParams();

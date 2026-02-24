@@ -138,8 +138,29 @@ public class WFHStatusUtil {
 
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", managerOrHr.getFirstName() + StringPool.SPACE + managerOrHr.getLastName());
 
+
             mailContent = mailContent.replace("${BODY}", body);
-            mailContent = mailContent.replace("${COMMENT}", userComment);
+
+            if (userComment != null && !userComment.trim().isEmpty()) {
+                StringBuilder commentString = new StringBuilder();
+                commentString.append("<tr>")
+                        .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+                        .append("<strong>Remarks/Comments:</strong> ").append(userComment)
+                        .append("</td>")
+                        .append("</tr>");
+
+                mailContent =  mailContent.replace("${COMMENT_SECTION}",commentString);
+
+
+            }
+            else {
+                mailContent =  mailContent.replace("${COMMENT_SECTION}","");
+            }
+
+
+
+
+//            mailContent = mailContent.replace("${COMMENT}", userComment);
 
 //            mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 //            mailContent =  mailContent.replace("${BODY}", body);
@@ -200,6 +221,7 @@ public class WFHStatusUtil {
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 
             mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${COMMENT_SECTION}","");
 //            mailContent = mailContent.replace("${COMMENT}", userComment);
 
            log.info("-----------------------------------------------------------");
@@ -267,16 +289,18 @@ public class WFHStatusUtil {
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
 
-                .append("</tr>");
+                .append("</tr>")
+
+                .append("${COMMENT_SECTION}");
 
         // Add comment/remarks section if available
-        if (userComment != null && !userComment.trim().isEmpty()) {
-            body.append("<tr>")
-                .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")  
-                .append("<strong>Remarks/Comments:</strong> ").append(userComment)
-                .append("</td>")
-                .append("</tr>");
-        }
+//        if (userComment != null && !userComment.trim().isEmpty()) {
+//            body.append("<tr>")
+//                .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+//                .append("<strong>Remarks/Comments:</strong> ").append(userComment)
+//                .append("</td>")
+//                .append("</tr>");
+//        }
 
         body.append(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_FOOTER);
 

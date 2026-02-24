@@ -221,7 +221,6 @@ public class WFHStatusUtil {
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getStartDate())).append("</td>")
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
-                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getEndDate())).append("</td>")
 
                 .append("</tr>");
 
