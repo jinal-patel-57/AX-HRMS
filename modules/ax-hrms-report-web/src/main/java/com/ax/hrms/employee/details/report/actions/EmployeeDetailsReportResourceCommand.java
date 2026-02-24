@@ -4,8 +4,10 @@ import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortle
 
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.model.DocumentTypeMaster;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.master.service.DocumentTypeMasterLocalService;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeBankAccount;
@@ -169,7 +171,7 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
                 employeeDetailsJson.put(PUT_X, StringPool.DASH);
                 employeeDetailsJson.put("employeeName", employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
                 employeeDetailsJson.put(CODE, employeeDetails.getEmployeeCode());
-                employeeDetailsJson.put(PAN_NAME, employeeDetails.getNameAsPerAadhaarCard());
+                
                 try {
                 	EmployeeSalary employeeSalary = employeeSalaryLocalService.findByEmployeeIdAndStatus(employeeId, true);
                 	employeeDetailsJson.put(GROSS_SALARY_PM, employeeSalary.getGrossSalaryCtcPm());
@@ -205,31 +207,44 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 				if(Validator.isNotNull(employeeDetails.getBankAccountId()) && employeeDetails.getBankAccountId()>0) {
 					try {
 						EmployeeBankAccount employeeBankAccount = employeeBankAccountLocalService.getEmployeeBankAccount(employeeDetails.getBankAccountId());
-						employeeDetailsJson.put(BANK_NAME, employeeBankAccount.getBankName());
-						employeeDetailsJson.put(IFSC, employeeBankAccount.getIfscCode());
-						employeeDetailsJson.put(SAVING_BANK_ACCOUNT, employeeBankAccount.getAccountNumber());
+						employeeDetailsJson.put(BANK_NAME, !employeeBankAccount.getBankName().isBlank()?employeeBankAccount.getBankName():StringPool.DASH);
+						employeeDetailsJson.put(IFSC, !employeeBankAccount.getIfscCode().isBlank()?employeeBankAccount.getIfscCode():StringPool.DASH);
+						employeeDetailsJson.put(SAVING_BANK_ACCOUNT, !employeeBankAccount.getAccountNumber().isBlank()?employeeBankAccount.getAccountNumber():StringPool.DASH);
+						employeeDetailsJson.put(PAN_NAME, !employeeBankAccount.getNameAsPerPanCard().isBlank()?employeeBankAccount.getNameAsPerPanCard():StringPool.DASH);
 					} catch(Exception e) {
 						log.error("Error while fetching employee bank account -- " + e.getMessage());
 						employeeDetailsJson.put(BANK_NAME, StringPool.DASH);
 						employeeDetailsJson.put(IFSC, StringPool.DASH);
 						employeeDetailsJson.put(SAVING_BANK_ACCOUNT, StringPool.DASH);
+						employeeDetailsJson.put(PAN_NAME, StringPool.DASH);
 					}
 				} else {
 					employeeDetailsJson.put(BANK_NAME, StringPool.DASH);
 					employeeDetailsJson.put(IFSC, StringPool.DASH);
 					employeeDetailsJson.put(SAVING_BANK_ACCOUNT, StringPool.DASH);
+					employeeDetailsJson.put(PAN_NAME, StringPool.DASH);
 				}
-				employeeDetailsJson.put(PAN, employeeDetails.getPanCardNumber());
-				employeeDetailsJson.put(PERSONAL_EMAIL, employeeDetails.getPersonalEmail());
+				employeeDetailsJson.put(PAN, !employeeDetails.getPanCardNumber().isBlank()?employeeDetails.getPanCardNumber():StringPool.DASH);
+				employeeDetailsJson.put(PERSONAL_EMAIL, !employeeDetails.getPersonalEmail().isBlank()?employeeDetails.getPersonalEmail():StringPool.DASH);
 				log.info("mobile No -- " + employeeDetails.getMobileNo());
-				employeeDetailsJson.put(MOBILE_NO, employeeDetails.getMobileNo());
+				employeeDetailsJson.put(MOBILE_NO, !employeeDetails.getMobileNo().isBlank()?employeeDetails.getMobileNo():StringPool.DASH);
 				employeeDetailsJson.put(GENDER, employeeDetails.getGender());
-				employeeDetailsJson.put(FH_NAME, employeeDetails.getFatherName());
-				String employeeDobStr = Validator.isNotNull(employeeDetails.getDateOfBirth())?sdf.format(employeeDetails.getDateOfBirth()):StringPool.BLANK;
+				employeeDetailsJson.put(FH_NAME, !employeeDetails.getFatherName().isBlank()?employeeDetails.getFatherName():StringPool.DASH);
+				String employeeDobStr = Validator.isNotNull(employeeDetails.getDateOfBirth())?sdf.format(employeeDetails.getDateOfBirth()):StringPool.DASH;
 				employeeDetailsJson.put(DATE_OF_BIRTH, employeeDobStr);
 				employeeDetailsJson.put(MARITAL_STATUS, employeeDetails.isMaritalStatus()?MARRIED:SINGLE);
-				employeeDetailsJson.put(NAME_AS_PER_AADHAR, employeeDetails.getNameAsPerAadhaarCard());
-				employeeDetailsJson.put(KYC_DOC, AADHAR_CARD);
+				employeeDetailsJson.put(NAME_AS_PER_AADHAR, !employeeDetails.getNameAsPerAadhaarCard().isBlank()?employeeDetails.getNameAsPerAadhaarCard():StringPool.DASH);
+				try {
+					DocumentTypeMaster documentTypeMaster = documentTypeLocalService.getDocumentTypeMaster(employeeDetails.getDocumentTypeMasterId());
+					if(Validator.isNotNull(documentTypeMaster)) {
+						employeeDetailsJson.put(KYC_DOC, documentTypeMaster.getDocumentTypeName());
+					} else {
+						employeeDetailsJson.put(KYC_DOC, AADHAR_CARD);
+					}
+				}catch(Exception e) {
+					log.error("Error while fetching kyc document - " + e.getMessage());
+					employeeDetailsJson.put(KYC_DOC, AADHAR_CARD);
+				}
 				
 				try {
 					long employeeAddressId = employeeDetails.getEmployeeAddressId();
@@ -253,8 +268,8 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 				
 				try {
 					EmployeeUanEsic employeeUanEsic = employeeUanEsicLocalService.getEmployeeUanEsic(employeeDetails.getUanEsicId());
-					employeeDetailsJson.put(UAN, employeeUanEsic.getUan());
-					employeeDetailsJson.put(ESIC, employeeUanEsic.getEsicNo());
+					employeeDetailsJson.put(UAN, !employeeUanEsic.getUan().isBlank()?employeeUanEsic.getUan():StringPool.DASH);
+					employeeDetailsJson.put(ESIC, !employeeUanEsic.getEsicNo().isBlank()?employeeUanEsic.getEsicNo():StringPool.DASH);
 				} catch(Exception e) {
 					log.error("Error while fetching employee uan esic -- " + e.getMessage());
 					employeeDetailsJson.put(UAN, StringPool.DASH);
@@ -263,8 +278,8 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 				
 				try {
 					Nominee nominee = nomineeLocalService.getNominee(employeeDetails.getNominneeId());
-					employeeDetailsJson.put(NOMINEE_NAME, nominee.getNomineeFirstName() + " " + nominee.getNomineeLastName());
-					employeeDetailsJson.put(RELATION, nominee.getRelationshipWithNominee());
+					employeeDetailsJson.put(NOMINEE_NAME, !nominee.getNomineeFirstName().isBlank()?nominee.getNomineeFirstName() + " " + nominee.getNomineeLastName():StringPool.DASH);
+					employeeDetailsJson.put(RELATION, !nominee.getRelationshipWithNominee().isBlank()?nominee.getRelationshipWithNominee():StringPool.DASH);
 					String nomineeDOBStr = Validator.isNotNull(nominee.getNomineeDob())?sdf.format(nominee.getNomineeDob()):"";
 					employeeDetailsJson.put(NOMINEE_DOB, nomineeDOBStr);
 				} catch(Exception e) {
@@ -274,12 +289,10 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 					employeeDetailsJson.put(NOMINEE_DOB, StringPool.DASH);
 				}
                 employeeDetailsJson.put(CO_EMPLOYEE_CODE, StringPool.DASH);
-                employeeDetailsJson.put(SPOUSE_NAME, employeeDetails.getSpouseName());
+                employeeDetailsJson.put(SPOUSE_NAME, !employeeDetails.getSpouseName().isBlank()?employeeDetails.getSpouseName():StringPool.DASH);
                 employeesArr.put(employeeDetailsJson);
             }
-
 			EmployeeDetailsExcelExportUtil.exportEmployeeExcel(employeesArr, response);
-
         } catch (Exception e) {
             log.error("Exception in Leave Export", e);
         }
@@ -290,7 +303,7 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 	private String getAddressString(Address address) {
 		List<String> parts = new ArrayList<>();
 		String addressStr = StringPool.BLANK;
-		if(Validator.isNotNull(address)) {
+		if(Validator.isNotNull(address) && !address.getLine1().isBlank()) {
 			parts.add(address.getLine1());
 			if (Validator.isNotNull(address.getLine2())) {
 				parts.add(address.getLine2());
@@ -308,7 +321,9 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 			if (Validator.isNotNull(address.getPincode())) {
 				addressStr = addressStr + " - " + address.getPincode();
 			}
-		} 
+		} else {
+			addressStr = StringPool.DASH;
+		}
 		return addressStr;
 	}
 
@@ -340,6 +355,9 @@ public class EmployeeDetailsReportResourceCommand implements MVCResourceCommand 
 	
 	@Reference
 	DepartmentMasterLocalService departmentMasterLocalService;
+	
+	@Reference
+	DocumentTypeMasterLocalService documentTypeLocalService;
     
     @Reference
     private EmployeeSalaryLocalService employeeSalaryLocalService;
