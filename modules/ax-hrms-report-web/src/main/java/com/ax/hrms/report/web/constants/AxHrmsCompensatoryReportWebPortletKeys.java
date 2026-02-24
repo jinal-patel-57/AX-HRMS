@@ -6,7 +6,7 @@ public class AxHrmsCompensatoryReportWebPortletKeys {
 
     public static final String SHEET_NAME = "Comp Off Report";
 
-    public static final String FILE_NAME = "AX_Comp_Off_Report";
+    public static final String FILE_NAME = "AX_Availed_Comp_Off_Report";
 
     public static final String COMP_OFF = "Compensatory Off";
 
