@@ -105,6 +105,21 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
                 compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
                 compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
+
+                int requestedHours = compensatoryData.getRequestedHours();
+                int approvedHours = compensatoryData.getApprovedHours();
+                if (requestedHours == 4) {
+                    compensatoryDataDto.setRequestedCompensationType("Half Day");
+                } else if (requestedHours == 8) {
+                    compensatoryDataDto.setRequestedCompensationType("Full Day");
+                }
+                if (approvedHours == 4) {
+                    compensatoryDataDto.setApprovedCompensationType("Half Day");
+                } else if (approvedHours == 8) {
+                    compensatoryDataDto.setApprovedCompensationType("Full Day");
+                }
+
+
                 compensatoryDataDto.setDescription(compensatoryData.getDescription());
                 compensatoryDataDto.setEmployeeId(compensatoryData.getEmployeeId());
                 try {
@@ -113,6 +128,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 }catch (NoSuchEmployeeDetailsException noSuchEmployeeDetailsException){
                     log.error("noSuchEmployeeDetailsException "+noSuchEmployeeDetailsException.getMessage());
                 }
+                log.info(compensatoryDataDto.getEmployeeName()+ "    "+compensatoryDataDto.getDateOfCompensation()+ "   "+compensatoryDataDto.getRequestedCompensationType()+"   "+compensatoryDataDto.getApprovedCompensationType());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String formattedDate = dateFormat.format(compensatoryData.getDateOfCompensation());
                 compensatoryDataDto.setDateOfCompensation(formattedDate);

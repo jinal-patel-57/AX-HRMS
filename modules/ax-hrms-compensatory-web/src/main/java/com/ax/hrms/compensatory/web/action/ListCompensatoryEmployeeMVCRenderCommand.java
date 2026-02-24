@@ -93,27 +93,43 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
             List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1, -1);
             List<CompensatoryDataDto> compensatoryDataDtoList = new ArrayList<>();
             List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
-            log.info("listOfEmployeeDetails = " + listOfEmployeeDetails.toString());
+//            log.info("listOfEmployeeDetails = " + listOfEmployeeDetails.toString());
             try {
                 EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
-                log.info("employee Dtains :: "+employeeDetails.toString());
+//                log.info("employee Dtains :: "+employeeDetails.toString());
                 List<User> managerUserList = axHrmsCommonApi.fetchRolePersonList(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.MANAGER, -1, -1);
-                log.info("managerUserList = " + managerUserList.toString());
+//                log.info("managerUserList = " + managerUserList.toString());
                 List<EmployeeDetails> managerList = new ArrayList<>();
                 for (User manager : managerUserList) {
 
                     managerList.add(employeeDetailsLocalService.findByLrUserId(manager.getUserId()));
 
                 }
-                log.info("managerList = " + managerList.toString());
+//                log.info("managerList = " + managerList.toString());
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.MANAGER_LIST, managerList);
 
                 List<CompensatoryData> compensatoryDataList = compensatoryDataLocalService.findByEmployeeId(employeeDetails.getEmployeeId());
                 for (CompensatoryData compensatoryData : compensatoryDataList) {
                     CompensatoryDataDto compensatoryDataDto = new CompensatoryDataDto();
                     compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
-                    compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
-                    compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
+//                    compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
+//                    compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
+
+                    int requestedHours = compensatoryData.getRequestedHours();
+                    int approvedHours = compensatoryData.getApprovedHours();
+                    compensatoryDataDto.setRequestedHours(requestedHours);
+                    compensatoryDataDto.setApprovedHours(approvedHours);
+
+                    if (requestedHours == 4) {
+                        compensatoryDataDto.setRequestedCompensationType("Half Day");
+                    } else if (requestedHours == 8) {
+                        compensatoryDataDto.setRequestedCompensationType("Full Day");
+                    }
+                    if (approvedHours == 4) {
+                        compensatoryDataDto.setApprovedCompensationType("Half Day");
+                    } else if (approvedHours == 8) {
+                        compensatoryDataDto.setApprovedCompensationType("Full Day");
+                    }
                     compensatoryDataDto.setDescription(compensatoryData.getDescription());
                     SimpleDateFormat dateFormat = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER_DD_MM_YYYY);
                     try {
