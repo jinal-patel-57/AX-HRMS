@@ -1,8 +1,10 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@ include file="/init.jsp" %>
+<%@ page import="com.liferay.portal.kernel.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
+<%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 
-
-
+<%@ page import="org.json.JSONObject" %>
 <liferay-ui:error key="policy-hr-admin-exists" message="policy-hr-admin-name-is-already-exist" />
 <liferay-ui:success key="policy-hr-admin-deleted" message="policy-hr-admin-has-been-deleted-successfully" />
 <liferay-ui:success key="policy-hr-admin-added" message="policy-hr-admin-has-been-successfully-added" />
@@ -67,7 +69,7 @@
         
         <liferay-ui:search-container-column-text name="Policy Status" value="${policy.status ? 'Active' : 'In Active'}" />
 
-	       <liferay-ui:search-container-column-text name="Actions" cssClass="text-center">
+	      <%-- <liferay-ui:search-container-column-text name="Actions" cssClass="text-center">
 	       
 	       
 	       <c:set var="isValidYear" value="${isHRAdmin || policy.year == currentYear}" />
@@ -80,7 +82,7 @@
 					</button>
 					<ul class="dropdown-menu">
 						<li>
-						<a  href="${policy.previewURL}" download="${policy.file}" class="dropdown-item ${btnClass}"><i class="icon-download-alt"></i>  <liferay-ui:message
+						<a  href="${policy.previewURL}" target="_blank" class="dropdown-item ${btnClass}"><i class="icon-download-alt"></i>  <liferay-ui:message
 						key="download" /></a>
 						</li>
 					</ul>
@@ -88,7 +90,27 @@
 								   
            
             
-        </liferay-ui:search-container-column-text>
+        </liferay-ui:search-container-column-text>--%>
+
+<liferay-ui:search-container-column-text name="Document">
+
+<%
+    long fileEntryId = 0;
+
+    if (policy.getFile() != null) {
+        fileEntryId = policy.getFile().getFileEntryId();
+    }
+
+%>
+
+    <a href="${policy.previewURL}"
+       target="_blank"
+       rel="noopener noreferrer" style="color: #893D96;">
+        <%= policy.getFile() != null ? policy.getFile().getFileName() : "No File" %>
+    </a>
+
+</liferay-ui:search-container-column-text>
+
     </liferay-ui:search-container-row>
  <liferay-ui:search-iterator
 		searchContainer="${policySearchContainer}" markupView="lexicon" paginate="true" />
