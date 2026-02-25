@@ -15,7 +15,7 @@
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-anniversary-calendar"></div>
-                <div><strong> No Anniversaries Today</strong></div>
+                <div><strong> No Work Anniversaries Today</strong></div>
                 <div class="wish-message">No work anniversaries today. We will be back to celebrate milestones as soon as the next special day arrives.</div>
             </div>
         </div>

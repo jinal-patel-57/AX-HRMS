@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp"%>
+<%@ page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil" %>
 
 <c:if test="${empty todaysLeaves}">
 	<div class="ax-card card border-0">
@@ -16,9 +17,25 @@
 	</div>
 </c:if>
 
+
+<%
+boolean isHRAdmin = false;
+
+if (themeDisplay.isSignedIn()) {
+    isHRAdmin = RoleLocalServiceUtil.hasUserRole(
+            themeDisplay.getUserId(),
+            themeDisplay.getCompanyId(),
+            "HR Admin",
+            true
+    );
+}
+%>
+
+
+
 <c:if test="${not empty todaysLeaves}">
 	<div class="card">
-
+	   <c:if test="<%= isHRAdmin %>">
 		<div
 			class="card-header d-flex align-items-center justify-content-between">
 			<strong>Today's Leaves</strong>
@@ -27,7 +44,7 @@
 				Requests</a>
 				</c:if>
 		</div>
-
+	   </c:if>
 		<div class="card-body ax-body">
 			<table class="table ">
 				<thead>

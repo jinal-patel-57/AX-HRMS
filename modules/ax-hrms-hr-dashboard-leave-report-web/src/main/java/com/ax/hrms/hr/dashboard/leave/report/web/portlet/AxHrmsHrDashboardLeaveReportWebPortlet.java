@@ -17,7 +17,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=AxHrmsHrDashboardLeaveReportWeb",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/dashboardleavereport/listTodaysLeaveEmployees.jsp",
+		"javax.portlet.init-param.view-template=/jsp/dashboardleavereport/listTodaysLeaveEmployees.jsp",
 		"javax.portlet.name=" + AxHrmsHrDashboardLeaveReportWebPortletKeys.AXHRMSHRDASHBOARDLEAVEREPORTWEB,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
