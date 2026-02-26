@@ -3,7 +3,23 @@ package com.ax.hrms.scheduler.portlet;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
+import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.constants.AxHrmsBirthdayWebPortletConstants;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
+import com.ax.hrms.master.model.DepartmentMaster;
+import com.ax.hrms.master.model.DesignationMaster;
+import com.ax.hrms.master.service.DesignationMasterLocalService;
+import com.ax.hrms.model.EmployeeDesignation;
+import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
+import com.ax.hrms.service.EmployeeDesignationLocalService;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -44,6 +60,21 @@ public class AxHrmsYearlyScheduler extends BaseDispatchTaskExecutor{
 	@Reference
 	private LeavePolicyMasterLocalService leavePolicyMasterLocalService;
 
+	@Reference
+	private EmployeeDetailsLocalService employeeDetailsLocalService;
+
+	@Reference
+	private AxHrmsCommonApi axHrmsCommonApi;
+
+	@Reference
+	private EmployeeDesignationLocalService employeeDesignationLocalService;
+
+	@Reference
+	private DesignationMasterLocalService designationMasterLocalService;
+
+	@Reference
+	private MailTemplateConfiguration mailTemplateConfiguration;
+
 	@Override
 	public String getName() {
 		return "Ax Hrms Yearly Scheduler";
@@ -55,8 +86,18 @@ public class AxHrmsYearlyScheduler extends BaseDispatchTaskExecutor{
 		try {
 		addLeaveEntryInHistoryTable();
 		updateLeaveBalance();
+
 		}catch(Exception e) {
 			log.info("Error:"+ e.getMessage());
+			try {
+				Group group = GroupLocalServiceUtil.fetchGroup(PortalUtil.getDefaultCompanyId(), "Guest");
+				String fromName = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+				String fromEmailAddress = PrefsPropsUtil.getString(group.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+				sendMailAndNotificationToHr(fromName, fromEmailAddress, e.getMessage(), group.getCompanyId());
+				log.info("mail sent to HR Admin related to Yearly Scheduler Fail.");
+			}catch (Exception e1){
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -122,6 +163,37 @@ public class AxHrmsYearlyScheduler extends BaseDispatchTaskExecutor{
 	                leaveBalanceLocalService.updateLeaveBalance(leaveBalance);
 	            }
 	        }
+	}
+
+
+	public void sendMailAndNotificationToHr(String fromName, String fromEmailAddress, String body, long companyId)
+			throws Exception {
+
+
+try {
+	List<User> hrUserList = axHrmsCommonApi.fetchRolePersonList(companyId, "HR Admin", -1, -1);
+
+
+
+	//SEND MAIL TO HR
+	String mailContent = mailTemplateConfiguration.mailYearlySchedulerFailBody();
+	mailContent = mailContent.replace("${MESSAGE}",
+			Objects.toString(body,
+					"Unknown error occurred during Yearly Scheduler execution."));
+
+	String subject = mailTemplateConfiguration.mailYearlySchedulerFailSubject();
+	for (User hrUser : hrUserList) {
+		EmployeeDetails hrPerson = employeeDetailsLocalService.findByLrUserId(hrUser.getUserId());
+
+		axHrmsCommonApi.sendMail(hrPerson.getOfficialEmail(), fromEmailAddress, fromName,
+				subject, mailContent);
+
+	}
+}catch (Exception e){
+	e.printStackTrace();
+}
+
+
 	}
 
 

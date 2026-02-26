@@ -457,6 +457,17 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
 		// TODO Auto-generated method stub
 		return _configuration.mailDailySchedulerAnniversaryBody();
 	}
+	@Override
+	public String mailYearlySchedulerFailBody() {
+		// TODO Auto-generated method stub
+		return _configuration.mailYearlySchedulerFailBody();
+	}
+
+	@Override
+	public String mailYearlySchedulerFailSubject() {
+		// TODO Auto-generated method stub
+		return _configuration.mailYearlySchedulerFailSubject();
+	}
 
 
 }

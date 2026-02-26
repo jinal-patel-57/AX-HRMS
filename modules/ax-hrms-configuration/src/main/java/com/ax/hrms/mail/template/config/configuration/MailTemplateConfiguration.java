@@ -730,4 +730,42 @@ public interface MailTemplateConfiguration {
             required = false
     )
     public String mailUpcomingAnniversaryHrMarketingBody();
+
+
+
+
+
+    @Meta.AD(
+            deflt = "Yearly Scheduler Execution Failed - Immediate Attention Required",
+            name = "Yearly Scheduler Failure Notification (SUBJECT)",
+            required = false
+    )
+    public String mailYearlySchedulerFailSubject();
+
+
+    @Meta.AD(
+            deflt = "<p style=\"font-family:Arial, sans-serif; font-size:14px;\">Dear Team,</p>" +
+                    "<p style=\"font-family:Arial, sans-serif; font-size:14px;\">" +
+                    "The yearly scheduled job has encountered an <b style=\"color:#d9534f;\">error</b> during execution." +
+                    "</p>" +
+                    "<p style=\"font-family:Arial, sans-serif; font-size:14px;\">" +
+                    "Please find the error details below:" +
+                    "</p>" +
+                    "<div style=\"background-color:#f8d7da; border-left:4px solid #d9534f; padding:10px; " +
+                    "font-family:monospace; font-size:13px; color:#721c24; margin:10px 0;\">" +
+                    "${MESSAGE}" +
+                    "</div>" +
+                    "<p style=\"font-family:Arial, sans-serif; font-size:14px;\">" +
+                    "Kindly review the issue and take necessary corrective action at the earliest." +
+                    "</p>" +
+                    "<br/>" +
+                    "<p style=\"font-family:Arial, sans-serif; font-size:14px;\">" +
+                    "Regards,<br/>" +
+                    "<b>HRMS System Scheduler</b><br/>" +
+                    "<span style=\"font-size:12px; color:#888;\">(This is an automated notification)</span>" +
+                    "</p>",
+            name = "Yearly Scheduler Failure Notification (BODY)",
+            required = false
+    )
+    public String mailYearlySchedulerFailBody();
 }

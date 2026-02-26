@@ -115,8 +115,8 @@ public class AxHrmsDailyScheduler extends BaseDispatchTaskExecutor {
         try {
             log.info("Inside the do execute method of the Daily Schedular");
             send7thDayBirthdayAndAnniversaryToHrAndMarketing(fromName, fromEmailAddress, group.getCompanyId());
-            sendMailForPendingAppraisalEvaluation();
-            sendNotificationAndMailToHrForPipMeetings();
+//            sendMailForPendingAppraisalEvaluation();
+//            sendNotificationAndMailToHrForPipMeetings();
             sendMailAndNotificationToHrForBirthdayWishes(fromName, fromEmailAddress, group.getCompanyId());
             sendMailAndNotificationToHrForAnniversaryWishes(group, group.getGroupId(), group.getCreatorUserId(), group.getCompanyId());
         } catch (Exception e) {
