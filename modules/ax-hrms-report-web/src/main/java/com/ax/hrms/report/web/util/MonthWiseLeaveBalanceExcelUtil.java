@@ -20,13 +20,11 @@ public class MonthWiseLeaveBalanceExcelUtil {
 
         int rowNum = 0;
 
-        // ================= HEADER =================
         Row headerRow = sheet.createRow(rowNum++);
         // Create bold font
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
 
-// Create cell style and set font
         CellStyle headerStyle = workbook.createCellStyle();
         headerStyle.setFont(headerFont);
 
@@ -65,7 +63,7 @@ public class MonthWiseLeaveBalanceExcelUtil {
         // Freeze first 3 columns and header row
         sheet.createFreezePane(3, 1);
 
-        // ================= DATA =================
+
 
         for (Map.Entry<String, Map<String, Double>> entry
                 : leaveBalanceData.entrySet()) {
@@ -108,7 +106,6 @@ public class MonthWiseLeaveBalanceExcelUtil {
             sheet.autoSizeColumn(i);
         }
 
-        // ================= RESPONSE =================
 
         response.setContentType(
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

@@ -119,7 +119,6 @@
             "September", "October", "November", "December"
         ];
 
-        /* -------- Initialize Select2 ONLY ONCE -------- */
 
         employeeSelect.select2({
             placeholder: "Select Employee(s)",
@@ -127,7 +126,6 @@
             width: "100%"
         });
 
-        /* -------- Toggle Function -------- */
 
         function toggleEmployeeSelect(enable) {
 
@@ -172,14 +170,12 @@
             populateMonths($(this).val());
         });
 
-        /* -------- Clear Error -------- */
 
         function clearEmployeeError() {
             employeeError.text("");
             employeeSelect.removeClass("is-invalid");
         }
 
-        /* -------- Validation -------- */
 
         function validateForm() {
 
@@ -211,7 +207,6 @@
             return isValid;
         }
 
-        /* -------- Radio Change -------- */
 
         $("input[name='<portlet:namespace/>employeeType']").on("change", function () {
 
@@ -225,7 +220,6 @@
             }
         });
 
-        /* -------- Remove error on selection -------- */
 
         employeeSelect.on("change", function () {
             clearEmployeeError();
@@ -235,7 +229,6 @@
             monthSelect.removeClass("is-invalid");
         });
 
-        /* -------- Form Submit -------- */
 
         form.on("submit", function (e) {
             if (!validateForm()) {
@@ -243,7 +236,6 @@
             }
         });
 
-        /* -------- Default State -------- */
         toggleEmployeeSelect(false);
 
          populateMonths(yearSelect.val());
