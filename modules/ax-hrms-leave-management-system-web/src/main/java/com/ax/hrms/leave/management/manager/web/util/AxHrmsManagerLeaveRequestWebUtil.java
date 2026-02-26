@@ -257,7 +257,9 @@ public class AxHrmsManagerLeaveRequestWebUtil {
         double remainingLeaveDays = leaveBalance.getNoOfRemainingLeaves();
         double usedLeaveDays = leaveBalance.getNoOfUsedLeaves();
         leaveBalance.setNoOfRemainingLeaves(remainingLeaveDays + totalDays);
-        leaveBalance.setNoOfUsedLeaves(usedLeaveDays - totalDays);
+        if(totalDays<=usedLeaveDays) {
+            leaveBalance.setNoOfUsedLeaves(usedLeaveDays - totalDays);
+        }
         leaveBalanceLocalService.updateLeaveBalance(leaveBalance);
     }
 

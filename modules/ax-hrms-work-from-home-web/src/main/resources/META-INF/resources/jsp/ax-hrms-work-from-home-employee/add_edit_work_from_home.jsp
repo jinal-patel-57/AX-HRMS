@@ -3,6 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.liferay.portal.kernel.util.*" %>
 
+<style>
+#wfhDateInputsContainer .form-control {
+    width: 48%;
+}
+
+</style>
+
 <%
     boolean isEdit = (request.getAttribute("wfh") != null);
     com.ax.hrms.model.WorkFromHomeRequest wfh =
@@ -44,75 +51,86 @@ String currentURL = PortalUtil.getCurrentURL(request);
 
     <form id="wfhForm" action="${saveWFHURL}" method="post" >
         <div class="card-body">
+		   <div class="row">
 
             <c:if test="${isEdit}">
                 <input type="hidden"
                        name="<portlet:namespace/>workFromHomeRequestId"
                        value="<%= wfh.getWorkFromHomeRequestId() %>"/>
             </c:if>
+			
+			<div class="col-12">
+				<div class="form-group">
+				  <label>Team <span class="text-danger">*</span></label>
 
-          <div class="form-group">
-              <label>Team <span class="text-danger">*</span></label>
+				  <select id="mySelect" name="<portlet:namespace />wfhTeamIdSelectBox"
+						  class="form-control custom-select mr-sm-2">
 
-              <select id="mySelect" name="<portlet:namespace />wfhTeamIdSelectBox"
-                      class="form-control custom-select mr-sm-2">
+					  <option value="">Select Employee</option>
 
-                  <option value="">Select Employee</option>
+					  <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
+						  <option value="${employeeDetailsList.getOfficialEmail()}">
+							  ${employeeDetailsList.employeeCode} -
+							  ${employeeDetailsList.getFirstName()}
+							  ${employeeDetailsList.getLastName()}
+						  </option>
+					  </c:forEach>
 
-                  <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
-                      <option value="${employeeDetailsList.getOfficialEmail()}">
-                          ${employeeDetailsList.employeeCode} -
-                          ${employeeDetailsList.getFirstName()}
-                          ${employeeDetailsList.getLastName()}
-                      </option>
-                  </c:forEach>
+				  </select>
 
-              </select>
+				  <input type="hidden"
+						 id="<portlet:namespace />teamId"
+						 name="<portlet:namespace />teamId"/>
 
-              <input type="hidden"
-                     id="<portlet:namespace />teamId"
-                     name="<portlet:namespace />teamId"/>
+				  <div id="selectedOptionsContainer" class="selected-options mt-2"></div>
 
-              <div id="selectedOptionsContainer" class="selected-options mt-2"></div>
+				  <small class="text-danger d-block mt-1" id="teamError"></small>
+				</div>
+			</div>
 
-              <small class="text-danger d-block mt-1" id="teamError"></small>
-          </div>
+			<div class="col-12">
+				<div class="form-group">
+					<label>Reason <span class="text-danger">*</span></label>
+					<textarea class="form-control"
+							  id="reason"
+							  name="<portlet:namespace/>reason"
+							  rows="3"
+							  ><%= isEdit ? wfh.getReason() : "" %></textarea>
+					<small class="text-danger" id="reasonError"></small>
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label>Reason <span class="text-danger">*</span></label>
-                <textarea class="form-control"
-                          id="reason"
-                          name="<portlet:namespace/>reason"
-                          rows="3"
-                          ><%= isEdit ? wfh.getReason() : "" %></textarea>
-                <small class="text-danger" id="reasonError"></small>
-            </div>
+			<div class="col-sm-12 col-md-6 col-lg-6">
+				<div class="form-group">
+					<label>Start Date <span class="text-danger">*</span></label>
+					<input type="date"
+						   id="startDate"
+						   class="form-control"
+						   name="<portlet:namespace/>startDate"
+						   value="<%= isEdit ? df.format(wfh.getStartDate()) : "" %>"
+						   />
+					<small class="text-danger" id="startError"></small>
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label>Start Date <span class="text-danger">*</span></label>
-                <input type="date"
-                       id="startDate"
-                       class="form-control"
-                       name="<portlet:namespace/>startDate"
-                       value="<%= isEdit ? df.format(wfh.getStartDate()) : "" %>"
-                       />
-                <small class="text-danger" id="startError"></small>
-            </div>
-
-            <div class="form-group">
-                <label>End Date <span class="text-danger">*</span></label>
-                <input type="date"
-                       id="endDate"
-                       class="form-control"
-                       name="<portlet:namespace/>endDate"
-                       value="<%= isEdit ? df.format(wfh.getEndDate()) : "" %>"
-                        />
-                <small class="text-danger" id="endError"></small>
-            </div>
-            <div class="form-group">
-                <div id="wfhDateInputsContainer" style="display:none;"></div>
-            </div>
-
+			<div class="col-sm-12 col-md-6 col-lg-6">
+				<div class="form-group">
+					<label>End Date <span class="text-danger">*</span></label>
+					<input type="date"
+						   id="endDate"
+						   class="form-control"
+						   name="<portlet:namespace/>endDate"
+						   value="<%= isEdit ? df.format(wfh.getEndDate()) : "" %>"
+							/>
+					<small class="text-danger" id="endError"></small>
+				</div>
+			</div>
+			<div class="col-sm-12 col-md-8 col-lg-8">
+				<div class="form-group">
+					<div id="wfhDateInputsContainer" style="display:none;"></div>
+				</div>
+			</div>
+		  </div>
         </div>
 
         <div class="card-footer text-right">
@@ -433,7 +451,7 @@ function dynamicDateCreator() {
 
             const halfLabel = $('<label>')
                 .text(' Is Half Day')
-                .addClass('ml-1');
+                .addClass('my-0 ml-1');
 
             const wrapper = $('<div>')
                 .addClass('dayTypeSelectContainer d-flex align-items-center')

@@ -362,11 +362,18 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
     const currentYearEnd = new Date(currentYear, 11, 31);
     currentYearEnd.setHours(23, 59, 59, 999);
 
+
+     const maxEndDate = new Date();
+        maxEndDate.setFullYear(maxEndDate.getFullYear() + 1);
+        maxEndDate.setHours(23, 59, 59, 999);
+
+
     // Check if end date is beyond current year
-    if (endDate > currentYearEnd) {
+    if (endDate > maxEndDate) {
         $.validator.messages.validEndDate = 
-            "End date cannot be beyond December 31 of the current year.";
+            "The end date must not exceed one year from today’s date.";
         return false;
+
     }
 
     /* Start date comparison */
@@ -408,10 +415,15 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
             // Get last day of current month
             const currentMonthEnd = new Date(currentYear, currentMonth + 1, 0);
             currentMonthEnd.setHours(23, 59, 59, 999);
+
+             const maxDate = new Date();
+                maxDate.setFullYear(maxDate.getFullYear() + 1);
+                maxDate.setHours(23, 59, 59, 999);
+
             
             // Validate: date must be >= previous month start AND <= current month end
-            return selectedDate >= previousMonthStart && selectedDate <= currentMonthEnd;
-        }, "Start date must be within the previous month or current month only.");
+            return selectedDate >= previousMonthStart && selectedDate <= maxDate;
+        }, "Start date must be within the previous month and up to 1 year from today.");
         //jQuery Validation end here
 
         // first event: When Window load first time

@@ -1,0 +1,254 @@
+
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<portlet:resourceURL var="downloadURL" id="/month_wise_leave_balance/export" />
+
+<!-- Filter Card -->
+<div class="card">
+    <div class="card-body">
+
+        <form method="post" action="${downloadURL}">
+
+            <!-- Employee Selection -->
+            <div class="row mb-6">
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label for="<portlet:namespace/>year">Year</label>
+                        <select class="form-control"
+                                id="year"
+                                name="<portlet:namespace/>year">
+                            <c:forEach var="year" items="${yearList}">
+                                <option value="${year}">
+                                    ${year}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+               <div class="col-md-6 col-sm-12">
+                   <div class="form-group">
+                       <label for="<portlet:namespace/>month">Month</label>
+                       <select class="form-control"
+                               id="month"
+                               name="<portlet:namespace/>month">
+                           <option value="">Select Month</option>
+                       </select>
+                       <small class="text-danger" id="monthError"></small>
+                   </div>
+               </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Employee</label>
+                        <div class="radio-group">
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input type="radio"
+                                    id="allEmployees"
+                                    name="<portlet:namespace/>employeeType"
+                                    value="ALL"
+                                    class="form-check-input"
+                                    checked
+                                    onclick="toggleEmployeeSelect(false)">
+                                <label class="form-check-label" for="allEmployees">
+                                    All Employees
+                                </label>
+                            </div>
+
+                            <div class="form-check d-flex align-items-center c-gap-1">
+                                <input type="radio"
+                                    id="specificEmployees"
+                                    name="<portlet:namespace/>employeeType"
+                                    value="SPECIFIC"
+                                    class="form-check-input"
+                                    onclick="toggleEmployeeSelect(true)">
+                                <label class="form-check-label" for="specificEmployees">
+                                    Specific Employee(s)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-12">
+                    <div class="form-group">
+                        <select class="form-control mt-3 custom-multi-select"
+                            id="employeeIds" data-live-search="true"
+                            name="<portlet:namespace/>employeeIds"
+                            multiple placeholder="Select Employee(s)"
+                            disabled>
+                            <c:forEach var="employee" items="${employeeList}">
+                                <option value="${employee.getEmployeeId()}">
+                                    ${employee.getEmployeeCode() }: ${employee.getFirstName()} ${employee.getLastName() }
+                                </option>
+                            </c:forEach>
+                        </select>
+                        <small class="text-danger" id="employeeError"></small>
+
+                        <div id="selectedOptionsContainer" class="selected-options"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button type="submit" class="btn btn-primary">
+                        Download Excel
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        const employeeSelect = $("#employeeIds");
+        const form = $("form");
+        const employeeError = $("#employeeError");
+
+        const yearSelect = $("#year");
+        const monthSelect = $("#month");
+
+        const currentYear = ${currentYear};
+        const currentMonth = ${currentMonth};
+
+        const monthNames = [
+            "January", "February", "March", "April",
+            "May", "June", "July", "August",
+            "September", "October", "November", "December"
+        ];
+
+        /* -------- Initialize Select2 ONLY ONCE -------- */
+
+        employeeSelect.select2({
+            placeholder: "Select Employee(s)",
+            allowClear: true,
+            width: "100%"
+        });
+
+        /* -------- Toggle Function -------- */
+
+        function toggleEmployeeSelect(enable) {
+
+            if (enable) {
+                // Enable select2 properly
+                employeeSelect.prop("disabled", false);
+            } else {
+                // Clear selected values properly
+                employeeSelect.val(null).trigger("change");
+            employeeSelect.select2({
+                placeholder: "Select Employee(s)",
+                allowClear: true,
+                width: '100%'
+            });
+                // Disable using select2 mechanism
+                employeeSelect.prop("disabled", true);
+
+                clearEmployeeError();
+            }
+
+
+        }
+        function populateMonths(selectedYear) {
+
+            monthSelect.empty();
+            monthSelect.append('<option value="">Select Month</option>');
+
+            let limit = 12;
+
+            if (parseInt(selectedYear) === currentYear) {
+                limit = currentMonth;
+            }
+
+            for (let i = 1; i <= limit; i++) {
+                monthSelect.append(
+                    '<option value="' + i + '">' + monthNames[i - 1] + '</option>'
+                );
+            }
+        }
+
+        yearSelect.on("change", function () {
+            populateMonths($(this).val());
+        });
+
+        /* -------- Clear Error -------- */
+
+        function clearEmployeeError() {
+            employeeError.text("");
+            employeeSelect.removeClass("is-invalid");
+        }
+
+        /* -------- Validation -------- */
+
+        function validateForm() {
+
+            clearEmployeeError();
+
+            const selectedEmployeeType =
+                $("input[name='<portlet:namespace/>employeeType']:checked").val();
+
+            const selectedEmployees = employeeSelect.val();
+
+            let isValid = true;
+
+            if (selectedEmployeeType === "SPECIFIC") {
+
+                if (!selectedEmployees || selectedEmployees.length === 0) {
+                    employeeError.text("Please select at least one employee.");
+                    employeeSelect.addClass("is-invalid");
+                    isValid = false;
+                }
+            }
+            const selectedMonth = monthSelect.val();
+
+            if (!selectedMonth) {
+                $("#monthError").text("Please select a month.");
+                monthSelect.addClass("is-invalid");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        /* -------- Radio Change -------- */
+
+        $("input[name='<portlet:namespace/>employeeType']").on("change", function () {
+
+            const selectedValue =
+                $("input[name='<portlet:namespace/>employeeType']:checked").val();
+
+            if (selectedValue === "ALL") {
+                toggleEmployeeSelect(false);
+            } else {
+                toggleEmployeeSelect(true);
+            }
+        });
+
+        /* -------- Remove error on selection -------- */
+
+        employeeSelect.on("change", function () {
+            clearEmployeeError();
+        });
+        monthSelect.on("change", function () {
+            $("#monthError").text("");
+            monthSelect.removeClass("is-invalid");
+        });
+
+        /* -------- Form Submit -------- */
+
+        form.on("submit", function (e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }
+        });
+
+        /* -------- Default State -------- */
+        toggleEmployeeSelect(false);
+
+         populateMonths(yearSelect.val());
+
+
+    });
+
+</script>

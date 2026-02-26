@@ -10,6 +10,7 @@ import com.ax.hrms.master.model.DepartmentMaster;
     import com.ax.hrms.master.model.DesignationMaster;
     import com.ax.hrms.master.service.DepartmentMasterLocalService;
     import com.ax.hrms.master.service.DesignationMasterLocalService;
+    import com.ax.hrms.master.service.ProbationStatusMasterLocalService;
     import com.ax.hrms.model.EmployeeDepartment;
     import com.ax.hrms.model.EmployeeDesignation;
     import com.ax.hrms.model.EmployeeDetails;
@@ -98,6 +99,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
         @Reference
         private RoleTypeContributorProvider roleTypeContributorProvider;
+
+        @Reference
+        private ProbationStatusMasterLocalService probationStatusMasterLocalService;
 
         private Log log = LogFactoryUtil.getLog(AddEditEmployeeOnBoardingMVCActionCommmand.class);
 
@@ -230,6 +234,9 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                 employeeDetails.setCreatedBy(themeDisplay.getUserId());
                 employeeDetails.setGroupId(themeDisplay.getCompanyGroupId());
                 employeeDetails.setIsProbationEnabled(isProbationEnabled.equalsIgnoreCase("Enabled"));
+                if(!isProbationEnabled.equalsIgnoreCase("Enabled")) {
+                employeeDetails.setProbationStatusId( probationStatusMasterLocalService.findByProbationStatusName(AxHrmsEmployeeOnboardingHrWebPortletConstants.COMPLETED).getProbationStatusMasterId());
+                }
                 employeeDetails.setBranchId(branchId);
                 employeeDetails.setExperienceYears(isExperienced.equalsIgnoreCase("yes") ?ParamUtil.getDouble(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.EXPERIENCE_YEAR):0);
                 if(employeeDetails.getEmployeeType().equalsIgnoreCase("intern")) {
