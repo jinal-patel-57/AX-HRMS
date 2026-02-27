@@ -401,6 +401,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
             employeeBasicDetailsUtil.addEditFileEntry( aadhaarFile, aadhaarFileName, actionRequest, employeeDetails, employeeDetails.getAadhaarCardFileId(),"AADHAAR", aadhaarCardFolder, serviceContext);
             employeeBasicDetailsUtil.addEditFileEntry( panFile, panFileName, actionRequest,  employeeDetails, employeeDetails.getPanCardFileId(), "PAN", panCardFolder, serviceContext);
             lrUser.setPortraitId(profilePicId);
+            UserLocalServiceUtil.updatePortrait(lrUser.getUserId(), FileUtil.getBytes(file));
 
             employeeDetailsLocalService.updateEmployeeDetails(employeeDetails);
             updateEmployeeWithManager(themeDisplay.getCompanyId(), employeeDetails, employeeDetails.getManagerId(),oldManagerId);

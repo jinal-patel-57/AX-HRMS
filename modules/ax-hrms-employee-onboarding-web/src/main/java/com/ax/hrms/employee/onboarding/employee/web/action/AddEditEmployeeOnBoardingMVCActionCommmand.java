@@ -20,8 +20,10 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -107,6 +109,7 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 		User employeeUser =
 				userLocalService.getUser(employeeDetails.getLrUserId());
 		employeeUser.setPortraitId(employeeDetails.getProfilePicId());
+		UserLocalServiceUtil.updatePortrait(employeeDetails.getLrUserId(), FileUtil.getBytes(file));
 		long documentTypeMasterId = ParamUtil.getLong(
 				actionRequest,
 				"kycDocumentType"
