@@ -215,7 +215,7 @@ public class ImportEmployeesLeavesUtility extends MVCPortlet {
 			log.info("newUrl -- " + newUrl);
 			actionResponse.sendRedirect(newUrl);  
 		}
-		actionResponse.sendRedirect(redirect);
+		//actionResponse.sendRedirect(redirect);
 	}
 
 	private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay, String leaveCount, String typeOfLeave) {

@@ -58,7 +58,7 @@
 									<ul class="user_links">
 										<li></li>
 										<#if is_signed_in>
-											<li class="notification">
+											<li class="notification d-none">
 												<div class="dropdown">
 													<a class="dropdown-toggle" href="${themeDisplay.getPortalURL()}/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet">
 														<i class="icon-bell-alt"></i>
