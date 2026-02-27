@@ -229,7 +229,7 @@ body:not(.collapsedMenu) .side_navbar::-webkit-scrollbar { display: none;}
 .side_navbar > ul > li > ul{display: inline-block; width: 100%; vertical-align: top;background: #fff; }
 .side_navbar > ul > li > ul > li{position: relative; display: inline-block; width: 100%; vertical-align: top;}
 .side_navbar > ul > li > ul > li.selected > a{color: var(--text-primary);}
-.side_navbar > ul > li > ul > li > a{display: inline-block; width: 100%; vertical-align: top; text-decoration: none; font-size: clamp(13px, 0.78vw, 15px); font-weight: 500; padding: 10px 10px 10px 50px; color: #494949; word-break: break-all;}
+.side_navbar > ul > li > ul > li > a{display: inline-block; width: 100%; vertical-align: top; text-decoration: none; font-size: clamp(13px, 0.78vw, 15px); font-weight: 500; padding: 10px 10px 10px 50px; color: #494949; word-break: break-word;}
 .side_navbar > ul > li > ul > li > ul{display: inline-block; width: 100%; vertical-align: top;background: #000000; }
 .side_navbar > ul > li > ul > li > ul > li > a{display: inline-block; width: 100%; vertical-align: top; text-decoration: none; font-size: clamp(13px, 0.78vw, 15px); font-weight: 600; padding: 10px; color: #494949;}
 span.collapsed_icon{display: flex; align-items: center; justify-content: center; position: absolute; right: 0; top: 0; cursor: pointer; width: 30px; height: 40px;}
