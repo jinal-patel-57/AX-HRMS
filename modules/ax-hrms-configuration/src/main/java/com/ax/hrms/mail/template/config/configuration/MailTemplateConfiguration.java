@@ -677,7 +677,7 @@ public interface MailTemplateConfiguration {
 
     @Meta.AD(
             deflt = "Work From Home Request Approved",
-            name = "Work From Home Request Approved Mail to Employee (SUBJECT)",
+            name = "Work From Home Request Approved Mail to Team (SUBJECT)",
             required = false
     )
     public String mailWFHApproveTeamSubject();
@@ -686,7 +686,7 @@ public interface MailTemplateConfiguration {
             deflt = "<p>Dear Team Members,</p>" +
                     "<p>Work From Home request has been <b>approved</b>.</p>" +
                     "${BODY}" ,
-            name = "Work From Home Request Approved Mail to Employee (BODY)",
+            name = "Work From Home Request Approved Mail to Team (BODY)",
             required = false
     )
     public String mailWFHApproveTeamBody();
