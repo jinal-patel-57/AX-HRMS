@@ -5,9 +5,9 @@
 		<div class="card-header invisible">No WFH Today</div>
 		<div class="ax-body d-flex align-items-center">
 			<div class="ax-conatiner">
-				<div class="icon-no-leaves"></div>
+				<div class="icon-wfh"></div>
 				<div>
-					<strong>No Work From Home Today</strong>
+					<strong>No Work From Home Requests Today</strong>
 				</div>
 				<div class="wish-message">
 					Looks like everyone is working from office today.

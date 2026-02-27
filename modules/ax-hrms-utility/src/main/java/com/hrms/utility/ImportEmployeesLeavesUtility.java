@@ -214,8 +214,9 @@ public class ImportEmployeesLeavesUtility extends MVCPortlet {
 			String newUrl = baseUrl + "/employee-onboarding-hr";
 			log.info("newUrl -- " + newUrl);
 			actionResponse.sendRedirect(newUrl);  
+		} else {
+			actionResponse.sendRedirect(redirect);
 		}
-		//actionResponse.sendRedirect(redirect);
 	}
 
 	private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay, String leaveCount, String typeOfLeave) {
