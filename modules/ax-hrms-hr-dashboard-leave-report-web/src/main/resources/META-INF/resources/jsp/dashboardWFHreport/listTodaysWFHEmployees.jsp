@@ -18,24 +18,13 @@
 </c:if>
 
 
-<%
-boolean isHRAdmin = false;
 
-if (themeDisplay.isSignedIn()) {
-    isHRAdmin = RoleLocalServiceUtil.hasUserRole(
-            themeDisplay.getUserId(),
-            themeDisplay.getCompanyId(),
-            "HR Admin",
-            true
-    );
-}
-%>
 
 <c:if test="${not empty todaysWFH}">
 	<div class="card">
 		<div class="card-header d-flex align-items-center justify-content-between">
 			<strong>Today's Work From Home</strong>
-            <c:if test="<%= isHRAdmin %>">
+            <c:if test="${isHrAdmin}">
                 <a class="btn btn-primary"
                    href="/web/ax-hrms/wfh-management"
                    target="_blank">

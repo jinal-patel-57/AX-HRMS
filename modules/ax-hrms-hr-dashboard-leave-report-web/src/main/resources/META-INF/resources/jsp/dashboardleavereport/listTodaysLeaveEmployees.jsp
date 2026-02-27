@@ -18,33 +18,24 @@
 </c:if>
 
 
-<%
-boolean isHRAdmin = false;
 
-if (themeDisplay.isSignedIn()) {
-    isHRAdmin = RoleLocalServiceUtil.hasUserRole(
-            themeDisplay.getUserId(),
-            themeDisplay.getCompanyId(),
-            "HR Admin",
-            true
-    );
-}
-%>
 
 
 
 <c:if test="${not empty todaysLeaves}">
 	<div class="card">
-	   <c:if test="<%= isHRAdmin %>">
+
 		<div
 			class="card-header d-flex align-items-center justify-content-between">
 			<strong>Today's Leaves</strong>
-			<c:if test="${isHrAdmin}"><a class="btn btn-primary"
+			<c:if test="${isHrAdmin}">
+			 <c:if test="${isHrAdmin}"><a class="btn btn-primary"
 				href="/web/ax-hrms/leave-management" target="_blank">All Leave
 				Requests</a>
 				</c:if>
+				</c:if>
 		</div>
-	   </c:if>
+
 		<div class="card-body ax-body">
 			<table class="table ">
 				<thead>

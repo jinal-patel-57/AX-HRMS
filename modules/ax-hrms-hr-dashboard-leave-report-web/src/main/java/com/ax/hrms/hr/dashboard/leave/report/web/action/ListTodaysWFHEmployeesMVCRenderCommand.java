@@ -13,6 +13,7 @@ import com.ax.hrms.service.*;
 
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
@@ -21,6 +22,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -36,6 +40,7 @@ import java.util.*;
 )
 public class ListTodaysWFHEmployeesMVCRenderCommand implements MVCRenderCommand {
 
+    public static final String HR_ADMIN = "HR Admin";
     private static final Log log =
             LogFactoryUtil.getLog(ListTodaysWFHEmployeesMVCRenderCommand.class);
 
@@ -68,6 +73,8 @@ public class ListTodaysWFHEmployeesMVCRenderCommand implements MVCRenderCommand 
             throws PortletException {
 
         log.info("===== Inside ListTodaysWFHEmployeesMVCRenderCommand =====");
+        ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        
 
         Calendar cal = Calendar.getInstance();
 
@@ -213,6 +220,21 @@ public class ListTodaysWFHEmployeesMVCRenderCommand implements MVCRenderCommand 
         renderRequest.setAttribute("todaysWFH", todaysWFHEmployees);
 
         log.info("===== Exiting ListTodaysWFHEmployeesMVCRenderCommand =====");
+
+
+        boolean isHrAdmin = false;
+        try {
+            isHrAdmin = RoleLocalServiceUtil.hasUserRole(
+                    themeDisplay.getUserId(),
+                    themeDisplay.getCompanyId(),
+                    HR_ADMIN,
+                    true
+            );
+        } catch (PortalException e) {
+            throw new RuntimeException(e);
+        }
+
+        renderRequest.setAttribute("isHrAdmin",isHrAdmin);
 
         return "/jsp/dashboardWFHreport/listTodaysWFHEmployees.jsp";
     }}
