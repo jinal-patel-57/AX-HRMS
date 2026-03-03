@@ -111,7 +111,7 @@
 							${htmlUtil.escape(the_title)}
 						</h2>
 						<#assign layoutName = themeDisplay.getLayout().getName(themeDisplay.getLocale()) />
-						<#if is_signed_in && (layoutName != 'Dashboard' || layoutName != 'Sign In')>
+						<#if is_signed_in && (layoutName != 'Dashboard' && layoutName != 'Sign In' && layoutName != 'Home' && layoutName != 'Self Onboarding')>
 							<div class="title-container">
 								<h4 class="page-title mb-1">${themeDisplay.getLayout().getName(themeDisplay.getLocale())}</h4>
 							</div>
