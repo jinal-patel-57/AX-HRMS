@@ -83,8 +83,11 @@
 					</button>
 					<ul class="dropdown-menu">
 						<li>
-						<a href="${deleteCompensatoryDataURL }" class=" dropdown-item"><i class="icon-trash"></i> <liferay-ui:message
-						key="delete" /></a>
+						<a class="dropdown-item"
+                           onclick="openDeleteModal('${deleteCompensatoryDataURL}')">
+                            <i class="icon-trash"></i>
+                            <liferay-ui:message key="delete" />
+                        </a>
 						</li>
 					</ul>
 				</div>
@@ -213,6 +216,48 @@
     </div>
 </div>
 
+<div class="modal fade" id="deleteCompensatoryModal" tabindex="-1" role="dialog"
+     aria-labelledby="deleteCompensatoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header  text-white">
+                <h5 class="modal-title" id="deleteCompensatoryModalLabel">
+                    <i class="icon-warning-sign"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="close " data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="mb-2">
+                    <strong>This action cannot be undone.</strong>
+                </p>
+                <p>
+                    Are you sure you want to delete this compensation request?
+                </p>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        id="confirmDeleteBtn"
+                        class="btn btn-danger btn-sm">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <script>
 
@@ -221,6 +266,23 @@
         var config = {};
         config.namespace = '<portlet:namespace />';
         axHrmsCompensatoryDataWebPortlet.setConfigs(config);
+    });
+
+    var deleteUrl = "";
+
+    function openDeleteModal(url) {
+
+        deleteUrl = url;
+
+        $('#deleteCompensatoryModal').modal('show');
+    }
+
+    $('#confirmDeleteBtn').click(function () {
+
+        if (deleteUrl) {
+            window.location.href = deleteUrl;
+        }
+
     });
 
 </script>

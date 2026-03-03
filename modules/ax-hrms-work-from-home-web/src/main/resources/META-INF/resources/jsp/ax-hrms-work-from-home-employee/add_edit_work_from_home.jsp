@@ -128,6 +128,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
 			<div class="col-sm-12 col-md-8 col-lg-8">
 				<div class="form-group">
 					<div id="wfhDateInputsContainer" style="display:none;"></div>
+					<small class="text-danger" id="dateRangeError"></small>
 				</div>
 			</div>
 		  </div>
@@ -274,6 +275,16 @@ $("#wfhForm").validate({
        if (!isTeamValid) {
            return false;
        }
+       let startVal = $("#startDate").val();
+           let endVal = $("#endDate").val();
+           let generatedDates = dateInputsContainer.find("input[type='date']");
+
+           $("#dateRangeError").text("");
+
+           if (startVal && endVal && generatedDates.length === 0) {
+               $("#dateRangeError").text("Please confirm the date range before submitting.");
+               return false;
+           }
 
        submitBtn.disabled = true;
        form.submit();
