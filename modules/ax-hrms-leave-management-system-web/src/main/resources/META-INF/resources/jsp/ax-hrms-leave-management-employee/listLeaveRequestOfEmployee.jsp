@@ -86,12 +86,13 @@
                         </button>
                         <ul class="dropdown-menu">
                             <c:if test="${leaveRequest.getLeaveRequestStatus() == 'Pending'}">
-                                <li>
-                                    <a class="dropdown-item"
-                                       onclick="cancelAction(${leaveRequest.getLeaveRequestId()})"><i
-                                            class="icon-ban-circle"></i> <liferay-ui:message
-                                            key="cancel"/></a>
-                                </li>
+                               <li>
+                                   <a class="dropdown-item cancel-leave-btn"
+                                      data-leave-id="${leaveRequest.getLeaveRequestId()}">
+                                       <i class="icon-ban-circle"></i>
+                                       <liferay-ui:message key="cancel"/>
+                                   </a>
+                               </li>
                             </c:if>
                             <li>
                                 <a href="${viewLeaveRequestDetail }" class="dropdown-item"><i class="icon-eye-open"></i> View</a>
@@ -107,7 +108,50 @@
         </liferay-ui:search-container>
     </div>
 </div>
+<div class="modal fade" id="cancelLeaveModal" tabindex="-1"
+     aria-labelledby="cancelLeaveModalLabel"
+     aria-hidden="true">
 
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header text-white">
+                <h5 class="modal-title" id="cancelLeaveModalLabel">
+                    <i class="icon-warning-sign"></i>
+                    Confirm Cancel
+                </h5>
+
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="mb-2">
+                    <strong>This action cannot be undone.</strong>
+                </p>
+                <p>
+                    Are you sure you want to cancel this Leave request?
+                </p>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        id="confirmCancelLeaveBtn"
+                        class="btn btn-danger btn-sm">
+                    Confirm
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -122,4 +166,43 @@
 
         AxEmployeeLeaveManagement.setConfigsForCancelLeaveRequest(config);
     }
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    let leaveRequestId = null;
+
+    document.querySelectorAll(".cancel-leave-btn").forEach(function (btn) {
+
+        btn.addEventListener("click", function () {
+
+            leaveRequestId = this.getAttribute("data-leave-id");
+
+            const modalElement = document.getElementById("cancelLeaveModal");
+
+            if (modalElement) {
+                const modalInstance = new bootstrap.Modal(modalElement);
+                modalInstance.show();
+            }
+        });
+    });
+
+    const confirmCancelBtn = document.getElementById("confirmCancelLeaveBtn");
+
+    if (confirmCancelBtn) {
+
+        confirmCancelBtn.addEventListener("click", function () {
+
+            if (leaveRequestId) {
+                cancelAction(leaveRequestId);
+            }
+
+        });
+
+    }
+
+});
+
 </script>

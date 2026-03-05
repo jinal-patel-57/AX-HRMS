@@ -901,8 +901,7 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
         console.log(config);
         let url = config.cancelUrl;
         url = url.replace('LEAVE_REQUEST_ID', config.leaveRequestId);
-        if (confirm('Are you sure you want to Cancel ?'))
-            window.location.href = url;
+         window.location.href = url;
     }
 
     AxEmployeeLeaveManagement.setConfigs = setConfigs;
