@@ -51,6 +51,8 @@ public class CompensatoryDataWrapper
 			"leaveCompensatoryStatusMasterId",
 			getLeaveCompensatoryStatusMasterId());
 		attributes.put("description", getDescription());
+		attributes.put("startTime", getStartTime());
+		attributes.put("endTime", getEndTime());
 
 		return attributes;
 	}
@@ -147,6 +149,18 @@ public class CompensatoryDataWrapper
 		if (description != null) {
 			setDescription(description);
 		}
+
+		Date startTime = (Date)attributes.get("startTime");
+
+		if (startTime != null) {
+			setStartTime(startTime);
+		}
+
+		Date endTime = (Date)attributes.get("endTime");
+
+		if (endTime != null) {
+			setEndTime(endTime);
+		}
 	}
 
 	@Override
@@ -235,6 +249,16 @@ public class CompensatoryDataWrapper
 	}
 
 	/**
+	 * Returns the end time of this compensatory data.
+	 *
+	 * @return the end time of this compensatory data
+	 */
+	@Override
+	public Date getEndTime() {
+		return model.getEndTime();
+	}
+
+	/**
 	 * Returns the group ID of this compensatory data.
 	 *
 	 * @return the group ID of this compensatory data
@@ -302,6 +326,16 @@ public class CompensatoryDataWrapper
 	@Override
 	public int getRequestedHours() {
 		return model.getRequestedHours();
+	}
+
+	/**
+	 * Returns the start time of this compensatory data.
+	 *
+	 * @return the start time of this compensatory data
+	 */
+	@Override
+	public Date getStartTime() {
+		return model.getStartTime();
 	}
 
 	/**
@@ -400,6 +434,16 @@ public class CompensatoryDataWrapper
 	}
 
 	/**
+	 * Sets the end time of this compensatory data.
+	 *
+	 * @param endTime the end time of this compensatory data
+	 */
+	@Override
+	public void setEndTime(Date endTime) {
+		model.setEndTime(endTime);
+	}
+
+	/**
 	 * Sets the group ID of this compensatory data.
 	 *
 	 * @param groupId the group ID of this compensatory data
@@ -470,6 +514,16 @@ public class CompensatoryDataWrapper
 	@Override
 	public void setRequestedHours(int requestedHours) {
 		model.setRequestedHours(requestedHours);
+	}
+
+	/**
+	 * Sets the start time of this compensatory data.
+	 *
+	 * @param startTime the start time of this compensatory data
+	 */
+	@Override
+	public void setStartTime(Date startTime) {
+		model.setStartTime(startTime);
 	}
 
 	/**

@@ -174,7 +174,9 @@ create table ax_CompensatoryData (
 	approvedHours INTEGER,
 	managerId LONG,
 	leaveCompensatoryStatusMasterId LONG,
-	description VARCHAR(75) null
+	description VARCHAR(250) null,
+	startTime DATE null,
+	endTime DATE null
 );
 
 create table ax_EmployeeAddress (

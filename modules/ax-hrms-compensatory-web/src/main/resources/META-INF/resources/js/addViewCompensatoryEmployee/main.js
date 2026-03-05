@@ -49,7 +49,7 @@ var submit_compensatory_form;
             });
 
             $.validator.addMethod("maxCharThousand", function (value) {
-                return value.length <= 70;
+                return value.length <= 250;
             });
 
             $.validator.addMethod("notSameEmployeeAndManager", function (value) {
@@ -57,6 +57,18 @@ var submit_compensatory_form;
                 if (!employeeId || !value) return true;
                 return employeeId !== value;
             }, "Employee and Manager cannot be the same.");
+            $.validator.addMethod("endTimeAfterStart", function (value, element) {
+
+                var start = $("#startTime").val();
+                var end = value;
+
+                if (!start || !end) {
+                    return true;
+                }
+
+                return end > start;
+
+            }, "End time must be greater than start time.");
 
             $("#addCompensatoryDataForm").validate({
 
@@ -80,6 +92,14 @@ var submit_compensatory_form;
                     [namespace + "description"]: {
                         required: true,
                         maxCharThousand: true
+                    },
+                    [namespace + "startTime"]: {
+                        required: true
+                    },
+
+                    [namespace + "endTime"]: {
+                        required: true,
+                        endTimeAfterStart: true
                     }
                 },
 
@@ -104,7 +124,15 @@ var submit_compensatory_form;
                     },
                     [namespace + "description"]: {
                         required: "Please enter description.",
-                        maxCharThousand: "Description cannot exceed 70 characters."
+                        maxCharThousand: "Description cannot exceed 250 characters."
+                    },
+                    [namespace + "startTime"]: {
+                        required: "Please select start time."
+                    },
+
+                    [namespace + "endTime"]: {
+                        required: "Please select end time.",
+                        endTimeAfterStart: "End time must be greater than start time."
                     }
                 },
 
@@ -149,9 +177,7 @@ var submit_compensatory_form;
                     $(element).valid();
                 },
 
-                onkeyup: function (element) {
-                    $(element).valid();
-                },
+                onkeyup: false,
 
                 submitHandler: function (form) {
                     form.submit();

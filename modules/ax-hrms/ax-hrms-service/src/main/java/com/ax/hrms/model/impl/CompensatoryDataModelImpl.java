@@ -71,7 +71,8 @@ public class CompensatoryDataModelImpl
 		{"requestedHours", Types.INTEGER}, {"approvedHours", Types.INTEGER},
 		{"managerId", Types.BIGINT},
 		{"leaveCompensatoryStatusMasterId", Types.BIGINT},
-		{"description", Types.VARCHAR}
+		{"description", Types.VARCHAR}, {"startTime", Types.TIMESTAMP},
+		{"endTime", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -93,10 +94,12 @@ public class CompensatoryDataModelImpl
 		TABLE_COLUMNS_MAP.put("managerId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("leaveCompensatoryStatusMasterId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("startTime", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("endTime", Types.TIMESTAMP);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_CompensatoryData (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,compensatoryDataId LONG not null primary key,employeeId LONG,dateOfCompensation DATE null,requestedHours INTEGER,approvedHours INTEGER,managerId LONG,leaveCompensatoryStatusMasterId LONG,description VARCHAR(75) null)";
+		"create table ax_CompensatoryData (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,compensatoryDataId LONG not null primary key,employeeId LONG,dateOfCompensation DATE null,requestedHours INTEGER,approvedHours INTEGER,managerId LONG,leaveCompensatoryStatusMasterId LONG,description VARCHAR(250) null,startTime DATE null,endTime DATE null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_CompensatoryData";
@@ -290,6 +293,10 @@ public class CompensatoryDataModelImpl
 				CompensatoryData::getLeaveCompensatoryStatusMasterId);
 			attributeGetterFunctions.put(
 				"description", CompensatoryData::getDescription);
+			attributeGetterFunctions.put(
+				"startTime", CompensatoryData::getStartTime);
+			attributeGetterFunctions.put(
+				"endTime", CompensatoryData::getEndTime);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -368,6 +375,14 @@ public class CompensatoryDataModelImpl
 				"description",
 				(BiConsumer<CompensatoryData, String>)
 					CompensatoryData::setDescription);
+			attributeSetterBiConsumers.put(
+				"startTime",
+				(BiConsumer<CompensatoryData, Date>)
+					CompensatoryData::setStartTime);
+			attributeSetterBiConsumers.put(
+				"endTime",
+				(BiConsumer<CompensatoryData, Date>)
+					CompensatoryData::setEndTime);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -666,6 +681,36 @@ public class CompensatoryDataModelImpl
 		_description = description;
 	}
 
+	@JSON
+	@Override
+	public Date getStartTime() {
+		return _startTime;
+	}
+
+	@Override
+	public void setStartTime(Date startTime) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_startTime = startTime;
+	}
+
+	@JSON
+	@Override
+	public Date getEndTime() {
+		return _endTime;
+	}
+
+	@Override
+	public void setEndTime(Date endTime) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_endTime = endTime;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -744,6 +789,8 @@ public class CompensatoryDataModelImpl
 		compensatoryDataImpl.setLeaveCompensatoryStatusMasterId(
 			getLeaveCompensatoryStatusMasterId());
 		compensatoryDataImpl.setDescription(getDescription());
+		compensatoryDataImpl.setStartTime(getStartTime());
+		compensatoryDataImpl.setEndTime(getEndTime());
 
 		compensatoryDataImpl.resetOriginalValues();
 
@@ -785,6 +832,10 @@ public class CompensatoryDataModelImpl
 				"leaveCompensatoryStatusMasterId"));
 		compensatoryDataImpl.setDescription(
 			this.<String>getColumnOriginalValue("description"));
+		compensatoryDataImpl.setStartTime(
+			this.<Date>getColumnOriginalValue("startTime"));
+		compensatoryDataImpl.setEndTime(
+			this.<Date>getColumnOriginalValue("endTime"));
 
 		return compensatoryDataImpl;
 	}
@@ -929,6 +980,24 @@ public class CompensatoryDataModelImpl
 			compensatoryDataCacheModel.description = null;
 		}
 
+		Date startTime = getStartTime();
+
+		if (startTime != null) {
+			compensatoryDataCacheModel.startTime = startTime.getTime();
+		}
+		else {
+			compensatoryDataCacheModel.startTime = Long.MIN_VALUE;
+		}
+
+		Date endTime = getEndTime();
+
+		if (endTime != null) {
+			compensatoryDataCacheModel.endTime = endTime.getTime();
+		}
+		else {
+			compensatoryDataCacheModel.endTime = Long.MIN_VALUE;
+		}
+
 		return compensatoryDataCacheModel;
 	}
 
@@ -1007,6 +1076,8 @@ public class CompensatoryDataModelImpl
 	private long _managerId;
 	private long _leaveCompensatoryStatusMasterId;
 	private String _description;
+	private Date _startTime;
+	private Date _endTime;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1055,6 +1126,8 @@ public class CompensatoryDataModelImpl
 			"leaveCompensatoryStatusMasterId",
 			_leaveCompensatoryStatusMasterId);
 		_columnOriginalValues.put("description", _description);
+		_columnOriginalValues.put("startTime", _startTime);
+		_columnOriginalValues.put("endTime", _endTime);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1107,6 +1180,10 @@ public class CompensatoryDataModelImpl
 		columnBitmasks.put("leaveCompensatoryStatusMasterId", 8192L);
 
 		columnBitmasks.put("description", 16384L);
+
+		columnBitmasks.put("startTime", 32768L);
+
+		columnBitmasks.put("endTime", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

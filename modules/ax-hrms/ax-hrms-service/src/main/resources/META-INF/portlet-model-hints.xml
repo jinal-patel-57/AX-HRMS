@@ -177,7 +177,11 @@
 		<field name="approvedHours" type="int" />
 		<field name="managerId" type="long" />
 		<field name="leaveCompensatoryStatusMasterId" type="long" />
-		<field name="description" type="String" />
+		<field name="description" type="String">
+			<hint name="max-length">250</hint>
+		</field>
+		<field name="startTime" type="Date" />
+		<field name="endTime" type="Date" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeAddress">
 		<field name="uuid" type="String" />

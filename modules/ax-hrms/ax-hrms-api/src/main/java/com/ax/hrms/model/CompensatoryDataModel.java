@@ -270,6 +270,34 @@ public interface CompensatoryDataModel
 	 */
 	public void setDescription(String description);
 
+	/**
+	 * Returns the start time of this compensatory data.
+	 *
+	 * @return the start time of this compensatory data
+	 */
+	public Date getStartTime();
+
+	/**
+	 * Sets the start time of this compensatory data.
+	 *
+	 * @param startTime the start time of this compensatory data
+	 */
+	public void setStartTime(Date startTime);
+
+	/**
+	 * Returns the end time of this compensatory data.
+	 *
+	 * @return the end time of this compensatory data
+	 */
+	public Date getEndTime();
+
+	/**
+	 * Sets the end time of this compensatory data.
+	 *
+	 * @param endTime the end time of this compensatory data
+	 */
+	public void setEndTime(Date endTime);
+
 	@Override
 	public CompensatoryData cloneWithOriginalValues();
 

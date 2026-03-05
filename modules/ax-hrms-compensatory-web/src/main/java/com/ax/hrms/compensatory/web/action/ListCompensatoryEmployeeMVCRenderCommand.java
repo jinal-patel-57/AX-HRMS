@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -145,6 +146,20 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
                     EmployeeDetails managerDetails = employeeDetailsLocalService.getEmployeeDetails(compensatoryData.getManagerId());
                     compensatoryDataDto.setManagerName(managerDetails.getFirstName() + StringPool.SPACE + managerDetails.getLastName());
                     compensatoryDataDto.setEmployeeName(employee.getFirstName() + StringPool.SPACE + employee.getLastName());
+
+                    SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+
+                    compensatoryDataDto.setStartTime(
+                            Validator.isNotNull(compensatoryData.getStartTime())
+                                    ? time.format(compensatoryData.getStartTime())
+                                    : ""
+                    );
+
+                    compensatoryDataDto.setEndTime(
+                            Validator.isNotNull(compensatoryData.getEndTime())
+                                    ? time.format(compensatoryData.getEndTime())
+                                    : ""
+                    );
 
                     compensatoryDataDtoList.add(compensatoryDataDto);
                     compensatoryDatasCount += 1;

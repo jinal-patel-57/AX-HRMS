@@ -27,6 +27,10 @@ import org.osgi.service.component.annotations.Reference;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -127,6 +131,30 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
+
+        String startTimeStr = ParamUtil.getString(actionRequest, "startTime");
+        String endTimeStr = ParamUtil.getString(actionRequest, "endTime");
+
+        LocalDate compDate = compensationDate
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        LocalTime startTime = LocalTime.parse(startTimeStr);
+        LocalTime endTime = LocalTime.parse(endTimeStr);
+
+        LocalDateTime startDateTime = LocalDateTime.of(compDate, startTime);
+        LocalDateTime endDateTime = LocalDateTime.of(compDate, endTime);
+
+        Date startTimeDate = Date.from(
+                startDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        );
+
+        Date endTimeDate = Date.from(
+                endDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        );
+
+
         boolean hrManagerStatus = ParamUtil.getBoolean(actionRequest, "hrManagerStatus");
 
         CompensatoryData compensatoryData = compensatoryDataLocalService.createCompensatoryData(
@@ -156,6 +184,8 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
         compensatoryData.setCreateDate(new Date());
         compensatoryData.setModifiedDate(new Date());
         compensatoryData.setModifiedBy(themeDisplay.getUserId());
+        compensatoryData.setStartTime(startTimeDate);
+        compensatoryData.setEndTime(endTimeDate);
         CompensatoryData compensatoryData1 = compensatoryDataLocalService.addCompensatoryData(compensatoryData);
 
 

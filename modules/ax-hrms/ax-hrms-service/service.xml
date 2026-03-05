@@ -562,6 +562,8 @@
         <column name="managerId" type="long"/>
         <column name="leaveCompensatoryStatusMasterId" type="long"/>
         <column name="description" type="String"/>
+        <column name="startTime" type="Date"/>
+        <column name="endTime" type="Date"/>
 
 
         <!-- finder method  -->

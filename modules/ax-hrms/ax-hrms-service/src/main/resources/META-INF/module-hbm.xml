@@ -236,6 +236,8 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="managerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="leaveCompensatoryStatusMasterId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="startTime" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="endTime" type="org.hibernate.type.TimestampType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeAddressImpl" table="ax_EmployeeAddress">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeAddressId" type="long">

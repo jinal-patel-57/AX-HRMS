@@ -65,6 +65,10 @@ public class CompensatoryDataTable extends BaseTable<CompensatoryDataTable> {
 	public final Column<CompensatoryDataTable, String> description =
 		createColumn(
 			"description", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CompensatoryDataTable, Date> startTime = createColumn(
+		"startTime", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
+	public final Column<CompensatoryDataTable, Date> endTime = createColumn(
+		"endTime", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 
 	private CompensatoryDataTable() {
 		super("ax_CompensatoryData", CompensatoryDataTable::new);

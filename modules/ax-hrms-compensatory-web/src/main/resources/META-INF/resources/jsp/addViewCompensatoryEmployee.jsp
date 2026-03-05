@@ -47,6 +47,10 @@
                     <liferay-ui:search-container-column-text name="Date of Compensation"
                                                              value="${ compensatoryDataDto.getDateOfCompensation() }"/>
 
+             <liferay-ui:search-container-column-text name="Start Time"
+                                                                     value="${ compensatoryDataDto.getStartTime() }"/>
+                            <liferay-ui:search-container-column-text name="End Time"
+                                                                     value="${ compensatoryDataDto.getEndTime() }"/>
 
                     <liferay-ui:search-container-column-text name="Modified By"
                                                              value="${ compensatoryDataDto.getModifiedBy() }"/>
@@ -111,7 +115,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addCompensatoryDataModalLabel"><liferay-ui:message
-                        key="add-compensatory-data"/>
+                        key="add-comp-off"/>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -145,14 +149,14 @@
                                     </c:if>
                     <div class="form-group">
                         <label class="" for="compensationDate"><liferay-ui:message
-                                key="compensation-date"/><span class="text-danger">*</span></label>
+                                key="worked-date"/><span class="text-danger">*</span></label>
                         <input id="compensationDate" placeholder="<liferay-ui:message key='compensation-date'/>"
                                class="form-control" type="date" name="<portlet:namespace/>compensationDate"/>
                         <label id="compensationDate-error" class="error text-danger" for="compensationDate"></label>
                     </div>
                     <div class="form-group">
                         <label>
-                            <liferay-ui:message key="Compensation Day Type"/>
+                            <liferay-ui:message key="Duration"/>
                             <span class="text-danger">*</span>
                         </label>
 
@@ -181,6 +185,47 @@
 
 
                     </div>
+
+
+                 <div class="form-group">
+                     <label for="startTime">
+                         Start Time
+                         <span class="text-danger">*</span>
+                     </label>
+
+                     <small class="form-text text-muted">
+                         Hours : Minutes (24-hour format)
+                     </small>
+
+                     <input id="startTime"
+                            type="time"
+
+                            class="form-control"
+                            name="<portlet:namespace />startTime"/>
+
+                     <label id="startTime-error" class="error text-danger" for="startTime"></label>
+                 </div>
+
+                 <div class="form-group">
+                     <label for="endTime">
+                         End Time
+                         <span class="text-danger">*</span>
+                     </label>
+
+                     <small class="form-text text-muted">
+                         Hours : Minutes (24-hour format)
+                     </small>
+
+                     <input id="endTime"
+                            type="time"
+
+                            class="form-control"
+                            name="<portlet:namespace />endTime"/>
+
+                     <label id="endTime-error" class="error text-danger" for="endTime"></label>
+                 </div>
+
+
                     <div class="form-group">
                         <label for="projectManagerSelect"><liferay-ui:message
                                 key="select-project-manager"/><span class="text-danger">*</span></label>
@@ -202,6 +247,9 @@
                         <span class="text-danger">*</span>
                         <textarea id="description" class="form-control"
                                   name="<portlet:namespace />description"></textarea>
+                                  <small class="form-text text-muted">
+                                      Maximum 250 characters allowed.
+                                  </small>
                         <label id="description-error" class="error text-danger" for="description"></label>
                     </div>
             </div>

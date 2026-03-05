@@ -39,6 +39,10 @@
 
                 <liferay-ui:search-container-column-text name="date-of-compensation"
                                                          value="${ compensatoryDataDto.getDateOfCompensation() }"/>
+                <liferay-ui:search-container-column-text name="Start Time"
+                                                         value="${ compensatoryDataDto.getStartTime() }"/>
+                <liferay-ui:search-container-column-text name="End Time"
+                                                         value="${ compensatoryDataDto.getEndTime() }"/>
 
                 <liferay-ui:search-container-column-text name="Employee Name"
                                                              value="${ compensatoryDataDto.getEmployeeName() }"/>

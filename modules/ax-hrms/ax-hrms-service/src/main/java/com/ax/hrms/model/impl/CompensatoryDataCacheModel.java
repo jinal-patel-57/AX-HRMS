@@ -56,7 +56,7 @@ public class CompensatoryDataCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,6 +88,10 @@ public class CompensatoryDataCacheModel
 		sb.append(leaveCompensatoryStatusMasterId);
 		sb.append(", description=");
 		sb.append(description);
+		sb.append(", startTime=");
+		sb.append(startTime);
+		sb.append(", endTime=");
+		sb.append(endTime);
 		sb.append("}");
 
 		return sb.toString();
@@ -147,6 +151,20 @@ public class CompensatoryDataCacheModel
 			compensatoryDataImpl.setDescription(description);
 		}
 
+		if (startTime == Long.MIN_VALUE) {
+			compensatoryDataImpl.setStartTime(null);
+		}
+		else {
+			compensatoryDataImpl.setStartTime(new Date(startTime));
+		}
+
+		if (endTime == Long.MIN_VALUE) {
+			compensatoryDataImpl.setEndTime(null);
+		}
+		else {
+			compensatoryDataImpl.setEndTime(new Date(endTime));
+		}
+
 		compensatoryDataImpl.resetOriginalValues();
 
 		return compensatoryDataImpl;
@@ -179,6 +197,8 @@ public class CompensatoryDataCacheModel
 
 		leaveCompensatoryStatusMasterId = objectInput.readLong();
 		description = objectInput.readUTF();
+		startTime = objectInput.readLong();
+		endTime = objectInput.readLong();
 	}
 
 	@Override
@@ -219,6 +239,9 @@ public class CompensatoryDataCacheModel
 		else {
 			objectOutput.writeUTF(description);
 		}
+
+		objectOutput.writeLong(startTime);
+		objectOutput.writeLong(endTime);
 	}
 
 	public String uuid;
@@ -236,5 +259,7 @@ public class CompensatoryDataCacheModel
 	public long managerId;
 	public long leaveCompensatoryStatusMasterId;
 	public String description;
+	public long startTime;
+	public long endTime;
 
 }
