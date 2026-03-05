@@ -251,7 +251,7 @@
                         <div class="form-group">
                             <label class="form-label">
                                 <liferay-ui:message key="address-proof-document"/>
-                                <span class="text-danger">*</span>
+
                             </label>
 
                             <input type="file"

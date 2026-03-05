@@ -1005,23 +1005,7 @@ $.validator.addMethod(
                                        validPincode: true
                                    },
                                    [namespace + "addressProofFile"]: {
-                                       required: function (element) {
-                                               const form = element.form;
-                                               if (!form._submitAttempted) {
-                                                   return false;
-                                               }
 
-                                               if ($("#" + namespace + "addressProofAlreadyUploaded").length) {
-                                                   return false;
-                                               }
-
-                                             if (element.files && element.files.length > 0) {
-                                                 return false;
-                                             }
-
-
-                                               return true;
-                                           },
                                            validExtension: true,
                                            maxFileSize: 10
                                    },
@@ -1099,7 +1083,7 @@ $.validator.addMethod(
                                        validPincode: "Pincode must be exactly 6 digits."
                                    },
                                    [namespace + "addressProofFile"]: {
-                                    required: "Please upload the Address Proof File.",
+
                                      validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
                                      maxFileSize: "File size must not exceed 10 MB."                                   },
                                }

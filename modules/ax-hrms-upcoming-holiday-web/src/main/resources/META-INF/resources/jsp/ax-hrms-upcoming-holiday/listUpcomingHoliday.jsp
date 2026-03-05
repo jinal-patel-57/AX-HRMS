@@ -46,7 +46,7 @@
 
                     <fmt:formatDate
                         value="${upcomingHoliday.date}"
-                        pattern="dd-MM-yyyy"
+                        pattern="dd-MMM-yyyy"
                         var="formattedHolidayDate"/>
                     <fmt:formatDate
                         value="${upcomingHoliday.date}"

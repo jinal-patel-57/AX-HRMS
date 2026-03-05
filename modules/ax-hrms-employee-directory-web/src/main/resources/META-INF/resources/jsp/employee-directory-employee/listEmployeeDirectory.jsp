@@ -8,9 +8,9 @@
 
 <portlet:renderURL var="filterDataURL">
     <portlet:param name="mvcRenderCommandName" value="/filterData"/>
-    <portlet:param name="selectedDesig" value="SELECTEDDESIG"/>
+
     <portlet:param name="selectedDepart" value="SELECTEDDEPART"/>
-    <portlet:param name="searchQuery" value="SEARCHQUERY"/>
+
 </portlet:renderURL>
 
 
@@ -37,12 +37,7 @@
 
           <form class="form-inline" onsubmit="updateURLAndFetchData(); return false;">
 
-                <select class="custom-select custom-select-sm mr-1" id="selectedDesig" name="<portlet:namespace />selectedDesig">
-                    <option value="0" selected><liferay-ui:message key="desig" /></option>
-                    <c:forEach items="${designationList}" var="designation">
-                        <option value="${designation.designationMasterId}" ${designation.designationMasterId == designationValue? 'selected':''}>${designation.designationName}</option>
-                    </c:forEach>
-                </select>
+
 
                 <select class="custom-select custom-select-sm mr-1" id="selectedDepart" name="<portlet:namespace />selectedDepart">
                     <option value="0" selected><liferay-ui:message key="depart" /></option>
@@ -158,23 +153,23 @@ function searchValue() {
 function updateURLAndFetchData() {
 
     console.log("hiiii");
-    var eleDesig = document.getElementById('selectedDesig');
+ //   var eleDesig = document.getElementById('selectedDesig');
     var eleDepart = document.getElementById('selectedDepart');
     var eleSearch = document.getElementById('search');
 
-    var selectedDesig = eleDesig.value;
+   // var selectedDesig = eleDesig.value;
     var selectedDepart = eleDepart.value;
 	var selectedValue = eleSearch.value;
 	
-    console.log(selectedDesig);
+
     console.log(selectedDepart);
 
     var config = {
-        namespaceDesignation: '<portlet:namespace />selectedDesig',
+      //  namespaceDesignation: '<portlet:namespace />selectedDesig',
         namespaceDepartment: '<portlet:namespace />selectedDepart',
         namespaceSearch: '<portlet:namespace />searchQuery',
         renderUrl: '${filterDataURL}',
-        selectedDesig: selectedDesig,
+      //  selectedDesig: selectedDesig,
         selectedDepart: selectedDepart,
         searchedValue: selectedValue
     };

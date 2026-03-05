@@ -46,7 +46,7 @@
 						<th scope="col">
 							<liferay-ui:message key="Designation" />
 						</th>
-						 <c:if test="${isHrAdmin}">
+						 <c:if test="${isHrAdmin || isManager}">
                               <th scope="col">
                               							<liferay-ui:message key="status" />
                               						</th>
@@ -56,13 +56,24 @@
 				<tbody>
 					<c:forEach var="todaysWFHEmployee" items="${todaysWFH}">
 						<tr>
-							<td>${todaysWFHEmployee.name}</td>
-							<td>${todaysWFHEmployee.departmentName}</td>
-							<td>${todaysWFHEmployee.designationName}</td>
-							 <c:if test="${isHrAdmin}">
-                                     <td>${todaysWFHEmployee.status}</td>
-                                        </c:if>
-						</tr>
+                            <td>${todaysWFHEmployee.name}</td>
+                            <td>${todaysWFHEmployee.departmentName}</td>
+                            <td>${todaysWFHEmployee.designationName}</td>
+
+                           <c:if test="${isHrAdmin || isManager}">
+                                       <td>
+                                           <c:choose>
+                                               <c:when test="${isHrAdmin || todaysWFHEmployee.isReportingManager()}">
+                                                   ${todaysWFHEmployee.status}
+                                               </c:when>
+                                               <c:otherwise>
+                                                   -
+                                               </c:otherwise>
+                                           </c:choose>
+                                       </td>
+                                   </c:if>
+
+                        </tr>
 					</c:forEach>
 				</tbody>
 			</table>

@@ -155,7 +155,8 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 						log.error("Unable to fetch designation-- "+e.getMessage());
 					}
 					todaysLeaveEmployee.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
-
+					boolean isReportingManager = employeeDetailsLocalService.findByEmployeeId(employeeDetails.getManagerId()).getLrUserId() == themeDisplay.getUserId();
+					todaysLeaveEmployee.setReportingManager(isReportingManager);
 					todaysLeaveEmployees.add(todaysLeaveEmployee);
 					log.info("todaysLeaveEmployee -- " + todaysLeaveEmployee);
 				}
@@ -165,7 +166,9 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 		}
 		renderRequest.setAttribute("todaysLeaves", todaysLeaveEmployees);
 		boolean isHrAdmin = axHrmsCommonApi.isRolePerson(themeDisplay, "HR Admin");
+		boolean isManager = axHrmsCommonApi.isRolePerson(themeDisplay, "Manager");
 		renderRequest.setAttribute("isHrAdmin", isHrAdmin);
+		renderRequest.setAttribute("isManager", isManager);
 		return "/jsp/dashboardleavereport/listTodaysLeaveEmployees.jsp";
 	}
 

@@ -14,6 +14,16 @@ public class TodaysLeaveEmployee {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public boolean isReportingManager;
+
+
+	public boolean isReportingManager() {
+		return isReportingManager;
+	}
+
+	public void setReportingManager(boolean reportingManager) {
+		isReportingManager = reportingManager;
+	}
 
 	public String getName() {
 		return name;
