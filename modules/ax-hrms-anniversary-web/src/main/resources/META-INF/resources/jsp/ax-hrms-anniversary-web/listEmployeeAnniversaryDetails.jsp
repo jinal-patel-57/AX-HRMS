@@ -32,8 +32,8 @@
                 <thead>
                 <tr>
                     <th scope="col"><liferay-ui:message key="employee-name"/></th>
-                    <th scope="col"><liferay-ui:message key="department-name"/></th>
-                    <th scope="col"><liferay-ui:message key="designation-name"/></th>
+                    <th scope="col"><liferay-ui:message key="department"/></th>
+
                     <th scope="col"><liferay-ui:message key="action"/></th>
                 </tr>
                 </thead>
@@ -43,7 +43,7 @@
                     <tr>
                         <td>${anniversaryEmployees.employeeName}</td>
                         <td>${anniversaryEmployees.departmentName}</td>
-                        <td>${anniversaryEmployees.designationName}</td>
+
                         <td>
                          <c:if test="${currentUserId ne anniversaryEmployees.lrUserId}">
                             <a href="javascript:void(0)" data-senna-off="true"

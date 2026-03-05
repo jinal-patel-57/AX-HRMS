@@ -42,8 +42,13 @@
 					<tr>
 
 						<th scope="col"><liferay-ui:message key="employee-name" /></th>
-						<th scope="col"><liferay-ui:message key="department-name" /></th>
-						<th scope="col"><liferay-ui:message key="designation-name" /></th>
+						<th scope="col"><liferay-ui:message key="Department" /></th>
+						<th scope="col"><liferay-ui:message key="Designation" /></th>
+						 <c:if test="${isHrAdmin}">
+                          <th scope="col">
+                                                    <liferay-ui:message key="status" />
+                                                </th>
+                                </c:if>
 					</tr>
 				</thead>
 				<tbody>
@@ -52,6 +57,9 @@
 							<td>${todaysLeaveEmployee.name}</td>
 							<td>${todaysLeaveEmployee.departmentName}</td>
 							<td>${todaysLeaveEmployee.designationName}</td>
+							<c:if test="${isHrAdmin}">
+                             <td>${todaysLeaveEmployee.status}</td>
+                                </c:if>
 
 						</tr>
 					</c:forEach>

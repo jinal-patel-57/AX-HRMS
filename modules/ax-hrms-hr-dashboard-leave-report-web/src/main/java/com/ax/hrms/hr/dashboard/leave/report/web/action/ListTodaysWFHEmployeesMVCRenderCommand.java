@@ -202,6 +202,7 @@ public class ListTodaysWFHEmployeesMVCRenderCommand implements MVCRenderCommand 
                         log.error("Unable to fetch designation for employeeId : "
                                 + employee.getEmployeeId(), e);
                     }
+                    dto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(wfhRequest.getStatus()).getLeaveCompensatoryStatus());
 
                     todaysWFHEmployees.add(dto);
 

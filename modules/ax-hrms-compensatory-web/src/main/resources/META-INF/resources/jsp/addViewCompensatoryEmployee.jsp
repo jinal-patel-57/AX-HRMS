@@ -247,7 +247,7 @@
                         <span class="text-danger">*</span>
                         <textarea id="description" class="form-control"
                                   name="<portlet:namespace />description"></textarea>
-                                  <small class="form-text text-muted">
+                                  <small class="text-muted d-block">
                                       Maximum 250 characters allowed.
                                   </small>
                         <label id="description-error" class="error text-danger" for="description"></label>

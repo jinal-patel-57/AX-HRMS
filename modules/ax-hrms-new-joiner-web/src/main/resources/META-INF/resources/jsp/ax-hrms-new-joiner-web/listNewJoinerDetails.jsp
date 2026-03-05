@@ -32,8 +32,8 @@
             <thead>
                 <tr>
                     <th scope="col"><liferay-ui:message key="employee-name" /></th>
-                    <th scope="col"><liferay-ui:message key="department-name" /></th>
-                    <th scope="col"><liferay-ui:message key="designation-name" /></th>
+                    <th scope="col"><liferay-ui:message key="department" /></th>
+
                     <th scope="col"><liferay-ui:message key="action" /></th>
                 </tr>
             </thead>
@@ -42,7 +42,7 @@
                     <tr>
                         <td>${newJoiner.employeeName}</td>
                         <td>${newJoiner.departmentName}</td>
-                        <td>${newJoiner.designationName}</td>
+
                         <td>
                             <c:if test="${currentUserId ne newJoiner.lrUserId}">
 	                            <a href="javascript:void(0)" data-senna-off="true" class="btn btn-primary btn-sm sendNewJoineeWish" data-toggle="modal" data-employee-id='${newJoiner.employeeId}' data-employee-name='${newJoiner.employeeName}'> <liferay-ui:message key="send-wishes" /></a>

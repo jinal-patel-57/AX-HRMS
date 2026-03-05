@@ -154,6 +154,8 @@ public class ListTodaysLeaveEmployeesMVCRenderCommand implements MVCRenderComman
 					} catch(Exception e) {
 						log.error("Unable to fetch designation-- "+e.getMessage());
 					}
+					todaysLeaveEmployee.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
+
 					todaysLeaveEmployees.add(todaysLeaveEmployee);
 					log.info("todaysLeaveEmployee -- " + todaysLeaveEmployee);
 				}

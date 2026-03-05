@@ -58,10 +58,47 @@ String currentURL = PortalUtil.getCurrentURL(request);
                        name="<portlet:namespace/>workFromHomeRequestId"
                        value="<%= wfh.getWorkFromHomeRequestId() %>"/>
             </c:if>
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6">
+            				<div class="form-group">
+            					<label>Start Date <span class="text-danger">*</span></label>
+            					<input type="date"
+            						   id="startDate"
+            						   class="form-control"
+            						   name="<portlet:namespace/>startDate"
+            						   value="<%= isEdit ? df.format(wfh.getStartDate()) : "" %>"
+            						   />
+            					<small class="text-danger" id="startError"></small>
+            				</div>
+            			</div>
+
+            			<div class="col-sm-12 col-md-6 col-lg-6">
+            				<div class="form-group">
+            					<label>End Date <span class="text-danger">*</span></label>
+            					<input type="date"
+            						   id="endDate"
+            						   class="form-control"
+            						   name="<portlet:namespace/>endDate"
+            						   value="<%= isEdit ? df.format(wfh.getEndDate()) : "" %>"
+            							/>
+            					<small class="text-danger" id="endError"></small>
+            				</div>
+            			</div>
+            			<div class="col-sm-12 col-md-8 col-lg-8">
+            				<div class="form-group">
+            					<div id="wfhDateInputsContainer" style="display:none;"></div>
+            					<small class="text-danger" id="dateRangeError"></small>
+            				</div>
+            			</div>
+
+
+
+
 			
 			<div class="col-12">
 				<div class="form-group">
-				  <label>Team <span class="text-danger">*</span></label>
+				  <label>Inform Team Members<span class="text-danger">*</span></label>
 
 				  <select id="mySelect" name="<portlet:namespace />wfhTeamIdSelectBox"
 						  class="form-control custom-select mr-sm-2">
@@ -89,48 +126,26 @@ String currentURL = PortalUtil.getCurrentURL(request);
 			</div>
 
 			<div class="col-12">
-				<div class="form-group">
-					<label>Reason <span class="text-danger">*</span></label>
-					<textarea class="form-control"
-							  id="reason"
-							  name="<portlet:namespace/>reason"
-							  rows="3"
-							  ><%= isEdit ? wfh.getReason() : "" %></textarea>
-					<small class="text-danger" id="reasonError"></small>
-				</div>
-			</div>
+                <div class="form-group">
+                    <label>Reason <span class="text-danger">*</span></label>
 
-			<div class="col-sm-12 col-md-6 col-lg-6">
-				<div class="form-group">
-					<label>Start Date <span class="text-danger">*</span></label>
-					<input type="date"
-						   id="startDate"
-						   class="form-control"
-						   name="<portlet:namespace/>startDate"
-						   value="<%= isEdit ? df.format(wfh.getStartDate()) : "" %>"
-						   />
-					<small class="text-danger" id="startError"></small>
-				</div>
-			</div>
+                    <textarea class="form-control"
+                              id="reason"
+                              name="<portlet:namespace/>reason"
+                              rows="3"><%= isEdit ? wfh.getReason() : "" %></textarea>
 
-			<div class="col-sm-12 col-md-6 col-lg-6">
-				<div class="form-group">
-					<label>End Date <span class="text-danger">*</span></label>
-					<input type="date"
-						   id="endDate"
-						   class="form-control"
-						   name="<portlet:namespace/>endDate"
-						   value="<%= isEdit ? df.format(wfh.getEndDate()) : "" %>"
-							/>
-					<small class="text-danger" id="endError"></small>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md-8 col-lg-8">
-				<div class="form-group">
-					<div id="wfhDateInputsContainer" style="display:none;"></div>
-					<small class="text-danger" id="dateRangeError"></small>
-				</div>
-			</div>
+                    <!-- Helper text -->
+                    <small class="text-muted d-block">
+                        Minimum 10 and maximum 250 characters allowed.
+                    </small>
+
+                    <!-- Validation error -->
+                    <small class="text-danger d-block" id="reasonError"></small>
+
+                </div>
+            </div>
+
+
 		  </div>
         </div>
 

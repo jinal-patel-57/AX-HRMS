@@ -38,8 +38,8 @@
                 <tr>
 
                     <th scope="col"><liferay-ui:message key="employee-name"/></th>
-                    <th scope="col"><liferay-ui:message key="department-name"/></th>
-                    <th scope="col"><liferay-ui:message key="designation-name"/></th>
+                    <th scope="col"><liferay-ui:message key="department"/></th>
+
                     <th scope="col"><liferay-ui:message key="action"/></th>
                 </tr>
                 </thead>
@@ -49,7 +49,7 @@
                     <tr>
                         <td>${birthdayEmployee.employeeName}</td>
                         <td>${birthdayEmployee.departmentName}</td>
-                        <td>${birthdayEmployee.designationName}</td>
+
                         <td>
                          <c:if test="${currentUserId ne birthdayEmployee.lrUserId}">
                             <a href="javascript:void(0)" data-senna-off="true" class="btn btn-sm btn-primary sendBirthdayWish"
