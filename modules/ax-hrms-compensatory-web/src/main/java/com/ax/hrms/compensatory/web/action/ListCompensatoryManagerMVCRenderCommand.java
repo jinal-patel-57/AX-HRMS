@@ -168,7 +168,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
             renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
         } catch (NoSuchEmployeeDetailsException e) {
             renderRequest.setAttribute("currentEmployeeId", 0);
-            throw new RuntimeException(e);
+           
         }
 
 
