@@ -169,10 +169,7 @@
                             <label class="form-check-label" for="halfDay">
                                 Half Day
                             </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio"
+                            <input class="ml-2 form-check-input" type="radio"
                                    name="<portlet:namespace />compensationType"
                                    id="fullDay"
                                    value="FULL">
@@ -194,7 +191,7 @@
                      </label>
 
                      <small class="form-text text-muted">
-                         Hours : Minutes (24-hour format)
+                         Hours : Minutes (12-hour format)
                      </small>
 
                      <input id="startTime"
@@ -213,7 +210,7 @@
                      </label>
 
                      <small class="form-text text-muted">
-                         Hours : Minutes (24-hour format)
+                         Hours : Minutes (12-hour format)
                      </small>
 
                      <input id="endTime"
