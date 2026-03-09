@@ -14,6 +14,7 @@ public class AxHrmsWorkFromHomePortletKeys {
     public static final String WFH_LIST_JSP = "/jsp/ax-hrms-work-from-home-employee/list_work_from_home.jsp";
     public static final String PENDING = "Pending";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final String DATE_FORMAT_MMM = "dd-MMM-yyyy";
 
     public static final String WFH_REQUEST_MAIL_HEAD =
             "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;\">" +

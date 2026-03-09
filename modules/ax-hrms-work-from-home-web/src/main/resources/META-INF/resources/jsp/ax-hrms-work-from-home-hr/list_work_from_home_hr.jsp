@@ -48,11 +48,11 @@
                         value="${wfh.employeeName}" />
 
                 <liferay-ui:search-container-column-text name="Start Date">
-                    <fmt:formatDate value="${wfh.startDate}" pattern="dd-MM-yyyy" />
+                    <fmt:formatDate value="${wfh.startDate}" pattern="dd-MMM-yyyy" />
                 </liferay-ui:search-container-column-text>
 
                 <liferay-ui:search-container-column-text name="End Date">
-                    <fmt:formatDate value="${wfh.endDate}" pattern="dd-MM-yyyy" />
+                    <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
                 </liferay-ui:search-container-column-text>
                   <liferay-ui:search-container-column-text name="No of Days" value="${wfh.noOfDays}" />
 
@@ -61,7 +61,7 @@
                         value="${wfh.reason}" />
 
        <liferay-ui:search-container-column-text name="Request Date">
-                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MM-yyyy" />
+                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MMM-yyyy" />
                 </liferay-ui:search-container-column-text>
 
 

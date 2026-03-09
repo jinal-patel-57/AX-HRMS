@@ -168,7 +168,7 @@ public class WFHStatusUtil {
     }
 
     public String setDateFormat(Date inputDate) {
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsWorkFromHomePortletKeys.DATE_FORMAT);
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsWorkFromHomePortletKeys.DATE_FORMAT_MMM);
         String dateStr = null;
         try {
 

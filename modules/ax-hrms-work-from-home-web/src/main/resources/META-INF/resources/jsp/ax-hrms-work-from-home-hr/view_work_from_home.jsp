@@ -115,7 +115,7 @@
                                         <td>
                                             <fmt:formatDate
                                                 value="${wfhDay.workFromHomeDate}"
-                                                pattern="dd-MM-yyyy"
+                                                pattern="dd-MMM-yyyy"
                                                 var="formattedWFHDate"/>
                                             <p class="text-center my-0">
                                                 ${formattedWFHDate}

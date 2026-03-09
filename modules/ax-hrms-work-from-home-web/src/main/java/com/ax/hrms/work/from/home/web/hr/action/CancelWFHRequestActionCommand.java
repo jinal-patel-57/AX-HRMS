@@ -93,11 +93,9 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
                 return false;
             }
 
-            // 🔥 Fetch all statuses
             List<LeaveCompensatoryStatusMaster> statusList =
                     leaveStatusLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
-            // 🔥 Find CANCELLED/REJECTED ID (rename if needed)
             long cancelledId = statusList.stream()
                     .filter(s -> "Cancelled".equalsIgnoreCase(s.getLeaveCompensatoryStatus()))
                     .map(LeaveCompensatoryStatusMaster::getLeaveCompensatoryStatusMasterId)
@@ -109,7 +107,6 @@ public class CancelWFHRequestActionCommand implements MVCActionCommand {
                 return false;
             }
 
-            // 🔥 Update WFH status
             wfh.setStatus(cancelledId);
             Map<String, Object> serviceMap = new HashMap<>();
             serviceMap.put("departmentMasterLocalService", departmentMasterLocalService);
