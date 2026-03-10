@@ -82,7 +82,7 @@
         <liferay-ui:search-container-column-text name="Official Email" value="${employee.getOfficialEmail()}" />
         <liferay-ui:search-container-column-text name="Mobile Number" value="${employee.getMobileNo()}" />
        <liferay-ui:search-container-column-text name="Date Of Birth">
-           <fmt:formatDate value="${employee.dateOfBirth}" pattern="dd-MM-yyyy" />
+           <fmt:formatDate value="${employee.dateOfBirth}" pattern="dd-MMM-yyyy" />
        </liferay-ui:search-container-column-text>
 
         <liferay-ui:search-container-column-text name="Designation" value="${employee.getDesignationName()}"/>

@@ -327,7 +327,7 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
     }
     public String setDateFormat(Date inputDate) {
         SimpleDateFormat outputDateFormat = new SimpleDateFormat(
-                AxHrmsCompensatoryDataConstants.DATE_FORMAT);
+                AxHrmsCompensatoryDataConstants.DD_MMM_YYYY);
         String dateStr = null;
         try {
 

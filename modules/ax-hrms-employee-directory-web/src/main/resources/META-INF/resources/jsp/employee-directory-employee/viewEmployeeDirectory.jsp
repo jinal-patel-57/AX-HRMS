@@ -119,7 +119,7 @@
 							<liferay-ui:message key="joining-date" />
 						</div>
 						<div class="label-content">
-						 <fmt:formatDate value='${employeeProfileDetail.joiningDate}' pattern='dd-MM-yyyy'/>
+						 <fmt:formatDate value='${employeeProfileDetail.joiningDate}' pattern='dd-MMM-yyyy'/>
 						</div>
 					</div>
 
