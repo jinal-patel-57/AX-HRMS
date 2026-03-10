@@ -233,7 +233,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
         if (!officialEmailId.endsWith(domain)) {
             officialEmailId = officialEmailId + domain;
         }
-        employeeDetails.setOfficialEmail(officialEmailId);
+        employeeDetails.setOfficialEmail(officialEmailId.toLowerCase().trim());
         employeeDetails.setGender(gender);
         employeeDetails.setIsTerminated(false);
         employeeDetails.setIsEmployeeOnboarded(false);
