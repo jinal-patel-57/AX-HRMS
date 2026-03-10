@@ -72,20 +72,20 @@ public class LeaveRequestUtil {
 
         body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE).append(employee.getEmployeeCode())
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(employee.getFirstName()).append(" ").append(employee.getLastName())
+                .append(employee.getFirstName()).append(" ").append(employee.getLastName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(departmentMaster.getDepartmentName())
+                .append(departmentMaster.getDepartmentName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(designationMaster.getDesignationName())
+                .append(designationMaster.getDesignationName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(status.getLeaveCompensatoryStatus())
+                .append(status.getLeaveCompensatoryStatus()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(leaveRequestUtil.setDateFormat(leaveRequest.getDateOfRequest()))
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getDateOfRequest())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(leaveRequestUtil.setDateFormat(leaveRequest.getStartDateTime()))
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getStartDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(leaveRequestUtil.setDateFormat(leaveRequest.getEndDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING);
-
+                .append(leaveRequestUtil.setDateFormat(leaveRequest.getEndDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
+				.append("</tr>");
         body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_FOOTER);
         return body;
     }
