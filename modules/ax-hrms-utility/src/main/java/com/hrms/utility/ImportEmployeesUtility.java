@@ -251,7 +251,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		long[] roles = roleIds.stream().mapToLong(Long::longValue).toArray();
 			    		
 			    		//creating new user in the database of Liferay and sending the message also.
-			    		Map<User, String> userPassMap = createNewEmployeeUser(innerMap.get("2").toString().trim(), "", innerMap.get("3").toString().trim(), innerMap.get("4").toString().trim(), themeDisplay, roles, innerMap.get("13").toString().trim());
+			    		Map<User, String> userPassMap = createNewEmployeeUser(innerMap.get("2").toString().trim(), "", innerMap.get("3").toString().trim(), innerMap.get("4").toString().toLowerCase().trim(), themeDisplay, roles, innerMap.get("13").toString().trim());
 			    		
 			    		User user = null;
 			    		String password = StringPool.BLANK;
@@ -285,7 +285,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    		employeeDetails.setEmployeeCode(innerMap.get("13").toString().trim());
 			    		employeeDetails.setFirstName(innerMap.get("2").toString().trim());
 			    		employeeDetails.setLastName(innerMap.get("3").toString().trim());
-			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString().trim());
+			    		employeeDetails.setOfficialEmail(innerMap.get("4").toString().toLowerCase().trim());
 			    		employeeDetails.setGender(Validator.isNotNull(innerMap.get("10"))?innerMap.get("10").toString().trim():"Male");
 			    		//employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))?innerMap.get("9").toString():"");
 			    		employeeDetails.setMobileNo(Validator.isNotNull(innerMap.get("9"))

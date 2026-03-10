@@ -67,7 +67,7 @@
                             <img src="${employee.profilePicUrl}" />
                         </c:when>
                         <c:otherwise>
-                            <img src="<%= themeDisplay.getPathThemeImages() %>/user_portrait.png" />
+                            <img src="/image/user_portrait.png" />
                         </c:otherwise>
                     </c:choose>
                 </div>
