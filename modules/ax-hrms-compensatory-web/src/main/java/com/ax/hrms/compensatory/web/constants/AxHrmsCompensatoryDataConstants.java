@@ -5,6 +5,7 @@ public class AxHrmsCompensatoryDataConstants {
     public static final String DATE_FORMATER = "yyyy-MM-dd";
     public static final String EMPLOYEE_DETAILS_LIST = "employeeDetailsList";
     public static final String DATE_FORMATER_DD_MM_YYYY = "dd-MM-yyyy";
+    public static final String DATE_FORMATER_DD_MMM_YYYY = "dd-MMM-yyyy";
     public static final String COMPENSATION_DATE = "compensationDate";
     public static final String PROJECT_MANAGER = "projectManager";
     public static final String PENDING = "Pending";

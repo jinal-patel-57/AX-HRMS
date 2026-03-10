@@ -132,7 +132,7 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
                         compensatoryDataDto.setApprovedCompensationType("Full Day");
                     }
                     compensatoryDataDto.setDescription(compensatoryData.getDescription());
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER_DD_MM_YYYY);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(AxHrmsCompensatoryDataConstants.DATE_FORMATER_DD_MMM_YYYY);
                     try {
                         EmployeeDetails modifiedByEmployeeDetails = employeeDetailsLocalService.findByLrUserId(compensatoryData.getModifiedBy());
                         compensatoryDataDto.setModifiedBy(modifiedByEmployeeDetails.getFirstName() + " " + modifiedByEmployeeDetails.getLastName());

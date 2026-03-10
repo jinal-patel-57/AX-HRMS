@@ -130,7 +130,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                     log.error("noSuchEmployeeDetailsException "+noSuchEmployeeDetailsException.getMessage());
                 }
                 log.info(compensatoryDataDto.getEmployeeName()+ "    "+compensatoryDataDto.getDateOfCompensation()+ "   "+compensatoryDataDto.getRequestedCompensationType()+"   "+compensatoryDataDto.getApprovedCompensationType());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 String formattedDate = dateFormat.format(compensatoryData.getDateOfCompensation());
                 compensatoryDataDto.setDateOfCompensation(formattedDate);
                 compensatoryDataDto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(compensatoryData.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus());
