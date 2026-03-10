@@ -184,7 +184,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    	log.info("innerMap -- " + innerMap);
 			    	
 			    	EmployeeDetailsTable employeeDetailsTable = EmployeeDetailsTable.INSTANCE;
-			    	String officialEmail = innerMap.get("4").toString().trim();
+			    	String officialEmail = innerMap.get("4").toString().toLowerCase().trim();
 			    	DSLQuery dslQuery = DSLQueryFactoryUtil.select(employeeDetailsTable).from(employeeDetailsTable).where(employeeDetailsTable.officialEmail.eq(officialEmail));
 			    	
 			    	List<EmployeeDetails> employeeList = employeeDetailsLocalService.dslQuery(dslQuery);
