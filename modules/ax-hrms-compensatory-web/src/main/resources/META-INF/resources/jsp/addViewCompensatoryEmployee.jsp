@@ -3,7 +3,10 @@
 <portlet:actionURL name="/addCompensatoryData" var="addCompensatoryDataURL"/>
 <liferay-ui:success key="compensation-request-deleted" message="compensation-request-deleted"/>
 <liferay-ui:success key="compensation-request-submitted" message="compensation-request-submitted"/>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css"/>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
 <head>
 
     <style>
@@ -191,14 +194,14 @@
                      </label>
 
                      <small class="form-text text-muted">
-                         Hours : Minutes (12-hour format)
+                         Hours : Minutes (24-hour format)
                      </small>
 
                      <input id="startTime"
-                            type="time"
-
-                            class="form-control"
-                            name="<portlet:namespace />startTime"/>
+                            type="text"
+                            class="form-control timepicker"
+                            name="<portlet:namespace />startTime"
+                            placeholder="HH:mm"/>
 
                      <label id="startTime-error" class="error text-danger" for="startTime"></label>
                  </div>
@@ -210,14 +213,14 @@
                      </label>
 
                      <small class="form-text text-muted">
-                         Hours : Minutes (12-hour format)
+                         Hours : Minutes (24-hour format)
                      </small>
 
-                     <input id="endTime"
-                            type="time"
-
-                            class="form-control"
-                            name="<portlet:namespace />endTime"/>
+                   <input id="endTime"
+                          type="text"
+                          class="form-control timepicker"
+                          name="<portlet:namespace />endTime"
+                          placeholder="HH:mm"/>
 
                      <label id="endTime-error" class="error text-danger" for="endTime"></label>
                  </div>
@@ -308,6 +311,13 @@
 
 
     $(document).ready(function () {
+
+    $('.timepicker').timepicker({
+        timeFormat: 'H:i',
+        scrollDefault: 'now'
+
+    });
+
         var config = {};
         config.namespace = '<portlet:namespace />';
         axHrmsCompensatoryDataWebPortlet.setConfigs(config);

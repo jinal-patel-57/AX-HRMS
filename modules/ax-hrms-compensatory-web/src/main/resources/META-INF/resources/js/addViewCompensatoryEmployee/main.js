@@ -185,7 +185,13 @@ var submit_compensatory_form;
             });
         });
 
+$("#startTime").on("change", function () {
+    var endTime = $("#endTime").val();
 
+    if (endTime) {
+        $("#endTime").valid();
+    }
+});
 
         open_compensatory_form_modal = function () {
             $('#addCompensatoryDataModal').modal('show');
