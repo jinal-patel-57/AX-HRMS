@@ -32,7 +32,7 @@
         <div class="d-flex align-items-center">
             <form class="form-inline mr-2" onsubmit="searchValue(); return false;">
                 <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" >
-                <button type="submit" class="btn btn-outline-dark btn-sm"><liferay-ui:message key="search" /></button>
+                <button type="submit" class="btn btn-outline-dark btn-sm btn-primary"><liferay-ui:message key="search" /></button>
             </form>
 
           <form class="form-inline" onsubmit="updateURLAndFetchData(); return false;">
@@ -46,7 +46,7 @@
                     </c:forEach>
                 </select>
 
-                <button type="submit" class="btn btn-outline-dark btn-sm">
+                <button type="submit" class="btn btn-outline-dark btn-sm btn-primary">
                     <liferay-ui:message key="filter" />
                 </button>
             </form>
