@@ -6,6 +6,7 @@ import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.web.constants.AxBranchWebPortletKeys;
 import com.ax.hrms.master.web.constants.AxEducationLevelMasterWebPortletKeys;
 import com.ax.hrms.model.Address;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.ax.hrms.service.AddressLocalService;
@@ -59,7 +60,12 @@ public class ListBranchMasterMVCActionRenderCommand implements MVCRenderCommand 
                 branchDto.setPincode(address.getPincode());
 
             } catch (PortalException e) {
-                throw new RuntimeException(e);
+            	branchDto.setAddress(StringPool.BLANK);
+                branchDto.setCity(StringPool.BLANK);
+                branchDto.setState(StringPool.BLANK);
+                branchDto.setCountry(StringPool.BLANK);
+                branchDto.setPincode(StringPool.BLANK);
+                //throw new RuntimeException(e);
             }
 
             branchDto.setBranchName(branch.getBranchName());

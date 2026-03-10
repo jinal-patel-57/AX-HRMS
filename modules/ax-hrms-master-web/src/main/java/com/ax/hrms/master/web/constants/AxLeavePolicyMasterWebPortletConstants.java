@@ -35,7 +35,7 @@ public class AxLeavePolicyMasterWebPortletConstants {
 	public static final String IS_CHECK_MAX="ischeckmax";
 	public static final String MAXIMUM_BALANCE="maximumbalance";
 	public static final String ACCRUAL_RATE="accrualrate";
-	public static final String DESCRIPTION="desciption";
+	public static final String DESCRIPTION="description";
 	public static final String LEAVE_TYPE_MASTER_ID="leavetypemasterid";
 	public static final String LEAVE_POLICY_MASTER_ID="leavePolicyMasterId";
 	public static final String GET_LEAVE_POLICY_MASTER="getLeavePolicyMaster";
