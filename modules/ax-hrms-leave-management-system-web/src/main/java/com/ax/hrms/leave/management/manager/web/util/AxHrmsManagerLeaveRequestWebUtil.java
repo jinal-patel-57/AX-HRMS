@@ -119,7 +119,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
     }
 
     public String setDateFormat(Date inputDate) {
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsHrLeaveManagementSystemWebPortletConstants.DATE_FORMAT);
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(AxHrmsHrLeaveManagementSystemWebPortletConstants.DD_MMM_YYYY);
         String dateStr = null;
         try {
 

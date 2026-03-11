@@ -36,7 +36,7 @@
         <liferay-ui:search-container-column-text name="Holiday Name" value="${holiday.getHolidayName()}" />
         <liferay-ui:search-container-column-text name="Holiday Description" value="${holiday.getDescription()}" />
         
-  		<liferay-ui:search-container-column-text name="Holiday Date" value="<%= new java.text.SimpleDateFormat("dd-MM-yyyy").format(holiday.getDate()) %>" />
+  		<liferay-ui:search-container-column-text name="Holiday Date" value="<%= new java.text.SimpleDateFormat("dd-MMM-yyyy").format(holiday.getDate()) %>" />
   		<liferay-ui:search-container-column-text
                 name="Day"
                 value="<%= new java.text.SimpleDateFormat(\"EEEE\").format(holiday.getDate()) %>" />

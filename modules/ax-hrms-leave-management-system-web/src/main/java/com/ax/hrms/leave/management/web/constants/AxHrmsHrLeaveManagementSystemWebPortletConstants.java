@@ -21,6 +21,7 @@ public class AxHrmsHrLeaveManagementSystemWebPortletConstants {
 	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	public static final String TO = " to ";
 	public static final String DD_MM_YYYY = "dd-MM-yyyy";
+	public static final String DD_MMM_YYYY = "dd-MMM-yyyy";
 
 
 	// Aprroved Leave Request

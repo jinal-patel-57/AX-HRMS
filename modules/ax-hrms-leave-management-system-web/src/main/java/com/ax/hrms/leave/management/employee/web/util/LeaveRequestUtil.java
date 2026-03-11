@@ -243,7 +243,7 @@ public class LeaveRequestUtil {
 			else
 				noOfHoursInLeaveDayType += 8;
 		}
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(AxHrmsHrLeaveManagementSystemWebPortletConstants.DD_MM_YYYY);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(AxHrmsHrLeaveManagementSystemWebPortletConstants.DD_MMM_YYYY);
 		leaveRequestDetails.setLeavePeriod(simpleDateFormat.format(leaveRequest.getStartDateTime()) + AxHrmsHrLeaveManagementSystemWebPortletConstants.TO + simpleDateFormat.format(leaveRequest.getEndDateTime()));
 		leaveRequestDetails.setNoOfDays(noOfHoursInLeaveDayType / 8.0);
 		leaveRequestDetails.setNoOfHours(noOfHoursInLeaveDayType);

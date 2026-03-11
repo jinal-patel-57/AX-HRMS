@@ -80,7 +80,7 @@
                             <c:forEach var="leaveDayType" items="${leaveDayTypeList}">
                                 <tr>
                                     <td>
-                                        <fmt:formatDate value="${leaveDayType.leaveDate}" pattern="dd-MM-yyyy"
+                                        <fmt:formatDate value="${leaveDayType.leaveDate}" pattern="dd-MMM-yyyy"
                                                         var="formatedLeaveDate"/>
                                         <p class="text-center my-0">${formatedLeaveDate }</p>
                                     </td>

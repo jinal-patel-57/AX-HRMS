@@ -1,9 +1,7 @@
 package com.ax.hrms.policy.process.management.employee.web.action;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
@@ -162,7 +160,7 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 		for(Policy policy : policyList) {
 			if (Boolean.TRUE.equals(policy.getStatus())) {
 				PolicyDto policyDto = new PolicyDto();
-				policyDto.setDate(axHrmsCommonApi.setDateFormat(policy.getApplicableDate()));
+				policyDto.setDate(setDateFormat(policy.getApplicableDate()));
 				policyDto.setPolicyId(policy.getPolicyId());
 				policyDto.setPolicyName(policy.getPolicyName());
 				policyDto.setPolicyTypeName(policyTypeMasterLocalService.getPolicyTypeMaster(policy.getPolicyTypeId()).getPolicyType());
@@ -183,6 +181,22 @@ public class ListPolicyProcessManagementEmployeeMVCRenderCommand implements MVCR
 			}
 		}
 		return policyDtoList;
+	}
+	public String setDateFormat(Date inputDate) {
+		SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		String dateStr = null;
+		try {
+
+			// Format the current date to the desired format
+			dateStr = outputDateFormat.format(inputDate);
+
+		} catch (Exception e) {
+			log.error("ListPolicyProcessManagementEmployeeMVCRenderCommand >>> setDateFormat Method >>Error in Set Date Format..!!"
+					+ e.getMessage());
+		}
+
+		return dateStr;
+
 	}
 
 }
