@@ -258,7 +258,6 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
                             Date leaveDate = leaveDay.getLeaveDate();
                             double count = leaveDay.isIsHalfDay() ? 0.5 : 1.0;
 
-                            // ===== CUMULATIVE CALCULATION =====
                             if (!leaveDate.before(cumulativeStart)
                                     && !leaveDate.after(cumulativeEnd)) {
 

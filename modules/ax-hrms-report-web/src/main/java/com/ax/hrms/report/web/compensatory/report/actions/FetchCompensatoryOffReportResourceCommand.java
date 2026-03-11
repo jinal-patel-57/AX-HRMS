@@ -76,7 +76,7 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                 endDate = sdf.parse(toDateStr);
             }
 
-            SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
 
             LeaveTypeMaster compOffType =
                     leaveTypeMasterLocalService.findByLeaveTypeName(
