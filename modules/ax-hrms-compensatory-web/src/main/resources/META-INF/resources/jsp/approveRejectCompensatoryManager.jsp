@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:actionURL name="/approveRejectCompensatoryData" var="approveCompensatoryDataURL"/>
 <liferay-ui:success key="compensation-request-rejected" message="compensation-request-rejected"/>
@@ -60,8 +61,8 @@
                 <liferay-ui:search-container-column-text name="manager-name"
                                                          value="${ compensatoryDataDto.getManagerName() }"/>
 
-                <liferay-ui:search-container-column-text name="status"
-                                                         value="${ compensatoryDataDto.getStatus() }"/>
+				<liferay-ui:search-container-column-text name="Status"
+                                                             value='<span class="status ${fn:toLowerCase(fn:replace(compensatoryDataDto.getStatus(), " ", "-"))}">${compensatoryDataDto.getStatus()}</span>'/>
 
                 <liferay-ui:search-container-column-text name="description"
                                                          value="${ compensatoryDataDto.getDescription() }"/>

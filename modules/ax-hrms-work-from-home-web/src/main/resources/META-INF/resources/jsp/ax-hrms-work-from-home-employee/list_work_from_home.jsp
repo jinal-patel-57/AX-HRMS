@@ -1,4 +1,5 @@
 <%@ include file="../../init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <liferay-ui:success key="wfh-added" message="Work From Home request added successfully!" />
@@ -29,7 +30,9 @@
                     className="com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto"
                     modelVar="wfh"
                     keyProperty="workFromHomeRequestId">
-                <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" />
+                <%-- <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" /> --%>
+                <liferay-ui:search-container-column-text name="Status"
+					value='<span class="status ${fn:toLowerCase(fn:replace(wfh.status, " ", "-"))}">${wfh.status}</span>'/>
                 <liferay-ui:search-container-column-text name="Modified By" value="${wfh.modifiedBy}" />
 
                                 <liferay-ui:search-container-column-text name="Start Date">

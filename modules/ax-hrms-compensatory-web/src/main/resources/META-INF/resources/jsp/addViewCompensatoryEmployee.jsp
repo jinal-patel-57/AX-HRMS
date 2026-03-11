@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:actionURL name="/addCompensatoryData" var="addCompensatoryDataURL"/>
 <liferay-ui:success key="compensation-request-deleted" message="compensation-request-deleted"/>
@@ -70,7 +71,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.ti
                                                              value="${ compensatoryDataDto.getManagerName() }"/>
 
                     <liferay-ui:search-container-column-text name="Status"
-                                                             value="${ compensatoryDataDto.getStatus() }"/>
+                                                             value='<span class="status ${fn:toLowerCase(fn:replace(compensatoryDataDto.getStatus(), " ", "-"))}">${compensatoryDataDto.getStatus()}</span>'/>
 
                     <liferay-ui:search-container-column-text name="Description"
                                                              value="${ compensatoryDataDto.getDescription() }"/>
