@@ -16,7 +16,7 @@
 <div class="card">
     <div class="card-header">
         <strong>
-          Leave Request List
+          Leave Requests
         </strong>
     </div>
     <div class="card-body">
@@ -39,7 +39,7 @@
                                                                  value="${leaveRequest.endDateOfLeaveRequest}"/>
                         <liferay-ui:search-container-column-text name="Date of Request Leave"
                                                                  value="${leaveRequest.dateOfRequestedLeave}"/>
-                      <liferay-ui:search-container-column-text name="No of days"
+                      <liferay-ui:search-container-column-text name="No. of days"
                                                                               value="${ leaveRequest.totalNoOfDays}"></liferay-ui:search-container-column-text>
                        <liferay-ui:search-container-column-text name="Modified by"
                                                                   value="${ leaveRequest.getModifiedUser() }"></liferay-ui:search-container-column-text>

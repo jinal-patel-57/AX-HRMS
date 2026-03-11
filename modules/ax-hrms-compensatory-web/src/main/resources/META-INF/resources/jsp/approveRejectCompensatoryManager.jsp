@@ -22,7 +22,7 @@
 <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
         <strong>
-            <liferay-ui:message key="List of Compensatory Details"/>
+            <liferay-ui:message key="Compensatory Requests"/>
 
         </strong>
     </div>

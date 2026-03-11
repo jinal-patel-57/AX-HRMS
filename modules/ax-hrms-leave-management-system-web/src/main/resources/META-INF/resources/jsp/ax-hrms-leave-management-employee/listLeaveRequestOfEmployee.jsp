@@ -23,7 +23,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <strong>
-            Leave Request List
+            Leave Requests
         </strong>
         <a class="btn btn-primary btn-sm ${isApplicableForLeave ? '':'disabled'}" href="${addLeaveRequestUrl}"
            data-senna-off="true">
@@ -45,7 +45,7 @@
                                                          value="${ leaveRequest.getLeaveType() }"></liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Leave Period"
                                                          value="${ leaveRequest.getLeavePeriod() }"></liferay-ui:search-container-column-text>
-                <liferay-ui:search-container-column-text name="No of days"
+                <liferay-ui:search-container-column-text name="No. of days"
                                                          value="${ leaveRequest.getNoOfDays() }"></liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Modified by"
                                                          value="${ leaveRequest.getModifiedUser() }"></liferay-ui:search-container-column-text>

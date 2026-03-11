@@ -21,7 +21,7 @@
 <div class="card">
     <div class="card-header">
         <strong>
-            Employee Leave Request
+            Leave Request
         </strong>
     </div>
 

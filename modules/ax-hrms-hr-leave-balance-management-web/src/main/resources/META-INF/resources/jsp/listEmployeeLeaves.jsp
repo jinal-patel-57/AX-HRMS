@@ -39,7 +39,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th scope="col">Sr No</th>
+                    <th scope="col">Sr No.</th>
                     <th scope="col">Leave Type Name</th>
                     <th scope="col">Leave Balance</th>
                     <th scope="col">New Balance</th>

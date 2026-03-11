@@ -24,7 +24,7 @@
              </a>-->
 
 
-        <strong>List Work From Home Requests</strong>
+        <strong>Work From Home Requests</strong>
     </div>
 
     <div class="card-body">
@@ -54,7 +54,7 @@
                 <liferay-ui:search-container-column-text name="End Date">
                     <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
                 </liferay-ui:search-container-column-text>
-                  <liferay-ui:search-container-column-text name="No of Days" value="${wfh.noOfDays}" />
+                  <liferay-ui:search-container-column-text name="No. of Days" value="${wfh.noOfDays}" />
 
                 <liferay-ui:search-container-column-text
                         name="Reason"

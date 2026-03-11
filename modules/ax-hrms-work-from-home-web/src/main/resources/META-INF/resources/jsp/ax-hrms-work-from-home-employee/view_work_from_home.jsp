@@ -61,7 +61,7 @@
             </div>
              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group-view">
-                                <div class="label-name">No of Days</div>
+                                <div class="label-name">No. of Days</div>
                                 <div class="label-content">${wfh.noOfDays}</div>
                             </div>
                         </div>
