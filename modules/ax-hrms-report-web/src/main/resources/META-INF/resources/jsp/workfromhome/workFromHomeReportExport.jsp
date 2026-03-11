@@ -4,20 +4,7 @@
 
 <portlet:resourceURL var="downloadURL" id="/work/from/home/report/export" />
 
-<div class="mb-4">
-    <div class="d-flex align-items-center justify-content-between">
-        <div>
-            <h3 class="mb-1 font-weight-bold">
-                 Work From Home Report Export
-            </h3>
-            <p class="text-muted mb-0">
-                Generate and download Work From Home reports for employees based on date range or previous month.
-            </p>
-        </div>
 
-    </div>
-    <hr>
-</div>
 
 
 <div class="card">
