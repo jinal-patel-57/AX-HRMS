@@ -324,7 +324,8 @@ log.info("url ::::  " + url);
 				.append(leaveRequestUtil.setDateFormat(leaveRequest.getStartDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
 				.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
 				.append(leaveRequestUtil.setDateFormat(leaveRequest.getEndDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
-				.append("</tr>");
+				.append("</tr>")
+                .append("${COMMENT_SECTION}");
 		body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_FOOTER);
 		return body;
 	}
@@ -348,7 +349,25 @@ log.info("url ::::  " + url);
              mailContent =  mailContent.replace("${BODY}", body);
              mailContent =  mailContent.replace("${COMMENT}", comment);
 
-              String subject =  isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() :isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
+            if (comment != null && !comment.trim().isEmpty()) {
+                StringBuilder commentString = new StringBuilder();
+                commentString.append("<tr>")
+                        .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+                        .append("<strong>Remarks/Comments:</strong> ").append(comment)
+                        .append("</td>")
+                        .append("</tr>");
+
+                mailContent =  mailContent.replace("${COMMENT_SECTION}",commentString);
+
+
+            }
+            else {
+                mailContent =  mailContent.replace("${COMMENT_SECTION}","");
+            }
+
+
+
+            String subject =  isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() :isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
                
 			
 			axHrmsCommonApi.sendMail(employee.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
@@ -377,8 +396,9 @@ log.info("url ::::  " + url);
 						.getEmployeeDetails(leaveInformDetail.getEmployeeId());
 				 String mailContent =  mailTemplateConfiguration.mailLeaveManagementTeamBody();
 	              mailContent =  mailContent.replace("${BODY}", body);
-	               
-	               String subject = mailTemplateConfiguration.mailLeaveManagementTeamSubject();
+                mailContent =  mailContent.replace("${COMMENT_SECTION}","");
+
+                String subject = mailTemplateConfiguration.mailLeaveManagementTeamSubject();
 	                log.info("sendMailtoTeam >>> subject = " + subject);
 				axHrmsCommonApi.sendMail(teamMember.getOfficialEmail(), fromEmailAddress, fromName, subject,
 						mailContent);

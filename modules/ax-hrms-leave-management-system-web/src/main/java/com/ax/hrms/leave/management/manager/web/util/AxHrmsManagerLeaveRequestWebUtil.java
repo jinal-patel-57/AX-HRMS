@@ -235,7 +235,8 @@ public class AxHrmsManagerLeaveRequestWebUtil {
                 .append(leaveRequestUtil.setDateFormat(leaveRequest.getStartDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
                 .append(leaveRequestUtil.setDateFormat(leaveRequest.getEndDateTime())).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
-                .append("</tr>");
+                .append("</tr>")
+                .append("${COMMENT_SECTION}");
         body.append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_FOOTER);
         return body;
     }
@@ -253,7 +254,22 @@ public class AxHrmsManagerLeaveRequestWebUtil {
             String mailContent = isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeBody() : mailTemplateConfiguration.mailLeaveRejectEmployeeBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
-            mailContent = mailContent.replace("${COMMENT}", comment);
+//            mailContent = mailContent.replace("${COMMENT}", comment);
+
+            if (comment != null && !comment.trim().isEmpty()) {
+                StringBuilder commentString = new StringBuilder();
+                commentString.append("<tr>")
+                        .append("<td colspan='8' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+                        .append("<strong>Remarks/Comments:</strong> ").append(comment)
+                        .append("</td>")
+                        .append("</tr>");
+
+                mailContent =  mailContent.replace("${COMMENT_SECTION}",commentString);
+            }
+            else {
+                mailContent =  mailContent.replace("${COMMENT_SECTION}","");
+            }
+
 
             String subject = isApprove ? mailTemplateConfiguration.mailLeaveApproveEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailLeaveCancelEmployeeSubject() : mailTemplateConfiguration.mailLeaveRejectEmployeeSubject();
 
@@ -310,6 +326,7 @@ public class AxHrmsManagerLeaveRequestWebUtil {
                 String mailContent = mailTemplateConfiguration.mailLeaveManagementTeamBody();
                 mailContent = mailContent.replace("${EMPLOYEE_NAME}", teamMember.getFirstName() + StringPool.SPACE + teamMember.getLastName());
                 mailContent = mailContent.replace("${BODY}", body);
+                mailContent =  mailContent.replace("${COMMENT_SECTION}","");
 
                 String subject = mailTemplateConfiguration.mailLeaveManagementTeamSubject();
 
