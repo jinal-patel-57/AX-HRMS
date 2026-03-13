@@ -11,11 +11,11 @@
         }
 
         if (!$.validator.methods.validDesignationName) {
-          $.validator.addMethod("validDesignationName", function (value, element) {
-              value = value.trim();
-              return this.optional(element) ||
-                  /^[A-Za-z][A-Za-z\s&.\-]{0,68}[A-Za-z]$/.test(value);
-          }, "Only letters, spaces, &, '.', and '-' are allowed");
+         $.validator.addMethod("validDesignationName", function (value, element) {
+             value = value.trim();
+             return this.optional(element) ||
+                 /^[A-Za-z][A-Za-z\s&.\-/]{0,68}[A-Za-z]$/.test(value);
+         }, "Only letters, spaces, &, '.', '-', and '/' are allowed");
 
         }
     });

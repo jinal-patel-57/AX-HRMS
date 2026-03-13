@@ -25,7 +25,15 @@
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
 					<div class="form-group-view">
 						<div class="profilePic mr-2">
-							<img src="${employeeProfileDetail.previewUrl}" class="cover">
+
+							<c:choose>
+                                <c:when test="${not empty employeeProfileDetail.previewUrl}">
+                                    <img src="${employeeProfileDetail.previewUrl}" class="cover">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="/image/user_portrait.png" class="cover" />
+                                </c:otherwise>
+                            </c:choose>
 						</div>
 						<div class="col-6 align-center">
 							<div class="row label-content">
