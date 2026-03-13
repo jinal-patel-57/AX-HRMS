@@ -1,6 +1,7 @@
 package com.ax.hrms.hr.dashboard.leave.report.web.action;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.hr.dashboard.leave.report.web.constants.AxHrmsHrDashboardLeaveReportWebPortletKeys;
 import com.ax.hrms.hr.dashboard.leave.report.web.dto.TodaysLeaveEmployee;
 import com.ax.hrms.master.exception.NoSuchLeaveCompensatoryStatusMasterException;
@@ -207,7 +208,13 @@ public class ListTodaysWFHEmployeesMVCRenderCommand implements MVCRenderCommand 
                                 + employee.getEmployeeId(), e);
                     }
                     dto.setStatus(leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMaster(wfhRequest.getStatus()).getLeaveCompensatoryStatus());
-                    boolean isReportingManager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId()).getLrUserId() == themeDisplay.getUserId();
+                    boolean isReportingManager = false;
+                    try {
+                    	isReportingManager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId()).getLrUserId() == themeDisplay.getUserId();
+                    } catch (NoSuchEmployeeDetailsException nsede) {
+                    	log.error("Unable to fetch employee details for manager - " + nsede.getMessage());
+                    }
+                    
                     dto.setReportingManager(isReportingManager);
                     todaysWFHEmployees.add(dto);
 
