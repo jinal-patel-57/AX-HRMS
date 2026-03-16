@@ -529,6 +529,9 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
     private void sendCredentialMailToEmployee(EmployeeDetails employeeDetails, String password, ThemeDisplay themeDisplay) {
         String subject = mailTemplateConfiguration.mailOnBoardingPermanentAndTemporaryEmployeesSubject();
         String body = mailTemplateConfiguration.mailOnBoardingPermanentAndTemporaryEmployeesBody();
+        String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
         body = body.replace("${EMPLOYEE_MAIL}", employeeDetails.getOfficialEmail());
         body = body.replace("${EMPLOYEE_NAME}", employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
@@ -544,13 +547,16 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
         }
         body = body.replace("${INSURANCE_LINK}", insuranceLink);
 
-        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_MAIL_ADDRESS, AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_NAME, subject, body);
+        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), fromEmailAddress, fromName, subject, body);
 
     }
 
     private void sendCredentialMailToInternAndContractor(EmployeeDetails employeeDetails, String password, ThemeDisplay themeDisplay) {
         String subject = mailTemplateConfiguration.mailOnBoardingInternAndContractorEmployeesSubject();
         String body = mailTemplateConfiguration.mailOnBoardingInternAndContractorEmployeesBody();
+        String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
         body = body.replace("${EMPLOYEE_NAME}", employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
         body = body.replace("${EMPLOYEE_MAIL}", employeeDetails.getOfficialEmail());
@@ -558,7 +564,7 @@ private void addLeaveBalanceForNewEmployee(EmployeeDetails employeeDetails, Them
         body = body.replace("${LOGIN_LINK}", themeDisplay.getURLPortal() + linksConfiguration.loginLink());
         body = body.replace("${ONBOARDING_LINK}", themeDisplay.getURLPortal() + linksConfiguration.employeeOnBoardingLink());
 
-        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_MAIL_ADDRESS, AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_NAME, subject, body);
+        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), fromEmailAddress, fromName, subject, body);
 
     }
 

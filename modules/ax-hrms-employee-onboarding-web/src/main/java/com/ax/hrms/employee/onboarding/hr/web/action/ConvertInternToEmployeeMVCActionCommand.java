@@ -23,6 +23,8 @@ import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -248,6 +250,9 @@ public class ConvertInternToEmployeeMVCActionCommand extends BaseMVCActionComman
     }
 
     private void sendConversionAndOnBoardingMailToIntern(EmployeeDetails employeeDetails, ThemeDisplay themeDisplay) {
+        String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+        String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
+                PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
         String body = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body style=\"font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;\">\n" +
@@ -278,7 +283,7 @@ public class ConvertInternToEmployeeMVCActionCommand extends BaseMVCActionComman
                 "\n" +
                 "</body>\n" +
                 "</html>\n";
-        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_MAIL_ADDRESS, AxHrmsEmployeeOnboardingHrWebPortletConstants.SENDER_NAME, AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN_CONVERSION_SUBJECT, body);
+        axHrmsCommonApi.sendMail(employeeDetails.getOfficialEmail(), fromEmailAddress, fromName, AxHrmsEmployeeOnboardingHrWebPortletConstants.INTERN_CONVERSION_SUBJECT, body);
 
     }
 }
