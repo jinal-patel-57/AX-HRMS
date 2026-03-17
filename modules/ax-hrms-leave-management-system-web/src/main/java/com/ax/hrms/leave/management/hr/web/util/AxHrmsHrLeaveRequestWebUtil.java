@@ -408,7 +408,8 @@ log.info("url ::::  " + url);
 				EmployeeDetails teamMember = employeeDetailsLocalService
 						.getEmployeeDetails(leaveInformDetail.getEmployeeId());
 				 String mailContent =  mailTemplateConfiguration.mailLeaveManagementTeamBody();
-	              mailContent =  mailContent.replace("${BODY}", body);
+				mailContent =  mailContent.replace("${EMPLOYEE_NAME}", teamMember.getFirstName()+ StringPool.SPACE+teamMember.getLastName());
+				mailContent =  mailContent.replace("${BODY}", body);
                 mailContent =  mailContent.replace("${COMMENT_SECTION}","");
 
                 String subject = mailTemplateConfiguration.mailLeaveManagementTeamSubject();
