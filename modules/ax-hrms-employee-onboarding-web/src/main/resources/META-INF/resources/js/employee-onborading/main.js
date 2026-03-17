@@ -507,7 +507,7 @@ function setConfigsForAddExperienceSection(config) {
 //                            return !profilePicName || profilePicName.trim() === "";
 //                        },
                         validExtensionForProfileImage:true,
-                            maxFileSize: true
+                            maxFileSize: 10
 
                     },
                     [namespace + "spouseName"]: {
@@ -1985,7 +1985,7 @@ initializeValidation()
             rules: {
                 [namespace + "accountNumber"]: {
                     maxlength: 20,
-                    minlength:12,
+                    minlength:10,
                     accountNumberValidation: true
                 },
 
