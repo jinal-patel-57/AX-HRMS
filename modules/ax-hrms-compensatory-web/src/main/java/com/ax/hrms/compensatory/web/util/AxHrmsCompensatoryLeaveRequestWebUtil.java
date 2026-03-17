@@ -4,6 +4,8 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryDataConstants;
 import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryWebPortletKeys;
 import com.ax.hrms.compensatory.web.notification.SendNotificationToUserHandler;
+import com.ax.hrms.exception.NoSuchEmployeeDepartmentException;
+import com.ax.hrms.exception.NoSuchEmployeeDesignationException;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
@@ -263,17 +265,31 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             throws PortalException {
         AxHrmsCompensatoryLeaveRequestWebUtil leaveRequestUtil = new AxHrmsCompensatoryLeaveRequestWebUtil();
 
+        
         // FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
-        EmployeeDepartment employeeDepartment = employeeDepartmentLocalService
-                .findByEmployeeId(employee.getEmployeeId());
+        String departmentName = StringPool.DASH;
+        try {
+        	// FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
+        	EmployeeDepartment employeeDepartment = employeeDepartmentLocalService
+        			.findByEmployeeId(employee.getEmployeeId());
+        	
+        	DepartmentMaster departmentMaster = departmentMasterLocalService
+        			.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
+        	departmentName = departmentMaster.getDepartmentName();
+        } catch (NoSuchEmployeeDepartmentException nsede) {
+        	log.error("Unable to fetch department " + nsede.getMessage());
+        }
 
-        DepartmentMaster departmentMaster = departmentMasterLocalService
-                .findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
-
-        EmployeeDesignation employeeDesignation = employeeDesignationLocalService
-                .findByEmployeeId(employee.getEmployeeId());
-        DesignationMaster designationMaster = designationMasterLocalService
-                .findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+        String designationName = StringPool.DASH;
+        try {
+        	EmployeeDesignation employeeDesignation = employeeDesignationLocalService
+        			.findByEmployeeId(employee.getEmployeeId());
+        	DesignationMaster designationMaster = designationMasterLocalService
+        			.findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+        	designationName = designationMaster.getDesignationName();
+        } catch(NoSuchEmployeeDesignationException nsede) {
+        	log.error("Unable to get designation " + nsede.getMessage());
+        }
 
         // FETCH DATA OF STATUS
         LeaveCompensatoryStatusMaster status = leaveCompensatoryStatusMasterLocalService
@@ -307,9 +323,9 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
                 .append(employee.getFirstName()).append(" ").append(employee.getLastName())
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
-                .append(departmentMaster.getDepartmentName())
+                .append(departmentName)
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
-                .append(designationMaster.getDesignationName())
+                .append(designationName)
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
                 .append(status.getLeaveCompensatoryStatus())
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)

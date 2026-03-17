@@ -1,6 +1,8 @@
 package com.ax.hrms.work.from.home.web.employee.util;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.exception.NoSuchEmployeeDepartmentException;
+import com.ax.hrms.exception.NoSuchEmployeeDesignationException;
 import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
@@ -190,19 +192,29 @@ public class WFHStatusUtil {
         log.info("string.getLeaveCompensatoryStatus() :; " + string.getLeaveCompensatoryStatus());
         //  EXACTLY ONE ROW — SAME AS LEAVE
 
-        EmployeeDepartment employeeDepartment = employeeDepartmentLocalService
-                .findByEmployeeId(workFromHomeRequest.getEmployeeId());
+        String departmentName = StringPool.DASH;
+        try {
+        	// FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
+        	EmployeeDepartment employeeDepartment = employeeDepartmentLocalService
+        			.findByEmployeeId(workFromHomeRequest.getEmployeeId());
+        	
+        	DepartmentMaster departmentMaster = departmentMasterLocalService
+        			.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
+        	departmentName = departmentMaster.getDepartmentName();
+        } catch (NoSuchEmployeeDepartmentException nsede) {
+        	log.error("Unable to fetch department " + nsede.getMessage());
+        }
 
-        DepartmentMaster departmentMaster = departmentMasterLocalService
-                .findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
-
-        EmployeeDesignation employeeDesignation = employeeDesignationLocalService
-                .findByEmployeeId(workFromHomeRequest.getEmployeeId());
-        DesignationMaster designationMaster = designationMasterLocalService
-                .findByDesignationNameById(employeeDesignation.getDesignationMasterId());
-
-
-
+        String designationName = StringPool.DASH;
+        try {
+        	EmployeeDesignation employeeDesignation = employeeDesignationLocalService
+        			.findByEmployeeId(workFromHomeRequest.getEmployeeId());
+        	DesignationMaster designationMaster = designationMasterLocalService
+        			.findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+        	designationName = designationMaster.getDesignationName();
+        } catch(NoSuchEmployeeDesignationException nsede) {
+        	log.error("Unable to get designation " + nsede.getMessage());
+        }
 
         body.append("<tr>")
 
@@ -210,9 +222,9 @@ public class WFHStatusUtil {
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(employee.getFirstName()).append(" ").append(employee.getLastName()).append("</td>")
 
-                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(departmentMaster.getDepartmentName()).append("</td>")
+                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(departmentName).append("</td>")
 
-                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(designationMaster.getDesignationName()).append("</td>")
+                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(designationName).append("</td>")
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(string.getLeaveCompensatoryStatus()).append("</td>")
 
