@@ -1,6 +1,8 @@
 package com.ax.hrms.leave.management.manager.web.util;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
+import com.ax.hrms.exception.NoSuchEmployeeDepartmentException;
+import com.ax.hrms.exception.NoSuchEmployeeDesignationException;
 import com.ax.hrms.exception.NoSuchLeaveBalanceException;
 import com.ax.hrms.exception.NoSuchLeaveRequestException;
 import com.ax.hrms.leave.management.employee.web.notification.SendNotificationToUserHandler;
@@ -207,13 +209,26 @@ public class AxHrmsManagerLeaveRequestWebUtil {
     public StringBuilder getBody(LeaveRequest leaveRequest, EmployeeDetails employee, StringBuilder body) throws PortalException {
         AxHrmsHrLeaveRequestWebUtil leaveRequestUtil = new AxHrmsHrLeaveRequestWebUtil();
 
-        // FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
-        EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employee.getEmployeeId());
+        
+        String departmentName = StringPool.DASH;
+        try {
+        	// FETCH DATA OF EMPLOYEE DEPARTMENT AND DESIGNATION
+        	EmployeeDepartment employeeDepartment = employeeDepartmentLocalService.findByEmployeeId(employee.getEmployeeId());
+        	
+        	DepartmentMaster departmentMaster = departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
+        	departmentName = departmentMaster.getDepartmentName();
+        } catch (NoSuchEmployeeDepartmentException nsede) {
+        	log.error("Unable to fetch department " + nsede.getMessage());
+        }
 
-        DepartmentMaster departmentMaster = departmentMasterLocalService.findByDepartmentNameById(employeeDepartment.getDepartmentMasterId());
-
-        EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employee.getEmployeeId());
-        DesignationMaster designationMaster = designationMasterLocalService.findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+        String designationName = StringPool.DASH;
+        try {
+        	EmployeeDesignation employeeDesignation = employeeDesignationLocalService.findByEmployeeId(employee.getEmployeeId());
+        	DesignationMaster designationMaster = designationMasterLocalService.findByDesignationNameById(employeeDesignation.getDesignationMasterId());
+        	designationName = designationMaster.getDesignationName();
+        } catch(NoSuchEmployeeDesignationException nsede) {
+        	log.error("Unable to get designation " + nsede.getMessage());
+        }
 
         // FETCH DATA OF STATUS
         LeaveCompensatoryStatusMaster status = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId());
@@ -224,9 +239,9 @@ public class AxHrmsManagerLeaveRequestWebUtil {
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
                 .append(employee.getFirstName()).append(" ").append(employee.getLastName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(departmentMaster.getDepartmentName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
+                .append(departmentName).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
-                .append(designationMaster.getDesignationName()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
+                .append(designationName).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
                 .append(status.getLeaveCompensatoryStatus()).append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE_CLOSING)
                 .append(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_STYLE)
