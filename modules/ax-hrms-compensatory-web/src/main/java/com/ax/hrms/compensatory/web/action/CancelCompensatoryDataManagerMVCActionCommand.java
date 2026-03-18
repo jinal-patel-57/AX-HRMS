@@ -175,7 +175,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
                 log.info("cancelledStatusId :: "+cancelledStatusId);
                 compensatoryData.setLeaveCompensatoryStatusMasterId(cancelledStatusId);
                 compensatoryData.setModifiedBy(themeDisplay.getUserId());
-                commentLocalService.addWorkflowComment(themeDisplay, 3l, "Cancel", compensatoryDataId, comment);
+                commentLocalService.addWorkflowComment(themeDisplay, 3l, "Cancelled", compensatoryDataId, comment);
 //                log.info("compensatoryData.getLeaveCompensatoryStatusMasterId() :: "+compensatoryData.getLeaveCompensatoryStatusMasterId());
                 compensatoryDataLocalService.updateCompensatoryData(compensatoryData);
                 log.info("Compensatory request cancelled successfully");

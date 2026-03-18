@@ -120,7 +120,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
                 leaveRequest.setLeaveCompensatoryStatusMasterId(cancelId);
                 SessionMessages.add(actionRequest,
                         AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_CANCELLED);
-                commentLocalService.addWorkflowComment(themeDisplay, 1l, "Cancel", leaveRequestId, comment);
+                commentLocalService.addWorkflowComment(themeDisplay, 1l, "Cancelled", leaveRequestId, comment);
 
             } else {
                 isCancelled = false;

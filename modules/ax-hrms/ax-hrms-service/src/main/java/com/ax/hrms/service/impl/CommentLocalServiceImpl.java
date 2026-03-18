@@ -64,7 +64,7 @@ public class CommentLocalServiceImpl extends CommentLocalServiceBaseImpl {
 
 		Date now = new Date();
 
-		if ("CANCEL".equalsIgnoreCase(action)) {
+		if ("Cancelled".equalsIgnoreCase(action)) {
 
 			List<Comment> activeComments =
 					commentPersistence.findByTypeRequestIdAndStatus(
