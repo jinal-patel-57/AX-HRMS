@@ -45,8 +45,8 @@
 										<a class="${logo_css_class}" href="${site_default_url}"
 											title="<@liferay.language_format arguments=" ${site_name}" key="go-to-x" />">
 										<img alt="${logo_description}" height="${site_logo_height}" class="collapsed"
-											src="${themeDisplay.getPathThemeImages()}/aixtor_branding_logo.svg" />
-										<img src="${themeDisplay.getPathThemeImages()}/aixtor-logo-cropped.svg" class="expanded"
+											src="${themeDisplay.getPathThemeImages()}/logo-cropped.png" />
+										<img src="${themeDisplay.getPathThemeImages()}/logo-main.png" class="expanded"
 											alt="Aixtor" />
 										</a>
 									</div>

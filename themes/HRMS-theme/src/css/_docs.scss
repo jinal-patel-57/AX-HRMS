@@ -153,7 +153,7 @@ body{font-size: 14px; line-height: 1.5; font-family: 'Open Sans'; color: var(--p
 .inner_header{display: flex; align-items: center; justify-content: space-between; height: inherit;}
 .header .header_logo{display: flex; justify-content: center; position: relative; text-align: center; width: 250px; height: inherit; border-right: 1px solid rgba(193, 193, 193, 0.5019607843); z-index: 1; padding: 0 20px; -webkit-transition: all .2s ease; -ms-transition: all .2s ease; transition: all .2s ease;}
 .header_logo a{display: flex; align-items: center;}
-.header_logo a img{height: 40px;}
+.header_logo a img{height: 70px;}
 .header_logo a img.collapsed{display: none;}
 
 .header #toggle_btn { z-index: 1; margin-left: -10px;}
@@ -258,7 +258,7 @@ li.parent > a + span.collapsed_icon {pointer-events: none !important;}
 
 
 .collapsedMenu .header .header_logo{width: 65px;}
-.collapsedMenu .header_logo a img.collapsed{display: block;}
+.collapsedMenu .header_logo a img.collapsed{display: block; height: 55px;}
 .collapsedMenu .header_logo a img.expanded{display: none;}
 .collapsedMenu .side_navbar{width: 65px;}
 
