@@ -99,7 +99,7 @@ public class LeaveRequestModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_LeaveRequest (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,leaveRequestId LONG not null primary key,employeeId LONG,leaveTypeMasterId LONG,startDateTime DATE null,endDateTime DATE null,reason VARCHAR(250) null,leaveCompensatoryStatusMasterId LONG,hrApprovalId LONG,managerApprovalId LONG,dateOfRequest DATE null)";
+		"create table ax_LeaveRequest (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,leaveRequestId LONG not null primary key,employeeId LONG,leaveTypeMasterId LONG,startDateTime DATE null,endDateTime DATE null,reason VARCHAR(2000) null,leaveCompensatoryStatusMasterId LONG,hrApprovalId LONG,managerApprovalId LONG,dateOfRequest DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_LeaveRequest";
 

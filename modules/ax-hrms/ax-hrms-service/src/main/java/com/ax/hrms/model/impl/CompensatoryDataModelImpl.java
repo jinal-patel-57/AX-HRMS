@@ -99,7 +99,7 @@ public class CompensatoryDataModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_CompensatoryData (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,compensatoryDataId LONG not null primary key,employeeId LONG,dateOfCompensation DATE null,requestedHours INTEGER,approvedHours INTEGER,managerId LONG,leaveCompensatoryStatusMasterId LONG,description VARCHAR(250) null,startTime DATE null,endTime DATE null)";
+		"create table ax_CompensatoryData (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,compensatoryDataId LONG not null primary key,employeeId LONG,dateOfCompensation DATE null,requestedHours INTEGER,approvedHours INTEGER,managerId LONG,leaveCompensatoryStatusMasterId LONG,description VARCHAR(2000) null,startTime DATE null,endTime DATE null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ax_CompensatoryData";

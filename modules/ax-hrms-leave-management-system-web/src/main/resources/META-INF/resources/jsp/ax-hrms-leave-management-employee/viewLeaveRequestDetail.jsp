@@ -72,8 +72,10 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
-                                <td><p class="text-center my-0"><b><liferay-ui:message key="day-type"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="day"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="half"/></b></td>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -85,9 +87,28 @@
                                         <p class="text-center my-0">${formatedLeaveDate }</p>
                                     </td>
                                     <td>
-                                        <p class="text-center my-0">${leaveDayType.isHalfDay ? (leaveDayType.isFirstHalf ? 'First Half' : 'Second Half') : "Full Day" }</p>
+                                        <p class="text-center my-0">${leaveDayType.isHalfDay ?  'Half Day' : "Full Day" }</p>
                                     </td>
+                                   <td>
+                                                                           <c:if test="${leaveDayType.isHalfDay}">
+                                                                               <c:choose>
+                                                                                   <c:when test="${leaveDayType.isFirstHalf }">
+                                                                                        <p class="text-center my-0"><liferay-ui:message key="first-half"/></p>
+                                                                                   </c:when>
+                                                                                   <c:otherwise>
+                                                                                       <p class="text-center my-0"> <liferay-ui:message key="second-half"/></p>
+                                                                                   </c:otherwise>
+                                                                               </c:choose>
+                                                                           </c:if>
+                                                                       </td>
                                 </tr>
+
+
+
+
+
+
+
                             </c:forEach>
                             </tbody>
                         </table>

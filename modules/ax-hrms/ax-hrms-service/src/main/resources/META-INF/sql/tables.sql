@@ -174,7 +174,7 @@ create table ax_CompensatoryData (
 	approvedHours INTEGER,
 	managerId LONG,
 	leaveCompensatoryStatusMasterId LONG,
-	description VARCHAR(250) null,
+	description VARCHAR(2000) null,
 	startTime DATE null,
 	endTime DATE null
 );
@@ -537,7 +537,7 @@ create table ax_LeaveRequest (
 	leaveTypeMasterId LONG,
 	startDateTime DATE null,
 	endDateTime DATE null,
-	reason VARCHAR(250) null,
+	reason VARCHAR(2000) null,
 	leaveCompensatoryStatusMasterId LONG,
 	hrApprovalId LONG,
 	managerApprovalId LONG,
@@ -787,7 +787,7 @@ create table ax_WorkFromHomeRequest (
 	reviewerId LONG,
 	teamMailId VARCHAR(2000) null,
 	status LONG,
-	reason VARCHAR(75) null,
+	reason VARCHAR(2000) null,
 	requestDate DATE null,
 	startDate DATE null,
 	endDate DATE null
