@@ -170,7 +170,7 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
 
                     DSLQuery query = DSLQueryFactoryUtil.select(table)
                             .from(table)
-                            .where(table.officialEmail.eq(officialEmail));
+                            .where(table.officialEmail.eq(officialEmail.toLowerCase()));
 
                     List<EmployeeDetails> employeeList =
                             employeeDetailsLocalService.dslQuery(query);
