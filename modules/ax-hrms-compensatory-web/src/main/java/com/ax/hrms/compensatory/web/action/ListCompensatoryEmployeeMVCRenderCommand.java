@@ -152,13 +152,13 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
                     compensatoryDataDto.setStartTime(
                             Validator.isNotNull(compensatoryData.getStartTime())
                                     ? time.format(compensatoryData.getStartTime())
-                                    : ""
+                                    : "-"
                     );
 
                     compensatoryDataDto.setEndTime(
                             Validator.isNotNull(compensatoryData.getEndTime())
                                     ? time.format(compensatoryData.getEndTime())
-                                    : ""
+                                    : "-"
                     );
 
                     compensatoryDataDtoList.add(compensatoryDataDto);

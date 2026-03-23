@@ -64,8 +64,8 @@
 				<liferay-ui:search-container-column-text name="Status"
                                                              value='<span class="status ${fn:toLowerCase(fn:replace(compensatoryDataDto.getStatus(), " ", "-"))}">${compensatoryDataDto.getStatus()}</span>'/>
 
-                <liferay-ui:search-container-column-text name="description"
-                                                         value="${ compensatoryDataDto.getDescription() }"/>
+                <%-- <liferay-ui:search-container-column-text name="description"
+                                                         value="${ compensatoryDataDto.getDescription() }"/> --%>
          <c:set var="isSameEmployee"
                 value="${currentEmployeeId == compensatoryDataDto.employeeId}" />
 
@@ -75,6 +75,12 @@
                                            var="cancelCompensatoryDataURL">
 
                         </portlet:actionURL>
+                        <portlet:renderURL var="viewCompensatoryURL">
+							<portlet:param name="mvcRenderCommandName"
+								value="/viewCompensatoryData" />
+							<portlet:param name="compensatoryDataId"
+								value="${compensatoryDataDto.compensatoryDataId}" />
+						</portlet:renderURL>
                     <c:if test="${!isSameEmployee && compensatoryDataDto.getStatus() =='Pending' }">
                         <portlet:actionURL name="/approveRejectCompensatoryData"
                                            var="rejectCompensatoryDataURL">
@@ -88,7 +94,8 @@
                                 <i class="icon-ellipsis-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
-
+								<li><a href="${viewCompensatoryURL}" class="dropdown-item"><i class="icon-eye-open"></i> 
+									<liferay-ui:message key="view" /></a></li>
                                 <li>
                                     <!--<a class="dropdown-item"
                                        onclick="open_compensatory_form_modal(${compensatoryDataDto.compensatoryDataId},${ compensatoryDataDto.getRequestedHours() })"><i
@@ -131,7 +138,8 @@
                                 <i class="icon-ellipsis-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
-
+								<li><a href="${viewCompensatoryURL}" class="dropdown-item"><i class="icon-eye-open"></i> 
+									<liferay-ui:message key="view" /></a></li>
                                 <li>
                                    <!-- <a href="${cancelCompensatoryDataURL }" class="dropdown-item "><i
                                             class="icon-ban-circle"></i> <liferay-ui:message

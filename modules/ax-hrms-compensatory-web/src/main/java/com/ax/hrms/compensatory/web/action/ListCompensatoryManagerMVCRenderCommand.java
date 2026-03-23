@@ -83,10 +83,8 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
 
         int compensatoryDatasCount = 0;
 
-
         List<CompensatoryDataDto> compensatoryDataDtoList = new ArrayList<>();
         try {
-            EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
             long hrRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.HR_ADMIN).getRoleId();
             long[] hrRoles = themeDisplay.getUser().getRoleIds();
@@ -98,6 +96,7 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.IS_HR, isHr);
                 compensatoryDataList = compensatoryDataLocalService.getCompensatoryDatas(-1,-1);
             }else {
+            	EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
                 // for managet person
                 compensatoryDataList = compensatoryDataLocalService.findByManagerId(employeeDetails.getEmployeeId());
             }
@@ -143,13 +142,13 @@ public class ListCompensatoryManagerMVCRenderCommand implements MVCRenderCommand
                 compensatoryDataDto.setStartTime(
                         Validator.isNotNull(compensatoryData.getStartTime())
                                 ? time.format(compensatoryData.getStartTime())
-                                : ""
+                                : "-"
                 );
 
                 compensatoryDataDto.setEndTime(
                         Validator.isNotNull(compensatoryData.getEndTime())
                                 ? time.format(compensatoryData.getEndTime())
-                                : ""
+                                : "-"
                 );
                 compensatoryDataDtoList.add(compensatoryDataDto);
                 compensatoryDatasCount += 1;
