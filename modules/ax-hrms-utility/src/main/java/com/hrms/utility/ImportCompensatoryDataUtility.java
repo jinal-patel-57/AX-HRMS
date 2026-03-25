@@ -93,9 +93,8 @@ public class ImportCompensatoryDataUtility extends MVCPortlet {
         Workbook workbook = axHrmsCommonApi.getWorkbook(fileName, compensatoryFile);
         long managerId = 0l;
         try {
-			managerId = employeeDetailsLocalService.findByLrUserId(userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), "connect@yopmail.com").getUserId()).getEmployeeId();;
+			managerId = employeeDetailsLocalService.findByLrUserId(userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), "connect@aixtor.com").getUserId()).getEmployeeId();;
 		} catch (PortalException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         Map<String, Map<String, Object>> compensatoryDataMap = axHrmsCommonApi.readExcelSheetForImportEmployee(workbook.getSheetAt(0));
