@@ -281,24 +281,24 @@ log.info("url ::::  " + url);
 
 		for (LeaveDayType leaveDayType : leaveDayTypeList) {
 			LeaveRequestDto leaveRequestDtoForDate = new LeaveRequestDto();
-			leaveRequestDtoForDate.setComment(null);
-			try {
-				List<Comment> commentList = commentLocalService.findByTypeRequestIdAndStatus(1,leaveDayType.getLeaveRequestId(), true);
-				if (Validator.isNotNull(commentList) && !commentList.isEmpty()) {
-					Comment comment = commentList.get(0);
-					leaveRequestDtoForDate.setComment(comment.getComment());
-					String commentByUserName = StringPool.DASH;
-					try {
-						EmployeeDetails commentedBy = employeeDetailsLocalService.findByLrUserId(comment.getCreatedBy());
-						commentByUserName = commentedBy.getFirstName() + " " + commentedBy.getLastName();
-					} catch(NoSuchEmployeeDetailsException e) {
-                        log.error("No user found for the comment");
-                    }
-					leaveRequestDtoForDate.setCommentedBy(commentByUserName);
-				}
-			} catch(Exception e) {
-                log.error("No comment found");
-            }
+			//leaveRequestDtoForDate.setComment(null);
+			/*
+			 * log.info(leaveRequestDtoListForDate); try { List<Comment> commentList =
+			 * commentLocalService.findByTypeRequestIdAndStatus(1,leaveDayType.
+			 * getLeaveRequestId(), true); log.info(commentList); if
+			 * (Validator.isNotNull(commentList) && !commentList.isEmpty()) { Comment
+			 * comment = commentList.get(0);
+			 * leaveRequestDtoForDate.setComment(comment.getComment()); String
+			 * commentByUserName = StringPool.DASH; log.info(comment.getComment()); try {
+			 * EmployeeDetails commentedBy =
+			 * employeeDetailsLocalService.findByLrUserId(comment.getCreatedBy());
+			 * commentByUserName = commentedBy.getFirstName() + " " +
+			 * commentedBy.getLastName(); log.info(commentByUserName); }
+			 * catch(NoSuchEmployeeDetailsException e) {
+			 * log.error("No user found for the comment"); }
+			 * leaveRequestDtoForDate.setCommentedBy(commentByUserName); } } catch(Exception
+			 * e) { log.error("No comment found"); }
+			 */
 			
 			String leaveDateStr = setDateFormat((leaveDayType.getLeaveDate()));
 			leaveRequestDtoForDate.setLeaveDate(leaveDateStr);
