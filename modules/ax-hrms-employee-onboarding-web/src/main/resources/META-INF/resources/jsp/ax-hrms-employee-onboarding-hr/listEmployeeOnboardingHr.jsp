@@ -14,7 +14,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
 
         <!-- LEFT SIDE -->
-        <strong class="mb-0">Employee On-Boarding</strong>
+        <strong class="mb-0">Employee Onboarding</strong>
 
         <!-- RIGHT SIDE -->
         <div class="d-flex align-items-center">

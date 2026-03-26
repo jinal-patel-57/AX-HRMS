@@ -707,7 +707,7 @@ $.validator.addMethod(
                     },
 
                     [namespace + "fatherName"]: {
-                        required: "Please Enter FatherName."
+                        required: "Please enter Father/Husband Name."
                     },
                     [namespace + "nameAsPerAadhaarCard"]: {
                         required: "Please Enter Name as per Aadhar Card.",
@@ -730,7 +730,7 @@ $.validator.addMethod(
                         lettersOnly: "Only letters are allowed for Name."
                     },
                       [namespace + "aadhaarCard"]: {
-                           documentRequired: "Please upload Aadhaar card.",
+                           documentRequired: "Please upload Aadhar card.",
                            validExtension: "Only PDF, JPG, JPEG, or PNG files are allowed.",
                            maxFileSize: "File size must not exceed 10 MB.",
 
@@ -743,8 +743,8 @@ $.validator.addMethod(
                        },
 
                         [namespace + "aadharNumber"]: {
-                            required: "Please enter Aadhaar number.",
-                              validAadhaar: "Aadhaar must be in format 1234-1234-1234."
+                            required: "Please enter Aadhar number.",
+                              validAadhaar: "Aadhar must be in format 1234-1234-1234."
 
                         },
                         [namespace + "panNumber"]: {

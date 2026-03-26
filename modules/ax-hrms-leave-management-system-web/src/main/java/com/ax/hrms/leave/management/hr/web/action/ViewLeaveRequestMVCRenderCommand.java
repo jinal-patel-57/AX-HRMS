@@ -16,6 +16,7 @@ import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
+import com.ax.hrms.service.CommentLocalService;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -73,6 +74,9 @@ public class ViewLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	
 	@Reference
 	AxHrmsHrLeaveRequestWebUtil leaveRequestUtil;
+	
+	@Reference
+    CommentLocalService commentLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse)  {

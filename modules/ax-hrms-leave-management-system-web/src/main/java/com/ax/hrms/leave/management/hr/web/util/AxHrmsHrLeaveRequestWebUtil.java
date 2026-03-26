@@ -12,6 +12,7 @@ import org.osgi.service.component.annotations.Reference;
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.exception.NoSuchEmployeeDepartmentException;
 import com.ax.hrms.exception.NoSuchEmployeeDesignationException;
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.exception.NoSuchLeaveBalanceException;
 import com.ax.hrms.exception.NoSuchLeaveRequestException;
 import com.ax.hrms.leave.management.web.constants.AxHrmsHrLeaveManagementSystemWebPortletConstants;
@@ -28,6 +29,7 @@ import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
+import com.ax.hrms.model.Comment;
 import com.ax.hrms.model.EmployeeDepartment;
 import com.ax.hrms.model.EmployeeDesignation;
 import com.ax.hrms.model.EmployeeDetails;
@@ -35,6 +37,7 @@ import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.model.LeaveDayType;
 import com.ax.hrms.model.LeaveInformToTeamDetail;
 import com.ax.hrms.model.LeaveRequest;
+import com.ax.hrms.service.CommentLocalService;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -96,7 +99,8 @@ public class AxHrmsHrLeaveRequestWebUtil {
 	@Reference
 	LeaveDayTypeLocalService leaveDayTypeLocalService;
 
-	
+	@Reference
+    CommentLocalService commentLocalService;
 
 	
 	public String setDateFormat(Date inputDate) {
@@ -277,7 +281,25 @@ log.info("url ::::  " + url);
 
 		for (LeaveDayType leaveDayType : leaveDayTypeList) {
 			LeaveRequestDto leaveRequestDtoForDate = new LeaveRequestDto();
-
+			leaveRequestDtoForDate.setComment(null);
+			try {
+				List<Comment> commentList = commentLocalService.findByTypeRequestIdAndStatus(1,leaveDayType.getLeaveRequestId(), true);
+				if (Validator.isNotNull(commentList) && !commentList.isEmpty()) {
+					Comment comment = commentList.get(0);
+					leaveRequestDtoForDate.setComment(comment.getComment());
+					String commentByUserName = StringPool.DASH;
+					try {
+						EmployeeDetails commentedBy = employeeDetailsLocalService.findByLrUserId(comment.getCreatedBy());
+						commentByUserName = commentedBy.getFirstName() + " " + commentedBy.getLastName();
+					} catch(NoSuchEmployeeDetailsException e) {
+                        log.error("No user found for the comment");
+                    }
+					leaveRequestDtoForDate.setCommentedBy(commentByUserName);
+				}
+			} catch(Exception e) {
+                log.error("No comment found");
+            }
+			
 			String leaveDateStr = setDateFormat((leaveDayType.getLeaveDate()));
 			leaveRequestDtoForDate.setLeaveDate(leaveDateStr);
 			leaveRequestDtoForDate.setHalfDay(leaveDayType.getIsHalfDay());

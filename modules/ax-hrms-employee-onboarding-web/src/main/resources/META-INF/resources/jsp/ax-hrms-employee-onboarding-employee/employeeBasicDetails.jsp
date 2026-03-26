@@ -66,6 +66,7 @@
                 </label>
                 <input type="text" class="form-control"
                        id="<portlet:namespace />fatherName"
+                       placeholder="Please enter Father/Husband Name."
                        name="<portlet:namespace />fatherName"
                        value="${employeeDetail.fatherName}" maxlength="50"/>
             </div>

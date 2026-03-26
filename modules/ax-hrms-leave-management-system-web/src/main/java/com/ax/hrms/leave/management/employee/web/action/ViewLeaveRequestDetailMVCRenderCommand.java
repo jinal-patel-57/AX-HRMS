@@ -1,21 +1,25 @@
 package com.ax.hrms.leave.management.employee.web.action;
 
+import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementWebPortletConstants;
-
+import com.ax.hrms.leave.management.web.dto.LeaveRequestDto;
 import com.ax.hrms.master.model.LeaveTypeMaster;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
+import com.ax.hrms.model.Comment;
+import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.LeaveDayType;
 import com.ax.hrms.model.LeaveInformToTeamDetail;
 import com.ax.hrms.model.LeaveRequest;
 import com.ax.hrms.service.*;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
-
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -69,12 +73,36 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 	@Reference
 	private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 	
+	@Reference
+    CommentLocalService commentLocalService;
+	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		long leaveRequestId = ParamUtil.getLong(renderRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR,AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
 		try {
 			LeaveRequest leaveRequest = leaveRequestLocalService.getLeaveRequest(leaveRequestId);
 			List<LeaveDayType> leaveDayTypeList = leaveDayTypeLocalService.findByLeaveRequestId(leaveRequestId);
+			LeaveRequestDto leaveRequestDtoForDate = new LeaveRequestDto();
+			leaveRequestDtoForDate.setComment(null);
+			try {
+				List<Comment> commentList = commentLocalService.findByTypeRequestIdAndStatus(1,leaveRequestId, true);
+				if (Validator.isNotNull(commentList) && !commentList.isEmpty()) {
+					Comment comment = commentList.get(0);
+					leaveRequestDtoForDate.setComment(comment.getComment());
+					String commentByUserName = StringPool.DASH;
+					try {
+						EmployeeDetails commentedBy = employeeDetailsLocalService.findByLrUserId(comment.getCreatedBy());
+						commentByUserName = commentedBy.getFirstName() + " " + commentedBy.getLastName();
+					} catch(NoSuchEmployeeDetailsException e) {
+                        log.error("No user found for the comment");
+                    }
+					leaveRequestDtoForDate.setCommentedBy(commentByUserName);
+				}
+			} catch(Exception e) {
+                log.error("No comment found");
+            }
+			
+			
 			LeaveTypeMaster leaveTypeMaster = leaveTypeMasterLocalService.getLeaveTypeMaster(leaveRequest.getLeaveTypeMasterId());
 			List<LeaveInformToTeamDetail> leaveInformToTeamList = leaveInformToTeamDetailLocalService.findByLeaveRequestId(leaveRequest.getLeaveRequestId());
 			Map<Long,String> leaveInformToTeamMap = new HashMap<>();
@@ -100,6 +128,7 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 			String leaveRequestStatus = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus();
 
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST, leaveRequest);
+			renderRequest.setAttribute("leaveRequestDto", leaveRequestDtoForDate);
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_DAY_TYPE_LIST, leaveDayTypeList);
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_TYPE_MASTER,leaveTypeMaster);
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_INFORM_TO_TEAM_DETAIL_MAP,leaveInformToTeamMap);

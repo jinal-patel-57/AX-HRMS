@@ -115,6 +115,33 @@
                     </div>
                 </div>
             </div>
+            <c:if test="${not empty leaveRequestDto and not empty leaveRequestDto.comment}">
+	            <div class="col-md-6 col-12">
+	                <div class="card">
+	                    <div class="card-header">
+	                        <strong>
+	                            Comment
+	                        </strong>
+	                    </div>
+	                    <div class="card-body">
+	                        <table class="table">
+	                            <thead>
+	                            <tr>
+	                                <th scope="col"><liferay-ui:message key="comment"/></th>
+	                                <th scope="col"><liferay-ui:message key="By"/></th>
+	                            </tr>
+	                            </thead>
+	                            <tbody>
+	                            	<tr>
+	                            		<td>${empty leaveRequestDto ? '' : leaveRequestDto.comment}</td>
+	                            		<td>${empty leaveRequestDto ? '' : leaveRequestDto.commentedBy}</td>
+	                            	</tr>
+	                            </tbody>
+	                         </table>
+	                     </div>
+	                 </div>
+	             </div>
+             </c:if>
         </div>
         
     </div>

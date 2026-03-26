@@ -9,9 +9,6 @@ import java.util.Date;
 public class LeaveRequestDto {
 	
 	long userId;
-
-
-
     long employeeId;
 	String employeeName;
 	String leaveType;
@@ -39,6 +36,33 @@ public class LeaveRequestDto {
 	String dateOfRequestedLeave;
     String employeeOfficialMail;
 	String leaveDate;
+	String comment;
+	String commentedBy;
+	CommentDto commentDto;
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getCommentedBy() {
+		return commentedBy;
+	}
+
+	public void setCommentedBy(String commentedBy) {
+		this.commentedBy = commentedBy;
+	}
+
+	public CommentDto getCommentDto() {
+		return commentDto;
+	}
+
+	public void setCommentDto(CommentDto commentDto) {
+		this.commentDto = commentDto;
+	}
 
 	String modifiedUser;
 

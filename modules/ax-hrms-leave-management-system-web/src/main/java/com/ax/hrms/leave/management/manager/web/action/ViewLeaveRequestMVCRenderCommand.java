@@ -65,6 +65,9 @@ public class ViewLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	
 	@Reference
 	AxHrmsHrLeaveRequestWebUtil leaveRequestUtil;
+	
+	@Reference
+    CommentLocalService commentLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse)  {
