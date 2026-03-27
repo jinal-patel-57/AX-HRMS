@@ -117,7 +117,7 @@
 
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <label><liferay-ui:message key="reason"/><span class="text-danger">*</span></label>
+                            <label>Leave Reason<span class="text-danger">*</span></label>
                             <textarea id="<portlet:namespace />reason" name="<portlet:namespace />reason" rows="4"
                                       cols="30"
                                       class="form-control"></textarea>

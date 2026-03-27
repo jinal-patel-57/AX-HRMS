@@ -163,7 +163,18 @@
 		page=body_bottom_include />
 	<@liferay_util["include"]
 		page=bottom_include />
-	
+	<script>
+		console.log('hi', themeDisplay);
+		console.log('isSignedIn', themeDisplay.isSignedIn());
+		console.log('getURLHome', themeDisplay.getURLHome());
+		console.log('getLayoutURL', themeDisplay.getLayoutURL());
+		console.log('getCanonicalURL', themeDisplay.getCanonicalURL());
+		console.log('getPortalURL', themeDisplay.getPortalURL());
+		if(themeDisplay.isSignedIn() && themeDisplay.getLayoutURL().includes('sign-in')){
+			console.log('in sign in');
+			window.location.href= themeDisplay.getPortalURL()+"/dashboard"
+		}
+	</script>
 
 </body>
 

@@ -309,7 +309,7 @@ li.parent > a + span.collapsed_icon {pointer-events: none !important;}
 .form-check-input[type="radio"]{appearance: none; -webkit-appearance: none; width: 16px; height: 16px; border: 1.4px solid #ced4da; border-radius: 50%; cursor: pointer; position: relative;}
 .form-check-input[type="radio"]:checked{border-color: #893D96; background-color: #fff;}
 .form-check-input[type="radio"]:checked::after{content: ""; width: 8px; height: 8px; background: #893D96; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}
-.form-check .form-check-input:focus, .form-group .form-control:focus, .card-body .form-control:focus,.form-control:focus, .form-select:focus{ box-shadow: 0 0 0 .25rem #893D9640; border-color: #893D96;}
+.form-check .form-check-input:focus, .form-group .form-control:focus, .card-body .form-control:focus,.form-control:focus, .form-select:focus{ box-shadow: 0 0 0 .25rem #893D9640; border-color: #893D96 !important;}
 /*=== Checkbox button overwrite styling ===*/
 
 input[type="checkbox"] {accent-color: #893D96;}

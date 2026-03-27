@@ -134,7 +134,6 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                 StringBuilder employeeMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
                 Role role = RoleLocalServiceUtil.fetchRole(companyId, roleName);
                 List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
-
                 EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(leaveRequest.getEmployeeId());
                 if(Validator.isNotNull(employee.getManagerId())) {
                     EmployeeDetails manager = employeeDetailsLocalService.findByEmployeeId(employee.getManagerId());
