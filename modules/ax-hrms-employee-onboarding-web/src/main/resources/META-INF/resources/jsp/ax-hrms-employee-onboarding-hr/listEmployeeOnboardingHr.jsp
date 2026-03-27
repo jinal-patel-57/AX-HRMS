@@ -19,25 +19,27 @@
         <!-- RIGHT SIDE -->
         <div class="d-flex align-items-center">
 
+
             <!-- Search Section -->
             <div class="d-flex align-items-center mr-3">
-                <input type="text"
-                       id="searchInput"
-                       class="form-control form-control-sm mr-2"
-                       placeholder="Search..."
-                       value="${param.searchQuery}" />
+                <form onsubmit="redirectToSearch(); return false;" class="d-flex align-items-center mb-0">
+                    <input type="text"
+                           id="searchInput"
+                           class="form-control form-control-sm mr-2"
+                           placeholder="Search..."
+                           value="${param.searchQuery}" />
 
-                <a href="javascript:void(0);"
-                   class="btn btn-primary btn-sm mr-2"
-                   onclick="redirectToSearch()">
-                    <liferay-ui:message key="search" />
-                </a>
+                    <button type="submit"
+                            class="btn btn-primary btn-sm mr-2">
+                        <liferay-ui:message key="search" />
+                    </button>
 
-                <a href="javascript:void(0);"
-                   class="btn btn-outline-secondary btn-sm"
-                   onclick="clearSearch()">
-                    Clear
-                </a>
+                    <a href="javascript:void(0);"
+                       class="btn btn-outline-secondary btn-sm"
+                       onclick="clearSearch()">
+                        Clear
+                    </a>
+                </form>
             </div>
 
             <!-- Start Onboarding Button -->
