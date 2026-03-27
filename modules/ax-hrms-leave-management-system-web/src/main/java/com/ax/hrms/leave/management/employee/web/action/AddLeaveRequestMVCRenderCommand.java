@@ -26,9 +26,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -80,8 +78,11 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		List<LeaveRequestDto> listOfLeaveTypeMaster = null;
+		int year = Calendar.getInstance().get(Calendar.YEAR);
 
-		List<LeavePolicyMaster> listOfLeavePolicyMaster = leavePolicyMasterLocalService.getLeavePolicyMasters(-1,-1);
+
+
+		List<LeavePolicyMaster> listOfLeavePolicyMaster = leavePolicyMasterLocalService.findByYear(year);
 		List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
 		List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
