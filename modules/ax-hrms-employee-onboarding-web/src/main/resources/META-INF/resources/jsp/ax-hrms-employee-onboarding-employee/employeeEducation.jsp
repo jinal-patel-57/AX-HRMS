@@ -350,12 +350,12 @@
 
         <c:if test="${employeeDetail.employeeType != 'contractor'}">
             <button type="button" class="btn btn-outline-primary previous-button">Previous</button>
-            <button type="button" class="btn btn-outline-primary next-button-education-details">Next</button>
+            <button type="button" class="btn btn-outline-primary next-button-education-details">Save & Continue</button>
         </c:if>
 
         <c:if test="${employeeDetail.employeeType == 'contractor'}">
             <button type="button" class="btn btn-outline-primary previous-button ">Previous</button>
-            <button type="button" class="btn btn-outline-primary" id="noactionbtnEducation">Next</button>
+            <button type="button" class="btn btn-outline-primary" id="noactionbtnEducation">Save & Continue</button>
         </c:if>
 
     </div>

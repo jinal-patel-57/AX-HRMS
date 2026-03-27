@@ -614,7 +614,7 @@
     </div>
     <div class="card-footer text-right align-items-center">
                 <button type="button" class="btn btn-outline-primary previous-button-step-one">Back</button>
-            <button type="submit" class="btn btn-outline-primary next-button next-button-basic-details">Next</button>
+            <button type="submit" class="btn btn-outline-primary next-button next-button-basic-details">Save & Continue</button>
     </div>
 </form>
 <script>

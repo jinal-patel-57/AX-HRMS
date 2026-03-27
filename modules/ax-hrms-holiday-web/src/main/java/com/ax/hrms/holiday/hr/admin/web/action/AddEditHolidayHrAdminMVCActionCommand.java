@@ -79,7 +79,7 @@ public class AddEditHolidayHrAdminMVCActionCommand extends BaseMVCActionCommand 
 			int holidayYear = holidayexisted.getYear();
 			int currentYear = Year.now().getValue();
 
-			if (holidayYear < currentYear ) {
+			if (holidayYear < currentYear-1 ) {
 				SessionErrors.add(actionRequest, "not-allowed");
 				return;
 			}

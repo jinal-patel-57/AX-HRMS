@@ -11,7 +11,7 @@
         if (!element) return;
 
         const nextYear = new Date().getFullYear() + 1;
-        const pastYear = new Date().getFullYear() - 2;
+        const pastYear = new Date().getFullYear() - 1;
         const maxDate = `${nextYear}-12-31`;
         const minDate = `${pastYear}-01-01`;
 
@@ -75,11 +75,11 @@
            var selectedYear = new Date(value).getFullYear();
            var currentYear = new Date().getFullYear();
 
-           return selectedYear >= currentYear - 2 &&
+           return selectedYear >= currentYear - 1 &&
                   selectedYear <= currentYear + 1;
        }, function () {
            var y = new Date().getFullYear();
-           return "Please select a date between " + (y - 2) + " and " + (y + 1);
+           return "Please select a date between " + (y - 1) + " and " + (y + 1);
        });
 
 

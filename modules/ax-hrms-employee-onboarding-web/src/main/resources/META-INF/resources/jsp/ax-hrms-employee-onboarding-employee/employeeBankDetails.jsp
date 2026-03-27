@@ -104,7 +104,7 @@
         </div>
         <div class="card-footer text-right">
             <button class="btn btn-outline-primary previous-button" type="button">Previous</button>
-            <button class="btn btn-outline-primary next-button next-button-bank-account-details" type="button">Next
+            <button class="btn btn-outline-primary next-button next-button-bank-account-details" type="button">Save & Continue
             </button>
         </div>
 

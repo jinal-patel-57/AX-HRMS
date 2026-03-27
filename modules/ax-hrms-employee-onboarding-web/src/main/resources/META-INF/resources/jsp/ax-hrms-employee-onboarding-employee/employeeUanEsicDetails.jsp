@@ -51,7 +51,7 @@
     <div class="card-footer text-right">
         <!-- Na vigation buttons -->
         <button class="btn btn-outline-primary previous-button" type="button">Previous</button>
-        <button class="btn btn-outline-primary next-button next-button-uan-esic-details" type="button">Next</button>
+        <button class="btn btn-outline-primary next-button next-button-uan-esic-details" type="button">Save & Continue</button>
     </div>
 
 </form>

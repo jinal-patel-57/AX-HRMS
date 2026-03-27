@@ -265,14 +265,14 @@
 
         <c:if test="${employeeDetail.employeeType != 'intern' && employeeDetail.employeeType != 'contractor'}">
             <button type="button" class="btn btn-outline-primary next-button-experience-details">
-                Next
+                Save & Continue
             </button>
         </c:if>
 
         <c:if test="${employeeDetail.employeeType == 'intern' || employeeDetail.employeeType == 'contractor'}">
             <button type="button" id="noactionbtnExperience"
                     class="btn btn-outline-primary">
-                Next
+                Save & Continue
             </button>
         </c:if>
     </div>

@@ -288,7 +288,7 @@
             <liferay-ui:message key="previous"/>
         </button>
         <button class="btn btn-outline-primary next-button next-button-adress-details" type="submit">
-            <liferay-ui:message key="next"/>
+            <liferay-ui:message key="Save & Continue"/>
         </button>
     </div>
 </form>

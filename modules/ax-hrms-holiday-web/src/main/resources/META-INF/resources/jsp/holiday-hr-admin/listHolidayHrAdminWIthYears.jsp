@@ -84,7 +84,7 @@
                     </portlet:actionURL>
                     
                     
-                    <c:set var="isValidYear" value="${holiday.getYear() >= currentYear}" />
+                    <c:set var="isValidYear" value="${holiday.getYear() >= currentYear-1}" />
 						        <c:set var="btnClass" value="${isValidYear ? '' : 'Btn-disabled'}" />
 
 					<div class="dropdown ">
