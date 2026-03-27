@@ -49,7 +49,7 @@ var submit_compensatory_form;
             });
 
             $.validator.addMethod("maxCharThousand", function (value) {
-                return value.length <= 250;
+                return value.length <= 500;
             });
 
             $.validator.addMethod("notSameEmployeeAndManager", function (value) {
@@ -57,6 +57,14 @@ var submit_compensatory_form;
                 if (!employeeId || !value) return true;
                 return employeeId !== value;
             }, "Employee and Manager cannot be the same.");
+              $.validator.addMethod("validLetters", function (value, element) {
+                    value = value.trim();
+
+                    // Allow most readable characters but block HTML tags
+                    var regex = /^[^<>]*$/;
+
+                    return this.optional(element) || regex.test(value);
+                }, "Please Enter valid data for the reason.");
             $.validator.addMethod("endTimeAfterStart", function (value, element) {
 
                 var start = $("#startTime").val();
@@ -91,7 +99,9 @@ var submit_compensatory_form;
                     },
                     [namespace + "description"]: {
                         required: true,
-                        maxCharThousand: true
+                        maxCharThousand: true,
+                        minlength:10,
+                        validLetters: true,
                     },
                     [namespace + "startTime"]: {
                         required: true
@@ -124,7 +134,8 @@ var submit_compensatory_form;
                     },
                     [namespace + "description"]: {
                         required: "Please enter description.",
-                        maxCharThousand: "Description cannot exceed 250 characters."
+                        maxCharThousand: "Description cannot exceed 500 characters.",
+                        validLetters: "Please Enter valid data for the description.",
                     },
                     [namespace + "startTime"]: {
                         required: "Please select start time."

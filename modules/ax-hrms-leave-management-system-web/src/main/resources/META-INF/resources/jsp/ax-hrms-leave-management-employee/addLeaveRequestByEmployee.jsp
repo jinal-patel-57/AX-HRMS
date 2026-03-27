@@ -121,8 +121,8 @@
                             <textarea id="<portlet:namespace />reason" name="<portlet:namespace />reason" rows="4"
                                       cols="30"
                                       class="form-control"></textarea>
-                                      <small class="text-muted float-right" id="reasonCharCount">
-                                          0 / 70 characters
+                                      <small class="text-muted " id="reasonCharCount">
+                                           Minimum 10 and maximum 500 characters allowed.
                                       </small>
 
                         </div>

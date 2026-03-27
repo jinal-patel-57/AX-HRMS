@@ -246,7 +246,7 @@
 								key="description" /></label> <span class="text-danger">*</span>
 						<textarea id="description" class="form-control"
 							name="<portlet:namespace />description"></textarea>
-						<small class="text-muted d-block"> Maximum 250 characters
+						<small class="text-muted d-block">  Minimum 10 and maximum 500 characters allowed.
 							allowed. </small> <label id="description-error" class="error text-danger"
 							for="description"></label>
 					</div>

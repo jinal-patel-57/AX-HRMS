@@ -1018,15 +1018,15 @@ $.validator.addMethod(
                                   [namespace + "permanentAddressLine1"]: {
                                       required: "Please enter permanent address line 1.",
                                       maxlength: "Address line 1 cannot exceed 250 characters.",
-                                      validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                      validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                   },
                                   [namespace + "permanentAddressLine2"]: {
                                       maxlength: "Address line 2 cannot exceed 250 characters.",
-                                      validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                      validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                   },
                                   [namespace + "permanentAddressLine3"]: {
                                       maxlength: "Address line 3 cannot exceed 250 characters.",
-                                      validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                      validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                   },
 
                                    [namespace + "permanentCity"]: {
@@ -1053,15 +1053,15 @@ $.validator.addMethod(
                                  [namespace + "presentaddressLine1"]: {
                                      required: "Please enter present address line 1.",
                                      maxlength: "Address line 1 cannot exceed 250 characters.",
-                                     validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                     validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                  },
                                  [namespace + "presentaddressLine2"]: {
                                      maxlength: "Address line 2 cannot exceed 250 characters.",
-                                     validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                     validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                  },
                                  [namespace + "presentaddressLine3"]: {
                                      maxlength: "Address line 3 cannot exceed 250 characters.",
-                                     validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                     validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                                  },
 
                                    [namespace + "presentCity"]: {
@@ -1093,8 +1093,9 @@ $.validator.addMethod(
 
 
                			$.validator.addMethod("validAddress", function (value) {
-                               return (value == '') || /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
-                           });
+                            return (value == '') || /^[A-Za-z0-9\s,.\-#/()'&]+$/.test(value.trim());
+                        }, "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed.");
+
 
                            $.validator.addMethod("validCity", function (value) {
                                return /^[A-Za-z ]+$/.test(value.trim());
@@ -2322,9 +2323,9 @@ initializeValidation()
                         "Only alphabets are allowed. No numbers or special characters."
                     );
                 }
-                $.validator.addMethod("validAddress", function (value) {
-                                               return /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
-                                           });
+              $.validator.addMethod("validAddress", function (value) {
+                  return (value == '') || /^[A-Za-z0-9\s,.\-#/()'&]+$/.test(value.trim());
+              }, "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed.");
 
 
         $form7.validate({
@@ -2426,7 +2427,7 @@ initializeValidation()
                             [namespace + "presentaddressLine1"]: {
                                 required: "Please enter the present address line 1.",
                                 maxlength: "Address line 1 cannot exceed 250 characters.",
-                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                             },
                             [namespace + "nomineeCity"]: {
                                 required: "Please enter the city for the present address.",
@@ -2436,11 +2437,11 @@ initializeValidation()
                             },
                             [namespace + "presentaddressLine2"]: {
                                 maxlength: "Address line 2 cannot exceed 250 characters.",
-                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                             },
                             [namespace + "presentaddressLine3"]: {
                                 maxlength: "Address line 3 cannot exceed 250 characters.",
-                                validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                                validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                             },
 
                             [namespace + "presentstate"]: {

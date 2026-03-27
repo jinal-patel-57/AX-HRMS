@@ -136,7 +136,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
 
                     <!-- Helper text -->
                     <small class="text-muted d-block">
-                        Minimum 10 and maximum 250 characters allowed.
+                        Minimum 10 and maximum 500 characters allowed.
                     </small>
 
                     <!-- Validation error -->
@@ -224,10 +224,16 @@ function validateTeamField() {
         return true;
     }
 }
-$.validator.addMethod("validReason", function(value, element) {
-    return this.optional(element) ||
-        /^(?=.*[a-zA-Z])[a-zA-Z0-9\s.,'()\/-]+$/.test(value);
-}, "Reason must contain at least one letter and no special characters.");
+
+
+$.validator.addMethod("validReason", function (value, element) {
+        value = value.trim();
+
+        // Allow most readable characters but block HTML tags
+        var regex = /^[^<>]*$/;
+
+        return this.optional(element) || regex.test(value);
+    }, "Please Enter valid data for the reason.");
 
 
 const ns = '<portlet:namespace />';
@@ -240,7 +246,7 @@ $("#wfhForm").validate({
         [ns + "reason"]: {
             required: true,
             minlength: 10,
-            maxlength: 250,
+            maxlength: 500,
             validReason: true
         },
         [ns + "startDate"]: {

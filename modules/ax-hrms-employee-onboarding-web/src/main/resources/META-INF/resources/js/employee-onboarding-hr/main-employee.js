@@ -1326,15 +1326,15 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                     [namespace + "permanentAddressLine1"]: {
                         required: "Please enter permanent address line 1.",
                         maxlength: "Address line 1 cannot exceed 250 characters.",
-                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                        validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
                     [namespace + "permanentAddressLine2"]: {
                         maxlength: "Address line 2 cannot exceed 250 characters.",
-                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                        validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
                     [namespace + "permanentAddressLine3"]: {
                         maxlength: "Address line 3 cannot exceed 250 characters.",
-                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                        validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
 
                     [namespace + "permanentCity"]: {
@@ -1361,15 +1361,15 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                     [namespace + "presentaddressLine1"]: {
                         required: "Please enter present address line 1.",
                         maxlength: "Address line 1 cannot exceed 250 characters.",
-                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                        validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
                     [namespace + "presentaddressLine2"]: {
                         maxlength: "Address line 2 cannot exceed 250 characters.",
-                       validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                       validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
                     [namespace + "presentaddressLine3"]: {
                         maxlength: "Address line 3 cannot exceed 250 characters.",
-                        validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                        validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                     },
                     [namespace + "presentCity"]: {
                         required: "Please enter the present city.",
@@ -1399,8 +1399,8 @@ $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
             });
             
 			$.validator.addMethod("validAddress", function (value) {
-                return (value == '') || /^[A-Za-z0-9\s,.-]+$/.test(value.trim());
-            });
+                return (value == '') || /^[A-Za-z0-9\s,.\-#/()'&]+$/.test(value.trim());
+            }, "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed.");
 
             $.validator.addMethod("validCity", function (value) {
                 return /^[A-Za-z ]+$/.test(value.trim());
@@ -2679,7 +2679,7 @@ function setConfigsForExperienceValidation(config) {
                 [namespace + "presentaddressLine1"]: {
                     required: "Please enter the present address line 1.",
                     maxlength: "Address line 1 cannot exceed 250 characters.",
-                    validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                    validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                 },
                 [namespace + "nomineeCity"]: {
                     required: "Please enter the city.",
@@ -2689,11 +2689,11 @@ function setConfigsForExperienceValidation(config) {
                 },
                 [namespace + "presentaddressLine2"]: {
                     maxlength: "Address line 2 cannot exceed 250 characters.",
-                    validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                    validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                 },
                 [namespace + "presentaddressLine3"]: {
                     maxlength: "Address line 3 cannot exceed 250 characters.",
-                    validAddress: "Address can contain letters, numbers, spaces, comma (,), dot (.) and hyphen (-)."
+                    validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                 },
                 
                 [namespace + "presentstate"]: {

@@ -5,7 +5,7 @@
         <div class="ax-body d-flex align-items-center">
             <div class="ax-conatiner">
                 <div class="icon-leave-request"></div>
-                <div><strong> No Leave Request</strong></div>
+                <div><strong> No Leave Balance</strong></div>
                 <div class="wish-message">No leave data available yet for this year. Leave balances and usage will appear here once updated.</div>
             </div>
         </div>

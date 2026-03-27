@@ -312,7 +312,8 @@ function closeCustomModal() {
               [namespace + "reason"]: {
                   required: true,
                   validLetters: true,
-                  maxlength: 70
+                  maxlength: 500,
+                  minlength:10
               },
                 [namespace + "startDate"]: {
                     required: true,
@@ -329,8 +330,8 @@ function closeCustomModal() {
                 },
                 [namespace + "reason"]: {
                        required: "Please enter reason for leave",
-                       validLetters: "Only letters, numbers, space and . , - are allowed",
-                       maxlength: "Reason cannot exceed 70 characters"
+                       validLetters: "Please Enter valid data for the reason.",
+                       maxlength: "Reason cannot exceed 500 characters"
                    },
                                    [namespace + "startDate"]: {
                                        required: "Start Date is required.",
@@ -339,16 +340,34 @@ function closeCustomModal() {
                                        required: "End Date is required.",
                                    },
             },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-            }
+            errorElement: "div",
+                errorClass: "invalid-feedback",
+
+                highlight: function(element) {
+                    $(element).addClass("is-invalid");
+                },
+
+                unhighlight: function(element) {
+                    $(element).removeClass("is-invalid");
+                },
+
+                errorPlacement: function (error, element) {
+                    if (element.next("small").length) {
+                        error.insertAfter(element.next("small"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
         });
 
-     $.validator.addMethod("validLetters", function (value, element) {
-         value = value.trim();
-         return this.optional(element) ||
-             /^[A-Za-z0-9\s.,-]+$/.test(value);
-     }, "Only letters, numbers, space and . , - are allowed");
+    $.validator.addMethod("validLetters", function (value, element) {
+        value = value.trim();
+
+        // Allow most readable characters but block HTML tags
+        var regex = /^[^<>]*$/;
+
+        return this.optional(element) || regex.test(value);
+    }, "Please Enter valid data for the reason.");
 
 jQuery.validator.addMethod("validEndDate", function (value, element) {
 
