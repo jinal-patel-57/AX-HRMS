@@ -83,30 +83,37 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 
 
 		List<LeavePolicyMaster> listOfLeavePolicyMaster = leavePolicyMasterLocalService.findByYear(year);
-		List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
+		List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.findByIsTerminated(false);
 		List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
 		/**
 		 * @implNote : listOfFilteredEmployeeDetails is a list of Employee Details in which auth user's role is Employee
 		 */
 		List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
-		
+		long currentUserId = themeDisplay.getUserId();
 		for(EmployeeDetails employeeDetails : listOfEmployeeDetails) {
 			
-			try {
-				long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE).getRoleId();
-				long[] userRoles = userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
-				for(long userRole : userRoles) {
-					if(userRole == employeeRoleId)
-						listOfFilteredEmployeeDetails.add(employeeDetails);
-				}
-			} catch (PortalException e) {
-				log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "+e.getMessage());
-			}catch (NullPointerException e) {
-				log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "+e.getMessage());
-			}catch(Exception e) {
-				log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
-			}
+			if (employeeDetails.getLrUserId() != currentUserId) {
+				listOfFilteredEmployeeDetails.add(employeeDetails);
+				continue;
+        	}
+			
+			/*
+			 * try { long employeeRoleId =
+			 * RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
+			 * AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE).getRoleId(); long[]
+			 * userRoles =
+			 * userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
+			 * for(long userRole : userRoles) { if(userRole == employeeRoleId)
+			 * listOfFilteredEmployeeDetails.add(employeeDetails); } } catch
+			 * (PortalException e) { log.
+			 * error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "
+			 * +e.getMessage()); }catch (NullPointerException e) { log.
+			 * error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "
+			 * +e.getMessage()); }catch(Exception e) {
+			 * log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e
+			 * .getMessage()); }
+			 */
 			
 		}
 		try{

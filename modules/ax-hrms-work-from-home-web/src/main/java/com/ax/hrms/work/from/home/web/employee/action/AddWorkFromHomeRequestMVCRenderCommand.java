@@ -3,7 +3,6 @@ package com.ax.hrms.work.from.home.web.employee.action;
 import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.LeaveBalanceLocalService;
 import com.ax.hrms.service.LeaveTypeViewPermitLocalService;
@@ -59,25 +58,32 @@ public class AddWorkFromHomeRequestMVCRenderCommand implements MVCRenderCommand{
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.getEmployeeDetailses(-1,-1);
+        List<EmployeeDetails> listOfEmployeeDetails = employeeDetailsLocalService.findByIsTerminated(false);
         List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
+        long currentUserId = themeDisplay.getUserId();
 
         for(EmployeeDetails employeeDetails : listOfEmployeeDetails) {
-
-            try {
-                long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), WFHActionConstants.EMPLOYEE).getRoleId();
-                long[] userRoles = userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
-                for(long userRole : userRoles) {
-                    if(userRole == employeeRoleId)
-                        listOfFilteredEmployeeDetails.add(employeeDetails);
-                }
-            } catch (PortalException e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "+e.getMessage());
-            }catch (NullPointerException e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "+e.getMessage());
-            }catch(Exception e) {
-                log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
-            }
+        	
+			if (employeeDetails.getLrUserId() != currentUserId) {
+				listOfFilteredEmployeeDetails.add(employeeDetails);
+				continue;
+        	}
+        	
+			/*
+			 * try { long employeeRoleId =
+			 * RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
+			 * WFHActionConstants.EMPLOYEE).getRoleId(); long[] userRoles =
+			 * userLocalService.getUserById(employeeDetails.getLrUserId()).getRoleIds();
+			 * for(long userRole : userRoles) { if(userRole == employeeRoleId)
+			 * listOfFilteredEmployeeDetails.add(employeeDetails); } } catch
+			 * (PortalException e) { log.
+			 * error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: PortalException: "
+			 * +e.getMessage()); }catch (NullPointerException e) { log.
+			 * error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: NullPointerException: "
+			 * +e.getMessage()); }catch(Exception e) {
+			 * log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e
+			 * .getMessage()); }
+			 */
 
         }
         renderRequest.setAttribute(WFHActionConstants.EMPLOYEE_DETAILS_LIST,listOfFilteredEmployeeDetails);
