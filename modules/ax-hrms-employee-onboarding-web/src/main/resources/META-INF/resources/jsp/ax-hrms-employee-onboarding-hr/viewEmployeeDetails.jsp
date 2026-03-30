@@ -209,7 +209,7 @@
 
                       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                           <div class="form-group-view">
-                              <div class="label-name">Pan Card Number</div>
+                              <div class="label-name">PAN Card Number</div>
                             <div class="label-content">${employeeDetail.panCardNumber}</div>
                           </div>
                       </div>
@@ -245,8 +245,8 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
-                            <div class="label-name">Pan Card</div>
-                            <div class="label-content"><c:if test="${not empty panCardFile}"><a target="_blank" href="${panCardFile}">View Pan Card</a></c:if></div>
+                            <div class="label-name">PAN Card</div>
+                            <div class="label-content"><c:if test="${not empty panCardFile}"><a target="_blank" href="${panCardFile}">View PAN Card</a></c:if></div>
                         </div>
                     </div>
 
@@ -719,7 +719,7 @@
                     </div>
                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                           <div class="form-group-view">
-                              <div class="label-name">Name as per Pan Card</div>
+                              <div class="label-name">Name as per PAN Card</div>
                             <div class="label-content text-unset">${employeeBankAccount.nameAsPerPanCard}</div>
                           </div>
                      </div>

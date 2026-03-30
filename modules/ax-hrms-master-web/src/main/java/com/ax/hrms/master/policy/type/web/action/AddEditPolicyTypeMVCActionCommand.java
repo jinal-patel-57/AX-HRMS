@@ -50,7 +50,7 @@ public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
 		 String policyTypeName = ParamUtil.getString(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_NAME, null);
 		 long policyTypeMasterId = ParamUtil.getLong(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_MASTER_ID, AxPolicyTypeMasterWebPortletConstants.DEFAULT_LONG_VALUE);
 
-		 if (policyTypeMasterId <= 0) {
+        if (policyTypeMasterId <= 0) {
             if (isLevelMasterAvailable(policyTypeName, 0)) {
                 PolicyTypeMaster policyTypeMaster = policyTypeMasterLocalService.createPolicyTypeMaster(CounterLocalServiceUtil.increment(PolicyTypeMaster.class.getName()));
 
@@ -62,6 +62,7 @@ public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
                 policyTypeMaster.setGroupId(themeDisplay.getCompanyGroupId());
                 policyTypeMaster.setCreateDate(new Date());
                 policyTypeMaster.setModifiedDate(new Date());
+
                 policyTypeMasterLocalService.addPolicyTypeMaster(policyTypeMaster);
                 
                 SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_ADDED);
@@ -76,11 +77,13 @@ public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
 		 
         else {
             if (isLevelMasterAvailable(policyTypeName, policyTypeMasterId) && isLevelNameValid(policyTypeName)) {
-            	PolicyTypeMaster policyTypeMaster = policyTypeMasterLocalService.getPolicyTypeMaster(policyTypeMasterId);
+
+                PolicyTypeMaster policyTypeMaster = policyTypeMasterLocalService.getPolicyTypeMaster(policyTypeMasterId);
+
             	policyTypeMaster.setPolicyType(policyTypeName);
+
                 ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
                 policyTypeMaster.setModifiedBy(themeDisplay.getUserId());
-                
                 policyTypeMasterLocalService.updatePolicyTypeMaster(policyTypeMaster);
 				  
 		        SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_UPDATED);
@@ -98,14 +101,13 @@ public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
         try {
         	
         	PolicyTypeMaster name = policyTypeMasterLocalService.findByPolicyType(policyTypeName);
-        	
         	 return (id>0 && name.getPolicyTypeMasterID() == id);
         } catch (NoSuchPolicyTypeMasterException e) {
             return true;
         }
     }
 
-    private boolean isLevelNameValid(String policyTypeName) { 
-        return Validator.isNotNull(policyTypeName) && Validator.isName(policyTypeName);
+    private boolean isLevelNameValid(String policyTypeName) {
+        return Validator.isNotNull(policyTypeName) && Validator.isAlphanumericName(policyTypeName);
     }
 }

@@ -65,7 +65,11 @@
                        class="form-control"
                        id="<portlet:namespace/>mobileNumber"
                        name="<portlet:namespace/>mobileNumber"
-                       value="${employeeDetail.mobileNo}" />
+                       value="${employeeDetail.mobileNo}"
+                               maxlength="10"
+                               pattern="[0-9]{10}"
+                               inputmode="numeric"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
             </div>
 
         </div>
@@ -302,7 +306,13 @@
                 <input type="text" class="form-control"
                        id="<portlet:namespace/>nomineeContact"
                        name="<portlet:namespace/>nomineeContact"
-                       value="${nominee.nomineeContact}" />
+                       value="${nominee.nomineeContact}"
+                               maxlength="10"
+                               pattern="[0-9]{10}"
+                               inputmode="numeric"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+
+                       />
             </div>
 
             <div class="col-md-4 mb-3">

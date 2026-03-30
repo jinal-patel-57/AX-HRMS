@@ -31,9 +31,6 @@
                     modelVar="wfh"
                     keyProperty="workFromHomeRequestId">
                 <%-- <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" /> --%>
-                <liferay-ui:search-container-column-text name="Status"
-					value='<span class="status ${fn:toLowerCase(fn:replace(wfh.status, " ", "-"))}">${wfh.status}</span>'/>
-                <liferay-ui:search-container-column-text name="Modified By" value="${wfh.modifiedBy}" />
 
                                 <liferay-ui:search-container-column-text name="Start Date">
                                     <fmt:formatDate value="${wfh.startDate}" pattern="dd-MMM-yyyy" />
@@ -43,13 +40,18 @@
                                     <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
                                 </liferay-ui:search-container-column-text>
                  <liferay-ui:search-container-column-text name="No. of Days" value="${wfh.noOfDays}" />
-                <liferay-ui:search-container-column-text
+            <%--   <liferay-ui:search-container-column-text
                         name="Reason"
-                        value="${wfh.reason}" />
+                        value="${wfh.reason}" />--%>
 
-               <liferay-ui:search-container-column-text name="Request Date">
+            <%--   <liferay-ui:search-container-column-text name="Request Date">
                     <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MMM-yyyy" />
-                </liferay-ui:search-container-column-text>
+                </liferay-ui:search-container-column-text>--%>
+                <liferay-ui:search-container-column-text name="Modified By" value="${wfh.modifiedBy}" />
+
+                <liferay-ui:search-container-column-text name="Status"
+					value='<span class="status ${fn:toLowerCase(fn:replace(wfh.status, " ", "-"))}">${wfh.status}</span>'/>
+
                 <liferay-ui:search-container-column-text name="Actions">
 
                     <portlet:renderURL var="viewWFH">
