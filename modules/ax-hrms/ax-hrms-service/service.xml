@@ -615,6 +615,11 @@
         <finder return-type="Collection" name="EmployeeId">
             <finder-column name="employeeId"/>
         </finder>
+        
+        <finder return-type="Collection" name="EmployeeIdAndStatus">
+            <finder-column name="employeeId"/>
+            <finder-column name="leaveCompensatoryStatusMasterId"/>
+        </finder>
 
         <finder return-type="LeaveRequest" name="leaveRequestId">
             <finder-column name="leaveRequestId"/>

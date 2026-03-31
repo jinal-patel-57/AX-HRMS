@@ -13,11 +13,24 @@
 <liferay-ui:success key="leave-request-cancelled" message="leave-request-cancelled-message"></liferay-ui:success>
 <liferay-ui:error key="some-error-found" message="some-error-found-message"/>
 
+<portlet:renderURL var="fetchLeaves">
+    <portlet:param name="mvcRenderCommandName" value="/"/>
+</portlet:renderURL>
+
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <strong>
           Leave Requests
         </strong>
+        <form class="form-inline" action="${fetchLeaves}" method="post">
+            <select data-live-search="true" class="form-control mr-2 custom-select" id="employeeSelect" name="<portlet:namespace/>employeeId">
+                <option value="">Select Employee</option>
+                <c:forEach var="employee" items="${employeeList}">
+                    <option value="${employee.employeeId}">${employee.firstName} ${employee.lastName}</option>
+                </c:forEach>
+            </select>
+            <button type="submit" class="btn btn-primary">Fetch</button>
+        </form>
     </div>
     <div class="card-body">
 

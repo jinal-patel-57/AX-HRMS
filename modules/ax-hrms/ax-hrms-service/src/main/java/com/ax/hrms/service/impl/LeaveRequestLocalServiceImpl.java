@@ -39,6 +39,11 @@ public class LeaveRequestLocalServiceImpl
 	public List<LeaveRequest> findByEmployeeId(long employeeId) {
 		return leaveRequestPersistence.findByEmployeeId(employeeId);
 	}
+	
+	public List<LeaveRequest> findByEmployeeIdAndStatus(long employeeId, long status) {
+		return leaveRequestPersistence.findByEmployeeIdAndStatus(employeeId, status);
+	}
+	
 	public LeaveRequest findByleaveRequestId(long leaveRequestId)
 			throws NoSuchLeaveRequestException {
 

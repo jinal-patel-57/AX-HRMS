@@ -96,7 +96,7 @@ create unique index IX_32C53AE3 on ax_LeaveDayType (uuid_[$COLUMN_LENGTH:75$], g
 create index IX_3AB3E42E on ax_LeaveInformToTeamDetail (leaveRequestId);
 create unique index IX_23B0DDD on ax_LeaveInformToTeamDetail (uuid_[$COLUMN_LENGTH:75$], groupId);
 
-create index IX_46F99663 on ax_LeaveRequest (employeeId);
+create index IX_4C25B65B on ax_LeaveRequest (employeeId, leaveCompensatoryStatusMasterId);
 create unique index IX_2B0E003C on ax_LeaveRequest (uuid_[$COLUMN_LENGTH:75$], groupId);
 
 create index IX_710DD372 on ax_LeaveTypeViewPermit (employeeId, leaveTypeMasterId);

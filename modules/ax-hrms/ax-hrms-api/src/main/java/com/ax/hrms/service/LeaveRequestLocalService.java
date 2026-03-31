@@ -208,6 +208,9 @@ public interface LeaveRequestLocalService
 
 	public List<LeaveRequest> findByEmployeeId(long employeeId);
 
+	public List<LeaveRequest> findByEmployeeIdAndStatus(
+		long employeeId, long status);
+
 	public LeaveRequest findByleaveRequestId(long leaveRequestId)
 		throws NoSuchLeaveRequestException;
 

@@ -219,6 +219,12 @@ public class LeaveRequestLocalServiceUtil {
 		return getService().findByEmployeeId(employeeId);
 	}
 
+	public static List<LeaveRequest> findByEmployeeIdAndStatus(
+		long employeeId, long status) {
+
+		return getService().findByEmployeeIdAndStatus(employeeId, status);
+	}
+
 	public static LeaveRequest findByleaveRequestId(long leaveRequestId)
 		throws com.ax.hrms.exception.NoSuchLeaveRequestException {
 

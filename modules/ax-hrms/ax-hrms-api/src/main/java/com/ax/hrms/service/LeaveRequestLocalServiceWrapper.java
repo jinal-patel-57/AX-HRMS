@@ -249,6 +249,14 @@ public class LeaveRequestLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.LeaveRequest>
+		findByEmployeeIdAndStatus(long employeeId, long status) {
+
+		return _leaveRequestLocalService.findByEmployeeIdAndStatus(
+			employeeId, status);
+	}
+
+	@Override
 	public com.ax.hrms.model.LeaveRequest findByleaveRequestId(
 			long leaveRequestId)
 		throws com.ax.hrms.exception.NoSuchLeaveRequestException {
