@@ -4,10 +4,7 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.*;
-import com.ax.hrms.service.CommentLocalService;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.LeaveDayTypeLocalService;
-import com.ax.hrms.service.LeaveRequestLocalService;
+import com.ax.hrms.service.*;
 import com.hrms.utility.constants.AxHrmsUtilityConstants;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
@@ -22,6 +19,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -73,6 +71,9 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
 
     @Reference
     LeaveTypeMasterLocalService leaveTypeMasterLocalService;
+
+    @Reference
+    LeaveBalanceLocalService leaveBalanceLocalService;
 
 
 
@@ -126,6 +127,8 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
                 throws IOException, PortletException {
             AtomicInteger successCount = new AtomicInteger();
             List<FailedRow> failedRows = new ArrayList<>();
+            List<ResultRow> resultRows = new ArrayList<>();
+
 
             ThemeDisplay themeDisplay =
                     (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -156,13 +159,27 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
 
                     String status = getSafeValue(innerMap, "12");
 
+//                    if (officialEmail.isEmpty()) {
+//                        failedRows.add(new FailedRow(outerKey, officialEmail, "Email is empty"));
+//                        return;
+//                    }
                     if (officialEmail.isEmpty()) {
-                        failedRows.add(new FailedRow(outerKey, officialEmail, "Email is empty"));
+                        resultRows.add(new ResultRow(
+                                outerKey, officialEmail, "",
+                                0, 0, 0,
+                                "ERROR - Email is empty"
+                        ));
                         return;
                     }
 
                     if ("Pending".equalsIgnoreCase(status)) {
-                        failedRows.add(new FailedRow(outerKey, officialEmail, "Status is Pending"));
+                        resultRows.add(new ResultRow(
+                                outerKey,
+                                officialEmail,
+                                getSafeValue(innerMap, "2"),
+                                0, 0, 0,
+                                "SKIPPED - Status: " + status
+                        ));
                         return;
                     }
 
@@ -176,47 +193,88 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
                             employeeDetailsLocalService.dslQuery(query);
 
                     if (Validator.isNull(employeeList) || employeeList.isEmpty()) {
-                        failedRows.add(new FailedRow(outerKey, officialEmail, "Employee not found"));
+                        resultRows.add(new ResultRow(
+                                outerKey,
+                                officialEmail,
+                                getSafeValue(innerMap, "2"),
+                                0, 0, 0,
+                                "ERROR - Employee not found"
+                        ));
                         return;
                     }
 
                     EmployeeDetails employee = employeeList.get(0);
 
                     try {
-                        LeaveRequest lr = addLeaveRequestData(employee, themeDisplay, innerMap);
+//                        LeaveRequest lr = addLeaveRequestData(employee, themeDisplay, innerMap);
+//
+//                        addLeaveDayTypeData(lr, innerMap, themeDisplay);
+//
+//                        addCommentData(lr, innerMap, themeDisplay);
 
-                        addLeaveDayTypeData(lr, innerMap, themeDisplay);
 
-                        addCommentData(lr, innerMap, themeDisplay);
-
-                        successCount.getAndIncrement();
-
-                    } catch (Exception e) {
-                        failedRows.add(new FailedRow(
+                        ResultRow result = processRowForBalance(
                                 outerKey,
                                 officialEmail,
-                                e.getMessage()
+                                employee,
+                                innerMap
+                        );
+
+                        resultRows.add(result);
+
+//                        successCount.getAndIncrement();
+                        if ("SUCCESS".equals(result.result)) {
+                            successCount.incrementAndGet();
+                        }
+
+                    } catch (Exception e) {
+                        resultRows.add(new ResultRow(
+                                outerKey,
+                                officialEmail,
+                                getSafeValue(innerMap, "2"),
+                                0, 0, 0,
+                                "ERROR - " + e.getMessage()
                         ));
                     }
 
                 } catch (Exception e) {
-                    failedRows.add(new FailedRow(outerKey, officialEmail, "Exception: " + e.getMessage()));
+                    resultRows.add(new ResultRow(
+                            outerKey,
+                            officialEmail,
+                            getSafeValue(innerMap, "2"),
+                            0, 0, 0,
+                            "ERROR - Exception: " + e.getMessage()
+                    ));
                     log.error("Error processing row: " + outerKey, e);
                 }
             });
 
             String errorFilePath = "";
 
-            if (!failedRows.isEmpty()) {
+//            if (!failedRows.isEmpty()) {
+//                try {
+////                    File errorFile = generateErrorExcel(failedRows);
+//                    File resultFile = generateResultExcel(resultRows);
+//                    errorFilePath = resultFile.getAbsolutePath();
+//                } catch (Exception e) {
+//                    log.error("Error generating Excel report", e);
+//                }
+//            }
+            if (!resultRows.isEmpty()) {
                 try {
-                    File errorFile = generateErrorExcel(failedRows);
-                    errorFilePath = errorFile.getAbsolutePath();
+                    File resultFile = generateResultExcel(resultRows);
+                    errorFilePath = resultFile.getAbsolutePath();
                 } catch (Exception e) {
                     log.error("Error generating Excel report", e);
+//                }
                 }
             }
+            long failedCount = resultRows.stream()
+                    .filter(r -> r.result.startsWith("ERROR"))
+                    .count();
+
+            actionResponse.setRenderParameter("failedCount", String.valueOf(failedCount));
             actionResponse.setRenderParameter("successCount", String.valueOf(successCount.get()));
-            actionResponse.setRenderParameter("failedCount", String.valueOf(failedRows.size()));
             actionResponse.setRenderParameter("errorFilePath", errorFilePath);
 
             SessionMessages.add(actionRequest, "sucess-key");
@@ -630,6 +688,194 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
         sheet.autoSizeColumn(2);
 
         File file = File.createTempFile("Leave_Error_Report_", ".xlsx");
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            workbook.write(fos);
+        }
+
+        workbook.close();
+
+        return file;
+    }
+
+    public static class ResultRow {
+        String rowNumber;
+        String email;
+        String leaveType;
+        double existingBalance;
+        double calculatedDays;
+        double newBalance;
+        String result;
+
+        public ResultRow(String rowNumber, String email, String leaveType,
+                         double existingBalance, double calculatedDays,
+                         double newBalance, String result) {
+            this.rowNumber = rowNumber;
+            this.email = email;
+            this.leaveType = leaveType;
+            this.existingBalance = existingBalance;
+            this.calculatedDays = calculatedDays;
+            this.newBalance = newBalance;
+            this.result = result;
+        }
+    }
+    private Date normalizeDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal.getTime();
+    }
+    private ResultRow processRowForBalance(
+            String rowKey,
+            String email,
+            EmployeeDetails employee,
+            Map<String, Object> map) {
+
+        try {
+
+            String status = getSafeValue(map, "12");
+            String leaveTypeStr = getSafeValue(map, "2");
+
+            //  Skip non-approved
+            if (status == null || !"Approved".equalsIgnoreCase(status.trim())) {
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, 0, 0, "SKIPPED - Status: " + status);
+            }
+
+            long leaveTypeId = getLeaveTypeId(leaveTypeStr);
+            if (leaveTypeId == 0) {
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, 0, 0, "ERROR - LeaveType not mapped");
+            }
+
+            // Parse and normalize dates
+            Date cutoff = normalizeDate(parseDate("13-Mar-2026"));
+
+            Date excelStart = normalizeDate(parseDate(getSafeValue(map, "3")));
+            Date excelEnd = normalizeDate(parseDate(getSafeValue(map, "4")));
+
+            if (excelStart == null || excelEnd == null) {
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, 0, 0, "ERROR - Invalid dates");
+            }
+
+            // Skip if fully after cutoff
+            if (excelStart.after(cutoff) && excelEnd.after(cutoff)) {
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, 0, 0, "SKIPPED - After cutoff");
+            }
+
+            // Adjust end date if crossing cutoff
+            Date adjustedExcelEnd = excelEnd;
+
+            if ((excelStart.before(cutoff) || excelStart.equals(cutoff))
+                    && excelEnd.after(cutoff)) {
+                adjustedExcelEnd = cutoff;
+            }
+
+            // Fetch LeaveRequests
+            List<LeaveRequest> requests =
+                    leaveRequestLocalService.findByEmployeeIdAndLeaveTypeId(
+                            employee.getEmployeeId(), leaveTypeId);
+
+            LeaveRequest matched = null;
+
+            for (LeaveRequest lr : requests) {
+
+                Date dbStart = normalizeDate(lr.getStartDateTime());
+                Date dbEnd = normalizeDate(lr.getEndDateTime());
+
+                if (dbStart.equals(excelStart) && dbEnd.equals(adjustedExcelEnd)) {
+                    matched = lr;
+                    break;
+                }
+            }
+
+            if (matched == null) {
+                log.warn("No LeaveRequest found for Employee: " + email +
+                        " | Start: " + excelStart + " | End: " + adjustedExcelEnd);
+
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, 0, 0, "ERROR - LeaveRequest not found");
+            }
+
+            //  Fetch LeaveDayType
+            List<LeaveDayType> dayTypes =
+                    leaveDayTypeLocalService.findByLeaveRequestId(
+                            matched.getLeaveRequestId());
+
+            double totalDays = 0;
+
+            for (LeaveDayType dt : dayTypes) {
+                totalDays += dt.getIsHalfDay() ? 0.5 : 1.0;
+            }
+
+            // Fetch LeaveBalance
+            LeaveBalance lb =
+                    leaveBalanceLocalService.findByEmployeeIdAndLeaveTypeMasterId(
+                            employee.getEmployeeId(), leaveTypeId);
+
+            if (lb == null) {
+                return new ResultRow(rowKey, email, leaveTypeStr,
+                        0, totalDays, 0, "ERROR - LeaveBalance not found");
+            }
+
+            double existing = lb.getNoOfUsedLeaves();
+            double newBalance = existing + totalDays;
+
+            //  DO NOT UPDATE DB (Audit Mode)
+
+            lb.setNoOfUsedLeaves(newBalance);
+            leaveBalanceLocalService.updateLeaveBalance(lb);
+
+            return new ResultRow(rowKey, email, leaveTypeStr,
+                    existing, totalDays, newBalance, "SUCCESS");
+
+        } catch (Exception e) {
+            return new ResultRow(rowKey, email,
+                    getSafeValue(map, "2"),
+                    0, 0, 0, "ERROR - " + e.getMessage());
+        }
+    }
+    private File generateResultExcel(List<ResultRow> resultRows) throws IOException {
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Results");
+
+        int rowNum = 0;
+
+        Row header = sheet.createRow(rowNum++);
+        header.createCell(0).setCellValue("Row");
+        header.createCell(1).setCellValue("Email");
+        header.createCell(2).setCellValue("Leave Type");
+        header.createCell(3).setCellValue("Existing Taken Leaves");
+        header.createCell(4).setCellValue("Calculated Days Of Taken Leaves");
+        header.createCell(5).setCellValue("Latest No Of Used Leaves");
+        header.createCell(6).setCellValue("Result");
+
+        for (ResultRow rr : resultRows) {
+
+            Row row = sheet.createRow(rowNum++);
+
+            row.createCell(0).setCellValue(rr.rowNumber);
+            row.createCell(1).setCellValue(rr.email);
+            row.createCell(2).setCellValue(rr.leaveType);
+            row.createCell(3).setCellValue(rr.existingBalance);
+            row.createCell(4).setCellValue(rr.calculatedDays);
+            row.createCell(5).setCellValue(rr.newBalance);
+            row.createCell(6).setCellValue(rr.result);
+        }
+
+        for (int i = 0; i < 7; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        File file = File.createTempFile("Leave_Balance_Audit_", ".xlsx");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             workbook.write(fos);

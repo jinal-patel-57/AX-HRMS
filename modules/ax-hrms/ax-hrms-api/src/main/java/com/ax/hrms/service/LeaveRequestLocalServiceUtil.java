@@ -219,6 +219,13 @@ public class LeaveRequestLocalServiceUtil {
 		return getService().findByEmployeeId(employeeId);
 	}
 
+	public static List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId) {
+
+		return getService().findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId);
+	}
+
 	public static List<LeaveRequest> findByEmployeeIdAndStatus(
 		long employeeId, long status) {
 

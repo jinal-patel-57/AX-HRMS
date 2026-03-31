@@ -49,6 +49,11 @@ public class LeaveRequestLocalServiceImpl
 
 		return leaveRequestPersistence.findByleaveRequestId(leaveRequestId);
 	}
+
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+			long employeeId, long leaveTypeMasterId) {
+		return leaveRequestPersistence.findByEmployeeIdAndLeaveTypeId(employeeId,leaveTypeMasterId);
+	}
 	
 	
 }

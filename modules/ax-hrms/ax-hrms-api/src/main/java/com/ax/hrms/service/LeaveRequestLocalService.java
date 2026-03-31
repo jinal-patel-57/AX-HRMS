@@ -208,6 +208,9 @@ public interface LeaveRequestLocalService
 
 	public List<LeaveRequest> findByEmployeeId(long employeeId);
 
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId);
+
 	public List<LeaveRequest> findByEmployeeIdAndStatus(
 		long employeeId, long status);
 

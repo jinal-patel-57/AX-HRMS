@@ -1,15 +1,15 @@
 package com.ax.hrms.report.web.leave.balance.actions;
 
+import com.ax.hrms.master.model.LeaveCompensatoryStatusMaster;
 import com.ax.hrms.master.model.LeaveTypeMaster;
+import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
-import com.ax.hrms.model.EmployeeDetails;
-import com.ax.hrms.model.LeaveBalance;
-import com.ax.hrms.model.LeaveBalanceHistory;
+import com.ax.hrms.model.*;
+
 import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys.*;
+
 import com.ax.hrms.report.web.util.ExcelExportUtil;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.ax.hrms.service.LeaveBalanceHistoryLocalService;
-import com.ax.hrms.service.LeaveBalanceLocalService;
+import com.ax.hrms.service.*;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -82,7 +82,29 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
             	    .thenComparing(e -> (e.getFirstName() + " " + e.getLastName()).toLowerCase())
             	);
             log.info("employeeList size: " + employeeList.size());
+            List<LeaveCompensatoryStatusMaster> statuses =
+                    leaveCompensatoryStatusMasterLocalService.getLeaveCompensatoryStatusMasters(-1, -1);
 
+            long approved = 0;
+            long pending = 0;
+
+            for (LeaveCompensatoryStatusMaster status : statuses) {
+                String name = status.getLeaveCompensatoryStatus().toLowerCase();
+
+                if ("approved".equals(name)) {
+                    approved = status.getLeaveCompensatoryStatusMasterId();
+                } else if ("pending".equals(name)) {
+                    pending = status.getLeaveCompensatoryStatusMasterId();
+                }
+            }
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            Date today = cal.getTime();
             
             for (EmployeeDetails employeeDetails : employeeList) {
 
@@ -95,6 +117,8 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                 
 
                 Map<String, Double> leaveTypeBalanceMap = new LinkedHashMap<>();
+
+
 
                 for (LeaveTypeMaster leaveType : leaveTypes) {
 
@@ -110,7 +134,40 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                     				", leaveTypeId=" + leaveTypeMasterId);
                     	}
                     	double remainingLeaves = (leaveBalance != null) ? leaveBalance.getNoOfRemainingLeaves() : 0.0;
-                    	leaveTypeBalanceMap.put(leaveType.getLeaveTypeName(), remainingLeaves);
+
+                        List<LeaveRequest> leaveRequestList = leaveRequestLocalService.findByEmployeeIdAndLeaveTypeId(employeeDetails.getEmployeeId(),leaveTypeMasterId);
+
+                        double totalDays = 0.0;
+                        for(LeaveRequest leaveRequest : leaveRequestList){
+                            long status = leaveRequest.getLeaveCompensatoryStatusMasterId();
+
+                            if (approved != status &&
+                                    pending != status) {
+                                continue;
+                            }
+                            if (leaveRequest.getEndDateTime().before(today)) {
+                                continue;
+                            }
+
+                                List<LeaveDayType> leaveDayTypeList = leaveDayTypeLocalService.findByLeaveRequestId(leaveRequest.getLeaveRequestId());
+                                for(LeaveDayType leaveDayType : leaveDayTypeList){
+                                    if (leaveDayType.getLeaveDate().after(today)) {
+                                        totalDays += leaveDayType.isIsHalfDay() ? 0.5 : 1.0;
+                                    }
+                                }
+
+                        }
+
+                        log.info("total days which is after this today:- "+ totalDays);
+                        log.info("remaining balance :- "+ remainingLeaves+totalDays);
+
+
+
+
+                        double finalBalance = remainingLeaves + totalDays;
+
+                        leaveTypeBalanceMap.put(leaveType.getLeaveTypeName(), finalBalance);
+
                     } else {
                     	LeaveBalanceHistory leaveBalanceHistory = null;
                     	try {
@@ -144,4 +201,13 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
     private LeaveBalanceLocalService leaveBalanceLocalService;
     @Reference
     private EmployeeDetailsLocalService employeeDetailsLocalService;
+
+    @Reference
+    private LeaveRequestLocalService leaveRequestLocalService;
+
+    @Reference
+    private LeaveDayTypeLocalService leaveDayTypeLocalService;
+
+    @Reference
+    private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 }

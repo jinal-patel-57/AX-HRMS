@@ -624,6 +624,10 @@
         <finder return-type="LeaveRequest" name="leaveRequestId">
             <finder-column name="leaveRequestId"/>
         </finder>
+        <finder return-type="Collection" name="EmployeeIdAndLeaveTypeId">
+            <finder-column name="employeeId"/>
+            <finder-column name="leaveTypeMasterId"/>
+        </finder>
 
     </entity>
 

@@ -494,7 +494,7 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
                 hideEndDateContainer();
                 setReadOnlyReason();
 //                setBlankStartDate();
-  hideReasonContainer();
+                hideReasonContainer();
                 setBlankEndDate();
                 ajaxForFloaterHolidayList();
             }

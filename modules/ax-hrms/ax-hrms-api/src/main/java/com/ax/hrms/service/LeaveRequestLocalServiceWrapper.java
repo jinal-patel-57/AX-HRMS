@@ -250,6 +250,15 @@ public class LeaveRequestLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.ax.hrms.model.LeaveRequest>
+		findByEmployeeIdAndLeaveTypeId(
+			long employeeId, long leaveTypeMasterId) {
+
+		return _leaveRequestLocalService.findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId);
+	}
+
+	@Override
+	public java.util.List<com.ax.hrms.model.LeaveRequest>
 		findByEmployeeIdAndStatus(long employeeId, long status) {
 
 		return _leaveRequestLocalService.findByEmployeeIdAndStatus(

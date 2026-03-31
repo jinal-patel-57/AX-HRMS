@@ -2724,6 +2724,562 @@ public class LeaveRequestPersistenceImpl
 	private static final String _FINDER_COLUMN_LEAVEREQUESTID_LEAVEREQUESTID_2 =
 		"leaveRequest.leaveRequestId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByEmployeeIdAndLeaveTypeId;
+	private FinderPath
+		_finderPathWithoutPaginationFindByEmployeeIdAndLeaveTypeId;
+	private FinderPath _finderPathCountByEmployeeIdAndLeaveTypeId;
+
+	/**
+	 * Returns all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @return the matching leave requests
+	 */
+	@Override
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId) {
+
+		return findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @return the range of matching leave requests
+	 */
+	@Override
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end) {
+
+		return findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching leave requests
+	 */
+	@Override
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end,
+		OrderByComparator<LeaveRequest> orderByComparator) {
+
+		return findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching leave requests
+	 */
+	@Override
+	public List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end,
+		OrderByComparator<LeaveRequest> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByEmployeeIdAndLeaveTypeId;
+				finderArgs = new Object[] {employeeId, leaveTypeMasterId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath =
+				_finderPathWithPaginationFindByEmployeeIdAndLeaveTypeId;
+			finderArgs = new Object[] {
+				employeeId, leaveTypeMasterId, start, end, orderByComparator
+			};
+		}
+
+		List<LeaveRequest> list = null;
+
+		if (useFinderCache) {
+			list = (List<LeaveRequest>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (LeaveRequest leaveRequest : list) {
+					if ((employeeId != leaveRequest.getEmployeeId()) ||
+						(leaveTypeMasterId !=
+							leaveRequest.getLeaveTypeMasterId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_LEAVEREQUEST_WHERE);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_LEAVETYPEMASTERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(LeaveRequestModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				list = (List<LeaveRequest>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching leave request
+	 * @throws NoSuchLeaveRequestException if a matching leave request could not be found
+	 */
+	@Override
+	public LeaveRequest findByEmployeeIdAndLeaveTypeId_First(
+			long employeeId, long leaveTypeMasterId,
+			OrderByComparator<LeaveRequest> orderByComparator)
+		throws NoSuchLeaveRequestException {
+
+		LeaveRequest leaveRequest = fetchByEmployeeIdAndLeaveTypeId_First(
+			employeeId, leaveTypeMasterId, orderByComparator);
+
+		if (leaveRequest != null) {
+			return leaveRequest;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("employeeId=");
+		sb.append(employeeId);
+
+		sb.append(", leaveTypeMasterId=");
+		sb.append(leaveTypeMasterId);
+
+		sb.append("}");
+
+		throw new NoSuchLeaveRequestException(sb.toString());
+	}
+
+	/**
+	 * Returns the first leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching leave request, or <code>null</code> if a matching leave request could not be found
+	 */
+	@Override
+	public LeaveRequest fetchByEmployeeIdAndLeaveTypeId_First(
+		long employeeId, long leaveTypeMasterId,
+		OrderByComparator<LeaveRequest> orderByComparator) {
+
+		List<LeaveRequest> list = findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching leave request
+	 * @throws NoSuchLeaveRequestException if a matching leave request could not be found
+	 */
+	@Override
+	public LeaveRequest findByEmployeeIdAndLeaveTypeId_Last(
+			long employeeId, long leaveTypeMasterId,
+			OrderByComparator<LeaveRequest> orderByComparator)
+		throws NoSuchLeaveRequestException {
+
+		LeaveRequest leaveRequest = fetchByEmployeeIdAndLeaveTypeId_Last(
+			employeeId, leaveTypeMasterId, orderByComparator);
+
+		if (leaveRequest != null) {
+			return leaveRequest;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("employeeId=");
+		sb.append(employeeId);
+
+		sb.append(", leaveTypeMasterId=");
+		sb.append(leaveTypeMasterId);
+
+		sb.append("}");
+
+		throw new NoSuchLeaveRequestException(sb.toString());
+	}
+
+	/**
+	 * Returns the last leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching leave request, or <code>null</code> if a matching leave request could not be found
+	 */
+	@Override
+	public LeaveRequest fetchByEmployeeIdAndLeaveTypeId_Last(
+		long employeeId, long leaveTypeMasterId,
+		OrderByComparator<LeaveRequest> orderByComparator) {
+
+		int count = countByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<LeaveRequest> list = findByEmployeeIdAndLeaveTypeId(
+			employeeId, leaveTypeMasterId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the leave requests before and after the current leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param leaveRequestId the primary key of the current leave request
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next leave request
+	 * @throws NoSuchLeaveRequestException if a leave request with the primary key could not be found
+	 */
+	@Override
+	public LeaveRequest[] findByEmployeeIdAndLeaveTypeId_PrevAndNext(
+			long leaveRequestId, long employeeId, long leaveTypeMasterId,
+			OrderByComparator<LeaveRequest> orderByComparator)
+		throws NoSuchLeaveRequestException {
+
+		LeaveRequest leaveRequest = findByPrimaryKey(leaveRequestId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			LeaveRequest[] array = new LeaveRequestImpl[3];
+
+			array[0] = getByEmployeeIdAndLeaveTypeId_PrevAndNext(
+				session, leaveRequest, employeeId, leaveTypeMasterId,
+				orderByComparator, true);
+
+			array[1] = leaveRequest;
+
+			array[2] = getByEmployeeIdAndLeaveTypeId_PrevAndNext(
+				session, leaveRequest, employeeId, leaveTypeMasterId,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected LeaveRequest getByEmployeeIdAndLeaveTypeId_PrevAndNext(
+		Session session, LeaveRequest leaveRequest, long employeeId,
+		long leaveTypeMasterId,
+		OrderByComparator<LeaveRequest> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_LEAVEREQUEST_WHERE);
+
+		sb.append(_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_EMPLOYEEID_2);
+
+		sb.append(_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_LEAVETYPEMASTERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(LeaveRequestModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(employeeId);
+
+		queryPos.add(leaveTypeMasterId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(leaveRequest)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<LeaveRequest> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63; from the database.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 */
+	@Override
+	public void removeByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId) {
+
+		for (LeaveRequest leaveRequest :
+				findByEmployeeIdAndLeaveTypeId(
+					employeeId, leaveTypeMasterId, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(leaveRequest);
+		}
+	}
+
+	/**
+	 * Returns the number of leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @return the number of matching leave requests
+	 */
+	@Override
+	public int countByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId) {
+
+		FinderPath finderPath = _finderPathCountByEmployeeIdAndLeaveTypeId;
+
+		Object[] finderArgs = new Object[] {employeeId, leaveTypeMasterId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_LEAVEREQUEST_WHERE);
+
+			sb.append(_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_EMPLOYEEID_2);
+
+			sb.append(
+				_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_LEAVETYPEMASTERID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(employeeId);
+
+				queryPos.add(leaveTypeMasterId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_EMPLOYEEID_2 =
+			"leaveRequest.employeeId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_EMPLOYEEIDANDLEAVETYPEID_LEAVETYPEMASTERID_2 =
+			"leaveRequest.leaveTypeMasterId = ?";
+
 	public LeaveRequestPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -3412,6 +3968,30 @@ public class LeaveRequestPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByleaveRequestId",
 			new String[] {Long.class.getName()},
 			new String[] {"leaveRequestId"}, false);
+
+		_finderPathWithPaginationFindByEmployeeIdAndLeaveTypeId =
+			new FinderPath(
+				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+				"findByEmployeeIdAndLeaveTypeId",
+				new String[] {
+					Long.class.getName(), Long.class.getName(),
+					Integer.class.getName(), Integer.class.getName(),
+					OrderByComparator.class.getName()
+				},
+				new String[] {"employeeId", "leaveTypeMasterId"}, true);
+
+		_finderPathWithoutPaginationFindByEmployeeIdAndLeaveTypeId =
+			new FinderPath(
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"findByEmployeeIdAndLeaveTypeId",
+				new String[] {Long.class.getName(), Long.class.getName()},
+				new String[] {"employeeId", "leaveTypeMasterId"}, true);
+
+		_finderPathCountByEmployeeIdAndLeaveTypeId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByEmployeeIdAndLeaveTypeId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"employeeId", "leaveTypeMasterId"}, false);
 
 		LeaveRequestUtil.setPersistence(this);
 	}

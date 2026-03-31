@@ -730,6 +730,163 @@ public interface LeaveRequestPersistence extends BasePersistence<LeaveRequest> {
 	public int countByleaveRequestId(long leaveRequestId);
 
 	/**
+	 * Returns all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @return the matching leave requests
+	 */
+	public java.util.List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId);
+
+	/**
+	 * Returns a range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @return the range of matching leave requests
+	 */
+	public java.util.List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching leave requests
+	 */
+	public java.util.List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>LeaveRequestModelImpl</code>.
+	 * </p>
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param start the lower bound of the range of leave requests
+	 * @param end the upper bound of the range of leave requests (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching leave requests
+	 */
+	public java.util.List<LeaveRequest> findByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching leave request
+	 * @throws NoSuchLeaveRequestException if a matching leave request could not be found
+	 */
+	public LeaveRequest findByEmployeeIdAndLeaveTypeId_First(
+			long employeeId, long leaveTypeMasterId,
+			com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+				orderByComparator)
+		throws NoSuchLeaveRequestException;
+
+	/**
+	 * Returns the first leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching leave request, or <code>null</code> if a matching leave request could not be found
+	 */
+	public LeaveRequest fetchByEmployeeIdAndLeaveTypeId_First(
+		long employeeId, long leaveTypeMasterId,
+		com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+			orderByComparator);
+
+	/**
+	 * Returns the last leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching leave request
+	 * @throws NoSuchLeaveRequestException if a matching leave request could not be found
+	 */
+	public LeaveRequest findByEmployeeIdAndLeaveTypeId_Last(
+			long employeeId, long leaveTypeMasterId,
+			com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+				orderByComparator)
+		throws NoSuchLeaveRequestException;
+
+	/**
+	 * Returns the last leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching leave request, or <code>null</code> if a matching leave request could not be found
+	 */
+	public LeaveRequest fetchByEmployeeIdAndLeaveTypeId_Last(
+		long employeeId, long leaveTypeMasterId,
+		com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+			orderByComparator);
+
+	/**
+	 * Returns the leave requests before and after the current leave request in the ordered set where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param leaveRequestId the primary key of the current leave request
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next leave request
+	 * @throws NoSuchLeaveRequestException if a leave request with the primary key could not be found
+	 */
+	public LeaveRequest[] findByEmployeeIdAndLeaveTypeId_PrevAndNext(
+			long leaveRequestId, long employeeId, long leaveTypeMasterId,
+			com.liferay.portal.kernel.util.OrderByComparator<LeaveRequest>
+				orderByComparator)
+		throws NoSuchLeaveRequestException;
+
+	/**
+	 * Removes all the leave requests where employeeId = &#63; and leaveTypeMasterId = &#63; from the database.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 */
+	public void removeByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId);
+
+	/**
+	 * Returns the number of leave requests where employeeId = &#63; and leaveTypeMasterId = &#63;.
+	 *
+	 * @param employeeId the employee ID
+	 * @param leaveTypeMasterId the leave type master ID
+	 * @return the number of matching leave requests
+	 */
+	public int countByEmployeeIdAndLeaveTypeId(
+		long employeeId, long leaveTypeMasterId);
+
+	/**
 	 * Caches the leave request in the entity cache if it is enabled.
 	 *
 	 * @param leaveRequest the leave request
