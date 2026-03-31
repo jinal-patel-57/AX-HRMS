@@ -1,6 +1,8 @@
 package com.ax.hrms.report.web.previous.month.leave.report.actions;
 
+import com.ax.hrms.master.exception.NoSuchLeaveCompensatoryStatusMasterException;
 import com.ax.hrms.master.model.LeaveTypeMaster;
+import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.*;
 import com.ax.hrms.report.web.constants.AxHrmsPreviousMonthLeaveReportWebPortletKeys;
@@ -94,6 +96,23 @@ public class FetchPreviousMonthLeaveReportResourceCommand implements MVCResource
                     leaveTypeMasterLocalService.getLeaveTypeMasters(
                             QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
+            long approvedStatusId = 0;
+            long pendingStatusId = 0;
+            
+            try {
+            	approvedStatusId =
+            			leaveCompensatoryStatusMasterLocalService
+            			.findByLeaveCompensatoryStatusName("Approved")
+            			.getLeaveCompensatoryStatusMasterId();
+            	
+            	pendingStatusId =
+            			leaveCompensatoryStatusMasterLocalService
+            			.findByLeaveCompensatoryStatusName("Pending")
+            			.getLeaveCompensatoryStatusMasterId();
+            	
+            } catch (NoSuchLeaveCompensatoryStatusMasterException e) {
+            	log.error("Status master not found", e);
+            }
             for (long employeeId : employeeIds) {
 
                 EmployeeDetails employeeDetails =
@@ -114,8 +133,11 @@ public class FetchPreviousMonthLeaveReportResourceCommand implements MVCResource
 
                 List<LeaveRequest> leaveRequests =
                         leaveRequestLocalService.findByEmployeeId(employeeId);
-
                 for (LeaveRequest leaveRequest : leaveRequests) {
+					if (leaveRequest.getLeaveCompensatoryStatusMasterId() != approvedStatusId
+							&& leaveRequest.getLeaveCompensatoryStatusMasterId() != pendingStatusId) {
+						continue;
+					}
 
                     long leaveTypeMasterId = leaveRequest.getLeaveTypeMasterId();
 
@@ -171,6 +193,9 @@ public class FetchPreviousMonthLeaveReportResourceCommand implements MVCResource
 
     private static final Log log = LogFactoryUtil.getLog(FetchPreviousMonthLeaveReportResourceCommand.class);
 
+    @Reference
+    private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
+    
     @Reference
     private LeaveTypeMasterLocalService leaveTypeMasterLocalService;
 

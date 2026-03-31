@@ -53,23 +53,46 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
 
             Map<String, Map<String, Double>> leaveBalanceData = new LinkedHashMap<>();
 
-            long[] employeeIds;
+			/*
+			 * long[] employeeIds; if (ALL.equalsIgnoreCase(employeeType)) {
+			 * List<EmployeeDetails> allEmployees =
+			 * employeeDetailsLocalService.findByIsTerminated(false); employeeIds =
+			 * allEmployees.stream().mapToLong(EmployeeDetails::getEmployeeId).toArray(); }
+			 * else { employeeIds = ParamUtil.getLongValues(request, EMPLOYEE_IDS); }
+			 */
+            
+            List<EmployeeDetails> employeeList;
+
             if (ALL.equalsIgnoreCase(employeeType)) {
-                List<EmployeeDetails> allEmployees = employeeDetailsLocalService.findByIsTerminated(false);
-                employeeIds = allEmployees.stream().mapToLong(EmployeeDetails::getEmployeeId).toArray();
+                employeeList = new ArrayList<>(employeeDetailsLocalService.findByIsTerminated(false));
             } else {
-                employeeIds = ParamUtil.getLongValues(request, EMPLOYEE_IDS);
+                long[] rawIds = ParamUtil.getLongValues(request, EMPLOYEE_IDS);
+                log.info("employeeIds :-"+ rawIds);
+                employeeList = new ArrayList<>();
+                for (long id : rawIds) {
+                    employeeList.add(employeeDetailsLocalService.getEmployeeDetails(id));
+                }
             }
+            
+            employeeList.sort(Comparator
+            	    .comparing(
+            	        EmployeeDetails::getJoiningDate,
+            	        Comparator.nullsLast(Comparator.naturalOrder())
+            	    )
+            	    .thenComparing(e -> (e.getFirstName() + " " + e.getLastName()).toLowerCase())
+            	);
+            log.info("employeeList size: " + employeeList.size());
 
-            log.info("employeeIds :-"+ employeeIds);
-            for (long employeeId : employeeIds) {
+            
+            for (EmployeeDetails employeeDetails : employeeList) {
 
-                EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+                //EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
                 JSONObject employeeDetailsJson = JSONFactoryUtil.createJSONObject();
                 employeeDetailsJson.put(EMPLOYEE_ID, employeeDetails.getEmployeeCode());
                 employeeDetailsJson.put(EMPLOYEE_NAME, employeeDetails.getFirstName() + StringPool.SPACE + employeeDetails.getLastName());
                 employeeDetailsJson.put(EMPLOYEE_EMAIL, employeeDetails.getOfficialEmail());
+                
 
                 Map<String, Double> leaveTypeBalanceMap = new LinkedHashMap<>();
 
@@ -81,9 +104,9 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                     if(Year.now().getValue() == year) {
                     	LeaveBalance leaveBalance = null;
                     	try {
-                    		leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
+                    		leaveBalance = leaveBalanceLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeDetails.getEmployeeId(), leaveTypeMasterId, year);
                     	} catch (Exception e) {
-                    		log.warn("LeaveBalance not found for employeeId=" + employeeId +
+                    		log.warn("LeaveBalance not found for employeeId=" + employeeDetails.getEmployeeId() +
                     				", leaveTypeId=" + leaveTypeMasterId);
                     	}
                     	double remainingLeaves = (leaveBalance != null) ? leaveBalance.getNoOfRemainingLeaves() : 0.0;
@@ -91,9 +114,9 @@ public class FetchLeaveBalanceResourceCommand implements MVCResourceCommand {
                     } else {
                     	LeaveBalanceHistory leaveBalanceHistory = null;
                     	try {
-                    		leaveBalanceHistory = leaveBalanceHistoryLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeId, leaveTypeMasterId, year);
+                    		leaveBalanceHistory = leaveBalanceHistoryLocalService.findByEmployeeIdLeaveTypeMasterIdAndYear(employeeDetails.getEmployeeId(), leaveTypeMasterId, year);
                     	} catch (Exception e) {
-                    		log.warn("LeaveBalance not found for employeeId=" + employeeId +
+                    		log.warn("LeaveBalance not found for employeeId=" + employeeDetails.getEmployeeId() +
                     				", leaveTypeId=" + leaveTypeMasterId);
                     	}
                     	double remainingLeaves = (leaveBalanceHistory != null) ? leaveBalanceHistory.getNoOfRemainingLeaves() : 0.0;
