@@ -19,6 +19,7 @@
                                    class="form-control"
                                    id="startDate"
                                    name="<portlet:namespace/>startDate" />
+                            <small class="text-danger" id="startDateError"></small>
                         </div>
                      </div>
                          <div class="col-md-3 col-sm-12">
@@ -28,10 +29,9 @@
                                    class="form-control"
                                    id="endDate"
                                    name="<portlet:namespace/>endDate" />
+                            <small class="text-danger" id="endDateError"></small>
                         </div>
                         </div>
-                        <small class="text-danger" id="dateError"></small>
-
 
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
@@ -105,7 +105,8 @@
             const employeeSelect = $("#employeeIds");
             const form = $("form");
             const employeeError = $("#employeeError");
-
+            const startDateError = $("#startDateError");
+            const endDateError = $("#endDateError");
             /* -------- Initialize Select2 ONLY ONCE -------- */
 
             employeeSelect.select2({
@@ -147,7 +148,9 @@
             }
 
             function clearDateError() {
-                dateError.text("");
+                startDateError.text("");
+                endDateError.text("");
+
                 startDate.removeClass("is-invalid");
                 endDate.removeClass("is-invalid");
             }
@@ -168,17 +171,25 @@
 
                 let isValid = true;
 
-                if (!start || !end) {
-                    dateError.text("Start Date and End Date are required.");
-                    startDate.addClass("is-invalid");
-                    endDate.addClass("is-invalid");
-                    isValid = false;
-                } else if (new Date(start) > new Date(end)) {
-                    dateError.text("Start Date cannot be greater than End Date.");
-                    startDate.addClass("is-invalid");
-                    endDate.addClass("is-invalid");
+                if (!start) {
+                    startDateError.text("Start Date is required.");
+                  //  startDate.addClass("is-invalid");
                     isValid = false;
                 }
+
+                if (!end) {
+                    endDateError.text("End Date is required.");
+                   // endDate.addClass("is-invalid");
+                    isValid = false;
+                }
+
+                    if (start && end) {
+                        if (new Date(start) > new Date(end)) {
+                            endDateError.text("End Date must be greater than or equal to Start Date.");
+                            endDate.addClass("is-invalid");
+                            isValid = false;
+                        }
+                    }
 
 
                 if (selectedEmployeeType === "SPECIFIC") {

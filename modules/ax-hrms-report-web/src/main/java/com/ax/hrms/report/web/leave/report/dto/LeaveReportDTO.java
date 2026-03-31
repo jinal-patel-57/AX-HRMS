@@ -6,7 +6,7 @@ public class LeaveReportDTO {
     private String employeeName;
     private String employeeEmail;
     private String leaveType;
-    private long days;
+    private double days;
     private String requestedDate;
     private String startDate;
     private String endDate;
@@ -64,11 +64,11 @@ public class LeaveReportDTO {
         this.leaveType = leaveType;
     }
 
-    public long getDays() {
+    public double getDays() {
         return days;
     }
 
-    public void setDays(long days) {
+    public void setDays(double days) {
         this.days = days;
     }
 
