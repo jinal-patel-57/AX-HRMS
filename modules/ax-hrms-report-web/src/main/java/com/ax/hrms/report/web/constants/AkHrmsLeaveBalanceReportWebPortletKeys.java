@@ -8,8 +8,10 @@ public class AkHrmsLeaveBalanceReportWebPortletKeys {
 	public static final String AKHRMSLEAVEBALANCEREPORTWEB =
 		"com_ax_hrms_leave_balance_report_web_AkHrmsLeaveBalanceReportWebPortlet";
 
+    public static final String AKHRMSLEAVEREPORTWEB =
+            "com_ax_hrms_leave_balance_report_web_AkHrmsLeaveReportWebPortlet";
 
-	public static final String ALL = "ALL";
+    public static final String ALL = "ALL";
 	public static final String SPECIFIC = "SPECIFIC";
 	public static final String LEAVE_BALANCE_EXPORT_FILE_NAME = "AX_Leave_Balance_Report";
 
