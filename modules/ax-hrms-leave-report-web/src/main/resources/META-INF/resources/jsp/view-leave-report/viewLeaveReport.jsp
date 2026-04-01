@@ -16,13 +16,20 @@
     <div class="card">
     <div class="card-header"><strong><liferay-ui:message key="leave-report" /></strong></div>
     <div class="card-body ax-body"><table class="table">
+        <thead>
+			<tr>
+				<th scope="col">Type</th>
+				<th scope="col">Available</th>
+				<th scope="col">Used</th>
+			</tr>
+		</thead>
         <tbody>
             <c:forEach var="report" items="${leaveReportDtoList}">
                 <c:if test="${report.year == currentYear}">
                     <tr>
                         <td>${report.leaveTypeName}</td>
-                        <td><liferay-ui:message key="available" /> ${report.remainingDays} <liferay-ui:message key="days" /></td>
-                        <td><liferay-ui:message key="Used" /> ${report.usedDays} <liferay-ui:message key="days" /></td>
+                        <td>${report.remainingDays}</td>
+                        <td>${report.usedDays}</td>
                     </tr>
                 </c:if>
             </c:forEach>
