@@ -26,7 +26,7 @@
             <select data-live-search="true" class="form-control mr-2 custom-select" id="employeeSelect" name="<portlet:namespace/>employeeId">
                 <option value="">Select Employee</option>
                 <c:forEach var="employee" items="${employeeList}">
-                    <option value="${employee.employeeId}">${employee.firstName} ${employee.lastName}</option>
+                    <option value="${employee.employeeId}" ${employeeId == employee.employeeId ? 'selected' : ''} >${employee.firstName} ${employee.lastName}</option>
                 </c:forEach>
             </select>
             <button type="submit" class="btn btn-primary">Fetch</button>
@@ -66,30 +66,34 @@
 
                            value='<span class="status ${fn:toLowerCase(fn:replace(leaveRequest.status, " ", "-"))}">${leaveRequest.status}</span>' />
 
-<c:set var="isSameEmployee"
-       value="${currentEmployeeId == leaveRequest.employeeId}" />
+				<c:set var="isSameEmployee"
+				       value="${currentEmployeeId == leaveRequest.employeeId}" />
 
                         <liferay-ui:search-container-column-text name="Action">
                             <portlet:actionURL name="/approveLeaveRequest" var="approveLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
                                 <portlet:param name="comment" value="COMMENT"/>
+                                <portlet:param name="employeeId" value="${employeeId}"/>
                                 <portlet:param name="approvedId" value="${approvedId}"/>
                             </portlet:actionURL>
 
                             <portlet:actionURL name="/rejectCancelLeaveRequest" var="rejectLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
                                 <portlet:param name="comment" value="COMMENT"/>
+                                <portlet:param name="employeeId" value="${employeeId}"/>
                                 <portlet:param name="rejectedId" value="${rejectedId}"/>
                             </portlet:actionURL>
 
                             <portlet:actionURL name="/rejectCancelLeaveRequest" var="cancelLeaveRequestURL">
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
                                 <portlet:param name="comment" value="COMMENT"/>
+                                <portlet:param name="employeeId" value="${employeeId}"/>
                                 <portlet:param name="cancelId" value="${cancelId}"/>
                             </portlet:actionURL>
 
                             <portlet:renderURL var="viewLeaveRequestURL">
                                 <portlet:param name="mvcRenderCommandName" value="/viewLeaveRequest"/>
+                                <portlet:param name="employeeId" value="${employeeId}"/>
                                 <portlet:param name="leaveRequestId" value="${leaveRequest.leaveRequestId}"/>
                             </portlet:renderURL>
 

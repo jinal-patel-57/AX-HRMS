@@ -181,7 +181,18 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
             log.error(" RejectCancelLeaveRequestMVCActionCommand >>> Action >>> " + e.getMessage());
             SessionErrors.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.SOME_ERROR_FOUND);
         }
-        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+        
+        long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+        log.info("employeeId in the end is :: " + employeeId);
+		if(employeeId>0) {
+			EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+			log.info("employeeId -- " + employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
+			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
+		} else {
+			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		}
+        
+       // actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
     }
 
 

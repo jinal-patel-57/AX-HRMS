@@ -118,7 +118,8 @@ public class ViewLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 					+ e.getMessage());
 
 		}
-
+		log.info("employeeId -- " + ParamUtil.getLong(renderRequest, "employeeId", 0l));
+		renderRequest.setAttribute("employeeId", ParamUtil.getLong(renderRequest, "employeeId", 0l));
 		return AxHrmsHrLeaveManagementSystemWebPortletConstants.VIEW_LEAVE_REQUEST_JSP;
 	}
 

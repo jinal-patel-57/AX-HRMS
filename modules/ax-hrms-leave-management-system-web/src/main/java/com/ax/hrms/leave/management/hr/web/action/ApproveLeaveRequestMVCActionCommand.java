@@ -51,8 +51,6 @@ import java.io.IOException;
 public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 	private static final Log log = LogFactoryUtil.getLog(ApproveLeaveRequestMVCActionCommand.class);
 
-	
-
 	@Reference
 	LeaveRequestLocalService leaveRequestLocalService;
 	
@@ -135,8 +133,6 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
             leaveRequestWebUtil.sendNotificationToTeam("approve is done by hr.",leaveRequestId);
 			// SENDING NOTIFICATION TO EMPLOYEE
 
-
-
 			PortletURL leavePortletURL =
 					PortletURLFactoryUtil.create(
 							actionRequest,
@@ -167,8 +163,15 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 					+ e.getMessage());
 			SessionErrors.add(actionRequest, AxHrmsHrLeaveManagementSystemWebPortletConstants.SOME_ERROR_FOUND);
 		}
-		actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
-
+		
+		long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+		if(employeeId>0) {
+			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
+		} else {
+			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		}
+		
+		
 	}
 
 }

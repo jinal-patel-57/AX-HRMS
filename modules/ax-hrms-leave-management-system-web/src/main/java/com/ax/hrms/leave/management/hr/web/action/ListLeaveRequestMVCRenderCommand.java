@@ -143,6 +143,7 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 						new ArrayList<LeaveRequestDto>());
 				renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.TOTAL_LEAVE_REQUEST, 0);
 			}
+			renderRequest.setAttribute("employeeId", employeeId);
 		} else {
 			int totalLeaveRequest = leaveRequestLocalService.getLeaveRequestsCount();
 			int totalPageContainer = (totalLeaveRequest + deltaValue - 1) / deltaValue;
