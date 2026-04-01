@@ -36,7 +36,9 @@
 
         <div class="row">
             <div class="col">
-                <liferay-portlet:renderURL varImpl="iteratorURL"/>
+                <%-- <liferay-portlet:renderURL varImpl="iteratorURL">
+                	<portlet:param name="employeeId" value="${employeeId}"/>
+                </liferay-portlet:renderURL> --%>
                 <liferay-ui:search-container total="${totalLeaveRequest }" delta="${delta}"
                                              emptyResultsMessage="no-Leave-request-found-error-message"
                                              iteratorURL="${iteratorURL}">

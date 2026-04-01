@@ -3,6 +3,7 @@ package com.ax.hrms.leave.management.hr.web.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -131,9 +132,12 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 					renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.APPROVED_ID, approvedId);
 					renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.REJECTED_ID, rejectedId);
 					renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.CANCELLED_ID, cancelId);
-					
+					PortletURL iteratorURL = renderResponse.createRenderURL();
+					if (employeeId > 0) {
+					    iteratorURL.setParameter("employeeId", String.valueOf(employeeId));
+					}
 					renderRequest.setAttribute(AxHrmsHrLeaveManagementSystemWebPortletConstants.ITERATOR_URL,
-							renderResponse.createRenderURL());
+							iteratorURL);
 					
 				} catch (Exception e) {
 					log.error("ListLeaveRequestMVCRenderCommand >>> Render >>> " + e.getMessage());
