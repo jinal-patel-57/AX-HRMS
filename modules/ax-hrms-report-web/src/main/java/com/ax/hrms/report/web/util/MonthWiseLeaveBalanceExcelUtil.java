@@ -13,7 +13,7 @@ public class MonthWiseLeaveBalanceExcelUtil {
 
     public static void exportMonthWiseLeaveBalance(
             Map<String, Map<String, Double>> leaveBalanceData,
-            ResourceResponse response) throws Exception {
+            ResourceResponse response,int year) throws Exception {
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Month Wise Leave Balance");
@@ -48,17 +48,17 @@ public class MonthWiseLeaveBalanceExcelUtil {
         cell4.setCellValue("Leave Taken");
         cell4.setCellStyle(headerStyle);
 
-        Cell cell5 = headerRow.createCell(5);
-        cell5.setCellValue("Encash Leave");
-        cell5.setCellStyle(headerStyle);
-
-        Cell cell6 = headerRow.createCell(6);
-        cell6.setCellValue("Unpaid Leave");
-        cell6.setCellStyle(headerStyle);
-
-        Cell cell7 = headerRow.createCell(7);
-        cell7.setCellValue("Paternity Leave");
-        cell7.setCellStyle(headerStyle);
+//        Cell cell5 = headerRow.createCell(5);
+//        cell5.setCellValue("Encash Leave");
+//        cell5.setCellStyle(headerStyle);
+//
+//        Cell cell6 = headerRow.createCell(6);
+//        cell6.setCellValue("Unpaid Leave");
+//        cell6.setCellStyle(headerStyle);
+//
+//        Cell cell7 = headerRow.createCell(7);
+//        cell7.setCellValue("Paternity Leave");
+//        cell7.setCellStyle(headerStyle);
 
         // Freeze first 3 columns and header row
         sheet.createFreezePane(3, 1);
@@ -86,8 +86,8 @@ public class MonthWiseLeaveBalanceExcelUtil {
             double leaveTaken =
                     balanceMap.getOrDefault("Leave Taken", 0.0);
 
-            double unpaid =
-                    balanceMap.getOrDefault("Unpaid Leave", 0.0);
+//            double unpaid =
+//                    balanceMap.getOrDefault("Unpaid Leave", 0.0);
 
             Row row = sheet.createRow(rowNum++);
 
@@ -96,9 +96,9 @@ public class MonthWiseLeaveBalanceExcelUtil {
             row.createCell(2).setCellValue(email);
             row.createCell(3).setCellValue(balance);
             row.createCell(4).setCellValue(leaveTaken);
-            row.createCell(5).setCellValue(0);
-            row.createCell(6).setCellValue(unpaid);
-            row.createCell(7).setCellValue(0);
+//            row.createCell(5).setCellValue(0);
+//            row.createCell(6).setCellValue(unpaid);
+//            row.createCell(7).setCellValue(0);
         }
 
         // Auto size columns
@@ -112,7 +112,7 @@ public class MonthWiseLeaveBalanceExcelUtil {
 
         response.setProperty(
                 "Content-Disposition",
-                "attachment; filename=Month_Wise_Leave_Balance.xlsx");
+                "attachment; filename=Leave_Balance_"+year+".xlsx");
 
         OutputStream out = response.getPortletOutputStream();
         workbook.write(out);

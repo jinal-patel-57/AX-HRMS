@@ -27,17 +27,7 @@
                         </select>
                     </div>
                 </div>
-               <div class="col-md-6 col-sm-12">
-                   <div class="form-group">
-                       <label for="<portlet:namespace/>month">Month</label>
-                       <select class="form-control"
-                               id="month"
-                               name="<portlet:namespace/>month">
-                           <option value="">Select Month</option>
-                       </select>
-                       <small class="text-danger" id="monthError"></small>
-                   </div>
-               </div>
+
                 <div class="col-md-3 col-sm-12">
                     <div class="form-group">
                         <label>Employee</label>
@@ -108,16 +98,10 @@
         const employeeError = $("#employeeError");
 
         const yearSelect = $("#year");
-        const monthSelect = $("#month");
+
 
         const currentYear = ${currentYear};
-        const currentMonth = ${currentMonth};
 
-        const monthNames = [
-            "January", "February", "March", "April",
-            "May", "June", "July", "August",
-            "September", "October", "November", "December"
-        ];
 
 
         employeeSelect.select2({
@@ -148,27 +132,7 @@
 
 
         }
-        function populateMonths(selectedYear) {
 
-            monthSelect.empty();
-            monthSelect.append('<option value="">Select Month</option>');
-
-            let limit = 12;
-
-            if (parseInt(selectedYear) === currentYear) {
-                limit = currentMonth;
-            }
-
-            for (let i = 1; i <= limit; i++) {
-                monthSelect.append(
-                    '<option value="' + i + '">' + monthNames[i - 1] + '</option>'
-                );
-            }
-        }
-
-        yearSelect.on("change", function () {
-            populateMonths($(this).val());
-        });
 
 
         function clearEmployeeError() {
@@ -196,13 +160,7 @@
                     isValid = false;
                 }
             }
-            const selectedMonth = monthSelect.val();
 
-            if (!selectedMonth) {
-                $("#monthError").text("Please select a month.");
-                monthSelect.addClass("is-invalid");
-                isValid = false;
-            }
 
             return isValid;
         }
@@ -224,10 +182,7 @@
         employeeSelect.on("change", function () {
             clearEmployeeError();
         });
-        monthSelect.on("change", function () {
-            $("#monthError").text("");
-            monthSelect.removeClass("is-invalid");
-        });
+
 
 
         form.on("submit", function (e) {
@@ -238,7 +193,7 @@
 
         toggleEmployeeSelect(false);
 
-         populateMonths(yearSelect.val());
+
 
 
     });

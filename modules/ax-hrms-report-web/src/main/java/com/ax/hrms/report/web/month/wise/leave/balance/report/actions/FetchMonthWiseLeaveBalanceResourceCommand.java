@@ -22,10 +22,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortletKeys.ALL;
 
@@ -53,53 +51,42 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
     @Reference private LeaveDayTypeLocalService leaveDayTypeLocalService;
     @Reference private LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 
-
     @Override
     public boolean serveResource(ResourceRequest request, ResourceResponse response) {
 
-        log.info("in leave balcne report of month wise");
+        log.info("Year-wise Leave Balance Report");
 
         try {
 
             String employeeType = ParamUtil.getString(request, EMPLOYEE_TYPE);
             int year = ParamUtil.getInteger(request, YEAR);
-            int month = ParamUtil.getInteger(request, "month");
 
-            long approvedId = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName("Approved").getLeaveCompensatoryStatusMasterId();
-            long pendingId = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusName("Pending").getLeaveCompensatoryStatusMasterId();
+            long approvedId = leaveCompensatoryStatusMasterLocalService
+                    .findByLeaveCompensatoryStatusName("Approved")
+                    .getLeaveCompensatoryStatusMasterId();
 
-            log.info("year" + year);
-            log.info("month" + month);
+            long pendingId = leaveCompensatoryStatusMasterLocalService
+                    .findByLeaveCompensatoryStatusName("Pending")
+                    .getLeaveCompensatoryStatusMasterId();
 
             LocalDate today = LocalDate.now();
             int currentYear = today.getYear();
-            int currentMonth = today.getMonthValue();
 
-            if (year == currentYear && month > currentMonth) {
-                throw new IllegalArgumentException("Future month selection not allowed.");
-            }
-
-            LocalDate yearStart = LocalDate.of(year, 1, 1);
-            LocalDate monthStart = LocalDate.of(year, month, 1);
-            LocalDate monthEnd = monthStart.withDayOfMonth(monthStart.lengthOfMonth());
-
-
+            //  Date Range (Year-based only)
+            LocalDate startDate = LocalDate.of(year, 1, 1);
+            LocalDate endDate = (year == currentYear)
+                    ? today
+                    : LocalDate.of(year, 12, 31);
 
             Date cumulativeStart = Date.from(
-                    yearStart.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             Date cumulativeEnd = Date.from(
-                    monthEnd.atTime(23, 59, 59)
+                    endDate.atTime(23, 59, 59)
                             .atZone(ZoneId.systemDefault()).toInstant());
-
-            Date monthOnlyStart = Date.from(
-                    monthStart.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            Date monthOnlyEnd = cumulativeEnd;
 
             long earnedLeaveId = 0;
             long loyaltyLeaveId = 0;
-            long unpaidLeaveId = 0;
 
             List<LeaveTypeMaster> leaveTypes =
                     leaveTypeMasterLocalService.getLeaveTypeMasters(
@@ -115,18 +102,23 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
                 else if ("Loyalty Leave".equalsIgnoreCase(name)) {
                     loyaltyLeaveId = leaveType.getLeaveTypeMasterId();
                 }
-                else if ("Unpaid Leave".equalsIgnoreCase(name)) {
-                    unpaidLeaveId = leaveType.getLeaveTypeMasterId();
-                }
             }
 
             long[] employeeIds;
 
             if (ALL.equalsIgnoreCase(employeeType)) {
 
-                List<EmployeeDetails> allEmployees =
-                        employeeDetailsLocalService.findByIsTerminated(false);
-
+                List<EmployeeDetails> allEmployees = employeeDetailsLocalService
+                        .findByIsTerminated(false)
+                        .stream()
+                        .sorted(Comparator
+                                .comparing(EmployeeDetails::getJoiningDate,
+                                        Comparator.nullsLast(Comparator.naturalOrder()))
+                                .thenComparing(e ->
+                                        (e.getFirstName() + " " + e.getLastName()).toLowerCase()
+                                )
+                        )
+                        .collect(Collectors.toList());
                 employeeIds = allEmployees.stream()
                         .mapToLong(EmployeeDetails::getEmployeeId)
                         .toArray();
@@ -138,19 +130,12 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
             Map<String, Map<String, Double>> leaveBalanceData =
                     new LinkedHashMap<>();
 
-
             for (long employeeId : employeeIds) {
 
                 try {
 
-                    EmployeeDetails employee;
-
-                    try {
-                        employee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
-                    } catch (Exception e) {
-                        log.error("Employee not found for ID: " + employeeId, e);
-                        continue;
-                    }
+                    EmployeeDetails employee =
+                            employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
                     JSONObject employeeJson = JSONFactoryUtil.createJSONObject();
                     employeeJson.put("Employee Code", employee.getEmployeeCode());
@@ -158,153 +143,143 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
                             employee.getFirstName() + " " + employee.getLastName());
                     employeeJson.put("Email", employee.getOfficialEmail());
 
-                    double finalBalance = 0.0;
                     double earnedAllocation = 0.0;
                     double loyaltyAllocation = 0.0;
-
                     double earnedTakenTotal = 0.0;
                     double loyaltyTakenTotal = 0.0;
-                    double earnedTakenMonth = 0.0;
-                    double loyaltyTakenMonth = 0.0;
-                    double unpaidTakenMonth = 0.0;
 
+                    // ===============================
+                    // CURRENT YEAR LOGIC
+                    // ===============================
+                    if (year == currentYear) {
 
+                        try {
+                            LeaveBalance earned =
+                                    leaveBalanceLocalService
+                                            .findByEmployeeIdLeaveTypeMasterIdAndYear(
+                                                    employeeId, earnedLeaveId, year);
 
-
-
-
-                        if (year == currentYear) {
-
-                            try {
-                                LeaveBalance earned =
-                                        leaveBalanceLocalService
-                                                .findByEmployeeIdLeaveTypeMasterIdAndYear(
-                                                        employeeId, earnedLeaveId, year);
-
-                                if (earned != null) {
-                                    earnedAllocation =
-                                            earned.getNoOfUsedLeaves()
-                                                    + earned.getNoOfRemainingLeaves();
-                                }
-
-                            } catch (Exception ignored) {}
-
-                            try {
-                                LeaveBalance loyalty =
-                                        leaveBalanceLocalService
-                                                .findByEmployeeIdLeaveTypeMasterIdAndYear(
-                                                        employeeId, loyaltyLeaveId, year);
-
-                                if (loyalty != null) {
-                                    loyaltyAllocation =
-                                            loyalty.getNoOfUsedLeaves()
-                                                    + loyalty.getNoOfRemainingLeaves();
-                                }
-
-                            } catch (Exception ignored) {}
-
-                        } else {
-
-                            try {
-                                LeaveBalanceHistory earnedHistory =
-                                        leaveBalanceHistoryLocalService
-                                                .findByEmployeeIdLeaveTypeMasterIdAndYear(
-                                                        employeeId, earnedLeaveId, year);
-
-                                if (earnedHistory != null) {
-                                    earnedAllocation =
-                                            earnedHistory.getNoOfUsedLeaves()
-                                                    + earnedHistory.getNoOfRemainingLeaves();
-                                }
-
-                            } catch (Exception ignored) {}
-
-                            try {
-                                LeaveBalanceHistory loyaltyHistory =
-                                        leaveBalanceHistoryLocalService
-                                                .findByEmployeeIdLeaveTypeMasterIdAndYear(
-                                                        employeeId, loyaltyLeaveId, year);
-
-                                if (loyaltyHistory != null) {
-                                    loyaltyAllocation =
-                                            loyaltyHistory.getNoOfUsedLeaves()
-                                                    + loyaltyHistory.getNoOfRemainingLeaves();
-                                }
-
-                            } catch (Exception ignored) {}
-                        }
-
-
-
-                    List<LeaveRequest> leaveRequests =
-                            leaveRequestLocalService.findByEmployeeId(employeeId);
-
-                    for (LeaveRequest leaveRequest : leaveRequests) {
-
-                        if (leaveRequest.getLeaveCompensatoryStatusMasterId() != approvedId
-                                && leaveRequest.getLeaveCompensatoryStatusMasterId() != pendingId) {
-                            continue;
-                        }
-
-                        List<LeaveDayType> leaveDays =
-                                leaveDayTypeLocalService
-                                        .findByLeaveRequestId(leaveRequest.getLeaveRequestId());
-
-                        for (LeaveDayType leaveDay : leaveDays) {
-
-                            if (leaveDay == null || leaveDay.getLeaveDate() == null)
-                                continue;
-
-                            Date leaveDate = leaveDay.getLeaveDate();
-                            double count = leaveDay.isIsHalfDay() ? 0.5 : 1.0;
-
-                            if (!leaveDate.before(cumulativeStart)
-                                    && !leaveDate.after(cumulativeEnd)) {
-
-                                if (leaveRequest.getLeaveTypeMasterId() == earnedLeaveId) {
-                                    earnedTakenTotal += count;
-                                }
-                                else if (leaveRequest.getLeaveTypeMasterId() == loyaltyLeaveId) {
-                                    loyaltyTakenTotal += count;
-                                }
+                            if (earned != null) {
+                                earnedAllocation =
+                                        earned.getNoOfUsedLeaves()
+                                                + earned.getNoOfRemainingLeaves();
                             }
 
-                            if (!leaveDate.before(monthOnlyStart)
-                                    && !leaveDate.after(monthOnlyEnd)) {
+                        } catch (Exception ignored) {}
 
-                                if (leaveRequest.getLeaveTypeMasterId() == earnedLeaveId) {
-                                    earnedTakenMonth += count;
-                                }
-                                else if (leaveRequest.getLeaveTypeMasterId() == loyaltyLeaveId) {
-                                    loyaltyTakenMonth += count;
-                                }
-                                else if (leaveRequest.getLeaveTypeMasterId() == unpaidLeaveId) {
-                                    unpaidTakenMonth += count;
+                        try {
+                            LeaveBalance loyalty =
+                                    leaveBalanceLocalService
+                                            .findByEmployeeIdLeaveTypeMasterIdAndYear(
+                                                    employeeId, loyaltyLeaveId, year);
+
+                            if (loyalty != null) {
+                                loyaltyAllocation =
+                                        loyalty.getNoOfUsedLeaves()
+                                                + loyalty.getNoOfRemainingLeaves();
+                            }
+
+                        } catch (Exception ignored) {}
+
+
+
+                        Set<LeaveRequest> leaveRequests = new HashSet<>();
+
+                        leaveRequests.addAll(
+                                leaveRequestLocalService.findByEmployeeIdAndLeaveTypeId(employeeId, earnedLeaveId)
+                        );
+
+                        leaveRequests.addAll(
+                                leaveRequestLocalService.findByEmployeeIdAndLeaveTypeId(employeeId, loyaltyLeaveId)
+                        );
+
+                        for (LeaveRequest leaveRequest : leaveRequests) {
+
+                            //  Only approved
+                            long statusId = leaveRequest.getLeaveCompensatoryStatusMasterId();
+
+                            if (statusId != approvedId && statusId != pendingId) {
+                                continue;
+                            }
+
+                            List<LeaveDayType> leaveDays =
+                                    leaveDayTypeLocalService
+                                            .findByLeaveRequestId(leaveRequest.getLeaveRequestId());
+
+                            for (LeaveDayType leaveDay : leaveDays) {
+
+                                if (leaveDay == null || leaveDay.getLeaveDate() == null)
+                                    continue;
+
+                                Date leaveDate = leaveDay.getLeaveDate();
+                                double count = leaveDay.isIsHalfDay() ? 0.5 : 1.0;
+
+                                if (!leaveDate.before(cumulativeStart)
+                                        && !leaveDate.after(cumulativeEnd)) {
+
+                                    if (leaveRequest.getLeaveTypeMasterId() == earnedLeaveId) {
+                                        earnedTakenTotal += count;
+
+                                    } else if (leaveRequest.getLeaveTypeMasterId() == loyaltyLeaveId) {
+                                        loyaltyTakenTotal += count;
+                                    }
                                 }
                             }
                         }
                     }
 
+                    // ===============================
+                    //  PAST YEAR LOGIC (NO CALCULATION)
+                    // ===============================
+                    else {
 
+                        try {
+                            LeaveBalanceHistory earnedHistory =
+                                    leaveBalanceHistoryLocalService
+                                            .findByEmployeeIdLeaveTypeMasterIdAndYear(
+                                                    employeeId, earnedLeaveId, year);
 
+                            if (earnedHistory != null) {
+                                earnedAllocation =
+                                        earnedHistory.getNoOfUsedLeaves()
+                                                + earnedHistory.getNoOfRemainingLeaves();
 
-                        double openingBalance = earnedAllocation + loyaltyAllocation;
+                                earnedTakenTotal = earnedHistory.getNoOfUsedLeaves();
+                            }
 
-                        finalBalance =
-                                openingBalance
-                                        - (earnedTakenTotal + loyaltyTakenTotal);
+                        } catch (Exception ignored) {}
 
+                        try {
+                            LeaveBalanceHistory loyaltyHistory =
+                                    leaveBalanceHistoryLocalService
+                                            .findByEmployeeIdLeaveTypeMasterIdAndYear(
+                                                    employeeId, loyaltyLeaveId, year);
 
-                    double leaveTakenMonth =
-                            earnedTakenMonth + loyaltyTakenMonth;
+                            if (loyaltyHistory != null) {
+                                loyaltyAllocation =
+                                        loyaltyHistory.getNoOfUsedLeaves()
+                                                + loyaltyHistory.getNoOfRemainingLeaves();
 
-                    double unpaidMonth =
-                            -unpaidTakenMonth;
+                                loyaltyTakenTotal = loyaltyHistory.getNoOfUsedLeaves();
+                            }
+
+                        } catch (Exception ignored) {}
+                    }
+
+                    // ===============================
+                    //  FINAL CALCULATION
+                    // ===============================
+                    double openingBalance = earnedAllocation + loyaltyAllocation;
+
+                    double finalBalance =
+                            openingBalance - (earnedTakenTotal + loyaltyTakenTotal);
+
+                    double leaveTaken =
+                            earnedTakenTotal + loyaltyTakenTotal;
 
                     Map<String, Double> balanceMap = new LinkedHashMap<>();
                     balanceMap.put("Leave Balance", finalBalance);
-                    balanceMap.put("Leave Taken", leaveTakenMonth);
-                    balanceMap.put("Unpaid Leave", unpaidMonth);
+                    balanceMap.put("Leave Taken", leaveTaken);
 
                     leaveBalanceData.put(employeeJson.toString(), balanceMap);
 
@@ -313,11 +288,11 @@ public class FetchMonthWiseLeaveBalanceResourceCommand implements MVCResourceCom
                 }
             }
 
-            log.info("leave balance " + leaveBalanceData);
-            MonthWiseLeaveBalanceExcelUtil.exportMonthWiseLeaveBalance(leaveBalanceData,response);
+            MonthWiseLeaveBalanceExcelUtil.exportMonthWiseLeaveBalance(
+                    leaveBalanceData, response,year);
 
         } catch (Exception e) {
-            log.error("Exception in Month Wise Leave Balance Export", e);
+            log.error("Exception in Leave Balance Report", e);
         }
 
         return false;

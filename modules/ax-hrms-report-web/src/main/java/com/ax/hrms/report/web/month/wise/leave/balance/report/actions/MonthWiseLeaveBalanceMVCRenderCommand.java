@@ -46,7 +46,7 @@ public class MonthWiseLeaveBalanceMVCRenderCommand implements MVCRenderCommand {
         List<EmployeeDetails> employeeList = employeeDetailsLocalService.findByIsTerminated(false);
         renderRequest.setAttribute("employeeList", employeeList);
         int currentYear = Year.now().getValue();
-        int currentMonth = LocalDate.now().getMonthValue();
+
 
         List<Integer> yearList = Arrays.asList(
                 currentYear,
@@ -56,7 +56,7 @@ public class MonthWiseLeaveBalanceMVCRenderCommand implements MVCRenderCommand {
 
         renderRequest.setAttribute("yearList", yearList);
         renderRequest.setAttribute("currentYear", currentYear);
-        renderRequest.setAttribute("currentMonth", currentMonth);
+
         return "/jsp/monthwiseleavebalance/monthwiseleaveBalanceExport.jsp";
     }
 
