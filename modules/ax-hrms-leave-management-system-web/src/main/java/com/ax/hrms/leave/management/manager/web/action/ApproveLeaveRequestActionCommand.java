@@ -149,8 +149,13 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
             e.printStackTrace();
             SessionErrors.add(actionRequest, "leave-error");
         }
-        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
-
+        //actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+        long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+		if(employeeId>0) {
+			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
+		} else {
+			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		}
 
     }
 }
