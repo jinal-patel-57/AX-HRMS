@@ -1,6 +1,9 @@
 <%@ include file="/init.jsp" %>
 
-<portlet:renderURL var="homeUrl"/>
+<portlet:renderURL var="homeUrl">
+	<portlet:param name="mvcRenderCommandName" value="/"/>
+	<portlet:param name="employeeId" value="${employeeId}"/>
+</portlet:renderURL>
 
 
 <div class="card">

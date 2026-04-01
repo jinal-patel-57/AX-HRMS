@@ -185,10 +185,18 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
 
                 leaveRequestWebUtil.sendNotificationToEmployee(subject, employee);
             }
-        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            //actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
         } catch (Exception ex) {
             log.error("Failed to send email/notification for leaveId=", ex);
         }
-
+        long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+        log.info("employeeId in the end is :: " + employeeId);
+		if(employeeId>0) {
+			EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
+			log.info("employeeId -- " + employeeDetails.getFirstName() + " " + employeeDetails.getLastName());
+			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
+		} else {
+			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		}
     }
 }

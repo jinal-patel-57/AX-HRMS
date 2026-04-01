@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -60,7 +61,8 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
     @Reference AxHrmsManagerLeaveRequestWebUtil axHrmsManagerLeaveRequestWebUtil;
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-        System.out.println("ListEmployeeLeaveRequestMVCRenderCommand render");
+        log.info("ListEmployeeLeaveRequestMVCRenderCommand render");
+        
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long lrUserId = themeDisplay.getUserId();
         List<LeaveCompensatoryStatusMaster> statusList =
@@ -85,16 +87,26 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         } else {
             managerEmployeeId = Long.parseLong(obj.toString());
         }
+        
+        long employeeId = ParamUtil.getLong(renderRequest, "employeeId");
 
         log.info("Manager Employee ID resolved = " + managerEmployeeId);
 
 
         List<EmployeeDetails> employeesUnderManager =
                 employeeDetailsLocalService.findByManagerId(managerEmployeeId);
-        List<Long> employeeIds = employeesUnderManager.stream()
-                .map(EmployeeDetails::getEmployeeId)
-                .toList();
-
+    	List<Long> employeeIds;
+        if(employeeId>0) {
+        	employeeIds = List.of(employeeId);
+        	renderRequest.setAttribute("employeeId", employeeId);
+        } else {
+        	employeeIds = employeesUnderManager.stream()
+        			.map(EmployeeDetails::getEmployeeId)
+        			.toList();
+        }
+        
+        renderRequest.setAttribute("employeeList", employeesUnderManager);
+        
         log.info("Employees under manager: " + employeesUnderManager.size());
         log.info("Employee List: " + employeesUnderManager);
 
@@ -161,4 +173,5 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
 
         return "/jsp/ax-hrms-leave-management-manager/listLeaveRequest.jsp";
     }
+    
 }
