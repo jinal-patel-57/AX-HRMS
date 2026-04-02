@@ -181,10 +181,8 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
                     log.info("inside the reject ");
                     subject = notificationTemplateConfiguration.leaveRejectedNotificationToEmployee();
                 } else {
-
                     log.info("inside the cancel ");
                     subject = notificationTemplateConfiguration.leaveCancelledNotificationToEmployee();
-
                 }
 
                 leaveRequestWebUtil.sendNotificationToEmployee(subject, employee);
@@ -197,7 +195,7 @@ public class RejectCancelLeaveRequestMVCActionCommand extends BaseMVCActionComma
         log.info("employeeId in the end is :: " + employeeId);
         PortletURL redirectURL = PortletURLFactoryUtil.create(
 		        actionRequest,
-		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_MANAGER_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
 		        themeDisplay.getPlid(),
 		        PortletRequest.RENDER_PHASE
 		);

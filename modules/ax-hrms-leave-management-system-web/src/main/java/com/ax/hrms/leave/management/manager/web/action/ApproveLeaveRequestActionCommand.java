@@ -157,7 +157,7 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
         long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
         PortletURL redirectURL = PortletURLFactoryUtil.create(
 		        actionRequest,
-		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_MANAGER_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
 		        themeDisplay.getPlid(),
 		        PortletRequest.RENDER_PHASE
 		);

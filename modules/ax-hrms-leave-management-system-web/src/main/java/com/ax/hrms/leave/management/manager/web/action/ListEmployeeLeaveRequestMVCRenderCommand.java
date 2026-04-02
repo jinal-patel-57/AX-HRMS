@@ -98,6 +98,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
                 employeeDetailsLocalService.findByManagerId(managerEmployeeId);
     	List<Long> employeeIds;
         if(employeeId>0) {
+        	log.info("Filtering for specific employeeId: " + employeeId);
         	employeeIds = List.of(employeeId);
         	renderRequest.setAttribute("employeeId", employeeId);
         } else {
