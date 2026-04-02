@@ -17,6 +17,7 @@ import com.ax.hrms.service.LeaveDayTypeLocalService;
 import com.ax.hrms.service.LeaveRequestLocalService;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -136,7 +137,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
                 leaveRequestDtoList.add(leaveRequestDto);
 
             } catch (PortalException e) {
-                throw new RuntimeException(e);
+                log.error("Error fetching leave request details for ID: " + lr.getLeaveRequestId(), e);
             }
         }
 
@@ -153,7 +154,6 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
                 CANCELLED);
         log.info("Total leave requests found for team = " + managerLeaveList.size());
         log.info(" leave requests found for team = " + managerLeaveList);
-        log.info("Total leave requests found = " + finalList.size());
 
         EmployeeDetails currentEmployee = null;
         try {
@@ -161,15 +161,33 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
             renderRequest.setAttribute("currentEmployeeId", currentEmployee.getEmployeeId());
         } catch (NoSuchEmployeeDetailsException e) {
             renderRequest.setAttribute("currentEmployeeId", 0);
-            throw new RuntimeException(e);
+            log.error("No employee details found for LR User ID: " + themeDisplay.getUserId(), e);
         }
 
 
+        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, 20);
+        int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
+        
+        int total = leaveRequestDtoList.size();
+        int totalPages = (total + deltaValue - 1) / deltaValue;
+        if (totalPages == 0) totalPages = 1;
+        if (curValue > totalPages) curValue = totalPages;
+        if (curValue < 1) curValue = 1;
+
+        int start = (curValue - 1) * deltaValue;
+        int end = Math.min(start + deltaValue, total);
+
+        List<LeaveRequestDto> pagedList = total > 0 ? leaveRequestDtoList.subList(start, end) : leaveRequestDtoList;
+        renderRequest.setAttribute("managerLeaves", pagedList);
+        renderRequest.setAttribute("totalManagerLeaves", total);
+        renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);
+        
+        
         renderRequest.setAttribute(APPROVED_ID, approvedId);
         renderRequest.setAttribute(REJECTED_ID, rejectedId);
         renderRequest.setAttribute(CANCELLED_ID, cancelId);
         // Send data to JSP
-        renderRequest.setAttribute("managerLeaves", leaveRequestDtoList);
+        //renderRequest.setAttribute("managerLeaves", leaveRequestDtoList);
 
         return "/jsp/ax-hrms-leave-management-manager/listLeaveRequest.jsp";
     }

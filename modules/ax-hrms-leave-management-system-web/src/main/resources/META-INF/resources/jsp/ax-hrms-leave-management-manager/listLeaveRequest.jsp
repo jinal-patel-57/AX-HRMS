@@ -22,11 +22,18 @@
     </div>
 
     <div class="card-body">
-
+		<%
+		    javax.portlet.PortletURL iteratorURL = renderResponse.createRenderURL();
+		    iteratorURL.setParameter("mvcRenderCommandName", "/");
+		    long empId = com.liferay.portal.kernel.util.ParamUtil.getLong(renderRequest, "employeeId");
+		    if (empId > 0) {
+		        iteratorURL.setParameter("employeeId", String.valueOf(empId));
+		    }
+		%>
         <liferay-ui:search-container
-                total="${fn:length(managerLeaves)}"
-                delta="20"
-                emptyResultsMessage="No leave requests found">
+                total="${totalManagerLeaves}"
+                delta="${delta}"
+                emptyResultsMessage="No leave requests found" iteratorURL="<%= iteratorURL %>">
 
             <liferay-ui:search-container-results results="${managerLeaves}" />
 

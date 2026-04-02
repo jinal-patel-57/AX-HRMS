@@ -15,6 +15,7 @@ import com.ax.hrms.service.LeaveRequestLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -26,6 +27,9 @@ import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+
 import java.io.IOException;
 
 @Component(
@@ -151,11 +155,21 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
         }
         //actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
         long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
-		if(employeeId>0) {
-			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
-		} else {
-			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+        PortletURL redirectURL = PortletURLFactoryUtil.create(
+		        actionRequest,
+		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+		        themeDisplay.getPlid(),
+		        PortletRequest.RENDER_PHASE
+		);
+
+		redirectURL.setParameter("mvcRenderCommandName", "/");
+
+		if (employeeId > 0) {
+		    redirectURL.setParameter("employeeId", String.valueOf(employeeId));
 		}
+
+		actionResponse.sendRedirect(redirectURL.toString());
+		
 
     }
 }

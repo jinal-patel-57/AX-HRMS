@@ -165,12 +165,20 @@ public class ApproveLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 		}
 		
 		long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
-		if(employeeId>0) {
-			actionResponse.setRenderParameter("employeeId", String.valueOf(employeeId));
-		} else {
-			actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+		PortletURL redirectURL = PortletURLFactoryUtil.create(
+		        actionRequest,
+		        AxHrmsLeaveManagementSystemWebPortletKeys.AXHRMS_HR_LEAVE_MANAGEMENT_SYSTEM_WEB_PORTLET,
+		        themeDisplay.getPlid(),
+		        PortletRequest.RENDER_PHASE
+		);
+
+		redirectURL.setParameter("mvcRenderCommandName", "/");
+
+		if (employeeId > 0) {
+		    redirectURL.setParameter("employeeId", String.valueOf(employeeId));
 		}
-		
+
+		actionResponse.sendRedirect(redirectURL.toString());
 		
 	}
 

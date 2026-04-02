@@ -81,6 +81,7 @@ public class ListLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse)  {
 		
 		long employeeId = ParamUtil.getLong(renderRequest, "employeeId");
+		log.info("ListLeaveRequestMVCRenderCommand >>> Render >>> employeeId : " + employeeId);
         renderRequest.setAttribute("employeeList", getActiveEmployees());
 		
 		int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, 1);
