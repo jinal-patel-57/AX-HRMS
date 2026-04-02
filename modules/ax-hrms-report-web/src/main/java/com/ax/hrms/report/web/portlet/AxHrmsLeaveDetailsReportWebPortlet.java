@@ -14,7 +14,7 @@ import javax.portlet.Portlet;
                 "com.liferay.portlet.display-category=category.sample",
                 "com.liferay.portlet.header-portlet-css=/css/main.css",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=AkHrmsLeaveReportWeb",
+                "javax.portlet.display-name=AkHrmsLeaveDetailsReportWeb",
                 "com.liferay.portlet.footer-portlet-javascript=/js/main.js",
                 "javax.portlet.init-param.template-path=/",
                 "javax.portlet.init-param.view-template=/jsp/leavereport/leaveReport.jsp",
@@ -24,5 +24,5 @@ import javax.portlet.Portlet;
         },
         service = Portlet.class
 )
-public class AxHrmsLeaveReportWebPortlet extends MVCPortlet {
+public class AxHrmsLeaveDetailsReportWebPortlet extends MVCPortlet {
 }
