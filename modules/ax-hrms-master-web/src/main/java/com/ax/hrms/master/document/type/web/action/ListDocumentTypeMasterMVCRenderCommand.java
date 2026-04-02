@@ -49,7 +49,7 @@ public class ListDocumentTypeMasterMVCRenderCommand implements MVCRenderCommand 
 				renderRequest.setAttribute(AxDocumentTypeMasterWebPortletConstants.DOCUMENT_TYPE_LIST, documentTypeList);
 
 				int curValue = ParamUtil.getInteger(renderRequest,SearchContainer.DEFAULT_CUR_PARAM,1);
-				int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+				int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 				
 				int totalOfDocumentTypeMaster = documentTypeMasterLocalService.getDocumentTypeMastersCount();
 			    int totalPageContainer = (totalOfDocumentTypeMaster + deltaValue - 1) / deltaValue;

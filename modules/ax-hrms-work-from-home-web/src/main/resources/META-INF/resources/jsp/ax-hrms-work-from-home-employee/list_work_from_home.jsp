@@ -12,7 +12,7 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-end">
-        <a href="${addWFHForm}" class="btn btn-primary btn-sm">Add Work From Home</a>
+        <a href="${addWFHForm}" class="btn btn-primary btn-sm">Request Work From Home</a>
     </div>
 
     <div class="card-body">
@@ -32,13 +32,20 @@
                     keyProperty="workFromHomeRequestId">
                 <%-- <liferay-ui:search-container-column-text name="Status" value="${wfh.status}" /> --%>
 
-                                <liferay-ui:search-container-column-text name="Start Date">
+                       <%--         <liferay-ui:search-container-column-text name="Start Date">
                                     <fmt:formatDate value="${wfh.startDate}" pattern="dd-MMM-yyyy" />
                                 </liferay-ui:search-container-column-text>
 
                                 <liferay-ui:search-container-column-text name="End Date">
                                     <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
-                                </liferay-ui:search-container-column-text>
+                                </liferay-ui:search-container-column-text> --%>
+
+                    <liferay-ui:search-container-column-text name="WFH Period">
+                        <fmt:formatDate value="${wfh.startDate}" pattern="dd-MMM-yyyy" />
+                        to
+                        <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
+                    </liferay-ui:search-container-column-text>
+
                  <liferay-ui:search-container-column-text name="No. of Days" value="${wfh.noOfDays}" />
             <%--   <liferay-ui:search-container-column-text
                         name="Reason"

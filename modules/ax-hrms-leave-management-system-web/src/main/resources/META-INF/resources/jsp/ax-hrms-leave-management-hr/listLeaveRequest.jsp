@@ -46,13 +46,13 @@
                     <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
                         <liferay-ui:search-container-column-text name="Employee Name"
                                                                  value="${leaveRequest.employeeName}"/>
-                        <liferay-ui:search-container-column-text name="Leave Type Name"
+                        <liferay-ui:search-container-column-text name="Leave Type"
                                                                  value="${leaveRequest.leaveType}"/>
-                        <liferay-ui:search-container-column-text name="Start Date of Leave"
+                        <liferay-ui:search-container-column-text name="Start Date"
                                                                  value="${leaveRequest.startDateOfLeaveRequest}"/>
-                        <liferay-ui:search-container-column-text name="End Date of Leave"
+                        <liferay-ui:search-container-column-text name="End Date"
                                                                  value="${leaveRequest.endDateOfLeaveRequest}"/>
-                        <liferay-ui:search-container-column-text name="Date of Request Leave"
+                        <liferay-ui:search-container-column-text name="Date of Request"
                                                                  value="${leaveRequest.dateOfRequestedLeave}"/>
                       <liferay-ui:search-container-column-text name="No. of days"
                                                                               value="${ leaveRequest.totalNoOfDays}"></liferay-ui:search-container-column-text>
@@ -129,8 +129,20 @@
                                                <i class="icon-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                      
-                                     
+                                            <li>
+                                                <a href="${viewLeaveRequestURL}"
+                                                   class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
+                                                        key="view"/></a>
+                                            </li>
+                                            <li>
+                                              <a href="javascript:void(0);"
+                                                 class="dropdown-item"
+                                                 onclick="openActionModal('${cancelLeaveRequestURL}', 'CANCEL')">
+                                                  <i class="icon-remove"></i>
+                                                  <liferay-ui:message key="cancel"/>
+                                              </a>
+
+                                            </li>
                                          
                                             <li><a href="javascript:void(0);"
                                                    class="dropdown-item"
@@ -150,20 +162,8 @@
                                                </a>
 
                                             </li>
-                                            <li>
-                                              <a href="javascript:void(0);"
-                                                 class="dropdown-item"
-                                                 onclick="openActionModal('${cancelLeaveRequestURL}', 'CANCEL')">
-                                                  <i class="icon-remove"></i>
-                                                  <liferay-ui:message key="cancel"/>
-                                              </a>
 
-                                            </li>
-                                            <li>
-                                                <a href="${viewLeaveRequestURL}"
-                                                   class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
-                                                        key="view"/></a>
-                                            </li>
+
                                         </ul>
                                     </div>
 

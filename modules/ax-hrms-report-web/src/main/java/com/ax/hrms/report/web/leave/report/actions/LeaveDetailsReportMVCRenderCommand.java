@@ -23,9 +23,9 @@ import static com.ax.hrms.report.web.constants.AkHrmsLeaveBalanceReportWebPortle
         },
         service = MVCRenderCommand.class
 )
-public class LeaveReportMVCRenderCommand implements MVCRenderCommand {
+public class LeaveDetailsReportMVCRenderCommand implements MVCRenderCommand {
 
-    private static final Log log = LogFactoryUtil.getLog(LeaveReportMVCRenderCommand.class);
+    private static final Log log = LogFactoryUtil.getLog(LeaveDetailsReportMVCRenderCommand.class);
 
     @Reference
     EmployeeDetailsLocalService employeeDetailsLocalService;

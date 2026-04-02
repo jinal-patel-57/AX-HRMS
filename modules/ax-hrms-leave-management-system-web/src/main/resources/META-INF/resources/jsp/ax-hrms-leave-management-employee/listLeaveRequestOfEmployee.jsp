@@ -85,6 +85,9 @@
                             <i class="icon-ellipsis-vertical"></i>
                         </button>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a href="${viewLeaveRequestDetail }" class="dropdown-item"><i class="icon-eye-open"></i> View</a>
+                            </li>
                             <c:if test="${leaveRequest.getLeaveRequestStatus() == 'Pending'}">
                                <li>
                                    <a class="dropdown-item cancel-leave-btn"
@@ -94,9 +97,7 @@
                                    </a>
                                </li>
                             </c:if>
-                            <li>
-                                <a href="${viewLeaveRequestDetail }" class="dropdown-item"><i class="icon-eye-open"></i> View</a>
-                            </li>
+
                         </ul>
                     </div>
 

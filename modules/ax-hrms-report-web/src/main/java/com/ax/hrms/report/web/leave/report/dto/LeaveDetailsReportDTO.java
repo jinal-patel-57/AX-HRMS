@@ -1,6 +1,6 @@
 package com.ax.hrms.report.web.leave.report.dto;
 
-public class LeaveReportDTO {
+public class LeaveDetailsReportDTO {
 
     private String employeeCode;
     private String employeeName;

@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -25,37 +26,31 @@ import org.osgi.service.component.annotations.Reference;
 
 
 /**
+ * Author: Himanshu Jha
+ */
 
-Author: Himanshu Jha
-*/
-
-@Component(
-	    immediate = true,
-	    property = {
-	        "javax.portlet.name="+ AxPolicyTypeMasterWebPortletKeys.AXHRMS_POLICYTYPEMASTER_WEB_PORTLET_KEYS,
-	        "mvc.command.name=/addEditPolicyType"
-	    },
-	    service = MVCActionCommand.class
-)
+@Component(immediate = true, property = {"javax.portlet.name=" + AxPolicyTypeMasterWebPortletKeys.AXHRMS_POLICYTYPEMASTER_WEB_PORTLET_KEYS, "mvc.command.name=/addEditPolicyType"}, service = MVCActionCommand.class)
 
 public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
-		
-	@Reference
-	PolicyTypeMasterLocalService policyTypeMasterLocalService;
+
+    @Reference
+    PolicyTypeMasterLocalService policyTypeMasterLocalService;
 
 
-	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
-		 String policyTypeName = ParamUtil.getString(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_NAME, null);
-		 long policyTypeMasterId = ParamUtil.getLong(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_MASTER_ID, AxPolicyTypeMasterWebPortletConstants.DEFAULT_LONG_VALUE);
+    @Override
+    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
+        String policyTypeName = ParamUtil.getString(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_NAME, null);
+        long policyTypeMasterId = ParamUtil.getLong(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_MASTER_ID, AxPolicyTypeMasterWebPortletConstants.DEFAULT_LONG_VALUE);
+        ThemeDisplay themeDisplay;
+        themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         if (policyTypeMasterId <= 0) {
             if (isLevelMasterAvailable(policyTypeName, 0)) {
                 PolicyTypeMaster policyTypeMaster = policyTypeMasterLocalService.createPolicyTypeMaster(CounterLocalServiceUtil.increment(PolicyTypeMaster.class.getName()));
 
-                
-                ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+                themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
                 policyTypeMaster.setPolicyType(policyTypeName);
                 policyTypeMaster.setCompanyId(themeDisplay.getCompanyId());
                 policyTypeMaster.setCreatedBy(themeDisplay.getUserId());
@@ -64,44 +59,44 @@ public class AddEditPolicyTypeMVCActionCommand extends BaseMVCActionCommand {
                 policyTypeMaster.setModifiedDate(new Date());
 
                 policyTypeMasterLocalService.addPolicyTypeMaster(policyTypeMaster);
-                
-                SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_ADDED);
-				}
-				else {
-					SessionErrors.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_EXISTS);
-					super.hideDefaultErrorMessage(actionRequest);
 
-					actionResponse.setRenderParameter(AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_PATH, AxPolicyTypeMasterWebPortletConstants.FORM_POLICY_TYPE_MASTER);
-				}
-		 }
-		 
-        else {
+                SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_ADDED);
+            } else {
+                SessionErrors.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_EXISTS);
+                super.hideDefaultErrorMessage(actionRequest);
+
+                actionResponse.setRenderParameter(AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_PATH, AxPolicyTypeMasterWebPortletConstants.FORM_POLICY_TYPE_MASTER);
+            }
+        } else {
             if (isLevelMasterAvailable(policyTypeName, policyTypeMasterId) && isLevelNameValid(policyTypeName)) {
 
                 PolicyTypeMaster policyTypeMaster = policyTypeMasterLocalService.getPolicyTypeMaster(policyTypeMasterId);
 
-            	policyTypeMaster.setPolicyType(policyTypeName);
+                policyTypeMaster.setPolicyType(policyTypeName);
 
-                ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+                themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
                 policyTypeMaster.setModifiedBy(themeDisplay.getUserId());
                 policyTypeMasterLocalService.updatePolicyTypeMaster(policyTypeMaster);
-				  
-		        SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_UPDATED);
-			}
-			else {
-				SessionErrors.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_EXISTS);
-				super.hideDefaultErrorMessage(actionRequest);
-				
-				actionResponse.setRenderParameter(AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_PATH, AxPolicyTypeMasterWebPortletConstants.FORM_POLICY_TYPE_MASTER);
-			}
+
+                SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_UPDATED);
+
+            } else {
+                SessionErrors.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_EXISTS);
+                super.hideDefaultErrorMessage(actionRequest);
+
+                actionResponse.setRenderParameter(AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_PATH, AxPolicyTypeMasterWebPortletConstants.FORM_POLICY_TYPE_MASTER);
+            }
         }
+
+        actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
     }
 
-    private boolean isLevelMasterAvailable(String policyTypeName, long id) { 
+    private boolean isLevelMasterAvailable(String policyTypeName, long id) {
         try {
-        	
-        	PolicyTypeMaster name = policyTypeMasterLocalService.findByPolicyType(policyTypeName);
-        	 return (id>0 && name.getPolicyTypeMasterID() == id);
+
+            PolicyTypeMaster name = policyTypeMasterLocalService.findByPolicyType(policyTypeName);
+            return (id > 0 && name.getPolicyTypeMasterID() == id);
         } catch (NoSuchPolicyTypeMasterException e) {
             return true;
         }

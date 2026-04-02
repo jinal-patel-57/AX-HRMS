@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -39,16 +42,19 @@ public class DeletePolicyTypeMasterMVCActionCommand extends BaseMVCActionCommand
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
 		Long policyTypeMasterId = ParamUtil.getLong(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICYTYPE_MASTER_ID);
-		
-		
-		try {
+		System.out.println("policyTypeMasterId :: "+policyTypeMasterId);
+        ThemeDisplay themeDisplay;
+        themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        try {
 			
 			policyTypeMasterLocalService.deletePolicyTypeMaster(policyTypeMasterId);
 			
 			SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_DELETED);
 
-			
-		}catch (Exception e) {
+            actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
+        }catch (Exception e) {
 			SessionMessages.add(actionRequest, AxPolicyTypeMasterWebPortletConstants.POLICY_TYPE_DELETED_ERROR);
 			log.error(e.getMessage());
 		}

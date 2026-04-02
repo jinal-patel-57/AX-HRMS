@@ -45,7 +45,7 @@
 			</portlet:renderURL>
 	        
 	        <portlet:actionURL var="deletePolicyTypeUrl" name="/deletePolicyType">
-				<portlet:param name="policyTypeMasterId" value="POLICYTYPE_MASTER_ID" />
+				<portlet:param name="policyTypeMasterId" value="${policyTypeMaster.policyTypeMasterID}" />
 			</portlet:actionURL>
             
             <div class="dropdown ">
@@ -62,8 +62,8 @@
 						key="edit-button" /></a>
 						</li>
 						<li>
-						<a class="dropdown-item"
-					onclick="deletePolicyTypeByMasterId('${policyTypeMaster.policyTypeMasterID}')"><i class="icon-trash"></i> <liferay-ui:message
+						<a class="dropdown-item" href="${deletePolicyTypeUrl}"
+					><i class="icon-trash"></i> <liferay-ui:message
 						key="delete-button" />
 						</a></li>
 					</ul>
@@ -89,14 +89,7 @@
 
 <script>
 
-function deletePolicyTypeByMasterId(policyTypeMasterID) {		
-    var config = {
-        namespace: '<portlet:namespace />',
-        deleteUrl: '${deletePolicyTypeUrl}',
-        policyTypeMasterId: policyTypeMasterID
-    };
-    AxPolicyTypeMasterWebPortlet.setConfigsForDeletePolicyTypeMaster(config);
-}
+
 
 function goBack() {
     window.history.back();

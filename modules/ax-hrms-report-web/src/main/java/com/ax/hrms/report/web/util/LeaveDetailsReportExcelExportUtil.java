@@ -1,6 +1,6 @@
 package com.ax.hrms.report.web.util;
 
-import com.ax.hrms.report.web.leave.report.dto.LeaveReportDTO;
+import com.ax.hrms.report.web.leave.report.dto.LeaveDetailsReportDTO;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -8,12 +8,12 @@ import javax.portlet.ResourceResponse;
 import java.io.OutputStream;
 import java.util.List;
 
-public class LeaveReportExcelExportUtil {
-    public static void exportLeaveReport(List<LeaveReportDTO> data, ResourceResponse response, String fileName) throws Exception {
+public class LeaveDetailsReportExcelExportUtil {
+    public static void exportLeaveReport(List<LeaveDetailsReportDTO> data, ResourceResponse response, String fileName) throws Exception {
 
         try (Workbook workbook = new XSSFWorkbook()) {
 
-            Sheet sheet = workbook.createSheet("Leave Report");
+            Sheet sheet = workbook.createSheet("Leave Details Report");
 
             // Header Style
             CellStyle headerStyle = workbook.createCellStyle();
@@ -35,7 +35,7 @@ public class LeaveReportExcelExportUtil {
             // Data Rows
             int rowIdx = 1;
 
-            for (LeaveReportDTO dto : data) {
+            for (LeaveDetailsReportDTO dto : data) {
 
                 Row row = sheet.createRow(rowIdx++);
 

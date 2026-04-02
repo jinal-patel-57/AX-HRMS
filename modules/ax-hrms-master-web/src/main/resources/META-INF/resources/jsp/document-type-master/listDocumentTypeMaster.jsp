@@ -46,7 +46,7 @@
 
 <liferay-portlet:renderURL varImpl="iteratorURL" />
 	<liferay-ui:search-container total="${totalDocumentTypeMaster }"
-		delta="20" emptyResultsMessage="no-document-type-found-error-message"
+		delta="${delta}" emptyResultsMessage="no-document-type-found-error-message"
 		iteratorURL="${iteratorURL}">
 
 		<liferay-ui:search-container-results results="${documentTypeList }" />
@@ -99,7 +99,7 @@
 				
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator markupView="lexicon" />
+		<liferay-ui:search-iterator markupView="lexicon" paginate="true"/>
 	</liferay-ui:search-container>
 
 </div>
