@@ -2282,7 +2282,7 @@ function setConfigsForExperienceValidation(config) {
 
                [namespace + "bankBranch"]: {
                    maxlength: 75,
-                   onlyLettersAndSpaces: true
+                   onlyLettersAndSpacesAndNumber: true
                },
                 [namespace + "ifscCode"]: {
                     maxlength: 75,
@@ -2312,12 +2312,12 @@ function setConfigsForExperienceValidation(config) {
 
                 [namespace + "bankBranch"]: {
                     maxlength: "Bank branch should not exceed 75 characters.",
-                    onlyLettersAndSpaces: "Bank branch should contain only alphabets and spaces."
+                    onlyLettersAndSpacesAndNumber: "Bank branch should contain only letters, numbers, and spaces."
                 },
 
                 [namespace + "ifscCode"]: {
                     maxlength: "IFSC code should not exceed 75 characters.",
-                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0BBBBBB)"
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0123456)"
                 }
             }
         });
@@ -2326,9 +2326,15 @@ function setConfigsForExperienceValidation(config) {
             return /^[0-9]*$/.test(value);
         }, "Account number should not contain alphabet characters, underscores, special characters, or whitespaces.");
 
+        $.validator.addMethod("onlyLettersAndSpacesAndNumber", function(value, element) {
+            return this.optional(element) || /^[A-Za-z0-9\s]+$/.test(value);
+        }, "Please enter only letters, numbers, and spaces.");
+
+
 		$.validator.addMethod("ifscCodeValidation", function (value, element) {
-      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
-    	}, "Please enter a valid IFSC code (Format: AAAA0BBBBBB)");
+//      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value);
+    return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase());
+    	}, "Please enter a valid IFSC code (Format: AAAA0123456)");
     	 if (!$.validator.methods.onlyLettersAndSpaces) {
              $.validator.addMethod(
                  "onlyLettersAndSpaces",
@@ -2349,7 +2355,7 @@ function setConfigsForExperienceValidation(config) {
             const paramName = "_com_ax_hrms_employee_onboarding_web_AxHrmsEmployeeOnboardingHrWebPortlet_ExperienceCurIndex";
 			if (url.searchParams.has(paramName)) {
 			    url.searchParams.delete(paramName);
-			
+
 			    window.history.replaceState({}, document.title, url.toString());
 			}
             const form5 = $('#bankAccountStepperForm');

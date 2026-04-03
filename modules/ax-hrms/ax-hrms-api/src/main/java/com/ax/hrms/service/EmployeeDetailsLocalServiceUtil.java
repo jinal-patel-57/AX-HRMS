@@ -270,6 +270,10 @@ public class EmployeeDetailsLocalServiceUtil {
 		return getService().findByManagerId(managerId);
 	}
 
+	public static List<Long> findEmployeeByFirstAndLastName(String nameStr) {
+		return getService().findEmployeeByFirstAndLastName(nameStr);
+	}
+
 	public static List<Object[]> findEmployeeByName(
 		String fName, String lName) {
 

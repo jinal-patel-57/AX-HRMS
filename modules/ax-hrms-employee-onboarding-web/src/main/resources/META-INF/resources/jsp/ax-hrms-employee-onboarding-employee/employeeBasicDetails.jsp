@@ -624,7 +624,8 @@
     </c:forEach>
     $('#department').val(values).trigger('change');
 
-   var aadhaarCardId = ${employeeDetail.aadhaarCardFileId};
+  // var aadhaarCardId = ${employeeDetail.aadhaarCardFileId};
+var aadhaarCardId = ${empty employeeDetail.aadhaarCardFileId ? 0 : employeeDetail.aadhaarCardFileId};
    var panCardId = ${employeeDetail.panCardFileId};
     var isHrStatus = ${isHrStatus ? 'true' : 'false'};
 

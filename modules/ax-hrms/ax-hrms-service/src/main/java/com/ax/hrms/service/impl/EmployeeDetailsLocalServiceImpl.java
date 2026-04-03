@@ -66,6 +66,9 @@ public class EmployeeDetailsLocalServiceImpl extends EmployeeDetailsLocalService
 	public List<Long> getEmployeeIdByNameString(String nameStr){
 		return employeeDetailsFinder.getEmployeeIdByNameString(nameStr);
 	}
+    public List<Long> findEmployeeByFirstAndLastName(String nameStr){
+        return employeeDetailsFinder.findEmployeeByFirstAndLastName(nameStr);
+    }
 	public List<Long> getEmployeeIdByDepartmentId(long departmentId){
 		return employeeDetailsFinder.getEmployeeIdByDepartmentId(departmentId);
 	}

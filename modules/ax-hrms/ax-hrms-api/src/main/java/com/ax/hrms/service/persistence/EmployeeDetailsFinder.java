@@ -20,6 +20,8 @@ public interface EmployeeDetailsFinder {
 
 	public java.util.List<Long> getEmployeeIdByDepartmentId(long departmentId);
 
+	public java.util.List<Long> findEmployeeByFirstAndLastName(String nameStr);
+
 	public java.util.List<Long> getEmployeeIdByDesignationId(
 		long designationId);
 

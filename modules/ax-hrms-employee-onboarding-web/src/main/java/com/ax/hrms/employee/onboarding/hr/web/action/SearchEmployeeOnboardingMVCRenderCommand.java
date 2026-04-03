@@ -81,7 +81,7 @@ public class SearchEmployeeOnboardingMVCRenderCommand implements MVCRenderComman
 
                 List<Long> employeeIds =
                         employeeDetailsLocalService
-                                .getEmployeeIdByNameString("%" + keyword + "%");
+                                .findEmployeeByFirstAndLastName("%" + keyword + "%");
 
                 if (!employeeIds.isEmpty()) {
 

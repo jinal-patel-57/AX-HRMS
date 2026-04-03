@@ -2007,7 +2007,7 @@ initializeValidation()
 
                [namespace + "bankBranch"]: {
                    maxlength: 75,
-                   onlyLettersAndSpaces: true
+                   onlyLettersAndSpacesAndNumber: true
                },
                 [namespace + "ifscCode"]: {
                     maxlength: 75,
@@ -2037,12 +2037,12 @@ initializeValidation()
 
                [namespace + "bankBranch"]: {
                    maxlength: "Bank branch should not exceed 75 characters.",
-                   onlyLettersAndSpaces: "Bank branch should contain only alphabets and spaces."
+                   onlyLettersAndSpacesAndNumber: "Bank branch should contain only letters, numbers, and spaces."
                },
 
                 [namespace + "ifscCode"]: {
                     maxlength: "IFSC code should not exceed 75 characters.",
-                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AXIS0ABCD12)"
+                    ifscCodeValidation: "Please enter a valid IFSC code (Format: AAAA0123456)"
                 }
             }
         });
@@ -2052,11 +2052,16 @@ initializeValidation()
         $.validator.addMethod("accountNumberValidation", function (value, element) {
             return /^[0-9]*$/.test(value);
         }, "Account number should not contain alphabet characters, underscores, special characters, or whitespaces.");
-        
-        $.validator.addMethod("ifscCodeValidation", function (value, element) {
-      		return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase());
 
-    	}, "Please enter a valid IFSC code (Format: AXIS0ABCD12)");
+        $.validator.addMethod("onlyLettersAndSpacesAndNumber", function(value, element) {
+            return this.optional(element) || /^[A-Za-z0-9\s]+$/.test(value);
+        }, "Please enter only letters, numbers, and spaces.");
+
+        $.validator.addMethod("ifscCodeValidation", function (value, element) {
+      		//return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase());
+    return (value == '') || /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase());
+
+    	}, "Please enter a valid IFSC code (Format: AAAA0123456)");
 
     	 if (!$.validator.methods.onlyLettersAndSpaces) {
              $.validator.addMethod(

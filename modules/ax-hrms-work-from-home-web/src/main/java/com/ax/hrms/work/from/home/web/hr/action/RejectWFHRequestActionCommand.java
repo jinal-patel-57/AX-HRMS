@@ -75,7 +75,7 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
         try {
             long wfhId = ParamUtil.getLong(actionRequest, "wfhId");
 
-            String userComment = ParamUtil.getString(actionRequest,"actionComment");
+            String userComment = ParamUtil.getString(actionRequest, "actionComment");
 
 
             commentLocalService.addWorkflowComment(themeDisplay, 2L, WFHActionConstants.REJECT, wfhId, userComment);
@@ -119,13 +119,14 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
 //            wfh.setEmployeeId(employeeDetails.getEmployeeId());
             wfh.setModifiedBy(themeDisplay.getUserId());
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
-            log.info("wfh details :: "+wfh.toString());
+            log.info("wfh details :: " + wfh.toString());
 
             EmployeeDetails employeeDetails1 = employeeDetailsLocalService.findByEmployeeId(wfh.getEmployeeId());
-            log.info("employee is the :: "+employeeDetails1.toString());
+            log.info("employee is the :: " + employeeDetails1.toString());
 
             EmployeeDetails manager = employeeDetailsLocalService.fetchEmployeeDetails(employeeDetails1.getManagerId());
-            log.info("manager is the :: "+manager.getFirstName()+" "+manager.getLastName());
+
+//            log.info("manager is the :: "+manager.getFirstName()+" "+manager.getLastName());
             StringBuilder managerMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
             String employeeRejectedNotification = notificationTemplateConfiguration.WFHRequestRejectedNotificationToEmployee();
 
@@ -148,11 +149,15 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
                     continue;
                 }
                 log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
-                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
-                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-                log.info("Employee Id: " + HremployeeDetails.toString());
-                WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false, userComment);
+                try {
+                    EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                    StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                    log.info("Employee Id: " + HremployeeDetails.toString());
+                    WFHStatusUtil.sendNotificationToEmployee(employeeRejectedNotification, HremployeeDetails);
+                    WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false, false, userComment);
+                } catch (Exception e) {
+                    log.error("Error :: " + e.getMessage());
+                }
             }
 
 

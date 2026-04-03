@@ -266,12 +266,16 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
             for (User user : users) {
-                log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
-                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
-                log.info("Employee Id: " + HremployeeDetails.toString());
-                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
-                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,false);
+                try {
+                    log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                    EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                    log.info("Employee Id: " + HremployeeDetails.toString());
+                    WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
+                    StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                    WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, false);
+                } catch (Exception e) {
+                    log.info("error while sending notification to manager :: "+e.getMessage());
+                }
             }
 
             //send mail to Manager
@@ -321,12 +325,16 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), roleName);
             List<User> users = UserLocalServiceUtil.getRoleUsers(role.getRoleId());
             for (User user : users) {
-                log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
-                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
-                log.info("Employee Id: " + HremployeeDetails.toString());
-                WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
-                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-                WFHStatusUtil.sendMailtoManager(fromName,fromEmailAddress,hrMailBody,wfh,HremployeeDetails,mailTemplateConfiguration,employeeDetailsLocalService,axHrmsCommonApi,serviceMap,true);
+                try {
+                    log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                    EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                    log.info("Employee Id: " + HremployeeDetails.toString());
+                    WFHStatusUtil.sendNotificationToEmployee(HrAndManagerNotification, HremployeeDetails);
+                    StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                    WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true);
+                } catch (Exception e) {
+                    log.info("error while sending notification to manager :: "+e.getMessage());
+                }
             }
 
             //send mail to Manager
@@ -343,7 +351,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 //        if (Validator.isNotNull(redirect)) {
 //            actionResponse.sendRedirect(redirect);
 //        }
-
+        log.info("I am at last of WFH");
         // Hide default Liferay error message
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 

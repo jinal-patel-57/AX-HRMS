@@ -140,12 +140,16 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
                 if (user.getUserId() == currentUserId) {
                     continue;
                 }
-                StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
-                log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
-                EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
-                log.info("Employee Id: " + HremployeeDetails.toString());
-                WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification, HremployeeDetails);
-                WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false, userComment);
+                try {
+                    StringBuilder hrMailBody = new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
+                    log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                    EmployeeDetails HremployeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                    log.info("Employee Id: " + HremployeeDetails.toString());
+                    WFHStatusUtil.sendNotificationToEmployee(employeeApprovedNotification, HremployeeDetails);
+                    WFHStatusUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, wfh, HremployeeDetails, mailTemplateConfiguration, employeeDetailsLocalService, axHrmsCommonApi, serviceMap, true, false, userComment);
+                } catch (Exception e) {
+                    log.error("Error while sending email to manager: " + e.getMessage());
+                }
             }
 
             //Send mail to team

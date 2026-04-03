@@ -311,6 +311,12 @@ public class EmployeeDetailsLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<Long> findEmployeeByFirstAndLastName(String nameStr) {
+		return _employeeDetailsLocalService.findEmployeeByFirstAndLastName(
+			nameStr);
+	}
+
+	@Override
 	public java.util.List<Object[]> findEmployeeByName(
 		String fName, String lName) {
 

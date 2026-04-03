@@ -104,4 +104,12 @@ WHERE
                     AND employee.isterminated = false;
         ]]>
     </sql>
+    <sql id="findEmployeeByFirstAndLastName">
+        <![CDATA[
+        	SELECT cast(employeeid AS text)
+            from ax_employeedetails
+            WHERE (lower(firstname) LIKE ?
+               OR lower(lastname) LIKE ?)
+        ]]>
+    </sql>
 </custom-sql>

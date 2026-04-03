@@ -231,6 +231,8 @@ public interface EmployeeDetailsLocalService
 
 	public List<EmployeeDetails> findByManagerId(long managerId);
 
+	public List<Long> findEmployeeByFirstAndLastName(String nameStr);
+
 	public List<Object[]> findEmployeeByName(String fName, String lName);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

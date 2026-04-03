@@ -91,6 +91,34 @@ public class EmployeeDetailsFinderImpl extends EmployeeDetailsFinderBaseImpl imp
         }
         return employeeIds;
     }
+
+    public List<Long> findEmployeeByFirstAndLastName(String nameStr){
+        List<Long> employeeIds = new ArrayList<>();
+
+        Session session=null;
+        try{
+            session=openSession();
+            String sql=_customSQL.get(getClass(),"findEmployeeByFirstAndLastName");
+            System.out.println("Query==> "+sql);
+            SQLQuery sqlQuery = session.createSQLQuery(sql);
+            sqlQuery.setCacheable(false);
+            QueryPos qPos = QueryPos.getInstance(sqlQuery);
+            qPos.add(nameStr);
+            qPos.add(nameStr);
+
+            for(Object employeeId: sqlQuery.list()){
+                employeeIds.add(Long.valueOf(String.valueOf(employeeId)));
+            }
+            return employeeIds;
+        }catch(Exception e){
+            System.out.println("Exception in custom sql ::: findEmployeeByFirstAndLastName ::: "+e.getMessage());
+        }finally {
+            closeSession(session);
+        }
+        return employeeIds;
+    }
+
+
     public List<Long> getEmployeeIdByDesignationId(long designationId){
         List<Long> employeeIds = new ArrayList<>();
 
