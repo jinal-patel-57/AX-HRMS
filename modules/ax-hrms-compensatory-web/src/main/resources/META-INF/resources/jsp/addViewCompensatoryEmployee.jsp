@@ -245,7 +245,7 @@
 						<label for="description"><liferay-ui:message
 								key="description" /></label> <span class="text-danger">*</span>
 						<textarea id="description" class="form-control"
-							name="<portlet:namespace />description"></textarea>
+							name="<portlet:namespace />description" placeholder="Enter Description"></textarea>
 						<small class="text-muted d-block">  Minimum 10 and maximum 500 characters allowed.
 							allowed. </small> <label id="description-error" class="error text-danger"
 							for="description"></label>

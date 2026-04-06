@@ -559,8 +559,17 @@ jQuery.validator.addMethod("validEndDate", function (value, element) {
                             showDateInputContainer();
                             console.log("daysDiff is: "+daysDiff +" at: "+new Date().getTime())
                             debugger;
+                            //  Floater logic (NEW)
+                                            if(isApplicableForFloater){
+                                                if(daysDiff > remainingLeave){
+                                                    showMessage("Selected leave duration exceeds your remaining leave balance.");
+                                                    setDisabledSubmitBtn();
+                                                    dateInputsContainer.empty();
+                                                    return;
+                                                }
+                                            }
                             if(remainingLeave/0.5 == daysDiff){
-                                showMessage("You can mark all days as half-days for the selected range.","success");
+                                showMessage("You can mark all days as half-days for the selected range.","Warning");
                                 setDisabledSubmitBtn();
                                 dateInputsContainer.on('change', 'input[type="checkbox"]', function() {
                                     if(checkSelectedCheckboxNumbers() == daysDiff) {
