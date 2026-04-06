@@ -64,7 +64,7 @@ public class AddEditLeaveTypeMasterMVCActionCommand extends BaseMVCActionCommand
 		
 	}
 	private void addLeaveTypeMasterData(ActionRequest actionRequest,ActionResponse actionResponse,LeaveTypeMaster leaveTypeMaster) {
-		if (!Validator.isBlank(leaveTypeMaster.getLeaveTypeName())) {
+		if (Validator.isNotNull(leaveTypeMaster) && !Validator.isBlank(leaveTypeMaster.getLeaveTypeName())) {
 			try{
 				if (!leaveTypeMasterLocalService.isLeaveTypeNameExists(leaveTypeMaster.getLeaveTypeName())) {
 					leaveTypeMasterLocalService.addLeaveTypeMaster(leaveTypeMaster);
@@ -84,7 +84,7 @@ public class AddEditLeaveTypeMasterMVCActionCommand extends BaseMVCActionCommand
 	}
 	
 	private void editLeaveTypeMasterData(ActionRequest actionRequest,ActionResponse actionResponse, LeaveTypeMaster leaveTypeMaster) {
-		if (!Validator.isBlank(leaveTypeMaster.getLeaveTypeName())) {
+		if (Validator.isNotNull(leaveTypeMaster) && !Validator.isBlank(leaveTypeMaster.getLeaveTypeName())) {
 			try{
 				if (!leaveTypeMasterLocalService.isLeaveTypeNameExists(leaveTypeMaster.getLeaveTypeName())) {
 					SessionMessages.add(actionRequest, AxHrmsLeaveTypeMasterWebPortletConstants.LEAVE_TYPE_EDITED_MESSAGE_KEY);
@@ -124,6 +124,8 @@ public class AddEditLeaveTypeMasterMVCActionCommand extends BaseMVCActionCommand
 				leaveTypeMaster = leaveTypeMasterLocalService.getLeaveTypeMaster(leaveTypeMasterId);
 			} catch (PortalException e) {
 				log.error("AddEditLeaveTypeMasterMVCActionCommand >>> setLeaveTypeMasterData (MVCActionCommand) ::: Exception is: "+e.getMessage());
+				leaveTypeMaster = leaveTypeMasterLocalService.createLeaveTypeMaster(CounterLocalServiceUtil.increment(LeaveTypeMaster.class.getName()));
+				leaveTypeMaster.setCreatedBy(themeDisplay.getUserId());
 			}
 		}
 		else {

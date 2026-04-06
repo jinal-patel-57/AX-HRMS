@@ -138,12 +138,17 @@ public class BirthdayWebUtil {
 				if(Validator.isNotNull(employee.getDateOfBirth())) {
 				Calendar currentDate = Calendar.getInstance();
 				Calendar dob = Calendar.getInstance();
+				log.info("Employee Name : "+employee.getFirstName()+" "+employee.getLastName()+" Date Of Birth : "+employee.getDateOfBirth());
+				log.info("Current Date : "+currentDate.getTime());
+				
 				dob.setTime(employee.getDateOfBirth());
-
-				if(currentDate.get(Calendar.DATE)==dob.get(Calendar.DATE)&&(currentDate.get(Calendar.MONTH)+1)==(dob.get(Calendar.MONTH)+1)) {
+				log.info("Current Date Month : "+(currentDate.get(Calendar.MONTH))+" DOB Month : "+(dob.get(Calendar.MONTH)));
+				log.info("Current Date Date : "+currentDate.get(Calendar.DATE)+" DOB Date : "+dob.get(Calendar.DATE));
+				if(currentDate.get(Calendar.DATE)==dob.get(Calendar.DATE)&&(currentDate.get(Calendar.MONTH))==(dob.get(Calendar.MONTH))) {
+					log.info("in true condition");
 					birthdayListOfEmployee.add(employee);
 				}
-				}
+			}
 		}
 
 		return birthdayListOfEmployee;

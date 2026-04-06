@@ -269,34 +269,36 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
             Nominee nominee = null;
             if (nomineeId > 0) {
                 nominee = nomineeLocalService.getNominee(nomineeId);
-            }
-            Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
 
-            nominee.setNomineeFirstName(
-                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_FIRST_NAME));
-            nominee.setNomineeLastName(
-                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LAST_NAME));
-            nominee.setNomineeContact(
-                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CONTACT));
-            nominee.setRelationshipWithNominee(
-                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.RELATIONSHIP_WITH_NOMINEE));
-
-            String dob = ParamUtil.getString(actionRequest,
-                    AxHrmsProfileManagementWebConstants.NOMINEE_DOB);
-            if(Validator.isNotNull(dob) && !dob.isBlank()) {
-            	nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
-            }
-
-            address.setLine1(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE1));
-            address.setLine2(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE2));
-            address.setLine3(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE3));
-            address.setCity(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CITY));
-            address.setState(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_STATE));
-            address.setCountry(ParamUtil.getLong(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_COUNTRY));
-            address.setPincode(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_PINCODE));
-
-            addressLocalService.updateAddress(address);
-            nomineeLocalService.updateNominee(nominee);
+	            Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
+	
+	            nominee.setNomineeFirstName(
+	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_FIRST_NAME));
+	            nominee.setNomineeLastName(
+	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LAST_NAME));
+	            nominee.setNomineeContact(
+	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CONTACT));
+	            nominee.setRelationshipWithNominee(
+	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.RELATIONSHIP_WITH_NOMINEE));
+	
+	            String dob = ParamUtil.getString(actionRequest,
+	                    AxHrmsProfileManagementWebConstants.NOMINEE_DOB);
+	            if(Validator.isNotNull(dob) && !dob.isBlank()) {
+	            	nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+	            }
+	
+	            address.setLine1(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE1));
+	            address.setLine2(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE2));
+	            address.setLine3(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE3));
+	            address.setCity(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CITY));
+	            address.setState(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_STATE));
+	            address.setCountry(ParamUtil.getLong(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_COUNTRY));
+	            address.setPincode(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_PINCODE));
+	
+	            addressLocalService.updateAddress(address);
+	            nomineeLocalService.updateNominee(nominee);
+            
+        	}
 
         } catch (Exception e) {
             log.error("Error updating nominee", e);

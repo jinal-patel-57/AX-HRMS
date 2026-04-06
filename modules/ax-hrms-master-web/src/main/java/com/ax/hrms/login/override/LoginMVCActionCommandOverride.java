@@ -374,12 +374,9 @@ public class LoginMVCActionCommandOverride extends BaseMVCActionCommand {
 		String portletName = liferayPortletRequest.getPortletName();
 
 		if (portletName.equals(LoginPortletKeys.LOGIN)) {
-			if (layout.isTypeUtility()) {
-				portletURL.setWindowState(WindowState.NORMAL);
-			}
-			else {
-				portletURL.setWindowState(WindowState.NORMAL);
-			}
+			
+			portletURL.setWindowState(WindowState.NORMAL);
+			
 		}
 		else {
 			portletURL.setWindowState(actionRequest.getWindowState());

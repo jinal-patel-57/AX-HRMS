@@ -243,13 +243,8 @@ public class WFHStatusUtil {
                         mailContent
                 );
             }
-
-
-
-
-
         } catch (PortalException e) {
-            throw new RuntimeException(e);
+            log.error("Error fetching employee details for employee ID: " + workFromHomeRequest.getEmployeeId(), e);
         }
 
     }

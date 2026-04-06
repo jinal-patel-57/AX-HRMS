@@ -113,7 +113,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
 
         try {
             compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
-            if (compensatoryData == null) {
+            if (Validator.isNull(compensatoryData)) {
                 log.error("CompensatoryData not found for ID : " + compensatoryDataId);
                 return;
             }
@@ -141,7 +141,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
             log.error("CANCELLED status not found", e);
         }
 
-        if (approvedStatusId > 0 && compensatoryData.getLeaveCompensatoryStatusMasterId() == approvedStatusId) {
+        if (approvedStatusId > 0 && Validator.isNotNull(compensatoryData) && compensatoryData.getLeaveCompensatoryStatusMasterId() == approvedStatusId) {
 
             try {
                 LeaveTypeMaster leaveTypeMaster =
@@ -171,7 +171,7 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
 
         // Update status to CANCELLED
         try {
-            if (cancelledStatusId > 0) {
+            if (Validator.isNotNull(compensatoryData) && cancelledStatusId > 0) {
                 log.info("cancelledStatusId :: "+cancelledStatusId);
                 compensatoryData.setLeaveCompensatoryStatusMasterId(cancelledStatusId);
                 compensatoryData.setModifiedBy(themeDisplay.getUserId());
@@ -186,10 +186,12 @@ public class CancelCompensatoryDataManagerMVCActionCommand extends BaseMVCAction
 
         // Notification & Mail
         try {
-            EmployeeDetails employee =
-                    employeeDetailsLocalService.getEmployeeDetails(
-                            compensatoryData.getEmployeeId());
-            axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToEmployee("Cancelled", employee);
+            if(Validator.isNotNull(compensatoryData)) {
+            	EmployeeDetails employee =
+            			employeeDetailsLocalService.getEmployeeDetails(
+            					compensatoryData.getEmployeeId());
+            	axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToEmployee("Cancelled", employee);
+            }
         } catch (PortalException portalException) {
             log.error("Exception Raised Due to :: " + portalException.getMessage());
         }

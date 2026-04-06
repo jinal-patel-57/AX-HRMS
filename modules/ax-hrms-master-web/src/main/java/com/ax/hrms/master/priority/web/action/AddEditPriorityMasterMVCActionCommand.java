@@ -61,7 +61,7 @@ public class AddEditPriorityMasterMVCActionCommand extends BaseMVCActionCommand{
 		
 	}
 	private void addPriorityMasterData(ActionRequest actionRequest,ActionResponse actionResponse,PriorityMaster priorityMaster) {
-		if (!Validator.isBlank(priorityMaster.getPriorityName())) {
+		if (Validator.isNotNull(priorityMaster) && !Validator.isBlank(priorityMaster.getPriorityName())) {
 			try{
 				if (!priorityMasterLocalService.isPriorityNameExist(priorityMaster.getPriorityName())) {
 					priorityMasterLocalService.addPriorityMaster(priorityMaster);
@@ -81,7 +81,7 @@ public class AddEditPriorityMasterMVCActionCommand extends BaseMVCActionCommand{
 	}
 	
 	private void editPriorityMasterData(ActionRequest actionRequest,ActionResponse actionResponse, PriorityMaster priorityMaster) {
-		if (!Validator.isBlank(priorityMaster.getPriorityName())) {
+		if (Validator.isNotNull(priorityMaster) && !Validator.isBlank(priorityMaster.getPriorityName())) {
 			try{
 				if (!priorityMasterLocalService.isPriorityNameExist(priorityMaster.getPriorityName())) {
 					SessionMessages.add(actionRequest, AxHrmsPriorityMasterWebPortletConstants.PRIORITY_EDITED_MESSAGE_KEY);
@@ -118,6 +118,8 @@ public class AddEditPriorityMasterMVCActionCommand extends BaseMVCActionCommand{
 				priorityMaster = priorityMasterLocalService.getPriorityMaster(priorityMasterId);
 			} catch (PortalException e) {
 				log.error("AddEditPriorityMasterMVCActionCommand >>> setPriorityMasterData (MVCActionCommand) ::: Exception is: "+e.getMessage());
+				priorityMaster = priorityMasterLocalService.createPriorityMaster(CounterLocalServiceUtil.increment(PriorityMaster.class.getName()));
+				priorityMaster.setCreatedBy(themeDisplay.getUserId());
 			}
 		}
 		else {

@@ -218,16 +218,22 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
             File convertedFile = File.createTempFile("temp", ".tmp");
             FileOutputStream fos = new FileOutputStream(convertedFile);
             // Creating a buffer for file conversion
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, bytesRead);
+            try {
+                // Creating a buffer for file conversion
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+            } finally {
+                fos.close();
+                is.close();
             }
-            fos.close();
-            is.close();
             return convertedFile;
         } catch (Exception e) {
             log.error("ERROR CONVERTING DL FILE TO File type");
+        } finally {
+        	
         }
         return null;
     }

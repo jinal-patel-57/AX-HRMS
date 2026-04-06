@@ -110,7 +110,8 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
 
     @Reference
     private RoleTypeContributorProvider roleTypeContributorProvider;
-
+    
+    final Random random = new Random();
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -326,7 +327,7 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
     }
     
     public String generatePassword(int length) {
-    	final Random random = new Random();
+    	
         StringBuilder password = new StringBuilder();
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$";
 

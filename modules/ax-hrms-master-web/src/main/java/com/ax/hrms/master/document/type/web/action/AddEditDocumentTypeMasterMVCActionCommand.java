@@ -131,6 +131,8 @@ private DocumentTypeMaster setDocumentTypeMasterData(ActionRequest actionRequest
 				documentTypeMaster = documentTypeMasterLocalService.getDocumentTypeMaster(documentTypeMasterId);
 			} catch (PortalException e) {
 				log.error("AddEditDocumentTypeMasterMVCActionCommand >>> setDocumentTypeMasterData (MVCActionCommand) ::: Exception is: "+e.getMessage());
+				documentTypeMaster = documentTypeMasterLocalService.createDocumentTypeMaster(CounterLocalServiceUtil.increment(DocumentTypeMaster.class.getName()));
+				documentTypeMaster.setCreatedBy(themeDisplay.getUserId());
 			}
 		}
 		else {

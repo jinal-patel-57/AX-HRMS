@@ -28,7 +28,7 @@ public class AxHrmsProbationConfigurationAction {
 		probationPeriod = commonProbationConfiguration.proationPeriod();
 	}
 	
-	private volatile AxHrmsProbationConfiguration commonProbationConfiguration;
+	private AxHrmsProbationConfiguration commonProbationConfiguration;
 	
 	private static String probationPeriod;
 	
