@@ -150,7 +150,7 @@ public class ApproveLeaveRequestActionCommand extends BaseMVCActionCommand {
 //            SessionMessages.add(actionRequest, "leave-approved");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error approving leave request: " + e.getMessage(), e);
             SessionErrors.add(actionRequest, "leave-error");
         }
         //actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));

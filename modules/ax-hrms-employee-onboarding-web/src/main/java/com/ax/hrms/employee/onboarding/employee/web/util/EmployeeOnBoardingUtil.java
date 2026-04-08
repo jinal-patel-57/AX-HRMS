@@ -216,7 +216,7 @@ public class EmployeeOnBoardingUtil {
             renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDetails);
 
         } catch (PortalException e) {
-            e.printStackTrace();
+            log.error("Error retrieving employeeDetails: " + e.getMessage());
         }
     }
 
@@ -271,7 +271,7 @@ public class EmployeeOnBoardingUtil {
                                 addressProofPreviewURL
                         );
                     } catch (PortalException e) {
-                        throw new RuntimeException(e);
+                        log.error("Error retrieving file entry for address proof: " + e.getMessage());
                     }
                 }
                 renderRequest.setAttribute("presentPermanentSame",employeeAddress.getPresentPermanentSame());

@@ -123,7 +123,6 @@ public class ListLeaveBalanceHistoryMVCRenderCommand implements MVCRenderCommand
 		
 		}catch(Exception e) {
 			log.error("ListLeaveBalanceHistoryMVCRenderCommand >>> "+ e.getMessage());
-			e.printStackTrace();
 		}
 
 		

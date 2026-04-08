@@ -85,7 +85,7 @@ public class FetchPolicyProcessManagementHrAdminMVCRenderCommand implements MVCR
         try {
             policyType = policyTypeMasterLocalService.getPolicyTypeMaster(policyTypeId).getPolicyType();
         } catch (PortalException e1) {
-            e1.printStackTrace();
+            log.error("FetchPolicyMVCRenderCommand >>> render ::: Exception is: " + e1.getMessage());
         }
 
         String filePreviewUrl = AxHrmsPolicyProcessManagementWebPortletConstants.Empty_Policy_process_Management;

@@ -87,7 +87,7 @@ public class EmployeeProfileUtil {
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_DETAIL, employeeDetails);
 
 		} catch (PortalException e) {
-			e.printStackTrace();
+			log.error("Error retrieving employeeDetails: " + e.getMessage());
 		}
 	}
 	public void setAddress(RenderRequest renderRequest, Long employeeId) {

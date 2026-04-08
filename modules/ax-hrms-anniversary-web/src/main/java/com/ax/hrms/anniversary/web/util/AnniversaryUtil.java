@@ -114,44 +114,42 @@ public class AnniversaryUtil {
 
 		List<EmployeeDetailsDto> employeeDetailsDtoList = new ArrayList<>();
 		try {
-		if(!employeeDetailsList.isEmpty()){
-			for(EmployeeDetails employeeDetails : employeeDetailsList){
-				EmployeeDetailsDto employeeDetailsDto = new EmployeeDetailsDto();
-				employeeDetailsDto.setEmployeeId(employeeDetails.getEmployeeId());
-				employeeDetailsDto.setLrUserId(employeeDetails.getLrUserId());
-				employeeDetailsDto.setEmployeeName(employeeDetails.getFirstName()+AxHrmsAnniversaryWebPortletConstants.ONE_SPACE+employeeDetails.getLastName());
-				try{
-				
+			if(!employeeDetailsList.isEmpty()){
+				for(EmployeeDetails employeeDetails : employeeDetailsList){
+					EmployeeDetailsDto employeeDetailsDto = new EmployeeDetailsDto();
+					employeeDetailsDto.setEmployeeId(employeeDetails.getEmployeeId());
+					employeeDetailsDto.setLrUserId(employeeDetails.getLrUserId());
+					employeeDetailsDto.setEmployeeName(employeeDetails.getFirstName()+AxHrmsAnniversaryWebPortletConstants.ONE_SPACE+employeeDetails.getLastName());
+					try{
+						List<DepartmentMaster> departmentMasterList = 	axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeDetails.getEmployeeId());
+						StringBuilder departmentName = new StringBuilder();
+						for(DepartmentMaster department:departmentMasterList) {
+							departmentName.append(department.getDepartmentName());
+							departmentName.append(",");
+						}
+						String department = departmentName.toString();
+						department = department.substring(0,department.length()-1);
+						employeeDetailsDto.setDepartmentName(department);
+	
+					}catch (Exception e) {
+						log.error("getEmployeeDto >>> "+ e.getMessage());
+					}
+					try{
 					
-				List<DepartmentMaster> departmentMasterList = 	axHrmsCommonApi.getDepartmentMastersFromEmployeeId(employeeDetails.getEmployeeId());
-				StringBuilder departmentName = new StringBuilder();
-				for(DepartmentMaster department:departmentMasterList) {
-					departmentName.append(department.getDepartmentName());
-					departmentName.append(",");
+						EmployeeDesignation employeeDesignation = employeeDesignationLocalService
+								.findByEmployeeId(employeeDetails.getEmployeeId());
+						DesignationMaster designationMaster = designationMasterLocalService
+								.getDesignationMaster(employeeDesignation.getDesignationMasterId());
+						employeeDetailsDto.setDesignationName(designationMaster.getDesignationName());
+	
+					}catch (Exception e) {
+						log.error("getEmployeeDto >>> "+ e.getMessage());
+						e.printStackTrace();				
+					}
+						employeeDetailsDto.setEmployeeCode(employeeDetails.getEmployeeCode());
+						employeeDetailsDtoList.add(employeeDetailsDto);
 				}
-				String department = departmentName.toString();
-				department = department.substring(0,department.length()-1);
-				employeeDetailsDto.setDepartmentName(department);
-
-				}catch (Exception e) {
-					log.error("getEmployeeDto >>> "+ e.getMessage());
-					e.printStackTrace();
-				}
-				try{
-				
-					EmployeeDesignation employeeDesignation = employeeDesignationLocalService
-							.findByEmployeeId(employeeDetails.getEmployeeId());
-					DesignationMaster designationMaster = designationMasterLocalService
-							.getDesignationMaster(employeeDesignation.getDesignationMasterId());
-					employeeDetailsDto.setDesignationName(designationMaster.getDesignationName());
-
-				}catch (Exception e) {
-					log.error("getEmployeeDto >>> "+ e.getMessage());
-					e.printStackTrace();				}
-				employeeDetailsDto.setEmployeeCode(employeeDetails.getEmployeeCode());
-				employeeDetailsDtoList.add(employeeDetailsDto);
 			}
-		}
 		}catch(Exception e) {
 			log.error("Anniversary >>> getEmployeeDetailsDtoList >>>"+ e.getMessage());
 		}

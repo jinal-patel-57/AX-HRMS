@@ -89,7 +89,6 @@ public class AddLogTimeMVCRenderCommand implements MVCRenderCommand{
 			boolean isManager = axHrmsCommonApi.isRolePerson(themeDisplay, AxHrmsTaskWebConstants.MANAGER);
 			renderRequest.setAttribute(AxHrmsTaskWebConstants.IS_MANAGER, isManager);
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error("AddLogTimeMVCRenderCommand >>> Render >>> "+ e.getMessage());
 		}
 		

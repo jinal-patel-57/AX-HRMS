@@ -204,7 +204,7 @@ public class AddCompensatoryDataEmployeeMVCActionCommand extends BaseMVCActionCo
 
             axHrmsCompensatoryLeaveRequestWebUtil.sendNotificationToManagerAndHr(employeeMailSubject, userList);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error while sending notification and mail for compensatory leave request :: " + e.getMessage());
         }
 
         SessionMessages.add(actionRequest, "compensation-request-submitted");

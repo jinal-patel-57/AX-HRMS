@@ -45,9 +45,9 @@ public class ShowEmployeeOnBoardingStatusMVCRenderCommand implements MVCRenderCo
 				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDetails);
 			}
 		} catch (NoSuchEmployeeDetailsException e1) {
-			e1.printStackTrace();
+			log.error("No Employee Details Found for userId: " + themeDisplay.getUserId());
 		} catch (PortalException e) {
-			e.printStackTrace();
+			log.error("Error fetching Employee Details for userId: " + themeDisplay.getUserId(), e);
 		}
 		
 		return AxHrmsEmployeeOnBoardingEmployeeConstants.SHOW_EMPLOYEE_ONBOARDING_STATUS_PAGE;

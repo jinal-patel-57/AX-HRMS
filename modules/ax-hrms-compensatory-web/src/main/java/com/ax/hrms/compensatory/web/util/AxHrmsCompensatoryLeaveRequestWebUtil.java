@@ -164,7 +164,6 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
 }
         } catch (Exception e) {
             log.error("AxHrmsCompensatoryLeaveRequestWebUtil >>>sendMailtoEmployee >>>  " + e.getMessage());
-            e.printStackTrace();
         }
 
     }

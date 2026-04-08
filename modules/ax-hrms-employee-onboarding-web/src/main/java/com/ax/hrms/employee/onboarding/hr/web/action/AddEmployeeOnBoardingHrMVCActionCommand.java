@@ -320,7 +320,6 @@ public class AddEmployeeOnBoardingHrMVCActionCommand extends BaseMVCActionComman
             return retMp;
         } catch (Exception e) {
         	log.error("ERROR CREATING THE NEW EMPLOYEE USER -- " + e.getMessage());
-        	e.printStackTrace();
         }
         retMp.put(user, password);
         return retMp;
@@ -393,7 +392,7 @@ public static void assignRegularRole(long userId, long companyId, String roleNam
 
         log.info("Role assigned successfully: " + roleName);
     } catch (PortalException e) {
-        e.printStackTrace();
+        log.error("Error assigning role: " + roleName + " to userId: " + userId, e);
     }
 }
 

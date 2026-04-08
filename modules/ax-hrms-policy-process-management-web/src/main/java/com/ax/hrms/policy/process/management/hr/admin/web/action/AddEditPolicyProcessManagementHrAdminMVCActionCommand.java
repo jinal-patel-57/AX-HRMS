@@ -149,7 +149,6 @@ public class AddEditPolicyProcessManagementHrAdminMVCActionCommand extends BaseM
 
             } catch (Exception exception) {
                 log.error("Exception at insert form policy: " + exception.getMessage());
-				exception.printStackTrace();
     	        SessionErrors.add(actionRequest, AxHrmsPolicyProcessManagementWebPortletConstants.EXISTED_ENTRY_KEY);
             }
         }
@@ -360,7 +359,6 @@ public class AddEditPolicyProcessManagementHrAdminMVCActionCommand extends BaseM
 				
 				rolePoliciesLocalService.deleteRolePolicies(rolePolicy);
 			}
-			
 			
 			newRolePoliciesList.removeAll(removeRoleId);
 			for (Long roleId : newRolePoliciesList) {

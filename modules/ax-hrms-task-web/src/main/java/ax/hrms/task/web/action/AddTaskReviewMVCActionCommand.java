@@ -70,7 +70,6 @@ public class AddTaskReviewMVCActionCommand extends BaseMVCActionCommand {
 		SessionMessages.add(actionRequest,AxHrmsTaskWebConstants.TASK_REVIEW_ADDED_KEY);
 
 		}catch(Exception e) {
-			e.printStackTrace();
 			log.error("AddTaskReviewMVCActionCommand >>> Action >>> "+ e.getMessage());
 		}
 		actionResponse.sendRedirect(ParamUtil.getString(actionRequest, AxHrmsTaskWebConstants.BACKURL));

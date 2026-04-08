@@ -176,8 +176,7 @@ public class WFHStatusUtil {
             log.error("ApproveLeaveRequestMVCActionCommand >>>sendMailtoEmployee >>>  " + e.getMessage());
         }
     }
-
-
+    
 //    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body) throws PortalException {
 //
 //        // START TABLE
@@ -212,17 +211,17 @@ public class WFHStatusUtil {
                 (LeaveCompensatoryStatusMasterLocalService) serviceMap.get("leaveStatusLocalService");
         EmployeeDetailsLocalService employeeDetailsLocalService=(EmployeeDetailsLocalService) serviceMap.get("employeeDetailsLocalService");
         EmployeeDetails employee= null;
-        body =
+        StringBuilder mailBody =
                 new StringBuilder(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_HEAD_v2);
 
         try {
             employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
             String subject=mailTemplateConfiguration.mailWFHApproveTeamSubject();
-            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService, userComment);
+            mailBody = getWfhBody(workFromHomeRequest, employee, mailBody, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService, userComment);
             String mailContent=mailTemplateConfiguration.mailWFHApproveTeamBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
 
-            mailContent = mailContent.replace("${BODY}", body);
+            mailContent = mailContent.replace("${BODY}", mailBody);
             mailContent = mailContent.replace("${COMMENT_SECTION}","");
 //            mailContent = mailContent.replace("${COMMENT}", userComment);
 

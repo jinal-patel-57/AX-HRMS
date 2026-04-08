@@ -123,7 +123,7 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 					}
 				}
 			}catch (Exception e){
-				e.printStackTrace();
+				log.error("Error while fetching leave policy for festival floater -- " + e.getMessage());
 			}
 			String leaveRequestStatus = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus();
 

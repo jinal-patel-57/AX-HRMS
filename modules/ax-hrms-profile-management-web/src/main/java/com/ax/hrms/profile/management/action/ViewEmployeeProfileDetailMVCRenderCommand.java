@@ -239,7 +239,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_DETAIL, employeeDto);
 		} catch (PortalException e) {
-			e.printStackTrace();
+			log.error("Error retrieving employeeDetails: " + e.getMessage());
 		}
 
 		try {
@@ -266,7 +266,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			}
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EDUCATION_LIST, educationDtoList);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			log.error("Error retrieving employeeEducation: " + e1.getMessage());
 		}
 
 		try {
@@ -407,7 +407,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			log.error(e.getMessage());
 		}
 		} catch (NoSuchEmployeeDetailsException e) {
-			e.printStackTrace();
+			log.error("No employee details found for the current user. UserId: " + themeDisplay.getUserId());
 		}
 		return AxHrmsProfileManagementWebConstants.VIEW_EMPLOYEE_PROFILE_JSP_FILE;
 	}

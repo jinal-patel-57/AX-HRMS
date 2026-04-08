@@ -94,8 +94,7 @@ public class AddEditDepartmentMasterActionCommand extends BaseMVCActionCommand {
 					super.hideDefaultErrorMessage(actionRequest);
 				}
 			} catch (Exception e) {
-				log.info("Error in catch ===> " + e.getMessage());
-				e.printStackTrace();
+				log.error("Error in catch ===> " + e.getMessage());
 			}
 		} else {
 			// Updated Employee Master Details

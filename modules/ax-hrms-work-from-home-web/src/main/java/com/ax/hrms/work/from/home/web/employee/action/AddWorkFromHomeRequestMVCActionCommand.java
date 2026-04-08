@@ -235,23 +235,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             workFromHomeRequestLocalService.addWorkFromHomeRequest(wfh);
             addWFHDayTypeData(actionRequest, wfh.getWorkFromHomeRequestId(), themeDisplay);
             log.info("add successfullyt");
-
-
-            // adding details in workFromHomeDayType table
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
             //Sending notification to Manager
 
             log.info("employeeDetails.getManagerId() ::   "+employeeDetails.getManagerId());
@@ -259,7 +243,6 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             log.info("manage info is the :: "+manager);
 
             String HrAndManagerNotification =notificationTemplateConfiguration.WFHRequestManagerAndHr();
-
 
             //Sending notification to the HR Admin
             String roleName="HR Admin";
@@ -301,7 +284,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             wfh.setModifiedBy(themeDisplay.getUserId());
             wfh.setModifiedDate(new Date());
             wfh.setModifiedBy(themeDisplay.getUserId());
-            wfh.setReviewerId(employeeDetails.getEmployeeId());
+            wfh.setReviewerId(Validator.isNotNull(employeeDetails)?employeeDetails.getEmployeeId():0l);
             workFromHomeRequestLocalService.updateWorkFromHomeRequest(wfh);
             // delete old records
             List<WorkFromHomeDayType> oldList =

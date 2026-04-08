@@ -73,7 +73,6 @@ public class AddUpdateLogTimeMVCActionCommand extends BaseMVCActionCommand {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			SessionErrors.add(actionRequest, AxHrmsTaskWebConstants.ERROR_KEY);
 			log.error("AddUpdateLogTimeMVCActionCommand >>>" + e.getMessage());
 		}

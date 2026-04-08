@@ -83,7 +83,7 @@ public class DownloadPolicyProcessManagementEmployee  extends BaseMVCResourceCom
                             file.getFolderId() +  AxHrmsPolicyProcessManagementWebPortletConstants.Slash_Policy_Process_Management +file.getTitle() ;
                 }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
 

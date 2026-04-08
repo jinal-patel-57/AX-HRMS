@@ -252,7 +252,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                         log.info("before update ");
                         employeeSalaryLocalService.updateEmployeeSalary(employeeSalary);
                     } catch(NoSuchEmployeeSalaryException nsese) {
-                        nsese.printStackTrace();
+                        log.error("No active salary record found for employee." + nsese.getMessage());
                     }
                 }
 
@@ -288,7 +288,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                         employeeDesignationLocalService.updateEmployeeDesignation(employeeDesignation);
                     }catch(PortalException e) {
                     	log.error("Error while fetching designation role");
-                        e.printStackTrace();
                     }
 
                 }

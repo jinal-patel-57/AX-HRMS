@@ -123,9 +123,6 @@ public class ListProjectTaskMVCRenderCommand implements MVCRenderCommand {
 					
 //					taskList = taskLocalService.findByAssignedTo( employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId());
 				}
-				
-				
-				
 			}
 			taskDtoList = getTaskList(taskList,taskWebUtil);
 			PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
@@ -141,7 +138,6 @@ public class ListProjectTaskMVCRenderCommand implements MVCRenderCommand {
 		renderRequest.setAttribute(AxHrmsTaskWebConstants.PROJECT_LIST, projectList);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
 			log.error("ListTaskMVCRenderComand >>> Render >>> "+ e.getMessage());
 			
 		}

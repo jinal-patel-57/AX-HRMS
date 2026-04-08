@@ -174,7 +174,7 @@ public class AddEditDesignationMasterMVCActionCommand extends BaseMVCActionComma
 				 Role role = RoleLocalServiceUtil.addRole("", themeDisplay.getUserId(), roleTypeContributor.getClassName(), 0, roleName, titleMap, descriptionMap, type, null, serviceContext);
 				 log.info("role -- " + role.getName());
 			}catch(PortalException e) {
-				e.printStackTrace();
+				log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception while adding role is: "+e.getMessage());
 			}
 			
 			log.error("AddEditDesignationMasterMVCActionCommand >>> addRole ::: Exception is: "+exception.getMessage());

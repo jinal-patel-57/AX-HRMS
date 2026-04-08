@@ -154,7 +154,7 @@ public class AxHrmsFetchAppraisalDetailsScheduler extends BaseDispatchTaskExecut
         hrUsers = axHrmsCommonApi.fetchHrAdminList(group.getCompanyId());
     }
     catch (Exception e){
-        e.printStackTrace();
+        log.error("Error fetching HR users: " + e.getMessage());
     }
         sendAppraisalReminderMailToHr(hrUsers,employeeDetailsList);
 

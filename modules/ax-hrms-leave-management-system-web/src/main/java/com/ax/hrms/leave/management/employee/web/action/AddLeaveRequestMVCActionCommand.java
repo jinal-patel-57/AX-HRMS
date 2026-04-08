@@ -152,7 +152,6 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
 
             } catch (Exception e) {
                 log.info("exception raised ::::   " + e.getMessage());
-                e.printStackTrace();
                 SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY);
             }
         } else {

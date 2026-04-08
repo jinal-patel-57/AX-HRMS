@@ -215,7 +215,7 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
             renderRequest.setAttribute("projectSearchContainer", projectSearchContainer);
             renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.ITERATOR_URL, renderResponse.createRenderURL());
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("ListCompensatoryEmployeeMVCRenderCommand >>> render ::: Exception: " + e.getMessage());
         }
 
         return AxHrmsCompensatoryDataConstants.EMPLOYEE_JSP;

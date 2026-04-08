@@ -333,7 +333,7 @@ try {
         employeeExperienceLocalService.addEmployeeExperience(experience);
     }
 }catch (Exception e){
-    e.printStackTrace();
+    log.error("Error in processing employee experience action", e);
 }
     }
 

@@ -293,7 +293,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_DETAIL, employeeDto);
 		} catch (PortalException e) {
-			e.printStackTrace();
+			log.error("Error retrieving employeeDetails: " + e.getMessage());
 		}
 
 		try {
@@ -320,7 +320,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			}
 			renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.EDUCATION_LIST, educationDtoList);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			log.error("error in catch" + e1.getMessage());
 		}
 
 		try {

@@ -52,9 +52,7 @@ Log log = LogFactoryUtil.getLog(CheckEmailExistsMVCResourceCommand.class.getName
             resourceResponse.setContentType("application/json");
             resourceResponse.getWriter().write(json.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error writing JSON response", e);
         }
-
-
     }
 }

@@ -171,7 +171,7 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
             return (int) employeeDetailsLocalService.dynamicQueryCount(dq);
 
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("OnBoardingEmployeeHrMVCRenderCommand >>> getTodayEmployeeCount ::: Exception: "+e.getMessage());
         }
         return 0;
     }

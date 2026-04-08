@@ -193,7 +193,7 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
             try {
                 UserLocalServiceUtil.deleteRoleUser(role.getRoleId(), user);
             } catch (PortalException e) {
-                e.printStackTrace();
+                log.error("Error while removing role: " + role.getName() + " from user: " + user.getEmailAddress(), e);
             }
         });
 
