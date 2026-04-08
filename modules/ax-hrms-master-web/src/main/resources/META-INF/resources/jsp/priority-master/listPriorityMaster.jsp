@@ -19,14 +19,16 @@
 					<liferay-ui:message key="add-priority" />
 				</a></div>
   <div class="card-body mb-0">
-			
+
 			<liferay-portlet:renderURL varImpl="iteratorURL" />
-			
-			<liferay-ui:search-container total="${ totalPriorityMaster}" delta="20" emptyResultsMessage="no-priority-found" iteratorURL="${iteratorURL}">
+
+			<liferay-ui:search-container total="${totalPriorityMaster}"
+			     delta="${delta}"
+			 emptyResultsMessage="no-priority-found" iteratorURL="${iteratorURL}">
 			    <liferay-ui:search-container-results results="${ priorityMasterList}" />
-			
+
 			    <liferay-ui:search-container-row className="com.ax.hrms.master.model.PriorityMaster" modelVar="priorityMaster" keyProperty="priorityMasterId">
-			    
+
 			        <liferay-ui:search-container-column-text name="priority-name" value="${ priorityMaster.getPriorityName() }" ></liferay-ui:search-container-column-text>
 
 			        <liferay-ui:search-container-column-text name="Action" cssClass="text-center">
@@ -42,8 +44,8 @@
 							<portlet:param name="priorityMasterId" value="PRIORITY_MASTER_ID" />
 							<portlet:param name="iteratorUrl" value="${iteratorURL }" />
 						</portlet:actionURL>
-						
-						
+
+
 						<div class="dropdown ">
 					<button class="btn fa fa-ellipsis-v dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 						<i class="icon-ellipsis-vertical"></i>
@@ -64,16 +66,16 @@
 						</a></li>
 					</ul>
 				</div>
-				
-				
+
+
 
 					</liferay-ui:search-container-column-text>
-					
+
 			    </liferay-ui:search-container-row>
-			
+
 			    <liferay-ui:search-iterator markupView="lexicon" paginate="true" />
 			</liferay-ui:search-container>
-	
+
 </div>
 </div>
 
@@ -84,7 +86,7 @@
 	function deleteAction(priorityMasterId){
 		var config = new Object({}),
 		namespace = '<portlet:namespace />';
-		
+
 		config.namespace = namespace;
 		config.deleteUrl = '${deleteUrl}';
 		config.priorityMasterId = priorityMasterId;

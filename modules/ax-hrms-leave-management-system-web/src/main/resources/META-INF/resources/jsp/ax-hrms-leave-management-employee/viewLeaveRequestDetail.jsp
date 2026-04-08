@@ -59,6 +59,12 @@
                     <div class="label-content">${status}</div>
                 </div>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+                <div class="form-group-view">
+                    <div class="label-name"><liferay-ui:message key="No. Of Days"/></div>
+                    <div class="label-content">${leaveRequestDto.noOfDays}</div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-6">
@@ -74,7 +80,7 @@
                             <tr>
                             <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
                             <td><p class="text-center my-0"><b><liferay-ui:message key="day"/></b></td>
-                            <td><p class="text-center my-0"><b><liferay-ui:message key="half"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="Day Type"/></b></td>
 
                             </tr>
                             </thead>

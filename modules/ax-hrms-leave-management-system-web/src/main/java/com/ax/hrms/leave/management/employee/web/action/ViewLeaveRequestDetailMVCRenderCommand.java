@@ -1,6 +1,7 @@
 package com.ax.hrms.leave.management.employee.web.action;
 
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
+import com.ax.hrms.leave.management.employee.web.util.LeaveRequestUtil;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementSystemWebPortletKeys;
 import com.ax.hrms.leave.management.web.constants.AxHrmsLeaveManagementWebPortletConstants;
 import com.ax.hrms.leave.management.web.dto.LeaveRequestDto;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -78,6 +80,7 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+//        List<LeaveDayType> listOfLeaveDayType = leaveDayTypeList;
 		long leaveRequestId = ParamUtil.getLong(renderRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_ID_VAR,AxHrmsLeaveManagementWebPortletConstants.DEFAULT_LONG_VALUE);
 		try {
 			LeaveRequest leaveRequest = leaveRequestLocalService.getLeaveRequest(leaveRequestId);
@@ -127,6 +130,12 @@ public class ViewLeaveRequestDetailMVCRenderCommand implements MVCRenderCommand{
 			}
 			String leaveRequestStatus = leaveCompensatoryStatusMasterLocalService.findByLeaveCompensatoryStatusById(leaveRequest.getLeaveCompensatoryStatusMasterId()).getLeaveCompensatoryStatus();
 
+            List<LeaveDayType> leaveDayTypeListFiltered = leaveDayTypeList.stream()
+                    .filter(leaveDayType -> leaveDayType.getLeaveRequestId() == leaveRequest.getLeaveRequestId())
+                    .collect(Collectors.toList());
+            if (!leaveDayTypeListFiltered.isEmpty()) {
+                LeaveRequestUtil.setLeaveDayTypeDetailsInLeaveRequest(leaveRequestDtoForDate, leaveDayTypeListFiltered, leaveRequest);
+            }
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST, leaveRequest);
 			renderRequest.setAttribute("leaveRequestDto", leaveRequestDtoForDate);
 			renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_DAY_TYPE_LIST, leaveDayTypeList);

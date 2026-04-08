@@ -41,9 +41,9 @@
 
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div class="form-group-view">
-                    <div class="label-name">Team Mail ID</div>
+                    <div class="label-name">Team IDs</div>
                     <div class="label-content email">
-                        ${wfh.teamMailId}
+                        ${wfh.teamMailId} <br/>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@
                                     </td>
                                     <td>
                                         <p class="text-center my-0">
-                                            <b>Half</b>
+                                            <b>Day Type</b>
                                         </p>
                                     </td>
                                 </tr>

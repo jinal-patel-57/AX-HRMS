@@ -100,7 +100,7 @@
                             <tr>
                                 <th scope="col"><liferay-ui:message key="leave-date"/></th>
                                 <th scope="col"><liferay-ui:message key="day"/></th>
-                                <th scope="col"><liferay-ui:message key="half"/></th>
+                                <th scope="col"><liferay-ui:message key="Day Type"/></th>
                             </tr>
                             </thead>
                             <c:forEach var="data" items="${leaveDayTypeList}">

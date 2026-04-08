@@ -248,7 +248,7 @@ public class LeaveRequestUtil {
 		leaveRequestDetails.setLeaveTypeDescription(leaveTypeMaster.getDescription());
 	}
 
-	private static void setLeaveDayTypeDetailsInLeaveRequest(LeaveRequestDto leaveRequestDetails, List<LeaveDayType> listOfLeaveDayTypes, LeaveRequest leaveRequest) {
+	public static void setLeaveDayTypeDetailsInLeaveRequest(LeaveRequestDto leaveRequestDetails, List<LeaveDayType> listOfLeaveDayTypes, LeaveRequest leaveRequest) {
 		int noOfHoursInLeaveDayType = 0;
 		for (LeaveDayType leaveDayType : listOfLeaveDayTypes) {
 			if (leaveDayType.getIsHalfDay())

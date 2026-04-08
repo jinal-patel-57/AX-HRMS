@@ -30,7 +30,7 @@ public class EmployeeDto {
 	public long uanEsicId;
 	public long probationStatusId;
 	public boolean isEmployeeOnboarded;
-
+    public String kycDocumentType;
 	public boolean isExperienced;
 
 	public long kycDocumentFileEntryId;
@@ -51,7 +51,19 @@ public class EmployeeDto {
 		return nameAsPerPanCard;
 	}
 
-	public long getKycDocumentFileEntryId() {
+    public String getKycDocumentType() {
+        return kycDocumentType;
+    }
+
+    public void setKycDocumentType(String kycDocumentType) {
+        this.kycDocumentType = kycDocumentType;
+    }
+
+    public void setKycDocumentFileEntryId(long kycDocumentFileEntryId) {
+        this.kycDocumentFileEntryId = kycDocumentFileEntryId;
+    }
+
+    public long getKycDocumentFileEntryId() {
 		return kycDocumentFileEntryId;
 	}
 

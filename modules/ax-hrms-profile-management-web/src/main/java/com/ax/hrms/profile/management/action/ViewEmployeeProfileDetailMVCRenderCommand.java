@@ -3,10 +3,8 @@ package com.ax.hrms.profile.management.action;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.model.DepartmentMaster;
 import com.ax.hrms.master.model.DesignationMaster;
-import com.ax.hrms.master.service.BranchMasterLocalService;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.master.service.EducationLevelMasterLocalService;
+import com.ax.hrms.master.model.DocumentTypeMaster;
+import com.ax.hrms.master.service.*;
 import com.ax.hrms.model.*;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebPortletKeys;
@@ -89,6 +87,8 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 	@Reference
 	BranchMasterLocalService branchMasterLocalService;
 
+    @Reference
+    DocumentTypeMasterLocalService documentTypeMasterLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -138,7 +138,15 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
 			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
 			employeeDto.setStipend(employeeDetails.getStipend());
-
+            try {
+                employeeDto.kycDocumentFileEntryId = employeeDetails.getKycDocumentFileEntryId();
+                long documentTypeMasterID = employeeDetails.getDocumentTypeMasterId();
+                DocumentTypeMaster documentTypeMaster = documentTypeMasterLocalService.fetchDocumentTypeMaster(documentTypeMasterID);
+                String kycDocumentType = documentTypeMaster.getDocumentTypeName();
+                employeeDto.setKycDocumentType(kycDocumentType);
+            } catch (Exception e) {
+                log.info("Exception raised due to..... " + e.getMessage());
+            }
 			employeeDto.setAadhaarCardNumber(employeeDetails.getAadhaarCardNumber());
 			employeeDto.setPanCardNumber(employeeDetails.getPanCardNumber());
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
@@ -196,9 +204,10 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 					renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.ADDRESS_PROOF_FILE, previewURL);
 				}
 			}
+            log.info("employeeDto.getKycDocumentFileEntryId() :: "+employeeDto.getKycDocumentFileEntryId()+"  ::   "+employeeDto.getKycDocumentFileEntryId());
 			if(Validator.isNotNull(employeeDto.getKycDocumentFileEntryId()) && employeeDto.getKycDocumentFileEntryId()>0) {
 				FileEntry kycDocumentFile = DLAppServiceUtil.getFileEntry(employeeDto.getKycDocumentFileEntryId());
-
+                log.info("kycDocumentFile "+kycDocumentFile.getFileVersion());
 				if (Validator.isNotNull(kycDocumentFile)) {
 					String previewURL = DLUtil.getPreviewURL(kycDocumentFile, kycDocumentFile.getFileVersion(), themeDisplay,StringPool.BLANK);
 					log.info("previewURL of kycDocumentFile ::: " + previewURL);
@@ -271,9 +280,8 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 
 		try {
 			EmployeeAddress employeeAddress = employeeAddressLocalService
-					.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+                        .getEmployeeAddress(employeeDetails.getEmployeeAddressId());
 			renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.EMPLOYEE_ADDRESS, employeeAddress);
-
 
 			if (employeeAddress.getPresentPermanentSame()) {
 				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());

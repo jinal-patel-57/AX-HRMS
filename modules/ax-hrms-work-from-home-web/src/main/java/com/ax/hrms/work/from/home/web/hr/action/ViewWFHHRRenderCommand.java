@@ -57,7 +57,12 @@ public class ViewWFHHRRenderCommand implements MVCRenderCommand {
             WFHRequestDto dto = new WFHRequestDto();
 
             dto.setWorkFromHomeRequestId(wfh.getWorkFromHomeRequestId());
-            dto.setTeamMailId(wfh.getTeamMailId());
+            String teamMail = wfh.getTeamMailId();
+
+            if (teamMail != null) {
+                teamMail = teamMail.replaceAll("\\s*,\\s*", ", ");
+            }
+            dto.setTeamMailId(teamMail);
             dto.setReason(wfh.getReason());
             dto.setRequestDate(wfh.getRequestDate());
             dto.setStartDate(wfh.getStartDate());

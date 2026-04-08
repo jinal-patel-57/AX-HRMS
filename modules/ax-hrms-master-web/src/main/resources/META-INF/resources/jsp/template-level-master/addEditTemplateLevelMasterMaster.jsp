@@ -6,7 +6,7 @@
 </portlet:renderURL>
 
 <liferay-ui:error key="error-already-exist" message="template-already-exist" />
-<liferay-ui:error key="error-already-exist" message="template-level-error-already-exist" />
+<%--<liferay-ui:error key="error-already-exist" message="template-level-error-already-exist" />--%>
 <liferay-ui:success key="success" message="template-level-success" />
 <liferay-ui:success key="success-delete" message="template-level-delete" />
 <liferay-ui:success key="success-edit" message="template-level-edit" />

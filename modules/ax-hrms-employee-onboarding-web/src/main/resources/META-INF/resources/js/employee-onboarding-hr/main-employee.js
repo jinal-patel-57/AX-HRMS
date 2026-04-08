@@ -923,7 +923,7 @@ $.validator.addMethod(
                      min: 0,
                      max: 50,
                       messages: {
-                             required: "Please enter experience in years.",
+                             required: "Please enter experience.",
                              decimalExperience: "Enter a valid experience (e.g. 2, 2.5, 10.75).",
                              min: "Experience must be at least 0.",
                              max: "Experience cannot exceed 50 years."

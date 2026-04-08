@@ -41,7 +41,7 @@ public class ListPriorityMasterMVCRenderCommand implements MVCRenderCommand {
         List<PriorityMaster> priorityMastersList = null;
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,1);
-        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,3);
+        int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
 
         int totalPriorityMaster = priorityMasterLocalService.getPriorityMastersCount();
         int totalPageContainer = (totalPriorityMaster + deltaValue - 1) / deltaValue;
@@ -57,10 +57,12 @@ public class ListPriorityMasterMVCRenderCommand implements MVCRenderCommand {
 
         priorityMastersList = priorityMasterLocalService.getPriorityMasters(start,end);
         renderRequest.setAttribute("totalPriorityMaster", totalPriorityMaster);
-        renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);
+//        renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);
         renderRequest.setAttribute("priorityMasterList", priorityMastersList);
         renderRequest.setAttribute("iteratorURL", renderResponse.createRenderURL());
-
+//        renderRequest.setAttribute(SearchContainer.DEFAULT_CUR_PARAM, curValue);
+        renderRequest.setAttribute("cur", curValue);
+        renderRequest.setAttribute("delta", deltaValue);
         return "/jsp/priority-master/listPriorityMaster.jsp";
     }
 }

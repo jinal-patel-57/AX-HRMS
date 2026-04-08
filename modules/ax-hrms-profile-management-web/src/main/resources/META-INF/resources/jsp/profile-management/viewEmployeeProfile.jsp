@@ -286,7 +286,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
                             <div class="label-name">KYC Document Type</div>
-                            <div class="label-content text-unset">${documentTypeMasterName}</div>
+                            <div class="label-content text-unset">${employeeDetail.kycDocumentType}</div>
                         </div>
                      </div>
                     <c:if test="${not empty kycDocumentFile}">

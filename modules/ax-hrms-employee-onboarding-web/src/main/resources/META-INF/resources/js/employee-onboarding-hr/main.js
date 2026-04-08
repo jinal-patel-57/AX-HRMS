@@ -93,37 +93,37 @@ var setFileInputValues;
                 messages: {
                     [namespace + "employeeCode"]: {
                         required: "Please enter Employee Code",
-                        maxlength: "Employee Code exceeding maximum length!",
+                        maxlength: "Employee Code exceeding maximum length.",
                         lettersAndNumbersOnly:
-                            "Use only letters and numbers for Employee Code!",
+                            "Use only letters and numbers for Employee Code.",
                     },
                     [namespace + "firstName"]: {
                         required: "Please enter First Name",
-                        maxlength: "First Name exceeding maximum length!",
+                        maxlength: "First Name exceeding maximum length.",
                         lettersOnly:
-                            "Use only letters for First Name!",
+                            "Use only letters for First Name.",
                     },
                     [namespace + "lastName"]: {
                         required: "Please enter Last Name",
-                        maxlength: "Last Name exceeding maximum length!",
+                        maxlength: "Last Name exceeding maximum length.",
                         lettersOnly:
-                            "Use only letters for Last Name!",
+                            "Use only letters for Last Name.",
                     },
                     [namespace + "middleName"]: {
-                        maxlength: "Middle Name exceeding maximum length!",
+                        maxlength: "Middle Name exceeding maximum length.",
                         lettersOnly:
-                            "Use only letters for Middle Name!",
+                            "Use only letters for Middle Name.",
                     },
                     [namespace + "branch"]: {
-                        required: "Please select a Branch!"
+                        required: "Please select a Branch."
 
                     },
                     [namespace + "designation"]: {
-                        required: "Please select a Designation!"
+                        required: "Please select a Designation."
 
                     },
                     [namespace + "department"]: {
-                        required: "Please select a Department!"
+                        required: "Please select a Department."
 
                     },
                    [namespace + "officialEmailId"]: {
@@ -132,7 +132,7 @@ var setFileInputValues;
                    },
 
                     [namespace + "joiningDate"]: {
-                        required: "Please Enter a valid Joining date",
+                        required: "Please Enter a Joining date",
                         date: "Enter a proper Date Only"
                     },
                     [namespace + "grossSalaryCTCPM"]: {
@@ -234,7 +234,7 @@ var setFileInputValues;
                                  min: 0,
                                  max: 50,
                                   messages: {
-                                         required: "Please enter experience in years.",
+                                         required: "Please enter experience.",
                                          decimalExperience: "Enter a valid experience (e.g. 2, 2.5, 10.75).",
                                          min: "Experience must be at least 0.",
                                          max: "Experience cannot exceed 50 years."

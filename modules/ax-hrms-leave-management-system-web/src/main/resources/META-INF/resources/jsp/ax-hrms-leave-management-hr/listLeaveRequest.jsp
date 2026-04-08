@@ -303,7 +303,7 @@ function openActionModal(actionURL, action) {
     document.getElementById('actionComment').value = '';
 
     document.getElementById('modalTitle').innerText =
-        action.charAt(0) + action.slice(1).toLowerCase() + " Request";
+        action.charAt(0) + action.slice(1).toLowerCase() ;
 
     $('#actionModal').modal('show');
 }

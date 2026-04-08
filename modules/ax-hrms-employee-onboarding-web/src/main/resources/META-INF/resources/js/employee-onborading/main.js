@@ -2175,7 +2175,10 @@ initializeValidation()
 
                    value = value.trim();
 
-                   return /^[A-Za-z]+(?:\.[A-Za-z]+)*(?:[ -][A-Za-z]+(?:\.[A-Za-z]+)*)*(?: ?\([A-Za-z]+(?:\.[A-Za-z]+)*\))?$/.test(value);
+                //   return /^[A-Za-z]+(?:\.[A-Za-z]+)*(?:[ -][A-Za-z]+(?:\.[A-Za-z]+)*)*(?: ?\([A-Za-z]+(?:\.[A-Za-z]+)*\))?$/.test(value);
+                     //  return /^[A-Za-z]+(\.[A-Za-z]+)*(\s*-\s*[A-Za-z]+(\.[A-Za-z]+)*)*(\s*\([A-Za-z]+(\.[A-Za-z]+)*\))?$/.test(value);
+        return /^[A-Za-z]+(\.[A-Za-z]+)*(\s*-\s*[A-Za-z]+(\.[A-Za-z]+)*)*(\s*\([A-Za-z\s.]+\))?\.?$/.test(value);
+
                },
                "Please enter a valid degree name."
            );
