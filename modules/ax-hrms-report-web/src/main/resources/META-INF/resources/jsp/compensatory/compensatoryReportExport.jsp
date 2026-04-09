@@ -246,14 +246,40 @@
             return isValid;
         }
 
+        function setPreviousMonthDates() {
+            try {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                
+                const firstDayDate = new Date(year, month - 1, 1);
+                const lastDayDate = new Date(year, month, 0);
+                
+                const padZero = function(num) {
+                    return num < 10 ? '0' + num : '' + num;
+                };
+                
+                const fromDateFormatted = firstDayDate.getFullYear() + '-' + padZero(firstDayDate.getMonth() + 1) + '-' + padZero(firstDayDate.getDate());
+                const toDateFormatted = lastDayDate.getFullYear() + '-' + padZero(lastDayDate.getMonth() + 1) + '-' + padZero(lastDayDate.getDate());
+                
+                document.getElementById("fromDate").value = fromDateFormatted;
+                document.getElementById("toDate").value = toDateFormatted;
+            } catch (e) {
+                console.error("Error setting dates:", e);
+            }
+        }
+
         previousMonth.on("change", function () {
 
             clearDateErrors();
 
             if (this.checked) {
-                fromDate.prop("disabled", true).val("");
-                toDate.prop("disabled", true).val("");
+                setPreviousMonthDates();
+                fromDate.prop("disabled", true);
+                toDate.prop("disabled", true);
             } else {
+                fromDate.val("");
+                toDate.val("");
                 fromDate.prop("disabled", false);
                 toDate.prop("disabled", false);
             }

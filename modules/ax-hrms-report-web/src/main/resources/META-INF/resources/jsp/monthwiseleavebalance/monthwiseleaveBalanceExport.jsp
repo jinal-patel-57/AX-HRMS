@@ -99,17 +99,13 @@
 
         const yearSelect = $("#year");
 
-
         const currentYear = ${currentYear};
-
-
 
         employeeSelect.select2({
             placeholder: "Select Employee(s)",
             allowClear: true,
             width: "100%"
         });
-
 
         function toggleEmployeeSelect(enable) {
 
@@ -130,16 +126,12 @@
                 clearEmployeeError();
             }
 
-
         }
-
-
 
         function clearEmployeeError() {
             employeeError.text("");
             employeeSelect.removeClass("is-invalid");
         }
-
 
         function validateForm() {
 
@@ -160,7 +152,6 @@
                     isValid = false;
                 }
             }
-
 
             return isValid;
         }
@@ -183,8 +174,6 @@
             clearEmployeeError();
         });
 
-
-
         form.on("submit", function (e) {
             if (!validateForm()) {
                 e.preventDefault();
@@ -192,9 +181,6 @@
         });
 
         toggleEmployeeSelect(false);
-
-
-
 
     });
 

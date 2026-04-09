@@ -180,6 +180,30 @@
             clearEmployeeError();
         });
 
+        /* -------- Focus on last selected option -------- */
+        employeeSelect.on("select2:opening", function () {
+            const selected = employeeSelect.val();
+
+            if (selected && selected.length > 0) {
+                const lastSelected = selected[selected.length - 1];
+
+                setTimeout(function () {
+                    const $option = employeeSelect.find("option[value='" + lastSelected + "']");
+
+                    if ($option.length) {
+                        const dropdown = $(".select2-container--open");
+                        const resultsList = dropdown.find("li[id$='" + lastSelected + "']");
+
+                        if (resultsList.length) {
+                            resultsList[0].focus();
+                        }
+                    }
+                }, 50);
+            } else {
+                console.log("No employees selected");
+            }
+        });
+
         /* -------- Form Submit -------- */
 
         form.on("submit", function (e) {
