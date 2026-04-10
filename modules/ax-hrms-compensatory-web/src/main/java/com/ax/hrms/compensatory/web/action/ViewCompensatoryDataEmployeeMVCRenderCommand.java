@@ -115,7 +115,7 @@ public class ViewCompensatoryDataEmployeeMVCRenderCommand implements MVCRenderCo
 
             renderRequest.setAttribute("compensatoryData", compensatoryDataDto);
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("Error in render command :: " + e.getMessage(), e);
         }
 
         return "/jsp/viewCompensatoryRequest.jsp";

@@ -160,14 +160,13 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
                 }
             }
 
-
             // Success message (matches your JSP)
             actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
 
             SessionMessages.add(actionRequest, "wfh-rejected");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error while rejecting WFH request: " + e.getMessage(), e);
             SessionErrors.add(actionRequest, "wfh-error");
         }
 

@@ -356,7 +356,7 @@ public class ImportEmployeesUtility extends MVCPortlet {
 			    	}
 			    }
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error while processing employee data -- " + e.getMessage(), e);
 			}
 		});
 		
