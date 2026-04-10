@@ -300,6 +300,13 @@ function closeCustomModal() {
             }
         }
 
+        function isWeekend(dateString) {
+            if (!dateString) return false;
+            const date = new Date(dateString);
+            const dayOfWeek = date.getDay();
+            return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
+        }
+
         //For jQuery Validation start here
         leaveRequestForm.validate({
             rules: {
@@ -317,11 +324,13 @@ function closeCustomModal() {
               },
                 [namespace + "startDate"]: {
                     required: true,
-                    validDate: true
+                    validDate: true,
+                    noWeekends: true
                 },
                 [namespace + "endDate"]: {
                     required: true,
-                    validEndDate: true
+                    validEndDate: true,
+                    noWeekends: true
                 },
             },
             messages: {
@@ -368,6 +377,23 @@ function closeCustomModal() {
 
         return this.optional(element) || regex.test(value);
     }, "Please Enter valid data for the reason.");
+
+jQuery.validator.addMethod("noWeekends", function (value, element) {
+    if (!value) {
+        return true; // Allow empty values
+    }
+    
+    const date = new Date(value);
+    const dayOfWeek = date.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
+    
+    if (isWeekend) {
+        $.validator.messages.noWeekends = "Leave should not be allowed to select weekends dates.";
+        return false;
+    }
+    
+    return true;
+}, "Leave should not be allowed to select weekends dates.");
 
 jQuery.validator.addMethod("validEndDate", function (value, element) {
 
