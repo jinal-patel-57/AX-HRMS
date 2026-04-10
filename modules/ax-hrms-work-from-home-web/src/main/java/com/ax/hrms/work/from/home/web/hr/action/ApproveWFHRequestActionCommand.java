@@ -164,7 +164,7 @@ public class ApproveWFHRequestActionCommand implements MVCActionCommand {
             SessionMessages.add(actionRequest, "wfh-approved");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error while approving WFH request: " + e.getMessage(), e);
             SessionErrors.add(actionRequest, "wfh-error");
         }
 

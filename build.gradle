@@ -25,3 +25,10 @@ sonarqube {
 
     }
 }
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "https://repository.liferay.com/nexus/content/groups/public"
+    }
+}
