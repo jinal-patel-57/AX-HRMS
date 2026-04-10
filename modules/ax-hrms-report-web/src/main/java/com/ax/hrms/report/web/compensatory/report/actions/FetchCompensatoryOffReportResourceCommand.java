@@ -76,7 +76,7 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                 endDate = sdf.parse(toDateStr);
             }
 
-            SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
+            SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
             LeaveTypeMaster compOffType =
                     leaveTypeMasterLocalService.findByLeaveTypeName(
@@ -202,7 +202,11 @@ public class FetchCompensatoryOffReportResourceCommand implements MVCResourceCom
                             : "-");
 
                     row.put("Location", "Ahmedabad");
-                    row.put("Employee Type", employeeDetails.getEmployeeType());
+                    String empType = employeeDetails.getEmployeeType();
+                    empType = empType != null && !empType.isEmpty() 
+                        ? empType.substring(0, 1).toUpperCase() + empType.substring(1).toLowerCase()
+                        : empType;
+                    row.put("Employee Type", empType);
 
                     row.put("Start Date",
                             displayFormat.format(leaveRequest.getStartDateTime()));

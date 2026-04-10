@@ -129,7 +129,11 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
                             : "-");
 
                     row.put("Location", "Ahmedabad");
-                    row.put("Employee Type", employeeDetails.getEmployeeType());
+                    String empType = employeeDetails.getEmployeeType();
+                    empType = empType != null && !empType.isEmpty() 
+                        ? empType.substring(0, 1).toUpperCase() + empType.substring(1).toLowerCase()
+                        : empType;
+                    row.put("Employee Type", empType);
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 
@@ -168,7 +172,7 @@ public class FetchWorkFromHomeReportResourceCommand implements MVCResourceComman
                         status = leaveCompensatoryStatusMaster.getLeaveCompensatoryStatus();
                     }
                     row.put("Status", status);
-                    SimpleDateFormat sdfWithTimestamp = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+                    SimpleDateFormat sdfWithTimestamp = new SimpleDateFormat("dd-MMM-yyyy");
 
                     String dateOfRequest = sdfWithTimestamp.format( workFromHomeRequest.getRequestDate());
                     row.put("Date of Request", dateOfRequest);
