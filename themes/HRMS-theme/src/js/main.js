@@ -143,7 +143,12 @@ function childNavigation() {
       .next('.select2-container')
       .find('.select2-selection__rendered');
 
-    $rendered.text(last ? last.text : '');
+    if (last) {
+      $rendered.text(last.text);
+    } else {
+      const placeholder = $(this).attr('placeholder') || 'Select Options';
+      $rendered.html('<span class="select2-selection__placeholder">' + placeholder + '</span>');
+    }
   });
 
 
