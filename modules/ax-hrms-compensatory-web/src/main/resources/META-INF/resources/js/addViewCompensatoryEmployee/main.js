@@ -118,15 +118,15 @@ var submit_compensatory_form;
                         required: "Please select an employee."
                     },
                     [namespace + "compensationDate"]: {
-                        required: "Please enter compensation date.",
-                        notAfterToday: "Compensation date cannot be in the future."
+                        required: "Please enter worked date.",
+                        notAfterToday: "Worked date cannot be in the future."
                     },
 //                    [namespace + "compensationHours"]: {
 //                        required: "Please enter hours.",
 //                        positiveInteger: "Hours must be a positive number."
 //                    },
                     [namespace + "compensationType"]: {
-                        required: "Please select half day or full day."
+                        required: "Please select duration."
                     },
                     [namespace + "projectManager"]: {
                         required: "Please select manager.",

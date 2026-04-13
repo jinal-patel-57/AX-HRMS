@@ -175,7 +175,7 @@
 						<label class="" for="compensationDate"><liferay-ui:message
 								key="worked-date" /><span class="text-danger">*</span></label> <input
 							id="compensationDate"
-							placeholder="<liferay-ui:message key='compensation-date'/>"
+							placeholder="<liferay-ui:message key='worked-date'/>"
 							class="form-control" type="date"
 							name="<portlet:namespace/>compensationDate" /> <label
 							id="compensationDate-error" class="error text-danger"
@@ -210,7 +210,7 @@
 						</label> <small class="form-text text-muted"> Hours : Minutes
 							(24-hour format) </small> <input id="startTime" type="text"
 							class="form-control timepicker"
-							name="<portlet:namespace />startTime" placeholder="HH:mm" /> <label
+						name="<portlet:namespace />startTime" placeholder="HH:MM" /> <label
 							id="startTime-error" class="error text-danger" for="startTime"></label>
 					</div>
 
@@ -219,7 +219,7 @@
 						</label> <small class="form-text text-muted"> Hours : Minutes
 							(24-hour format) </small> <input id="endTime" type="text"
 							class="form-control timepicker"
-							name="<portlet:namespace />endTime" placeholder="HH:mm" /> <label
+							name="<portlet:namespace />endTime" placeholder="HH:MM" /> <label
 							id="endTime-error" class="error text-danger" for="endTime"></label>
 					</div>
 
