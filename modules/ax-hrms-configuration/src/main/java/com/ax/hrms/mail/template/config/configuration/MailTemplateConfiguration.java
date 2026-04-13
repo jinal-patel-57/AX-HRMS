@@ -249,8 +249,10 @@ public interface MailTemplateConfiguration {
                             "<table style=\"max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px;\">" +
                             "<tr><td>" +
                             "<p>Dear <strong>${EMPLOYEE_NAME}</strong>,</p>" +
-                            "<p>${COMMENTS}</p>" +
-                            "<a href=\"${RE_UPLOAD_LINK}\">Re-upload Onboarding Details</a>" +
+                            "<div style=\"background-color:#fff3cd;border:2px solid #ffc107;border-radius:6px;padding:15px;margin:20px 0;\">" +
+                            "<p style=\"color:#856404;margin:0;\">${COMMENTS}</p>" +
+                            "</div>" +
+                            "<p style=\"margin-top:20px;\"><a href=\"${RE_UPLOAD_LINK}\" style=\"background-color:#0066cc;color:#fff;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block;\">Re-upload Onboarding Details</a></p>" +
                             "</td></tr></table></body></html>",
             name = "Re-Upload OnBoarding Details Employee MAIL  (BODY)",
             required = false)
