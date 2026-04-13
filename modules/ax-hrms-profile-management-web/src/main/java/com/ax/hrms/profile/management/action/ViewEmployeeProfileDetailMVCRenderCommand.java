@@ -152,6 +152,9 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setNameAsPerAadhaarCard(employeeDetails.getNameAsPerAadhaarCard());
             if(Validator.isNotNull(employeeDetails.getEmployeeAddressId())) {
                 EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeDetails.getEmployeeAddressId());
+                boolean isPresentPermanentSame=employeeAddress.isPresentPermanentSame();
+                log.info("isPresentPermanentSame  :: :: --->  :: "+isPresentPermanentSame);
+                renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS, isPresentPermanentSame);
                 employeeDto.setAddressProofFileEntryId(employeeAddress.getEmployeeAddressProofFileEntryId());
             }
 

@@ -201,8 +201,9 @@ public class AxHrmsEmployeeOnBoardingEmployeeConstants {
 	public static final String EMPLOYEE_ADDRESS="employeeAddress";
 	
 	public static final String PRESENT_ADDRESS="presentaddresss";
-	
-	public static final String PERMANENT_ADDRESS="permanentaddresss";
+    public static final String IS_PRESENT_AND_PERMANENT_ADDRESS_SAME="isPresentAndPermanentAddressSame";
+
+    public static final String PERMANENT_ADDRESS="permanentaddresss";
 	
 	public static final String EXPERIENCE_LIST="experienceList";
 	

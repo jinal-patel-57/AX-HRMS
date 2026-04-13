@@ -522,19 +522,16 @@
                                <div class="label-content">${presentaddresss.pincode}</div>
                            </div>
                        </div>
+                                            <c:if test="${not isSamePresentAddress}">                                                          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                                                              <div class="form-group-view">
+                                                                  <div class="label-name">Address Proof</div>
+                                                                    <div class="label-content">
+                                                                        <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof</a></c:if>
 
-
-                          <c:if test="${not presentPermanentSame}">
-                                                      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                                                          <div class="form-group-view">
-                                                              <div class="label-name">Address Proof</div>
-                                                                <div class="label-content">
-                                                                    <c:if test="${not empty addressProofFile}"><a target="_blank" href="${addressProofFile}">View Address Proof</a></c:if>
-
+                                                                   </div>
                                                                </div>
-                                                           </div>
-                                                      </div>
-                                                  </c:if>
+                                                          </div>
+                                                      </c:if>
                        </div>
 
 
@@ -568,13 +565,6 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group-view">
-                            <div class="label-name">Degree</div>
-                            <div class="label-content">${education.degree}</div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                        <div class="form-group-view">
                             <div class="label-name">Start Date</div>
                             <div class="label-content">
                                 <fmt:formatDate value="${education.startDate}" pattern="dd-MMM-yyyy"/>
@@ -588,6 +578,13 @@
                             <div class="label-content">
                                 <fmt:formatDate value="${education.endDate}" pattern="dd-MMM-yyyy"/>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group-view">
+                            <div class="label-name">Degree</div>
+                            <div class="label-content">${education.degree}</div>
                         </div>
                     </div>
 

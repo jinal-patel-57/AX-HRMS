@@ -164,6 +164,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setLeavingDate(employeeDetails.getLeavingDate());
 			employeeDto.setGender(employeeDetails.getGender());
 			employeeDto.setExperienced(employeeDetails.getIsExperienced());
+            log.info("employeeDetails.getEmployeeType() :: "+employeeDetails.getEmployeeType());
 			employeeDto.setEmployeeType(employeeDetails.getEmployeeType());
 			log.info("employee code -- " + employeeDetails.getEmployeeCode());
 			employeeDto.setEmployeeCode(employeeDetails.getEmployeeCode());
@@ -204,10 +205,11 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			} catch(Exception e) {
 				log.error("Error while fetching address - " + e.getMessage());
 			}
-
 			if(employeeDetails.getManagerId()>0) {
 				EmployeeDetails reportingManagerDetails = employeeDetailsLocalService.getEmployeeDetails(employeeDetails.getManagerId());
-				employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());
+                log.info("reportingManagerDetails.getFirstName() :: "+reportingManagerDetails.getFirstName()+"  :  "+reportingManagerDetails.getLastName());
+
+                employeeDto.setReportingManager(reportingManagerDetails.getFirstName()+" "+ reportingManagerDetails.getLastName());
 			} else {
 				employeeDto.setReportingManager("");
 			}
@@ -330,15 +332,22 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			if (employeeAddress.getPresentPermanentSame()) {
 				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());
 				Address permanentaddresss = addressLocalService.getAddress(employeeAddress.getPermanentAddress());
-				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS, presentaddresss);
+                boolean isPresentAndPermanentAddressSame =  employeeAddress.isPresentPermanentSame();
+
+                renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS, presentaddresss);
 				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_ADDRESS, permanentaddresss);
-				log.info("presentaddresss" +presentaddresss);
+                renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.IS_PRESENT_AND_PERMANENT_ADDRESS_SAME, isPresentAndPermanentAddressSame);
+
+                log.info("presentaddresss" +presentaddresss);
 				log.info("permanentaddresss" +permanentaddresss);
 			} else {
 				Address presentaddresss = addressLocalService.getAddress(employeeAddress.getPresentAddress());
 				Address permanentaddresss = addressLocalService.getAddress(employeeAddress.getPermanentAddress());
+                 boolean isPresentAndPermanentAddressSame =  employeeAddress.isPresentPermanentSame();
 				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PERMANENT_ADDRESS, permanentaddresss);
 				renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.PRESENT_ADDRESS, presentaddresss);
+                renderRequest.setAttribute(AxHrmsEmployeeOnBoardingEmployeeConstants.IS_PRESENT_AND_PERMANENT_ADDRESS_SAME, isPresentAndPermanentAddressSame);
+
 				log.info("presentaddresss" +presentaddresss);
 				log.info("permanentaddresss" +permanentaddresss);
 			}
