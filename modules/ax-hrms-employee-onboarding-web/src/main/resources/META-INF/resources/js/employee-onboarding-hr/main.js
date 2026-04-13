@@ -312,9 +312,8 @@ var setFileInputValues;
 
 
             let allCheckedOnReady = $('.checkbox').length === $('.checkbox:checked').length;
-            if (allCheckedOnReady) {
-                $('.checkbox').attr("disabled", true);
-            }
+            
+            // NOTE: Checkboxes should NEVER be disabled - users must be able to edit them anytime
 
             $('.checkbox').on('change', function () {
                 toggleFileUploads();
@@ -353,11 +352,64 @@ var setFileInputValues;
             setFileInputValues(config.experienceLetterFileName, 'fileUpload1');
             setFileInputValues(config.relievingLetterFileName, 'fileUpload2');
 
+            // ========== FILE UPLOAD VALIDATION (PDF only) ==========
+            
+            // Validate Experience Letter (fileUpload1) - PDF only
+            $('#fileUpload1').on('change', function () {
+                validatePdfFile(this, 'Experience Letter');
+            });
+            
+            // Validate Relieving Letter (fileUpload2) - PDF only
+            $('#fileUpload2').on('change', function () {
+                validatePdfFile(this, 'Relieving Letter');
+            });
+            
+            function validatePdfFile(fileInput, fieldName) {
+                const file = fileInput.files[0];
+                if (!file) {
+                    return;
+                }
+                
+                const fileName = file.name.toLowerCase();
+                const validExtensions = ['.pdf', '.doc', '.docx'];
+                const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+                
+                if (!validExtensions.includes(fileExtension)) {
+                    alert(fieldName + ' must be a PDF or DOC/DOCX file. Selected file: ' + file.name);
+                    $(fileInput).val('');  // Clear the input
+                    checkFormCompleteness();
+                }
+            }
+
+            // Handle Full and Final Letter input with character counter and validation
+            $('#fileUpload3').on('input', function () {
+                const currentLength = $(this).val().length;
+                $('#charCount').text(currentLength);
+                checkFormCompleteness();
+            });
+
             function checkFormCompleteness() {
                 let allChecked = $('.checkbox').length === $('.checkbox:checked').length;
-                let allFilesUploaded = $('.file-upload').filter(function () {
-                    return $(this).val() === "";
-                }).length === 0;
+                let allFilesUploaded = true;
+                
+                // Check all file upload fields
+                $('.file-upload').each(function () {
+                    const fieldId = $(this).attr('id');
+                    const value = $(this).val();
+                    
+                    // Special handling for fileUpload3 (Full and Final Letter textarea)
+                    if (fieldId === 'fileUpload3') {
+                        // Must have non-whitespace content
+                        if (!value || value.trim() === "") {
+                            allFilesUploaded = false;
+                        }
+                    } else {
+                        // File inputs must not be empty
+                        if (value === "") {
+                            allFilesUploaded = false;
+                        }
+                    }
+                });
 
                 if (allChecked && allFilesUploaded) {
                     $('#offBoardBtn').prop('disabled', false);
@@ -367,6 +419,20 @@ var setFileInputValues;
             }
 
             checkFormCompleteness();
+            
+            // ========== OFF-BOARDING FORM BUTTON HANDLERS ==========
+            
+            // Handle Save Draft button click
+            $('#saveDraftBtn').on('click', function (event) {
+                $('#action').val('');  // Empty action = draft save
+            });
+            
+            // Handle Off-Board button click
+            $('#offBoardBtn').on('click', function (event) {
+                event.preventDefault();
+                $('#action').val('offBoard');
+                $('#offBoardFm').submit();
+            });
         });
 
         $(document).ready(function () {

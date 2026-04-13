@@ -62,6 +62,7 @@ public class AxHrmsEmployeeOnboardingHrWebPortletConstants {
     public static final String ASSET="asset";
     public  static final String MAIL_AND_BIOMETRICS="mailAndBiometrics";
     public  static final String OFF_BOARDING="OFF_BOARDING";
+    public  static final String RETURN_URL="returnURL";
    
     public  static final String EMPLOYEE_DESIGNATION="employeeDesignation";
     public  static final String EMPOYEE_DEPARTMENT="employeeDepartment";

@@ -16,6 +16,7 @@
         <div class="card-body">
             <input type="hidden" name="<portlet:namespace/>employeeId" value="${employeeId}">
             <input type="hidden" name="<portlet:namespace/>action" id="action" value="">
+            <input type="hidden" name="<portlet:namespace/>returnURL" id="returnURL" value="${param.returnURL}">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -71,18 +72,19 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="fileUpload1"><liferay-ui:message key='exp-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled accept="application/pdf"
+                        <input type="file" class="form-control-file file-upload" id="fileUpload1" disabled accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                name="<portlet:namespace/>file1">
                     </div>
                     <div class="form-group">
                         <label for="fileUpload2"><liferay-ui:message key='rel-letter'/><span class="text-danger">*</span></label>
-                        <input type="file" class="form-control-file file-upload" id="fileUpload2" disabled accept="application/pdf"
+                        <input type="file" class="form-control-file file-upload" id="fileUpload2" disabled accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                name="<portlet:namespace/>file2">
                     </div>
                     <div class="form-group">
                         <label for="fileUpload3"><liferay-ui:message key='full-final-letter'/><span class="text-danger">*</span></label>
-                        <textarea class="form-control file-upload" id="fileUpload3" disabled rows="4"
-                                  name="<portlet:namespace/>fullAndFinal">${fullAndFinalLetterFileName}</textarea>
+                        <textarea class="form-control file-upload" id="fileUpload3" disabled rows="4" maxlength="500"
+                                  name="<portlet:namespace/>fullAndFinal" placeholder="Maximum 500 characters">${fullAndFinalLetterFileName}</textarea>
+                        <small class="form-text text-muted"><span id="charCount">0</span>/500 characters</small>
                     </div>
                 </div>
             </div>
@@ -95,7 +97,7 @@
             <button type="submit" class="btn btn-outline-success" name="<portlet:namespace/>offBoard" value="offBoard"
                     id="offBoardBtn" disabled><liferay-ui:message key='off-board'/></button>
             <button type="submit" class="btn btn-outline-primary" id="saveDraftBtn" name="<portlet:namespace/>draft"
-                    value="draft"><liferay-ui:message key='save-draft'/></button>
+                    value="draft"><liferay-ui:message key='save-as-draft'/></button>
         </div>
     </form>
 

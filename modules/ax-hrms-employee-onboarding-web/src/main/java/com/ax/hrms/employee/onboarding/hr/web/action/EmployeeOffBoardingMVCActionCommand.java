@@ -72,16 +72,16 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         String offBoard = ParamUtil.getString(actionRequest, "action");
         EmployeeOffBoarding employeeOffBoarding = employeeOffBoardingLocalService.findByEmployeeId(employeeId);
         EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeOffBoarding.getEmployeeId());
-        if (!areAllCheckBoxSaved(employeeOffBoarding)) {
-            String kt = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.KT);
-            String nda = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.NDA);
-            String asset = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.ASSET);
-            String mailAndBiometrics = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.MAIL_AND_BIOMETRICS);
-            employeeOffBoarding.setKt(kt.equals("on"));
-            employeeOffBoarding.setNda(nda.equals("on"));
-            employeeOffBoarding.setAssets(asset.equals("on"));
-            employeeOffBoarding.setMailAndBiometrics(mailAndBiometrics.equals("on"));
-        }
+        
+        // Always update checkbox values to allow editing even after all are checked
+        String kt = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.KT);
+        String nda = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.NDA);
+        String asset = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.ASSET);
+        String mailAndBiometrics = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.MAIL_AND_BIOMETRICS);
+        employeeOffBoarding.setKt(kt.equals("on"));
+        employeeOffBoarding.setNda(nda.equals("on"));
+        employeeOffBoarding.setAssets(asset.equals("on"));
+        employeeOffBoarding.setMailAndBiometrics(mailAndBiometrics.equals("on"));
 
 
         long file1Id = uploadLettersToDLFileEntry(actionRequest, employeeId, "file1", "Experience Letter");
@@ -101,6 +101,11 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         }
 
         String fullAndFinal = ParamUtil.getString(actionRequest, "fullAndFinal");
+        // Trim whitespace and validate max length (500 characters)
+        fullAndFinal = fullAndFinal != null ? fullAndFinal.trim() : "";
+        if (fullAndFinal.length() > 500) {
+            throw new PortalException("Full and Final Letter cannot exceed 500 characters");
+        }
         if (!fullAndFinal.isEmpty()) {
             employeeOffBoarding.setFullAndFinal(fullAndFinal);
         }
@@ -152,8 +157,12 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
             actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
         } else {
             SessionMessages.add(actionRequest, "draft-saved");
-            MutableRenderParameters renderParams = actionResponse.getRenderParameters();
-            renderParams.setValue("mvcRenderCommandName", "/employeeOffBoarding");
+            String returnURL = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnboardingHrWebPortletConstants.RETURN_URL);
+            if (returnURL != null && !returnURL.isEmpty()) {
+                actionResponse.sendRedirect(returnURL);
+            } else {
+                actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+            }
         }
     }
 
@@ -175,7 +184,8 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         if (employeeOffBoarding.getRelievingLetterId() == 0) {
             isComplete = false;
         }
-        if (employeeOffBoarding.getFullAndFinal().isEmpty()) {
+        // Full and Final must have non-whitespace content
+        if (employeeOffBoarding.getFullAndFinal() == null || employeeOffBoarding.getFullAndFinal().trim().isEmpty()) {
             isComplete = false;
         }
 
@@ -224,10 +234,6 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         return folder;
     }
 
-    private boolean areAllCheckBoxSaved(EmployeeOffBoarding employeeOffBoarding) {
-        return employeeOffBoarding.getKt() && employeeOffBoarding.getNda() && employeeOffBoarding.getAssets() && employeeOffBoarding.getMailAndBiometrics();
-    }
-
     private long uploadLettersToDLFileEntry(ActionRequest actionRequest, long employeeId, String fieldName, String documentFolder) throws PortalException {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
@@ -244,6 +250,11 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
         }
         file1Name = uploadPortletRequest.getFileName(fieldName);
         if (file1Name != null && !file1Name.isEmpty() && length != 0) {
+            // Validate file extension for Experience and Relieving letters - PDF and DOC formats only
+            if ((fieldName.equals("file1") || fieldName.equals("file2")) && !isValidPdfFile(file1Name)) {
+                throw new PortalException("Only PDF or DOC/DOCX files are allowed for " + documentFolder);
+            }
+            
             Folder folder1 = folderNavigatorForOffBoardingFileUpload(documentFolder, employeeId, themeDisplay, serviceContext);
             file1Name = generateFileName(file1Name);
             FileEntry entry1 = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), themeDisplay.getScopeGroupId(), folder1.getFolderId(), file1Name, MimeTypesUtil.getContentType(file1), file1Name, StringPool.BLANK, StringPool.BLANK, file1, serviceContext);
@@ -252,6 +263,15 @@ public class EmployeeOffBoardingMVCActionCommand extends BaseMVCActionCommand {
             return 0;
         }
     }
+
+    private boolean isValidPdfFile(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return false;
+        }
+        String lowerFileName = fileName.toLowerCase();
+        return lowerFileName.endsWith(".pdf") || lowerFileName.endsWith(".doc") || lowerFileName.endsWith(".docx");
+    }
+
     private String generateFileName(String original) {
         String timestamp = String.valueOf(System.currentTimeMillis());
         return timestamp + "_" + original.replaceAll("\\s+", "_");
