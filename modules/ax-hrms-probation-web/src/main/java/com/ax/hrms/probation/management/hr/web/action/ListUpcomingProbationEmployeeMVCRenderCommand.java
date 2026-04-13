@@ -97,7 +97,7 @@ public class ListUpcomingProbationEmployeeMVCRenderCommand implements MVCRenderC
 				boolean isCurrentProbationEndDate = (probationEndMonth == currentMonth) && (probationEndYear == currentYear);
 
 
-				if (employeeProbationDetailDto.getProbationStatusMasterId() == inProbationStatusId || employeeProbationDetailDto.getProbationStatusMasterId() == extendedStatusId && isCurrentProbationEndDate)
+				if ((employeeProbationDetailDto.getProbationStatusMasterId() == inProbationStatusId || employeeProbationDetailDto.getProbationStatusMasterId() == extendedStatusId) && isCurrentProbationEndDate)
 					employeeProbationDetailDtoList.add(employeeProbationDetailDto);
 			}
 		}catch(Exception e){
