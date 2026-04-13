@@ -201,7 +201,7 @@ public class ImportEmployeesLeavesUtility extends MVCPortlet {
 			    	}
 			    }
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error processing employee leaves data: " + e.getMessage(), e);
 			}
 		}); 
 		
@@ -266,7 +266,7 @@ public class ImportEmployeesLeavesUtility extends MVCPortlet {
 				log.error("NoSuchLeaveTypeMasterException -- " + e.getMessage());
 			}
 	    } else {
-	    	log.info("Blank leave -- " + leaveCount);
+	    	log.error("Blank leave -- " + leaveCount);
 	    }
 	}
 	
@@ -287,7 +287,6 @@ public class ImportEmployeesLeavesUtility extends MVCPortlet {
             return retMp;
         } catch (Exception e) {
         	log.error("ERROR CREATING THE NEW EMPLOYEE USER -- " + e.getMessage());
-        	e.printStackTrace();
         }
         retMp.put(user, password);
         return retMp;

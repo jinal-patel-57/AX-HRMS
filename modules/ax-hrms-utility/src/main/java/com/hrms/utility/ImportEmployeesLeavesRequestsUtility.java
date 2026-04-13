@@ -664,38 +664,36 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
 
     private File generateErrorExcel(List<FailedRow> failedRows) throws IOException {
 
-        Workbook workbook = new XSSFWorkbook();
-       Sheet sheet = workbook.createSheet("Errors");
-
-        int rowNum = 0;
-
-        // Header
-        org.apache.poi.ss.usermodel.Row header = sheet.createRow(rowNum++);
-        header.createCell(0).setCellValue("Row Number");
-        header.createCell(1).setCellValue("Email");
-        header.createCell(2).setCellValue("Reason");
-
-        // Data
-        for (FailedRow fr : failedRows) {
-            org.apache.poi.ss.usermodel.Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(fr.rowNumber);
-            row.createCell(1).setCellValue(fr.email);
-            row.createCell(2).setCellValue(fr.reason);
-        }
-
-        sheet.autoSizeColumn(0);
-        sheet.autoSizeColumn(1);
-        sheet.autoSizeColumn(2);
-
-        File file = File.createTempFile("Leave_Error_Report_", ".xlsx");
-
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            workbook.write(fos);
-        }
-
-        workbook.close();
-
+       try(Workbook workbook = new XSSFWorkbook()) {
+    	   Sheet sheet = workbook.createSheet("Errors");
+    	   
+    	   int rowNum = 0;
+    	   
+    	   // Header
+    	   org.apache.poi.ss.usermodel.Row header = sheet.createRow(rowNum++);
+    	   header.createCell(0).setCellValue("Row Number");
+    	   header.createCell(1).setCellValue("Email");
+    	   header.createCell(2).setCellValue("Reason");
+    	   
+    	   // Data
+    	   for (FailedRow fr : failedRows) {
+    		   org.apache.poi.ss.usermodel.Row row = sheet.createRow(rowNum++);
+    		   row.createCell(0).setCellValue(fr.rowNumber);
+    		   row.createCell(1).setCellValue(fr.email);
+    		   row.createCell(2).setCellValue(fr.reason);
+    	   }
+    	   
+    	   sheet.autoSizeColumn(0);
+    	   sheet.autoSizeColumn(1);
+    	   sheet.autoSizeColumn(2);
+    	   
+    	   File file = File.createTempFile("Leave_Error_Report_", ".xlsx");
+    	   
+    	   try (FileOutputStream fos = new FileOutputStream(file)) {
+    		   workbook.write(fos);
+    	   }
         return file;
+       }
     }
 
     public static class ResultRow {
@@ -843,46 +841,44 @@ public class ImportEmployeesLeavesRequestsUtility extends MVCPortlet {
         }
     }
     private File generateResultExcel(List<ResultRow> resultRows) throws IOException {
-
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Results");
-
-        int rowNum = 0;
-
-        Row header = sheet.createRow(rowNum++);
-        header.createCell(0).setCellValue("Row");
-        header.createCell(1).setCellValue("Email");
-        header.createCell(2).setCellValue("Leave Type");
-        header.createCell(3).setCellValue("Existing Taken Leaves");
-        header.createCell(4).setCellValue("Calculated Days Of Taken Leaves");
-        header.createCell(5).setCellValue("Latest No Of Used Leaves");
-        header.createCell(6).setCellValue("Result");
-
-        for (ResultRow rr : resultRows) {
-
-            Row row = sheet.createRow(rowNum++);
-
-            row.createCell(0).setCellValue(rr.rowNumber);
-            row.createCell(1).setCellValue(rr.email);
-            row.createCell(2).setCellValue(rr.leaveType);
-            row.createCell(3).setCellValue(rr.existingBalance);
-            row.createCell(4).setCellValue(rr.calculatedDays);
-            row.createCell(5).setCellValue(rr.newBalance);
-            row.createCell(6).setCellValue(rr.result);
-        }
-
-        for (int i = 0; i < 7; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
-        File file = File.createTempFile("Leave_Balance_Audit_", ".xlsx");
-
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            workbook.write(fos);
-        }
-
-        workbook.close();
-
-        return file;
+    	try(Workbook workbook = new XSSFWorkbook()) {
+    		Sheet sheet = workbook.createSheet("Results");
+    		
+    		int rowNum = 0;
+    		
+    		Row header = sheet.createRow(rowNum++);
+    		header.createCell(0).setCellValue("Row");
+    		header.createCell(1).setCellValue("Email");
+    		header.createCell(2).setCellValue("Leave Type");
+    		header.createCell(3).setCellValue("Existing Taken Leaves");
+    		header.createCell(4).setCellValue("Calculated Days Of Taken Leaves");
+    		header.createCell(5).setCellValue("Latest No Of Used Leaves");
+    		header.createCell(6).setCellValue("Result");
+    		
+    		for (ResultRow rr : resultRows) {
+    			
+    			Row row = sheet.createRow(rowNum++);
+    			
+    			row.createCell(0).setCellValue(rr.rowNumber);
+    			row.createCell(1).setCellValue(rr.email);
+    			row.createCell(2).setCellValue(rr.leaveType);
+    			row.createCell(3).setCellValue(rr.existingBalance);
+    			row.createCell(4).setCellValue(rr.calculatedDays);
+    			row.createCell(5).setCellValue(rr.newBalance);
+    			row.createCell(6).setCellValue(rr.result);
+    		}
+    		
+    		for (int i = 0; i < 7; i++) {
+    			sheet.autoSizeColumn(i);
+    		}
+    		
+    		File file = File.createTempFile("Leave_Balance_Audit_", ".xlsx");
+    		
+    		try (FileOutputStream fos = new FileOutputStream(file)) {
+    			workbook.write(fos);
+    		}
+    		
+    		return file;
+    	}
     }
 }

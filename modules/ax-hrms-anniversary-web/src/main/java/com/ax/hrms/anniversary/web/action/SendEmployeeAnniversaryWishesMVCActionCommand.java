@@ -79,8 +79,6 @@ public class SendEmployeeAnniversaryWishesMVCActionCommand extends BaseMVCAction
 
             if (Validator.isNotNull(wishes)) {
 
-//                String subject = user.getFirstName() + AxHrmsAnniversaryWebPortletConstants.ONE_SPACE + user.getLastName() + AxHrmsAnniversaryWebPortletConstants.ANNIVERSARY_WISH_MAIL_SUBJECT_POSTFIX;
-                
                String mailContent =  mailTemplateConfiguration.mailAnniversaryWishBody();
               mailContent =  mailContent.replace("${EMPLOYEE_NAME}", anniversaryEmployeeDetails.getFirstName()+StringPool.SPACE+anniversaryEmployeeDetails.getLastName());
               mailContent = mailContent.replace("${SENDER_NAME}", user.getFirstName()+StringPool.SPACE+user.getLastName());

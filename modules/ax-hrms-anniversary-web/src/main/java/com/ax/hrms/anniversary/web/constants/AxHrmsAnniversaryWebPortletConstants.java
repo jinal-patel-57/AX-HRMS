@@ -9,11 +9,14 @@ public class AxHrmsAnniversaryWebPortletConstants {
     private AxHrmsAnniversaryWebPortletConstants(){}
 
     public static final String DEFAULT_PATH = "/";
-    public static final String EMPLOYEE_ANNIVERSARY_LIST_JSP_PATH = "/jsp/ax-hrms-anniversary-web/listEmployeeAnniversaryDetails.jsp";
-    public static final String MAIN_CSS_PATH = "/css/ax-hrms-anniversary-web/main.css";
-    public static final String MAIN_JS_PATH = "/js/ax-hrms-anniversary-web/main.js";
-    public static final String JQUERY_JS_PATH = "/js/ax-hrms-anniversary-web/jquery-3.7.1.js";
-    public static final String JQUERY_VALIDATOR_JS_PATH = "/js/ax-hrms-anniversary-web/jquery.validate.min.js";
+    public static final String JSP_FINAL_PATH = "/jsp/ax-hrms-anniversary-web";
+    public static final String JS_FINAL_PATH = "/js/ax-hrms-anniversary-web";
+    public static final String CSS_FINAL_PATH = "/css/ax-hrms-anniversary-web";
+    public static final String EMPLOYEE_ANNIVERSARY_LIST_JSP_PATH = JSP_FINAL_PATH + "/listEmployeeAnniversaryDetails.jsp";
+    public static final String MAIN_CSS_PATH = CSS_FINAL_PATH + "/main.css";
+    public static final String MAIN_JS_PATH = JS_FINAL_PATH + "/main.js";
+    public static final String JQUERY_JS_PATH = JS_FINAL_PATH + "/jquery-3.7.1.js";
+    public static final String JQUERY_VALIDATOR_JS_PATH = JS_FINAL_PATH + "/jquery.validate.min.js";
     public static final String SEND_ANNIVERSARY_WISH = "/sendAnniversaryWish";
 
     public static final String EMPLOYEE_ID = "employeeId";

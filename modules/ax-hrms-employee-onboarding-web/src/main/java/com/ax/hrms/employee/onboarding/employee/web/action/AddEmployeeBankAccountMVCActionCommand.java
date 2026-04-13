@@ -34,8 +34,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 	@Reference
 	EmployeeDetailsLocalService employeeDetailsLocalService;
 
-	private long employeeBankAccountId = 0;
-
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
@@ -72,8 +70,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 					employeeBankAccount.setStatus(true);
 
-					employeeBankAccountId = employeeBankAccount.getBankAccountId();
-					
 					if(employeeId>0) {
 						EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 						employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
@@ -109,7 +105,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 					employeeBankAccount.setBankBranch(bankBranch);
 					employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 					employeeBankAccount.setStatus(true);
-					//EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
 
 					employeeBankAccountLocalService.updateEmployeeBankAccount(employeeBankAccount);
@@ -119,13 +114,5 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 			}
 		
 		
-	}
-	private boolean areAnyFieldsEmpty(String... fields) {
-	    for (String field : fields) {
-	        if (field == null || field.trim().isEmpty()) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 }

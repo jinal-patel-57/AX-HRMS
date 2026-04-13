@@ -106,7 +106,6 @@ public class  AddEditEmployeeAddressMVCActionCommand extends BaseMVCActionComman
 			return true;
 		} catch (Exception e) {
 			log.error("Error in processAddresses: " + e.getMessage());
-			e.printStackTrace();
 			return false;
 		}
 	}

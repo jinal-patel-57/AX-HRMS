@@ -33,13 +33,11 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 	@Reference
 	EmployeeDetailsLocalService employeeDetailsLocalService;
 
-	private long employeeBankAccountId=0;
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		log.info("AddEmployeeBankAccountMVCActionCommand >>> doProcessAction ::: Action Called :::");
 
 		String accountNumber = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ACCOUNT_NUMBER);
-		String accountType = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.ACCOUNT_TYPE);
 		String beneficiaryName = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BENEFICIARY_NAME);
 		String bankName = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.BANK_NAME);
 		String ifscCode = ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.IFSC_CODE);
@@ -65,7 +63,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setModifiedBy(themeDisplay.getUserId());
 
 				employeeBankAccount.setAccountNumber(accountNumber);
-//				employeeBankAccount.setAccountType(accountType);
                 employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
@@ -74,7 +71,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 				employeeBankAccount.setStatus(true);
 				
-				employeeBankAccountId=employeeBankAccount.getBankAccountId();
 				if(employeeId>0) {
 					EmployeeDetails employeeDetails = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 					employeeBankAccount.setEmployeeId(employeeDetails.getEmployeeId());
@@ -103,7 +99,6 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				employeeBankAccount.setCreatedBy(themeDisplay.getUserId());
 				employeeBankAccount.setModifiedBy(themeDisplay.getUserId());
 				employeeBankAccount.setAccountNumber(accountNumber);
-//				employeeBankAccount.setAccountType(accountType);
                 employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
@@ -119,13 +114,5 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
 				log.error("error in bankAccount while Update");
 			}
 		}
-	}
-	private boolean areAnyFieldsEmpty(String... fields) {
-	    for (String field : fields) {
-	        if (field == null || field.trim().isEmpty()) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 }

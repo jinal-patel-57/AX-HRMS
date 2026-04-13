@@ -96,7 +96,7 @@ public class AxHrmsYearlyScheduler extends BaseDispatchTaskExecutor{
 				sendMailAndNotificationToHr(fromName, fromEmailAddress, e.getMessage(), group.getCompanyId());
 				log.info("mail sent to HR Admin related to Yearly Scheduler Fail.");
 			}catch (Exception e1){
-				e1.printStackTrace();
+				log.error("Error while sending mail to HR Admin about Yearly Scheduler failure: " + e1.getMessage(), e1);
 			}
 		}
 	}
@@ -168,33 +168,22 @@ public class AxHrmsYearlyScheduler extends BaseDispatchTaskExecutor{
 
 	public void sendMailAndNotificationToHr(String fromName, String fromEmailAddress, String body, long companyId)
 			throws Exception {
-
-
-try {
-	List<User> hrUserList = axHrmsCommonApi.fetchRolePersonList(companyId, "HR Admin", -1, -1);
-
-
-
-	//SEND MAIL TO HR
-	String mailContent = mailTemplateConfiguration.mailYearlySchedulerFailBody();
-	mailContent = mailContent.replace("${MESSAGE}",
-			Objects.toString(body,
-					"Unknown error occurred during Yearly Scheduler execution."));
-
-	String subject = mailTemplateConfiguration.mailYearlySchedulerFailSubject();
-	for (User hrUser : hrUserList) {
-		EmployeeDetails hrPerson = employeeDetailsLocalService.findByLrUserId(hrUser.getUserId());
-
-		axHrmsCommonApi.sendMail(hrPerson.getOfficialEmail(), fromEmailAddress, fromName,
-				subject, mailContent);
-
+		try {
+			List<User> hrUserList = axHrmsCommonApi.fetchRolePersonList(companyId, "HR Admin", -1, -1);
+			//SEND MAIL TO HR
+			String mailContent = mailTemplateConfiguration.mailYearlySchedulerFailBody();
+			mailContent = mailContent.replace("${MESSAGE}",
+					Objects.toString(body,
+							"Unknown error occurred during Yearly Scheduler execution."));
+			String subject = mailTemplateConfiguration.mailYearlySchedulerFailSubject();
+			for (User hrUser : hrUserList) {
+				EmployeeDetails hrPerson = employeeDetailsLocalService.findByLrUserId(hrUser.getUserId());
+		
+				axHrmsCommonApi.sendMail(hrPerson.getOfficialEmail(), fromEmailAddress, fromName,
+						subject, mailContent);
+			}
+		}catch (Exception e){
+			log.error("Error while sending mail to HR Admin about Yearly Scheduler failure: " + e.getMessage(), e);
+		}
 	}
-}catch (Exception e){
-	e.printStackTrace();
-}
-
-
-	}
-
-
 }

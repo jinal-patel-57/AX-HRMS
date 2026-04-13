@@ -77,7 +77,7 @@ public class ViewWFHRenderCommand implements MVCRenderCommand {
                 String teamMail = wfh.getTeamMailId();
 
                 if (teamMail != null) {
-                    teamMail = teamMail.replaceAll("\\s*,\\s*", ", ");
+                    teamMail = teamMail.replace(" ,", ",").replace(", ", ",");
                 }
                 dto.setTeamMailId(teamMail);
                 dto.setStatus(statusName);

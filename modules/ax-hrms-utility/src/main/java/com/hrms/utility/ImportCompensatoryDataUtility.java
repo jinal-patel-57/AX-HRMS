@@ -93,9 +93,9 @@ public class ImportCompensatoryDataUtility extends MVCPortlet {
         Workbook workbook = axHrmsCommonApi.getWorkbook(fileName, compensatoryFile);
         long managerId = 0l;
         try {
-			managerId = employeeDetailsLocalService.findByLrUserId(userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), "connect@aixtor.com").getUserId()).getEmployeeId();;
+			managerId = employeeDetailsLocalService.findByLrUserId(userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), "connect@aixtor.com").getUserId()).getEmployeeId();
 		} catch (PortalException e) {
-			e.printStackTrace();
+			log.error("Error fetching manager details: " + e.getMessage(), e);
 		}
         Map<String, Map<String, Object>> compensatoryDataMap = axHrmsCommonApi.readExcelSheetForImportEmployee(workbook.getSheetAt(0));
         log.info("Read compensatory data: " + compensatoryDataMap);
@@ -141,7 +141,7 @@ public class ImportCompensatoryDataUtility extends MVCPortlet {
 			try {
 				compensationDate = sdfc.parse(dateOfComp);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				log.error("Error parsing date of compensation: " + e.getMessage(), e);
 			}
 
 			// Find employeeId using email or name
@@ -194,8 +194,7 @@ public class ImportCompensatoryDataUtility extends MVCPortlet {
 						compensatoryData.setStartTime(startDateTime);
 						compensatoryData.setEndTime(endDateTime);
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error("Error parsing start/end time: " + e.getMessage(), e);
 					}
 				}
 				
@@ -204,40 +203,15 @@ public class ImportCompensatoryDataUtility extends MVCPortlet {
 					compensatoryData.setLeaveCompensatoryStatusMasterId(leaveCompensatoryStatusMasterLocalService
 							.findByLeaveCompensatoryStatusName(approvedStatus).getLeaveCompensatoryStatusMasterId());
 				} catch (NoSuchLeaveCompensatoryStatusMasterException e) {
-					e.printStackTrace();
+					log.error("Error fetching LeaveCompensatoryStatusMaster for status " + approvedStatus + ": " + e.getMessage(), e);
 				}
 				
 				// Save to DB
 				compensatoryDataLocalService.addCompensatoryData(compensatoryData);
 				log.info("compensatory data " + compensatoryData);
-				//break;
 			} else {
 				log.warn("No employee found with email: " + officialEmail);
 			}
-
-
-			/*
-			 * try { if (!"0".equalsIgnoreCase(outerKey) && Validator.isNotNull(innerMap)) {
-			 * CompensatoryOff compensatoryOff =
-			 * compensatoryOffLocalService.createCompensatoryOff(
-			 * CounterLocalServiceUtil.increment(CompensatoryOff.class.getName()) );
-			 * compensatoryOff.setCompanyId(themeDisplay.getCompanyId());
-			 * compensatoryOff.setGroupId(themeDisplay.getCompanyGroupId());
-			 * compensatoryOff.setCreateDate(new Date());
-			 * compensatoryOff.setModifiedDate(new Date());
-			 * compensatoryOff.setCreatedBy(themeDisplay.getUserId());
-			 * compensatoryOff.setEmployeeCode(innerMap.get("1").toString().trim());
-			 * compensatoryOff.setDateEarned(new Date()); // Parse from innerMap if
-			 * available
-			 * compensatoryOff.setNoOfDays(Double.parseDouble(innerMap.get("2").toString().
-			 * trim())); compensatoryOff.setStatus(true);
-			 * 
-			 * compensatoryOffLocalService.addCompensatoryOff(compensatoryOff); } } catch
-			 * (Exception e) { log.error("Error processing compensatory data: " +
-			 * e.getMessage()); }
-			 */
-			
-			
 		}
 
         String redirect = ParamUtil.getString(actionRequest, "redirect");

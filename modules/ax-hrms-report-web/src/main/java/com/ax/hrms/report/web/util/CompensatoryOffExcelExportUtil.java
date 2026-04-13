@@ -22,9 +22,9 @@ public class CompensatoryOffExcelExportUtil {
             ResourceResponse response,
             String fileName) throws IOException {
 
-        Workbook workbook = new XSSFWorkbook();
+        
         OutputStream outputStream = response.getPortletOutputStream();
-        try {
+        try(Workbook workbook = new XSSFWorkbook()) {
         	
         	Sheet sheet = workbook.createSheet("Comp Off Report");
         	
@@ -86,7 +86,6 @@ public class CompensatoryOffExcelExportUtil {
 			log.error("Error exporting Comp Off report to Excel: " + e.getMessage(), e);
 		} finally {
 			outputStream.close();
-			workbook.close();
 		}
     }
 }
