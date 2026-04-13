@@ -63,7 +63,7 @@
                            <c:if test="${isHrAdmin || isManager}">
                                        <td>
                                            <c:choose>
-                                               <c:when test="${isHrAdmin || todaysWFHEmployee.isReportingManager()}">
+                                               <c:when test="${isHrAdmin || isManager}">
                                                    ${todaysWFHEmployee.status}
                                                </c:when>
                                                <c:otherwise>

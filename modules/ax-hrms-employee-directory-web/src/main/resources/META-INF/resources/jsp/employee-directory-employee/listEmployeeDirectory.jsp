@@ -34,7 +34,9 @@
                 <input type="text" name="<portlet:namespace />searchQuery" value="${searchedValue}" class="form-control form-control-sm mr-1" placeholder="Search..." id="search" >
                 <button type="submit" class="btn btn-outline-dark btn-sm btn-primary"><liferay-ui:message key="search" /></button>
             </form>
-
+        <button type="button" class="btn btn-secondary btn-sm ml-1 mx-2" onclick="clearFilters()">
+            Clear
+        </button>
           <form class="form-inline" onsubmit="updateURLAndFetchData(); return false;">
 
 
@@ -173,6 +175,24 @@ function updateURLAndFetchData() {
         selectedDepart: selectedDepart,
         searchedValue: selectedValue
     };
+    AxHrmsEmployeeDirectoryHrAdminWebPortlet.setConfigsForRenderFetchData(config);
+}
+
+function clearFilters() {
+
+    // Reset fields
+    document.getElementById('search').value = '';
+    document.getElementById('selectedDepart').value = '0';
+
+    var config = {
+        namespaceDepartment: '<portlet:namespace />selectedDepart',
+        namespaceSearch: '<portlet:namespace />searchQuery',
+        renderUrl: '${filterDataURL}',
+        selectedDepart: 0,
+        searchedValue: ''
+    };
+
+    // Call same method to reload full data
     AxHrmsEmployeeDirectoryHrAdminWebPortlet.setConfigsForRenderFetchData(config);
 }
 </script>

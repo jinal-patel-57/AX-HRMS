@@ -184,9 +184,10 @@
         let url = config.deleteUrl;
         url = url.replace('SELECTED_ID', config.holidayId);
 
-        if (confirm("Are you sure you want to delete this holiday?")) {
-            window.location.href = url;
-        }
+//        if (confirm("Are you sure you want to delete this holiday?")) {
+//            window.location.href = url;
+//        }
+window.location.href=url
     }
 
 

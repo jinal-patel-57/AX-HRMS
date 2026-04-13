@@ -11,6 +11,7 @@ import com.ax.hrms.model.WorkFromHomeRequest;
 import com.ax.hrms.notification.template.config.configuration.NotificationTemplateConfiguration;
 import com.ax.hrms.service.*;
 import com.ax.hrms.work.from.home.web.constants.AxHrmsWorkFromHomePortletKeys;
+import com.ax.hrms.work.from.home.web.employee.dto.DayInfo;
 import com.ax.hrms.work.from.home.web.employee.util.WFHStatusUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -70,6 +71,70 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
 
     @Reference
     WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
+
+
+    private List<DayInfo> getNewRequestList(ActionRequest request) {
+
+        List<DayInfo> list = new ArrayList<>();
+
+        String[] dates = ParamUtil.getParameterValues(request, "wfhDate");
+
+        if (dates == null)
+        {return list;
+        }
+
+        for (String date : dates) {
+
+            String key = date.replace("-", "");
+
+            boolean isHalf = ParamUtil.getBoolean(request, "day" + key + "IsHalf");
+            boolean isFirstHalf = false;
+
+            if (isHalf) {
+                String halfType = ParamUtil.getString(request, "day" + key + "halfType");
+                isFirstHalf = "firstHalf".equalsIgnoreCase(halfType);
+            }
+
+            list.add(new DayInfo(date, isHalf, isFirstHalf));
+        }
+
+        return list;
+    }
+
+    private boolean isOverlap(
+            List<DayInfo> newList,
+            List<WorkFromHomeDayType> existingList) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (DayInfo newDay : newList) {
+
+            for (WorkFromHomeDayType existing : existingList) {
+
+                String existingDate = sdf.format(existing.getWorkFromHomeDate());
+
+                // Only compare same date
+                if (!existingDate.equals(newDay.date)) continue;
+
+                boolean exIsHalf = existing.getIsHalfDay();
+                boolean exIsFirstHalf = existing.getIsFirstHalf();
+
+                //RULE 1: FULL day conflict
+                if (!exIsHalf || !newDay.isHalfDay) {
+                    return true;
+                }
+
+                //RULE 2: Same half conflict
+                if (exIsFirstHalf == newDay.isFirstHalf) {
+                    return true;
+                }
+
+                //RULE 3: First vs Second → allowed
+            }
+        }
+
+        return false;
+    }
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -178,13 +243,72 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
             hasError = true;
         }
 
+
+
         // If any validation failed → stop processing
         if (hasError) {
             actionResponse.setRenderParameter("mvcPath", "/jsp/ax-hrms-work-from-home-employee/add_edit_work_from_home.jsp");
             return;
         }
 
+        List<DayInfo> newRequestList = getNewRequestList(actionRequest);
+        EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 
+        long pendingId = leaveStatusLocalService
+                .findByLeaveCompensatoryStatusName(AxHrmsWorkFromHomePortletKeys.PENDING)
+                .getLeaveCompensatoryStatusMasterId();
+        log.info("pendingId:" + pendingId);
+
+        long approvedId = leaveStatusLocalService
+                .findByLeaveCompensatoryStatusName("Approved")
+                .getLeaveCompensatoryStatusMasterId();
+        log.info("approvedId:" + approvedId);
+
+        List<Long> statusIds = Arrays.asList(pendingId, approvedId);
+        log.info("statusIds:" + statusIds);
+        List<WorkFromHomeRequest> allRequests =
+                workFromHomeRequestLocalService
+                        .findByEmployeeId(employeeDetails.getEmployeeId(),-1,-1);
+        log.info("allRequests:" + allRequests);
+        List<WorkFromHomeRequest> existingRequests = new ArrayList<>();
+
+        for (WorkFromHomeRequest req : allRequests) {
+
+            long status = req.getStatus();
+
+            if (status == pendingId || status == approvedId) {
+                existingRequests.add(req);
+            }
+        }
+        for (WorkFromHomeRequest existingReq : existingRequests) {
+
+            // Skip same record in EDIT
+            if (existingReq.getWorkFromHomeRequestId() == wfhId) continue;
+
+            List<WorkFromHomeDayType> existingDays =
+                    workFromHomeDayTypeLocalService
+                            .findByWorkFromHomeRequestId(
+                                    existingReq.getWorkFromHomeRequestId()
+                            );
+
+            if (isOverlap(newRequestList, existingDays)) {
+                log.info("overlap is happen");
+                SessionErrors.add(actionRequest, "wfh-overlap-error");
+
+//                actionResponse.setRenderParameter(
+//                        "mvcPath",
+//                        "/jsp/ax-hrms-work-from-home-employee/list_work_from_home.jsp"
+//                );
+
+//                actionResponse.setRenderParameter(
+//                        "mvcRenderCommandName",
+//                        "/"   // <-- your render command name
+//                );
+                actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
+
+                return;
+            }
+        }
         // -----------------------------
         // SAVE DATA (ADD / EDIT)
         // -----------------------------
@@ -200,7 +324,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),
                 PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-        EmployeeDetails employeeDetails = null;
+//        EmployeeDetails employeeDetails = null;
         try {
             employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
             log.info("employee details " + employeeDetails.toString());
