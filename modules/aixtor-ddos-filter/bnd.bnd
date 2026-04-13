@@ -1,0 +1,4 @@
+Bundle-Name: aixtor-ddos-filter
+Bundle-SymbolicName: aixtor.ddos.filter
+Bundle-Version: 1.0.0
+Export-Package: com.aixtor.ddos.filter.constants
