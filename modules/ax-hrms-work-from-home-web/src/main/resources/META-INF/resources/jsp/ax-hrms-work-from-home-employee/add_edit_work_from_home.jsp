@@ -260,13 +260,23 @@ $("#wfhForm").validate({
         },
         [ns + "teamId"]: {
             required: true
-        }
+        },
+
     },
 
     messages: {
         [ns + "teamId"]: {
             required: "Please select at least one team member."
-        }
+        },
+            [ns + "startDate"]: {
+                    required: "Start Date is Required.",
+                },
+                [ns + "endDate"]: {
+                    required:  "End Date is Required.",
+                },
+                  [ns + "reason"]: {
+                              required: "Reason is Required.",
+                          },
     },
 
     errorElement: "small",

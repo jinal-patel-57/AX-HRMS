@@ -2433,7 +2433,7 @@ initializeValidation()
                                 digits: "Address ID should contain only digits."
                             },
                             [namespace + "presentaddressLine1"]: {
-                                required: "Please enter the present address line 1.",
+                                required: "Please enter the address line 1.",
                                 maxlength: "Address line 1 cannot exceed 250 characters.",
                                 validAddress: "Invalid address. Only letters, numbers, and special characters ( # , . - / ' & ) are allowed."
                             },

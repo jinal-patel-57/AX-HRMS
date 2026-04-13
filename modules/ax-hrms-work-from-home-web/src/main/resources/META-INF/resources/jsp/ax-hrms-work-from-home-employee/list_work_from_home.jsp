@@ -5,6 +5,7 @@
 <liferay-ui:success key="wfh-added" message="Work From Home request added successfully!" />
 <liferay-ui:success key="wfh-updated" message="Work From Home request updated successfully!" />
 <liferay-ui:success key="delete-success" message="Work From Home request deleted successfully!" />
+<liferay-ui:error key="wfh-overlap-error" message="You have overlapping Work From Home. Kindly check and apply accordingly."/>
 
 <portlet:renderURL var="addWFHForm">
     <portlet:param name="mvcRenderCommandName" value="/addWFHForm" />
