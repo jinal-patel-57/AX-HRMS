@@ -117,8 +117,10 @@
         /* ================= FORM VALIDATION ================= */
         form.validate({
             ignore: [],
-            errorClass: "is-invalid",
-            validClass: "is-valid",
+//            errorClass: "is-invalid",
+            errorClass: "invalid",
+//            validClass: "is-valid",
+            validClass: "valid",
             errorElement: "div",
 
             errorPlacement: function (error, element) {

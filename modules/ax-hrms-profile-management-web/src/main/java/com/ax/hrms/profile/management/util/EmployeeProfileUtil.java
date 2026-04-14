@@ -65,11 +65,29 @@ public class EmployeeProfileUtil {
 			long profilePicId = employeeDetails.getProfilePicId();
 			long aadhaarCardId = employeeDetails.getAadhaarCardFileId();
 			long panCardId = employeeDetails.getPanCardFileId();
+            ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 			if (profilePicId > 0) {
+                try {
 				FileEntry profilePicPathName = DLAppLocalServiceUtil.getFileEntry(profilePicId);
 				String profilePicName = profilePicPathName.getFileName();
-				renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PROFILE_PIC_NAME, profilePicName);
+                String profilePicURL =
+                        DLUtil.getPreviewURL(
+                                profilePicPathName,
+                                profilePicPathName.getFileVersion(),
+                                themeDisplay,
+                                ""
+                        );
+
+                renderRequest.setAttribute(
+                        AxHrmsProfileManagementWebConstants.PROFILE_PIC_URL,
+                        profilePicURL
+                );
+
+                renderRequest.setAttribute(AxHrmsProfileManagementWebConstants.PROFILE_PIC_NAME, profilePicName);
+                } catch (Exception e) {
+                    log.error("Profile picture not found for ID: " + profilePicId);
+                }
 			}
 			if (aadhaarCardId > 0) {
 				FileEntry aadhaarCardFile = DLAppLocalServiceUtil.getFileEntry(aadhaarCardId);

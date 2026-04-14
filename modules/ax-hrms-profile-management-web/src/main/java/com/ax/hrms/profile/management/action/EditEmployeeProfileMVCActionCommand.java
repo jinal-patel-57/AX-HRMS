@@ -1,24 +1,30 @@
 package com.ax.hrms.profile.management.action;
 
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
-import com.ax.hrms.master.service.DepartmentMasterLocalService;
-import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.Address;
 import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.Nominee;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebConstants;
 import com.ax.hrms.profile.management.constants.AxHrmsProfileManagementWebPortletKeys;
-import com.ax.hrms.service.*;
 import com.ax.hrms.service.AddressLocalService;
+import com.ax.hrms.service.EmployeeAddressLocalService;
+import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.NomineeLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.object.rest.dto.v1_0.FileEntry;
 import com.liferay.object.rest.dto.v1_0.Folder;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.ResourceConstants;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -30,8 +36,10 @@ import org.osgi.service.component.annotations.Reference;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component(
@@ -52,9 +60,12 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
     EmployeeAddressLocalService employeeAddressLocalService;
     @Reference
     AddressLocalService addressLocalService;
-
+    @Reference
+    private ResourcePermissionLocalService resourcePermissionLocalService;
     @Reference
     NomineeLocalService nomineeLocalService;
+    @Reference
+    private RoleLocalService roleLocalService;
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         log.info("EditEmployeeProfileMVCActionCommand >>> doProcessAction ::: Edit employee profile Action called...");
@@ -71,94 +82,140 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
             updateNominee(actionRequest, themeDisplay);
 
 
-//            boolean isSamePresentAddress = ParamUtil.getBoolean(actionRequest,AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,GetterUtil.DEFAULT_BOOLEAN);
-//            if(isSamePresentAddress){
-//                Address oldPermanantAddressObj = addressLocalService.getAddress(oldEmployeeAddressObj.getPermanentAddress());
-//                Address newPermanantAddressObj = getPermanantAddress(actionRequest,oldPermanantAddressObj);
-//                addressLocalService.updateAddress(newPermanantAddressObj);
-//                if(!oldEmployeeAddressObj.getPresentPermanentSame()){
-//                    deletePresentAddress(oldEmployeeAddressObj.getPresentAddress());
-//                }
-//                updateAddressIdsInEmployeeAddress(newPermanantAddressObj.getAddressId(),newPermanantAddressObj.getAddressId(),oldEmployeeAddressObj,isSamePresentAddress);
-//            } else {
-//                File addressProofFile =
-//                        uploadRequest.getFile(
-//                                AxHrmsProfileManagementWebConstants.ADDRESS_PROOF_FILE);
-//                if (Validator.isNotNull(addressProofFile) &&
-//                        addressProofFile.length() > 0) {
+            // ================= PROFILE PIC UPLOAD =================
+            File profilePicFile = uploadRequest.getFile("profilePic");
+
+            if (Validator.isNotNull(profilePicFile) && profilePicFile.length() > BigDecimal.ZERO.intValue()) {
+
+                log.info("Uploading Profile Picture...");
+
+                ServiceContext serviceContext =
+                        ServiceContextFactory.getInstance(
+                                Folder.class.getName(), actionRequest);
+
+                serviceContext.setAddGroupPermissions(true);
+                serviceContext.setAddGuestPermissions(true);
+
+                String rootFolderName = "HRMS Document";
+
+                User employeeUser =
+                        userLocalService.getUser(oldEmployeeDetailsObj.getLrUserId());
+
+                String employeeFolderName =
+                        employeeUser.getScreenName() + employeeUser.getUserId();
+
+                String documentFolderName = "Profile Picture";
+
+                String originalFileName =
+                        uploadRequest.getFileName("profilePic");
+
+                long oldProfilePicId = oldEmployeeDetailsObj.getProfilePicId();
+
+                long profilePicFileEntryId =
+                        axHrmsCommonApi.uploadEmployeeDocument(
+                                themeDisplay,
+                                serviceContext,
+                                profilePicFile,
+                                originalFileName,
+                                oldProfilePicId,
+                                rootFolderName,
+                                employeeFolderName,
+                                documentFolderName
+                        );
+
+                if (profilePicFileEntryId > 0) {
+
+                    try {
+                        Role guestRole = roleLocalService.getRole(
+                                themeDisplay.getCompanyId(),
+                                RoleConstants.GUEST);
+
+                        resourcePermissionLocalService.setResourcePermissions(
+                                themeDisplay.getCompanyId(),
+                                com.liferay.document.library.kernel.model.DLFileEntry.class.getName(),
+                                ResourceConstants.SCOPE_INDIVIDUAL,
+                                String.valueOf(profilePicFileEntryId),
+                                guestRole.getRoleId(),
+                                new String[]{
+                                        ActionKeys.VIEW,
+                                        ActionKeys.DOWNLOAD
+                                }
+                        );
+
+                    } catch (Exception e) {
+                        log.error("Error setting permission for profile pic", e);
+                    }
+
+                    oldEmployeeDetailsObj.setProfilePicId(profilePicFileEntryId);
+                    employeeDetailsLocalService.updateEmployeeDetails(oldEmployeeDetailsObj);
+
+                    log.info("Profile pic uploaded successfully: " + profilePicFileEntryId);
+                }
+            }
+
+
+//            boolean isSamePresentAddress = ParamUtil.getBoolean(
+//                    actionRequest,
+//                    AxHrmsProfileManagementWebConstants.IS_SAME_PRESENT_ADDRESS,
+//                    false
+//            );
 //
-//                    log.info("Uploading Address Proof from My Profile");
+//            List<Address> oldAddressList = getAddressList(oldEmployeeAddressObj);
 //
-//                    ServiceContext serviceContext =
-//                            ServiceContextFactory.getInstance(
-//                                    Folder.class.getName(), actionRequest);
+//            Address permanentAddress;
+//            Address presentAddress;
 //
-//                    String rootFolderName = "HRMS Document";
-//                    long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+//            if (!oldAddressList.isEmpty()) {
 //
-//                    long lrUserId = themeDisplay.getUserId();
+//                //  1. UPDATE PERMANENT ADDRESS
+//                permanentAddress = getPermanantAddress(actionRequest, oldAddressList.get(0));
+//                addressLocalService.updateAddress(permanentAddress);
 //
-//                    EmployeeDetails employeeDetails =
-//                            employeeDetailsLocalService.fetchEmployeeDetailsByLRUserId(lrUserId);
+//                //  2. HANDLE PRESENT ADDRESS
+//                if (isSamePresentAddress) {
 //
-//                    EmployeeAddress employeeAddress =
-//                            employeeAddressLocalService.getEmployeeAddress(
-//                                    employeeDetails.getEmployeeAddressId());
+//                    //  Same as permanent
+//                    updateAddressIdsInEmployeeAddress(
+//                            permanentAddress.getAddressId(),
+//                            permanentAddress.getAddressId(),
+//                            oldEmployeeAddressObj,
+//                            true
+//                    );
 //
-//                    if (Validator.isNull(addressProofFile) || addressProofFile.length() == 0) {
-//                        log.info("No address proof file uploaded.");
-//                        return;
+//                } else {
+//
+//                    if (oldAddressList.size() == 2) {
+//
+//                        //  Update existing present address
+//                        presentAddress = getPresentAddress(actionRequest, oldAddressList.get(1));
+//                        addressLocalService.updateAddress(presentAddress);
+//
+//                    } else {
+//
+//                        //  Create new present address
+//                        presentAddress = addressLocalService.createAddress(
+//                                CounterLocalServiceUtil.increment(Address.class.getName())
+//                        );
+//
+//                        presentAddress.setCreatedBy(themeDisplay.getUserId());
+//                        presentAddress.setModifiedBy(themeDisplay.getUserId());
+//                        presentAddress.setGroupId(themeDisplay.getScopeGroupId());
+//
+//                        presentAddress = getPresentAddress(actionRequest, presentAddress);
+//                        addressLocalService.addAddress(presentAddress);
 //                    }
 //
-//                    User employeeUser =
-//                            userLocalService.getUser(employeeDetails.getLrUserId());
-//
-//                    String employeeFolderName =
-//                            employeeUser.getScreenName() + employeeUser.getUserId();
-//
-//                    String documentFolderName = "Address Proof";
-//                    String originalFileName =
-//                            uploadRequest.getFileName("addressProofFile");
-//                    long addressProofFileEntryId =
-//                            axHrmsCommonApi.uploadEmployeeDocument(
-//                                    themeDisplay,
-//                                    serviceContext,
-//                                    addressProofFile,
-//                                    originalFileName,
-//                                    employeeAddress.getEmployeeAddressProofFileEntryId(),
-//                                    rootFolderName,
-//                                    employeeFolderName,
-//                                    documentFolderName
-//                            );
-//
-//                    if (addressProofFileEntryId > 0) {
-//                        employeeAddress.setEmployeeAddressProofFileEntryId(addressProofFileEntryId);
-//                        employeeAddressLocalService.updateEmployeeAddress(employeeAddress);
-//
-//                        log.info("Address proof uploaded successfully. FileEntryId = " + addressProofFileEntryId);
-//                    }
-//                }
-//
-//
-//                List<Address> oldAddressList = getAddressList(oldEmployeeAddressObj);
-//                Address newPermanantAddressObj;
-//                Address newPresentAddressObj;
-//                if(!oldAddressList.isEmpty()) {
-//                    newPermanantAddressObj = getPermanantAddress(actionRequest, oldAddressList.get(0));
-//                    if(oldAddressList.size() == 2) {
-//                        newPresentAddressObj = getPresentAddress(actionRequest, oldAddressList.get(1));
-//                        addressLocalService.updateAddress(newPresentAddressObj);
-//                    }
-//                    else{
-//                        Address address = addressLocalService.createAddress(CounterLocalServiceUtil.increment(Address.class.getName()));
-//                        address.setCreatedBy(themeDisplay.getUserId());
-//                        address.setModifiedBy(themeDisplay.getUserId());
-//                        address.setGroupId(themeDisplay.getScopeGroupId());
-//                        addPresentAddress(actionRequest,oldEmployeeAddressObj,isSamePresentAddress,address);
-//                    }
-//                    addressLocalService.updateAddress(newPermanantAddressObj);
+//                    //  3. UPDATE MAPPING
+//                    updateAddressIdsInEmployeeAddress(
+//                            permanentAddress.getAddressId(),
+//                            presentAddress.getAddressId(),
+//                            oldEmployeeAddressObj,
+//                            false
+//                    );
 //                }
 //            }
+
+
             SessionMessages.add(actionRequest,AxHrmsProfileManagementWebConstants.UPDATE_SUCCESS_MESSAGE_KEY);
         }catch(Exception exception){
 
@@ -231,7 +288,16 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
             String lastName = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.LAST_NAME, GetterUtil.DEFAULT_STRING);
             String mobileNumber = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.MOBILE_NUMBER, GetterUtil.DEFAULT_STRING);
             String personalEmail = ParamUtil.getString(actionRequest,AxHrmsProfileManagementWebConstants.PERSONAL_EMAIL, GetterUtil.DEFAULT_STRING);
-
+            boolean maritalStatus = ParamUtil.getBoolean(actionRequest, "maritalStatus", false);
+            Date marriageDate = ParamUtil.getDate(actionRequest, "marriageDate", new SimpleDateFormat("yyyy-MM-dd"));
+            String spouseName = ParamUtil.getString(actionRequest, "spouseName");
+            if (!maritalStatus) {
+                marriageDate = null;
+                spouseName = "";
+            }
+            employeeDetails.setMaritalStatus(maritalStatus);
+            employeeDetails.setMarriageDate(marriageDate);
+            employeeDetails.setSpouseName(spouseName);
             employeeDetails.setFirstName(firstName);
             user.setMiddleName(middleName);
             employeeDetails.setLastName(lastName);
@@ -271,7 +337,7 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
                 nominee = nomineeLocalService.getNominee(nomineeId);
 
 	            Address address = addressLocalService.getAddress(nominee.getNomineeAddress());
-	
+
 	            nominee.setNomineeFirstName(
 	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_FIRST_NAME));
 	            nominee.setNomineeLastName(
@@ -280,13 +346,13 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
 	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_CONTACT));
 	            nominee.setRelationshipWithNominee(
 	                    ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.RELATIONSHIP_WITH_NOMINEE));
-	
+
 	            String dob = ParamUtil.getString(actionRequest,
 	                    AxHrmsProfileManagementWebConstants.NOMINEE_DOB);
 	            if(Validator.isNotNull(dob) && !dob.isBlank()) {
 	            	nominee.setNomineeDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
 	            }
-	
+
 	            address.setLine1(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE1));
 	            address.setLine2(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE2));
 	            address.setLine3(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_LINE3));
@@ -294,15 +360,17 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
 	            address.setState(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_STATE));
 	            address.setCountry(ParamUtil.getLong(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_COUNTRY));
 	            address.setPincode(ParamUtil.getString(actionRequest, AxHrmsProfileManagementWebConstants.NOMINEE_PINCODE));
-	
+
 	            addressLocalService.updateAddress(address);
 	            nomineeLocalService.updateNominee(nominee);
-            
+
         	}
 
         } catch (Exception e) {
             log.error("Error updating nominee", e);
         }
+
+
 
 
     }

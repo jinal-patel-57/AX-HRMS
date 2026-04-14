@@ -79,7 +79,7 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String EMPLOYEE_UAN_ESIC="employeeUanEsic";
 
 	public static final String NOMINEE="nominee";
-
+    public static final String PROFILE_PIC_URL = "profilePicURL";
 	public static final String PROFILE_PIC_NAME="profilePicName";
 	public static final String AADHAAR_CARD_FILE_NAME="aadhaarCardFileName";
 	public static final String PAN_CARD_FILE_NAME="panCardFileName";

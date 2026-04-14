@@ -13,6 +13,56 @@
       enctype="multipart/form-data"
       data-senna="off">
 
+
+
+
+<!-- ========================================================= -->
+<!-- PROFILE PICTURE -->
+<!-- ========================================================= -->
+<div class="card mt-3">
+    <div class="card-header">
+        <strong>Profile Picture</strong>
+    </div>
+
+    <div class="card-body">
+
+        <!-- EXISTING PROFILE IMAGE -->
+        <c:choose>
+            <c:when test="${not empty profilePicURL}">
+                <img
+                    id="profilePreview"
+                    src="${profilePicURL}"
+                    class="img-thumbnail mb-3"
+                    style="width:150px;height:150px;object-fit:cover;border-radius:50%;" />
+            </c:when>
+
+            <c:otherwise>
+                <img
+                    id="profilePreview"
+                    src="https://via.placeholder.com/150"
+                    class="img-thumbnail mb-3"
+                    style="width:150px;height:150px;object-fit:cover;border-radius:50%;" />
+            </c:otherwise>
+        </c:choose>
+
+        <!-- FILE INPUT -->
+        <div class="mb-3">
+            <input type="file"
+                   class="form- control"
+                   id="<portlet:namespace/>profilePic"
+                   name="<portlet:namespace/>profilePic"
+                   accept="image/*" />
+        </div>
+
+        <small class="text-muted">
+            Allowed: JPG, PNG | Max size: 2MB
+        </small>
+
+    </div>
+</div>
+
+
+
 <!-- ========================================================= -->
 <!-- BASIC DETAILS -->
 <!-- ========================================================= -->
@@ -72,200 +122,58 @@
                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
             </div>
 
-        </div>
-    </div>
+
+<div class="col-md-4 mb-3">
+            <input type="checkbox"
+                   class="mt-4"
+                   id="<portlet:namespace />maritalStatus"
+                   name="<portlet:namespace />maritalStatus"
+                   value="true"
+                   <c:if test="${employeeDetail != null && employeeDetail.maritalStatus}">
+                       checked="checked"
+                   </c:if> />
+
+            <label for="<portlet:namespace />maritalStatus">
+                Married
+            </label>
 </div>
-
-<!-- ========================================================= -->
-<!-- PERMANENT ADDRESS -->
-<!-- ========================================================= -->
-<c:if test="${not empty permanentaddresss}">
-<div class="card mt-3">
-    <div class="card-header"><strong>Permanent Address</strong></div>
-    <div class="card-body">
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>permanantLine1" class="form-label">
-                    Address Line 1 <span class="text-danger">*</span>
+            <div class="col-md-4 col-sm-12 mb-3" id="marriageDateWrapper">
+                <label for="<portlet:namespace />marriageDate" class="form-label">
+                    Marriage Date
                 </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>permanantLine1"
-                       name="<portlet:namespace/>permanantLine1"
-                       value="${permanentaddresss.line1}" />
+
+                <input type="date"
+                       class="form-control"
+                       id="<portlet:namespace />marriageDate"
+                       name="<portlet:namespace />marriageDate"
+                       value="<fmt:formatDate value='${employeeDetail.marriageDate}' pattern='yyyy-MM-dd'/>"/>
+                       <small id="<portlet:namespace/>marriageDateError"
+                              class="text-danger"
+                              style="display:none;"></small>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>permanantState" class="form-label">
-                    State <span class="text-danger">*</span>
+            <div class="col-md-4 col-sm-12 mb-3" id="spouseNameWrapper">
+                <label for="<portlet:namespace />spouseName" class="form-label">
+                    Spouse Name
                 </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>permanantState"
-                       name="<portlet:namespace/>permanantState"
-                       value="${permanentaddresss.state}" />
-            </div>
-             <div class="col-md-4 col-sm-12 mb-3">
 
-
-                                <label for="permanentCity" class="form-label"> <liferay-ui:message
-                                        key="permanent-city"/><span class="text-danger">*</span>
-                                </label> <input type="text" class="form-control"
-                                                id="<portlet:namespace />permanentCity"
-                                                name="<portlet:namespace />permanentCity" maxlength="100"
-                                                value="${permanentaddresss.city}"/>
-
-                        </div>
-
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>permanantPincode" class="form-label">
-                    Pincode <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>permanantPincode"
-                       name="<portlet:namespace/>permanantPincode"
-                       value="${permanentaddresss.pincode}" />
+                <input type="text"
+                       class="form-control"
+                       id="<portlet:namespace />spouseName"
+                       name="<portlet:namespace />spouseName"
+                       value="${employeeDetail.spouseName}" />
+                <small id="<portlet:namespace/>spouseError"
+                       class="text-danger"
+                       style="display:none;"></small>
             </div>
 
-           <div class="col-md-4 col-sm-12 mb-3">
-               <div class="form-group">
-                   <label for="<portlet:namespace/>permanantCountry" class="form-label">
-                       Country <span class="text-danger">*</span>
-                   </label>
 
-                   <select class="form-control text-capitalize"
-                           id="<portlet:namespace/>permanantCountry"
-                           name="<portlet:namespace/>permanantCountry">
-                       <option value="">Select a country</option>
-                       <c:forEach items="${countryList}" var="country">
-                           <option class="text-capitalize"
-                                   value="${country.countryId}"
-                                   ${country.countryId == permanentaddresss.country ? 'selected' : ''}>
-                               ${country.name}
-                           </option>
-                       </c:forEach>
-                   </select>
-               </div>
-           </div>
+
 
 
         </div>
     </div>
 </div>
-<!-- SAME AS PERMANENT -->
-<div class="form-check mt-3">
-    <input type="checkbox"
-           class="form-check-input"
-           id="<portlet:namespace/>isSamePresentAddress"
-           name="<portlet:namespace/>isSamePresentAddress"
-
-           ${isSamePresentAddress ? 'checked' : ''}/>
-    <label for="<portlet:namespace/>isSamePresentAddress" class="form-label">
-        Same as permanent address
-    </label>
-</div>
-</c:if>
-
-
-<!-- ========================================================= -->
-<!-- PRESENT ADDRESS -->
-<!-- ========================================================= -->
-<c:if test="${not empty presentaddresss}">
-<div class="card mt-3">
-    <div class="card-header"><strong>Present Address</strong></div>
-    <div class="card-body">
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>presentLine1" class="form-label">
-                    Address Line 1 <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>presentLine1"
-                       name="<portlet:namespace/>presentLine1"
-                       value="${presentaddresss.line1}" />
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>presentState" class="form-label">
-                    State <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>presentState"
-                       name="<portlet:namespace/>presentState"
-                       value="${presentaddresss.state}" />
-            </div>
-
-        <div class="col-md-4 col-sm-12 mb-3">
-
-
-                <label for="<portlet:namespace />presentCity" class="form-label"> <liferay-ui:message
-                        key="city"/><span class="text-danger">*</span>
-                </label> <input type="text" class="form-control"
-                                id="<portlet:namespace />presentCity" name="<portlet:namespace />presentCity"
-                                maxlength="100" value="${presentaddresss.city}"/>
-
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="<portlet:namespace/>presentPincode" class="form-label">
-                    Pincode <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control"
-                       id="<portlet:namespace/>presentPincode"
-                       name="<portlet:namespace/>presentPincode"
-                       value="${presentaddresss.pincode}" />
-            </div>
-
-           <div class="col-md-4 col-sm-12 mb-3">
-               <div class="form-group">
-                   <label for="<portlet:namespace/>presentCountry" class="form-label">
-                       Country <span class="text-danger">*</span>
-                   </label>
-
-                   <select class="form-control text-capitalize"
-                           id="<portlet:namespace/>presentCountry"
-                           name="<portlet:namespace/>presentCountry">
-                       <option value="">Select a country</option>
-                       <c:forEach items="${countryList}" var="country">
-                           <option class="text-capitalize"
-                                   value="${country.countryId}"
-                                   ${country.countryId == presentaddresss.country ? 'selected' : ''}>
-                               ${country.name}
-                           </option>
-                       </c:forEach>
-                   </select>
-               </div>
-           </div>
-
-<div class="row mt-3" id="addressProofSection">
-    <div class="col-md-6 col-sm-12 mb-3">
-        <label class="form-label">
-            <liferay-ui:message key="address-proof-document"/>
-            <span class="text-danger">*</span>
-        </label>
-
-        <input type="file"
-               class="form-control"
-               id="<portlet:namespace/>addressProofFile"
-               name="<portlet:namespace/>addressProofFile"
-               accept="application/pdf,image/*" />
-             <c:if test="${not presentPermanentSame}">
-                            <c:if test="${not empty addressProofPreviewURL}">
-                                <a href="${addressProofPreviewURL}" target="_blank">
-                                    <liferay-ui:message key="view-address-proof"/>
-                                </a>
-                            </c:if>
-             </c:if>
-        <small class="form-text text-muted">
-            Upload address proof (PDF / JPG / PNG)
-        </small>
-    </div>
-</div>
-
-        </div>
-    </div>
-</div>
-</c:if>
-
 
 
 
@@ -431,6 +339,7 @@
 </div>
 </c:if>
 
+
 <!-- ========================================================= -->
 <!-- FOOTER -->
 <!-- ========================================================= -->
@@ -442,11 +351,116 @@
 </form>
 
 
-
 <script>
+
+
+
 $(document).ready(function () {
     AxProfileManagementWeb.setConfigs({
         namespace: '<portlet:namespace />'
     });
+
+    var ns = '<portlet:namespace />';
+
+
+    var maritalCheckbox = $('#' + ns + 'maritalStatus');
+    var spouseField = $('#' + ns + 'spouseName');
+    var marriageDateField = $('#' + ns + 'marriageDate');
+
+    var spouseError = $('#' + ns + 'spouseError');
+    var marriageDateError = $('#' + ns + 'marriageDateError');
+
+    function validateMarriageFields() {
+
+        spouseError.hide().text('');
+        marriageDateError.hide().text('');
+
+        if (maritalCheckbox.is(':checked')) {
+
+            let isValid = true;
+
+            if (!spouseField.val().trim()) {
+                spouseError.text('Spouse name is required.').show();
+                isValid = false;
+            }
+
+            if (!marriageDateField.val()) {
+                marriageDateError.text('Marriage date is required.').show();
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        return true;
+    }
+
+    //  FORM SUBMIT VALIDATION
+    $('#profileForm').on('submit', function () {
+        return validateMarriageFields();
+    });
+
+    //  LIVE ERROR REMOVE
+    spouseField.on('input', function () {
+        if ($(this).val().trim()) {
+            spouseError.hide();
+        }
+    });
+
+    marriageDateField.on('change', function () {
+        if ($(this).val()) {
+            marriageDateError.hide();
+        }
+    });
+
+maritalCheckbox.on('change', function () {
+
+    if (!$(this).is(':checked')) {
+
+        // Clear values
+        spouseField.val('');
+        marriageDateField.val('');
+
+        // Remove error messages
+        spouseError.hide().text('');
+        marriageDateError.hide().text('');
+    }
+});
+
+});
+
+Liferay.on('allPortletsReady', function () {
+
+    var ns = '<portlet:namespace />';
+
+    /* =======================================================
+       MARITAL STATUS (CHECKBOX BASED)
+    ======================================================= */
+
+    var maritalCheckbox = document.getElementById(ns + 'maritalStatus');
+    var spouseField = document.getElementById(ns + 'spouseName');
+    var marriageDateField = document.getElementById(ns + 'marriageDate');
+
+    function toggleMaritalFields() {
+
+        if (!maritalCheckbox) return;
+
+        if (maritalCheckbox.checked) {
+            spouseField.disabled = false;
+            marriageDateField.disabled = false;
+        } else {
+            spouseField.disabled = true;
+            marriageDateField.disabled = true;
+
+            spouseField.value = '';
+            marriageDateField.value = '';
+        }
+    }
+
+    toggleMaritalFields();
+    maritalCheckbox.addEventListener('change', toggleMaritalFields);
+
+
+
 });
 </script>

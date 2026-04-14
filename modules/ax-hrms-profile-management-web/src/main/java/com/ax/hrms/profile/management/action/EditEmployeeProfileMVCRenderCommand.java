@@ -79,7 +79,7 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
         try {
             employeeId = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId()).getEmployeeId();
             employeeProfileUtil.setEmployeeDetails(renderRequest, employeeId);
-//            employeeProfileUtil.setAddress(renderRequest, employeeId);
+            employeeProfileUtil.setAddress(renderRequest, employeeId);
             employeeProfileUtil.setNominee(renderRequest, employeeId);
 
             renderRequest.setAttribute(
@@ -87,32 +87,32 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
                     countryLocalService.getCountries(-1, -1)
             );
 
-//            long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
-//
-//            EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
-//
-//            long addressProofFileEntryId = employeeAddress.getEmployeeAddressProofFileEntryId();
-//
-//            String addressProofPreviewURL = null;
-//
-//            if (addressProofFileEntryId > 0) {
-//
-//                FileEntry fileEntry =
-//                        DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
-//
-//                addressProofPreviewURL =
-//                        DLUtil.getPreviewURL(
-//                                fileEntry,
-//                                fileEntry.getFileVersion(),
-//                                themeDisplay,
-//                                ""
-//                        );
-//
-//                renderRequest.setAttribute(
-//                        "addressProofPreviewURL",
-//                        addressProofPreviewURL
-//                );
-//            }
+            long employeeAddressId = employeeDetailsLocalService.getEmployeeDetails(employeeId).getEmployeeAddressId();
+
+            EmployeeAddress employeeAddress = employeeAddressLocalService.getEmployeeAddress(employeeAddressId);
+
+            long addressProofFileEntryId = employeeAddress.getEmployeeAddressProofFileEntryId();
+
+            String addressProofPreviewURL = null;
+
+            if (addressProofFileEntryId > 0) {
+
+                FileEntry fileEntry =
+                        DLAppLocalServiceUtil.getFileEntry(addressProofFileEntryId);
+
+                addressProofPreviewURL =
+                        DLUtil.getPreviewURL(
+                                fileEntry,
+                                fileEntry.getFileVersion(),
+                                themeDisplay,
+                                ""
+                        );
+
+                renderRequest.setAttribute(
+                        "addressProofPreviewURL",
+                        addressProofPreviewURL
+                );
+            }
 
         } catch (NoSuchEmployeeDetailsException e) {
             throw new RuntimeException(e);
