@@ -207,25 +207,24 @@
 					<div class="form-group">
 						<label for="startTime"> Start Time <span
 							class="text-danger">*</span>
-						</label> <small class="form-text text-muted"> Hours : Minutes
-							(24-hour format) </small> <input id="startTime" type="text"
-							class="form-control timepicker"
-						name="<portlet:namespace />startTime" placeholder="HH:MM" /> <label
-							id="startTime-error" class="error text-danger" for="startTime"></label>
-					</div>
+					</label> <small class="form-text text-muted"> Hours : Minutes
+						(24-hour format) </small> <input id="startTime" type="text"
+						class="form-control timepicker"
+					 name="<portlet:namespace />startTime" placeholder="HH:MM" /> <label
+						id="startTime-error" class="error text-danger" for="startTime"></label>
+				</div>
 
-					<div class="form-group">
-						<label for="endTime"> End Time <span class="text-danger">*</span>
-						</label> <small class="form-text text-muted"> Hours : Minutes
-							(24-hour format) </small> <input id="endTime" type="text"
-							class="form-control timepicker"
-							name="<portlet:namespace />endTime" placeholder="HH:MM" /> <label
-							id="endTime-error" class="error text-danger" for="endTime"></label>
-					</div>
+				<div class="form-group">
+					<label for="endTime"> End Time <span class="text-danger">*</span>
+					</label> <small class="form-text text-muted"> Hours : Minutes
+						(24-hour format) </small> <input id="endTime" type="text"
+						class="form-control timepicker"
+						name="<portlet:namespace />endTime" placeholder="HH:MM" /> <label
+						id="endTime-error" class="error text-danger" for="endTime"></label>
+				</div>
 
-
-					<div class="form-group">
-						<label for="projectManagerSelect"><liferay-ui:message
+				<div class="form-group">
+					<label for="projectManagerSelect"><liferay-ui:message
 								key="select-project-manager" /><span class="text-danger">*</span></label>
 
 						<select id="projectManagerSelect"
@@ -309,7 +308,12 @@
     $('.timepicker').timepicker({
         timeFormat: 'H:i',
         scrollDefault: 'now'
+    });
 
+    // Prevent manual input in timepicker fields
+    $('#startTime, #endTime').on('keypress', function(e) {
+        e.preventDefault();
+        return false;
     });
 
         var config = {};
