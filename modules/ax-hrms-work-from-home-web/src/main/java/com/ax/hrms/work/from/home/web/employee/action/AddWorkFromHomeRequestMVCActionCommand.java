@@ -320,6 +320,7 @@ public class AddWorkFromHomeRequestMVCActionCommand extends BaseMVCActionCommand
         serviceMap.put("employeeDesignationLocalService", employeeDesignationLocalService);
         serviceMap.put("leaveStatusLocalService", leaveStatusLocalService);
         serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
+        serviceMap.put("workFromHomeDayTypeLocalService", workFromHomeDayTypeLocalService);
 
         String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
         String fromEmailAddress = PrefsPropsUtil.getString(themeDisplay.getCompanyId(),

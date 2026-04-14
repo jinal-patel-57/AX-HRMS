@@ -27,7 +27,7 @@ public class AxHrmsWorkFromHomePortletKeys {
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Department</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Designation</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Status</th>" +
-                    "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH Request Date</th>" +
+                    "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">No. of Days</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH Start Date</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH End Date</th>" +
                     "</tr>" +
@@ -44,7 +44,7 @@ public class AxHrmsWorkFromHomePortletKeys {
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Department</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Designation</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">Status</th>" +
-                    "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH Request Date</th>" +
+                    "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">No. of Days</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH Start Date</th>" +
                     "<th style=\"border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;\">WFH End Date</th>" +
                     "</tr>" +

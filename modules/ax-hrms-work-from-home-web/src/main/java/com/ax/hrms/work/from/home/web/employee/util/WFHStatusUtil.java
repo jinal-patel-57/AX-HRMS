@@ -139,9 +139,11 @@ public class WFHStatusUtil {
                     (EmployeeDesignationLocalService) serviceMap.get("employeeDesignationLocalService");
             LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService =
                     (LeaveCompensatoryStatusMasterLocalService) serviceMap.get("leaveStatusLocalService");
+            WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService =
+                    (WorkFromHomeDayTypeLocalService) serviceMap.get("workFromHomeDayTypeLocalService");
             EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(workFromHomeRequest.getEmployeeId());
 
-            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService);
+            body = getWfhBody(workFromHomeRequest, employee, body, leaveStatusLocalService, departmentMasterLocalService, designationMasterLocalService,employeeDepartmentLocalService,employeeDesignationLocalService, workFromHomeDayTypeLocalService);
 //
             // SEND MAIL TO EMPLOYE
 
@@ -186,7 +188,7 @@ public class WFHStatusUtil {
     }
 
 
-    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body, LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService, DepartmentMasterLocalService departmentMasterLocalService, DesignationMasterLocalService designationMasterLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService ,EmployeeDesignationLocalService employeeDesignationLocalService) throws PortalException {
+    public static StringBuilder getWfhBody(WorkFromHomeRequest workFromHomeRequest, EmployeeDetails employee, StringBuilder body, LeaveCompensatoryStatusMasterLocalService leaveStatusLocalService, DepartmentMasterLocalService departmentMasterLocalService, DesignationMasterLocalService designationMasterLocalService,EmployeeDepartmentLocalService employeeDepartmentLocalService ,EmployeeDesignationLocalService employeeDesignationLocalService, WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService) throws PortalException {
         WFHStatusUtil wFHStatusUtil = new WFHStatusUtil();
         LeaveCompensatoryStatusMaster string = leaveStatusLocalService.findByLeaveCompensatoryStatusById(workFromHomeRequest.getStatus());
         log.info("string.getLeaveCompensatoryStatus() :; " + string.getLeaveCompensatoryStatus());
@@ -216,6 +218,8 @@ public class WFHStatusUtil {
         	log.error("Unable to get designation " + nsede.getMessage());
         }
 
+        double noOfDays = getNoOfDays(workFromHomeRequest.getWorkFromHomeRequestId(), workFromHomeDayTypeLocalService);
+
         body.append("<tr>")
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(employee.getEmployeeCode()).append("</td>")
@@ -228,7 +232,7 @@ public class WFHStatusUtil {
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(string.getLeaveCompensatoryStatus()).append("</td>")
 
-                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getCreateDate())).append("</td>")
+                .append("<td style='border:1px solid #ddd;padding:10px;'>").append(formatNoOfDays(noOfDays)).append("</td>")
 
                 .append("<td style='border:1px solid #ddd;padding:10px;'>").append(wFHStatusUtil.setDateFormat(workFromHomeRequest.getStartDate())).append("</td>")
 
@@ -239,6 +243,28 @@ public class WFHStatusUtil {
         body.append(AxHrmsWorkFromHomePortletKeys.WFH_REQUEST_MAIL_FOOTER);
 
         return body;
+    }
+
+    private static double getNoOfDays(long workFromHomeRequestId, WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService) {
+        if (workFromHomeDayTypeLocalService == null) {
+            return 0.0;
+        }
+
+        double totalDays = 0.0;
+
+        for (WorkFromHomeDayType day : workFromHomeDayTypeLocalService.findByWorkFromHomeRequestId(workFromHomeRequestId)) {
+            totalDays += day.getIsHalfDay() ? 0.5 : 1.0;
+        }
+
+        return totalDays;
+    }
+
+    private static String formatNoOfDays(double noOfDays) {
+        if (noOfDays == Math.rint(noOfDays)) {
+            return String.valueOf((long) noOfDays);
+        }
+
+        return String.valueOf(noOfDays);
     }
     public static void  setWorkFromHomeDayTypeData(WFHRequestDto dto, WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService) {
 

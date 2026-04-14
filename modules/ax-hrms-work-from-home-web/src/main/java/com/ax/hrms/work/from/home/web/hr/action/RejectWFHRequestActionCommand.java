@@ -68,6 +68,9 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
     @Reference
     private CommentLocalService commentLocalService;
 
+    @Reference
+    private WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
+
     @Override
     public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -107,6 +110,7 @@ public class RejectWFHRequestActionCommand implements MVCActionCommand {
             serviceMap.put("employeeDesignationLocalService", employeeDesignationLocalService);
             serviceMap.put("leaveStatusLocalService", leaveStatusLocalService);
             serviceMap.put("employeeDetailsLocalService", employeeDetailsLocalService);
+            serviceMap.put("workFromHomeDayTypeLocalService", workFromHomeDayTypeLocalService);
 
             long currentUserId = themeDisplay.getUserId();
             String fromName = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
