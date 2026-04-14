@@ -123,6 +123,15 @@ public class EditEmployeeProfileMVCActionCommand extends BaseMVCActionCommand {
                                 documentFolderName
                         );
 
+                try {
+                    User employeeUserDetails =
+                            userLocalService.getUser(oldEmployeeDetailsObj.getLrUserId());
+                    employeeUserDetails.setPortraitId(oldEmployeeDetailsObj.getProfilePicId());
+                    UserLocalServiceUtil.updatePortrait(oldEmployeeDetailsObj.getLrUserId(), FileUtil.getBytes(profilePicFile));
+                } catch (Exception e) {
+                    log.error("Exception raised due to :: "+e.getMessage());
+                }
+
                 if (profilePicFileEntryId > 0) {
 
                     try {
