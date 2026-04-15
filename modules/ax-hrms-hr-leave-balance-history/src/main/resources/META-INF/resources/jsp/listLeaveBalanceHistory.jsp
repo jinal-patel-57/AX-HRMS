@@ -29,7 +29,7 @@
                     </c:forEach>
                 </select>
 
-                <button type="submit" class="btn btn-outline-dark btn-sm">
+                <button type="submit" class="btn btn-outline-dark btn-sm btn-primary">
                     <liferay-ui:message key="filter" />
                 </button>
             </form>
