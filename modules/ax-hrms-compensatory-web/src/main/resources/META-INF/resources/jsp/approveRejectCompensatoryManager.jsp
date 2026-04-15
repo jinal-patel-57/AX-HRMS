@@ -232,7 +232,8 @@
                         <textarea id="comment"
                                   class="form-control"
                                   rows="3"
-                                  name="<portlet:namespace />comment"></textarea>
+                                  name="<portlet:namespace />comment"
+                                  placeholder="Enter comment"></textarea>
                     </div>
 
                     <input type="hidden" id="hiddenCompensatoryDataId"
@@ -243,12 +244,12 @@
                                   name="<portlet:namespace />actionType">
 
             </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"><liferay-ui:message
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message
                         key="close"/></button>
                <button type="button"
                        id="submitCompensationBtn"
-                       class="btn btn-outline-success btn-sm"
+                       class="btn btn-primary"
                        onclick="submit_compensatory_form()">
                    <liferay-ui:message key="approve"/>
                </button>
@@ -329,12 +330,12 @@
 
            // Change title & button
            $('#approveCompensationModalLabel')
-               .text('<liferay-ui:message key="Reject Compensation Request"/>');
+               .text('<liferay-ui:message key="reject-compensation-hours"/>');
 
            $('#submitCompensationBtn')
                .text('<liferay-ui:message key="reject"/>')
-               .removeClass('btn-outline-success')
-               .addClass('btn-outline-danger');
+               .removeClass('btn-primary')
+               .addClass('btn-danger');
 
            $('#actionType').val('REJECT');
 
@@ -379,10 +380,8 @@
 
           $('#submitCompensationBtn')
               .text('<liferay-ui:message key="cancel"/>')
-              .removeClass('btn-outline-success')
-              .addClass('btn-outline-danger');
-
-          $('#actionType').val('CANCEL');
+               .removeClass('btn-primary')
+               .addClass('btn-danger');
 
           $('#approveCompensationModal').modal('show');
       }
@@ -402,8 +401,8 @@
            // Reset submit button
            $('#submitCompensationBtn')
                .text('<liferay-ui:message key="approve"/>')
-               .removeClass('btn-outline-danger')
-               .addClass('btn-outline-success');
+               .removeClass('btn-danger')
+               .addClass('btn-primary');
 
            // Reset fields
            $('#requestedHours').val('').prop('disabled', false)

@@ -250,12 +250,12 @@
 							for="description"></label>
 					</div>
 			</div>
-			<div class="modal-footer d-flex justify-content-end">
-				<button type="button" class="btn btn-outline-danger btn-sm mr-1"
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
 					data-dismiss="modal">
 					<liferay-ui:message key="close" />
 				</button>
-				<button type="button" class="btn btn-outline-success btn-sm"
+				<button type="button" class="btn btn-primary"
 					onclick="submit_compensatory_form()">
 					<liferay-ui:message key="submit" />
 				</button>

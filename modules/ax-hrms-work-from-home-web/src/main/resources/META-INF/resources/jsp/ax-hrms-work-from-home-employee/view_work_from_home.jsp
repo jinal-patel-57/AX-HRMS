@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="com.ax.hrms.work.from.home.web.employee.dto.WFHRequestDto" %>
 
 <!-- Set WFH DTO using JSTL instead of scriptlet -->
@@ -34,7 +35,7 @@
                 <div class="form-group-view">
                     <div class="label-name">Employee Official Mail ID</div>
                     <div class="label-content email">
-                        ${wfh.employeeOfficialMailId}
+                        ${empty wfh.employeeOfficialMailId ? '' : fn:replace(wfh.employeeOfficialMailId, ',', ', ')}
                     </div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
                 <div class="form-group-view">
                     <div class="label-name">Team IDs</div>
                     <div class="label-content email">
-                        ${wfh.teamMailId} <br/>
+                        ${empty wfh.teamMailId ? '' : fn:replace(wfh.teamMailId, ',', ', ')} <br/>
                     </div>
                 </div>
             </div>
@@ -94,17 +95,12 @@
                                 <tr>
                                     <td>
                                         <p class="text-center my-0">
-                                            <b>Date</b>
+                                            <b><liferay-ui:message key="date"/></b>
                                         </p>
                                     </td>
                                     <td>
                                         <p class="text-center my-0">
-                                            <b>Day</b>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center my-0">
-                                            <b>Day Type</b>
+                                            <b><liferay-ui:message key="day-type"/></b>
                                         </p>
                                     </td>
                                 </tr>
@@ -126,22 +122,15 @@
                                             </p>
                                         </td>
 
-                                        <!-- Day Type -->
-                                        <td>
-                                            <p class="text-center my-0">
-                                                ${wfhDay.isHalfDay() ? "Half Day" : "Full Day"}
-                                            </p>
-                                        </td>
-
                                         <!-- Half Type -->
                                         <td>
                                             <p class="text-center my-0">
                                                 <c:choose>
                                                     <c:when test="${wfhDay.isHalfDay()}">
-                                                        ${wfhDay.isFirstHalf() ? "First Half" : "Second Half"}
+                                                        ${wfhDay.isFirstHalf() ? "Half Day (1st half)" : "Half Day (2nd half)"}
                                                     </c:when>
                                                     <c:otherwise>
-                                                        -
+                                                        Full Day
                                                     </c:otherwise>
                                                 </c:choose>
                                             </p>

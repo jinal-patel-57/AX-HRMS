@@ -48,7 +48,7 @@
                     <c:forEach var="leaveInformToTeamMap" items="${leaveInformToTeamDetailMap}">
                        <!-- <div class="label-content">${leaveInformToTeamMap.value }</div> -->
                        <div class="label-content email">
-                           ${fn:toLowerCase(leaveInformToTeamMap.value)}
+                           ${fn:replace(fn:toLowerCase(leaveInformToTeamMap.value), ',', ', ')}
                        </div>
                     </c:forEach>
                 </div>
@@ -78,9 +78,9 @@
                         <table class="table">
                             <thead>
                             <tr>
-                            <td><p class="text-center my-0"><b><liferay-ui:message key="leave-date"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="date"/></b></td>
                             <td><p class="text-center my-0"><b><liferay-ui:message key="day"/></b></td>
-                            <td><p class="text-center my-0"><b><liferay-ui:message key="Day Type"/></b></td>
+                            <td><p class="text-center my-0"><b><liferay-ui:message key="day-type"/></b></td>
 
                             </tr>
                             </thead>
@@ -92,21 +92,18 @@
                                                         var="formatedLeaveDate"/>
                                         <p class="text-center my-0">${formatedLeaveDate }</p>
                                     </td>
-                                    <td>
-                                        <p class="text-center my-0">${leaveDayType.isHalfDay ?  'Half Day' : "Full Day" }</p>
-                                    </td>
                                    <td>
-                                                                           <c:if test="${leaveDayType.isHalfDay}">
-                                                                               <c:choose>
-                                                                                   <c:when test="${leaveDayType.isFirstHalf }">
-                                                                                        <p class="text-center my-0"><liferay-ui:message key="first-half"/></p>
-                                                                                   </c:when>
-                                                                                   <c:otherwise>
-                                                                                       <p class="text-center my-0"> <liferay-ui:message key="second-half"/></p>
-                                                                                   </c:otherwise>
-                                                                               </c:choose>
-                                                                           </c:if>
-                                                                       </td>
+                                       <c:choose>
+                                           <c:when test="${leaveDayType.isHalfDay}">
+                                               <p class="text-center my-0">
+                                                   ${leaveDayType.isFirstHalf ? 'Half Day (1st half)' : 'Half Day (2nd half)'}
+                                               </p>
+                                           </c:when>
+                                           <c:otherwise>
+                                               <p class="text-center my-0">Full Day</p>
+                                           </c:otherwise>
+                                       </c:choose>
+                                   </td>
                                 </tr>
 
 

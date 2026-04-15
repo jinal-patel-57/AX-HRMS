@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:renderURL var="homeUrl">
 	<portlet:param name="mvcRenderCommandName" value="/"/>
@@ -24,7 +25,7 @@
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
                 <div class="form-group-view">
                     <div class="label-name"><liferay-ui:message key="employee-email-id"/></div>
-                    <div class="label-content email">${empty leaveRequestDto ? '' : leaveRequestDto.employeeOfficialMail}</div>
+                    <div class="label-content email">${empty leaveRequestDto || empty leaveRequestDto.employeeOfficialMail ? '' : fn:replace(leaveRequestDto.employeeOfficialMail, ',', ', ')}</div>
                 </div>
             </div>
 
@@ -98,9 +99,9 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col"><liferay-ui:message key="leave-date"/></th>
+                                <th scope="col"><liferay-ui:message key="date"/></th>
                                 <th scope="col"><liferay-ui:message key="day"/></th>
-                                <th scope="col"><liferay-ui:message key="Day Type"/></th>
+                                <th scope="col"><liferay-ui:message key="day-type"/></th>
                             </tr>
                             </thead>
                             <c:forEach var="data" items="${leaveDayTypeList}">
@@ -111,24 +112,14 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${data.halfDay}">
-                                                <liferay-ui:message key="half-day"/>
+                                                <p class="text-center my-0">
+                                                    ${data.firstHalf ? 'Half Day (1st half)' : 'Half Day (2nd half)'}
+                                                </p>
                                             </c:when>
                                             <c:otherwise>
-                                                <liferay-ui:message key="full-day"/>
+                                                <p class="text-center my-0">Full Day</p>
                                             </c:otherwise>
                                         </c:choose>
-                                    </td>
-                                    <td>
-                                        <c:if test="${data.halfDay}">
-                                            <c:choose>
-                                                <c:when test="${data.firstHalf}">
-                                                    <liferay-ui:message key="first-half"/>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <liferay-ui:message key="second-half"/>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:if>
                                     </td>
                                 </tr>
                                 </tbody>
