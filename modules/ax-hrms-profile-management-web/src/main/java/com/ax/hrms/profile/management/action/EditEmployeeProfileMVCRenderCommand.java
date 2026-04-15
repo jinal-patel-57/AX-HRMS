@@ -115,9 +115,10 @@ public class EditEmployeeProfileMVCRenderCommand implements MVCRenderCommand {
             }
 
         } catch (NoSuchEmployeeDetailsException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            log.info("Exception raise Due to :: "+e.getMessage());
         } catch (Exception e) {
-            throw new PortletException(e);
+            log.info("Exception raise Due to :: "+e.getMessage());
         }
 
         return AxHrmsProfileManagementWebConstants.EDIT_EMPLOYEE_PROFILE_JSP_FILE;
