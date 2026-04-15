@@ -22,6 +22,8 @@ sonarqube {
 
         // Exclusions (very important for Liferay)
         property "sonar.exclusions", "**/build/resources/main/META-INF/resources/**/*.jsp,**/*Impl.java,**/*-service/**/model/impl/**/*.java,**/*-service/**/service/persistence/**/**/*.java,**/*-service/**/service/base/**/*.java,**/*-service/**/service/http/**/*.java,**/*-service/**/service/util/**/*.java,**/*-api/**/dto/**/*.java,**/*-api/**/exception/**/*.java,**/*-api/**/model/**/*.java,**/*-api/**/service/**/*.java,**/*-rest-builder-api/**,**/*-rest-builder-test/**,**/*-rest-builder-client/**,**/*-rest-builder-impl/**/graphql/**,**/*-rest-builder-impl/**/jaxrs/**,**/*-rest-builder-impl/**/resource/v1_0/factory/**,**/*-rest-builder-impl/**/resource/v1_0/Base*.java,**/*-rest-builder-impl/**/resource/v1_0/OpenAPI*.java,**/*-rbac-service/**/service/impl/*ServiceImpl.java,**/*-gis-rest-builder-impl/**/internal/batch/**,**/*-invoice-rest-builder-impl/**/internal/resource/v1_0/**"
+        property "sonar.coverage.exclusions", "**/*"
+        property "sonar.cpd.exclusions", "**/generated/**,**/dto/**,**/model/**"
 
     }
 }
