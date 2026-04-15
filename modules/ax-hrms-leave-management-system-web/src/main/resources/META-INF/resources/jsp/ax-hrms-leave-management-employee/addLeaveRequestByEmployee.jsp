@@ -93,11 +93,14 @@
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <div class="form-group">
                             <label><liferay-ui:message key="Inform Team Members"/></label>
-                            <select id="mySelect" name="<portlet:namespace />teamIdSelectBox"
-                                    class="form-control custom-select mr-sm-2" >
-                                <option value="" >Select Employee</option>
+                            <select class="form-control mt-3 custom-multi-select"
+                                    id="teamIdSelectBox" 
+                                    name="<portlet:namespace />teamIdSelectBox"
+                                    data-live-search="true"
+                                    multiple 
+                                    placeholder="Select Employee(s)">
                                 <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
-                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.employeeCode} - ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
+                                    <option value="${employeeDetailsList.getEmployeeId()}">${employeeDetailsList.employeeCode}: ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}</option>
                                 </c:forEach>
                             </select>
                             <input type="hidden" id="<portlet:namespace />teamId" name="<portlet:namespace />teamId"/>
@@ -174,7 +177,6 @@
 
 <script>
 
-
 function showMessage(message, type = 'warning') {
 
     let title = 'Message';
@@ -215,27 +217,76 @@ function closeCustomModal() {
         config.getEmployeeLeavesData = '<portlet:resourceURL id="/viewEmployeeLeavesDetail" />';
 
         AxEmployeeLeaveManagement.setConfigs(config);
+
+        // Initialize Team Members Multi-Select with localStorage and rendering
+        const teamSelect = $("#teamIdSelectBox");
+        const selectedOptionsContainer = $('#selectedOptionsContainer');
+        const namespace = '<portlet:namespace />';
+        let selectedValues = [];
+
+        // Function to get team IDs from localStorage
+        function getTeamIds() {
+            return JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+        }
+
+        // Function to update hidden field with selected values
+        function setTeamIdInParams() {
+            const teamIds = getTeamIds();
+            $("#" + namespace + "teamId").val(teamIds.join(','));
+        }
+
+        // Function to render selected options visually
+        function renderSelectedOptions() {
+            selectedOptionsContainer.empty();
+            selectedValues = getTeamIds();
+
+            selectedValues.forEach(function(value) {
+                const selectedOptionElement = $('<div>').addClass('selected-option');
+                const text = $('#teamIdSelectBox option[value="' + value + '"]').text();
+                const span = $('<span>').text(text);
+                const closeButton = $('<button type="button">').text('x');
+
+                closeButton.click(function(e) {
+                    e.preventDefault();
+                    selectedValues = selectedValues.filter(v => v !== value);
+                    localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
+                    renderSelectedOptions();
+                    setTeamIdInParams();
+                });
+
+                selectedOptionElement.append(span, closeButton);
+                selectedOptionsContainer.append(selectedOptionElement);
+            });
+        }
+
+        // Initialize Select2
+        teamSelect.select2({
+            placeholder: "Select Employee(s)",
+            allowClear: true,
+            width: '100%'
+        });
+
+        // Handle selection changes
+        teamSelect.on("change", function() {
+            const selectedVals = $(this).val();
+            if (selectedVals && selectedVals.length > 0) {
+                selectedValues = selectedVals;
+                localStorage.setItem('selectedOptions', JSON.stringify(selectedVals));
+                renderSelectedOptions();
+                setTeamIdInParams();
+            } else {
+                localStorage.removeItem('selectedOptions');
+                renderSelectedOptions();
+                setTeamIdInParams();
+            }
+        });
+
+        // Render initial selected options on page load
+        renderSelectedOptions();
+
     });
-
-
 
 $(document).ready(function () {
-
-    $('.liferay-alert-danger').each(function () {
-        showMessage($(this).text().trim(), 'error');
-    });
-
-    $('.liferay-alert-success').each(function () {
-        showMessage($(this).text().trim(), 'success');
-    });
-
-    $('.liferay-alert-info').each(function () {
-        showMessage($(this).text().trim(), 'info');
-    });
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("<portlet:namespace />leaveRequestForm");
     const submitBtn = document.getElementById("<portlet:namespace />submit");

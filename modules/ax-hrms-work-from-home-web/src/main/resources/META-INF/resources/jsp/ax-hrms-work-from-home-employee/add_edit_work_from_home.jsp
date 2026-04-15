@@ -100,27 +100,26 @@ String currentURL = PortalUtil.getCurrentURL(request);
 				<div class="form-group">
 				  <label>Inform Team Members<span class="text-danger">*</span></label>
 
-				  <select id="mySelect" name="<portlet:namespace />wfhTeamIdSelectBox"
-						  class="form-control custom-select mr-sm-2">
-
-					  <option value="">Select Employee</option>
+				  <select class="form-control mt-3 custom-multi-select" 
+						  id="wfhTeamIdSelectBox" 
+						  name="<portlet:namespace />wfhTeamIdSelectBox"
+						  data-live-search="true"
+						  multiple
+						  placeholder="Select Employee(s)">
 
 					  <c:forEach var="employeeDetailsList" items="${employeeDetailsList}">
 						  <option value="${employeeDetailsList.getOfficialEmail()}">
-							  ${employeeDetailsList.employeeCode} -
-							  ${employeeDetailsList.getFirstName()}
-							  ${employeeDetailsList.getLastName()}
+							  ${employeeDetailsList.employeeCode}: ${employeeDetailsList.getFirstName()} ${employeeDetailsList.getLastName()}
 						  </option>
 					  </c:forEach>
 
 				  </select>
 
 				  <input type="hidden"
-						 id="<portlet:namespace />teamId"
-						 name="<portlet:namespace />teamId"/>
+						     id="<portlet:namespace />teamId"
+						     name="<portlet:namespace />teamId"/>
 
-				  <div id="selectedOptionsContainer" class="selected-options mt-2"></div>
-
+				  <div id="selectedOptionsContainer" class="selected-options"></div>
 				  <small class="text-danger d-block mt-1" id="teamError"></small>
 				</div>
 			</div>
@@ -368,82 +367,70 @@ $("#startDate, #endDate").on("blur", function () {
 
 function wfhTeamMultiSelect(){
 
+    const wfhSelect = $('#wfhTeamIdSelectBox');
+    const selectedOptionsContainer = $('#selectedOptionsContainer');
+    const namespace = '<portlet:namespace />';
+    let selectedValues = [];
 
-    const storageKey = namespace + "wfhSelectedOptions";
+    // Function to get team IDs from localStorage
+    function getTeamIds() {
+        return JSON.parse(localStorage.getItem('wfhSelectedOptions') || '[]');
+    }
 
-    let getTeamIds = () => {
-        return JSON.parse(localStorage.getItem(storageKey) || '[]');
-    };
+    // Function to update hidden field with selected values
+    function setTeamIdInParams() {
+        const teamIds = getTeamIds();
+        $('#' + namespace + 'teamId').val(teamIds.join(','));
+    }
 
-    let setTeamIdInParams = () => {
-        let teamIds = getTeamIds();
-        let teamIdElement = document.getElementById(namespace + "teamId");
-        teamIdElement.value = teamIds.join(',');
-
-    };
-
-    localStorage.removeItem(storageKey);
-
-    const wfhSelect = $('#mySelect');
-    const wfhContainer = $('#selectedOptionsContainer');
-
-    let wfhSelectedValues = getTeamIds();
-
+    // Function to render selected options visually
     function renderSelectedOptions() {
+        selectedOptionsContainer.empty();
+        selectedValues = getTeamIds();
 
-        wfhContainer.empty();
-
-        wfhSelectedValues = getTeamIds();
-
-        wfhSelectedValues.forEach(function(value){
-
+        selectedValues.forEach(function(value) {
             const selectedOptionElement = $('<div>').addClass('selected-option');
-
-            const text = $('#mySelect option[value="' + value + '"]').text();
-
+            const text = $('#wfhTeamIdSelectBox option[value="' + value + '"]').text();
             const span = $('<span>').text(text);
-
             const closeButton = $('<button type="button">').text('x');
 
-            closeButton.click(function(){
-
-                wfhSelectedValues = wfhSelectedValues.filter(v => v !== value);
-
-                localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
-
+            closeButton.click(function(e) {
+                e.preventDefault();
+                selectedValues = selectedValues.filter(v => v !== value);
+                localStorage.setItem('wfhSelectedOptions', JSON.stringify(selectedValues));
                 renderSelectedOptions();
                 setTeamIdInParams();
-                 $("#" + namespace + "teamId").valid();
             });
 
             selectedOptionElement.append(span, closeButton);
-            wfhContainer.append(selectedOptionElement);
+            selectedOptionsContainer.append(selectedOptionElement);
         });
     }
 
-    function updateSelectedOptions() {
+    // Initialize Select2
+    wfhSelect.select2({
+        placeholder: "Select Employee(s)",
+        allowClear: true,
+        width: '100%'
+    });
 
-        let value = $(this).val();
-
-        if(value && !wfhSelectedValues.includes(value)){
-            wfhSelectedValues.push(value);
-            localStorage.setItem(storageKey, JSON.stringify(wfhSelectedValues));
+    // Handle change event to populate hidden field
+    wfhSelect.on('change', function() {
+        const selectedVals = $(this).val();
+        if (selectedVals && selectedVals.length > 0) {
+            selectedValues = selectedVals;
+            localStorage.setItem('wfhSelectedOptions', JSON.stringify(selectedVals));
             renderSelectedOptions();
             setTeamIdInParams();
-
-             $("#" + namespace + "teamId").valid();
+        } else {
+            localStorage.removeItem('wfhSelectedOptions');
+            renderSelectedOptions();
+            setTeamIdInParams();
         }
+    });
 
-        $(this).val('');
-    }
-
-    wfhSelect.off('change').on('change', updateSelectedOptions);
-
-
-
-
+    // Render initial selected options on page load
     renderSelectedOptions();
-    setTeamIdInParams();
 }
 
 wfhTeamMultiSelect();
