@@ -1,5 +1,6 @@
 package com.ax.hrms.leave.management.employee.web.action;
 
+import java.util.List;
 import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.exception.NoSuchLeaveBalanceException;
 import com.ax.hrms.leave.management.employee.web.util.LeaveRequestUtil;
@@ -42,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+
 
 /**
  * @author krish.moradiya
@@ -75,7 +76,8 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
     AxHrmsCommonApi axHrmsCommonApi;
     @Reference
     DepartmentMasterLocalService departmentMasterLocalService;
-
+    @Reference
+    HolidayLocalService holidayLocalService;
     @Reference
     DesignationMasterLocalService designationMasterLocalService;
 
@@ -96,7 +98,6 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         super.hideDefaultErrorMessage(actionRequest);
         super.hideDefaultSuccessMessage(actionRequest);
         EmployeeDetails eligibleEmployee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
-
         if(eligibleEmployee.getIsProbationEnabled()){
             SessionErrors.add(actionRequest, AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_NOT_INSERTED_MESSAGE_KEY_BECAUSE_OF_PROBATION);
             actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
@@ -108,7 +109,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
             actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay));
             return;
         }
-        
+
         long overlapCount = getOverlapCount(actionRequest, employeeId);
 
         log.info("overlapped count " + overlapCount);
@@ -142,12 +143,16 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
                     LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, employeeMailBody, leaveRequest.getLeaveRequestId(), manager.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
                 }
                 for (User user : users) {
-                    log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
-                    EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
-                    log.info("Employee Id: " + employeeDetails.toString());
-                    LeaveRequestUtil.sendNotificationToManager(managerNotification, employeeDetails);
-                    StringBuilder hrMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
-                    LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, leaveRequest.getLeaveRequestId(), employeeDetails.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                    try {
+                        log.info("User: " + user.getFullName() + " | Email: " + user.getEmailAddress() + "  ,,,,, " + user.getUserId());
+                        EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(user.getUserId());
+                        log.info("Employee Id: " + employeeDetails.toString());
+                        LeaveRequestUtil.sendNotificationToManager(managerNotification, employeeDetails);
+                        StringBuilder hrMailBody = new StringBuilder(AxHrmsHrLeaveManagementSystemWebPortletConstants.LEAVE_REQUEST_MAIL_HEAD);
+                        LeaveRequestUtil.sendMailtoManager(fromName, fromEmailAddress, hrMailBody, leaveRequest.getLeaveRequestId(), employeeDetails.getEmployeeId(), mailTemplateConfiguration, employeeDetailsLocalService, leaveRequestLocalService, employeeDepartmentLocalService, departmentMasterLocalService, employeeDesignationLocalService, designationMasterLocalService, leaveCompensatoryStatusMasterLocalService, axHrmsCommonApi);
+                    } catch (Exception e) {
+                        log.info("Error for not getting user : " + e.getMessage());
+                    }
                 }
 
             } catch (Exception e) {
@@ -196,32 +201,135 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         }
         Long[] validStatusIds = new Long[] {approvedStatusId, pendingStatusId};
         
-        DSLQuery dslQuery = DSLQueryFactoryUtil.select(
-        		DSLFunctionFactoryUtil
-                .count(LeaveRequestTable.INSTANCE.leaveRequestId)
-                .as("overlapCount")
-        ).from(
-                LeaveRequestTable.INSTANCE
-        ).where(
-            LeaveRequestTable.INSTANCE.employeeId.eq(employeeId)
-            .and(
-                LeaveRequestTable.INSTANCE.startDateTime.lte(endDate)
-            )
-            .and(
-                LeaveRequestTable.INSTANCE.endDateTime.gte(startDate)
-            ).and(
-                LeaveRequestTable.INSTANCE.leaveCompensatoryStatusMasterId.in(
-            		validStatusIds
-                )
-            )
-        );
-        
-        List<Long> result =
-        	    (List<Long>) leaveRequestLocalService.dslQuery(dslQuery);
 
-        long overlapCount = result.isEmpty() ? 0 : result.get(0);
-		return overlapCount;
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        List<LeaveDayType> newDays =
+                getNewLeaveDayTypesFromRequest(actionRequest, dateFormat, themeDisplay);
+
+        List<LeaveRequest> overlappingRequests =
+                leaveRequestLocalService.dslQuery(
+                        DSLQueryFactoryUtil.select(
+                                LeaveRequestTable.INSTANCE
+                        ).from(
+                                LeaveRequestTable.INSTANCE
+                        ).where(
+                                LeaveRequestTable.INSTANCE.employeeId.eq(employeeId)
+                                        .and(LeaveRequestTable.INSTANCE.startDateTime.lte(endDate))
+                                        .and(LeaveRequestTable.INSTANCE.endDateTime.gte(startDate))
+                                        .and(LeaveRequestTable.INSTANCE.leaveCompensatoryStatusMasterId.in(validStatusIds))
+                        )
+                );
+
+        // Compare
+        for (LeaveRequest existingRequest : overlappingRequests) {
+
+            List<LeaveDayType> existingDays =
+                    leaveDayTypeLocalService.findByLeaveRequestId(existingRequest.getLeaveRequestId());
+
+            for (LeaveDayType newDay : newDays) {
+                for (LeaveDayType existingDay : existingDays) {
+
+                    if (isSameDate(newDay.getLeaveDate(), existingDay.getLeaveDate())) {
+
+                        //  Full day conflict
+                        if (!newDay.getIsHalfDay() || !existingDay.getIsHalfDay()) {
+                            return 1;
+                        }
+
+                        //  Same half conflict
+                        if (newDay.getIsFirstHalf() == existingDay.getIsFirstHalf()) {
+                            return 1;
+                        }
+
+                        // First + Second → allowed
+                    }
+                }
+            }
+        }
+
+        return 0;
 	}
+
+    private List<LeaveDayType> getNewLeaveDayTypesFromRequest(
+            ActionRequest actionRequest,
+            DateFormat dateFormat,
+            ThemeDisplay themeDisplay) {
+
+        List<LeaveDayType> leaveDayTypes = new ArrayList<>();
+
+        String start = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.START_DATE);
+        String end = ParamUtil.getString(actionRequest, AxHrmsLeaveManagementWebPortletConstants.END_DATE);
+
+        Date startDate = null;
+        Date endDate = null;
+
+        try {
+            startDate = dateFormat.parse(start + AxHrmsLeaveManagementWebPortletConstants.DEFAULT_TIME);
+            endDate = dateFormat.parse(end + AxHrmsLeaveManagementWebPortletConstants.DEFAULT_TIME);
+        } catch (ParseException e) {
+            log.error("Error parsing dates", e);
+            return leaveDayTypes;
+        }
+
+        Date[] leaveDatesArray = getDatesBetween(startDate, endDate);
+
+        for (Date date : leaveDatesArray) {
+
+            int day = date.getDate();
+            String actualDate = (day < 10) ? "0" + day : String.valueOf(day);
+
+            String dateString = ParamUtil.getString(
+                    actionRequest,
+                    AxHrmsLeaveManagementWebPortletConstants.DAY + actualDate + AxHrmsLeaveManagementWebPortletConstants.DATE
+            );
+
+            Date leaveDate = null;
+            try {
+                leaveDate = dateFormat.parse(dateString + AxHrmsLeaveManagementWebPortletConstants.DEFAULT_TIME);
+            } catch (ParseException e) {
+                log.error("Error parsing leaveDate", e);
+                continue;
+            }
+
+            boolean isHalf = ParamUtil.getBoolean(
+                    actionRequest,
+                    AxHrmsLeaveManagementWebPortletConstants.DAY + actualDate + AxHrmsLeaveManagementWebPortletConstants.IS_HALF,
+                    false
+            );
+
+            boolean isFirstHalf = false;
+
+            if (isHalf) {
+                String halfType = ParamUtil.getString(
+                        actionRequest,
+                        AxHrmsLeaveManagementWebPortletConstants.DAY + actualDate + AxHrmsLeaveManagementWebPortletConstants.HALF_TYPE
+                );
+
+                isFirstHalf = AxHrmsLeaveManagementWebPortletConstants.FIRST_HALF.equals(halfType);
+            }
+
+            LeaveDayType temp = leaveDayTypeLocalService.createLeaveDayType(0); // ID = 0 (not persisted)
+
+            temp.setLeaveDate(leaveDate);
+            temp.setIsHalfDay(isHalf);
+            temp.setIsFirstHalf(isFirstHalf);
+
+            leaveDayTypes.add(temp);
+        }
+
+        return leaveDayTypes;
+    }
+
+    private boolean isSameDate(Date d1, Date d2) {
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        c1.setTime(d1);
+        c2.setTime(d2);
+
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
+    }
 
     private void addLeaveRequestData(ActionRequest actionRequest, LeaveRequest leaveRequest) {
         leaveRequestLocalService.addLeaveRequest(leaveRequest);
@@ -297,16 +405,40 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
         else return null;
     }
 
-    public static Date[] getDatesBetween(Date startDate, Date endDate) {
+    public  Date[] getDatesBetween(Date startDate, Date endDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
         List<Date> datesBetween = new ArrayList<>();
-
+        int year = calendar.get(Calendar.YEAR);
+        List<Holiday> holidays=null;
+        try {
+             holidays = holidayLocalService.findByYear(year);
+        }catch (Exception e) {
+            log.info("Error raised due to ::"+e.getMessage());
+        }
         while (calendar.getTime().compareTo(endDate) < 0 || calendar.getTime().compareTo(endDate) == 0) {
             Date result = calendar.getTime();
 
-            if (calendar.getTime().getDay() != 6 && calendar.getTime().getDay() != 0) datesBetween.add(result);
+//            if (calendar.getTime().getDay() != 6 && calendar.getTime().getDay() != 0) datesBetween.add(result);
+
+            boolean isWeekend =
+                    result.getDay() == 0 || result.getDay() == 6;
+
+            boolean isHoliday = false;
+           if(Validator.isNotNull(holidays)) {
+               for (Holiday holiday : holidays) {
+                   if (isSameDate(result, holiday.getDate())) {
+                       isHoliday = true;
+                       break;
+                   }
+               }
+           }
+
+            //  Skip BOTH weekend AND holiday
+            if (!isWeekend && !isHoliday) {
+                datesBetween.add(result);
+            }
 
             calendar.add(Calendar.DATE, 1);
         }

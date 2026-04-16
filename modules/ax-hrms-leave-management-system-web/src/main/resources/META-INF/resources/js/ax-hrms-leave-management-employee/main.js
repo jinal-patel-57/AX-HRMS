@@ -22,17 +22,15 @@
     let leaveRequestForm;
     let employeeNames;
     let employeeId;
-
-
+    let holidayList;
     function setConfigs(config){
         namespace = config.namespace;
         isContinuous = config.isContinuous;
         remainingLeave = config.remainingLeave;
         isApplicableForFloater = config.isApplicableForFloater;
-
+        holidayList=config.holidayList;
         getFloaters = config.getFloaters;
         getEmployeeLeavesData = config.getEmployeeLeavesData;
-
         startDate = $('#'+namespace+'startDate');
         endDate = $('#'+namespace+'endDate');
         startDateContainer = $('#startDateContainer');
@@ -212,7 +210,13 @@ function closeCustomModal() {
                }
 
 
-                if (date.getDay() !== 0 && date.getDay() !== 6) {
+
+
+               let formattedDate = formatDateForInput(date);
+                let isWeekend = (date.getDay() === 0 || date.getDay() === 6);
+                let isHoliday = holidayList.includes(formattedDate);
+            if (!isWeekend && !isHoliday) {
+//                if (date.getDay() !== 0 && date.getDay() !== 6) {
 //                    dateContainer.append(dateDiv);
 //                    dateContainer.append(dayTypeSelectContainerDiv);
 //                    dateInputsContainer.append(dateContainer);

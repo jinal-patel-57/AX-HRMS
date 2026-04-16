@@ -11,11 +11,15 @@ import com.ax.hrms.master.model.LeaveTypeMaster;
 import com.ax.hrms.master.service.LeavePolicyMasterLocalService;
 import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.model.Holiday;
 import com.ax.hrms.model.LeaveBalance;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
+import com.ax.hrms.service.HolidayLocalService;
 import com.ax.hrms.service.LeaveBalanceLocalService;
 import com.ax.hrms.service.LeaveTypeViewPermitLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
@@ -23,8 +27,10 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.*;
 
@@ -68,7 +74,8 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private UserLocalService userLocalService;
-	
+    @Reference
+    private HolidayLocalService holidayLocalService;
 
 	
 	private static int currentYear = Year.now().getValue();
@@ -124,6 +131,25 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 			if(isHr) {
 				renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.IS_HR_STATUS, isHr);
 			}
+            List<Holiday> holidayList=null;
+            try {
+                holidayList = holidayLocalService.findByYear(year);
+            } catch (Exception exception) {
+                log.info("Exception raised due to ::: "+exception.getMessage());
+            }
+            JSONArray holidayJsonArray = JSONFactoryUtil.createJSONArray();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            if(Validator.isNotNull(holidayList)) {
+                for (Holiday holiday : holidayList) {
+                    log.info("Holiday is the ::"+holiday.toString());
+                    if (!holiday.getIsFloater()) {   // Filter non-floater only
+                        holidayJsonArray.put(sdf.format(holiday.getDate()));
+                    }
+                }
+            }
+
+            renderRequest.setAttribute("holidayJson", holidayJsonArray.toString());
 		}catch(Exception e){
 			log.error("ViewLeaveRequestFormMVCRenderCommand >>> render ::: Exception: "+e.getMessage());
 		}
@@ -134,7 +160,6 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 		} catch (NoSuchEmployeeDetailsException e) {
 			e.getMessage();
 		}
-
 		
 		renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE_DETAILS_LIST,listOfFilteredEmployeeDetails);
 		renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_TYPE_MASTER_LIST, listOfLeaveTypeMaster);
