@@ -8,27 +8,15 @@ import com.ax.hrms.master.model.DesignationMaster;
 import com.ax.hrms.master.service.BranchMasterLocalService;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
-import com.ax.hrms.model.EmployeeAddress;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.module.config.configuration.ModuleConfiguration;
-import com.ax.hrms.service.EmployeeAddressLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
-import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
-import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -134,16 +122,16 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
 
         LocalDate today = LocalDate.now();
 
-        int serialNo = getTodayEmployeeCount() + 1;
+        int serialNo = getEmployeeCountByJoiningDate(today) + 1;
 
 
         log.info("Serial no :- "+ serialNo);
 
         Map<String, String> replacements = new HashMap<>();
-        replacements.put("yyyy", String.valueOf(today.getYear()));
+        replacements.put("yy", String.valueOf(today.getYear()).substring(2));
         replacements.put("MM", String.format("%02d", today.getMonthValue()));
         replacements.put("dd", String.format("%02d", today.getDayOfMonth()));
-        replacements.put("no", String.valueOf(serialNo));
+        replacements.put("no", serialNo == 1 ? "" : String.valueOf(serialNo));
 
         String employeeCode = pattern;
 
@@ -155,26 +143,31 @@ public class OnBoardingEmployeeHrMVCRenderCommand implements MVCRenderCommand {
     }
 
 
-    public int getTodayEmployeeCount() {
+
+    public int getEmployeeCountByJoiningDate(LocalDate joiningDate) {
 
         try {
-            LocalDate today = LocalDate.now();
+            // Convert LocalDate → Date (start & end of day)
+            Date startOfDay = Date.from(joiningDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            Date startOfDay = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endOfDay = Date.from(today.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+            Date endOfDay = Date.from(joiningDate.atTime(23, 59, 59)
+                    .atZone(ZoneId.systemDefault()).toInstant());
 
             DynamicQuery dq = employeeDetailsLocalService.dynamicQuery();
 
-            dq.add(RestrictionsFactoryUtil.ge("createDate", startOfDay));
-            dq.add(RestrictionsFactoryUtil.le("createDate", endOfDay));
+            dq.add(RestrictionsFactoryUtil.ge("joiningDate", startOfDay));
+            dq.add(RestrictionsFactoryUtil.le("joiningDate", endOfDay));
 
             return (int) employeeDetailsLocalService.dynamicQueryCount(dq);
 
-        }catch (Exception e){
-            log.error("OnBoardingEmployeeHrMVCRenderCommand >>> getTodayEmployeeCount ::: Exception: "+e.getMessage());
+        } catch (Exception e) {
+            log.error("OnBoardingEmployeeHrMVCRenderCommand >>> getEmployeeCountByJoiningDate ::: Exception: "+e.getMessage());
         }
+
         return 0;
     }
+
+
 
 
 
