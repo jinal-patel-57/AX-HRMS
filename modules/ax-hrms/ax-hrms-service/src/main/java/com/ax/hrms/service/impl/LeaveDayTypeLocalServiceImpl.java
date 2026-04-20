@@ -18,7 +18,10 @@ import com.ax.hrms.model.LeaveDayType;
 import com.ax.hrms.service.base.LeaveDayTypeLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,11 +36,49 @@ import org.osgi.service.component.annotations.Component;
 )
 public class LeaveDayTypeLocalServiceImpl
 	extends LeaveDayTypeLocalServiceBaseImpl {
+
+	public List<LeaveDayType> findByLeaveDate(Date leaveDate) {
+		return leaveDayTypePersistence.findByLeaveDate(leaveDate);
+	}
+
+	public List<LeaveDayType> findByLeaveDateBetween(
+		Date startDate, Date endDate) {
+
+		DynamicQuery dynamicQuery = dynamicQuery();
+
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.ge("leaveDate", _getStartOfDay(startDate)));
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.le("leaveDate", _getEndOfDay(endDate)));
+
+		return dynamicQuery(dynamicQuery);
+	}
+
 	public List<LeaveDayType> findByLeaveRequestId(long leaveRequestId) {
 		return leaveDayTypePersistence.findByLeaveRequestId(leaveRequestId);
 	}
-	
-	public List<LeaveDayType> findByLeaveDate(Date leaveDate) {
-		return leaveDayTypePersistence.findByLeaveDate(leaveDate);
+
+	private Date _getEndOfDay(Date date) {
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+
+		return calendar.getTime();
+	}
+
+	private Date _getStartOfDay(Date date) {
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		return calendar.getTime();
 	}
 }

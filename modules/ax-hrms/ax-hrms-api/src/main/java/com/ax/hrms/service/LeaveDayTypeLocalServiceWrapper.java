@@ -249,6 +249,15 @@ public class LeaveDayTypeLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.ax.hrms.model.LeaveDayType>
+		findByLeaveDateBetween(
+			java.util.Date startDate, java.util.Date endDate) {
+
+		return _leaveDayTypeLocalService.findByLeaveDateBetween(
+			startDate, endDate);
+	}
+
+	@Override
 	public java.util.List<com.ax.hrms.model.LeaveDayType> findByLeaveRequestId(
 		long leaveRequestId) {
 

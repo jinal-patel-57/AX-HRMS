@@ -770,4 +770,25 @@ public interface MailTemplateConfiguration {
             required = false
     )
     public String mailYearlySchedulerFailBody();
+
+	@Meta.AD(
+		deflt = "hr@yopmail.com",
+		name = "Attendance Reconciliation Recipient Email",
+		required = false
+	)
+	public String mailAttendanceReconciliationToEmailAddress();
+
+	@Meta.AD(
+		deflt = "Missing Attendance Reconciliation Report - ${YEAR_MONTH}",
+		name = "Attendance Reconciliation Report (SUBJECT)",
+		required = false
+	)
+	public String mailAttendanceReconciliationSubject();
+
+	@Meta.AD(
+		deflt = "<p>Dear HR Team,</p><p>Please find attached the missing attendance report for the period <b>${YEAR_MONTH}</b>.</p><p>Regards,<br/>HRMS System</p>",
+		name = "Attendance Reconciliation Report (BODY)",
+		required = false
+	)
+	public String mailAttendanceReconciliationBody();
 }

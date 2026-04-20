@@ -219,6 +219,12 @@ public class LeaveDayTypeLocalServiceUtil {
 		return getService().findByLeaveDate(leaveDate);
 	}
 
+	public static List<LeaveDayType> findByLeaveDateBetween(
+		java.util.Date startDate, java.util.Date endDate) {
+
+		return getService().findByLeaveDateBetween(startDate, endDate);
+	}
+
 	public static List<LeaveDayType> findByLeaveRequestId(long leaveRequestId) {
 		return getService().findByLeaveRequestId(leaveRequestId);
 	}
