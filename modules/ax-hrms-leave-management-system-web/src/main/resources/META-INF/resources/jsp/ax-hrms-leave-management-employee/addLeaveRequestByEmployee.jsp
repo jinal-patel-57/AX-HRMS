@@ -207,7 +207,7 @@ function closeCustomModal() {
     $(document).ready(function () {
 
         var config = new Object({});
-        namespace = '<portlet:namespace />';
+        const namespace = '<portlet:namespace />';
 
         config.namespace = namespace;
         config.isContinuous = $('#<portlet:namespace />leaveType').find(':selected').data('is-continuous');
@@ -221,7 +221,7 @@ function closeCustomModal() {
         // Initialize Team Members Multi-Select with localStorage and rendering
         const teamSelect = $("#teamIdSelectBox");
         const selectedOptionsContainer = $('#selectedOptionsContainer');
-        const namespace = '<portlet:namespace />';
+        //const namespace = '<portlet:namespace />';
         let selectedValues = [];
 
         // Function to get team IDs from localStorage
