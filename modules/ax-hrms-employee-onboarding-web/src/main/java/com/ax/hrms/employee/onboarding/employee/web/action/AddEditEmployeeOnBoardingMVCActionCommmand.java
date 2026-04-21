@@ -5,6 +5,8 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.onboarding.employee.web.util.EmployeeBasicDetailsUtil;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnBoardingEmployeeConstants;
 import com.ax.hrms.employee.onboarding.web.constants.AxHrmsEmployeeOnboardingWebPortletKeys;
+import com.ax.hrms.master.model.DocumentTypeMaster;
+import com.ax.hrms.master.service.DocumentTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
@@ -50,6 +52,8 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 	AxHrmsCommonApi axHrmsCommonApi;
 	@Reference
 	private UserLocalService userLocalService;
+    @Reference
+    private DocumentTypeMasterLocalService documentTypeMasterLocalService;
 
 	private Log log = LogFactoryUtil.getLog(AddEditEmployeeOnBoardingMVCActionCommmand.class);
 
@@ -75,11 +79,24 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 
 		File aadhaarFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD);
 		String aadhaarFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAAR_CARD));
+        String kycSourceType = ParamUtil.getString(actionRequest, "kycSourceType");
+
+
+
+
+        log.info("kycSourceType :: " + kycSourceType);
+
+
+
+
+
+
 
 		File panFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD);
 		String panFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD));
+        String boodGroup =ParamUtil.getString(actionRequest, "bloodGroup");
 
-		EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
+        EmployeeDetails employeeDetails = employeeDetailsLocalService.findByLrUserId(themeDisplay.getUserId());
 		employeeDetails.setPersonalEmail(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PERSONAL_EMAIL));
 		employeeDetails.setMobileNo(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.MOBILE_NUMBER));
 		employeeDetails.setSkypeId(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SKYPE_ID));
@@ -89,7 +106,7 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest,AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
 		employeeDetails.setNameAsPerAadhaarCard(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_AADHAAR_CARD));
-
+        employeeDetails.setBloodGroup(boodGroup);
 
 		log.info("Employee details created successfully.... :: "+employeeDetails.toString());
         try {
@@ -114,7 +131,12 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 				actionRequest,
 				"kycDocumentType"
 		);
-		UploadPortletRequest uploadPortletRequest =
+
+        DocumentTypeMaster selectedDocType =
+                documentTypeMasterLocalService.getDocumentTypeMaster(documentTypeMasterId);
+        log.info("selectedDocType.getDocumentTypeName() :: "+selectedDocType.getDocumentTypeName());
+
+        UploadPortletRequest uploadPortletRequest =
 				PortalUtil.getUploadPortletRequest(actionRequest);
 
 		File kycFile =
@@ -125,18 +147,56 @@ public class AddEditEmployeeOnBoardingMVCActionCommmand extends BaseMVCActionCom
 
 		String employeeFolderName =
 				employeeUser.getScreenName() + employeeUser.getUserId();
-		long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
-				themeDisplay,
-				serviceContext,
-				kycFile,
-				originalFileName,
-				employeeDetails.getKycDocumentFileEntryId(),
-				AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
-				employeeFolderName,
-				AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
-		);
+//		long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+//				themeDisplay,
+//				serviceContext,
+//				kycFile,
+//				originalFileName,
+//				employeeDetails.getKycDocumentFileEntryId(),
+//				AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+//				employeeFolderName,
+//				AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+//		);
+        long kycFileEntryId=0;
+        if ("PAN_NEW".equals(kycSourceType) || "AADHAAR_NEW".equals(kycSourceType)) {
 
-		if (documentTypeMasterId > 0) {
+            if (kycFile != null && kycFile.length() > 0) {
+
+                kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+                        themeDisplay,
+                        serviceContext,
+                        kycFile,
+                        originalFileName,
+                        employeeDetails.getKycDocumentFileEntryId(),
+                        AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+                        employeeFolderName,
+                        AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+                );
+
+            }
+
+        } else if ("PAN_EXISTING".equals(kycSourceType)) {
+
+            kycFileEntryId = employeeDetails.getPanCardFileId();
+
+        } else if ("AADHAAR_EXISTING".equals(kycSourceType)) {
+
+            kycFileEntryId = employeeDetails.getAadhaarCardFileId();
+        } else {
+            kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+                    themeDisplay,
+                    serviceContext,
+                    kycFile,
+                    originalFileName,
+                    employeeDetails.getKycDocumentFileEntryId(),
+                    AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+                    employeeFolderName,
+                    AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+            );
+        }
+
+
+        if (documentTypeMasterId > 0) {
 			employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
 		}
 		employeeDetails.setKycDocumentFileEntryId(kycFileEntryId);

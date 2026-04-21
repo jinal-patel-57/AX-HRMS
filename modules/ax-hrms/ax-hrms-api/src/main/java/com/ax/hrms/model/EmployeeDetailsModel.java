@@ -794,6 +794,21 @@ public interface EmployeeDetailsModel
 	 */
 	public void setKycDocumentFileEntryId(long kycDocumentFileEntryId);
 
+	/**
+	 * Returns the blood group of this employee details.
+	 *
+	 * @return the blood group of this employee details
+	 */
+	@AutoEscape
+	public String getBloodGroup();
+
+	/**
+	 * Sets the blood group of this employee details.
+	 *
+	 * @param bloodGroup the blood group of this employee details
+	 */
+	public void setBloodGroup(String bloodGroup);
+
 	@Override
 	public EmployeeDetails cloneWithOriginalValues();
 

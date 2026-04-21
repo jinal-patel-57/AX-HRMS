@@ -90,7 +90,7 @@ public class EmployeeDetailsModelImpl
 		{"panCardNumber", Types.VARCHAR}, {"aadhaarCardNumber", Types.VARCHAR},
 		{"nameAsPerAadhaarCard", Types.VARCHAR}, {"branchId", Types.BIGINT},
 		{"documentTypeMasterId", Types.BIGINT},
-		{"kycDocumentFileEntryId", Types.BIGINT}
+		{"kycDocumentFileEntryId", Types.BIGINT}, {"bloodGroup", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -145,10 +145,11 @@ public class EmployeeDetailsModelImpl
 		TABLE_COLUMNS_MAP.put("branchId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("documentTypeMasterId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("kycDocumentFileEntryId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("bloodGroup", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG,experienceYears DOUBLE,panCardNumber VARCHAR(75) null,aadhaarCardNumber VARCHAR(75) null,nameAsPerAadhaarCard VARCHAR(75) null,branchId LONG,documentTypeMasterId LONG,kycDocumentFileEntryId LONG)";
+		"create table ax_EmployeeDetails (uuid_ VARCHAR(75) null,companyId LONG,createdBy LONG,modifiedBy LONG,groupId LONG,createDate DATE null,modifiedDate DATE null,employeeId LONG not null primary key,employeeCode VARCHAR(75) null,lrUserId LONG,firstName VARCHAR(75) null,lastName VARCHAR(75) null,officialEmail VARCHAR(75) null,personalEmail VARCHAR(75) null,joiningDate DATE null,leavingDate DATE null,mobileNo VARCHAR(75) null,gender VARCHAR(75) null,fatherName VARCHAR(75) null,dateOfBirth DATE null,maritalStatus BOOLEAN,marriageDate DATE null,spouseName VARCHAR(75) null,employeeAddressId LONG,skypeId VARCHAR(75) null,nominneeId LONG,bankAccountId LONG,uanEsicId LONG,probationStatusId LONG,isEmployeeOnboarded BOOLEAN,isExperienced BOOLEAN,isProbationEnabled BOOLEAN,profilePicId LONG,aadhaarCardFileId LONG,panCardFileId LONG,insuranceLink VARCHAR(1000) null,isTerminated BOOLEAN,appraisalDate DATE null,employeeType VARCHAR(75) null,stipend DOUBLE,managerId LONG,experienceYears DOUBLE,panCardNumber VARCHAR(75) null,aadhaarCardNumber VARCHAR(75) null,nameAsPerAadhaarCard VARCHAR(75) null,branchId LONG,documentTypeMasterId LONG,kycDocumentFileEntryId LONG,bloodGroup VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table ax_EmployeeDetails";
 
@@ -437,6 +438,8 @@ public class EmployeeDetailsModelImpl
 			attributeGetterFunctions.put(
 				"kycDocumentFileEntryId",
 				EmployeeDetails::getKycDocumentFileEntryId);
+			attributeGetterFunctions.put(
+				"bloodGroup", EmployeeDetails::getBloodGroup);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -644,6 +647,10 @@ public class EmployeeDetailsModelImpl
 				"kycDocumentFileEntryId",
 				(BiConsumer<EmployeeDetails, Long>)
 					EmployeeDetails::setKycDocumentFileEntryId);
+			attributeSetterBiConsumers.put(
+				"bloodGroup",
+				(BiConsumer<EmployeeDetails, String>)
+					EmployeeDetails::setBloodGroup);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -1607,6 +1614,26 @@ public class EmployeeDetailsModelImpl
 		_kycDocumentFileEntryId = kycDocumentFileEntryId;
 	}
 
+	@JSON
+	@Override
+	public String getBloodGroup() {
+		if (_bloodGroup == null) {
+			return "";
+		}
+		else {
+			return _bloodGroup;
+		}
+	}
+
+	@Override
+	public void setBloodGroup(String bloodGroup) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_bloodGroup = bloodGroup;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1718,6 +1745,7 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsImpl.setDocumentTypeMasterId(getDocumentTypeMasterId());
 		employeeDetailsImpl.setKycDocumentFileEntryId(
 			getKycDocumentFileEntryId());
+		employeeDetailsImpl.setBloodGroup(getBloodGroup());
 
 		employeeDetailsImpl.resetOriginalValues();
 
@@ -1824,6 +1852,8 @@ public class EmployeeDetailsModelImpl
 			this.<Long>getColumnOriginalValue("documentTypeMasterId"));
 		employeeDetailsImpl.setKycDocumentFileEntryId(
 			this.<Long>getColumnOriginalValue("kycDocumentFileEntryId"));
+		employeeDetailsImpl.setBloodGroup(
+			this.<String>getColumnOriginalValue("bloodGroup"));
 
 		return employeeDetailsImpl;
 	}
@@ -2147,6 +2177,14 @@ public class EmployeeDetailsModelImpl
 		employeeDetailsCacheModel.kycDocumentFileEntryId =
 			getKycDocumentFileEntryId();
 
+		employeeDetailsCacheModel.bloodGroup = getBloodGroup();
+
+		String bloodGroup = employeeDetailsCacheModel.bloodGroup;
+
+		if ((bloodGroup != null) && (bloodGroup.length() == 0)) {
+			employeeDetailsCacheModel.bloodGroup = null;
+		}
+
 		return employeeDetailsCacheModel;
 	}
 
@@ -2257,6 +2295,7 @@ public class EmployeeDetailsModelImpl
 	private long _branchId;
 	private long _documentTypeMasterId;
 	private long _kycDocumentFileEntryId;
+	private String _bloodGroup;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -2339,6 +2378,7 @@ public class EmployeeDetailsModelImpl
 			"documentTypeMasterId", _documentTypeMasterId);
 		_columnOriginalValues.put(
 			"kycDocumentFileEntryId", _kycDocumentFileEntryId);
+		_columnOriginalValues.put("bloodGroup", _bloodGroup);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -2457,6 +2497,8 @@ public class EmployeeDetailsModelImpl
 		columnBitmasks.put("documentTypeMasterId", 70368744177664L);
 
 		columnBitmasks.put("kycDocumentFileEntryId", 140737488355328L);
+
+		columnBitmasks.put("bloodGroup", 281474976710656L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

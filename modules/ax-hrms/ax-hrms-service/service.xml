@@ -62,6 +62,7 @@
         <column name="branchId" type="long"/>
         <column name="documentTypeMasterId" type="long"/>
         <column name="kycDocumentFileEntryId" type="long" />
+        <column name="bloodGroup" type="String"/>
 
 
 

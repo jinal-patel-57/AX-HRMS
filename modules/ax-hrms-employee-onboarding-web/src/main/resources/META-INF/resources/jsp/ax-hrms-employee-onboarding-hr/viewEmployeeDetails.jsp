@@ -175,6 +175,12 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                         <div class="form-group-view">
+                            <div class="label-name">Blood Group</div>
+                            <div class="label-content">${employeeDetail.bloodGroup}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                        <div class="form-group-view">
                             <div class="label-name">Maritial Status</div>
                             <div class="label-content">${employeeDetail.maritalStatus ? 'Married' : 'Single'}</div>
                         </div>

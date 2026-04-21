@@ -298,6 +298,7 @@
 		<field name="branchId" type="long" />
 		<field name="documentTypeMasterId" type="long" />
 		<field name="kycDocumentFileEntryId" type="long" />
+		<field name="bloodGroup" type="String" />
 	</model>
 	<model name="com.ax.hrms.model.EmployeeDocument">
 		<field name="uuid" type="String" />

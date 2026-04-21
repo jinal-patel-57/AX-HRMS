@@ -180,6 +180,7 @@ public class ViewEmployeeOnBoardingMVCRenderCommand implements MVCRenderCommand 
 			employeeDto.setExperienceYears(employeeDetails.getExperienceYears());
 			employeeDto.setKycDocumentFileEntryId(employeeDetails.getKycDocumentFileEntryId());
 			employeeDto.setDocumentTypeMasterId(employeeDetails.getDocumentTypeMasterId());
+            employeeDto.setBloodGroup(employeeDetails.getBloodGroup());
 			try {
 				employeeDto.setBranchName(Validator.isNotNull(employeeDetails.getBranchId()) ? branchMasterLocalService.getBranchMaster(employeeDetails.getBranchId()).getBranchName() : "");
 			}catch(Exception e){

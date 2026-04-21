@@ -148,6 +148,8 @@ public class EmployeeDetailsTable extends BaseTable<EmployeeDetailsTable> {
 		createColumn(
 			"kycDocumentFileEntryId", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
+	public final Column<EmployeeDetailsTable, String> bloodGroup = createColumn(
+		"bloodGroup", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private EmployeeDetailsTable() {
 		super("ax_EmployeeDetails", EmployeeDetailsTable::new);

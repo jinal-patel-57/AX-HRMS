@@ -54,7 +54,7 @@ public class EmployeeDetailsCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(97);
+		StringBundler sb = new StringBundler(99);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -152,6 +152,8 @@ public class EmployeeDetailsCacheModel
 		sb.append(documentTypeMasterId);
 		sb.append(", kycDocumentFileEntryId=");
 		sb.append(kycDocumentFileEntryId);
+		sb.append(", bloodGroup=");
+		sb.append(bloodGroup);
 		sb.append("}");
 
 		return sb.toString();
@@ -356,6 +358,13 @@ public class EmployeeDetailsCacheModel
 		employeeDetailsImpl.setDocumentTypeMasterId(documentTypeMasterId);
 		employeeDetailsImpl.setKycDocumentFileEntryId(kycDocumentFileEntryId);
 
+		if (bloodGroup == null) {
+			employeeDetailsImpl.setBloodGroup("");
+		}
+		else {
+			employeeDetailsImpl.setBloodGroup(bloodGroup);
+		}
+
 		employeeDetailsImpl.resetOriginalValues();
 
 		return employeeDetailsImpl;
@@ -436,6 +445,7 @@ public class EmployeeDetailsCacheModel
 		documentTypeMasterId = objectInput.readLong();
 
 		kycDocumentFileEntryId = objectInput.readLong();
+		bloodGroup = objectInput.readUTF();
 	}
 
 	@Override
@@ -610,6 +620,13 @@ public class EmployeeDetailsCacheModel
 		objectOutput.writeLong(documentTypeMasterId);
 
 		objectOutput.writeLong(kycDocumentFileEntryId);
+
+		if (bloodGroup == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(bloodGroup);
+		}
 	}
 
 	public String uuid;
@@ -660,5 +677,6 @@ public class EmployeeDetailsCacheModel
 	public long branchId;
 	public long documentTypeMasterId;
 	public long kycDocumentFileEntryId;
+	public String bloodGroup;
 
 }

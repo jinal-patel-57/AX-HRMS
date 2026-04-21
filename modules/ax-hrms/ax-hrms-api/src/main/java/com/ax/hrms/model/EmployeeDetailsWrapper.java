@@ -82,6 +82,7 @@ public class EmployeeDetailsWrapper
 		attributes.put("branchId", getBranchId());
 		attributes.put("documentTypeMasterId", getDocumentTypeMasterId());
 		attributes.put("kycDocumentFileEntryId", getKycDocumentFileEntryId());
+		attributes.put("bloodGroup", getBloodGroup());
 
 		return attributes;
 	}
@@ -380,6 +381,12 @@ public class EmployeeDetailsWrapper
 		if (kycDocumentFileEntryId != null) {
 			setKycDocumentFileEntryId(kycDocumentFileEntryId);
 		}
+
+		String bloodGroup = (String)attributes.get("bloodGroup");
+
+		if (bloodGroup != null) {
+			setBloodGroup(bloodGroup);
+		}
 	}
 
 	@Override
@@ -425,6 +432,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public long getBankAccountId() {
 		return model.getBankAccountId();
+	}
+
+	/**
+	 * Returns the blood group of this employee details.
+	 *
+	 * @return the blood group of this employee details
+	 */
+	@Override
+	public String getBloodGroup() {
+		return model.getBloodGroup();
 	}
 
 	/**
@@ -980,6 +997,16 @@ public class EmployeeDetailsWrapper
 	@Override
 	public void setBankAccountId(long bankAccountId) {
 		model.setBankAccountId(bankAccountId);
+	}
+
+	/**
+	 * Sets the blood group of this employee details.
+	 *
+	 * @param bloodGroup the blood group of this employee details
+	 */
+	@Override
+	public void setBloodGroup(String bloodGroup) {
+		model.setBloodGroup(bloodGroup);
 	}
 
 	/**

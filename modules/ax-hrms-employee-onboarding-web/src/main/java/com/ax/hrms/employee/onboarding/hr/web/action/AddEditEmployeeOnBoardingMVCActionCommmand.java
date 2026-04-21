@@ -8,8 +8,10 @@
 import com.ax.hrms.exception.NoSuchEmployeeSalaryException;
 import com.ax.hrms.master.model.DepartmentMaster;
     import com.ax.hrms.master.model.DesignationMaster;
+    import com.ax.hrms.master.model.DocumentTypeMaster;
     import com.ax.hrms.master.service.DepartmentMasterLocalService;
     import com.ax.hrms.master.service.DesignationMasterLocalService;
+    import com.ax.hrms.master.service.DocumentTypeMasterLocalService;
     import com.ax.hrms.master.service.ProbationStatusMasterLocalService;
     import com.ax.hrms.model.EmployeeDepartment;
     import com.ax.hrms.model.EmployeeDesignation;
@@ -103,6 +105,10 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
         @Reference
         private ProbationStatusMasterLocalService probationStatusMasterLocalService;
 
+        @Reference
+        private DocumentTypeMasterLocalService documentTypeMasterLocalService;
+
+
         private Log log = LogFactoryUtil.getLog(AddEditEmployeeOnBoardingMVCActionCommmand.class);
 
 
@@ -120,6 +126,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
             serviceContext.setAddGroupPermissions(true);
             serviceContext.setAddGuestPermissions(false);
             long oldManagerId = 0l;
+            String kycSourceType = ParamUtil.getString(actionRequest, "kycSourceType");
 
             EmployeeDetails employeeUser = employeeDetailsLocalService.getEmployeeDetails(employeeId);
             User employeeLrUser = userLocalService.getUser(employeeUser.getLrUserId());
@@ -139,6 +146,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
             File panFile = uploadRequest.getFile(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD);
             String panFileName = generateFileName(uploadRequest.getFileName(AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_CARD));
+            String boodGroup =ParamUtil.getString(actionRequest, "bloodGroup");
 
 
 
@@ -150,7 +158,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 		employeeDetails.setMaritalStatus(ParamUtil.getBoolean(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.MARTIAL_STATUS));
 		employeeDetails.setSpouseName(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.SPOUSE_NAME));
         employeeDetails.setNameAsPerAadhaarCard(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.NAME_AS_PER_AADHAAR_CARD));
-
+        employeeDetails.setBloodGroup(boodGroup);
         employeeDetails.setAadhaarCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.AADHAR_NUMBER));
         employeeDetails.setPanCardNumber(ParamUtil.getString(actionRequest, AxHrmsEmployeeOnBoardingEmployeeConstants.PAN_NUMBER));
 
@@ -161,6 +169,10 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                     actionRequest,
                     "kycDocumentType"
             );
+            DocumentTypeMaster selectedDocType =
+                    documentTypeMasterLocalService.getDocumentTypeMaster(documentTypeMasterId);
+            log.info("selectedDocType.getDocumentTypeName() :: "+selectedDocType.getDocumentTypeName());
+
             UploadPortletRequest uploadPortletRequest =
                     PortalUtil.getUploadPortletRequest(actionRequest);
 
@@ -172,7 +184,43 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
             String employeeFolderName =
                     lrUser.getScreenName() + lrUser.getUserId();
-            long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+//            long kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+//                    themeDisplay,
+//                    serviceContext,
+//                    kycFile,
+//                    originalFileName,
+//                    employeeDetails.getKycDocumentFileEntryId(),
+//                    AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+//                    employeeFolderName,
+//                    AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+//            );
+            long kycFileEntryId=0;
+            if ("PAN_NEW".equals(kycSourceType) || "AADHAAR_NEW".equals(kycSourceType)) {
+
+                if (kycFile != null && kycFile.length() > 0) {
+
+                    kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
+                            themeDisplay,
+                            serviceContext,
+                            kycFile,
+                            originalFileName,
+                            employeeDetails.getKycDocumentFileEntryId(),
+                            AxHrmsEmployeeOnboardingWebPortletKeys.ROOT_FOLDER_HRMS_DOCUMENT,
+                            employeeFolderName,
+                            AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
+                    );
+
+                }
+
+            } else if ("PAN_EXISTING".equals(kycSourceType)) {
+
+                kycFileEntryId = employeeDetails.getPanCardFileId();
+
+            } else if ("AADHAAR_EXISTING".equals(kycSourceType)) {
+
+                kycFileEntryId = employeeDetails.getAadhaarCardFileId();
+            } else{
+                kycFileEntryId = axHrmsCommonApi.uploadEmployeeDocument(
                     themeDisplay,
                     serviceContext,
                     kycFile,
@@ -182,6 +230,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
                     employeeFolderName,
                     AxHrmsEmployeeOnboardingWebPortletKeys.FOLDER_KYC_DOCUMENT
             );
+            }
 
             employeeDetails.setDocumentTypeMasterId(documentTypeMasterId);
             employeeDetails.setKycDocumentFileEntryId(kycFileEntryId);

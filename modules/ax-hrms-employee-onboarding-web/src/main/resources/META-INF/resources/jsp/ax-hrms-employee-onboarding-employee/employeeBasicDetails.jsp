@@ -277,6 +277,25 @@
                        value="${employeeDetail.spouseName}" maxlength="50"/>
             </div>
 
+
+            <div class="col-md-4 col-sm-12 mb-3">
+                    <label for="<portlet:namespace />bloodGroup" class="form-label">
+                        Blood Group<span class="text-danger">*</span>
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           id="<portlet:namespace />bloodGroup"
+                           name="<portlet:namespace />bloodGroup"
+                           placeholder="e.g. A+, O-"
+                           value="${employeeDetail.bloodGroup}"
+                           maxlength="5"
+                           pattern="^(A|B|AB|O)[+-]$"
+                           title="Enter valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-)" />
+            </div>
+
+
+
             <div class="col-md-4 col-sm-12 mb-3">
                 <!-- KYC Document Type -->
                 <label class="form-label">
@@ -414,6 +433,7 @@
                     </div>
                     <label id="gender-error" class="error text-danger" for="gender"></label>
                 </div>
+
 
                 <div class="col-md-4 col-sm-12 mb-3">
                     <!-- Is Experienced -->
@@ -635,90 +655,195 @@ var aadhaarCardId = ${empty employeeDetail.aadhaarCardFileId ? 0 : employeeDetai
 
 </script>
 
-<aui:script>
+    <aui:script>
+        Liferay.on('allPortletsReady', function () {
+
+            var documentSelect =
+                $('#<portlet:namespace/>kycDocumentType');
+
+            var uploadSection =
+                $('#kycDocumentUploadSection');
+
+            function toggleKycUpload() {
+                var isSelected = !!documentSelect.val();
+
+                uploadSection
+                    .find('input, select, textarea, button')
+                    .prop('disabled', !isSelected);
+            }
+
+            toggleKycUpload();
+
+            documentSelect.on('change', function () {
+                toggleKycUpload();
+            });
+        });
+         var isKycDocumentAlreadyUploaded = ${not empty kycDocumentUrl};
+    </aui:script>
+    <script>
     Liferay.on('allPortletsReady', function () {
 
-        var documentSelect =
-            $('#<portlet:namespace/>kycDocumentType');
+        var employeeType =
+            $('input[name="<portlet:namespace />employeeType"]').val();
 
-        var uploadSection =
-            $('#kycDocumentUploadSection');
+        var grossPmWrapper = $('#grossSalaryCTCPM').closest('.col-md-4');
+        var grossPaWrapper = $('#grossSalaryCTCPA').closest('.col-md-4');
+        var stipendWrapper = $('#stipendWrapper');
 
-        function toggleKycUpload() {
-            var isSelected = !!documentSelect.val();
+        var grossPm = $('#grossSalaryCTCPM');
+        var grossPa = $('#grossSalaryCTCPA');
+        var stipend = $('#stipendAmount');
 
-            uploadSection
-                .find('input, select, textarea, button')
-                .prop('disabled', !isSelected);
+        function applyEmployeeTypeRules() {
+
+            if (employeeType &&
+                employeeType.toLowerCase() === 'intern') {
+
+                // Hide CTC fields
+                grossPmWrapper.hide();
+                grossPaWrapper.hide();
+
+                grossPm.val('').prop('required', false);
+                grossPa.val('').prop('required', false);
+
+                // Show stipend
+                stipendWrapper.show();
+                stipend.prop('required', true);
+
+            } else {
+
+                // Show CTC fields
+                grossPmWrapper.show();
+                grossPaWrapper.show();
+
+                grossPm.prop('required', true);
+                grossPa.prop('required', true);
+
+                // Hide stipend
+                stipendWrapper.hide();
+                stipend.val('').prop('required', false);
+            }
         }
 
-        toggleKycUpload();
-
-        documentSelect.on('change', function () {
-            toggleKycUpload();
+        applyEmployeeTypeRules();
+        $(document).on('input', '#stipendAmount', function () {
+            this.value = this.value.replace(/[^0-9.]/g, '');
         });
-    });
-     var isKycDocumentAlreadyUploaded = ${not empty kycDocumentUrl};
-</aui:script>
-<script>
-Liferay.on('allPortletsReady', function () {
+        var namespace = '<portlet:namespace />';
+        var kycType = $("#" + namespace + "kycDocumentType");
+        var kycFileInput = $("#" + namespace + "kycDocumentFile");
 
-    var employeeType =
-        $('input[name="<portlet:namespace />employeeType"]').val();
+    var panInput = $("#" + namespace + "panCard");
+    var aadhaarInput = $("#" + namespace + "aadhaarCard");
 
-    var grossPmWrapper = $('#grossSalaryCTCPM').closest('.col-md-4');
-    var grossPaWrapper = $('#grossSalaryCTCPA').closest('.col-md-4');
-    var stipendWrapper = $('#stipendWrapper');
+    function handleKycAutoFill() {
 
-    var grossPm = $('#grossSalaryCTCPM');
-    var grossPa = $('#grossSalaryCTCPA');
-    var stipend = $('#stipendAmount');
+        var selectedText = kycType.find("option:selected")
+            .text()
+            .trim()
+            .toLowerCase();
+        var panFile = panInput[0].files[0];
+        var aadhaarFile = aadhaarInput[0].files[0];
 
-    function applyEmployeeTypeRules() {
+        var isPanAvailable = panCardId > 0 || panInput.val();
+        var isAadhaarAvailable = aadhaarCardId > 0 || aadhaarInput.val();
+        $("#kycSourceType").remove();
 
-        if (employeeType &&
-            employeeType.toLowerCase() === 'intern') {
+        // Reset
+        kycFileInput.val('');
+        kycFileInput.prop('disabled', false);
+        kycFileInput.next('small.text-success').remove();
 
-            // Hide CTC fields
-            grossPmWrapper.hide();
-            grossPaWrapper.hide();
+        console.log("Selected:", selectedText);
+        console.log("PAN available:", isPanAvailable);
+        console.log("Aadhaar available:", isAadhaarAvailable);
+        console.log("panfile 1:: ",panFile)
 
-            grossPm.val('').prop('required', false);
-            grossPa.val('').prop('required', false);
+        if (selectedText.includes("pan")) {
+                       console.log("panfile 1:: ",panFile)
 
-            // Show stipend
-            stipendWrapper.show();
-            stipend.prop('required', true);
+            if (panFile) {
+                // New upload case
+                const dt = new DataTransfer();
+                dt.items.add(panFile);
+                kycFileInput[0].files = dt.files;
 
-        } else {
+                kycFileInput.after(
+                    '<small class="text-success">PAN file selected as KYC</small>'
+                );
 
-            // Show CTC fields
-            grossPmWrapper.show();
-            grossPaWrapper.show();
 
-            grossPm.prop('required', true);
-            grossPa.prop('required', true);
+                $('<input>').attr({
+                    type: 'hidden',
+                    id: 'kycSourceType',
+                    name: '<portlet:namespace/>kycSourceType',
+                    value: 'PAN_NEW'
+                }).appendTo('form');
+            } else if (panCardId > 0) {
+                //  Existing file case (IMPORTANT FIX)
+                        $('<input>').attr({
+                            type: 'hidden',
+                            id: 'kycSourceType',
+                            name: '<portlet:namespace/>kycSourceType',
+                            value: 'PAN_EXISTING'
+                        }).appendTo('form');
 
-            // Hide stipend
-            stipendWrapper.hide();
-            stipend.val('').prop('required', false);
+                kycFileInput.after(
+                    '<small class="text-success">Existing PAN will be used as KYC</small>'
+                );
+            }
+
+        } else if (selectedText.includes("aadhaar") || selectedText.includes("aadhar")) {
+
+            if (aadhaarFile) {
+                const dt = new DataTransfer();
+                dt.items.add(aadhaarFile);
+                kycFileInput[0].files = dt.files;
+            $('<input>').attr({
+                    type: 'hidden',
+                    id: 'kycSourceType',
+                    name: '<portlet:namespace/>kycSourceType',
+                    value: 'AADHAAR_NEW'
+                }).appendTo('form');
+                kycFileInput.after(
+                    '<small class="text-success">Aadhaar file selected as KYC</small>'
+                );
+
+            } else if (aadhaarCardId > 0) {
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    id: 'kycSourceType',
+                    name: '<portlet:namespace/>kycSourceType',
+                    value: 'AADHAAR_EXISTING'
+                }).appendTo('form');
+
+                kycFileInput.after(
+                    '<small class="text-success">Existing Aadhaar will be used as KYC</small>'
+                );
+            }
         }
     }
 
-    applyEmployeeTypeRules();
-    $(document).on('input', '#stipendAmount', function () {
-        this.value = this.value.replace(/[^0-9.]/g, '');
+        handleKycAutoFill();
+
+        kycType.on('change', function () {
+            handleKycAutoFill();
+        });
+
+
+    $("#" + namespace + "panCard, #" + namespace + "aadhaarCard")
+        .on("change", function () {
+            handleKycAutoFill();
+        });
     });
 
 
-});
+        $(document).on('click', '.previous-button-step-one', function (event) {
+            event.preventDefault();
+            window.history.back();
+        });
 
 
-    $(document).on('click', '.previous-button-step-one', function (event) {
-        event.preventDefault();
-        window.history.back();
-    });
-
-
-</script>
+    </script>
 

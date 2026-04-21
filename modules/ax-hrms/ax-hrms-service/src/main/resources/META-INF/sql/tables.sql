@@ -295,7 +295,8 @@ create table ax_EmployeeDetails (
 	nameAsPerAadhaarCard VARCHAR(75) null,
 	branchId LONG,
 	documentTypeMasterId LONG,
-	kycDocumentFileEntryId LONG
+	kycDocumentFileEntryId LONG,
+	bloodGroup VARCHAR(75) null
 );
 
 create table ax_EmployeeDocument (

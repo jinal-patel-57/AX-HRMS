@@ -11,7 +11,7 @@
       action="${editEmployeeProfileUrl}"
       method="post"
       enctype="multipart/form-data"
-      data-senna="off">
+      data-senna="off" novalidate >
 
 
 
@@ -48,17 +48,22 @@
         <!-- FILE INPUT -->
         <div class="mb-3">
             <input type="file"
-                   class="form- control"
+                   class="form-control"
                    id="<portlet:namespace/>profilePic"
                    name="<portlet:namespace/>profilePic"
                    accept="image/*" />
         </div>
 
         <small class="text-muted">
-            Allowed: JPG, PNG | Max size: 2MB
+            Allowed: JPG, PNG
         </small>
-
+<div>
+  <small id="<portlet:namespace/>profilePicError"
+           class="text-danger"
+           style="display:none;"></small>
+</div>
     </div>
+
 </div>
 
 
@@ -345,7 +350,7 @@
 <!-- ========================================================= -->
 <div class="card-footer text-right mt-3">
     <a href="${backURL}" class="btn btn-outline-danger">Back</a>
-    <button type="submit" class="btn btn-outline-success">Submit</button>
+    <button type="submit" id="submitBtn" class="btn btn-outline-success">Submit</button>
 </div>
 
 </form>
@@ -370,7 +375,7 @@ $(document).ready(function () {
     var spouseError = $('#' + ns + 'spouseError');
     var marriageDateError = $('#' + ns + 'marriageDateError');
 
-    function validateMarriageFields() {
+ /*   function validateMarriageFields() {
 
         spouseError.hide().text('');
         marriageDateError.hide().text('');
@@ -393,12 +398,85 @@ $(document).ready(function () {
         }
 
         return true;
+    } */
+
+function validateMarriageFields() {
+
+    spouseError.hide().text('');
+    marriageDateError.hide().text('');
+
+    if (maritalCheckbox.is(':checked')) {
+
+        let isValid = true;
+
+        if (!spouseField.val().trim()) {
+            spouseError.text('Spouse name is required.').show();
+            isValid = false;
+        }
+
+        let marriageDateVal = marriageDateField.val();
+
+        if (!marriageDateVal) {
+            marriageDateError.text('Marriage date is required.').show();
+            isValid = false;
+        } else {
+            let selectedDate = new Date(marriageDateVal);
+            let today = new Date();
+
+            // Remove time part for accurate comparison
+            today.setHours(0,0,0,0);
+
+            if (selectedDate > today) {
+                marriageDateError.text('Marriage date cannot be in the future.').show();
+                isValid = false;
+            }
+        }
+
+        return isValid;
     }
 
+    return true;
+}
+document.getElementById('profileForm').addEventListener('submit', function (e) {
+
+    let isMarriageValid = validateMarriageFields();
+    let isImageValid = validateProfileImage();
+
+    if (!isMarriageValid || !isImageValid) {
+        e.preventDefault();              // STOP submit
+        e.stopImmediatePropagation();    // STOP liferay handlers
+        return false;
+    }
+
+});
     //  FORM SUBMIT VALIDATION
-    $('#profileForm').on('submit', function () {
-        return validateMarriageFields();
-    });
+    /* $('#profileForm').on('submit', function (e) {
+        //return validateMarriageFields();
+    let isMarriageValid = validateMarriageFields();
+    let isImageValid = validateProfileImage();
+
+    if (!isMarriageValid || !isImageValid) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return false;
+    }
+
+    return true;
+    }); */
+
+
+/*    document.getElementById('profileForm').addEventListener('submit', function (e) {
+
+        let isMarriageValid = validateMarriageFields();
+        let isImageValid = validateProfileImage();
+
+        if (!isMarriageValid || !isImageValid) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+    }); */
 
     //  LIVE ERROR REMOVE
     spouseField.on('input', function () {
@@ -427,6 +505,45 @@ maritalCheckbox.on('change', function () {
     }
 });
 
+
+
+var profilePicInput = $('#' + ns + 'profilePic');
+var profilePicError = $('#' + ns + 'profilePicError');
+
+function validateProfileImage() {
+
+    profilePicError.hide().text('');
+
+    const file = profilePicInput[0].files[0];
+
+    if (!file) return true;
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    // TYPE VALIDATION
+    if (!allowedTypes.includes(file.type)) {
+        profilePicError.text('Only JPG and PNG images are allowed.').show();
+        profilePicInput.val('');
+        return false;
+    }
+
+    // SIZE VALIDATION
+    if (file.size > maxSize) {
+        profilePicError.text('File size must be less than 10MB.').show();
+        profilePicInput.val('');
+        return false;
+    }
+
+    return true;
+}
+profilePicInput.on('change', function () {
+    validateProfileImage();
+
+    if ($(this).val()) {
+        profilePicError.hide();
+    }
+});
 });
 
 Liferay.on('allPortletsReady', function () {

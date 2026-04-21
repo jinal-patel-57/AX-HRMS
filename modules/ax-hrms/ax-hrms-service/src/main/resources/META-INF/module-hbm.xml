@@ -362,6 +362,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="branchId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentTypeMasterId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="kycDocumentFileEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="bloodGroup" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.ax.hrms.model.impl.EmployeeDocumentImpl" table="ax_EmployeeDocument">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="documentId" type="long">

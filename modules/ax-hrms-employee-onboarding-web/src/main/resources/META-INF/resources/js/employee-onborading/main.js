@@ -418,7 +418,9 @@ function setConfigsForAddExperienceSection(config) {
                       }
 
 
-
+$(document).on('input', '#' + namespace + 'bloodGroup', function () {
+    this.value = this.value.toUpperCase();
+});
         $(document).ready(function () {
                 function formatAadhaar(value) {
                     if (!value) return "";
@@ -521,7 +523,10 @@ function setConfigsForAddExperienceSection(config) {
                        validExtension:true,
                        maxFileSize: 10
                    },
-
+                    [namespace + "bloodGroup"]: {
+                        required: true,
+                        validBloodGroup: true
+                    },
                    [namespace + "panCard"]: {
                        documentRequired: panCardId,
                        validExtension:true,
@@ -534,25 +539,40 @@ function setConfigsForAddExperienceSection(config) {
                        }
                    },
                    [namespace + "kycDocumentFile"]: {
-                       required: function (element) {
-                                                               var kycTypeSelected =
-                                                                   $("#" + namespace + "kycDocumentType").val();
-                                                               const form = element.form;
-                                                        // UPDATE case → already uploaded
-                                                        if (isKycDocumentAlreadyUploaded) {
-                                                            return false;
-                                                        }
+    required: function () {
 
-                                                        // Do not validate before clicking Next
-                                                        if (!form._submitAttempted) {
-                                                            return false;
-                                                        }
-                                                               // Required only if:
-                                                               // 1. KYC type selected
-                                                               // 2. No document already uploaded
-                                                               return kycTypeSelected && !isKycDocumentAlreadyUploaded;
-                                                           },
-                       validExtension: true,
+        var selectedText = $("#" + namespace + "kycDocumentType")
+            .find("option:selected")
+            .text()
+            .trim()
+            .toLowerCase();
+
+        var panInputVal = $("#" + namespace + "panCard").val();
+        var aadhaarInputVal = $("#" + namespace + "aadhaarCard").val();
+
+        var isPanAvailable = panCardId > 0 || panInputVal;
+        var isAadhaarAvailable = aadhaarCardId > 0 || aadhaarInputVal;
+
+        console.log("Validation Check →", selectedText, isPanAvailable, isAadhaarAvailable);
+
+        // ✅ PAN selected and available → NOT required
+        if (selectedText.includes("pan") && isPanAvailable) {
+            return false;
+        }
+
+        // ✅ Aadhaar selected and available → NOT required
+        if ((selectedText.includes("aadhaar") || selectedText.includes("aadhar")) && isAadhaarAvailable) {
+            return false;
+        }
+
+        // ✅ If already uploaded (edit case)
+        if (isKycDocumentAlreadyUploaded) {
+            return false;
+        }
+
+        // ❌ Otherwise required
+        return $("#" + namespace + "kycDocumentType").val();
+    },                       validExtension: true,
                        maxFileSize: 10
 //                        function () {
 //                           var kycTypeSelected =
@@ -596,6 +616,10 @@ function setConfigsForAddExperienceSection(config) {
                         required: "Please Enter Name as per Aadhar Card.",
                         lettersOnly: "Only letters are allowed for Name."
 
+                    },
+                    [namespace + "bloodGroup"]: {
+                        required: "Please enter blood group.",
+                        validBloodGroup: "Enter valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-)."
                     },
                     [namespace + "marriageDate"]: {
                         required: "Please enter your marriage date.",
@@ -653,7 +677,15 @@ function setConfigsForAddExperienceSection(config) {
             if (marriageDateInput) {
                 applyGenericDateRestriction(marriageDateInput);
             }
+            $.validator.addMethod(
+                "validBloodGroup",
+                function (value, element) {
+                    if (!value) return true;
 
+                    return /^(A|B|AB|O)[+-]$/i.test(value.trim());
+                },
+                "Enter valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-)."
+            );
             $.validator.addMethod("validMobile10", function (value) {
 				return /^(?!0{10})\d{10}$/.test(value);
 			}, "Enter a valid 10-digit mobile number");

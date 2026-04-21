@@ -30,7 +30,7 @@ public class EmployeeDto {
 	public long uanEsicId;
 	public long probationStatusId;
 	public boolean isEmployeeOnboarded;
-
+    public String bloodGroup;
 	public boolean isExperienced;
 
 
@@ -64,7 +64,15 @@ public class EmployeeDto {
 		return branchName;
 	}
 
-	public void setBranchName(String branchName) {
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public void setBranchName(String branchName) {
 		this.branchName = branchName;
 	}
 

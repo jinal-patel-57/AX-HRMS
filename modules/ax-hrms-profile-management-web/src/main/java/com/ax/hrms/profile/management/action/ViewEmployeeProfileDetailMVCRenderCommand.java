@@ -138,6 +138,7 @@ public class ViewEmployeeProfileDetailMVCRenderCommand implements MVCRenderComma
 			employeeDto.setAadhaarCardFileId(employeeDetails.getAadhaarCardFileId());
 			employeeDto.setPanCardFileId(employeeDetails.getPanCardFileId());
 			employeeDto.setStipend(employeeDetails.getStipend());
+            employeeDto.setBloodGroup(employeeDetails.getBloodGroup());
             try {
                 employeeDto.kycDocumentFileEntryId = employeeDetails.getKycDocumentFileEntryId();
                 long documentTypeMasterID = employeeDetails.getDocumentTypeMasterId();

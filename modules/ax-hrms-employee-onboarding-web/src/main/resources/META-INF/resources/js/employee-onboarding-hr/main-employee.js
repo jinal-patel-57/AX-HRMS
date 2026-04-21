@@ -533,6 +533,9 @@ $.validator.addMethod(
           "Please upload the certificate."
       );
 
+$(document).on('input', '#' + namespace + 'bloodGroup', function () {
+    this.value = this.value.toUpperCase();
+});
 
 
         
@@ -626,12 +629,15 @@ $.validator.addMethod(
                         lettersOnly: true
 
                     },
+                    [namespace + "bloodGroup"]: {
+                        required: true,
+                        validBloodGroup: true
+                    },
                     [namespace + "aadhaarCard"]: {
                            documentRequired: aadhaarCardId,
                            validExtension: true,
                            maxFileSize: 10
                        },
-
                        [namespace + "panCard"]: {
                            documentRequired: panCardId,
                            validExtension: true,
@@ -705,7 +711,10 @@ $.validator.addMethod(
                            validExtensionForProfileImage:"Only JPG, JPEG, or PNG files are allowed.",
                            maxFileSize: "File size must not exceed 10 MB."
                     },
-
+                    [namespace + "bloodGroup"]: {
+                        required: "Please enter blood group.",
+                        validBloodGroup: "Enter valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-)."
+                    },
                     [namespace + "fatherName"]: {
                         required: "Please enter Father/Husband Name."
                     },
@@ -959,7 +968,15 @@ $.validator.addMethod(
 
 
 
+            $.validator.addMethod(
+                "validBloodGroup",
+                function (value, element) {
+                    if (!value) return true;
 
+                    return /^(A|B|AB|O)[+-]$/i.test(value.trim());
+                },
+                "Enter valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-)."
+            );
 
 $.validator.addMethod("ctcLimitByEmployeeType", function (value, element) {
     if (!value) return true; // handled by required rule

@@ -32,7 +32,7 @@ public class EmployeeDto {
 	public boolean isEmployeeOnboarded;
     public String kycDocumentType;
 	public boolean isExperienced;
-
+    public String bloodGroup;
 	public long kycDocumentFileEntryId;
 	public boolean isProbationEnabled;
 	public long profilePicId;
@@ -61,6 +61,14 @@ public class EmployeeDto {
 
     public void setKycDocumentFileEntryId(long kycDocumentFileEntryId) {
         this.kycDocumentFileEntryId = kycDocumentFileEntryId;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
     }
 
     public long getKycDocumentFileEntryId() {

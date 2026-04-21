@@ -377,7 +377,7 @@ function closeCustomModal() {
         value = value.trim();
 
         // Allow most readable characters but block HTML tags
-        var regex = /^[^<>]*$/;
+        let regex = /^[^<>]*$/;
 
         return this.optional(element) || regex.test(value);
     }, "Please Enter valid data for the reason.");
