@@ -387,6 +387,8 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		return _holidayLocalService.findByYear(
 			yearMonth.getYear()
 		).stream(
+		).filter(
+			holiday -> !Boolean.TRUE.equals(holiday.getIsFloater())
 		).map(
 			Holiday::getDate
 		).filter(
