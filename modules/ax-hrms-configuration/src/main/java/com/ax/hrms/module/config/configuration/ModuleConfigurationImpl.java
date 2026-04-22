@@ -24,10 +24,6 @@ public class ModuleConfigurationImpl implements ModuleConfiguration {
     public String employeeCodePattern() {
         return _configuration.employeeCodePattern();
     }
-    @Override
-    public String employeeOfficialMailIdForIgnoreFromEmployeeDirectory() {
-        return _configuration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
-    }
 
 
 
