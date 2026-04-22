@@ -5,9 +5,9 @@ import ax.hrms.attendance.reconciliation.web.dto.MissingAttendanceRecord;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,6 +17,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 public class AttendanceExcelExportUtil {
+	private AttendanceExcelExportUtil() {
+		// prevents instantiation
+	}
 	private static final String COL_NO = "No.";
 	private static final String COL_EMPLOYEE_CODE = "Employee ID";
 	private static final String COL_EMPLOYEE_NAME = "Employee Name";
@@ -24,15 +27,21 @@ public class AttendanceExcelExportUtil {
 	private static final String COL_REASON = "Reason";
 
 	public static File generateMissingAttendanceExcelFile(List<MissingAttendanceRecord> records) {
-		File tempFile = null;
-		Workbook workbook = new XSSFWorkbook();
 
-		try {
-			tempFile = File.createTempFile("Missing_Attendance_Report", ".xlsx");
+		File tempFile = null;
+
+		try (Workbook workbook = new XSSFWorkbook()) {
+
+			tempFile = Files.createTempFile(
+					"Missing_Attendance_Report",
+					".xlsx"
+			).toFile();
+
 			Sheet sheet = workbook.createSheet("Missing Attendance");
 
-			// Create Header Row
+			// Header Row
 			Row headerRow = sheet.createRow(0);
+
 			String[] headers = {
 					COL_NO,
 					COL_EMPLOYEE_CODE,
@@ -42,35 +51,34 @@ public class AttendanceExcelExportUtil {
 			};
 
 			for (int i = 0; i < headers.length; i++) {
-				Cell cell = headerRow.createCell(i);
-				cell.setCellValue(headers[i]);
+				headerRow.createCell(i).setCellValue(headers[i]);
 			}
 
-			// Create Data Rows
 			int rowIndex = 1;
-			for (MissingAttendanceRecord record : records) {
+
+			for (MissingAttendanceRecord missingAttendanceRecord : records) {
+
 				Row row = sheet.createRow(rowIndex++);
 
 				row.createCell(0).setCellValue(rowIndex - 1);
 
-				if (record.getEmployeeCode() != null) {
-					row.createCell(1).setCellValue(record.getEmployeeCode());
+				if (missingAttendanceRecord.getEmployeeCode() != null) {
+					row.createCell(1).setCellValue(missingAttendanceRecord.getEmployeeCode());
 				}
 
-				if (record.getEmployeeName() != null) {
-					row.createCell(2).setCellValue(record.getEmployeeName());
+				if (missingAttendanceRecord.getEmployeeName() != null) {
+					row.createCell(2).setCellValue(missingAttendanceRecord.getEmployeeName());
 				}
 
-				if (record.getDate() != null) {
-					row.createCell(3).setCellValue(record.getDate());
+				if (missingAttendanceRecord.getDate() != null) {
+					row.createCell(3).setCellValue(missingAttendanceRecord.getDate());
 				}
 
-				if (record.getReason() != null) {
-					row.createCell(4).setCellValue(record.getReason());
+				if (missingAttendanceRecord.getReason() != null) {
+					row.createCell(4).setCellValue(missingAttendanceRecord.getReason());
 				}
 			}
 
-			// Auto-size columns
 			for (int i = 0; i < headers.length; i++) {
 				sheet.autoSizeColumn(i);
 			}
@@ -80,13 +88,7 @@ public class AttendanceExcelExportUtil {
 			}
 
 		} catch (IOException e) {
-			_log.error("Error generating the excel file for missing attendance: " + e.getMessage(), e);
-		} finally {
-			try {
-				workbook.close();
-			} catch (IOException e) {
-				_log.error("Error closing the workbook: " + e.getMessage(), e);
-			}
+			_log.error("Error generating excel file for missing attendance", e);
 		}
 
 		return tempFile;

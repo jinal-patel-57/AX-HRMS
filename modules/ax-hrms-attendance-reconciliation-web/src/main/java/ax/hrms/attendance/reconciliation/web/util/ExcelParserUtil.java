@@ -10,7 +10,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -24,16 +23,22 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelParserUtil {
 
+	private ExcelParserUtil() {
+		// utility class
+	}
+
+	// ========================= MAIN METHOD =========================
+
 	public static List<AttendanceRecord> parseAttendanceExcel(
-		InputStream inputStream, String fileName, AxHrmsCommonApi commonApi,
-		Map<String, Long> employeeCodeToIdMap,
-		Map<Long, EmployeeDetails> employeeMap) {
+			InputStream inputStream,
+			String fileName,
+			AxHrmsCommonApi commonApi,
+			Map<String, Long> employeeCodeToIdMap,
+			Map<Long, EmployeeDetails> employeeMap) {
 
 		List<AttendanceRecord> records = new ArrayList<>();
-		Workbook workbook = null;
 
-		try {
-			workbook = commonApi.getWorkbook(inputStream, fileName);
+		try (Workbook workbook = commonApi.getWorkbook(inputStream, fileName)) {
 
 			if (workbook == null) {
 				return records;
@@ -46,230 +51,169 @@ public class ExcelParserUtil {
 			}
 
 			Map<String, Map<String, Object>> excelDataMap =
-				commonApi.readExcelSheet(sheet);
+					commonApi.readExcelSheet(sheet);
 
 			if (excelDataMap == null || excelDataMap.isEmpty()) {
 				return records;
 			}
 
-			String headerRowKey = null;
-			Map<String, Integer> columnMap = null;
+			HeaderInfo headerInfo = detectHeader(excelDataMap);
 
-			for (int rowIndex = 0; rowIndex <= 10; rowIndex++) {
-				Map<String, Object> rowData = excelDataMap.get(
-					String.valueOf(rowIndex));
-
-				if (rowData == null) {
-					continue;
-				}
-
-				columnMap = _detectHeaderColumns(rowData);
-
-				if (columnMap != null) {
-					headerRowKey = String.valueOf(rowIndex);
-					_log.info(
-						"ExcelParserUtil >> Header detected at row " + rowIndex +
-							" with columns " + columnMap);
-
-					break;
-				}
-			}
-
-			if (columnMap == null || headerRowKey == null) {
-				_log.info(
-					"ExcelParserUtil >> Header row not detected in first 10 rows");
+			if (headerInfo == null) {
+				_log.info("Header row not detected in first 10 rows");
 				return records;
 			}
 
-			int headerRowIndex = Integer.parseInt(headerRowKey);
+			processRows(
+					excelDataMap,
+					headerInfo,
+					employeeCodeToIdMap,
+					employeeMap,
+					records
+			);
 
-			for (Map.Entry<String, Map<String, Object>> rowEntry :
-					excelDataMap.entrySet()) {
-
-				int rowIndex;
-
-				try {
-					rowIndex = Integer.parseInt(rowEntry.getKey());
-				}
-				catch (NumberFormatException numberFormatException) {
-					continue;
-				}
-
-				if (rowIndex <= headerRowIndex) {
-					continue;
-				}
-
-				AttendanceRecord attendanceRecord = _mapRowToAttendanceRecord(
-					rowEntry.getValue(), columnMap, employeeCodeToIdMap,
-					employeeMap);
-
-				if (attendanceRecord != null) {
-					records.add(attendanceRecord);
-					_log.info(
-						"ExcelParserUtil >> Parsed row " + rowIndex +
-							" employeeCode=" + attendanceRecord.getEmployeeCode() +
-							", employeeId=" + attendanceRecord.getEmployeeId() +
-							", date=" + attendanceRecord.getDate() +
-							", firstPunch=" + attendanceRecord.getFirstPunch());
-				}
-				else {
-					_log.info(
-						"ExcelParserUtil >> Row " + rowIndex +
-							" skipped because AttendanceRecord is null");
-				}
-			}
-		}
-		catch (Exception exception) {
-			_log.error("ExcelParserUtil >> Error parsing attendance file", exception);
-		}
-		finally {
-			if (workbook != null) {
-				try {
-					workbook.close();
-				}
-				catch (Exception exception) {
-					_log.error("ExcelParserUtil >> Error closing workbook", exception);
-				}
-			}
+		} catch (Exception e) {
+			_log.error("Error parsing attendance file", e);
 		}
 
 		return records;
 	}
 
-	private static Map<String, Integer> _detectHeaderColumns(
+	// ========================= HEADER DETECTION =========================
+
+	private static HeaderInfo detectHeader(
+			Map<String, Map<String, Object>> excelDataMap) {
+
+		for (int i = 0; i <= 10; i++) {
+
+			Map<String, Object> rowData = excelDataMap.get(String.valueOf(i));
+
+			if (rowData == null) {
+				continue;
+			}
+
+			Map<String, Integer> columnMap = detectHeaderColumns(rowData);
+
+			if (columnMap != null) {
+				_log.info("Header detected at row " + i + " " + columnMap);
+				return new HeaderInfo(i, columnMap);
+			}
+		}
+
+		return null;
+	}
+
+	private static Map<String, Integer> detectHeaderColumns(
 			Map<String, Object> rowData) {
 
 		Map<String, Integer> columnMap = new HashMap<>();
 		boolean hasEmployeeCode = false;
 		boolean hasDate = false;
 
-		for (Map.Entry<String, Object> cellEntry : rowData.entrySet()) {
-			int columnIndex;
+		for (Map.Entry<String, Object> entry : rowData.entrySet()) {
 
-			try {
-				columnIndex = Integer.parseInt(cellEntry.getKey());
-			}
-			catch (NumberFormatException numberFormatException) {
+			Integer index = parseIntSafe(entry.getKey());
+
+			if (index == null || entry.getValue() == null) {
 				continue;
 			}
 
-			Object cellValue = cellEntry.getValue();
-
-			if (cellValue == null) {
-				continue;
-			}
-
-			String header = cellValue.toString().trim();
+			String header = entry.getValue().toString().trim();
 
 			switch (header) {
 
-				case "Employee ID":
-					columnMap.put(COL_EMPLOYEE_CODE, columnIndex);
+				case "Employee ID", "Last Name" -> {
+					columnMap.put(COL_EMPLOYEE_CODE, index);
 					hasEmployeeCode = true;
-					break;
+				}
 
-				case "Last Name":
-					columnMap.put(COL_EMPLOYEE_CODE, columnIndex);
-					hasEmployeeCode = true;
-					break;
+				case "First Name" ->
+						columnMap.put(COL_EMPLOYEE_NAME, index);
 
-				case "First Name":
-					columnMap.put(COL_EMPLOYEE_NAME, columnIndex);
-					break;
-
-				case "Date":
-					columnMap.put(COL_DATE, columnIndex);
+				case "Date" -> {
+					columnMap.put(COL_DATE, index);
 					hasDate = true;
-					break;
+				}
 
-				case "First Punch":
-					columnMap.put(COL_FIRST_PUNCH, columnIndex);
-					break;
+				case "First Punch" ->
+						columnMap.put(COL_FIRST_PUNCH, index);
 
-				case "Last Punch":
-					columnMap.put(COL_LAST_PUNCH, columnIndex);
-					break;
+				case "Last Punch" ->
+						columnMap.put(COL_LAST_PUNCH, index);
 
-				case "Total Time":
-					columnMap.put(COL_TOTAL_TIME, columnIndex);
-					break;
+				case "Total Time" ->
+						columnMap.put(COL_TOTAL_TIME, index);
+
+				default ->
+						_log.debug("Unknown header ignored: " + header);
 			}
 		}
 
-		if (hasEmployeeCode && hasDate) {
-			return columnMap;
-		}
-
-		return null;
+		return (hasEmployeeCode && hasDate) ? columnMap : null;
 	}
 
-	private static String _getCellValueAsString(Object cellValue) {
-		if (cellValue == null) {
-			return "";
-		}
+	// ========================= ROW PROCESSING =========================
 
-		if (cellValue instanceof Double) {
-			double value = (Double)cellValue;
+	private static void processRows(
+			Map<String, Map<String, Object>> excelDataMap,
+			HeaderInfo headerInfo,
+			Map<String, Long> employeeCodeToIdMap,
+			Map<Long, EmployeeDetails> employeeMap,
+			List<AttendanceRecord> records) {
 
-			if (value == Math.floor(value) && !Double.isInfinite(value)) {
-				return String.valueOf((long)value);
+		int headerRowIndex = headerInfo.headerRowIndex;
+
+		for (Map.Entry<String, Map<String, Object>> entry : excelDataMap.entrySet()) {
+
+			Integer rowIndex = parseIntSafe(entry.getKey());
+
+			if (rowIndex == null || rowIndex <= headerRowIndex) {
+				continue;
 			}
 
-			return String.valueOf(value);
-		}
+			AttendanceRecord attendanceRecord = mapRowToAttendanceRecord(
+					entry.getValue(),
+					headerInfo.columnMap,
+					employeeCodeToIdMap,
+					employeeMap
+			);
 
-		if (cellValue instanceof Date) {
-			return new SimpleDateFormat("HH:mm").format((Date)cellValue);
+			if (attendanceRecord != null) {
+				records.add(attendanceRecord);
+			}
 		}
-
-		return cellValue.toString().trim();
 	}
 
-	private static String _getEmployeeName(EmployeeDetails employeeDetails) {
-		if (employeeDetails == null) {
-			return "";
-		}
+	// ========================= MAPPING =========================
 
-		String firstName = Validator.isNotNull(employeeDetails.getFirstName()) ?
-			employeeDetails.getFirstName().trim() : "";
-		String lastName = Validator.isNotNull(employeeDetails.getLastName()) ?
-			employeeDetails.getLastName().trim() : "";
-
-		return (firstName + " " + lastName).trim();
-	}
-
-	private static AttendanceRecord _mapRowToAttendanceRecord(
-		Map<String, Object> rowData, Map<String, Integer> columnMap,
-		Map<String, Long> employeeCodeToIdMap,
-		Map<Long, EmployeeDetails> employeeMap) {
+	private static AttendanceRecord mapRowToAttendanceRecord(
+			Map<String, Object> rowData,
+			Map<String, Integer> columnMap,
+			Map<String, Long> employeeCodeToIdMap,
+			Map<Long, EmployeeDetails> employeeMap) {
 
 		if (rowData == null || rowData.isEmpty()) {
 			return null;
 		}
 
-		Integer employeeCodeColumn = columnMap.get(COL_EMPLOYEE_CODE);
-		Integer dateColumn = columnMap.get(COL_DATE);
+		Integer empCol = columnMap.get(COL_EMPLOYEE_CODE);
+		Integer dateCol = columnMap.get(COL_DATE);
 
-		if (employeeCodeColumn == null || dateColumn == null) {
+		if (empCol == null || dateCol == null) {
 			return null;
 		}
 
-		String employeeCode = _getCellValueAsString(
-			rowData.get(String.valueOf(employeeCodeColumn))).trim();
+		String employeeCode = getCellValueAsString(
+				rowData.get(String.valueOf(empCol))
+		).trim();
 
 		if (Validator.isNull(employeeCode)) {
-			_log.info("ExcelParserUtil >> employeeCode is blank, skipping row");
 			return null;
 		}
 
-		LocalDate attendanceDate = _parseDate(
-			rowData.get(String.valueOf(dateColumn)));
+		LocalDate date = parseDate(rowData.get(String.valueOf(dateCol)));
 
-		if (attendanceDate == null) {
-			_log.warn(
-				"ExcelParserUtil >> Skipping row because date is invalid for employee code " +
-					employeeCode);
-
+		if (date == null) {
 			return null;
 		}
 
@@ -277,93 +221,128 @@ public class ExcelParserUtil {
 
 		attendanceRecord.setEmployeeCode(employeeCode);
 		attendanceRecord.setEmployeeId(employeeCodeToIdMap.get(employeeCode));
-		attendanceRecord.setDate(attendanceDate);
-		attendanceRecord.setFirstPunch(
-			_getColumnValue(rowData, columnMap.get(COL_FIRST_PUNCH)));
-		attendanceRecord.setLastPunch(
-			_getColumnValue(rowData, columnMap.get(COL_LAST_PUNCH)));
-		attendanceRecord.setTotalTime(
-			_getColumnValue(rowData, columnMap.get(COL_TOTAL_TIME)));
+		attendanceRecord.setDate(date);
+
+		attendanceRecord.setFirstPunch(getColumnValue(rowData, columnMap.get(COL_FIRST_PUNCH)));
+		attendanceRecord.setLastPunch(getColumnValue(rowData, columnMap.get(COL_LAST_PUNCH)));
+		attendanceRecord.setTotalTime(getColumnValue(rowData, columnMap.get(COL_TOTAL_TIME)));
 
 		if (attendanceRecord.getEmployeeId() != null) {
-			attendanceRecord.setEmployeeName(
-				_getEmployeeName(employeeMap.get(attendanceRecord.getEmployeeId())));
+			attendanceRecord.setEmployeeName(getEmployeeName(
+					employeeMap.get(attendanceRecord.getEmployeeId())
+			));
 		}
 
 		if (Validator.isNull(attendanceRecord.getEmployeeName())) {
 			attendanceRecord.setEmployeeName(
-				_getColumnValue(rowData, columnMap.get(COL_EMPLOYEE_NAME)));
-		}
-
-		if (attendanceRecord.getEmployeeId() == null) {
-			_log.info(
-				"ExcelParserUtil >> Employee code not found in system: " +
-					employeeCode + ", employeeNameFromExcel=" +
-					attendanceRecord.getEmployeeName() + ", date=" +
-					attendanceRecord.getDate());
-		}
-		else {
-			_log.info(
-				"ExcelParserUtil >> Employee code matched: " + employeeCode +
-					" -> employeeId=" + attendanceRecord.getEmployeeId() +
-					", employeeName=" + attendanceRecord.getEmployeeName());
+					getColumnValue(rowData, columnMap.get(COL_EMPLOYEE_NAME))
+			);
 		}
 
 		return attendanceRecord;
 	}
 
-	private static String _getColumnValue(
-		Map<String, Object> rowData, Integer columnIndex) {
+	// ========================= HELPERS =========================
 
-		if (columnIndex == null) {
+	private static Integer parseIntSafe(String value) {
+		try {
+			return Integer.parseInt(value);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private static String getColumnValue(
+			Map<String, Object> rowData,
+			Integer index) {
+
+		if (index == null) {
 			return "";
 		}
 
-		return _getCellValueAsString(rowData.get(String.valueOf(columnIndex)));
+		return getCellValueAsString(rowData.get(String.valueOf(index)));
 	}
 
-	private static LocalDate _parseDate(Object dateValue) {
-		if (dateValue == null) {
+	private static String getCellValueAsString(Object value) {
+
+		if (value == null) {
+			return "";
+		}
+
+		if (value instanceof Double d) {
+
+			if (d == Math.floor(d) && !Double.isInfinite(d)) {
+				return String.valueOf(d.longValue());
+			}
+
+			return String.valueOf(d);
+		}
+
+		if (value instanceof Date date) {
+			return new java.text.SimpleDateFormat("HH:mm").format(date);
+		}
+
+		return value.toString().trim();
+	}
+
+	private static LocalDate parseDate(Object value) {
+
+		if (value == null) {
 			return null;
 		}
 
-		if (dateValue instanceof Date) {
-			return ((Date)dateValue).toInstant(
-			).atZone(
-				ZoneId.systemDefault()
-			).toLocalDate();
+		if (value instanceof Date date) {
+			return date.toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate();
 		}
 
-		String dateString = dateValue.toString().trim();
+		String str = value.toString().trim();
 
-		if (Validator.isNull(dateString)) {
+		if (Validator.isNull(str)) {
 			return null;
 		}
 
-		String[] supportedFormats = {
-			"dd-MM-yyyy", "yyyy-MM-dd", "MM/dd/yyyy", "dd/MM/yyyy"
+		String[] formats = {
+				"dd-MM-yyyy", "yyyy-MM-dd", "MM/dd/yyyy", "dd/MM/yyyy"
 		};
 
-		for (String supportedFormat : supportedFormats) {
+		for (String f : formats) {
 			try {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					supportedFormat);
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(f);
+				sdf.setLenient(false);
 
-				simpleDateFormat.setLenient(false);
+				return sdf.parse(str)
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate();
 
-				return simpleDateFormat.parse(
-					dateString
-				).toInstant(
-				).atZone(
-					ZoneId.systemDefault()
-				).toLocalDate();
-			}
-			catch (Exception exception) {
+			} catch (Exception ignored) {
+				// keep trying
 			}
 		}
 
 		return null;
 	}
+
+	private static String getEmployeeName(EmployeeDetails details) {
+
+		if (details == null) {
+			return "";
+		}
+
+		String first = Validator.isNotNull(details.getFirstName())
+				? details.getFirstName().trim()
+				: "";
+
+		String last = Validator.isNotNull(details.getLastName())
+				? details.getLastName().trim()
+				: "";
+
+		return (first + " " + last).trim();
+	}
+
+	// ========================= CONSTANTS =========================
 
 	private static final String COL_DATE = "DATE";
 	private static final String COL_EMPLOYEE_CODE = "EMPLOYEE_CODE";
@@ -372,7 +351,17 @@ public class ExcelParserUtil {
 	private static final String COL_LAST_PUNCH = "LAST_PUNCH";
 	private static final String COL_TOTAL_TIME = "TOTAL_TIME";
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		ExcelParserUtil.class);
+	private static final Log _log = LogFactoryUtil.getLog(ExcelParserUtil.class);
 
+	// ========================= HELPER CLASS =========================
+
+	private static class HeaderInfo {
+		int headerRowIndex;
+		Map<String, Integer> columnMap;
+
+		HeaderInfo(int headerRowIndex, Map<String, Integer> columnMap) {
+			this.headerRowIndex = headerRowIndex;
+			this.columnMap = columnMap;
+		}
+	}
 }

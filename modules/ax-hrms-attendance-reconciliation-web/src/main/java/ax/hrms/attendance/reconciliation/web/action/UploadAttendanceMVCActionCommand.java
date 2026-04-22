@@ -25,7 +25,6 @@ import com.ax.hrms.service.LeaveRequestLocalService;
 import com.ax.hrms.service.WorkFromHomeDayTypeLocalService;
 import com.ax.hrms.service.WorkFromHomeRequestLocalService;
 
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -43,6 +42,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -59,6 +59,8 @@ import java.util.stream.Collectors;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -71,174 +73,245 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 
+	private static final Logger log = LogManager.getLogger(UploadAttendanceMVCActionCommand.class);
+	private static final String MVC_PATH = "mvcPath";
+	private static final String VIEW_JSP = "/view.jsp";
+
 	@Override
 	protected void doProcessAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
+			ActionRequest actionRequest,
+			ActionResponse actionResponse) throws Exception {
 
 		hideDefaultErrorMessage(actionRequest);
 		hideDefaultSuccessMessage(actionRequest);
 
 		try {
-			UploadPortletRequest uploadPortletRequest =
-				PortalUtil.getUploadPortletRequest(actionRequest);
+			ProcessContext ctx = buildContext(actionRequest);
 
-			String fileName = uploadPortletRequest.getFileName("attendanceFile");
-			InputStream inputStream = uploadPortletRequest.getFileAsStream(
-				"attendanceFile");
-
-			if (Validator.isNull(fileName) || inputStream == null) {
-				SessionErrors.add(actionRequest, "file-required");
-
+			if (!validateUpload(ctx, actionRequest)) {
+				actionResponse.getRenderParameters().setValue(MVC_PATH, VIEW_JSP);
 				return;
 			}
-
-			String normalizedFileName = fileName.toLowerCase();
-
-			if (!normalizedFileName.endsWith(".xlsx") &&
-				!normalizedFileName.endsWith(".xls")) {
-
-				SessionErrors.add(actionRequest, "invalid-file-type");
-
-				return;
-			}
-
-			Map<String, Long> employeeCodeToIdMap = new HashMap<>();
-			Map<Long, EmployeeDetails> employeeMap = new HashMap<>();
-
-			_buildEmployeeMappings(employeeCodeToIdMap, employeeMap);
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Active employees loaded: " +
-					employeeMap.size() + ", employee codes mapped: " +
-					employeeCodeToIdMap.size());
 
 			List<AttendanceRecord> attendanceRecords =
-				ExcelParserUtil.parseAttendanceExcel(
-					inputStream, fileName, _axHrmsCommonApi, employeeCodeToIdMap,
-					employeeMap);
-
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Parsed attendance rows: " +
-					attendanceRecords.size());
+					ExcelParserUtil.parseAttendanceExcel(
+							ctx.inputStream,
+							ctx.fileName,
+							axHrmsCommonApi,
+							ctx.employeeCodeToIdMap,
+							ctx.employeeMap);
 
 			if (attendanceRecords.isEmpty()) {
 				SessionErrors.add(actionRequest, "empty-file");
-
+				actionResponse.getRenderParameters().setValue(MVC_PATH, VIEW_JSP);
 				return;
 			}
 
-			YearMonth yearMonth = _resolveYearMonth(attendanceRecords);
+			YearMonth yearMonth = resolveYearMonth(attendanceRecords);
 
 			if (yearMonth == null) {
 				SessionErrors.add(actionRequest, "empty-file");
-
+				actionResponse.getRenderParameters().setValue(MVC_PATH, VIEW_JSP);
 				return;
 			}
 
-			Map<Long, Map<LocalDate, AttendanceRecord>> attendanceMap =
-				_buildAttendanceMap(attendanceRecords, yearMonth);
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Attendance map employees: " +
-					attendanceMap.size());
-			Date startDate = _toDate(yearMonth.atDay(1));
-			Date endDate = _toDate(yearMonth.atEndOfMonth());
-			long approvedStatusId = _getApprovedStatusId();
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Selected month: " +
-					yearMonth + ", approved status id: " + approvedStatusId);
+			AttendanceData data = buildAttendanceData(attendanceRecords, yearMonth);
 
-			Set<LocalDate> holidaySet = _fetchHolidaySet(yearMonth);
-			Map<Long, Set<LocalDate>> leaveMap = _buildLeaveMap(
-				startDate, endDate, approvedStatusId);
-			Map<Long, Set<LocalDate>> wfhMap = _buildWfhMap(
-				startDate, endDate, approvedStatusId);
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Holiday count: " +
-					holidaySet.size() + ", leave employees: " + leaveMap.size() +
-					", wfh employees: " + wfhMap.size());
+			List<MissingAttendanceRecord> missing =
+					AttendanceValidationUtil.validateAttendance(
+							data.attendanceMap,
+							ctx.employeeMap,
+							yearMonth,
+							data.leaveMap,
+							data.wfhMap,
+							data.holidaySet,
+							ctx.skipEmployeeCodes);
 
-			String skipEmployeeCodesStr = uploadPortletRequest.getParameter("skipEmployeeCodes");
-			Set<String> skipEmployeeCodes = new HashSet<>();
-			if (Validator.isNotNull(skipEmployeeCodesStr)) {
-				for (String code : skipEmployeeCodesStr.split(",")) {
-					if (Validator.isNotNull(code) && Validator.isNotNull(code.trim())) {
-						skipEmployeeCodes.add(code.trim().toLowerCase());
-					}
-				}
-				_log.info("UploadAttendanceMVCActionCommand >> Skip Employee Codes: " + skipEmployeeCodes);
-			}
+			handleMissingRecords(actionRequest, missing, yearMonth);
 
-			List<MissingAttendanceRecord> missingAttendanceRecords =
-				AttendanceValidationUtil.validateAttendance(
-					attendanceMap, employeeMap, yearMonth, leaveMap, wfhMap,
-					holidaySet, skipEmployeeCodes);
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> Final issues count: " +
-					missingAttendanceRecords.size());
-
-			if (missingAttendanceRecords != null && !missingAttendanceRecords.isEmpty()) {
-				File tempExcelFile = null;
-				try {
-					tempExcelFile = AttendanceExcelExportUtil.generateMissingAttendanceExcelFile(missingAttendanceRecords);
-					if (tempExcelFile != null && tempExcelFile.exists()) {
-						ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-						long companyId = themeDisplay.getCompanyId();
-						String fromName = PrefsPropsUtil.getString(companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
-						String fromEmailAddress = PrefsPropsUtil.getString(companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-						String toEmail = _mailTemplateConfiguration.mailAttendanceReconciliationToEmailAddress();
-						String subject = _mailTemplateConfiguration.mailAttendanceReconciliationSubject();
-						String body = _mailTemplateConfiguration.mailAttendanceReconciliationBody();
-
-						// Replace placeholders
-						if (Validator.isNotNull(subject)) {
-							subject = subject.replace("${YEAR_MONTH}", yearMonth.toString());
-						}
-						if (Validator.isNotNull(body)) {
-							body = body.replace("${YEAR_MONTH}", yearMonth.toString());
-						}
-
-						_axHrmsCommonApi.sendMailWithAttachment(
-							toEmail, fromEmailAddress, fromName, subject, body, tempExcelFile,
-							"Missing_Attendance_Report_" + yearMonth.toString() + ".xlsx");
-						_log.info("UploadAttendanceMVCActionCommand >> Successfully sent the email with the excel attachment.");
-						
-						SessionMessages.add(actionRequest, AxHrmsAttendanceReconciliationWebPortletKeys.MAIL_SENT_SUCCESS);
-					}
-				}
-				catch (Exception e) {
-					_log.error("UploadAttendanceMVCActionCommand >> Error occurred while sending email with excel attachment.", e);
-				}
-			}
-
-			actionRequest.getPortletSession().setAttribute(
-				AxHrmsAttendanceReconciliationWebPortletKeys.
-					MISSING_ATTENDANCE_LIST,
-				missingAttendanceRecords);
-
-			actionRequest.getPortletSession().setAttribute(
-				AxHrmsAttendanceReconciliationWebPortletKeys.
-					UPLOADED_RECORDS_COUNT,
-				attendanceRecords.size());
+			storeSessionData(actionRequest, attendanceRecords, missing);
 
 			SessionMessages.add(
-				actionRequest,
-				AxHrmsAttendanceReconciliationWebPortletKeys.
-					PROCESSING_SUCCESS);
-		}
-		catch (Exception exception) {
-			_log.error(
-				"UploadAttendanceMVCActionCommand >> Error processing file",
-				exception);
+					actionRequest,
+					AxHrmsAttendanceReconciliationWebPortletKeys.PROCESSING_SUCCESS);
+
+		} catch (Exception e) {
+			_log.error("UploadAttendanceMVCActionCommand >> Error processing file", e);
 
 			SessionErrors.add(
-				actionRequest,
-				AxHrmsAttendanceReconciliationWebPortletKeys.PROCESSING_ERROR);
+					actionRequest,
+					AxHrmsAttendanceReconciliationWebPortletKeys.PROCESSING_ERROR);
 		}
 
-		actionResponse.setRenderParameter("mvcPath", "/view.jsp");
+		actionResponse.getRenderParameters().setValue(MVC_PATH, VIEW_JSP);
+	}
+	private void storeSessionData(
+			ActionRequest actionRequest,
+			List<AttendanceRecord> attendanceRecords,
+			List<MissingAttendanceRecord> missing) {
+
+		actionRequest.getPortletSession().setAttribute(
+				AxHrmsAttendanceReconciliationWebPortletKeys.MISSING_ATTENDANCE_LIST,
+				missing
+		);
+
+		actionRequest.getPortletSession().setAttribute(
+				AxHrmsAttendanceReconciliationWebPortletKeys.UPLOADED_RECORDS_COUNT,
+				attendanceRecords.size()
+		);
+	}
+	private void handleMissingRecords(
+			ActionRequest actionRequest,
+			List<MissingAttendanceRecord> missing,
+			YearMonth yearMonth) {
+
+		if (missing == null || missing.isEmpty()) {
+			return;
+		}
+
+		File tempExcelFile =
+				AttendanceExcelExportUtil.generateMissingAttendanceExcelFile(missing);
+
+		if (tempExcelFile == null || !tempExcelFile.exists()) {
+			return;
+		}
+
+		try {
+			ThemeDisplay themeDisplay =
+					(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			long companyId = themeDisplay.getCompanyId();
+
+			String fromName = PrefsPropsUtil.getString(
+					companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
+
+			String fromEmailAddress = PrefsPropsUtil.getString(
+					companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+			String toEmail =
+					mailTemplateConfiguration.mailAttendanceReconciliationToEmailAddress();
+
+			String subject =
+					mailTemplateConfiguration.mailAttendanceReconciliationSubject();
+
+			String body =
+					mailTemplateConfiguration.mailAttendanceReconciliationBody();
+
+			if (Validator.isNotNull(subject)) {
+				subject = subject.replace("${YEAR_MONTH}", yearMonth.toString());
+			}
+
+			if (Validator.isNotNull(body)) {
+				body = body.replace("${YEAR_MONTH}", yearMonth.toString());
+			}
+
+			axHrmsCommonApi.sendMailWithAttachment(
+					toEmail,
+					fromEmailAddress,
+					fromName,
+					subject,
+					body,
+					tempExcelFile,
+					"Missing_Attendance_Report_" + yearMonth + ".xlsx"
+			);
+
+		} catch (Exception e) {
+			log.error("Error sending missing attendance email", e);
+		}
+	}
+	private static class ProcessContext {
+		String fileName;
+		InputStream inputStream;
+		Map<String, Long> employeeCodeToIdMap;
+		Map<Long, EmployeeDetails> employeeMap;
+		Set<String> skipEmployeeCodes;
+	}
+	private ProcessContext buildContext(ActionRequest request)
+			throws IOException {
+
+		UploadPortletRequest uploadPortletRequest =
+				PortalUtil.getUploadPortletRequest(request);
+
+		ProcessContext ctx = new ProcessContext();
+
+		ctx.fileName = uploadPortletRequest.getFileName("attendanceFile");
+		ctx.inputStream = uploadPortletRequest.getFileAsStream("attendanceFile");
+
+		ctx.employeeCodeToIdMap = new HashMap<>();
+		ctx.employeeMap = new HashMap<>();
+
+		buildEmployeeMappings(ctx.employeeCodeToIdMap, ctx.employeeMap);
+
+		ctx.skipEmployeeCodes = parseSkipCodes(
+				uploadPortletRequest.getParameter("skipEmployeeCodes"));
+
+		return ctx;
+	}
+	private Set<String> parseSkipCodes(String input) {
+
+		Set<String> set = new HashSet<>();
+
+		if (Validator.isNull(input)) {
+			return set;
+		}
+
+		for (String code : input.split(",")) {
+			if (Validator.isNotNull(code) && Validator.isNotNull(code.trim())) {
+				set.add(code.trim().toLowerCase());
+			}
+		}
+
+		return set;
+	}
+	private static class AttendanceData {
+		Map<Long, Map<LocalDate, AttendanceRecord>> attendanceMap;
+		Map<Long, Set<LocalDate>> leaveMap;
+		Map<Long, Set<LocalDate>> wfhMap;
+		Set<LocalDate> holidaySet;
+	}
+	private AttendanceData buildAttendanceData(
+			List<AttendanceRecord> records,
+			YearMonth yearMonth) {
+
+		AttendanceData data = new AttendanceData();
+
+		data.attendanceMap = buildAttendanceMap(records, yearMonth);
+
+		Date startDate = toDate(yearMonth.atDay(1));
+		Date endDate = toDate(yearMonth.atEndOfMonth());
+
+        long approvedStatusId = 0;
+        try {
+            approvedStatusId = getApprovedStatusId();
+        } catch (NoSuchLeaveCompensatoryStatusMasterException e) {
+			log.error("Error occurred while fetching approvedStatusId", e);
+        }
+
+        data.holidaySet = fetchHolidaySet(yearMonth);
+
+		data.leaveMap = buildLeaveMap(startDate, endDate, approvedStatusId);
+		data.wfhMap = buildWfhMap(startDate, endDate, approvedStatusId);
+
+		return data;
+	}
+	private boolean validateUpload(ProcessContext ctx, ActionRequest request) {
+
+		if (Validator.isNull(ctx.fileName) || ctx.inputStream == null) {
+			SessionErrors.add(request, "file-required");
+			return false;
+		}
+
+		String normalized = ctx.fileName.toLowerCase();
+
+		if (!normalized.endsWith(".xlsx") && !normalized.endsWith(".xls")) {
+			SessionErrors.add(request, "invalid-file-type");
+			return false;
+		}
+
+		return true;
 	}
 
-	private Map<Long, Map<LocalDate, AttendanceRecord>> _buildAttendanceMap(
+	private Map<Long, Map<LocalDate, AttendanceRecord>> buildAttendanceMap(
 		List<AttendanceRecord> attendanceRecords, YearMonth yearMonth) {
 
 		Map<Long, Map<LocalDate, AttendanceRecord>> attendanceMap =
@@ -249,13 +322,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				attendanceRecord.getDate() == null ||
 				!yearMonth.equals(YearMonth.from(attendanceRecord.getDate()))) {
 
-				if (attendanceRecord != null) {
-					_log.info(
-						"UploadAttendanceMVCActionCommand >> Skipping attendance row while building attendanceMap. employeeCode=" +
-							attendanceRecord.getEmployeeCode() + ", employeeId=" +
-							attendanceRecord.getEmployeeId() + ", date=" +
-							attendanceRecord.getDate());
-				}
+
 
 				continue;
 			}
@@ -264,23 +331,18 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				attendanceRecord.getEmployeeId(),
 				key -> new HashMap<>()
 			).put(attendanceRecord.getDate(), attendanceRecord);
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> attendanceMap add employeeId=" +
-					attendanceRecord.getEmployeeId() + ", employeeCode=" +
-					attendanceRecord.getEmployeeCode() + ", date=" +
-					attendanceRecord.getDate() + ", firstPunch=" +
-					attendanceRecord.getFirstPunch());
+
 		}
 
 		return attendanceMap;
 	}
 
-	private void _buildEmployeeMappings(
+	private void buildEmployeeMappings(
 		Map<String, Long> employeeCodeToIdMap,
 		Map<Long, EmployeeDetails> employeeMap) {
 
 		List<EmployeeDetails> employeeDetailsList =
-			_employeeDetailsLocalService.findByIsTerminated(false);
+			employeeDetailsLocalService.findByIsTerminated(false);
 
 		for (EmployeeDetails employeeDetails : employeeDetailsList) {
 			employeeMap.put(employeeDetails.getEmployeeId(), employeeDetails);
@@ -289,26 +351,22 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				employeeCodeToIdMap.put(
 					employeeDetails.getEmployeeCode().trim(),
 					employeeDetails.getEmployeeId());
-				_log.info(
-					"UploadAttendanceMVCActionCommand >> employeeCode mapped: " +
-						employeeDetails.getEmployeeCode().trim() + " -> " +
-						employeeDetails.getEmployeeId());
 			}
 		}
 	}
 
-	private Map<Long, Set<LocalDate>> _buildLeaveMap(
+	private Map<Long, Set<LocalDate>> buildLeaveMap(
 		Date startDate, Date endDate, long approvedStatusId) {
 
 		List<LeaveDayType> leaveDayTypes =
-			_leaveDayTypeLocalService.findByLeaveDateBetween(startDate, endDate);
+			leaveDayTypeLocalService.findByLeaveDateBetween(startDate, endDate);
 		Set<Long> leaveRequestIds = leaveDayTypes.stream(
 		).map(
 			LeaveDayType::getLeaveRequestId
 		).collect(
 			Collectors.toSet()
 		);
-		Map<Long, LeaveRequest> leaveRequestMap = _getApprovedLeaveRequestMap(
+		Map<Long, LeaveRequest> leaveRequestMap = getApprovedLeaveRequestMap(
 			leaveRequestIds, approvedStatusId);
 		Map<Long, Set<LocalDate>> leaveMap = new HashMap<>();
 
@@ -317,32 +375,23 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				leaveDayType.getLeaveRequestId());
 
 			if (leaveRequest == null || leaveDayType.getLeaveDate() == null) {
-				_log.info(
-					"UploadAttendanceMVCActionCommand >> Ignoring leaveDayType. leaveRequestId=" +
-						leaveDayType.getLeaveRequestId() + ", leaveDate=" +
-						leaveDayType.getLeaveDate() + ", approvedRequestFound=" +
-						(leaveRequest != null));
 				continue;
 			}
 
 			leaveMap.computeIfAbsent(
 				leaveRequest.getEmployeeId(),
 				key -> new HashSet<>()
-			).add(_toLocalDate(leaveDayType.getLeaveDate()));
-			_log.info(
-				"UploadAttendanceMVCActionCommand >> leaveMap add employeeId=" +
-					leaveRequest.getEmployeeId() + ", date=" +
-					_toLocalDate(leaveDayType.getLeaveDate()));
+			).add(toLocalDate(leaveDayType.getLeaveDate()));
 		}
 
 		return leaveMap;
 	}
 
-	private Map<Long, Set<LocalDate>> _buildWfhMap(
+	private Map<Long, Set<LocalDate>> buildWfhMap(
 		Date startDate, Date endDate, long approvedStatusId) {
 
 		List<WorkFromHomeDayType> workFromHomeDayTypes =
-			_workFromHomeDayTypeLocalService.findByWorkFromHomeDateBetween(
+			workFromHomeDayTypeLocalService.findByWorkFromHomeDateBetween(
 				startDate, endDate);
 		Set<Long> workFromHomeRequestIds = workFromHomeDayTypes.stream(
 		).map(
@@ -351,7 +400,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			Collectors.toSet()
 		);
 		Map<Long, WorkFromHomeRequest> workFromHomeRequestMap =
-			_getApprovedWfhRequestMap(workFromHomeRequestIds, approvedStatusId);
+			getApprovedWfhRequestMap(workFromHomeRequestIds, approvedStatusId);
 		Map<Long, Set<LocalDate>> wfhMap = new HashMap<>();
 
 		for (WorkFromHomeDayType workFromHomeDayType : workFromHomeDayTypes) {
@@ -373,18 +422,18 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			wfhMap.computeIfAbsent(
 				workFromHomeRequest.getEmployeeId(),
 				key -> new HashSet<>()
-			).add(_toLocalDate(workFromHomeDayType.getWorkFromHomeDate()));
+			).add(toLocalDate(workFromHomeDayType.getWorkFromHomeDate()));
 			_log.info(
 				"UploadAttendanceMVCActionCommand >> wfhMap add employeeId=" +
 					workFromHomeRequest.getEmployeeId() + ", date=" +
-					_toLocalDate(workFromHomeDayType.getWorkFromHomeDate()));
+					toLocalDate(workFromHomeDayType.getWorkFromHomeDate()));
 		}
 
 		return wfhMap;
 	}
 
-	private Set<LocalDate> _fetchHolidaySet(YearMonth yearMonth) {
-		return _holidayLocalService.findByYear(
+	private Set<LocalDate> fetchHolidaySet(YearMonth yearMonth) {
+		return holidayLocalService.findByYear(
 			yearMonth.getYear()
 		).stream(
 		).filter(
@@ -394,7 +443,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		).filter(
 			Objects::nonNull
 		).map(
-			this::_toLocalDate
+			this::toLocalDate
 		).filter(
 			date -> YearMonth.from(date).equals(yearMonth)
 		).collect(
@@ -402,14 +451,14 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		);
 	}
 
-	private Map<Long, LeaveRequest> _getApprovedLeaveRequestMap(
+	private Map<Long, LeaveRequest> getApprovedLeaveRequestMap(
 		Set<Long> leaveRequestIds, long approvedStatusId) {
 
 		if (leaveRequestIds.isEmpty() || approvedStatusId <= 0) {
 			return new HashMap<>();
 		}
 
-		DynamicQuery dynamicQuery = _leaveRequestLocalService.dynamicQuery();
+		DynamicQuery dynamicQuery = leaveRequestLocalService.dynamicQuery();
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.in(
@@ -418,7 +467,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			RestrictionsFactoryUtil.eq(
 				"leaveCompensatoryStatusMasterId", approvedStatusId));
 
-		List<LeaveRequest> leaveRequests = _leaveRequestLocalService.dynamicQuery(
+		List<LeaveRequest> leaveRequests = leaveRequestLocalService.dynamicQuery(
 			dynamicQuery);
 
 		return leaveRequests.stream().collect(
@@ -426,7 +475,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				LeaveRequest::getLeaveRequestId, leaveRequest -> leaveRequest));
 	}
 
-	private Map<Long, WorkFromHomeRequest> _getApprovedWfhRequestMap(
+	private Map<Long, WorkFromHomeRequest> getApprovedWfhRequestMap(
 		Set<Long> workFromHomeRequestIds, long approvedStatusId) {
 
 		if (workFromHomeRequestIds.isEmpty() || approvedStatusId <= 0) {
@@ -434,7 +483,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		DynamicQuery dynamicQuery =
-			_workFromHomeRequestLocalService.dynamicQuery();
+			workFromHomeRequestLocalService.dynamicQuery();
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.in(
@@ -444,7 +493,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			RestrictionsFactoryUtil.eq("status", approvedStatusId));
 
 		List<WorkFromHomeRequest> workFromHomeRequests =
-			_workFromHomeRequestLocalService.dynamicQuery(dynamicQuery);
+			workFromHomeRequestLocalService.dynamicQuery(dynamicQuery);
 
 		return workFromHomeRequests.stream().collect(
 			Collectors.toMap(
@@ -452,9 +501,9 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				workFromHomeRequest -> workFromHomeRequest));
 	}
 
-	private long _getApprovedStatusId() throws NoSuchLeaveCompensatoryStatusMasterException {
+	private long getApprovedStatusId() throws NoSuchLeaveCompensatoryStatusMasterException {
 		LeaveCompensatoryStatusMaster leaveCompensatoryStatusMaster =
-			_leaveCompensatoryStatusMasterLocalService.
+			leaveCompensatoryStatusMasterLocalService.
 				findByLeaveCompensatoryStatusName(
 					AxHrmsAttendanceReconciliationWebPortletKeys.
 						STATUS_APPROVED);
@@ -466,7 +515,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		return leaveCompensatoryStatusMaster.getLeaveCompensatoryStatusMasterId();
 	}
 
-	private YearMonth _resolveYearMonth(List<AttendanceRecord> attendanceRecords) {
+	private YearMonth resolveYearMonth(List<AttendanceRecord> attendanceRecords) {
 		LocalDate firstAttendanceDate = attendanceRecords.stream(
 		).map(
 			AttendanceRecord::getDate
@@ -483,14 +532,14 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		return YearMonth.from(firstAttendanceDate);
 	}
 
-	private Date _toDate(LocalDate localDate) {
+	private Date toDate(LocalDate localDate) {
 		return Date.from(
 			localDate.atStartOfDay(
 				ZoneId.systemDefault()
 			).toInstant());
 	}
 
-	private LocalDate _toLocalDate(Date date) {
+	private LocalDate toLocalDate(Date date) {
 		return date.toInstant(
 		).atZone(
 			ZoneId.systemDefault()
@@ -501,31 +550,31 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		UploadAttendanceMVCActionCommand.class);
 
 	@Reference
-	private AxHrmsCommonApi _axHrmsCommonApi;
+	private AxHrmsCommonApi axHrmsCommonApi;
 
 	@Reference
-	private EmployeeDetailsLocalService _employeeDetailsLocalService;
+	private EmployeeDetailsLocalService employeeDetailsLocalService;
 
 	@Reference
-	private HolidayLocalService _holidayLocalService;
+	private HolidayLocalService holidayLocalService;
 
 	@Reference
 	private LeaveCompensatoryStatusMasterLocalService
-		_leaveCompensatoryStatusMasterLocalService;
+		leaveCompensatoryStatusMasterLocalService;
 
 	@Reference
-	private LeaveDayTypeLocalService _leaveDayTypeLocalService;
+	private LeaveDayTypeLocalService leaveDayTypeLocalService;
 
 	@Reference
-	private LeaveRequestLocalService _leaveRequestLocalService;
+	private LeaveRequestLocalService leaveRequestLocalService;
 
 	@Reference
-	private WorkFromHomeDayTypeLocalService _workFromHomeDayTypeLocalService;
+	private WorkFromHomeDayTypeLocalService workFromHomeDayTypeLocalService;
 
 	@Reference
-	private WorkFromHomeRequestLocalService _workFromHomeRequestLocalService;
+	private WorkFromHomeRequestLocalService workFromHomeRequestLocalService;
 
 	@Reference
-	private MailTemplateConfiguration _mailTemplateConfiguration;
+	private MailTemplateConfiguration mailTemplateConfiguration;
 
 }

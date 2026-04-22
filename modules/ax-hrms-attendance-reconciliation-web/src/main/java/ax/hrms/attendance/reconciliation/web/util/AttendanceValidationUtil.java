@@ -6,8 +6,6 @@ import ax.hrms.attendance.reconciliation.web.dto.MissingAttendanceRecord;
 
 import com.ax.hrms.model.EmployeeDetails;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.DayOfWeek;
@@ -23,204 +21,274 @@ import java.util.Set;
 
 public class AttendanceValidationUtil {
 
-	public static List<MissingAttendanceRecord> validateAttendance(
-		Map<Long, Map<LocalDate, AttendanceRecord>> attendanceMap,
-		Map<Long, EmployeeDetails> employeeMap, YearMonth yearMonth,
-		Map<Long, Set<LocalDate>> leaveMap,
-		Map<Long, Set<LocalDate>> wfhMap, Set<LocalDate> holidaySet,
-		Set<String> skipEmployeeCodes) {
 
-		List<MissingAttendanceRecord> missingAttendanceRecords =
-			new ArrayList<>();
-		List<LocalDate> workingDays = generateWorkingDays(yearMonth);
-		_log.info(
-			"AttendanceValidationUtil >> Month=" + yearMonth +
-				", workingDays=" + workingDays.size() + ", employees=" +
-				employeeMap.size());
-
-		for (Map.Entry<Long, EmployeeDetails> employeeEntry :
-				employeeMap.entrySet()) {
-
-			Long employeeId = employeeEntry.getKey();
-			EmployeeDetails employeeDetails = employeeEntry.getValue();
-			
-			if (skipEmployeeCodes != null && !skipEmployeeCodes.isEmpty()) {
-				String lastName = employeeDetails.getLastName() != null ? employeeDetails.getLastName().trim().toLowerCase() : "";
-				String empCode = employeeDetails.getEmployeeCode() != null ? employeeDetails.getEmployeeCode().trim().toLowerCase() : "";
-				
-				if ((!lastName.isEmpty() && skipEmployeeCodes.contains(lastName)) || 
-					(!empCode.isEmpty() && skipEmployeeCodes.contains(empCode))) {
-					_log.info("AttendanceValidationUtil >> Skipping requested HR employee code/lastName=" + lastName + " / " + empCode);
-					continue;
-				}
-			}
-			
-			String employeeName = _getEmployeeName(employeeDetails);
-			Map<LocalDate, AttendanceRecord> employeeAttendanceMap =
-				attendanceMap.getOrDefault(employeeId, Collections.emptyMap());
-			Set<LocalDate> leaveDates = leaveMap.getOrDefault(
-				employeeId, Collections.emptySet());
-			Set<LocalDate> wfhDates = wfhMap.getOrDefault(
-				employeeId, Collections.emptySet());
-			_log.info(
-				"AttendanceValidationUtil >> Validating employeeId=" + employeeId +
-					", employeeName=" + employeeName + ", attendanceDates=" +
-					employeeAttendanceMap.keySet() + ", leaveDates=" + leaveDates +
-					", wfhDates=" + wfhDates);
-
-			for (LocalDate workingDay : workingDays) {
-				if (!_isEmployeeActiveOnDate(employeeDetails, workingDay)) {
-					_log.info(
-						"AttendanceValidationUtil >> Skipping inactive date employeeId=" +
-							employeeId + ", date=" + workingDay);
-					continue;
-				}
-
-				if (holidaySet.contains(workingDay)) {
-					_log.info(
-						"AttendanceValidationUtil >> Skipping holiday employeeId=" +
-							employeeId + ", date=" + workingDay);
-					continue;
-				}
-
-				if (leaveDates.contains(workingDay)) {
-					_log.info(
-						"AttendanceValidationUtil >> Skipping leave employeeId=" +
-							employeeId + ", date=" + workingDay);
-					continue;
-				}
-
-				if (wfhDates.contains(workingDay)) {
-					_log.info(
-						"AttendanceValidationUtil >> Skipping wfh employeeId=" +
-							employeeId + ", date=" + workingDay);
-					continue;
-				}
-
-				AttendanceRecord attendanceRecord = employeeAttendanceMap.get(
-					workingDay);
-				String displayDate = DISPLAY_DATE_FORMATTER.format(workingDay);
-
-				if (attendanceRecord == null) {
-					_log.info(
-						"AttendanceValidationUtil >> Marking Missing employeeId=" +
-							employeeId + ", employeeName=" + employeeName +
-							", date=" + workingDay +
-							" because no attendance record exists in attendanceMap");
-					missingAttendanceRecords.add(
-						new MissingAttendanceRecord(
-							employeeDetails.getEmployeeCode(), employeeName, displayDate,
-							AxHrmsAttendanceReconciliationWebPortletKeys.
-								REASON_MISSING_ATTENDANCE));
-
-					continue;
-				}
-
-				if (isInvalidPunch(attendanceRecord.getFirstPunch())) {
-					_log.info(
-						"AttendanceValidationUtil >> Marking Invalid employeeId=" +
-							employeeId + ", employeeName=" + employeeName +
-							", date=" + workingDay + ", firstPunch=" +
-							attendanceRecord.getFirstPunch());
-					missingAttendanceRecords.add(
-						new MissingAttendanceRecord(
-							employeeDetails.getEmployeeCode(), employeeName, displayDate,
-							AxHrmsAttendanceReconciliationWebPortletKeys.
-								REASON_INVALID_ATTENDANCE));
-				}
-				else {
-					_log.info(
-						"AttendanceValidationUtil >> Attendance valid employeeId=" +
-							employeeId + ", employeeName=" + employeeName +
-							", date=" + workingDay + ", firstPunch=" +
-							attendanceRecord.getFirstPunch());
-				}
-			}
-		}
-
-		return missingAttendanceRecords;
+	private AttendanceValidationUtil() {
+		// prevents instantiation
 	}
 
+	// ========================= CONTEXT OBJECTS =========================
+
+	private static class EmployeeContext {
+		Long employeeId;
+		EmployeeDetails employeeDetails;
+		Map<LocalDate, AttendanceRecord> attendanceMap;
+
+		EmployeeContext(Long employeeId,
+		                EmployeeDetails employeeDetails,
+		                Map<LocalDate, AttendanceRecord> attendanceMap) {
+			this.employeeId = employeeId;
+			this.employeeDetails = employeeDetails;
+			this.attendanceMap = attendanceMap;
+		}
+	}
+
+	private static class RuleContext {
+		Set<LocalDate> leaveDates;
+		Set<LocalDate> wfhDates;
+		Set<LocalDate> holidaySet;
+		List<LocalDate> workingDays;
+		List<MissingAttendanceRecord> missingAttendanceRecords;
+
+		RuleContext(Set<LocalDate> leaveDates,
+		            Set<LocalDate> wfhDates,
+		            Set<LocalDate> holidaySet,
+		            List<LocalDate> workingDays,
+		            List<MissingAttendanceRecord> missingAttendanceRecords) {
+			this.leaveDates = leaveDates;
+			this.wfhDates = wfhDates;
+			this.holidaySet = holidaySet;
+			this.workingDays = workingDays;
+			this.missingAttendanceRecords = missingAttendanceRecords;
+		}
+	}
+
+	// ========================= MAIN METHOD =========================
+
+	public static List<MissingAttendanceRecord> validateAttendance(
+			Map<Long, Map<LocalDate, AttendanceRecord>> attendanceMap,
+			Map<Long, EmployeeDetails> employeeMap,
+			YearMonth yearMonth,
+			Map<Long, Set<LocalDate>> leaveMap,
+			Map<Long, Set<LocalDate>> wfhMap,
+			Set<LocalDate> holidaySet,
+			Set<String> skipEmployeeCodes) {
+
+		List<MissingAttendanceRecord> result = new ArrayList<>();
+		List<LocalDate> workingDays = generateWorkingDays(yearMonth);
+
+		for (Map.Entry<Long, EmployeeDetails> entry : employeeMap.entrySet()) {
+
+			Long employeeId = entry.getKey();
+			EmployeeDetails employeeDetails = entry.getValue();
+
+			if (shouldSkipEmployee(employeeDetails, skipEmployeeCodes)) {
+				continue;
+			}
+
+			Set<LocalDate> leaveDates =
+					leaveMap.getOrDefault(employeeId, Collections.emptySet());
+
+			Set<LocalDate> wfhDates =
+					wfhMap.getOrDefault(employeeId, Collections.emptySet());
+
+			EmployeeContext empCtx = new EmployeeContext(
+					employeeId,
+					employeeDetails,
+					attendanceMap.getOrDefault(employeeId, Collections.emptyMap())
+			);
+
+			RuleContext ruleCtx = new RuleContext(
+					leaveDates,
+					wfhDates,
+					holidaySet,
+					workingDays,
+					result
+			);
+
+			processEmployeeAttendance(empCtx, ruleCtx);
+		}
+
+		return result;
+	}
+
+	// ========================= PROCESSING =========================
+
+	private static void processEmployeeAttendance(EmployeeContext emp,
+	                                              RuleContext rule) {
+
+		String employeeName = getEmployeeName(emp.employeeDetails);
+
+		for (LocalDate workingDay : rule.workingDays) {
+
+			if (shouldSkipDay(
+					emp.employeeDetails,
+					workingDay,
+					rule.holidaySet,
+					rule.leaveDates,
+					rule.wfhDates)) {
+				continue;
+			}
+
+			validateDay(
+					workingDay,
+					emp.employeeDetails,
+					employeeName,
+					emp.attendanceMap,
+					rule.missingAttendanceRecords
+			);
+		}
+	}
+
+	// ========================= BUSINESS RULES =========================
+
+	private static boolean shouldSkipEmployee(EmployeeDetails employeeDetails,
+	                                          Set<String> skipEmployeeCodes) {
+
+		if (skipEmployeeCodes == null || skipEmployeeCodes.isEmpty()) {
+			return false;
+		}
+
+		String lastName = employeeDetails.getLastName() != null
+				? employeeDetails.getLastName().trim().toLowerCase()
+				: "";
+
+		String empCode = employeeDetails.getEmployeeCode() != null
+				? employeeDetails.getEmployeeCode().trim().toLowerCase()
+				: "";
+
+		return (!lastName.isEmpty() && skipEmployeeCodes.contains(lastName)) ||
+				(!empCode.isEmpty() && skipEmployeeCodes.contains(empCode));
+	}
+
+	private static boolean shouldSkipDay(EmployeeDetails employeeDetails,
+	                                     LocalDate workingDay,
+	                                     Set<LocalDate> holidaySet,
+	                                     Set<LocalDate> leaveDates,
+	                                     Set<LocalDate> wfhDates) {
+
+		return !isEmployeeActiveOnDate(employeeDetails, workingDay) ||
+				holidaySet.contains(workingDay) ||
+				leaveDates.contains(workingDay) ||
+				wfhDates.contains(workingDay);
+	}
+
+	private static void validateDay(LocalDate workingDay,
+	                                EmployeeDetails employeeDetails,
+	                                String employeeName,
+	                                Map<LocalDate, AttendanceRecord> attendanceMap,
+	                                List<MissingAttendanceRecord> result) {
+
+		AttendanceRecord attendanceRecord = attendanceMap.get(workingDay);
+		String displayDate = DISPLAY_DATE_FORMATTER.format(workingDay);
+
+		if (attendanceRecord == null) {
+			result.add(new MissingAttendanceRecord(
+					employeeDetails.getEmployeeCode(),
+					employeeName,
+					displayDate,
+					AxHrmsAttendanceReconciliationWebPortletKeys.REASON_MISSING_ATTENDANCE
+			));
+		} else if (isInvalidPunch(attendanceRecord.getFirstPunch())) {
+			result.add(new MissingAttendanceRecord(
+					employeeDetails.getEmployeeCode(),
+					employeeName,
+					displayDate,
+					AxHrmsAttendanceReconciliationWebPortletKeys.REASON_INVALID_ATTENDANCE
+			));
+		}
+	}
+
+	// ========================= UTILITIES =========================
+
 	public static List<LocalDate> generateWorkingDays(YearMonth yearMonth) {
+
 		List<LocalDate> workingDays = new ArrayList<>();
 
 		if (yearMonth == null) {
 			return workingDays;
 		}
 
-		LocalDate currentDate = yearMonth.atDay(1);
-		LocalDate endDate = yearMonth.atEndOfMonth();
+		LocalDate current = yearMonth.atDay(1);
+		LocalDate end = yearMonth.atEndOfMonth();
 
-		while (!currentDate.isAfter(endDate)) {
-			if (!isWeekend(currentDate)) {
-				workingDays.add(currentDate);
+		while (!current.isAfter(end)) {
+			if (!isWeekend(current)) {
+				workingDays.add(current);
 			}
-
-			currentDate = currentDate.plusDays(1);
+			current = current.plusDays(1);
 		}
 
 		return workingDays;
 	}
 
-	public static boolean isInvalidPunch(String firstPunch) {
-		if (Validator.isNull(firstPunch)) {
+	public static boolean isInvalidPunch(String punch) {
+
+		if (Validator.isNull(punch)) {
 			return true;
 		}
 
-		String value = firstPunch.trim();
+		String value = punch.trim();
 
-		return value.isEmpty() || "00:00".equals(value) || "0:00".equals(value);
+		return value.isEmpty()
+				|| "00:00".equals(value)
+				|| "0:00".equals(value);
 	}
 
 	public static boolean isWeekend(LocalDate date) {
+
 		if (date == null) {
 			return false;
 		}
 
-		DayOfWeek dayOfWeek = date.getDayOfWeek();
+		DayOfWeek d = date.getDayOfWeek();
 
-		return dayOfWeek == DayOfWeek.SATURDAY ||
-			dayOfWeek == DayOfWeek.SUNDAY;
+		return d == DayOfWeek.SATURDAY || d == DayOfWeek.SUNDAY;
 	}
 
-	private static String _getEmployeeName(EmployeeDetails employeeDetails) {
-		if (employeeDetails == null) {
+	private static String getEmployeeName(EmployeeDetails details) {
+
+		if (details == null) {
 			return "Unknown";
 		}
 
-		String firstName = Validator.isNotNull(employeeDetails.getFirstName()) ?
-			employeeDetails.getFirstName().trim() : "";
-		String lastName = Validator.isNotNull(employeeDetails.getLastName()) ?
-			employeeDetails.getLastName().trim() : "";
+		String first = Validator.isNotNull(details.getFirstName())
+				? details.getFirstName().trim()
+				: "";
 
-		return (firstName + " " + lastName).trim();
+		String last = Validator.isNotNull(details.getLastName())
+				? details.getLastName().trim()
+				: "";
+
+		return (first + " " + last).trim();
 	}
 
-	private static boolean _isEmployeeActiveOnDate(
-		EmployeeDetails employeeDetails, LocalDate localDate) {
+	private static boolean isEmployeeActiveOnDate(EmployeeDetails details,
+	                                              LocalDate date) {
 
-		if (employeeDetails == null || localDate == null) {
+		if (details == null || date == null) {
 			return false;
 		}
 
-		if (employeeDetails.getJoiningDate() != null) {
-			LocalDate joiningDate = employeeDetails.getJoiningDate().toInstant(
-			).atZone(
-				ZoneId.systemDefault()
-			).toLocalDate();
+		if (details.getJoiningDate() != null) {
 
-			if (localDate.isBefore(joiningDate)) {
+			LocalDate join = details.getJoiningDate()
+					.toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate();
+
+			if (date.isBefore(join)) {
 				return false;
 			}
 		}
 
-		if (employeeDetails.getLeavingDate() != null) {
-			LocalDate leavingDate = employeeDetails.getLeavingDate().toInstant(
-			).atZone(
-				ZoneId.systemDefault()
-			).toLocalDate();
+		if (details.getLeavingDate() != null) {
 
-			if (localDate.isAfter(leavingDate)) {
+			LocalDate leave = details.getLeavingDate()
+					.toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate();
+
+			if (date.isAfter(leave)) {
 				return false;
 			}
 		}
@@ -228,10 +296,8 @@ public class AttendanceValidationUtil {
 		return true;
 	}
 
+	// ========================= FORMATTER =========================
+
 	private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
-		DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		AttendanceValidationUtil.class);
-
+			DateTimeFormatter.ofPattern("dd-MM-yyyy");
 }
