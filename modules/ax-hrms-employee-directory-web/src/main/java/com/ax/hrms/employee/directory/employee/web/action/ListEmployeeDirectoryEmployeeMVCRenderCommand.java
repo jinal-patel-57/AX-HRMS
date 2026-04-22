@@ -109,7 +109,12 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 			}
 		}
 
+		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+		SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
+				StringPool.BLANK);
+		directorySearchContainer.setResultsAndTotal(employeeDetailsList);
 
+		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DESIGNATIONLIST, designationMasterLocalService.getDesignationMasters(-1,-1));
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DEPARTMENTLIST, departmentMasterLocalService.getDepartmentMasters(-1,-1));
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DESIGNATIONVALUE, designationId);
@@ -119,23 +124,10 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 
 
 
-			employeeDetailsList.sort((e1, e2) -> {
-				String name1 = (e1.getFirstName() + " " + e1.getLastName()).toLowerCase();
-				String name2 = (e2.getFirstName() + " " + e2.getLastName()).toLowerCase();
-				return name1.compareTo(name2);
-			});
-
-			PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
-			SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
-					StringPool.BLANK);
-			directorySearchContainer.setResultsAndTotal(employeeDetailsList);
-
-			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
-
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_EMPLOYEEDETAILS, employeeDetailsList);
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_GET, employeeDetailsList);
 
-
+			return AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.LIST_EMPLOYEE_DIRECTORY;
 
 		}
 
