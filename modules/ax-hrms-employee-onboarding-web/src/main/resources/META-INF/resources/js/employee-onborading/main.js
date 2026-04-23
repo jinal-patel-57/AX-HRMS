@@ -1772,7 +1772,9 @@ function setConfigsForExperienceValidation(config) {
                        pastDate1900: true
                    };
                    rules[expCertKey] = {
-                       fileRequiredIfNoExisting: true
+                       fileRequiredIfNoExisting: true,
+                       validExtension: true,
+                       maxFileSize:10
                    };
 
                     messages[company] = {
