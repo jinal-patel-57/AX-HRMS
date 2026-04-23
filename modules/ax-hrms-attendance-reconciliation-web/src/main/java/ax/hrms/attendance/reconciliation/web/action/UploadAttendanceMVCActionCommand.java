@@ -282,16 +282,18 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		Date endDate = toDate(yearMonth.atEndOfMonth());
 
         long approvedStatusId = 0;
+        long pendingStatusId = 0;
         try {
             approvedStatusId = getApprovedStatusId();
+            pendingStatusId = getPendingStatusId();
         } catch (NoSuchLeaveCompensatoryStatusMasterException e) {
-			log.error("Error occurred while fetching approvedStatusId", e);
+			log.error("Error occurred while fetching status IDs", e);
         }
 
         data.holidaySet = fetchHolidaySet(yearMonth);
 
 		data.leaveMap = buildLeaveMap(startDate, endDate, approvedStatusId);
-		data.wfhMap = buildWfhMap(startDate, endDate, approvedStatusId);
+		data.wfhMap = buildWfhMap(startDate, endDate, approvedStatusId, pendingStatusId);
 
 		return data;
 	}
@@ -389,7 +391,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private Map<Long, Set<LocalDate>> buildWfhMap(
-		Date startDate, Date endDate, long approvedStatusId) {
+		Date startDate, Date endDate, long approvedStatusId, long pendingStatusId) {
 
 		List<WorkFromHomeDayType> workFromHomeDayTypes =
 			workFromHomeDayTypeLocalService.findByWorkFromHomeDateBetween(
@@ -401,7 +403,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			Collectors.toSet()
 		);
 		Map<Long, WorkFromHomeRequest> workFromHomeRequestMap =
-			getApprovedWfhRequestMap(workFromHomeRequestIds, approvedStatusId);
+			getWfhRequestMap(workFromHomeRequestIds, approvedStatusId, pendingStatusId);
 		Map<Long, Set<LocalDate>> wfhMap = new HashMap<>();
 
 		for (WorkFromHomeDayType workFromHomeDayType : workFromHomeDayTypes) {
@@ -469,10 +471,10 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				LeaveRequest::getLeaveRequestId, leaveRequest -> leaveRequest));
 	}
 
-	private Map<Long, WorkFromHomeRequest> getApprovedWfhRequestMap(
-		Set<Long> workFromHomeRequestIds, long approvedStatusId) {
+	private Map<Long, WorkFromHomeRequest> getWfhRequestMap(
+		Set<Long> workFromHomeRequestIds, long approvedStatusId, long pendingStatusId) {
 
-		if (workFromHomeRequestIds.isEmpty() || approvedStatusId <= 0) {
+		if (workFromHomeRequestIds.isEmpty() || (approvedStatusId <= 0 && pendingStatusId <= 0)) {
 			return new HashMap<>();
 		}
 
@@ -483,8 +485,10 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			RestrictionsFactoryUtil.in(
 				"workFromHomeRequestId",
 				workFromHomeRequestIds.toArray(new Long[0])));
+		
+		Long[] validStatuses = {approvedStatusId, pendingStatusId};
 		dynamicQuery.add(
-			RestrictionsFactoryUtil.eq("status", approvedStatusId));
+			RestrictionsFactoryUtil.in("status", validStatuses));
 
 		List<WorkFromHomeRequest> workFromHomeRequests =
 			workFromHomeRequestLocalService.dynamicQuery(dynamicQuery);
@@ -501,6 +505,20 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 				findByLeaveCompensatoryStatusName(
 					AxHrmsAttendanceReconciliationWebPortletKeys.
 						STATUS_APPROVED);
+
+		if (leaveCompensatoryStatusMaster == null) {
+			return 0;
+		}
+
+		return leaveCompensatoryStatusMaster.getLeaveCompensatoryStatusMasterId();
+	}
+
+	private long getPendingStatusId() throws NoSuchLeaveCompensatoryStatusMasterException {
+		LeaveCompensatoryStatusMaster leaveCompensatoryStatusMaster =
+			leaveCompensatoryStatusMasterLocalService.
+				findByLeaveCompensatoryStatusName(
+					AxHrmsAttendanceReconciliationWebPortletKeys.
+						STATUS_PENDING);
 
 		if (leaveCompensatoryStatusMaster == null) {
 			return 0;

@@ -26,4 +26,6 @@ public class AxHrmsAttendanceReconciliationWebPortletKeys {
 
 	public static final String STATUS_APPROVED = "Approved";
 
+	public static final String STATUS_PENDING = "Pending";
+
 }
