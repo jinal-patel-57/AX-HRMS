@@ -6,220 +6,260 @@
 --%>
 
 <%@ include file="/init.jsp" %>
-<h2 class="custom-class">
-login <h2/>
 
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
 		<%
-		String signedInAs = HtmlUtil.escape(user.getFullName());
+			String signedInAs = HtmlUtil.escape(user.getFullName());
 
-		if (themeDisplay.isShowMyAccountIcon() && (themeDisplay.getURLMyAccount() != null) && PortletPermissionUtil.contains(themeDisplay.getPermissionChecker(), 0, PortletKeys.MY_ACCOUNT, ActionKeys.ACCESS_IN_CONTROL_PANEL, true)) {
-			String myAccountURL = String.valueOf(themeDisplay.getURLMyAccount());
+			if (themeDisplay.isShowMyAccountIcon() && (themeDisplay.getURLMyAccount() != null) && PortletPermissionUtil.contains(themeDisplay.getPermissionChecker(), 0, PortletKeys.MY_ACCOUNT, ActionKeys.ACCESS_IN_CONTROL_PANEL, true)) {
+				String myAccountURL = String.valueOf(themeDisplay.getURLMyAccount());
 
-			signedInAs = "<a class=\"signed-in\" href=\"" + HtmlUtil.escape(myAccountURL) + "\">" + signedInAs + "</a>";
-		}
+				signedInAs = "<a class=\"signed-in\" href=\"" + HtmlUtil.escape(myAccountURL) + "\">" + signedInAs + "</a>";
+			}
 		%>
 
 		<liferay-ui:message arguments="<%= signedInAs %>" key="you-are-signed-in-as-x" translateArguments="<%= false %>" />
 	</c:when>
 	<c:otherwise>
-
+		<link rel="stylesheet" href="<%= request.getContextPath() %>/css/login.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+		      rel="stylesheet">
 		<%
-		String formName = "loginForm";
+			String formName = "loginForm";
 
-		if (windowState.equals(LiferayWindowState.EXCLUSIVE)) {
-			formName += "Modal";
-		}
+			if (windowState.equals(LiferayWindowState.EXCLUSIVE)) {
+				formName += "Modal";
+			}
 
-		String redirect = ParamUtil.getString(request, "redirect");
+			String redirect = ParamUtil.getString(request, "redirect");
 
-		String login = (String)SessionErrors.get(renderRequest, "login");
+			String login = (String)SessionErrors.get(renderRequest, "login");
 
-		if (Validator.isNull(login)) {
-			login = LoginUtil.getLogin(request, "login", company);
-		}
+			if (Validator.isNull(login)) {
+				login = LoginUtil.getLogin(request, "login", company);
+			}
 
-		String password = StringPool.BLANK;
-		boolean rememberMe = ParamUtil.getBoolean(request, "rememberMe");
+			String password = StringPool.BLANK;
+			boolean rememberMe = ParamUtil.getBoolean(request, "rememberMe");
 
-		if (Validator.isNull(authType)) {
-			authType = company.getAuthType();
-		}
+			if (Validator.isNull(authType)) {
+				authType = company.getAuthType();
+			}
 		%>
 
-		<div class="login-container">
-			<portlet:actionURL name="/login/login" secure="<%= request.isSecure() %>" var="loginURL">
-				<portlet:param name="mvcRenderCommandName" value="/login/login" />
-			</portlet:actionURL>
-
-			<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="<%= formName %>" onSubmit="event.preventDefault();" validateOnBlur="<%= false %>">
-				<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
-				<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-				<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
-
-				<div class="inline-alert-container lfr-alert-container"></div>
-
-				<liferay-util:dynamic-include key="com.liferay.login.web#/login.jsp#alertPre" />
-
-				<c:choose>
-					<c:when test='<%= SessionMessages.contains(request, "forgotPasswordSent") %>'>
-						<div class="alert alert-success">
-							<liferay-ui:message key="your-request-completed-successfully" />
-						</div>
-					</c:when>
-					<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
-
-						<%
-						String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
-						%>
-
-						<div class="alert alert-success">
-							<liferay-ui:message key="thank-you-for-creating-an-account" />
-
-							<c:if test="<%= company.isStrangersVerify() %>">
-								<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
-							</c:if>
-
-							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
-								<c:choose>
-									<c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD, PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD) %>">
-										<liferay-ui:message key="use-your-password-to-login" />
-									</c:when>
-									<c:otherwise>
-										<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="you-can-set-your-password-following-instructions-sent-to-x" translateArguments="<%= false %>" />
-									</c:otherwise>
-								</c:choose>
-							</c:if>
-						</div>
-					</c:when>
-					<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
-
-						<%
-						String userEmailAddress = (String)SessionMessages.get(request, "userPending");
-						%>
-
-						<div class="alert alert-success">
-							<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
-						</div>
-					</c:when>
-				</c:choose>
-
-				<c:if test="<%= PropsValues.SESSION_ENABLE_PERSISTENT_COOKIES && PropsValues.SESSION_TEST_COOKIE_SUPPORT %>">
-					<div class="alert alert-danger" id="<portlet:namespace />cookieDisabled" style="display: none;">
-						<liferay-ui:message key="authentication-failed-please-enable-browser-cookies" />
+		<div class="ax-login-page">
+			<video autoplay loop muted playsinline class="ax-background-video">
+				<source src="<%= request.getContextPath() %>/images/login-bg-video.mp4" type="video/mp4">
+			</video>
+			<div class="ax-video-overlay"></div>
+			<div class="ax-login-wrapper">
+				<div class="ax-login-card">
+					<div class="ax-login-left">
+						<img src="<%= request.getContextPath() %>/images/SignIn-Image.png" alt="Login Illustration">
 					</div>
-				</c:if>
 
-				<c:choose>
-					<c:when test="<%= company.isSendPasswordResetLink() %>">
-						<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed-due-to-incorrect-credentials-or-account-lockout" />
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
-					</c:otherwise>
-				</c:choose>
+					<div class="ax-login-right">
+						<div class="ax-logo-container">
+							<img src="<%= request.getContextPath() %>/images/logo-main.png" alt="AXSETU Logo">
+						</div>
 
-				<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-log-in-because-the-maximum-number-of-users-has-been-reached" />
-				<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
-				<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
-				<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" message="please-enter-an-email-address" />
-				<liferay-ui:error exception="<%= UserLockoutException.LDAPLockout.class %>" message="this-account-is-locked" />
+						<portlet:actionURL name="/login/login" secure="<%= request.isSecure() %>" var="loginURL">
+							<portlet:param name="mvcRenderCommandName" value="/login/login" />
+						</portlet:actionURL>
 
-				<c:choose>
-					<c:when test="<%= company.isSendPasswordResetLink() %>">
-						<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>" message="authentication-failed-due-to-incorrect-credentials-or-account-lockout" />
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>" message="authentication-failed" />
-					</c:otherwise>
-				</c:choose>
+						<portlet:renderURL var="forgotPasswordURL" windowState="<%= LiferayWindowState.MAXIMIZED.toString() %>">
+							<portlet:param name="mvcPath" value="/forgot_password.jsp" />
+						</portlet:renderURL>
 
-				<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= UserScreenNameException.MustNotBeNull.class %>" message="the-screen-name-cannot-be-blank" />
+						<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="<%= formName %>" onSubmit="event.preventDefault();" validateOnBlur="<%= false %>">
+							<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
+							<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+							<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
 
-				<liferay-util:dynamic-include key="com.liferay.login.web#/login.jsp#alertPost" />
+							<div class="inline-alert-container lfr-alert-container"></div>
 
-				<aui:fieldset>
+							<liferay-util:dynamic-include key="com.liferay.login.web#/login.jsp#alertPre" />
 
-					<%
-					String loginLabel = null;
+							<c:choose>
+								<c:when test="<%= ParamUtil.getBoolean(request, \"passwordChanged\") %>">
+									<div class="alert alert-success">
+										Password changed successfully. Please sign in again.
+									</div>
+								</c:when>
+								<c:when test='<%= SessionMessages.contains(request, "forgotPasswordSent") %>'>
+									<div class="alert alert-success">
+										<liferay-ui:message key="your-request-completed-successfully" />
+									</div>
+								</c:when>
+								<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
 
-					if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-						loginLabel = "email-address";
-					}
-					else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-						loginLabel = "screen-name";
-					}
-					else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-						loginLabel = "id";
-					}
-					%>
+									<%
+										String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
+									%>
 
-					<aui:input cssClass="clearable" label="<%= loginLabel %>" name="login" required="<%= true %>" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
-						<c:if test="<%= authType.equals(CompanyConstants.AUTH_TYPE_EA) %>">
-							<aui:validator name="email" />
-						</c:if>
-					</aui:input>
+									<div class="alert alert-success">
+										<liferay-ui:message key="thank-you-for-creating-an-account" />
 
-					<aui:input name="password" required="<%= true %>" showRequiredLabel="<%= false %>" type="password" value="<%= password %>" />
+										<c:if test="<%= company.isStrangersVerify() %>">
+											<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
+										</c:if>
 
-					<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+										<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
+											<c:choose>
+												<c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD, PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD) %>">
+													<liferay-ui:message key="use-your-password-to-login" />
+												</c:when>
+												<c:otherwise>
+													<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="you-can-set-your-password-following-instructions-sent-to-x" translateArguments="<%= false %>" />
+												</c:otherwise>
+											</c:choose>
+										</c:if>
+									</div>
+								</c:when>
+								<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
 
-					<c:if test="<%= company.isAutoLogin() %>">
-						<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
-					</c:if>
-				</aui:fieldset>
+									<%
+										String userEmailAddress = (String)SessionMessages.get(request, "userPending");
+									%>
 
-				<aui:button-row>
-					<aui:button type="submit" value="sign-in" />
-				</aui:button-row>
-			</aui:form>
+									<div class="alert alert-success">
+										<liferay-ui:message arguments="<%= HtmlUtil.escape(userEmailAddress) %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
+									</div>
+								</c:when>
+							</c:choose>
 
-			<%@ include file="/navigation.jspf" %>
+							<c:if test="<%= PropsValues.SESSION_ENABLE_PERSISTENT_COOKIES && PropsValues.SESSION_TEST_COOKIE_SUPPORT %>">
+								<div class="alert alert-danger" id="<portlet:namespace />cookieDisabled" style="display: none;">
+									<liferay-ui:message key="authentication-failed-please-enable-browser-cookies" />
+								</div>
+							</c:if>
+
+							<c:choose>
+								<c:when test="<%= company.isSendPasswordResetLink() %>">
+									<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed-due-to-incorrect-credentials-or-account-lockout" />
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
+								</c:otherwise>
+							</c:choose>
+
+							<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-log-in-because-the-maximum-number-of-users-has-been-reached" />
+							<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
+							<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
+							<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
+							<liferay-ui:error exception="<%= PrincipalException.MustBeEnabled.class %>" message="password-recovery-is-disabled" />
+							<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" message="please-enter-an-email-address" />
+							<liferay-ui:error exception="<%= UserLockoutException.LDAPLockout.class %>" message="this-account-is-locked" />
+
+							<c:choose>
+								<c:when test="<%= company.isSendPasswordResetLink() %>">
+									<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>" message="authentication-failed-due-to-incorrect-credentials-or-account-lockout" />
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>" message="authentication-failed" />
+								</c:otherwise>
+							</c:choose>
+
+							<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
+							<liferay-ui:error exception="<%= UserScreenNameException.MustNotBeNull.class %>" message="the-screen-name-cannot-be-blank" />
+
+							<liferay-util:dynamic-include key="com.liferay.login.web#/login.jsp#alertPost" />
+
+							<aui:fieldset>
+
+								<%
+									String loginLabel = null;
+
+									if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+										loginLabel = "email-address";
+									}
+									else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+										loginLabel = "screen-name";
+									}
+									else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+										loginLabel = "id";
+									}
+								%>
+
+								<aui:input cssClass="clearable" label="<%= loginLabel %>" name="login" placeholder="Email Address" required="<%= true %>" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+									<c:if test="<%= authType.equals(CompanyConstants.AUTH_TYPE_EA) %>">
+										<aui:validator name="email" />
+									</c:if>
+								</aui:input>
+
+								<aui:input name="password" placeholder="Password" required="<%= true %>" showRequiredLabel="<%= false %>" type="password" value="<%= password %>" />
+
+								<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+
+								<c:if test="<%= company.isAutoLogin() %>">
+									<aui:input checked="<%= rememberMe %>" cssClass="ax-remember-me-checkbox" label="Remember Me" name="rememberMe" type="checkbox" />
+								</c:if>
+							</aui:fieldset>
+
+							<aui:button-row>
+								<aui:button cssClass="ax-btn-submit" type="submit" value="Sign In" />
+							</aui:button-row>
+						</aui:form>
+
+						<div class="ax-forgot-password-link">
+							<button class="ax-btn-forgot-password" data-senna-off="true" onclick="window.location.href='<%= HtmlUtil.escapeJS(forgotPasswordURL.toString()) %>';" type="button">
+								Forgot Password?
+							</button>
+						</div>
+
+						<div class="navigaton-include">
+							<%@ include file="/navigation.jspf" %>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<aui:script sandbox="<%= true %>">
 			var form = document.getElementById('<portlet:namespace /><%= formName %>');
 
 			if (form) {
-				form.addEventListener('submit', (event) => {
-					<c:if test="<%= PropsValues.SESSION_ENABLE_PERSISTENT_COOKIES && PropsValues.SESSION_TEST_COOKIE_SUPPORT %>">
-						if (!navigator.cookieEnabled) {
-							document.getElementById(
-								'<portlet:namespace />cookieDisabled'
-							).style.display = '';
+			form.addEventListener('submit', (event) => {
+			<c:if test="<%= PropsValues.SESSION_ENABLE_PERSISTENT_COOKIES && PropsValues.SESSION_TEST_COOKIE_SUPPORT %>">
+				if (!navigator.cookieEnabled) {
+				document.getElementById(
+				'<portlet:namespace />cookieDisabled'
+				).style.display = '';
 
-							return;
-						}
-					</c:if>
-
-					<c:if test="<%= Validator.isNotNull(redirect) %>">
-						var redirect = form.querySelector('#<portlet:namespace />redirect');
-
-						if (redirect) {
-							var redirectVal = redirect.getAttribute('value');
-
-							redirect.setAttribute('value', redirectVal + window.location.hash);
-						}
-					</c:if>
-
-					submitForm(form);
-				});
-
-				var password = form.querySelector('#<portlet:namespace />password');
-
-				if (password) {
-					password.addEventListener('keypress', (event) => {
-						Liferay.Util.showCapsLock(
-							event,
-							'<portlet:namespace />passwordCapsLockSpan'
-						);
-					});
+				return;
 				}
+			</c:if>
+
+			<c:if test="<%= Validator.isNotNull(redirect) %>">
+				var redirect = form.querySelector('#<portlet:namespace />redirect');
+
+				if (redirect) {
+				var redirectVal = redirect.getAttribute('value');
+
+				redirect.setAttribute('value', redirectVal + window.location.hash);
+				}
+			</c:if>
+
+			submitForm(form);
+			});
+
+			var password = form.querySelector('#<portlet:namespace />password');
+
+			if (password) {
+			password.addEventListener('keypress', (event) => {
+			Liferay.Util.showCapsLock(
+			event,
+			'<portlet:namespace />passwordCapsLockSpan'
+			);
+			});
+			}
 			}
 		</aui:script>
 	</c:otherwise>
+
 </c:choose>

@@ -17,6 +17,12 @@
  * loaded.
  */
 AUI().ready(function () {
+  function clearGlobalLoader() {
+    $("body").removeClass("page-loading");
+    $("#overlay").stop(true, true).hide();
+  }
+
+  clearGlobalLoader();
   
   $(".header #toggle_btn").click(function () {
     $("body").toggleClass('collapsedMenu');
@@ -162,13 +168,22 @@ function childNavigation() {
   });
 
 
-  document.getElementById("copyright-year").textContent = new Date().getFullYear();
+  const copyrightYear = document.getElementById("copyright-year");
+
+  if (copyrightYear) {
+    copyrightYear.textContent = new Date().getFullYear();
+  }
 });
 
  // Hide loader after full page load
   $(window).on("load", function () {
     $("body").removeClass("page-loading");
-    $("#overlay").fadeOut(300);
+    $("#overlay").stop(true, true).fadeOut(300);
+  });
+
+  $(window).on("pageshow", function () {
+    $("body").removeClass("page-loading");
+    $("#overlay").stop(true, true).hide();
   });
 
 /*
