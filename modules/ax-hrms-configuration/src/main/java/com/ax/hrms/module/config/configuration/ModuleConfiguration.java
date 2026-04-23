@@ -19,5 +19,11 @@ public interface ModuleConfiguration {
     public String employeeCodePattern();
 
 
+    @Meta.AD(deflt = "hr.aixtor@yopmail.com,connect@yopmail.com",
+            name = "Employee Official Mail Id for not showing employee on Employee Directory",
+            required = false)
+    public String employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
+
+
 
 }
