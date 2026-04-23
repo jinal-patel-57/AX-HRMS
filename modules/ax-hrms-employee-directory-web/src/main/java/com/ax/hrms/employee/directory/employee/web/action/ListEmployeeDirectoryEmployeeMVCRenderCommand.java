@@ -4,10 +4,12 @@ import com.ax.hrms.common.api.api.AxHrmsCommonApi;
 import com.ax.hrms.employee.directory.util.EmployeeDetailUtil;
 import com.ax.hrms.employee.directory.web.constants.AxHrmsEmployeeDirectoryEmployeeWebPortletConstants;
 import com.ax.hrms.employee.directory.web.constants.AxHrmsEmployeeDirectoryEmployeeWebPortletKeys;
+import com.ax.hrms.mail.template.config.configuration.MailTemplateConfiguration;
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.CustomEmployeeDetailsDTO;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -22,10 +24,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
@@ -66,6 +66,9 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 	EmployeeDesignationLocalService employeeDesignationLocalService;
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
+
+	@Reference
+	ModuleConfiguration moduleConfiguration;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -118,7 +121,25 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 		if(!employeeDetailsList.isEmpty()) {
 
 
+			String emailId =
+					moduleConfiguration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
+// comma separated mail ids
 
+// Convert comma separated emails into Set for fast lookup
+			Set<String> ignoreEmailSet = Arrays.stream(emailId.split(","))
+					.map(String::trim)
+					.map(String::toLowerCase)
+					.filter(mail -> !mail.isEmpty())
+					.collect(Collectors.toSet());
+
+// Remove employees whose official email exists in ignore list
+			employeeDetailsList.removeIf(employee ->
+					ignoreEmailSet.contains(
+							employee.getOfficialEmail().trim().toLowerCase()
+					)
+			);
+
+// Sort remaining employees by full name
 			employeeDetailsList.sort((e1, e2) -> {
 				String name1 = (e1.getFirstName() + " " + e1.getLastName()).toLowerCase();
 				String name2 = (e2.getFirstName() + " " + e2.getLastName()).toLowerCase();

@@ -1,5 +1,6 @@
 package com.ax.hrms.leave.management.employee.web.action;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.ax.hrms.model.LeaveBalance;
+import com.ax.hrms.service.LeaveBalanceLocalService;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -72,6 +76,9 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
     private ProbationStatusMasterLocalService probationStatusMasterLocalService;
 	@Reference
 	private AxHrmsCommonApi axHrmsCommonApi;
+
+    @Reference
+    private LeaveBalanceLocalService leaveBalanceLocalService;
     
 
     @Override
@@ -79,12 +86,14 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
 
         int curValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,1);
         int deltaValue = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,20);
+        int currentYear = Year.now().getValue();
 
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long userId = themeDisplay.getUserId();
         boolean isApplicableForLeave = true;
 
         List<LeaveRequestDto> listOfEmployeesLeaveRequest = new ArrayList<>();
+        List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
         List<ProbationStatusMaster> probationStatusMasterList = probationStatusMasterLocalService.getProbationStatusMasters(-1,-1);
         long[] probationStatusMasterIds = new long[2];
@@ -110,6 +119,7 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
 
 
                 listOfEmployeesLeaveRequest = LeaveRequestUtil.getListOfLeaveRequest(employeeDetails,listOfLeaveRequest,listOfLeaveTypeMaster,listOfLeaveDayType,listOfLeaveCompensatoryStatusMasters,employeeDetailsLocalService);
+                 leaveBalanceList = leaveBalanceLocalService.findByEmployeeIdAndYear(employeeDetails.getEmployeeId(),currentYear);
             }
 
 		} catch (NoSuchEmployeeDetailsException exception) {
@@ -137,8 +147,10 @@ public class ListEmployeeLeaveRequestMVCRenderCommand implements MVCRenderComman
         
         boolean isIntern = axHrmsCommonApi.isRolePerson(themeDisplay, "Intern");
 		boolean isContractor = axHrmsCommonApi.isRolePerson(themeDisplay, "Contractor");
+
+
 		
-		isApplicableForLeave = isApplicableForLeave && !isIntern && !isContractor;
+		isApplicableForLeave = isApplicableForLeave && !isIntern && !isContractor && !leaveBalanceList.isEmpty();
         renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.TOTAL_LEAVE_REQUEST_OF_EMPLOYEE, totalLeaveRequest);
         renderRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, deltaValue);
         renderRequest.setAttribute(AxHrmsLeaveManagementWebPortletConstants.LEAVE_REQUEST_LIST_VAR, listOfEmployeesLeaveRequest.subList(start,end));
