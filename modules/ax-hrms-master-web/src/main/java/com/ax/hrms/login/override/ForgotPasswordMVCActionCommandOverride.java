@@ -39,7 +39,8 @@ public class ForgotPasswordMVCActionCommandOverride extends BaseMVCActionCommand
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-
+		hideDefaultErrorMessage(actionRequest);
+		hideDefaultSuccessMessage(actionRequest);
 		int step = ParamUtil.getInteger(actionRequest, "step", 1);
 
 		// Only pre-validate on Step 1 (email input step)
@@ -122,6 +123,7 @@ public class ForgotPasswordMVCActionCommandOverride extends BaseMVCActionCommand
 			SessionErrors.add(
 					actionRequest,
 					NoSuchUserException.class);
+
 
 			actionResponse.getRenderParameters().setValue(
 					MVC_PATH,
