@@ -47,6 +47,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,8 +60,6 @@ import java.util.stream.Collectors;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -73,7 +72,7 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 
-	private static final Logger log = LogManager.getLogger(UploadAttendanceMVCActionCommand.class);
+	private static Log log = LogFactoryUtil.getLog(UploadAttendanceMVCActionCommand.class);
 	private static final String MVC_PATH = "mvcPath";
 	private static final String VIEW_JSP = "/view.jsp";
 
@@ -197,12 +196,14 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			String body =
 					mailTemplateConfiguration.mailAttendanceReconciliationBody();
 
+			String formattedMonth = yearMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy"));
+
 			if (Validator.isNotNull(subject)) {
-				subject = subject.replace("${YEAR_MONTH}", yearMonth.toString());
+				subject = subject.replace("${YEAR_MONTH}", formattedMonth);
 			}
 
 			if (Validator.isNotNull(body)) {
-				body = body.replace("${YEAR_MONTH}", yearMonth.toString());
+				body = body.replace("${YEAR_MONTH}", formattedMonth);
 			}
 
 			axHrmsCommonApi.sendMailWithAttachment(
@@ -212,7 +213,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 					subject,
 					body,
 					tempExcelFile,
-					"Missing_Attendance_Report_" + yearMonth + ".xlsx"
+					"Missing_Attendance_Report_" + formattedMonth.replace(" ", "_") + ".xlsx"
 			);
 
 		} catch (Exception e) {
@@ -409,13 +410,6 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 
 			if (workFromHomeRequest == null ||
 				workFromHomeDayType.getWorkFromHomeDate() == null) {
-
-				_log.info(
-					"UploadAttendanceMVCActionCommand >> Ignoring wfhDayType. requestId=" +
-						workFromHomeDayType.getWorkFromHomeRequestId() + ", date=" +
-						workFromHomeDayType.getWorkFromHomeDate() + ", approvedRequestFound=" +
-						(workFromHomeRequest != null));
-
 				continue;
 			}
 
