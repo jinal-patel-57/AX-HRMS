@@ -84,6 +84,10 @@ public class ListPolicyProcessManagementHrAdminMVCRenderCommand implements MVCRe
 
 		        
 		        List<Integer> policyYears = policyLocalService.getAllYear();
+
+			if (!policyYears.contains(selectedYear)) {
+				policyYears.add(selectedYear);
+			}
 		        
 		        Collections.sort(policyYears);
 
