@@ -292,7 +292,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 
         data.holidaySet = fetchHolidaySet(yearMonth);
 
-		data.leaveMap = buildLeaveMap(startDate, endDate, approvedStatusId);
+		data.leaveMap = buildLeaveMap(startDate, endDate, approvedStatusId,pendingStatusId);
 		data.wfhMap = buildWfhMap(startDate, endDate, approvedStatusId, pendingStatusId);
 
 		return data;
@@ -359,7 +359,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private Map<Long, Set<LocalDate>> buildLeaveMap(
-		Date startDate, Date endDate, long approvedStatusId) {
+		Date startDate, Date endDate, long approvedStatusId, long pendingStatusId) {
 
 		List<LeaveDayType> leaveDayTypes =
 			leaveDayTypeLocalService.findByLeaveDateBetween(startDate, endDate);
@@ -369,8 +369,8 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		).collect(
 			Collectors.toSet()
 		);
-		Map<Long, LeaveRequest> leaveRequestMap = getApprovedLeaveRequestMap(
-			leaveRequestIds, approvedStatusId);
+		Map<Long, LeaveRequest> leaveRequestMap = getLeaveRequestMap(
+			leaveRequestIds, approvedStatusId,pendingStatusId);
 		Map<Long, Set<LocalDate>> leaveMap = new HashMap<>();
 
 		for (LeaveDayType leaveDayType : leaveDayTypes) {
@@ -447,28 +447,45 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 		);
 	}
 
-	private Map<Long, LeaveRequest> getApprovedLeaveRequestMap(
-		Set<Long> leaveRequestIds, long approvedStatusId) {
+	private Map<Long, LeaveRequest> getLeaveRequestMap(
+			Set<Long> leaveRequestIds,
+			long approvedStatusId,
+			long pendingStatusId) {
 
-		if (leaveRequestIds.isEmpty() || approvedStatusId <= 0) {
+		if (leaveRequestIds.isEmpty() ||
+				(approvedStatusId <= 0 && pendingStatusId <= 0)) {
+
 			return new HashMap<>();
 		}
 
-		DynamicQuery dynamicQuery = leaveRequestLocalService.dynamicQuery();
+		DynamicQuery dynamicQuery =
+				leaveRequestLocalService.dynamicQuery();
 
 		dynamicQuery.add(
-			RestrictionsFactoryUtil.in(
-				"leaveRequestId", leaveRequestIds.toArray(new Long[0])));
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.eq(
-				"leaveCompensatoryStatusMasterId", approvedStatusId));
+				RestrictionsFactoryUtil.in(
+						"leaveRequestId",
+						leaveRequestIds.toArray(new Long[0])
+				)
+		);
 
-		List<LeaveRequest> leaveRequests = leaveRequestLocalService.dynamicQuery(
-			dynamicQuery);
+		Long[] validStatuses = {approvedStatusId, pendingStatusId};
+
+		dynamicQuery.add(
+				RestrictionsFactoryUtil.in(
+						"leaveCompensatoryStatusMasterId",
+						validStatuses
+				)
+		);
+
+		List<LeaveRequest> leaveRequests =
+				leaveRequestLocalService.dynamicQuery(dynamicQuery);
 
 		return leaveRequests.stream().collect(
-			Collectors.toMap(
-				LeaveRequest::getLeaveRequestId, leaveRequest -> leaveRequest));
+				Collectors.toMap(
+						LeaveRequest::getLeaveRequestId,
+						leaveRequest -> leaveRequest
+				)
+		);
 	}
 
 	private Map<Long, WorkFromHomeRequest> getWfhRequestMap(
@@ -485,7 +502,7 @@ public class UploadAttendanceMVCActionCommand extends BaseMVCActionCommand {
 			RestrictionsFactoryUtil.in(
 				"workFromHomeRequestId",
 				workFromHomeRequestIds.toArray(new Long[0])));
-		
+
 		Long[] validStatuses = {approvedStatusId, pendingStatusId};
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.in("status", validStatuses));
