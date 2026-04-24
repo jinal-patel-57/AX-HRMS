@@ -43,19 +43,16 @@ public class ListHolidayHrAdminMVCRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
-	
-			List<Holiday> holiday ;
+			List<Holiday> holiday;
 			
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-	        int selectedYear = ParamUtil.getInteger(renderRequest, AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYSELECTED_YEAR);
+	        int selectedYear = ParamUtil.getInteger(
+	        		renderRequest, AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYSELECTED_YEAR);
 	        
-	        if(selectedYear != 0) {
-	        	holiday = holidayLocalService.findByYear(selectedYear);
-	        }
-	        else {
+	        if (selectedYear == 0) {
 	        	selectedYear = currentYear;
-	        	holiday = holidayLocalService.findByYear(currentYear);
 	        }
+	        
 		holiday = new ArrayList<>(holidayLocalService.findByYear(selectedYear));
 		holiday.sort(Comparator.comparing(Holiday::getDate));
 
@@ -69,11 +66,16 @@ public class ListHolidayHrAdminMVCRenderCommand implements MVCRenderCommand {
 			renderRequest.setAttribute(AxHrmsHolidayHrAdminWebPortletConstants.HOLIDAYSEARCHCONTAINER, holidaySearchContainer);
 			
         
-			 List<Integer> holidayYears = holidayLocalService.getYear();
+			 List<Integer> holidayYears = new ArrayList<>(holidayLocalService.getYear());
 			    
 				if(!holidayYears.contains(currentYear)){
 					holidayYears.add(currentYear);
 				}
+				
+				if (!holidayYears.contains(selectedYear)) {
+					holidayYears.add(selectedYear);
+				}
+				
 		Collections.sort(holidayYears);
 
 				
