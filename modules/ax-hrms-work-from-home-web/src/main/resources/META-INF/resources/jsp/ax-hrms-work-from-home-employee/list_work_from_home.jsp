@@ -40,7 +40,9 @@
                                 <liferay-ui:search-container-column-text name="End Date">
                                     <fmt:formatDate value="${wfh.endDate}" pattern="dd-MMM-yyyy" />
                                 </liferay-ui:search-container-column-text> --%>
-
+                    <liferay-ui:search-container-column-text name="Request Date">
+                    <fmt:formatDate value="${wfh.requestDate}" pattern="dd-MMM-yyyy" />
+                     </liferay-ui:search-container-column-text>
                     <liferay-ui:search-container-column-text name="WFH Period">
                         <fmt:formatDate value="${wfh.startDate}" pattern="dd-MMM-yyyy" />
                         to

@@ -1,7 +1,12 @@
 <%@ include file="/init.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<style>
+    #<portlet:namespace/>marriageStar,
+    #<portlet:namespace/>spouseStar {
+        display: none;
+    }
+</style>
 <portlet:actionURL name="editEmployeeProfile" var="editEmployeeProfileUrl" />
 <portlet:renderURL var="backURL">
     <portlet:param name="mvcCommand" value="/"/>
@@ -145,6 +150,7 @@
             <div class="col-md-4 col-sm-12 mb-3" id="marriageDateWrapper">
                 <label for="<portlet:namespace />marriageDate" class="form-label">
                     Marriage Date
+                    <span class="text-danger" id="<portlet:namespace/>marriageStar">*</span>
                 </label>
 
                 <input type="date"
@@ -160,6 +166,7 @@
             <div class="col-md-4 col-sm-12 mb-3" id="spouseNameWrapper">
                 <label for="<portlet:namespace />spouseName" class="form-label">
                     Spouse Name
+                    <span class="text-danger" id="<portlet:namespace/>spouseStar">*</span>
                 </label>
 
                 <input type="text"
@@ -399,6 +406,30 @@ $(document).ready(function () {
 
         return true;
     } */
+
+
+    var marriageStar = $('#' + ns + 'marriageStar');
+    var spouseStar = $('#' + ns + 'spouseStar');
+
+    function toggleRequiredStar() {
+
+        if (maritalCheckbox.is(':checked')) {
+            marriageStar.show();
+            spouseStar.show();
+        } else {
+            marriageStar.hide();
+            spouseStar.hide();
+        }
+    }
+
+    // Initial load
+    toggleRequiredStar();
+
+    // On change
+    maritalCheckbox.on('change', function () {
+        toggleRequiredStar();
+    });
+
 
 function validateMarriageFields() {
 

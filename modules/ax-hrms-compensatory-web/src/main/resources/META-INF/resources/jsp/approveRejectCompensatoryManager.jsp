@@ -37,6 +37,8 @@
 
             <liferay-ui:search-container-row className="com.ax.hrms.compensatory.web.dto.CompensatoryDataDto"
                                              modelVar="compensatoryDataDto" keyProperty="compensatoryDataId">
+                <liferay-ui:search-container-column-text name="Employee Name"
+                                                             value="${ compensatoryDataDto.getEmployeeName() }"/>
 
                 <liferay-ui:search-container-column-text name="date-of-compensation"
                                                          value="${ compensatoryDataDto.getDateOfCompensation() }"/>
@@ -44,12 +46,6 @@
                                                          value="${ compensatoryDataDto.getStartTime() }"/>
                 <liferay-ui:search-container-column-text name="End Time"
                                                          value="${ compensatoryDataDto.getEndTime() }"/>
-
-                <liferay-ui:search-container-column-text name="Employee Name"
-                                                             value="${ compensatoryDataDto.getEmployeeName() }"/>
-
-                    <liferay-ui:search-container-column-text name="Modified By"
-                                                             value="${ compensatoryDataDto.getModifiedBy() }"/>
 
 
                 <liferay-ui:search-container-column-text name="Requested Type"
@@ -60,7 +56,8 @@
 
                 <liferay-ui:search-container-column-text name="manager-name"
                                                          value="${ compensatoryDataDto.getManagerName() }"/>
-
+                <liferay-ui:search-container-column-text name="Modified By"
+                                                             value="${ compensatoryDataDto.getModifiedBy() }"/>
 				<liferay-ui:search-container-column-text name="Status"
                                                              value='<span class="status ${fn:toLowerCase(fn:replace(compensatoryDataDto.getStatus(), " ", "-"))}">${compensatoryDataDto.getStatus()}</span>'/>
 
@@ -141,7 +138,7 @@
 								<li><a href="${viewCompensatoryURL}" class="dropdown-item"><i class="icon-eye-open"></i> 
 									<liferay-ui:message key="view" /></a></li>
                                 <li>
-                                   <!-- <a href="${cancelCompensatoryDataURL }" class="dropdown-item "><i
+                                   <!-- <a href="${cancelCompensatoryDataURL}" class="dropdown-item "><i
                                             class="icon-ban-circle"></i> <liferay-ui:message
                                             key="cancel"/></a>-->
 

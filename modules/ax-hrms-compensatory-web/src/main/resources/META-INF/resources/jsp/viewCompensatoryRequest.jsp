@@ -88,6 +88,36 @@
 									</div>
 								</div>
 							</div>
+
+
+							            <c:if test="${not empty compensatoryData and not empty compensatoryData.comment}">
+                            	            <div class="col-md-6 col-12">
+                            	                <div class="card">
+                            	                    <div class="card-header">
+                            	                        <strong>
+                            	                            Comment
+                            	                        </strong>
+                            	                    </div>
+                            	                    <div class="card-body">
+                            	                        <table class="table">
+                            	                            <thead>
+                            	                            <tr>
+                            	                                <th scope="col"><liferay-ui:message key="comment"/></th>
+                            	                                <th scope="col"><liferay-ui:message key="By"/></th>
+                            	                            </tr>
+                            	                            </thead>
+                            	                            <tbody>
+                            	                            	<tr>
+                            	                            		<td>${empty compensatoryData ? '' : compensatoryData.comment}</td>
+                            	                            		<td>${empty compensatoryData ? '' : compensatoryData.commentedBy}</td>
+                            	                            	</tr>
+                            	                            </tbody>
+                            	                         </table>
+                            	                     </div>
+                            	                 </div>
+                            	             </div>
+                                         </c:if>
+
 						</div>
 						<div class="card-footer text-right mb-0">
 							<a href="${backURL}" class="btn  btn-outline-danger"> <liferay-ui:message
@@ -96,5 +126,4 @@
 						</div>
 					</div>
 				</c:if>
-
 

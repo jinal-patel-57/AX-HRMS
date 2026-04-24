@@ -2720,15 +2720,15 @@ function setConfigsForExperienceValidation(config) {
                 },
                 
                 [namespace + "presentstate"]: {
-                    required: "Please enter the state for the present address.",
+                    required: "Please enter the state for the address.",
                     maxlength: "State name cannot exceed 100 characters.",
                     validNameOnly: "State name should contain only alphabets and space."
                 },
                 [namespace + "presentCountry"]: {
-                    required: "Please select a country for the present address."
+                    required: "Please select a country for the address."
                 },
                 [namespace + "presentpinCode"]: {
-                    required: "Please enter the pincode for the present address.",
+                    required: "Please enter the pincode for the address.",
                     digits: "Pincode should contain only digits.",
                     minlength: "Pincode must be at least 5 digits long.",
                     maxlength: "Pincode cannot exceed 10 digits."

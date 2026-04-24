@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -93,8 +94,29 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             mailContent = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeBody() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeBody() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
-            mailContent = mailContent.replace("${COMMENT}", comment);
+//            if(Validator.isNotNull(comment)) {
+//                mailContent = mailContent.replace("${COMMENT}", comment);
+//            }
+//            else{
+//                mailContent = mailContent.replace("${COMMENT}", "");
+//            }
 
+
+            if (comment != null && !comment.trim().isEmpty()) {
+                StringBuilder commentString = new StringBuilder();
+                commentString.append("<tr>")
+                        .append("<td colspan='9' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+                        .append("<strong>Remarks/Comments:</strong> ").append(comment)
+                        .append("</td>")
+                        .append("</tr>");
+
+                mailContent =  mailContent.replace("${COMMENT}",commentString);
+
+
+            }
+            else {
+                mailContent =  mailContent.replace("${COMMENT}","");
+            }
                  subject = isApprove ? mailTemplateConfiguration.mailCompensatoryLeaveRequestApprovedEmployeeSubject() : isCancelled ? mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelEmployeeSubject() : mailTemplateConfiguration.mailCompensatoryLeaveRequestRejectedEmployeeSubject();
 
             axHrmsCommonApi.sendMail(employee.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
@@ -122,8 +144,25 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
             mailContent = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverBody();
             mailContent = mailContent.replace("${EMPLOYEE_NAME}", employee.getFirstName() + StringPool.SPACE + employee.getLastName());
             mailContent = mailContent.replace("${BODY}", body);
-            mailContent = mailContent.replace("${COMMENT}", comment);
+//            mailContent = mailContent.replace("${COMMENT}", comment);
             mailContent=mailContent.replace("${APPROVER_NAME}", approver.getFirstName() + StringPool.SPACE + approver.getLastName());
+
+            if (comment != null && !comment.trim().isEmpty()) {
+                StringBuilder commentString = new StringBuilder();
+                commentString.append("<tr>")
+                        .append("<td colspan='9' style='border:1px solid #ddd;padding:10px;background-color:#f9f9f9;'>")
+                        .append("<strong>Remarks/Comments:</strong> ").append(comment)
+                        .append("</td>")
+                        .append("</tr>");
+
+                mailContent =  mailContent.replace("${COMMENT}",commentString);
+
+
+            }
+            else {
+                mailContent =  mailContent.replace("${COMMENT}","");
+            }
+
             subject = mailTemplateConfiguration.mailCompensatoryLeaveRequestCancelApproverSubject();
             axHrmsCommonApi.sendMail(approver.getOfficialEmail(), fromEmailAddress, fromName, subject, mailContent);
             log.info("Mail sent successfully");
@@ -335,8 +374,8 @@ public class AxHrmsCompensatoryLeaveRequestWebUtil {
                 .append(requestedType)
                 .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE)
                 .append(approvedType)
-               .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE_CLOSING);
-
+                .append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_STYLE_CLOSING)
+                .append("${COMMENT}");
         body.append(AxHrmsCompensatoryDataConstants.COMPENSATORY_REQUEST_MAIL_FOOTER);
         return body;
     }

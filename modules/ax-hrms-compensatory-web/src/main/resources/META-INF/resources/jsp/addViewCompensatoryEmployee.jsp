@@ -62,19 +62,17 @@
 				<liferay-ui:search-container-column-text name="End Time"
 					value="${ compensatoryDataDto.getEndTime() }" />
 
-				<liferay-ui:search-container-column-text name="Modified By"
-					value="${ compensatoryDataDto.getModifiedBy() }" />
-
-
-
 				<liferay-ui:search-container-column-text name="Requested Type"
 					value="${ compensatoryDataDto.getRequestedCompensationType() }" />
+
+				<liferay-ui:search-container-column-text name="Manager Name"
+					value="${ compensatoryDataDto.getManagerName() }" />
 
 				<liferay-ui:search-container-column-text name="Approved Type"
 					value="${ compensatoryDataDto.getApprovedCompensationType() }" />
 
-				<liferay-ui:search-container-column-text name="Manager Name"
-					value="${ compensatoryDataDto.getManagerName() }" />
+				<liferay-ui:search-container-column-text name="Modified By"
+					value="${ compensatoryDataDto.getModifiedBy() }" />
 
 				<liferay-ui:search-container-column-text name="Status"
 					value='<span class="status ${fn:toLowerCase(fn:replace(compensatoryDataDto.getStatus(), " ", "-"))}">${compensatoryDataDto.getStatus()}</span>'/>
@@ -100,6 +98,9 @@
 									<i class="icon-ellipsis-vertical"></i>
 								</button>
 								<ul class="dropdown-menu">
+						<li><a href="${viewCompensatoryURL}"
+										class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
+												key="view" /></a></li>
 								<c:if test="${ compensatoryDataDto.getStatus() =='Pending' }">
 
 									<portlet:actionURL name="/deleteCompensatoryData"
@@ -112,9 +113,7 @@
 												<i class="icon-trash"></i> <liferay-ui:message key="delete" />
 										</a></li>
 									</c:if>
-									<li><a href="${viewCompensatoryURL}"
-										class="dropdown-item"><i class="icon-eye-open"></i> <liferay-ui:message
-												key="view" /></a></li>
+
 								</ul>
 							</div>
 

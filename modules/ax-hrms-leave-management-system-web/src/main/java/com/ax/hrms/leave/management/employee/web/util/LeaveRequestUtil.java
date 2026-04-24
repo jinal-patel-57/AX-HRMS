@@ -116,6 +116,7 @@ public class LeaveRequestUtil {
 				if(leaveTypeMaster != null) {
 					leavePolicyMaster = getLeavePolicyMasterByLeaveTypeMasterId(leaveTypeMaster.getLeaveTypeMasterId(),leavePolicyMasterList);
 					leaveRequestDetailDto.setLeaveType(leaveTypeMaster.getLeaveTypeName());
+                    leaveRequestDetailDto.setDateOfRequestLeave(leaveTypeMaster.getCreateDate());
 					leaveRequestDetailDto.setLeaveTypeId(leaveTypeMaster.getLeaveTypeMasterId());
 					if(leavePolicyMaster != null){
 						leaveRequestDetailDto.setIsContinous(leavePolicyMaster.getIsContinuous());
@@ -191,7 +192,7 @@ public class LeaveRequestUtil {
 				setEmployeeDetailsInLeaveRequest(leaveRequestDetails, employeeDetails);
 
 				leaveRequestDetails.setLeaveRequestId(leaveRequest.getLeaveRequestId());
-
+                leaveRequestDetails.setDateOfRequestLeave(leaveRequest.getDateOfRequest());
 				if (Validator.isNotNull(leaveRequest.getModifiedBy())){
 					EmployeeDetails modifiedUser = employeeDetailsLocalService.findByLrUserId(leaveRequest.getModifiedBy());
 

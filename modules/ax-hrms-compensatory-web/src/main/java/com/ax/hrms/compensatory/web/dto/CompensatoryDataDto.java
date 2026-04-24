@@ -11,9 +11,26 @@ public class CompensatoryDataDto {
     String ModifiedBy;
     String employeeName;
     long employeeId;
-
+    String comment;
     String startTime;
     String endTime;
+    String commentedBy;
+
+    public String getCommentedBy() {
+        return commentedBy;
+    }
+
+    public void setCommentedBy(String commentedBy) {
+        this.commentedBy = commentedBy;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getStartTime() {
         return startTime;

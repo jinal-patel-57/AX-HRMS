@@ -6,8 +6,10 @@ import com.ax.hrms.compensatory.web.constants.AxHrmsCompensatoryWebPortletKeys;
 import com.ax.hrms.compensatory.web.dto.CompensatoryDataDto;
 import com.ax.hrms.exception.NoSuchEmployeeDetailsException;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
+import com.ax.hrms.model.Comment;
 import com.ax.hrms.model.CompensatoryData;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.service.CommentLocalService;
 import com.ax.hrms.service.CompensatoryDataLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.liferay.petra.string.StringPool;
@@ -21,6 +23,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -44,6 +47,9 @@ public class ViewCompensatoryDataEmployeeMVCRenderCommand implements MVCRenderCo
     CompensatoryDataLocalService compensatoryDataLocalService;
 
     @Reference
+    CommentLocalService commentLocalService;
+
+    @Reference
     LeaveCompensatoryStatusMasterLocalService leaveCompensatoryStatusMasterLocalService;
 
     @Reference
@@ -56,17 +62,34 @@ public class ViewCompensatoryDataEmployeeMVCRenderCommand implements MVCRenderCo
         try {
             log.info("inside the render");
             ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-            
+
             long compensatoryDataId = ParamUtil.getLong(renderRequest, "compensatoryDataId");
             log.info("compensatoryDataId :: " + compensatoryDataId);
-            
+
             CompensatoryData compensatoryData = compensatoryDataLocalService.getCompensatoryData(compensatoryDataId);
 
             CompensatoryDataDto compensatoryDataDto = new CompensatoryDataDto();
             compensatoryDataDto.setCompensatoryDataId(compensatoryData.getCompensatoryDataId());
 //            compensatoryDataDto.setApprovedHours(compensatoryData.getApprovedHours());
 //            compensatoryDataDto.setRequestedHours(compensatoryData.getRequestedHours());
-
+            try {
+                List<Comment> commentList = commentLocalService.findByTypeRequestIdAndStatus(3,compensatoryDataId, true);
+                log.info("CommentList ::--> "+commentList.toString());
+                if (Validator.isNotNull(commentList) && !commentList.isEmpty()) {
+                    Comment comment = commentList.get(0);
+                    compensatoryDataDto.setComment(comment.getComment());
+                    String commentByUserName = StringPool.DASH;
+                    try {
+                        EmployeeDetails commentedBy = employeeDetailsLocalService.findByLrUserId(comment.getCreatedBy());
+                        commentByUserName = commentedBy.getFirstName() + " " + commentedBy.getLastName();
+                    } catch(NoSuchEmployeeDetailsException e) {
+                        log.error("No user found for the comment");
+                    }
+                    compensatoryDataDto.setCommentedBy(commentByUserName);
+                }
+            } catch(Exception e) {
+                log.error("No comment found");
+            }
             int requestedHours = compensatoryData.getRequestedHours();
             int approvedHours = compensatoryData.getApprovedHours();
             compensatoryDataDto.setRequestedHours(requestedHours);

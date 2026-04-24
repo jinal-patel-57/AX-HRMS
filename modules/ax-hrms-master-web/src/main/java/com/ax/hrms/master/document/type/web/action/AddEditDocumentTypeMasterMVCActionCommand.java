@@ -101,7 +101,6 @@ public class AddEditDocumentTypeMasterMVCActionCommand extends BaseMVCActionComm
 					log.info("AddEditDocumentTypeMasterMVCActionCommand >>> edit DocumentTypeMasterData ::: Document Type Name Already exists.");
 					actionRequest.setAttribute(AxDocumentTypeMasterWebPortletConstants.EXISTED_DOCUMENT_TYPE_MASTER_ATTRIBUTE_NAME, documentTypeMaster);
 					actionRequest.setAttribute(AxDocumentTypeMasterWebPortletConstants.DOCUMENT_TYPE_MASTER_ID, documentTypeMaster.getDocumentTypeMasterId());
-
 					SessionErrors.add(actionRequest, AxDocumentTypeMasterWebPortletConstants.DOCUMENT_TYPE_DUPLICATION_MESSAGE);
 					actionResponse.setRenderParameter(AxDocumentTypeMasterWebPortletConstants .MVC_PATH_PARAMETER, AxDocumentTypeMasterWebPortletConstants.ADD_EDIT_DOCUMENT_TYPE_MASTER_JSP);
 				}

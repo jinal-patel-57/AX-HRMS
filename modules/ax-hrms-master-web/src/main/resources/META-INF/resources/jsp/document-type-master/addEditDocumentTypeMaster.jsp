@@ -42,7 +42,7 @@
                         id="<portlet:namespace />isDocumentUsedForKyc"
                         name="<portlet:namespace />isDocumentUsedForKyc"
                         value="true"
-                        ${not empty existedDocumentTypeMaster && existedDocumentTypeMaster.isDocumentUsedForKyc() ? "checked" : ""}
+                        ${not empty existedDocumentTypeMaster && existedDocumentTypeMaster.getIsDocumentUsedForKYC() ? "checked" : ""}
                     />
                     <label
                         class="custom-control-label"

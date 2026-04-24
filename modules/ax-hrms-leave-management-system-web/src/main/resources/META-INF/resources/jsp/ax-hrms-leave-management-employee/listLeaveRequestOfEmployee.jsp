@@ -40,7 +40,9 @@
 
             <liferay-ui:search-container-row className="com.ax.hrms.leave.management.web.dto.LeaveRequestDto" modelVar="leaveRequest" keyProperty="leaveRequestId">
 
-
+                    <liferay-ui:search-container-column-text name="Request Date">
+                    <fmt:formatDate value="${leaveRequest.dateOfRequestLeave}" pattern="dd-MMM-yyyy" />
+                     </liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Leave Type"
                                                          value="${ leaveRequest.getLeaveType() }"></liferay-ui:search-container-column-text>
                 <liferay-ui:search-container-column-text name="Leave Period"

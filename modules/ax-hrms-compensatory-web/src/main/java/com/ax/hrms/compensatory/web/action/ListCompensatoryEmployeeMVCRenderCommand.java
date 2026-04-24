@@ -102,9 +102,11 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
 //                log.info("managerUserList = " + managerUserList.toString());
                 List<EmployeeDetails> managerList = new ArrayList<>();
                 for (User manager : managerUserList) {
-
-                    managerList.add(employeeDetailsLocalService.findByLrUserId(manager.getUserId()));
-
+                    try {
+                        managerList.add(employeeDetailsLocalService.findByLrUserId(manager.getUserId()));
+                    }catch(Exception e) {
+                        log.info("no manager fount in compoff......"+e.getMessage());
+                    }
                 }
 //                log.info("managerList = " + managerList.toString());
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.MANAGER_LIST, managerList);

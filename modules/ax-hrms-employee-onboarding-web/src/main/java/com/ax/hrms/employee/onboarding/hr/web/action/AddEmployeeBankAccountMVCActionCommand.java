@@ -66,7 +66,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
                 employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
-				employeeBankAccount.setIfscCode(ifscCode);
+				employeeBankAccount.setIfscCode(ifscCode.toUpperCase());
 				employeeBankAccount.setBankBranch(bankBranch);
 				employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 				employeeBankAccount.setStatus(true);
@@ -102,7 +102,7 @@ public class AddEmployeeBankAccountMVCActionCommand extends BaseMVCActionCommand
                 employeeBankAccount.setAccountType("Salaried");
 				employeeBankAccount.setBeneficiaryName(beneficiaryName);
 				employeeBankAccount.setBankName(bankName);
-				employeeBankAccount.setIfscCode(ifscCode);
+				employeeBankAccount.setIfscCode(ifscCode.toUpperCase());
 				employeeBankAccount.setBankBranch(bankBranch);
 				employeeBankAccount.setNameAsPerPanCard(nameAsPerPanCard);
 				employeeBankAccount.setStatus(true);

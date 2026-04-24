@@ -406,6 +406,7 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
     }
 
     public  Date[] getDatesBetween(Date startDate, Date endDate) {
+        log.info("Date is getting over here");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
@@ -428,9 +429,12 @@ public class AddLeaveRequestMVCActionCommand extends BaseMVCActionCommand {
             boolean isHoliday = false;
            if(Validator.isNotNull(holidays)) {
                for (Holiday holiday : holidays) {
+
                    if (isSameDate(result, holiday.getDate())) {
-                       isHoliday = true;
-                       break;
+                       if(!holiday.getIsFloater()) {
+                           isHoliday = true;
+                           break;
+                       }
                    }
                }
            }
