@@ -55,17 +55,6 @@ public class EmployeeRejectMVCActionCommand extends BaseMVCActionCommand {
 
 		employeeUtil.sendNotification(employeeDetailsLocalService.findByEmployeeId(employeeId).getLrUserId(), reVerifyDetails);
 		
-		String subject = AxHrmsEmployeeOnBoardingEmployeeConstants.RE_UPLOAD_EMPLOYEE_ONBOARDING_DETAILS;
-		
-		StringBuilder body = new StringBuilder(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPLOYEE_MAIL_HEAD);
-		body.append(AxHrmsEmployeeOnBoardingEmployeeConstants.EMPOLYEE_MAIL_CONTENTLINE)
-			.append(employee.getFirstName())
-			.append(AxHrmsEmployeeOnBoardingEmployeeConstants.SPACE)
-			.append(employee.getLastName())
-			.append(AxHrmsEmployeeOnBoardingEmployeeConstants.SPACE)
-			.append(AxHrmsEmployeeOnBoardingEmployeeConstants.RE_UPLOAD_DOCUMENTS)
-			.append(reVerifyDetails);
-		
 		employeeUtil.sendMailToEmployee(employeeId, themeDisplay, actionRequest,  AxHrmsEmployeeOnBoardingEmployeeConstants.SLASH, reVerifyDetails);
         actionResponse.sendRedirect(PortalUtil.getLayoutFullURL(themeDisplay).replace("/employee-on-boarding", "/employee-onboarding-hr"));
 

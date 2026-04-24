@@ -154,7 +154,11 @@ public class EmployeeOnBoardingUtil {
         EmployeeDetails employee = employeeDetailsLocalService.getEmployeeDetails(employeeId);
 
 
-        body = body.replace("${COMMENTS}",review);
+        String highlightedReview =
+                "<span style=\"background-color: #fff3cd; padding:2px 4px;\">"
+                        + review +
+                        "</span>";
+        body = body.replace("${COMMENTS}", highlightedReview);
         body = body.replace("${EMPLOYEE_NAME}",employee.getFirstName() + " " + employee.getLastName());
 
         if (commandName != null) {
