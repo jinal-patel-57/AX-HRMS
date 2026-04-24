@@ -11,6 +11,11 @@
         value="/jsp/profile-management/editEmployeeProfile.jsp" />
 </portlet:renderURL>
 
+<portlet:renderURL var="changePasswordPageUrl">
+    <portlet:param name="mvcRenderCommandName"
+        value="/jsp/profile-management/changePassword.jsp" />
+</portlet:renderURL>
+
 <liferay-ui:success
     key="detail-update-success-message"
     message="Profile detail updated successfully" />
@@ -886,9 +891,10 @@
         </div>
     </div>
 </div>
- <div class="card-footer text-right align-items-center">
+        <div class="card-footer text-right align-items-center">
             <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-outline-danger mr-1  "><i
                     class="fa-solid fa-angle-left"></i> <liferay-ui:message key="back"/></a>
+                      <a href="${changePasswordPageUrl}" class="btn btn-outline-primary mr-1">Change Password</a>
                       <a href="${editEmployeeProfilePageUrl}" class="btn btn-outline-success">Edit</a>
 
         </div>

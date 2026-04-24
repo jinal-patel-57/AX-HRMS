@@ -1,0 +1,16 @@
+Bundle-Name: ax-hrms-attendance-reconciliation-web
+Bundle-SymbolicName: ax.hrms.attendance.reconciliation.web
+Bundle-Version: 1.0.0
+Export-Package:\
+	ax.hrms.attendance.reconciliation.web.constants
+Import-Package:\
+	com.ax.hrms.common.api.api,\
+	com.ax.hrms.model,\
+	com.ax.hrms.service,\
+	com.ax.hrms.master.model,\
+	com.ax.hrms.master.service,\
+	org.apache.poi.*;resolution:=optional,\
+	*
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

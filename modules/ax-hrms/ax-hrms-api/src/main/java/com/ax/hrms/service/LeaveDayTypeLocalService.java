@@ -208,6 +208,9 @@ public interface LeaveDayTypeLocalService
 
 	public List<LeaveDayType> findByLeaveDate(Date leaveDate);
 
+	public List<LeaveDayType> findByLeaveDateBetween(
+		Date startDate, Date endDate);
+
 	public List<LeaveDayType> findByLeaveRequestId(long leaveRequestId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

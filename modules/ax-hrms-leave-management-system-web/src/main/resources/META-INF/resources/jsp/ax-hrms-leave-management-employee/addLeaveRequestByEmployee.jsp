@@ -290,16 +290,73 @@
 
     $(document).ready(function () {
 
-        const form = document.getElementById("<portlet:namespace />leaveRequestForm");
-        const submitBtn = document.getElementById("<portlet:namespace />submit");
+        var config = new Object({});
+        const namespace = '<portlet:namespace />';
 
         let isSubmitting = false;
 
         form.addEventListener("submit", function (e) {
 
-            if (!$(form).valid()) {
-                e.preventDefault();
-                return false;
+        // Initialize Team Members Multi-Select with localStorage and rendering
+        const teamSelect = $("#teamIdSelectBox");
+        const selectedOptionsContainer = $('#selectedOptionsContainer');
+        //const namespace = '<portlet:namespace />';
+        let selectedValues = [];
+
+        // Function to get team IDs from localStorage
+        function getTeamIds() {
+            return JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+        }
+
+        // Function to update hidden field with selected values
+        function setTeamIdInParams() {
+            const teamIds = getTeamIds();
+            $("#" + namespace + "teamId").val(teamIds.join(','));
+        }
+
+        // Function to render selected options visually
+        function renderSelectedOptions() {
+            selectedOptionsContainer.empty();
+            selectedValues = getTeamIds();
+
+            selectedValues.forEach(function(value) {
+                const selectedOptionElement = $('<div>').addClass('selected-option');
+                const text = $('#teamIdSelectBox option[value="' + value + '"]').text();
+                const span = $('<span>').text(text);
+                const closeButton = $('<button type="button">').text('x');
+
+                closeButton.click(function(e) {
+                    e.preventDefault();
+                    selectedValues = selectedValues.filter(v => v !== value);
+                    localStorage.setItem('selectedOptions', JSON.stringify(selectedValues));
+                    renderSelectedOptions();
+                    setTeamIdInParams();
+                });
+
+                selectedOptionElement.append(span, closeButton);
+                selectedOptionsContainer.append(selectedOptionElement);
+            });
+        }
+
+        // Initialize Select2
+        teamSelect.select2({
+            placeholder: "Select Employee(s)",
+            allowClear: true,
+            width: '100%'
+        });
+
+        // Handle selection changes
+        teamSelect.on("change", function() {
+            const selectedVals = $(this).val();
+            if (selectedVals && selectedVals.length > 0) {
+                selectedValues = selectedVals;
+                localStorage.setItem('selectedOptions', JSON.stringify(selectedVals));
+                renderSelectedOptions();
+                setTeamIdInParams();
+            } else {
+                localStorage.removeItem('selectedOptions');
+                renderSelectedOptions();
+                setTeamIdInParams();
             }
 
             if (isSubmitting) {

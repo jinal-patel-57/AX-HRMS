@@ -214,6 +214,9 @@ public interface WorkFromHomeDayTypeLocalService
 	public List<WorkFromHomeDayType> findByWorkFromHomeDate(
 		Date workFromHomeDate);
 
+	public List<WorkFromHomeDayType> findByWorkFromHomeDateBetween(
+		Date startDate, Date endDate);
+
 	public List<WorkFromHomeDayType> findByWorkFromHomeRequestId(
 		long workFromHomeRequestId);
 

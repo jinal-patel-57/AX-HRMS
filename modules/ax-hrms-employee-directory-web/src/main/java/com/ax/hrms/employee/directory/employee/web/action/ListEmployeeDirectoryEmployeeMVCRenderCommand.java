@@ -8,6 +8,7 @@ import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.CustomEmployeeDetailsDTO;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -21,20 +22,16 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.liferay.portal.kernel.util.WebKeys;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
-import com.liferay.portal.kernel.util.WebKeys;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component(
 		immediate = true,
@@ -66,6 +63,9 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 	EmployeeDesignationLocalService employeeDesignationLocalService;
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
+
+	@Reference
+	ModuleConfiguration moduleConfiguration;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -109,12 +109,7 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 			}
 		}
 
-		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
-		SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
-				StringPool.BLANK);
-		directorySearchContainer.setResultsAndTotal(employeeDetailsList);
 
-		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DESIGNATIONLIST, designationMasterLocalService.getDesignationMasters(-1,-1));
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DEPARTMENTLIST, departmentMasterLocalService.getDepartmentMasters(-1,-1));
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DESIGNATIONVALUE, designationId);
@@ -123,11 +118,38 @@ public class ListEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRenderC
 		if(!employeeDetailsList.isEmpty()) {
 
 
+			String emailId =
+					moduleConfiguration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
+
+			Set<String> ignoreEmailSet = Arrays.stream(emailId.split(","))
+					.map(String::trim)
+					.map(String::toLowerCase)
+					.filter(mail -> !mail.isEmpty())
+					.collect(Collectors.toSet());
+
+			employeeDetailsList.removeIf(employee ->
+					ignoreEmailSet.contains(
+							employee.getOfficialEmail().trim().toLowerCase()
+					)
+			);
+
+			employeeDetailsList.sort((e1, e2) -> {
+				String name1 = (e1.getFirstName() + " " + e1.getLastName()).toLowerCase();
+				String name2 = (e2.getFirstName() + " " + e2.getLastName()).toLowerCase();
+				return name1.compareTo(name2);
+			});
+
+			PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+			SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null,
+					StringPool.BLANK);
+			directorySearchContainer.setResultsAndTotal(employeeDetailsList);
+
+			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
 
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_EMPLOYEEDETAILS, employeeDetailsList);
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_GET, employeeDetailsList);
 
-			return AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.LIST_EMPLOYEE_DIRECTORY;
+
 
 		}
 

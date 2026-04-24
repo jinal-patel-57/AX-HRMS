@@ -7,6 +7,7 @@ import com.ax.hrms.employee.directory.web.constants.AxHrmsEmployeeDirectoryEmplo
 import com.ax.hrms.master.service.DepartmentMasterLocalService;
 import com.ax.hrms.master.service.DesignationMasterLocalService;
 import com.ax.hrms.model.CustomEmployeeDetailsDTO;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.service.EmployeeDepartmentLocalService;
 import com.ax.hrms.service.EmployeeDesignationLocalService;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
@@ -20,19 +21,19 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.portal.kernel.util.WebKeys;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
-import com.liferay.portal.kernel.util.WebKeys;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component(
@@ -65,6 +66,8 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
 	@Reference
 	AxHrmsCommonApi axHrmsCommonApi;
 
+	@Reference
+	ModuleConfiguration moduleConfiguration;
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -94,17 +97,36 @@ public class SearchEmployeeDirectoryEmployeeMVCRenderCommand implements MVCRende
 		boolean isHR = axHrmsCommonApi.isRolePerson(themeDisplay,AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.HR_ADMIN);
 		renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.IS_HR,isHR);
 
-		PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
-		SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null, StringPool.BLANK);
-		directorySearchContainer.setResultsAndTotal(employeeDetailsList);
 
-			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
+
+
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DESIGNATIONLIST, designationMasterLocalService.getDesignationMasters(-1, -1));
 			renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_DEPARTMENTLIST, departmentMasterLocalService.getDepartmentMasters(-1, -1));
 			if(!employeeDetailsList.isEmpty()) {
+				String emailId =
+						moduleConfiguration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
 
+				Set<String> ignoreEmailSet = Arrays.stream(emailId.split(","))
+						.map(String::trim)
+						.map(String::toLowerCase)
+						.filter(mail -> !mail.isEmpty())
+						.collect(Collectors.toSet());
 
+				employeeDetailsList.removeIf(employee ->
+						ignoreEmailSet.contains(
+								employee.getOfficialEmail().trim().toLowerCase()
+						)
+				);
 
+				employeeDetailsList.sort((e1, e2) -> {
+					String name1 = (e1.getFirstName() + " " + e1.getLastName()).toLowerCase();
+					String name2 = (e2.getFirstName() + " " + e2.getLastName()).toLowerCase();
+					return name1.compareTo(name2);
+				});
+				PortletURL iteratorURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+				SearchContainer<CustomEmployeeDetailsDTO> directorySearchContainer = new SearchContainer<>(renderRequest, iteratorURL, null, StringPool.BLANK);
+				directorySearchContainer.setResultsAndTotal(employeeDetailsList);
+				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORYSEARCHCONTAINER, directorySearchContainer);
 				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_EMPLOYEEDETAILS, employeeDetailsList);
 				renderRequest.setAttribute(AxHrmsEmployeeDirectoryEmployeeWebPortletConstants.EMPLOYEEDIRECTORY_GET, employeeDetailsList);
 

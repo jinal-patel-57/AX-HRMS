@@ -259,6 +259,15 @@ public class WorkFromHomeDayTypeLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.ax.hrms.model.WorkFromHomeDayType>
+		findByWorkFromHomeDateBetween(
+			java.util.Date startDate, java.util.Date endDate) {
+
+		return _workFromHomeDayTypeLocalService.findByWorkFromHomeDateBetween(
+			startDate, endDate);
+	}
+
+	@Override
+	public java.util.List<com.ax.hrms.model.WorkFromHomeDayType>
 		findByWorkFromHomeRequestId(long workFromHomeRequestId) {
 
 		return _workFromHomeDayTypeLocalService.findByWorkFromHomeRequestId(

@@ -8,10 +8,12 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String PORTLET_CATEGORY = "AX HRMS";
 	public static final String VIEW_EMPLOYEE_PROFILE_JSP_FILE = "/jsp/profile-management/viewEmployeeProfile.jsp";
 	public static final String EDIT_EMPLOYEE_PROFILE_JSP_FILE = "/jsp/profile-management/editEmployeeProfile.jsp";
+	public static final String CHANGE_PASSWORD_JSP_FILE = "/jsp/profile-management/changePassword.jsp";
 	public static final String JQUERY_JS_FILE = "/js/profile-management/jquery-3.7.1.js";
 	public static final String JQUERY_VALIDATOR_JS_FILE = "/js/profile-management/jquery.validate.min.js";
 	public static final String MAIN_JS_FILE = "/js/profile-management/main.js";
 	public static final String EDIT_MVC_COMMAND_NAME = "editEmployeeProfile";
+	public static final String CHANGE_PASSWORD_MVC_COMMAND_NAME = "changePassword";
 	public static final String IS_SAME_PRESENT_ADDRESS = "isSamePresentAddress";
 	public static final String KYC_DOCUMENT_FILE="kycDocumentFile";
 
@@ -41,6 +43,14 @@ public class AxHrmsProfileManagementWebConstants {
 	public static final String NA = "NA";
 
 	public static final String UPDATE_SUCCESS_MESSAGE_KEY = "detail-update-success-message";
+	public static final String PASSWORD_UPDATE_SUCCESS_MESSAGE_KEY = "password-update-success-message";
+	public static final String CURRENT_PASSWORD = "currentPassword";
+	public static final String NEW_PASSWORD = "newPassword";
+	public static final String CONFIRM_PASSWORD = "confirmPassword";
+	public static final String PASSWORD_CHANGE_EMPTY_FIELDS_ERROR_KEY = "password-change-empty-fields";
+	public static final String PASSWORD_CHANGE_MISMATCH_ERROR_KEY = "password-change-mismatch";
+	public static final String PASSWORD_CHANGE_CURRENT_PASSWORD_INVALID_ERROR_KEY = "password-change-current-password-invalid";
+	public static final String PASSWORD_CHANGE_UPDATE_FAILED_ERROR_KEY = "password-change-update-failed";
 
 //	LocalService GENERATE Key
 

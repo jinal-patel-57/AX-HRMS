@@ -382,7 +382,6 @@ public class LoginMVCActionCommandOverride extends BaseMVCActionCommand {
 			portletURL.setWindowState(actionRequest.getWindowState());
 		}
 
-		actionResponse.sendRedirect(portletURL.toString());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

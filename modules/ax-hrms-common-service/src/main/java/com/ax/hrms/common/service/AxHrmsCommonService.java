@@ -240,9 +240,9 @@ public class AxHrmsCommonService implements AxHrmsCommonApi {
 
     @Override
     public void sendMailWithAttachment(String toEmailAddress, String fromEmailAddress, String fromName, String subject, String body, File file, String filename) {
-        InternetAddress toAddress = null;
+        InternetAddress[] toAddress = null;
         try {
-            toAddress = new InternetAddress(toEmailAddress);
+            toAddress = InternetAddress.parse(toEmailAddress);
         } catch (AddressException e) {
             log.info("Address exception");
         }

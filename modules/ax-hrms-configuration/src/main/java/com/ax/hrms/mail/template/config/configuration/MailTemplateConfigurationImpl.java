@@ -469,5 +469,19 @@ public class MailTemplateConfigurationImpl implements MailTemplateConfiguration 
 		return _configuration.mailYearlySchedulerFailSubject();
 	}
 
+	@Override
+	public String mailAttendanceReconciliationToEmailAddress() {
+		return _configuration.mailAttendanceReconciliationToEmailAddress();
+	}
+
+	@Override
+	public String mailAttendanceReconciliationSubject() {
+		return _configuration.mailAttendanceReconciliationSubject();
+	}
+
+	@Override
+	public String mailAttendanceReconciliationBody() {
+		return _configuration.mailAttendanceReconciliationBody();
+	}
 
 }

@@ -231,6 +231,12 @@ public class WorkFromHomeDayTypeLocalServiceUtil {
 		return getService().findByWorkFromHomeDate(workFromHomeDate);
 	}
 
+	public static List<WorkFromHomeDayType> findByWorkFromHomeDateBetween(
+		java.util.Date startDate, java.util.Date endDate) {
+
+		return getService().findByWorkFromHomeDateBetween(startDate, endDate);
+	}
+
 	public static List<WorkFromHomeDayType> findByWorkFromHomeRequestId(
 		long workFromHomeRequestId) {
 
