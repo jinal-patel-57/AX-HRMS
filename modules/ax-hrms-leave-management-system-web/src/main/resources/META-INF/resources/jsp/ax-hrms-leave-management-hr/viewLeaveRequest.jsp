@@ -86,7 +86,7 @@
             </div>
 
         </div>
-        
+
         <div class="row">
             <div class="col-md-6 col-12">
                 <div class="card">
@@ -100,7 +100,6 @@
                             <thead>
                             <tr>
                                 <th scope="col"><liferay-ui:message key="date"/></th>
-                                <th scope="col"><liferay-ui:message key="day"/></th>
                                 <th scope="col"><liferay-ui:message key="day-type"/></th>
                             </tr>
                             </thead>
@@ -112,12 +111,12 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${data.halfDay}">
-                                                <p class="text-center my-0">
+                                                <p class="my-0">
                                                     ${data.firstHalf ? 'Half Day (1st half)' : 'Half Day (2nd half)'}
                                                 </p>
                                             </c:when>
                                             <c:otherwise>
-                                                <p class="text-center my-0">Full Day</p>
+                                                <p class="my-0">Full Day</p>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>

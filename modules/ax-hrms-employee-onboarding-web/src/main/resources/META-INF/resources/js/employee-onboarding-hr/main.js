@@ -371,12 +371,21 @@ var setFileInputValues;
                 }
                 
                 const fileName = file.name.toLowerCase();
-                const validExtensions = ['.pdf', '.doc', '.docx'];
+                const validExtensions = ['.pdf', '.jpg', '.jpeg', '.png'];
                 const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
                 
                 if (!validExtensions.includes(fileExtension)) {
-                    alert(fieldName + ' must be a PDF or DOC/DOCX file. Selected file: ' + file.name);
+                    alert(fieldName + ' must be a PDF, JPG, PNG, or JPEG file. Selected file: ' + file.name);
                     $(fileInput).val('');  // Clear the input
+                    checkFormCompleteness();
+                    return;
+                }
+                
+                // 10MB validation
+                const maxSizeInBytes = 10 * 1024 * 1024;
+                if (file.size > maxSizeInBytes) {
+                    alert(fieldName + ' exceeds the maximum file size of 10MB. Selected file size: ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB');
+                    $(fileInput).val('');
                     checkFormCompleteness();
                 }
             }

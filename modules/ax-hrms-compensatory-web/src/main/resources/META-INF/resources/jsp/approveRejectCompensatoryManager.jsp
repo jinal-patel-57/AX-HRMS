@@ -251,7 +251,7 @@
                        id="submitCompensationBtn"
                        class="btn btn-primary"
                        onclick="submit_compensatory_form()">
-                   <liferay-ui:message key="approve"/>
+                   <liferay-ui:message key="submit"/>
                </button>
 
             </div>
@@ -332,11 +332,6 @@
            $('#approveCompensationModalLabel')
                .text('<liferay-ui:message key="reject-compensation-hours"/>');
 
-           $('#submitCompensationBtn')
-               .text('<liferay-ui:message key="reject"/>')
-               .removeClass('btn-primary')
-               .addClass('btn-danger');
-
            $('#actionType').val('REJECT');
 
            $('#approveCompensationModal').modal('show');
@@ -378,10 +373,7 @@
           $('#approveCompensationModalLabel')
               .text('<liferay-ui:message key="Cancel Compensation Request"/>');
 
-          $('#submitCompensationBtn')
-              .text('<liferay-ui:message key="cancel"/>')
-               .removeClass('btn-primary')
-               .addClass('btn-danger');
+          $('#actionType').val('CANCEL');
 
           $('#approveCompensationModal').modal('show');
       }
@@ -397,12 +389,6 @@
            // Reset modal title
            $('#approveCompensationModalLabel')
                .text('<liferay-ui:message key="approve-compensation-hours"/>');
-
-           // Reset submit button
-           $('#submitCompensationBtn')
-               .text('<liferay-ui:message key="approve"/>')
-               .removeClass('btn-danger')
-               .addClass('btn-primary');
 
            // Reset fields
            $('#requestedHours').val('').prop('disabled', false)
