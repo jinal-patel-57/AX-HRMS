@@ -13,6 +13,7 @@ import com.ax.hrms.master.service.LeaveTypeMasterLocalService;
 import com.ax.hrms.model.EmployeeDetails;
 import com.ax.hrms.model.Holiday;
 import com.ax.hrms.model.LeaveBalance;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.service.EmployeeDetailsLocalService;
 import com.ax.hrms.service.HolidayLocalService;
 import com.ax.hrms.service.LeaveBalanceLocalService;
@@ -33,6 +34,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -76,7 +78,8 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 	private UserLocalService userLocalService;
     @Reference
     private HolidayLocalService holidayLocalService;
-
+    @Reference
+    ModuleConfiguration moduleConfiguration;
 	
 	private static int currentYear = Year.now().getValue();
 	
@@ -96,16 +99,35 @@ public class AddLeaveRequestMVCRenderCommand implements MVCRenderCommand {
 		/**
 		 * @implNote : listOfFilteredEmployeeDetails is a list of Employee Details in which auth user's role is Employee
 		 */
-		List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
+        String emailId =
+                moduleConfiguration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
+        log.info("email Ids are :: "+emailId);
+        Set<String> ignoreEmailSet = Arrays.stream(emailId.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(mail -> !mail.isEmpty())
+                .collect(Collectors.toSet());
+        log.info("ignoreEmailSet are :: "+ignoreEmailSet);
+
+        List<EmployeeDetails> listOfFilteredEmployeeDetails = new ArrayList<>();
 		long currentUserId = themeDisplay.getUserId();
 		for(EmployeeDetails employeeDetails : listOfEmployeeDetails) {
-			
+
+            String email = employeeDetails.getOfficialEmail();
+            if (Validator.isNotNull(email) &&
+                    ignoreEmailSet.contains(email.trim().toLowerCase())) {
+                log.info(email + " is ignored");
+                continue;
+            }
+
 			if (employeeDetails.getLrUserId() != currentUserId) {
 				listOfFilteredEmployeeDetails.add(employeeDetails);
 				continue;
         	}
-			
-			/*
+
+
+
+            /*
 			 * try { long employeeRoleId =
 			 * RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 			 * AxHrmsLeaveManagementWebPortletConstants.EMPLOYEE).getRoleId(); long[]

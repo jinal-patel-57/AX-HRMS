@@ -9,6 +9,7 @@ import com.ax.hrms.master.service.EducationLevelMasterLocalService;
 import com.ax.hrms.master.service.LeaveCompensatoryStatusMasterLocalService;
 import com.ax.hrms.model.CompensatoryData;
 import com.ax.hrms.model.EmployeeDetails;
+import com.ax.hrms.module.config.configuration.ModuleConfiguration;
 import com.ax.hrms.service.*;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -35,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component(immediate = true, property = {
         "javax.portlet.name=" + AxHrmsCompensatoryWebPortletKeys.AX_HRMS_COMPENSATORY_EMPLOYEE_WEB_PORTLET,
@@ -79,6 +82,8 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
 
     @Reference
     ProjectEmployeeDetailsLocalService projectEmployeeDetailsLocalService;
+    @Reference
+    ModuleConfiguration moduleConfiguration;
 
     @Reference
     ProjectHistoryLocalService projectHistoryLocalService;
@@ -187,7 +192,24 @@ public class ListCompensatoryEmployeeMVCRenderCommand implements MVCRenderComman
                 renderRequest.setAttribute(AxHrmsCompensatoryDataConstants.COMPENSATORY_DATA_LIST, compensatoryDataDtoList);
             }
 
+            String emailId =
+                    moduleConfiguration.employeeOfficialMailIdForIgnoreFromEmployeeDirectory();
+            log.info("email Ids are :: "+emailId);
+            Set<String> ignoreEmailSet = Arrays.stream(emailId.split(","))
+                    .map(String::trim)
+                    .map(String::toLowerCase)
+                    .filter(mail -> !mail.isEmpty())
+                    .collect(Collectors.toSet());
+            log.info("ignoreEmailSet are :: "+ignoreEmailSet);
             for (EmployeeDetails employeeDetails : listOfEmployeeDetails) {
+
+
+                String email = employeeDetails.getOfficialEmail();
+                if (Validator.isNotNull(email) &&
+                        ignoreEmailSet.contains(email.trim().toLowerCase())) {
+                    log.info(email + " is ignored");
+                    continue;
+                }
 
                 try {
                     long employeeRoleId = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), AxHrmsCompensatoryDataConstants.EMPLOYEE).getRoleId();
