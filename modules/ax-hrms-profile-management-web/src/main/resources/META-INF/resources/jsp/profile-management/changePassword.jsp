@@ -127,30 +127,42 @@ request.setAttribute("sessionErrorKeys", sessionErrorKeys.toString());
                     <label for="<portlet:namespace/>currentPassword" class="form-label">
                         Current Password <span class="text-danger">*</span>
                     </label>
-                    <input type="password"
-                           class="form-control"
-                           id="<portlet:namespace/>currentPassword"
-                           name="<portlet:namespace/>currentPassword" />
+                    <div class="password-container">
+                        <input type="password"
+                               class="form-control"
+                               id="<portlet:namespace/>currentPassword"
+                               name="<portlet:namespace/>currentPassword" />
+                        <i class="icon-eye-open password-toggle-icon" 
+                           onclick="togglePasswordVisibility('<portlet:namespace/>currentPassword', this)"></i>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label for="<portlet:namespace/>newPassword" class="form-label">
                         New Password <span class="text-danger">*</span>
                     </label>
-                    <input type="password"
-                           class="form-control"
-                           id="<portlet:namespace/>newPassword"
-                           name="<portlet:namespace/>newPassword" />
+                    <div class="password-container">
+                        <input type="password"
+                               class="form-control"
+                               id="<portlet:namespace/>newPassword"
+                               name="<portlet:namespace/>newPassword" />
+                        <i class="icon-eye-open password-toggle-icon" 
+                           onclick="togglePasswordVisibility('<portlet:namespace/>newPassword', this)"></i>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label for="<portlet:namespace/>confirmPassword" class="form-label">
                         Confirm Password <span class="text-danger">*</span>
                     </label>
-                    <input type="password"
-                           class="form-control"
-                           id="<portlet:namespace/>confirmPassword"
-                           name="<portlet:namespace/>confirmPassword" />
+                    <div class="password-container">
+                        <input type="password"
+                               class="form-control"
+                               id="<portlet:namespace/>confirmPassword"
+                               name="<portlet:namespace/>confirmPassword" />
+                        <i class="icon-eye-open password-toggle-icon" 
+                           onclick="togglePasswordVisibility('<portlet:namespace/>confirmPassword', this)"></i>
+                    </div>
                 </div>
             </div>
 
@@ -189,4 +201,17 @@ request.setAttribute("sessionErrorKeys", sessionErrorKeys.toString());
             window.Liferay.on('allPortletsReady', hideGlobalLoader);
         }
     })();
+
+    function togglePasswordVisibility(inputId, icon) {
+        var passwordInput = document.getElementById(inputId);
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("icon-eye-open");
+            icon.classList.add("icon-eye-close");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("icon-eye-close");
+            icon.classList.add("icon-eye-open");
+        }
+    }
 </script>

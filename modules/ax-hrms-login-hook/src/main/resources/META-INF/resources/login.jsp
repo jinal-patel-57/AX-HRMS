@@ -191,7 +191,10 @@
 									</c:if>
 								</aui:input>
 
-								<aui:input name="password" placeholder="Password" required="<%= true %>" showRequiredLabel="<%= false %>" type="password" value="<%= password %>" />
+								<div class="password-container">
+									<aui:input name="password" placeholder="Password" required="<%= true %>" showRequiredLabel="<%= false %>" type="password" value="<%= password %>" />
+									<i class="icon-eye-open password-toggle-icon" onclick="togglePasswordVisibility('<portlet:namespace />password', this)"></i>
+								</div>
 
 								<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
 
@@ -260,6 +263,21 @@
 			}
 			}
 		</aui:script>
+
+		<script>
+			function togglePasswordVisibility(inputId, icon) {
+				var passwordInput = document.getElementById(inputId);
+				if (passwordInput.type === "password") {
+					passwordInput.type = "text";
+					icon.classList.remove("icon-eye-open");
+					icon.classList.add("icon-eye-close");
+				} else {
+					passwordInput.type = "password" ;
+					icon.classList.remove("icon-eye-close");
+					icon.classList.add("icon-eye-open");
+				}
+			}
+		</script>
 	</c:otherwise>
 
 </c:choose>

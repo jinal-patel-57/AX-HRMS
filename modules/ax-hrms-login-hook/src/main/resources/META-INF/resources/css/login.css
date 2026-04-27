@@ -11,6 +11,27 @@
     --footer-bg: #263238;
 }
 
+.password-container {
+    position: relative;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 68%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 100;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.password-toggle-icon:hover {
+    color: var(--primary-color);
+}
+
+
 body,
 html {
     margin: 0;
@@ -116,6 +137,7 @@ html {
 .ax-login-right .form-control {
     width: 100%;
     padding: 12px 15px;
+    padding-right: 45px;
     border: 1px solid var(--input-border);
     border-radius: 8px;
     font-size: 15px;
